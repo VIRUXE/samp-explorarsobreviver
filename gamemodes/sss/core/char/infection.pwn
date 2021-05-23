@@ -1,0 +1,100 @@
+#include <YSI\y_hooks>
+
+
+enum
+{
+	INFECT_TYPE_FOOD,
+	INFECT_TYPE_WOUND
+}
+
+
+static
+	infect_InfectionIntensity[MAX_PLAYERS][2],
+	infect_LastShake[MAX_PLAYERS];
+
+
+hook OnPlayerConnect(playerid)
+{
+	dbg("global", LOG_CORE, "[OnPlayerConnect] in /gamemodes/sss/core/char/infection.pwn");
+
+	infect_InfectionIntensity[playerid][0] = 0;
+	infect_InfectionIntensity[playerid][1] = 0;
+	infect_LastShake[playerid] = 0;
+
+	return 1;
+}
+
+hook OnPlayerDeath(playerid, killerid, reason)
+{
+	dbg("global", LOG_CORE, "[OnPlayerDeath] in /gamemodes/sss/core/char/infection.pwn");
+
+	infect_InfectionIntensity[playerid][0] = 0;
+	infect_InfectionIntensity[playerid][1] = 0;
+	infect_LastShake[playerid] = 0;
+}
+
+hook OnPlayerScriptUpdate(playerid)
+{
+	if(infect_InfectionIntensity[playerid][INFECT_TYPE_FOOD] == 0 && infect_InfectionIntensity[playerid][INFECT_TYPE_WOUND] == 0)
+		return;
+
+	if(IsPlayerUnderDrugEffect(playerid, drug_Morphine))
+		return;
+
+	if(IsPlayerUnderDrugEffect(playerid, drug_Adrenaline))
+		return;
+
+	if(IsPlayerUnderDrugEffect(playerid, drug_Air))
+		return;
+
+	if(GetPlayerDrunkLevel(playerid) == 0)
+	{
+		if(GetTickCountDifference(GetTickCount(), infect_LastShake[playerid]) > 500 * GetPlayerHP(playerid))
+		{
+			infect_LastShake[playerid] = GetTickCount();
+			SetPlayerDrunkLevel(playerid, 5000);
+		}
+	}
+	else
+	{
+		if(GetTickCountDifference(GetTickCount(), infect_LastShake[playerid]) > 100 * (120 - GetPlayerHP(playerid)) || 1 < GetPlayerDrunkLevel(playerid) < 2000)
+		{
+			infect_LastShake[playerid] = GetTickCount();
+			SetPlayerDrunkLevel(playerid, 0);
+		}
+	}
+
+	return;
+}
+
+stock GetPlayerInfectionIntensity(playerid, type)
+{
+	if(!IsPlayerConnected(playerid))
+		return 0;
+
+	return infect_InfectionIntensity[playerid][type];
+}
+
+stock SetPlayerInfectionIntensity(playerid, type, amount)
+{
+	if(!IsPlayerConnected(playerid))
+		return 0;
+
+	infect_InfectionIntensity[playerid][type] = amount;
+
+	return 1;
+}
+
+hook OnPlayerSave(playerid, filename[])
+{
+	dbg("global", LOG_CORE, "[OnPlayerSave] in /gamemodes/sss/core/char/infection.pwn");
+
+	modio_push(filename, _T<I,N,F,C>, 2, infect_InfectionIntensity[playerid]);
+}
+
+hook OnPlayerLoad(playerid, filename[])
+{
+	dbg("global", LOG_CORE, "[OnPlayerLoad] in /gamemodes/sss/core/char/infection.pwn");
+
+	modio_read(filename, _T<I,N,F,C>, 2, infect_InfectionIntensity[playerid]);
+}
