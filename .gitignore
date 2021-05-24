@@ -83,3 +83,4 @@ scriptfiles/.git/
 # runner binaries
 ScavengeSurvive.exe
 ScavengeSurvive
+*.code-workspace
