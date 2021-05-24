@@ -1,4 +1,19 @@
-#include <YSI\y_hooks>
+/*==============================================================================
+
+
+	Southclaws' Scavenge and Survive
+
+		Copyright (C) 2020 Barnaby "Southclaws" Keene
+
+		This Source Code Form is subject to the terms of the Mozilla Public
+		License, v. 2.0. If a copy of the MPL was not distributed with this
+		file, You can obtain one at http://mozilla.org/MPL/2.0/.
+
+
+==============================================================================*/
+
+
+#include <YSI_Coding\y_hooks>
 
 
 enum E_LOCK_STATE
@@ -22,8 +37,6 @@ hook OnItemTypeDefined(uname[])
 
 hook OnVehicleCreated(vehicleid)
 {
-	dbg("global", LOG_CORE, "[OnVehicleCreated] in /gamemodes/sss/core/vehicle/lock.pwn");
-
 	lock_Status[vehicleid] = E_LOCK_STATE_OPEN;
 	lock_LastChange[vehicleid] = 0;
 
@@ -37,15 +50,11 @@ hook OnVehicleReset(oldid, newid)
 
 hook OnPlayerConnect(playerid)
 {
-	dbg("global", LOG_CORE, "[OnPlayerConnect] in /gamemodes/sss/core/vehicle/lock.pwn");
-
 	lock_DisableForPlayer[playerid] = false;
 }
 
 hook OnPlayerKeyStateChange(playerid, newkeys, oldkeys)
 {
-	dbg("global", LOG_CORE, "[OnPlayerKeyStateChange] in /gamemodes/sss/core/vehicle/lock.pwn");
-
 	if(newkeys & KEY_SUBMISSION)
 	{
 		if(IsPlayerInAnyVehicle(playerid))
@@ -58,11 +67,14 @@ hook OnPlayerKeyStateChange(playerid, newkeys, oldkeys)
 
 		if(IsValidVehicle(vehicleid))
 		{
-			if(lock_Status[vehicleid] == E_LOCK_STATE_DEFAULT)
-				ShowActionText(playerid, ls(playerid, "LOCKUSECROW"), 6000);
+			if(!IsPlayerInVehicle(playerid, vehicleid))
+			{
+				if(lock_Status[vehicleid] == E_LOCK_STATE_DEFAULT)
+					ShowActionText(playerid, ls(playerid, "LOCKUSECROW"), 6000);
 
-			else if(lock_Status[vehicleid] == E_LOCK_STATE_EXTERNAL)
-				ShowActionText(playerid, ls(playerid, "LOCKCUSTOML"), 6000);
+				else if(lock_Status[vehicleid] == E_LOCK_STATE_EXTERNAL)
+					ShowActionText(playerid, ls(playerid, "LOCKCUSTOML"), 6000);
+			}
 		}
 	}
 
@@ -87,8 +99,6 @@ _HandleLockKey(playerid)
 
 hook OnPlayerEnterVehicle(playerid, vehicleid, ispassenger)
 {
-	dbg("global", LOG_CORE, "[OnPlayerEnterVehicle] in /gamemodes/sss/core/vehicle/lock.pwn");
-
 	if(lock_Status[vehicleid] != E_LOCK_STATE_OPEN)
 	{
 		CancelPlayerMovement(playerid);
@@ -100,8 +110,6 @@ hook OnPlayerEnterVehicle(playerid, vehicleid, ispassenger)
 
 hook OnPlayerEnterVehArea(playerid, vehicleid)
 {
-	dbg("global", LOG_CORE, "[OnPlayerEnterVehArea] in /gamemodes/sss/core/vehicle/lock.pwn");
-
 	if(lock_Status[vehicleid] == E_LOCK_STATE_OPEN && !lock_DisableForPlayer[playerid] && !IsVehicleDead(vehicleid))
 	{
 		SetVehicleParamsForPlayer(vehicleid, playerid, 0, 0);
@@ -116,8 +124,6 @@ hook OnPlayerEnterVehArea(playerid, vehicleid)
 
 hook OnPlayerLeaveVehArea(playerid, vehicleid)
 {
-	dbg("global", LOG_CORE, "[OnPlayerLeaveVehArea] in /gamemodes/sss/core/vehicle/lock.pwn");
-
 	SetVehicleParamsForPlayer(vehicleid, playerid, 0, 1);
 
 	return Y_HOOKS_CONTINUE_RETURN_0;

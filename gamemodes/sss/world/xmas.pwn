@@ -1,4 +1,19 @@
-#include <YSI\y_hooks>
+/*==============================================================================
+
+
+	Southclaws' Scavenge and Survive
+
+		Copyright (C) 2020 Barnaby "Southclaws" Keene
+
+		This Source Code Form is subject to the terms of the Mozilla Public
+		License, v. 2.0. If a copy of the MPL was not distributed with this
+		file, You can obtain one at http://mozilla.org/MPL/2.0/.
+
+
+==============================================================================*/
+
+
+#include <YSI_Coding\y_hooks>
 
 
 new xmas_presents[4] = {19054, 19055, 19056, 19057};
@@ -15,14 +30,15 @@ CreateXmasTree(Float:x, Float:y, Float:z, Float:rx, Float:ry, Float:rz)
 		Float:box_x,
 		Float:box_y,
 		Float:box_z,
-		containerid;
+		Container:containerid;
 
 	box_x = x + floatsin(-rz, degrees);
 	box_y = y + floatcos(-rz, degrees);
 	box_z = z + 0.6248;
 
 	CreateDynamicObject(xmas_presents[random(4)], box_x, box_y, box_z, 0.0, 0.0, frandom(360.0));
-	containerid = CreateContainer("Christmas Present", 10, CreateButton(box_x, box_y, box_z + 1.0, "Merry Christmas!"));
+	// TODO: FIX CHRISTMAS!
+	// containerid = CreateContainer("Christmas Present", 10, CreateButton(box_x, box_y, box_z + 1.0, "Merry Christmas!"));
 
 	FillContainerWithLoot(containerid, random(10) + 1, GetLootIndexFromName("world_military"));
 

@@ -1,4 +1,19 @@
-#include <YSI\y_hooks>
+/*==============================================================================
+
+
+	Southclaws' Scavenge and Survive
+
+		Copyright (C) 2020 Barnaby "Southclaws" Keene
+
+		This Source Code Form is subject to the terms of the Mozilla Public
+		License, v. 2.0. If a copy of the MPL was not distributed with this
+		file, You can obtain one at http://mozilla.org/MPL/2.0/.
+
+
+==============================================================================*/
+
+
+#include <YSI_Coding\y_hooks>
 
 
 new
@@ -8,8 +23,6 @@ new
 
 hook OnPlayerConnect(playerid)
 {
-	dbg("global", LOG_CORE, "[OnPlayerConnect] in /gamemodes/sss/core/item/handcuffs.pwn");
-
 	cuf_TargetPlayer[playerid] = INVALID_PLAYER_ID;
 	cuf_BeingCuffedBy[playerid] = INVALID_PLAYER_ID;
 }
@@ -17,14 +30,12 @@ hook OnPlayerConnect(playerid)
 
 hook OnPlayerKeyStateChange(playerid, newkeys, oldkeys)
 {
-	dbg("global", LOG_CORE, "[OnPlayerKeyStateChange] in /gamemodes/sss/core/item/handcuffs.pwn");
-
 	if(IsBadInteract(playerid))
 		return 1;
 
 	if(newkeys & 16)
 	{
-		new itemid = GetPlayerItem(playerid);
+		new Item:itemid = GetPlayerItem(playerid);
 
 		if(GetItemType(itemid) == item_HandCuffs)
 		{
@@ -33,7 +44,7 @@ hook OnPlayerKeyStateChange(playerid, newkeys, oldkeys)
 				if(i == playerid)
 					continue;
 
-				if(IsPlayerInPlayerArea(playerid, i))
+				if(IsPlayerNextToPlayer(playerid, i))
 				{
 					if(GetPlayerItem(i) == INVALID_ITEM_ID && GetPlayerWeapon(i) == 0 && cuf_BeingCuffedBy[i] == INVALID_PLAYER_ID)
 					{
@@ -55,7 +66,7 @@ hook OnPlayerKeyStateChange(playerid, newkeys, oldkeys)
 				if(i == playerid)
 					continue;
 
-				if(IsPlayerInPlayerArea(playerid, i))
+				if(IsPlayerNextToPlayer(playerid, i))
 				{
 					if(GetPlayerSpecialAction(i) == SPECIAL_ACTION_CUFFED)
 					{
@@ -95,8 +106,6 @@ StopApplyingHandcuffs(playerid)
 
 hook OnHoldActionUpdate(playerid, progress)
 {
-	dbg("global", LOG_CORE, "[OnHoldActionUpdate] in /gamemodes/sss/core/item/handcuffs.pwn");
-
 	if(cuf_TargetPlayer[playerid] != INVALID_PLAYER_ID)
 	{
 		if(!CanPlayerHandcuffPlayer(playerid, cuf_TargetPlayer[playerid]))
@@ -111,8 +120,6 @@ hook OnHoldActionUpdate(playerid, progress)
 
 hook OnHoldActionFinish(playerid)
 {
-	dbg("global", LOG_CORE, "[OnHoldActionFinish] in /gamemodes/sss/core/item/handcuffs.pwn");
-
 	if(cuf_TargetPlayer[playerid] != INVALID_PLAYER_ID)
 	{
 		if(!CanPlayerHandcuffPlayer(playerid, cuf_TargetPlayer[playerid]))
@@ -123,7 +130,7 @@ hook OnHoldActionFinish(playerid)
 
 		if(IsPlayerCuffed(cuf_TargetPlayer[playerid]))
 		{
-			new itemid = CreateItem(item_HandCuffs);
+			new Item:itemid = CreateItem(item_HandCuffs);
 
 			SetPlayerCuffs(cuf_TargetPlayer[playerid], false);
 			GiveWorldItemToPlayer(playerid, itemid, 0);
@@ -144,7 +151,7 @@ hook OnHoldActionFinish(playerid)
 
 CanPlayerHandcuffPlayer(playerid, targetid)
 {
-	if(!IsPlayerInPlayerArea(playerid, targetid))
+	if(!IsPlayerNextToPlayer(playerid, targetid))
 		return 0;
 
 	if(GetPlayerWeapon(targetid) != 0)

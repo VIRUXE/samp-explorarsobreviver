@@ -1,24 +1,39 @@
-#include <YSI\y_hooks>
+/*==============================================================================
+
+
+	Southclaws' Scavenge and Survive
+
+		Copyright (C) 2020 Barnaby "Southclaws" Keene
+
+		This Source Code Form is subject to the terms of the Mozilla Public
+		License, v. 2.0. If a copy of the MPL was not distributed with this
+		file, You can obtain one at http://mozilla.org/MPL/2.0/.
+
+
+==============================================================================*/
+
+
+#include <YSI_Coding\y_hooks>
 
 
 #define RANCH_STUFF_VIRTUALW	(1)
 
 
 new
-	RanchPcButton,
-	RanchHdd,
+	Button:RanchPcButton,
+	Item:RanchHdd,
 	RanchPcState,
 	RanchPcObj,
 	RanchPcPlayerViewing[MAX_PLAYERS],
 
-	QuarryDoor,
-	QuarryDoorKey,
+	Button:QuarryDoor,
+	Item:QuarryDoorKey,
 	QuarryDoorState,
 
-	CaveDoor,
+	Button:CaveDoor,
 	CaveLift,
-	CaveLiftButtonT,
-	CaveLiftButtonB,
+	Button:CaveLiftButtonT,
+	Button:CaveLiftButtonB,
 	LiftPos;
 
 
@@ -26,7 +41,7 @@ hook OnGameModeInit()
 {
 	_Ranch_LoadObjects();
 
-	new buttonid[2];
+	new Button:buttonid[2];
 
 	// Ranch
 
@@ -52,34 +67,34 @@ hook OnGameModeInit()
 
 	buttonid[0] = CreateButton(-2796.933349, 3682.779785, 02.515481, "Press "KEYTEXT_INTERACT" to enter", RANCH_STUFF_VIRTUALW); // cave 1
 	buttonid[1] = CreateButton(-1445.01, 3673.77, 4.08, "Press "KEYTEXT_INTERACT" to enter", RANCH_STUFF_VIRTUALW); // cave 2
-	LinkTP(buttonid[0], buttonid[1]);
+	// LinkTP(buttonid[0], buttonid[1]);
 
 	// Cave 2
 	buttonid[0] = CreateButton(-1618.94, 3648.38, 6.90, "Press "KEYTEXT_INTERACT" to enter", RANCH_STUFF_VIRTUALW); // cave 2
 	buttonid[1] = CreateButton(-785.9272, 3727.1111, 0.5293, "Press "KEYTEXT_INTERACT" to enter", RANCH_STUFF_VIRTUALW); // cave 3
-	LinkTP(buttonid[0], buttonid[1]);
+	// LinkTP(buttonid[0], buttonid[1]);
 
 
 	// Subway/Metro
 
 	buttonid[0] = CreateButton(-1007.395263, 5782.741210, 42.951477, "Press "KEYTEXT_INTERACT" to climb up the ladder", RANCH_STUFF_VIRTUALW);
 	buttonid[1] = CreateButton(2526.719482, -1648.620605, 14.471982, "Press "KEYTEXT_INTERACT" to climb down the ladder");
-	LinkTP(buttonid[0], buttonid[1]);
+	// LinkTP(buttonid[0], buttonid[1]);
 
 	buttonid[0] = CreateButton(250.599380, -154.643936, -50.768798, "Press "KEYTEXT_INTERACT" to enter", RANCH_STUFF_VIRTUALW);
 	buttonid[1] = CreateButton(247.878799, -154.444061, 02.399550, "Press "KEYTEXT_INTERACT" to enter");
-	LinkTP(buttonid[0], buttonid[1]);
+	// LinkTP(buttonid[0], buttonid[1]);
 
 	buttonid[0] = CreateButton(-2276.608642, 5324.488281, 41.677970, "Press "KEYTEXT_INTERACT" to enter", RANCH_STUFF_VIRTUALW);
 	buttonid[1] = CreateButton(-734.773986, 3861.994628, 12.482711, "Press "KEYTEXT_INTERACT" to enter", RANCH_STUFF_VIRTUALW); // cave
-	LinkTP(buttonid[0], buttonid[1]);
+	// LinkTP(buttonid[0], buttonid[1]);
 
 
 	// Fort Claw underground
 
 	buttonid[0]=CreateButton(246.698684, -178.849655, -50.199367, "Press "KEYTEXT_INTERACT" to enter", RANCH_STUFF_VIRTUALW); // underground
 	buttonid[1]=CreateButton(-952.559326, 5137.799804, 46.183383, "Press "KEYTEXT_INTERACT" to enter", RANCH_STUFF_VIRTUALW); // metro station
-	LinkTP(buttonid[0], buttonid[1]);
+	// LinkTP(buttonid[0], buttonid[1]);
 
 	CreateButton(-972.153869, 4303.185058, 48.666248, "~r~Locked", RANCH_STUFF_VIRTUALW);
 
@@ -100,10 +115,8 @@ hook OnGameModeInit()
 		265.0322, -168.9355, -46.8575, 0.0, 0.0, 0.0, .worldid = RANCH_STUFF_VIRTUALW);
 }
 
-hook OnButtonPress(playerid, buttonid)
+hook OnButtonPress(playerid, Button:buttonid)
 {
-	dbg("global", LOG_CORE, "[OnButtonPress] in /gamemodes/sss/world/puzzles/ranch.pwn");
-
 	if(buttonid==RanchPcButton)
 	{
 	    if(RanchPcState == 0)Dialog_Show(playerid, DIALOG_STYLE_MSGBOX, "Computer", "You try to turn on the computer but the hard disk is missing.\nYou wonder where it could be and think it's mighty suspicious.\nThere is nothing useful nearby.", "Close", "");
@@ -174,10 +187,8 @@ hook OnButtonPress(playerid, buttonid)
 	return Y_HOOKS_CONTINUE_RETURN_0;
 }
 
-hook OnPlayerUseItemWithBtn(playerid, buttonid, itemid)
+hook OnPlayerUseItemWithBtn(playerid, Button:buttonid, Item:itemid)
 {
-	dbg("global", LOG_CORE, "[OnPlayerUseItemWithBtn] in /gamemodes/sss/world/puzzles/ranch.pwn");
-
 	if(buttonid == RanchPcButton && itemid == RanchHdd)
 	{
 	    Dialog_Show(playerid, DIALOG_STYLE_MSGBOX, "Computer", "You begin reattaching the hard drive to the computer.", "Close", "");
@@ -216,7 +227,7 @@ timer AttachRanchHdd[2500](playerid)
 
 _Ranch_LoadObjects()
 {
-	// Quarry (by Southclaw)
+	// Quarry (by Southclaws)
 
 	CreateDynamicObject(3865, 494.74981689453, 775.16119384766, -21.255405426025, 0.00000000000, 0.00000000000, 352.05993652344, RANCH_STUFF_VIRTUALW, 0);
 	CreateDynamicObject(16637, 495.3046875, 779.7001953125, -21.165279388428, 2.61474609375, 0.1153564453125, 261.54602050781, RANCH_STUFF_VIRTUALW, 0);
@@ -299,7 +310,7 @@ _Ranch_LoadObjects()
 	CreateDynamicObject(1508, -951.70983886719, 5137.6645507813, 46.841693878174, 0.000000000000, 0.000000000000, 1.250000000000, RANCH_STUFF_VIRTUALW);
 	CreateDynamicObject(1966, -951.69128417969, 5137.4526367188, 50.718822479248, 0.000000000000, 0.000000000000, 91.252227783203, RANCH_STUFF_VIRTUALW);
 
-	// Cave 1 (by Southclaw)
+	// Cave 1 (by Southclaws)
 
 	CreateDynamicObject(4898, -2775.58032, 3697.31665, 2.62368, 4.29720, 359.14059, 11.25000, RANCH_STUFF_VIRTUALW);
 	CreateDynamicObject(18226, -2793.81396, 3757.43286, 9.34636, 0.00000, 0.00000, 131.76004, RANCH_STUFF_VIRTUALW);
@@ -348,7 +359,7 @@ _Ranch_LoadObjects()
 	CreateDynamicObject(3458, -2756.90601, 3757.25098, 35.03610, 180.00000, 88.90686, 153.28900, RANCH_STUFF_VIRTUALW);
 
 
-	// Cave 2 (by Southclaw)
+	// Cave 2 (by Southclaws)
 
 	CreateDynamicObject(4898, -1478.027832, 3679.792725, 7.065671, 353.1245, 0.0000, 270.0000, RANCH_STUFF_VIRTUALW);
 	CreateDynamicObject(4898, -1636.890747, 3657.150635, 4.292534, 351.4056, 355.7028, 98.9040, RANCH_STUFF_VIRTUALW);
@@ -373,7 +384,7 @@ _Ranch_LoadObjects()
 	CreateDynamicObject(18226, -1486.303101, 3664.326660, 35.203533, 11.1727, 185.5343, 315.0000, RANCH_STUFF_VIRTUALW);
 
 
-	// Cave 3 (by Southclaw)
+	// Cave 3 (by Southclaws)
 
 	CreateDynamicObject(4898, -757.886658, 3781.770752, 0.578399, 7.7349, 0.0000, 0.0000, RANCH_STUFF_VIRTUALW);
 	CreateDynamicObject(6234, -776.257385, 3760.870117, 2.495516, 0.0000, 0.0000, 337.5000, RANCH_STUFF_VIRTUALW);

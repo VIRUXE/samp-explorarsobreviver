@@ -1,4 +1,19 @@
-#include <YSI\y_hooks>
+/*==============================================================================
+
+
+	Southclaws' Scavenge and Survive
+
+		Copyright (C) 2020 Barnaby "Southclaws" Keene
+
+		This Source Code Form is subject to the terms of the Mozilla Public
+		License, v. 2.0. If a copy of the MPL was not distributed with this
+		file, You can obtain one at http://mozilla.org/MPL/2.0/.
+
+
+==============================================================================*/
+
+
+#include <YSI_Coding\y_hooks>
 
 
 Load_SF()
@@ -70,26 +85,26 @@ SF_District_Housing1()
 	DefineWeaponsCachePos(-2898.28613, -35.74038, 3.17566);
 	DefineWeaponsCachePos(-2897.09619, 223.05794, 2.77412);
 
-	CreateStaticLootSpawn(-2686.955566, -55.497821, 3.326509, GetLootIndexFromName("world_civilian"), 30); // Church
-	CreateStaticLootSpawn(-2640.512939, -55.365501, 3.319649, GetLootIndexFromName("world_civilian"), 30); // Church
-	CreateStaticLootSpawn(-2720.734863, -19.837850, 3.325220, GetLootIndexFromName("world_civilian"), 30); // Church
-	CreateStaticLootSpawn(-2669.485595, -55.208419, 3.326689, GetLootIndexFromName("world_civilian"), 30); // Church
-	CreateStaticLootSpawn(-2627.352783, -34.894920, 3.316289, GetLootIndexFromName("world_civilian"), 30); // Church
-	CreateStaticLootSpawn(-2670.139648, -35.158798, 3.322580, GetLootIndexFromName("world_civilian"), 30); // Church
-	CreateStaticLootSpawn(-2637.962646, -55.448200, 3.319750, GetLootIndexFromName("world_civilian"), 30); // Church
-	CreateStaticLootSpawn(-2620.038085, -55.509151, 3.316819, GetLootIndexFromName("world_civilian"), 30); // Church
-	CreateStaticLootSpawn(-2737.563232, -53.629840, 3.370170, GetLootIndexFromName("world_civilian"), 30); // Church
-	CreateStaticLootSpawn(-2720.112548, -57.937610, 3.325279, GetLootIndexFromName("world_civilian"), 30); // Church
-	CreateStaticLootSpawn(-2737.491699, -34.390571, 3.363240, GetLootIndexFromName("world_civilian"), 30); // Church
-	CreateStaticLootSpawn(-2737.338623, -48.846080, 3.346659, GetLootIndexFromName("world_civilian"), 30); // Church
-	CreateStaticLootSpawn(-2720.656250, -33.696880, 3.324860, GetLootIndexFromName("world_civilian"), 30); // Church
-	CreateStaticLootSpawn(-2720.902587, -23.388610, 3.324860, GetLootIndexFromName("world_civilian"), 30); // Church
-	CreateStaticLootSpawn(-2721.036865, -48.448928, 3.325109, GetLootIndexFromName("world_civilian"), 30); // Church
-	CreateStaticLootSpawn(-2720.938232, -44.580238, 3.325190, GetLootIndexFromName("world_civilian"), 30); // Church
-	CreateStaticLootSpawn(-2768.824707, 110.624946, 6.175630, GetLootIndexFromName("world_civilian"), 30); // Church
-	CreateStaticLootSpawn(-2779.708007, 107.499443, 6.171810, GetLootIndexFromName("world_civilian"), 30); // Church
-	CreateStaticLootSpawn(-2778.041992, 138.701248, 6.179080, GetLootIndexFromName("world_civilian"), 30); // Church
-	CreateStaticLootSpawn(-2765.889160, 121.983222, 6.175250, GetLootIndexFromName("world_civilian"), 30); // Church
+	CreateStaticLootSpawn(-2686.955566, -55.497821, 3.326509, GetLootIndexFromName("world_civilian"), 30);
+	CreateStaticLootSpawn(-2640.512939, -55.365501, 3.319649, GetLootIndexFromName("world_civilian"), 30);
+	CreateStaticLootSpawn(-2720.734863, -19.837850, 3.325220, GetLootIndexFromName("world_civilian"), 30);
+	CreateStaticLootSpawn(-2669.485595, -55.208419, 3.326689, GetLootIndexFromName("world_civilian"), 30);
+	CreateStaticLootSpawn(-2627.352783, -34.894920, 3.316289, GetLootIndexFromName("world_civilian"), 30);
+	CreateStaticLootSpawn(-2670.139648, -35.158798, 3.322580, GetLootIndexFromName("world_civilian"), 30);
+	CreateStaticLootSpawn(-2637.962646, -55.448200, 3.319750, GetLootIndexFromName("world_civilian"), 30);
+	CreateStaticLootSpawn(-2620.038085, -55.509151, 3.316819, GetLootIndexFromName("world_civilian"), 30);
+	CreateStaticLootSpawn(-2737.563232, -53.629840, 3.370170, GetLootIndexFromName("world_civilian"), 30);
+	CreateStaticLootSpawn(-2720.112548, -57.937610, 3.325279, GetLootIndexFromName("world_civilian"), 30);
+	CreateStaticLootSpawn(-2737.491699, -34.390571, 3.363240, GetLootIndexFromName("world_civilian"), 30);
+	CreateStaticLootSpawn(-2737.338623, -48.846080, 3.346659, GetLootIndexFromName("world_civilian"), 30);
+	CreateStaticLootSpawn(-2720.656250, -33.696880, 3.324860, GetLootIndexFromName("world_civilian"), 30);
+	CreateStaticLootSpawn(-2720.902587, -23.388610, 3.324860, GetLootIndexFromName("world_civilian"), 30);
+	CreateStaticLootSpawn(-2721.036865, -48.448928, 3.325109, GetLootIndexFromName("world_civilian"), 30);
+	CreateStaticLootSpawn(-2720.938232, -44.580238, 3.325190, GetLootIndexFromName("world_civilian"), 30);
+	CreateStaticLootSpawn(-2768.824707, 110.624946, 6.175630, GetLootIndexFromName("world_civilian"), 30);
+	CreateStaticLootSpawn(-2779.708007, 107.499443, 6.171810, GetLootIndexFromName("world_civilian"), 30);
+	CreateStaticLootSpawn(-2778.041992, 138.701248, 6.179080, GetLootIndexFromName("world_civilian"), 30);
+	CreateStaticLootSpawn(-2765.889160, 121.983222, 6.175250, GetLootIndexFromName("world_civilian"), 30);
 	CreateStaticLootSpawn(-2775.639892, 77.413681, 6.177649, GetLootIndexFromName("world_civilian"), 30);
 	CreateStaticLootSpawn(-2776.515625, 65.119018, 6.172249, GetLootIndexFromName("world_civilian"), 30);
 	CreateStaticLootSpawn(-2779.621582, 92.219711, 6.171740, GetLootIndexFromName("world_civilian"), 30);
@@ -623,11 +638,11 @@ SF_District_Housing1()
 	CreateStaticLootSpawn(-2656.242187, 112.072669, 3.139640, GetLootIndexFromName("world_industrial"), 35);
 	CreateStaticLootSpawn(-2676.513916, 82.152877, 3.153749, GetLootIndexFromName("world_industrial"), 35);
 
-	CreateStaticLootSpawn(-2627.389404, 210.012847, 3.569750, GetLootIndexFromName("world_police"), 40); // Ammunation
-	CreateStaticLootSpawn(-2734.060058, 67.639999, 10.279999, GetLootIndexFromName("world_survivor"), 8.0); // House roof tops
-	CreateStaticLootSpawn(-2720.620117, 143.559997, 14.750000, GetLootIndexFromName("world_survivor"), 8.0); // House roof tops
-	CreateStaticLootSpawn(-2718.199951, -320.089996, 56.580001, GetLootIndexFromName("world_survivor"), 8.0); // House roof tops
-	CreateStaticLootSpawn(-2477.290039, -148.360000, 32.720001, GetLootIndexFromName("world_survivor"), 8.0); // House roof tops
+	CreateStaticLootSpawn(-2627.389404, 210.012847, 3.569750, GetLootIndexFromName("world_police"), 40);
+	CreateStaticLootSpawn(-2734.060058, 67.639999, 10.279999, GetLootIndexFromName("world_survivor"), 8.0);
+	CreateStaticLootSpawn(-2720.620117, 143.559997, 14.750000, GetLootIndexFromName("world_survivor"), 8.0);
+	CreateStaticLootSpawn(-2718.199951, -320.089996, 56.580001, GetLootIndexFromName("world_survivor"), 8.0);
+	CreateStaticLootSpawn(-2477.290039, -148.360000, 32.720001, GetLootIndexFromName("world_survivor"), 8.0);
 }
 SF_District_Housing2()
 {
@@ -1233,21 +1248,21 @@ SF_District_Housing2()
 	CreateStaticLootSpawn(-2541.259277, 983.656127, 77.268577,		GetLootIndexFromName("world_civilian"), 30);
 	CreateStaticLootSpawn(-2541.248291, 979.803833, 76.367599,		GetLootIndexFromName("world_civilian"), 30);
 
-	CreateStaticLootSpawn(-2568.919189, 554.966918, 13.449370,		GetLootIndexFromName("world_industrial"), 30); // Warehouse in front of Hospital
-	CreateStaticLootSpawn(-2458.527832, 1068.362304, 54.747890,		GetLootIndexFromName("world_industrial"), 30); // Near gas station
-	CreateStaticLootSpawn(-2563.156494, 554.220886, 13.449580,		GetLootIndexFromName("world_industrial"), 30); // Warehouse in front of Hospital
-	CreateStaticLootSpawn(-2473.392333, 1068.567138, 54.752159,		GetLootIndexFromName("world_industrial"), 30); // Warehouse in front of Hospital
-	CreateStaticLootSpawn(-2437.279296, 1029.667602, 49.385601,		GetLootIndexFromName("world_industrial"), 30); // Paynspray
-	CreateStaticLootSpawn(-2415.471435, 1025.269409, 49.380020,		GetLootIndexFromName("world_industrial"), 30); // Paynspray
-	CreateStaticLootSpawn(-2446.112792, 1000.232482, 49.386409,		GetLootIndexFromName("world_industrial"), 30); // Paynspray
-	CreateStaticLootSpawn(-2451.205322, 942.507324, 44.408699,		GetLootIndexFromName("world_industrial"), 30); // Near gas station
-	CreateStaticLootSpawn(-2413.939697, 1000.184204, 49.378929,		GetLootIndexFromName("world_industrial"), 30); // Paynspray
-	CreateStaticLootSpawn(-2422.919433, 989.630432, 44.294170,		GetLootIndexFromName("world_industrial"), 30); // Gas station
-	CreateStaticLootSpawn(-2685.859863, 836.678222, 48.975059,		GetLootIndexFromName("world_industrial"), 30); // Gas station
-	CreateStaticLootSpawn(-2648.218994, 782.475769, 48.963161,		GetLootIndexFromName("world_industrial"), 30); // Gas station
-	CreateStaticLootSpawn(-2660.536132, 782.336669, 48.964328,		GetLootIndexFromName("world_industrial"), 30); // Gas station
-	CreateStaticLootSpawn(-2451.304443, 951.872680, 44.276630,		GetLootIndexFromName("world_industrial"), 30); // Gas station
-	CreateStaticLootSpawn(-2450.662841, 987.344299, 44.285701,		GetLootIndexFromName("world_industrial"), 30); // Gas station
+	CreateStaticLootSpawn(-2568.919189, 554.966918, 13.449370,		GetLootIndexFromName("world_industrial"), 30);
+	CreateStaticLootSpawn(-2458.527832, 1068.362304, 54.747890,		GetLootIndexFromName("world_industrial"), 30);
+	CreateStaticLootSpawn(-2563.156494, 554.220886, 13.449580,		GetLootIndexFromName("world_industrial"), 30);
+	CreateStaticLootSpawn(-2473.392333, 1068.567138, 54.752159,		GetLootIndexFromName("world_industrial"), 30);
+	CreateStaticLootSpawn(-2437.279296, 1029.667602, 49.385601,		GetLootIndexFromName("world_industrial"), 30);
+	CreateStaticLootSpawn(-2415.471435, 1025.269409, 49.380020,		GetLootIndexFromName("world_industrial"), 30);
+	CreateStaticLootSpawn(-2446.112792, 1000.232482, 49.386409,		GetLootIndexFromName("world_industrial"), 30);
+	CreateStaticLootSpawn(-2451.205322, 942.507324, 44.408699,		GetLootIndexFromName("world_industrial"), 30);
+	CreateStaticLootSpawn(-2413.939697, 1000.184204, 49.378929,		GetLootIndexFromName("world_industrial"), 30);
+	CreateStaticLootSpawn(-2422.919433, 989.630432, 44.294170,		GetLootIndexFromName("world_industrial"), 30);
+	CreateStaticLootSpawn(-2685.859863, 836.678222, 48.975059,		GetLootIndexFromName("world_industrial"), 30);
+	CreateStaticLootSpawn(-2648.218994, 782.475769, 48.963161,		GetLootIndexFromName("world_industrial"), 30);
+	CreateStaticLootSpawn(-2660.536132, 782.336669, 48.964328,		GetLootIndexFromName("world_industrial"), 30);
+	CreateStaticLootSpawn(-2451.304443, 951.872680, 44.276630,		GetLootIndexFromName("world_industrial"), 30);
+	CreateStaticLootSpawn(-2450.662841, 987.344299, 44.285701,		GetLootIndexFromName("world_industrial"), 30);
 
 	CreateStaticLootSpawn(-2637.697509, 639.087463, 13.433400,		GetLootIndexFromName("world_medical"), 30);
 	CreateStaticLootSpawn(-2644.255615, 638.228149, 13.434479,		GetLootIndexFromName("world_medical"), 30);
@@ -1286,7 +1301,7 @@ SF_District_Housing2()
 	CreateStaticLootSpawn(-2670.026611, 696.182678, 26.901809,		GetLootIndexFromName("world_medical"), 30);
 	CreateStaticLootSpawn(-2542.500244, 623.800903, 26.789899,		GetLootIndexFromName("world_medical"), 30);
 
-	CreateStaticLootSpawn(-2706.540283, 853.937194, 76.087432,		GetLootIndexFromName("world_survivor"), 30); // Top of bbq house
+	CreateStaticLootSpawn(-2706.540283, 853.937194, 76.087432,		GetLootIndexFromName("world_survivor"), 30);
 	CreateStaticLootSpawn(-2672.921386, 920.155578, 86.109329,		GetLootIndexFromName("world_survivor"), 30);
 	CreateStaticLootSpawn(-2650.969238, 875.850036, 83.578262,		GetLootIndexFromName("world_survivor"), 30);
 	CreateStaticLootSpawn(-2696.626953, 819.924255, 72.870613,		GetLootIndexFromName("world_survivor"), 30);
@@ -1587,19 +1602,19 @@ SF_District_City1()
 	ChatMsgAll(YELLOW, " >  Loading world region: 'SF_District_City1' please wait...");
 
 	new
-		buttonid[2];
+		Button:buttonid[2];
 
 	buttonid[0] = CreateButton(-2208.2568, 579.8558, 35.7653, "Press F to activate", 0);
 	buttonid[1] = CreateButton(-2208.2561, 584.4679, 35.7653, "Press F to activate", 0);
 	CreateDoor(16501, buttonid,
 		-2211.40, 581.99, 36.37,   0.00, 0.00, 90.00,
-		-2211.40, 581.99, 39.61,   0.00, 0.00, 90.00, .movesound = 6000, .stopsound = 6002);
+		-2211.40, 581.99, 39.61,   0.00, 0.00, 90.00, .moveSound = 6000, .stopSound = 6002);
 
 	buttonid[0] = CreateButton(-2243.0400, 640.7287, 49.9911, "Press F to activate", 0);
 	buttonid[1] = CreateButton(-2238.6035, 641.0287, 49.9911, "Press F to activate", 0);
 	CreateDoor(16501, buttonid,
 		-2241.90, 643.55, 50.69,   0.00, 0.00, 0.00,
-		-2241.90, 643.55, 53.96,   0.00, 0.00, 0.00, .movesound = 6000, .stopsound = 6002);
+		-2241.90, 643.55, 53.96,   0.00, 0.00, 0.00, .moveSound = 6000, .stopSound = 6002);
 
 
 	CreateZipline(
@@ -2031,7 +2046,7 @@ SF_District_City1()
 	CreateStaticLootSpawn(-2307.217041, 797.814331, 47.026630, GetLootIndexFromName("world_civilian"), 30);
 	CreateStaticLootSpawn(-2286.424316, 797.464965, 48.441059, GetLootIndexFromName("world_civilian"), 30);
 	CreateStaticLootSpawn(-2464.524169, 895.737670, 62.083030, GetLootIndexFromName("world_civilian"), 30);
-	CreateStaticLootSpawn(-2131.987792, 1230.077148, 32.919948, GetLootIndexFromName("world_industrial"), 35); // Alley
+	CreateStaticLootSpawn(-2131.987792, 1230.077148, 32.919948, GetLootIndexFromName("world_industrial"), 35);
 	CreateStaticLootSpawn(-2143.292480, 1248.628417, 22.700809, GetLootIndexFromName("world_industrial"), 35);
 	CreateStaticLootSpawn(-2178.442138, 453.895721, 34.147888, GetLootIndexFromName("world_industrial"), 35);
 	CreateStaticLootSpawn(-2211.002685, 414.953460, 34.150531, GetLootIndexFromName("world_industrial"), 35);
@@ -2065,10 +2080,10 @@ SF_District_City1()
 	CreateStaticLootSpawn(-2275.901123, 537.943176, 34.111160, GetLootIndexFromName("world_industrial"), 35);
 	CreateStaticLootSpawn(-2199.044921, 972.754943, 78.993202, GetLootIndexFromName("world_industrial"), 35);
 	CreateStaticLootSpawn(-2276.089843, 524.435119, 34.123508, GetLootIndexFromName("world_industrial"), 35);
-	CreateStaticLootSpawn(-2446.541992, 516.124816, 29.226570, GetLootIndexFromName("world_police"), 40); // Federal mint
-	CreateStaticLootSpawn(-2455.307617, 503.928527, 29.069019, GetLootIndexFromName("world_police"), 40); // Federal mint
-	CreateStaticLootSpawn(-2438.853027, 495.092437, 29.099840, GetLootIndexFromName("world_police"), 40); // Federal mint
-	CreateStaticLootSpawn(-2346.660156, 536.783264, 76.398193, GetLootIndexFromName("world_survivor"), 10); // A fucking chimeney
+	CreateStaticLootSpawn(-2446.541992, 516.124816, 29.226570, GetLootIndexFromName("world_police"), 40);
+	CreateStaticLootSpawn(-2455.307617, 503.928527, 29.069019, GetLootIndexFromName("world_police"), 40);
+	CreateStaticLootSpawn(-2438.853027, 495.092437, 29.099840, GetLootIndexFromName("world_police"), 40);
+	CreateStaticLootSpawn(-2346.660156, 536.783264, 76.398193, GetLootIndexFromName("world_survivor"), 10);
 	CreateStaticLootSpawn(-2384.442138, 485.373565, 83.006576, GetLootIndexFromName("world_survivor"), 10);
 	CreateStaticLootSpawn(-2344.066650, 488.628082, 83.509140, GetLootIndexFromName("world_survivor"), 10);
 	CreateStaticLootSpawn(-2446.138671, 526.878295, 33.151088, GetLootIndexFromName("world_survivor"), 10);
@@ -2648,19 +2663,19 @@ SF_District_City2()
 	CreateStaticLootSpawn(-2122.452390, 655.957280, 51.360810, GetLootIndexFromName("world_industrial"), 35.000000, 3);
 	CreateStaticLootSpawn(-2104.185300, 654.216060, 51.363730, GetLootIndexFromName("world_industrial"), 35.000000, 3);
 	CreateStaticLootSpawn(-1830.498540, 670.765630, 29.415220, GetLootIndexFromName("world_industrial"), 35.000000, 3);
-	CreateStaticLootSpawn(-1951.270020, 643.760010, 45.650000, GetLootIndexFromName("world_military"), 20.000000, 3); // Zombotech
-	CreateStaticLootSpawn(-1981.880000, 657.570010, 45.650000, GetLootIndexFromName("world_military"), 20.000000, 3); // Zombotech
-	CreateStaticLootSpawn(-1952.750000, 683.210020, 45.650000, GetLootIndexFromName("world_military"), 20.000000, 3); // Zombotech
-	CreateStaticLootSpawn(-1923.599980, 666.200010, 45.650000, GetLootIndexFromName("world_military"), 20.000000, 3); // Zombotech
-	CreateStaticLootSpawn(-1950.800050, 726.669980, 44.380000, GetLootIndexFromName("world_military"), 20.000000, 3); // Zombotech
-	CreateStaticLootSpawn(-1982.650020, 702.380000, 45.650000, GetLootIndexFromName("world_military"), 20.000000, 3); // Zombotech
-	CreateStaticLootSpawn(-1922.660030, 701.909970, 45.650000, GetLootIndexFromName("world_military"), 20.000000, 3); // Zombotech
-	CreateStaticLootSpawn(-1920.949950, 714.370000, 45.650000, GetLootIndexFromName("world_military"), 20.000000, 3); // Zombotech
+	CreateStaticLootSpawn(-1951.270020, 643.760010, 45.650000, GetLootIndexFromName("world_military"), 20.000000, 3);
+	CreateStaticLootSpawn(-1981.880000, 657.570010, 45.650000, GetLootIndexFromName("world_military"), 20.000000, 3);
+	CreateStaticLootSpawn(-1952.750000, 683.210020, 45.650000, GetLootIndexFromName("world_military"), 20.000000, 3);
+	CreateStaticLootSpawn(-1923.599980, 666.200010, 45.650000, GetLootIndexFromName("world_military"), 20.000000, 3);
+	CreateStaticLootSpawn(-1950.800050, 726.669980, 44.380000, GetLootIndexFromName("world_military"), 20.000000, 3);
+	CreateStaticLootSpawn(-1982.650020, 702.380000, 45.650000, GetLootIndexFromName("world_military"), 20.000000, 3);
+	CreateStaticLootSpawn(-1922.660030, 701.909970, 45.650000, GetLootIndexFromName("world_military"), 20.000000, 3);
+	CreateStaticLootSpawn(-1920.949950, 714.370000, 45.650000, GetLootIndexFromName("world_military"), 20.000000, 3);
 	CreateStaticLootSpawn(-1917.630000, 946.890010, 44.900000, GetLootIndexFromName("world_survivor"), 10.000000, 3);
 	CreateStaticLootSpawn(-1855.859990, 986.120000, 44.510000, GetLootIndexFromName("world_survivor"), 10.000000, 3);
 	CreateStaticLootSpawn(-1868.219970, 972.479980, 48.760000, GetLootIndexFromName("world_survivor"), 10.000000, 3);
 	CreateStaticLootSpawn(-1953.010010, 1018.929990, 66.899990, GetLootIndexFromName("world_survivor"), 10.000000, 3);
-	CreateStaticLootSpawn(-1989.020020, 1106.050050, 82.679990, GetLootIndexFromName("world_survivor"), 10.000000, 3); // Church tower
+	CreateStaticLootSpawn(-1989.020020, 1106.050050, 82.679990, GetLootIndexFromName("world_survivor"), 10.000000, 3);
 	CreateStaticLootSpawn(-1808.140010, 1027.050050, 44.320000, GetLootIndexFromName("world_survivor"), 10.000000, 3);
 	CreateStaticLootSpawn(-1868.489990, 811.460020, 111.620000, GetLootIndexFromName("world_survivor"), 10.000000, 3);
 	CreateStaticLootSpawn(-1844.569950, 825.570010, 108.929990, GetLootIndexFromName("world_survivor"), 10.000000, 3);
@@ -2701,7 +2716,7 @@ SF_District_Naval()
 {
 	ChatMsgAll(YELLOW, " >  Loading world region: 'SF_District_Naval' please wait...");
 
-	new buttonid[1];
+	new Button:buttonid[1];
 
 	// Requires "./scriptfiles/Maps/SF/Naval Base.map" to remove:
 	// RemoveBuildingForPlayer(playerid, 968, -1526.4375, 481.3828, 6.9063, 0.01);
@@ -2711,7 +2726,7 @@ SF_District_Naval()
 	CreateDoor(968, buttonid,
 		-1526.4375, 481.3828, 7.02, 356.8584, 270.00, 0.0,
 		-1526.4375, 481.3828, 7.00, 356.8584, 0.0000, 0.0,
-		.closedelay = -1, .maxbuttons = 1, .movespeed = 0.01, .movesound = 0, .stopsound = 0);
+		.closeDelay = -1, .maxButtons = 1, .moveSpeed = 0.01, .moveSound = 0, .stopSound = 0);
 
 	CreateStaticLootSpawn(-1346.540039, 492.079986, 10.279999,		GetLootIndexFromName("world_civilian"), 15.0);
 
@@ -3512,8 +3527,8 @@ SF_District_MontFoster()
 	CreateStaticLootSpawn(-1949.830566, -1086.813232, 29.760789, GetLootIndexFromName("world_industrial"), 35);
 	CreateStaticLootSpawn(-1942.155883, -1087.385498, 29.762199, GetLootIndexFromName("world_industrial"), 35);
 	CreateStaticLootSpawn(-2046.314086, -1015.848388, 31.168479, GetLootIndexFromName("world_industrial"), 35);
-	CreateStaticLootSpawn(-2718.644531, -320.541259, 56.482761, GetLootIndexFromName("world_military"), 20); // Hotel touer
-	CreateStaticLootSpawn(-2718.166259, -319.218170, 56.483180, GetLootIndexFromName("world_military"), 20); // Hotel touer
+	CreateStaticLootSpawn(-2718.644531, -320.541259, 56.482761, GetLootIndexFromName("world_military"), 20);
+	CreateStaticLootSpawn(-2718.166259, -319.218170, 56.483180, GetLootIndexFromName("world_military"), 20);
 	CreateStaticLootSpawn(-1965.399902, -1024.237426, 58.323169, GetLootIndexFromName("world_survivor"), 10);
 	CreateStaticLootSpawn(-1958.616821, -1018.107666, 52.322738, GetLootIndexFromName("world_survivor"), 10);
 	CreateStaticLootSpawn(-2009.385742, -1025.608276, 58.329498, GetLootIndexFromName("world_survivor"), 10);

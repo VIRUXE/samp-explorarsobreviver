@@ -1,4 +1,19 @@
-#include <YSI\y_hooks>
+/*==============================================================================
+
+
+	Southclaws' Scavenge and Survive
+
+		Copyright (C) 2020 Barnaby "Southclaws" Keene
+
+		This Source Code Form is subject to the terms of the Mozilla Public
+		License, v. 2.0. If a copy of the MPL was not distributed with this
+		file, You can obtain one at http://mozilla.org/MPL/2.0/.
+
+
+==============================================================================*/
+
+
+#include <YSI_Coding\y_hooks>
 
 
 #define MAX_VEHICLES_IN_RANGE			(8)
@@ -73,8 +88,6 @@ stock CreateVehicleArea(vehicleid)
 
 hook OnVehicleCreated(vehicleid)
 {
-	dbg("global", LOG_CORE, "[OnVehicleCreated] in /gamemodes/sss/core/vehicle/interact.pwn");
-
 	CreateVehicleArea(vehicleid);
 
 	return Y_HOOKS_CONTINUE_RETURN_0;
@@ -82,15 +95,11 @@ hook OnVehicleCreated(vehicleid)
 
 hook OnPlayerEnterDynArea(playerid, areaid)
 {
-	dbg("global", LOG_CORE, "[OnPlayerEnterDynArea] in /gamemodes/sss/core/vehicle/interact.pwn");
-
 	_vint_EnterArea(playerid, areaid);
 }
 
 hook OnPlayerLeaveDynArea(playerid, areaid)
 {
-	dbg("global", LOG_CORE, "[OnPlayerLeaveDynArea] in /gamemodes/sss/core/vehicle/interact.pwn");
-
 	_vint_LeaveArea(playerid, areaid);
 
 	return Y_HOOKS_CONTINUE_RETURN_0;
@@ -98,23 +107,18 @@ hook OnPlayerLeaveDynArea(playerid, areaid)
 
 _vint_EnterArea(playerid, areaid)
 {
-	dbg("gamemodes/sss/core/vehicle/interact.pwn", 1, "[_vint_EnterArea] %d %d", playerid, areaid);
-
 	if(IsPlayerInAnyVehicle(playerid))
 	{
-		dbg("gamemodes/sss/core/vehicle/interact.pwn", 1, "[_vint_EnterArea] Player in vehicle");
 		return;
 	}
 
 	if(!IsValidDynamicArea(areaid))
 	{
-		dbg("gamemodes/sss/core/vehicle/interact.pwn", 1, "[_vint_EnterArea] Invalid area ID (%d)", areaid);
 		return;
 	}
 
 	if(Iter_Count(varea_NearIndex[playerid]) == MAX_VEHICLES_IN_RANGE)
 	{
-		dbg("gamemodes/sss/core/vehicle/interact.pwn", 1, "[_vint_EnterArea] Player already in maximum amount of vehicle areas");
 		return;
 	}
 
@@ -124,13 +128,11 @@ _vint_EnterArea(playerid, areaid)
 
 	if(data[0] != VEH_STREAMER_AREA_IDENTIFIER)
 	{
-		dbg("gamemodes/sss/core/vehicle/interact.pwn", 1, "[_vint_EnterArea] Area not vehicle area type");
 		return;
 	}
 
 	if(!IsValidVehicle(data[1]))
 	{
-		dbg("gamemodes/sss/core/vehicle/interact.pwn", 1, "[_vint_EnterArea] Area contains invalid vehicle ID");
 		return;
 	}
 
@@ -158,8 +160,10 @@ _vint_EnterArea(playerid, areaid)
 		varea_NearList[playerid][cell] = data[1];
 		Iter_Add(varea_NearIndex[playerid], cell);
 	}
-	/*else
-		err("Vehicle %d already in NearList for player %d", data[1], playerid);*/
+	else
+	{
+		err("Vehicle %d already in NearList for player %d", data[1], playerid);
+	}
 
 	CallLocalFunction("OnPlayerEnterVehArea", "dd", playerid, data[1]);
 
@@ -170,19 +174,16 @@ _vint_LeaveArea(playerid, areaid)
 {
 	if(IsPlayerInAnyVehicle(playerid))
 	{
-		dbg("gamemodes/sss/core/vehicle/interact.pwn", 1, "[_vint_LeaveArea] Player in vehicle");
 		return;
 	}
 
 	if(!IsValidDynamicArea(areaid))
 	{
-		dbg("gamemodes/sss/core/vehicle/interact.pwn", 1, "[_vint_LeaveArea] Invalid area ID (%d)", areaid);
 		return;
 	}
 
 	if(Iter_Count(varea_NearIndex[playerid]) == 0)
 	{
-		dbg("gamemodes/sss/core/vehicle/interact.pwn", 1, "[_vint_LeaveArea] Vehicle area list is empty");
 		return;
 	}
 
@@ -192,13 +193,11 @@ _vint_LeaveArea(playerid, areaid)
 
 	if(data[0] != VEH_STREAMER_AREA_IDENTIFIER)
 	{
-		dbg("gamemodes/sss/core/vehicle/interact.pwn", 1, "[_vint_LeaveArea] Area not vehicle area type");
 		return;
 	}
 
 	if(!IsValidVehicle(data[1]))
 	{
-		dbg("gamemodes/sss/core/vehicle/interact.pwn", 1, "[_vint_LeaveArea] Vehicle in area data is invalid");
 		return;
 	}
 
@@ -209,7 +208,6 @@ _vint_LeaveArea(playerid, areaid)
 	{
 		if(varea_NearList[playerid][i] == data[1])
 		{
-			dbg("gamemodes/sss/core/vehicle/interact.pwn", 2, "[_vint_LeaveArea] Removed vehicle from list");
 			Iter_Remove(varea_NearIndex[playerid], i);
 			break;
 		}
@@ -220,8 +218,6 @@ _vint_LeaveArea(playerid, areaid)
 
 hook OnPlayerKeyStateChange(playerid, newkeys, oldkeys)
 {
-	dbg("global", LOG_CORE, "[OnPlayerKeyStateChange] in /gamemodes/sss/core/vehicle/interact.pwn");
-
 	if(newkeys == 16)
 		_varea_Interact(playerid);
 
@@ -230,17 +226,14 @@ hook OnPlayerKeyStateChange(playerid, newkeys, oldkeys)
 
 _varea_Interact(playerid)
 {
-	dbg("gamemodes/sss/core/vehicle/interact.pwn", 1, "[_varea_Interact] %d", playerid);
-
 	if(IsPlayerInAnyVehicle(playerid))
 	{
-		dbg("gamemodes/sss/core/vehicle/interact.pwn", 1, "[_varea_Interact] Player in vehicle");
 		return;
 	}
 
 	if(!IsPlayerInAnyDynamicArea(playerid))
 	{
-		//err("Player %d is not in areas but list isn't empty. Purging list.", playerid);
+		err("Player %d is not in areas but list isn't empty. Purging list.", playerid);
 		Iter_Clear(varea_NearIndex[playerid]);
 	}
 
@@ -263,7 +256,6 @@ _varea_Interact(playerid)
 
 	foreach(new i : varea_NearIndex[playerid])
 	{
-		dbg("gamemodes/sss/core/vehicle/interact.pwn", 2, "[_varea_Interact] [%d] Looping vehicles in list", i);
 		if(index >= MAX_VEHICLES_IN_RANGE - 1)
 		{
 			err("[_varea_Interact] varea_NearIndex tried to iterate %d times! Iterator size is %d", index, Iter_Count(varea_NearIndex));
@@ -277,7 +269,6 @@ _varea_Interact(playerid)
 
 		if(distance > (size_y / 2.0) + 0.8)
 		{
-			dbg("gamemodes/sss/core/vehicle/interact.pwn", 2, "[_varea_Interact] ERROR: Vehicle is too far away");
 			continue;
 		}
 
@@ -287,12 +278,10 @@ _varea_Interact(playerid)
 		index++;
 	}
 
-	dbg("gamemodes/sss/core/vehicle/interact.pwn", 1, "[_varea_Interact] Sorting compiled list");
 	_varea_SortPlayerVehicleList(list, 0, index);
 
 	for(new i = index - 1; i >= 0; i--)
 	{
-		dbg("gamemodes/sss/core/vehicle/interact.pwn", 2, "[_varea_Interact] [%d/%d] Interacting with vehicle", i, index);
 		if(!_varea_InteractSpecific(playerid, list[i][E_VEHICLE_AREA_VEHICLEID]))
 			break;
 	}
@@ -301,8 +290,6 @@ _varea_Interact(playerid)
 
 _varea_InteractSpecific(playerid, vehicleid)
 {
-	dbg("gamemodes/sss/core/vehicle/interact.pwn", 1, "[_varea_InteractSpecific] %d %d", playerid, vehicleid);
-
 	new
 		Float:px,
 		Float:py,
@@ -321,13 +308,11 @@ _varea_InteractSpecific(playerid, vehicleid)
 
 	if(!( (vz - 1.0) < pz < (vz + 2.0) ))
 	{
-		dbg("gamemodes/sss/core/vehicle/interact.pwn", 1, "[_varea_InteractSpecific] Vehicle out of Z bounds");
 		return 0;
 	}
 
 	if(CallLocalFunction("OnPlayerInteractVehicle", "ddf", playerid, vehicleid, angle))
 	{
-		dbg("gamemodes/sss/core/vehicle/interact.pwn", 1, "[_varea_InteractSpecific] OnPlayerInteractVehicle returned 1 to cancel call");
 		return 0;
 	}
 
@@ -445,15 +430,9 @@ stock IsPlayerAtVehicleTrunk(playerid, vehicleid)
 
 	angle = absoluteangle(vr - GetAngleToPoint(vx, vy, px, py));
 
-	if(!IsVehicleEngineAtTheBack(vehicleid))
+	if(155.0 < angle < 205.0)
 	{
-		if(155.0 < angle < 205.0)
-			return 1;
-	}
-	else
-	{
-		if(-25.0 < angle < 25.0 || 335.0 < angle < 385.0)
-			return 1;
+		return 1;
 	}
 
 	return 0;
@@ -487,15 +466,9 @@ stock IsPlayerAtVehicleBonnet(playerid, vehicleid)
 
 	angle = absoluteangle(vr - GetAngleToPoint(vx, vy, px, py));
 
-	if(!IsVehicleEngineAtTheBack(vehicleid))
+	if(-25.0 < angle < 25.0 || 335.0 < angle < 385.0)
 	{
-		if(-25.0 < angle < 25.0 || 335.0 < angle < 385.0)
-			return 1;
-	}
-	else
-	{
-		if(155.0 < angle < 205.0)
-			return 1;
+		return 1;
 	}
 
 	return 0;

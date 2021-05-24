@@ -1,4 +1,19 @@
-#include <YSI\y_hooks>
+/*==============================================================================
+
+
+	Southclaws' Scavenge and Survive
+
+		Copyright (C) 2020 Barnaby "Southclaws" Keene
+
+		This Source Code Form is subject to the terms of the Mozilla Public
+		License, v. 2.0. If a copy of the MPL was not distributed with this
+		file, You can obtain one at http://mozilla.org/MPL/2.0/.
+
+
+==============================================================================*/
+
+
+#include <YSI_Coding\y_hooks>
 
 
 /*
@@ -25,9 +40,9 @@ RC = ?
 enum E_LOCKUP_DATA
 {
 	lck_keyCode,
-	lck_keyButton,
-	lck_extButton,
-	lck_intButton,
+	Button:lck_keyButton,
+	Button:lck_extButton,
+	Button:lck_intButton,
 	lck_locked
 }
 
@@ -40,16 +55,16 @@ new
 
 hook OnGameModeInit()
 {
-	LoadLockup_SF();
 	SetItemTypeMaxArrayData(item_CodePart, 1);
+	LoadLockup_SF();
 }
 
-CreateCodeParts(Float:coords[][], size, keycode)
+CreateCodeParts(const Float:coords[][], size, keycode)
 {
 	new
 		output[16],
 		code[4 char],
-		itemid[4],
+		Item:itemid[4],
 		nameextra[4][2];
 
 	PickFromList(size, 4, output);
@@ -76,7 +91,7 @@ CreateCodeParts(Float:coords[][], size, keycode)
 	SetItemNameExtra(itemid[3], nameextra[3]);
 }
 
-CreateLockup(keypadbutton, extButton, intButton)
+CreateLockup(Button:keypadbutton, Button:extButton, Button:intButton)
 {
 	new keycode = 1000 + random(8999);
 	lck_Data[lck_Total][lck_keyCode] = keycode;
@@ -84,17 +99,16 @@ CreateLockup(keypadbutton, extButton, intButton)
 	lck_Data[lck_Total][lck_extButton] = extButton;
 	lck_Data[lck_Total][lck_intButton] = intButton;
 	lck_Data[lck_Total][lck_locked] = 1;
-	LinkTP(extButton, intButton);
+	// TODO: implement LinkTP
+	// LinkTP(extButton, intButton);
 
 	lck_Total++;
 
 	return keycode;
 }
 
-hook OnButtonPress(playerid, buttonid)
+hook OnButtonPress(playerid, Button:buttonid)
 {
-	dbg("global", LOG_CORE, "[OnButtonPress] in /gamemodes/sss/world/puzzles/codehunt.pwn");
-
 	for(new i; i < lck_Total; i++)
 	{
 		if(buttonid == lck_Data[i][lck_keyButton])
@@ -119,8 +133,6 @@ hook OnButtonPress(playerid, buttonid)
 
 hook OnPlayerKeypadEnter(playerid, keypadid, code, match)
 {
-	dbg("global", LOG_CORE, "[OnPlayerKeypadEnter] in /gamemodes/sss/world/puzzles/codehunt.pwn");
-
 	if(keypadid == k_Lockup)
 	{
 		if(code == match && lck_CurrentLockup[playerid] != -1)

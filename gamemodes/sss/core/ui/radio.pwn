@@ -1,4 +1,19 @@
-#include <YSI\y_hooks>
+/*==============================================================================
+
+
+	Southclaws' Scavenge and Survive
+
+		Copyright (C) 2020 Barnaby "Southclaws" Keene
+
+		This Source Code Form is subject to the terms of the Mozilla Public
+		License, v. 2.0. If a copy of the MPL was not distributed with this
+		file, You can obtain one at http://mozilla.org/MPL/2.0/.
+
+
+==============================================================================*/
+
+
+#include <YSI_Coding\y_hooks>
 
 
 #define MAX_RADIO_FREQ (108.0)
@@ -21,6 +36,8 @@ static
 
 ShowRadioUI(playerid)
 {
+	ClosePlayerInventory(playerid, true);
+	
 	PlayerTextDrawShow(playerid, RadioUI_Main[playerid]);
 	PlayerTextDrawShow(playerid, RadioUI_Strip[playerid]);
 	PlayerTextDrawShow(playerid, RadioUI_KnobL[playerid]);
@@ -49,6 +66,7 @@ HideRadioUI(playerid)
 
 	if(!IsPlayerInAnyVehicle(playerid))
 		DisplayPlayerInventory(playerid);
+
 	else
 		CancelSelectTextDraw(playerid);
 
@@ -68,6 +86,7 @@ UpdateRadioUI(playerid)
 
 		if(rad_OldMode[playerid] == CHAT_MODE_GLOBAL)
 			PlayerTextDrawSetString(playerid, RadioUI_Mode[playerid], "global");
+
 		else
 			PlayerTextDrawSetString(playerid, RadioUI_Mode[playerid], "freq");
 	}
@@ -87,12 +106,11 @@ UpdateRadioUI(playerid)
 
 hook OnPlayerClickPlayerTD(playerid, PlayerText:playertextid)
 {
-	dbg("global", LOG_CORE, "[OnPlayerClickPlayerTD] in /gamemodes/sss/core/ui/radio.pwn");
-
 	if(playertextid == RadioUI_KnobL[playerid])
 	{
 		if(GetPlayerRadioFrequency(playerid) - 0.5 <= MIN_RADIO_FREQ)
 			SetPlayerRadioFrequency(playerid, MIN_RADIO_FREQ);
+
 		else
 			SetPlayerRadioFrequency(playerid, GetPlayerRadioFrequency(playerid) - 0.5);
 
@@ -102,6 +120,7 @@ hook OnPlayerClickPlayerTD(playerid, PlayerText:playertextid)
 	{
 		if(GetPlayerRadioFrequency(playerid) + 0.5 >= MAX_RADIO_FREQ)
 			SetPlayerRadioFrequency(playerid, MAX_RADIO_FREQ);
+
 		else
 			SetPlayerRadioFrequency(playerid, GetPlayerRadioFrequency(playerid) + 0.5);
 
@@ -111,19 +130,23 @@ hook OnPlayerClickPlayerTD(playerid, PlayerText:playertextid)
 	{
 		if(GetPlayerChatMode(playerid) == CHAT_MODE_GLOBAL)
 			SetPlayerChatMode(playerid, CHAT_MODE_RADIO);
+
 		else if(GetPlayerChatMode(playerid) == CHAT_MODE_RADIO)
 			SetPlayerChatMode(playerid, CHAT_MODE_GLOBAL);
 
 		UpdateRadioUI(playerid);
 	}
 	if(playertextid == RadioUI_Freq[playerid])
+	{
 		ShowFrequencyDialog(playerid);
+	}
 	if(playertextid == RadioUI_Power[playerid])
 	{
 		if(GetPlayerChatMode(playerid) == CHAT_MODE_LOCAL)
 		{
 			if(rad_OldMode[playerid] == CHAT_MODE_GLOBAL)
 				SetPlayerChatMode(playerid, CHAT_MODE_GLOBAL);
+
 			else
 				SetPlayerChatMode(playerid, CHAT_MODE_RADIO);
 		}
@@ -136,7 +159,9 @@ hook OnPlayerClickPlayerTD(playerid, PlayerText:playertextid)
 		UpdateRadioUI(playerid);
 	}
 	if(playertextid == RadioUI_Back[playerid])
+	{
 		HideRadioUI(playerid);
+	}
 
 	return 1;
 }
@@ -154,14 +179,18 @@ ShowFrequencyDialog(playerid)
 				if(MIN_RADIO_FREQ <= frequency <= MAX_RADIO_FREQ)
 				{
 					SetPlayerRadioFrequency(playerid, frequency);
+					log("%p updated frequency to %.2f", playerid, frequency);
 					UpdateRadioUI(playerid);
-					log(DISCORD_CHANNEL_ADMINEVENTS, "[RADIO] `%p` updated radio frequency to `%.2f`", playerid, frequency);
 				}
 				else
+				{
 					ShowFrequencyDialog(playerid);
+				}
 			}
 			else
+			{
 				ShowFrequencyDialog(playerid);
+			}
 		}
 	}
 	Dialog_ShowCallback(playerid, using inline Response, DIALOG_STYLE_INPUT, "Frequency", "Enter a frequency between 87.5 and 108.0", "Accept", "Cancel");
@@ -171,20 +200,18 @@ ShowFrequencyDialog(playerid)
 
 hook OnPlayerClickTextDraw(playerid, Text:clickedid)
 {
-	dbg("global", LOG_CORE, "[OnPlayerClickTextDraw] in /gamemodes/sss/core/ui/radio.pwn");
-
 	if(clickedid == Text:65535)
 	{
 		if(rad_ViewingRadio[playerid])
+		{
 			SelectTextDraw(playerid, 0xFFFFFF88);
+		}
 	}
 }
 
 
 hook OnPlayerOpenInventory(playerid)
 {
-	dbg("global", LOG_CORE, "[OnPlayerOpenInventory] in /gamemodes/sss/core/ui/radio.pwn");
-
 	rad_InventoryItem[playerid] = AddInventoryListItem(playerid, "Radio");
 
 	return Y_HOOKS_CONTINUE_RETURN_0;
@@ -192,10 +219,10 @@ hook OnPlayerOpenInventory(playerid)
 
 hook OnPlayerSelectExtraItem(playerid, item)
 {
-	dbg("global", LOG_CORE, "[OnPlayerSelectExtraItem] in /gamemodes/sss/core/ui/radio.pwn");
-
 	if(item == rad_InventoryItem[playerid])
+	{
 		ShowRadioUI(playerid);
+	}
 
 	return Y_HOOKS_CONTINUE_RETURN_0;
 }
@@ -203,8 +230,6 @@ hook OnPlayerSelectExtraItem(playerid, item)
 
 hook OnPlayerConnect(playerid)
 {
-	dbg("global", LOG_CORE, "[OnPlayerConnect] in /gamemodes/sss/core/ui/radio.pwn");
-
 	RadioUI_Main[playerid]					= CreatePlayerTextDraw(playerid, 320.000000, 200.000000, "RADIO~n~ ~n~ ~n~ ~n~ ~n~ ");
 	PlayerTextDrawAlignment			(playerid, RadioUI_Main[playerid], 2);
 	PlayerTextDrawBackgroundColor	(playerid, RadioUI_Main[playerid], 255);
@@ -261,7 +286,7 @@ hook OnPlayerConnect(playerid)
 	PlayerTextDrawSetProportional	(playerid, RadioUI_Mode[playerid], 1);
 	PlayerTextDrawSetShadow			(playerid, RadioUI_Mode[playerid], 1);
 	PlayerTextDrawUseBox			(playerid, RadioUI_Mode[playerid], 1);
-	PlayerTextDrawBoxColor			(playerid, RadioUI_Mode[playerid], 255);
+	PlayerTextDrawBoxColor			(playerid, RadioUI_Mode[playerid], 0);
 	PlayerTextDrawTextSize			(playerid, RadioUI_Mode[playerid], 20.000000, 30.000000);
 	PlayerTextDrawSetSelectable		(playerid, RadioUI_Mode[playerid], true);
 
@@ -289,7 +314,7 @@ hook OnPlayerConnect(playerid)
 	PlayerTextDrawSetProportional	(playerid, RadioUI_Power[playerid], 1);
 	PlayerTextDrawSetShadow			(playerid, RadioUI_Power[playerid], 1);
 	PlayerTextDrawUseBox			(playerid, RadioUI_Power[playerid], 1);
-	PlayerTextDrawBoxColor			(playerid, RadioUI_Power[playerid], 255);
+	PlayerTextDrawBoxColor			(playerid, RadioUI_Power[playerid], 0);
 	PlayerTextDrawTextSize			(playerid, RadioUI_Power[playerid], 20.000000, 30.000000);
 	PlayerTextDrawSetSelectable		(playerid, RadioUI_Power[playerid], true);
 

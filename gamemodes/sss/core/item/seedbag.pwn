@@ -1,4 +1,19 @@
-#include <YSI\y_hooks>
+/*==============================================================================
+
+
+	Southclaws' Scavenge and Survive
+
+		Copyright (C) 2020 Barnaby "Southclaws" Keene
+
+		This Source Code Form is subject to the terms of the Mozilla Public
+		License, v. 2.0. If a copy of the MPL was not distributed with this
+		file, You can obtain one at http://mozilla.org/MPL/2.0/.
+
+
+==============================================================================*/
+
+
+#include <YSI_Coding\y_hooks>
 
 
 #define MAX_SEED_TYPES	(16)
@@ -6,7 +21,7 @@
 
 enum E_SEED_TYPE_DATA
 {
-			seed_name[ITM_MAX_NAME],
+			seed_name[MAX_ITEM_NAME],
 ItemType:	seed_itemType,
 			seed_growthTime,
 			seed_plantModel,
@@ -31,7 +46,7 @@ hook OnItemTypeDefined(uname[])
 		SetItemTypeMaxArrayData(GetItemTypeFromUniqueName("SeedBag"), 2);
 }
 
-stock DefineSeedType(name[], ItemType:itemtype, growthtime, plantmodel, Float:plantoffset)
+stock DefineSeedType(const name[], ItemType:itemtype, growthtime, plantmodel, Float:plantoffset)
 {
 	if(seed_Total >= MAX_SEED_TYPES)
 	{
@@ -39,7 +54,7 @@ stock DefineSeedType(name[], ItemType:itemtype, growthtime, plantmodel, Float:pl
 		return -1;
 	}
 
-	strcat(seed_Data[seed_Total][seed_name], name, ITM_MAX_NAME);
+	strcat(seed_Data[seed_Total][seed_name], name, MAX_ITEM_NAME);
 	seed_Data[seed_Total][seed_itemType] = itemtype;
 	seed_Data[seed_Total][seed_growthTime] = growthtime;
 	seed_Data[seed_Total][seed_plantModel] = plantmodel;
@@ -49,24 +64,20 @@ stock DefineSeedType(name[], ItemType:itemtype, growthtime, plantmodel, Float:pl
 }
 
 
-hook OnItemCreate(itemid)
+hook OnItemCreate(Item:itemid)
 {
-	dbg("global", LOG_CORE, "[OnItemCreate] in /gamemodes/sss/core/item/seedbag.pwn");
-
 	if(GetItemType(itemid) == item_SeedBag)
 	{
 		if(GetItemLootIndex(itemid) != -1)
 		{
-			SetItemArrayDataAtCell(itemid, random(5), E_SEED_BAG_AMOUNT, 1);
-			SetItemArrayDataAtCell(itemid, random(seed_Total), E_SEED_BAG_TYPE, 1);
+			SetItemArrayDataAtCell(itemid, random(5), E_SEED_BAG_AMOUNT, true);
+			SetItemArrayDataAtCell(itemid, random(seed_Total), E_SEED_BAG_TYPE, true);
 		}
 	}
 }
 
-hook OnItemNameRender(itemid, ItemType:itemtype)
+hook OnItemNameRender(Item:itemid, ItemType:itemtype)
 {
-	dbg("global", LOG_CORE, "[OnItemNameRender] in /gamemodes/sss/core/item/seedbag.pwn");
-
 	if(itemtype == item_SeedBag)
 	{
 		new seeddata[2];
@@ -97,7 +108,7 @@ stock GetSeedTypeName(seedtype, name[])
 		return 0;
 
 	name[0] = EOS;
-	strcat(name, seed_Data[seedtype][seed_name], ITM_MAX_NAME);
+	strcat(name, seed_Data[seedtype][seed_name], MAX_ITEM_NAME);
 
 	return 1;
 }

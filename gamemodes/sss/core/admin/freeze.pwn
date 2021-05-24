@@ -1,4 +1,19 @@
-#include <YSI\y_hooks>
+/*==============================================================================
+
+
+	Southclaws' Scavenge and Survive
+
+		Copyright (C) 2020 Barnaby "Southclaws" Keene
+
+		This Source Code Form is subject to the terms of the Mozilla Public
+		License, v. 2.0. If a copy of the MPL was not distributed with this
+		file, You can obtain one at http://mozilla.org/MPL/2.0/.
+
+
+==============================================================================*/
+
+
+#include <YSI_Coding\y_hooks>
 
 
 static
@@ -9,8 +24,6 @@ Timer:	frz_CheckTimer[MAX_PLAYERS];
 
 hook OnPlayerConnect(playerid)
 {
-	dbg("global", LOG_CORE, "[OnPlayerConnect] in /gamemodes/sss/core/admin/freeze.pwn");
-
 	frz_Frozen[playerid] = false;
 
 	return 1;
@@ -18,8 +31,6 @@ hook OnPlayerConnect(playerid)
 
 hook OnPlayerDisconnect(playerid, reason)
 {
-	dbg("global", LOG_CORE, "[OnPlayerDisconnect] in /gamemodes/sss/core/admin/freeze.pwn");
-
 	stop frz_DelayTimer[playerid];
 
 	return 1;

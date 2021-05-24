@@ -1,4 +1,19 @@
-#include <YSI\y_hooks>
+/*==============================================================================
+
+
+	Southclaws' Scavenge and Survive
+
+		Copyright (C) 2020 Barnaby "Southclaws" Keene
+
+		This Source Code Form is subject to the terms of the Mozilla Public
+		License, v. 2.0. If a copy of the MPL was not distributed with this
+		file, You can obtain one at http://mozilla.org/MPL/2.0/.
+
+
+==============================================================================*/
+
+
+#include <YSI_Coding\y_hooks>
 
 
 new
@@ -7,11 +22,9 @@ new
 
 hook OnPlayerKeyStateChange(playerid, newkeys, oldkeys)
 {
-	dbg("global", LOG_CORE, "[OnPlayerKeyStateChange] in /gamemodes/sss/core/item/parachute.pwn");
-
 	if(newkeys & KEY_YES)
 	{
-		new itemid = GetPlayerItem(playerid);
+		new Item:itemid = GetPlayerItem(playerid);
 
 		if(GetItemType(itemid) == item_Parachute)
 		{
@@ -35,10 +48,8 @@ hook OnPlayerKeyStateChange(playerid, newkeys, oldkeys)
 	}
 }
 
-hook OnPlayerDropItem(playerid, itemid)
+hook OnPlayerDropItem(playerid, Item:itemid)
 {
-	dbg("global", LOG_CORE, "[OnPlayerDropItem] in /gamemodes/sss/core/item/parachute.pwn");
-
 	if(GetItemType(itemid) == item_Parachute)
 	{
 		if(para_TakingOff[playerid])

@@ -1,4 +1,19 @@
-#include <YSI\y_hooks>
+/*==============================================================================
+
+
+	Southclaws' Scavenge and Survive
+
+		Copyright (C) 2020 Barnaby "Southclaws" Keene
+
+		This Source Code Form is subject to the terms of the Mozilla Public
+		License, v. 2.0. If a copy of the MPL was not distributed with this
+		file, You can obtain one at http://mozilla.org/MPL/2.0/.
+
+
+==============================================================================*/
+
+
+#include <YSI_Coding\y_hooks>
 
 
 hook OnItemTypeDefined(uname[])
@@ -7,17 +22,15 @@ hook OnItemTypeDefined(uname[])
 		SetItemTypeMaxArrayData(GetItemTypeFromUniqueName("Note"), 256);
 }
 
-hook OnPlayerUseItem(playerid, itemid)
+hook OnPlayerUseItem(playerid, Item:itemid)
 {
-	dbg("global", LOG_CORE, "[OnPlayerUseItem] in /gamemodes/sss/core/item/note.pwn");
-
 	if(GetItemType(itemid) == item_Note)
 		_ShowNoteDialog(playerid, itemid);
 
 	return Y_HOOKS_CONTINUE_RETURN_0;
 }
 
-_ShowNoteDialog(playerid, itemid)
+_ShowNoteDialog(playerid, Item:itemid)
 {
 	new string[256];
 
@@ -53,10 +66,8 @@ _ShowNoteDialog(playerid, itemid)
 	return 1;
 }
 
-hook OnItemNameRender(itemid, ItemType:itemtype)
+hook OnItemNameRender(Item:itemid, ItemType:itemtype)
 {
-	dbg("global", LOG_CORE, "[OnItemNameRender] in /gamemodes/sss/core/item/note.pwn");
-
 	if(itemtype == item_Note)
 	{
 		new

@@ -1,10 +1,27 @@
+/*==============================================================================
+
+
+	Southclaws' Scavenge and Survive
+
+		Copyright (C) 2020 Barnaby "Southclaws" Keene
+
+		This Source Code Form is subject to the terms of the Mozilla Public
+		License, v. 2.0. If a copy of the MPL was not distributed with this
+		file, You can obtain one at http://mozilla.org/MPL/2.0/.
+
+
+==============================================================================*/
+
+
 #define PLAYER_LIST_MAX_ITEMS	(32)
 #define PLAYER_LIST_ITEM_LEN	(MAX_PLAYER_NAME + 40) // 100ish max extra chars
+
 
 static
 	pls_String[MAX_PLAYERS][PLAYER_LIST_MAX_ITEMS * PLAYER_LIST_ITEM_LEN],
 	pls_List[MAX_PLAYERS][PLAYER_LIST_MAX_ITEMS][MAX_PLAYER_NAME],
 	pls_Length[MAX_PLAYERS];
+
 
 stock ShowPlayerList(playerid, list[][], size = sizeof(list), bool:highlightbanned = false)
 {
@@ -36,7 +53,9 @@ _ShowCurrentList(playerid)
 		#pragma unused pid, dialogid, inputtext
 
 		if(response)
+		{
 			_ShowPlayerListItem(playerid, listitem);
+		}
 	}
 	Dialog_ShowCallback(playerid, using inline Response, DIALOG_STYLE_LIST, "Player list", pls_String[playerid], "Select", "Close");
 }
@@ -63,9 +82,15 @@ _ShowPlayerListItem(playerid, item)
 		#pragma unused pid, dialogid, listitem, inputtext
 
 		if(response)
+		{
+			// Show some options.
 			_ShowPlayerListItemOptions(playerid, item);
+		}
 		else
+		{
+			// Send them back to the original list using the global list.
 			_ShowCurrentList(playerid);
+		}
 	}
 	Dialog_ShowCallback(playerid, using inline Response, DIALOG_STYLE_MSGBOX, pls_List[playerid][item], GetPlayerInfo(pls_List[playerid][item]), "Options", "Back");
 }
@@ -75,26 +100,31 @@ GetPlayerInfo(name[])
 	new
 		info[512],
 		dayslived,
+
 		pass[129],
 		ipv4,
 		ip[17],
+		country[32],
 		alive,
 		regdate,
 		lastlog,
 		spawntime,
 		totalspawns,
 		warnings,
-		hardwareid[32],
+		hash[41],
 		active;
 
-	GetAccountData(name, pass, ipv4, alive, regdate, lastlog, spawntime, totalspawns, warnings, hardwareid, active);
+	GetAccountData(name, pass, ipv4, alive, regdate, lastlog, spawntime, totalspawns, warnings, hash, active);
 
 	ip = IpIntToStr(ipv4);
+	// TODO: use a different country service
+	// GetIPCountry(ip, country);
 
-	dayslived = (gettime() > spawntime) ? (0) : ((gettime() - spawntime) / 86400); // 24hours
+	dayslived = (gettime() > spawntime) ? (0) : ((gettime() - spawntime) / 86400);
 
 	format(info, sizeof(info), "\
 		IP:\t\t\t%s\n\
+		Country:\t\t%s\n\
 		Alive:\t\t\t%s\n\
 		Registered:\t\t%s\n\
 		Last Login:\t\t%s\n\
@@ -103,6 +133,7 @@ GetPlayerInfo(name[])
 		Warnings:\t\t%d",
 
 		ip,
+		country,
 		alive ? ("Yes") : ("No"),
 		TimestampToDateTime(regdate),
 		TimestampToDateTime(lastlog),
@@ -147,7 +178,7 @@ _ShowPlayerListItemOptions(playerid, item)
 			{
 				ChatMsg(playerid, YELLOW, " >  Not implemented.");
 			}
-			/*case 2:// List accounts used by this IP
+			case 2:// List accounts used by this IP
 			{
 				new ip;
 				GetAccountIP(pls_List[playerid][item], ip);
@@ -166,7 +197,7 @@ _ShowPlayerListItemOptions(playerid, item)
 			case 5:// List GPCIs used by this name
 			{
 				ShowAccountGpciHistoryFromName(playerid, pls_List[playerid][item]);
-			}*/
+			}
 			case 6:// Ban
 			{
 				BanAndEnterInfo(playerid, pls_List[playerid][item]);
@@ -235,7 +266,7 @@ ACMD:testplist[5](playerid, params[])
 {
 	new list[3][MAX_PLAYER_NAME];
 
-	list[0] = "Southclaw";
+	list[0] = "Southclaws";
 	list[1] = "Dogmeat";
 	list[2] = "Atomsk";
 
@@ -259,6 +290,6 @@ ACMD:players[4](playerid, params[])
 ACMD:profile[2](playerid, params[])
 {
 	Dialog_Show(playerid, DIALOG_STYLE_MSGBOX, params, GetPlayerInfo(params), "Close");
-
+	SetAccountAliveState(params, 0);
 	return 1;
 }

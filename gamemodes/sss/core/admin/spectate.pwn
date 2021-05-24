@@ -1,4 +1,20 @@
-#include <YSI\y_hooks>
+/*==============================================================================
+
+
+	Southclaws' Scavenge and Survive
+
+		Copyright (C) 2020 Barnaby "Southclaws" Keene
+
+		This Source Code Form is subject to the terms of the Mozilla Public
+		License, v. 2.0. If a copy of the MPL was not distributed with this
+		file, You can obtain one at http://mozilla.org/MPL/2.0/.
+
+
+==============================================================================*/
+
+
+#include <YSI_Coding\y_hooks>
+
 
 enum
 {
@@ -6,6 +22,7 @@ enum
 	SPECTATE_TYPE_TARGET,
 	SPECTATE_TYPE_FREE
 }
+
 
 static
 			spectate_Type[MAX_PLAYERS],
@@ -17,10 +34,9 @@ PlayerText:	spectate_Info,
 			spectate_CameraObject[MAX_PLAYERS] = {INVALID_OBJECT_ID, ...},
 Float:		spectate_StartPos[MAX_PLAYERS][3];
 
+
 hook OnPlayerConnect(playerid)
 {
-	dbg("global", LOG_CORE, "[OnPlayerConnect] in /gamemodes/sss/core/admin/spectate.pwn");
-
 	spectate_Type[playerid] = SPECTATE_TYPE_NONE;
 	spectate_Target[playerid] = INVALID_PLAYER_ID;
 
@@ -28,7 +44,7 @@ hook OnPlayerConnect(playerid)
 	spectate_CameraObject[playerid] = INVALID_OBJECT_ID;
 	stop spectate_Timer[playerid];
 
-	spectate_Name					=CreatePlayerTextDraw(playerid, 320.000000, 365.000000, "[HLF]Southclaw");
+	spectate_Name						=CreatePlayerTextDraw(playerid, 320.000000, 365.000000, "[HLF]Southclaws");
 	PlayerTextDrawAlignment			(playerid, spectate_Name, 2);
 	PlayerTextDrawBackgroundColor	(playerid, spectate_Name, 255);
 	PlayerTextDrawFont				(playerid, spectate_Name, 1);
@@ -41,7 +57,7 @@ hook OnPlayerConnect(playerid)
 	PlayerTextDrawBoxColor			(playerid, spectate_Name, 255);
 	PlayerTextDrawTextSize			(playerid, spectate_Name, 100.000000, 340.000000);
 
-	spectate_Info					=CreatePlayerTextDraw(playerid, 320.000000, 380.000000, "Is awesome");
+	spectate_Info						=CreatePlayerTextDraw(playerid, 320.000000, 380.000000, "Is awesome");
 	PlayerTextDrawAlignment			(playerid, spectate_Info, 2);
 	PlayerTextDrawBackgroundColor	(playerid, spectate_Info, 255);
 	PlayerTextDrawFont				(playerid, spectate_Info, 1);
@@ -57,8 +73,6 @@ hook OnPlayerConnect(playerid)
 
 hook OnPlayerDisconnect(playerid)
 {
-	dbg("global", LOG_CORE, "[OnPlayerDisconnect] in /gamemodes/sss/core/admin/spectate.pwn");
-
 	if(spectate_Type[playerid] != SPECTATE_TYPE_NONE)
 		ExitSpectateMode(playerid);
 
@@ -75,6 +89,7 @@ hook OnPlayerDisconnect(playerid)
 
 			if(Iter_Count(Player) > 0)
 				SpectateNextTarget(i);
+
 			else
 				EnterFreeMode(i, x, y, z);
 		}
@@ -91,8 +106,6 @@ EnterSpectateMode(playerid, targetid)
 	if(spectate_Type[playerid] == SPECTATE_TYPE_FREE)
 		ExitFreeMode(playerid);
 
-	GetPlayerPos(playerid, spectate_StartPos[playerid][0], spectate_StartPos[playerid][1], spectate_StartPos[playerid][2]);
-
 	TogglePlayerSpectating(playerid, true);
 	ToggleNameTagsForPlayer(playerid, true);
 
@@ -107,7 +120,7 @@ EnterSpectateMode(playerid, targetid)
 	stop spectate_Timer[playerid];
 	spectate_Timer[playerid] = repeat UpdateSpectateMode(playerid);
 
-	log(DISCORD_CHANNEL_ADMINEVENTS, "[SPECTATE] `%p` watches `%p`", playerid, targetid);
+	log("[SPECTATE] %p watches %p", playerid, targetid);
 
 	return 1;
 }
@@ -127,19 +140,10 @@ EnterFreeMode(playerid, Float:camX = 0.0, Float:camY = 0.0, Float:camZ = 0.0)
 	AttachCameraToObject(playerid, spectate_CameraObject[playerid]);
 	GetPlayerPos(playerid, spectate_StartPos[playerid][0], spectate_StartPos[playerid][1], spectate_StartPos[playerid][2]);
 	spectate_Timer[playerid] = repeat UpdateSpectateMode(playerid);
-
-	DiscordMessage(DISCORD_CHANNEL_ADMINEVENTS, "[SPECTATE] `%p` entered `free mode` at `%.0f, %.0f, %.0f` (%s).", playerid, spectate_StartPos[playerid][0], spectate_StartPos[playerid][1], spectate_StartPos[playerid][2], GetPlayerZoneEx(playerid));
 }
 
 ExitFreeMode(playerid)
 {
-	new
-		Float:x,
-		Float:y,
-		Float:z;
-
-	GetPlayerCameraPos(playerid, x, y, z);
-
 	if(spectate_Type[playerid] == SPECTATE_TYPE_TARGET)
 		ExitSpectateMode(playerid);
 
@@ -151,9 +155,7 @@ ExitFreeMode(playerid)
 
 	TogglePlayerSpectating(playerid, false);
 	stop spectate_Timer[playerid];
-	defer ReturnToDuty(playerid, x, y, z);
-
-	DiscordMessage(DISCORD_CHANNEL_ADMINEVENTS, "[SPECTATE] `%p` exited `free mode` at `%.0f, %.0f, %.0f` (%s).", playerid, x, y, z, GetPlayerZoneEx(playerid));
+	defer ReturnToDuty(playerid);
 
 	return 1;
 }
@@ -166,8 +168,6 @@ ExitSpectateMode(playerid)
 	if(spectate_Type[playerid] == SPECTATE_TYPE_FREE)
 		ExitFreeMode(playerid);
 
-	DiscordMessage(DISCORD_CHANNEL_ADMINEVENTS, "[SPECTATE] `%p` stopped spectating (`%p`).", playerid, spectate_Target[playerid]);
-
 	spectate_Target[playerid] = INVALID_PLAYER_ID;
 	spectate_Type[playerid] = SPECTATE_TYPE_NONE;
 
@@ -175,17 +175,17 @@ ExitSpectateMode(playerid)
 	PlayerTextDrawHide(playerid, spectate_Info);
 	TogglePlayerSpectating(playerid, false);
 	stop spectate_Timer[playerid];
-	defer ReturnToDuty(playerid, spectate_StartPos[playerid][0], spectate_StartPos[playerid][1], spectate_StartPos[playerid][2]);
+	defer ReturnToDuty(playerid);
 
 	return 1;
 }
 
-timer ReturnToDuty[200](playerid, Float:x, Float:y, Float:z)
+timer ReturnToDuty[100](playerid)
 {
-	SetPlayerPos(playerid, x,y,z);
-
+	SetPlayerPos(playerid, spectate_StartPos[playerid][0], spectate_StartPos[playerid][1], spectate_StartPos[playerid][2]);
 	if(GetPlayerGender(playerid) == GENDER_MALE)
 		SetPlayerSkin(playerid, 217);
+
 	else
 		SetPlayerSkin(playerid, 211);
 }
@@ -259,10 +259,9 @@ _RefreshSpectate(playerid)
 
 		if(IsPlayerInAnyVehicle(spectate_Target[playerid]))
 			PlayerSpectateVehicle(playerid, GetPlayerVehicleID(spectate_Target[playerid]));
+
 		else
 			PlayerSpectatePlayer(playerid, spectate_Target[playerid]);
-
-		DiscordMessage(DISCORD_CHANNEL_ADMINEVENTS, "[SPECTATE] `%p` is spectating `%p`.", playerid, spectate_Target[playerid]);
 	}
 	else if(spectate_Type[playerid] == SPECTATE_TYPE_FREE)
 	{
@@ -310,9 +309,13 @@ timer UpdateSpectateMode[100](playerid)
 		GetPlayerCameraFrontVector(playerid, vecX, vecY, vecZ);
 
 		if(k & KEY_JUMP)
+		{
 			speed = 50.0;
+		}
 		if(k & KEY_WALK)
+		{
 			speed = 0.5;
+		}
 
 		if(ud == KEY_UP)
 		{
@@ -341,14 +344,20 @@ timer UpdateSpectateMode[100](playerid)
 			camY += (100 * floatcos(rotation - 90.0, degrees));
 		}
 		if(k & KEY_SPRINT)
+		{
 			camZ += 100.0;
+		}
 		if(k & KEY_CROUCH)
+		{
 			camZ -= 100.0;
+		}
 
 		MoveObject(spectate_CameraObject[playerid], camX, camY, camZ, speed);
 
 		if(ud == 0 && lr == 0 && !(k & KEY_SPRINT) && !(k & KEY_CROUCH))
+		{
 			StopObject(spectate_CameraObject[playerid]);
+		}
 
 	}
 	else
@@ -368,8 +377,9 @@ timer UpdateSpectateMode[100](playerid)
 		{
 			new
 				invehicleas[24],
-				itemid,
-				itemname[ITM_MAX_NAME + ITM_MAX_TEXT],
+				Float:bleedrate,
+				Item:itemid,
+				itemname[MAX_ITEM_NAME + MAX_ITEM_TEXT],
 				cameramodename[37];
 
 			if(GetPlayerState(targetid) == PLAYER_STATE_DRIVER)
@@ -378,6 +388,7 @@ timer UpdateSpectateMode[100](playerid)
 			else
 				invehicleas = "Passenger";
 
+			GetPlayerBleedRate(targetid, bleedrate);
 			itemid = GetPlayerItem(targetid);
 			if(!GetItemName(itemid, itemname))
 				itemname = "None";
@@ -394,7 +405,7 @@ timer UpdateSpectateMode[100](playerid)
 				GetPlayerInterior(targetid),
 				GetPlayerVirtualWorld(targetid),
 				IsPlayerKnockedOut(targetid) ? MsToString(GetPlayerKnockOutRemainder(targetid), "%1m:%1s") : ("No"),
-				GetPlayerBleedRate(targetid),
+				bleedrate,
 				itemname,
 				cameramodename,
 				GetPlayerTotalVelocity(targetid),
@@ -406,10 +417,11 @@ timer UpdateSpectateMode[100](playerid)
 		else
 		{
 			new
-				itemid,
-				itemname[ITM_MAX_NAME + ITM_MAX_TEXT],
-				holsteritemid,
+				Item:itemid,
+				itemname[MAX_ITEM_NAME + MAX_ITEM_TEXT],
+				Item:holsteritemid,
 				holsteritemname[32],
+				Float:bleedrate,
 				cameramodename[37],
 				Float:vx,
 				Float:vy,
@@ -424,6 +436,7 @@ timer UpdateSpectateMode[100](playerid)
 			if(!GetItemName(holsteritemid, holsteritemname))
 				holsteritemname = "None";
 
+			GetPlayerBleedRate(targetid, bleedrate);
 			GetCameraModeName(GetPlayerCameraMode(targetid), cameramodename);
 			GetPlayerVelocity(targetid, vx, vy, vz);
 
@@ -438,7 +451,7 @@ timer UpdateSpectateMode[100](playerid)
 				GetPlayerInterior(targetid),
 				GetPlayerVirtualWorld(targetid),
 				IsPlayerKnockedOut(targetid) ? MsToString(GetPlayerKnockOutRemainder(targetid), "%1m:%1s") : ("No"),
-				GetPlayerBleedRate(targetid),
+				bleedrate,
 				cameramodename,
 				velocity,
 				itemname,
@@ -457,8 +470,6 @@ timer UpdateSpectateMode[100](playerid)
 
 hook OnPlayerKeyStateChange(playerid, newkeys, oldkeys)
 {
-	dbg("global", LOG_CORE, "[OnPlayerKeyStateChange] in /gamemodes/sss/core/admin/spectate.pwn");
-
 	if(spectate_Target[playerid] != INVALID_PLAYER_ID)
 	{
 		if(GetTickCountDifference(GetTickCount(), spectate_ClickTick[playerid]) < 1000)
@@ -512,7 +523,7 @@ stock GetPlayerSpectateType(playerid)
 	return spectate_Type[playerid];
 }
 
-/*ACMD:freezecam[2](playerid)
+ACMD:freezecam[2](playerid)
 {
 	if(!IsPlayerOnAdminDuty(playerid))
 		return 6;
@@ -530,8 +541,7 @@ stock GetPlayerSpectateType(playerid)
 
 	SetPlayerCameraPos(playerid, camX, camY, camZ);
 	SetPlayerCameraLookAt(playerid, camX+vecX, camY+vecY, camZ+vecZ);
-
-	DiscordMessage(DISCORD_CHANNEL_ADMINEVENTS, "`%p` used FREEZECAM.", playerid);
 	
 	return 1;
-}*/
+}
+

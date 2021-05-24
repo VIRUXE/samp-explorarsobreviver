@@ -1,4 +1,19 @@
-#include <YSI\y_hooks>
+/*==============================================================================
+
+
+	Southclaws' Scavenge and Survive
+
+		Copyright (C) 2020 Barnaby "Southclaws" Keene
+
+		This Source Code Form is subject to the terms of the Mozilla Public
+		License, v. 2.0. If a copy of the MPL was not distributed with this
+		file, You can obtain one at http://mozilla.org/MPL/2.0/.
+
+
+==============================================================================*/
+
+
+#include <YSI_Coding\y_hooks>
 
 
 #define MAX_FOOD_ITEM (64)
@@ -24,9 +39,9 @@ Float:		food_biteValue,
 
 static
 			food_Data[MAX_FOOD_ITEM][E_FOOD_DATA],
-			food_ItemTypeFoodType[ITM_MAX_TYPES] = {-1, ...},
+			food_ItemTypeFoodType[MAX_ITEM_TYPE] = {-1, ...},
 			food_Total,
-			food_CurrentItem[MAX_PLAYERS];
+Item:		food_CurrentItem[MAX_PLAYERS];
 
 
 forward OnPlayerEat(playerid, itemid);
@@ -35,9 +50,7 @@ forward OnPlayerEaten(playerid, itemid);
 
 hook OnPlayerConnect(playerid)
 {
-	dbg("global", LOG_CORE, "[OnPlayerConnect] in /gamemodes/sss/core/item/food.pwn");
-
-	food_CurrentItem[playerid] = -1;
+	food_CurrentItem[playerid] = INVALID_ITEM_ID;
 }
 
 
@@ -72,27 +85,23 @@ DefineFoodItem(ItemType:itemtype, maxbites, Float:bitevalue, cancook, canrawinfe
 ==============================================================================*/
 
 
-hook OnItemCreate(itemid)
+hook OnItemCreate(Item:itemid)
 {
-	dbg("global", LOG_CORE, "[OnItemCreate] in /gamemodes/sss/core/item/food.pwn");
-
 	if(GetItemLootIndex(itemid) != -1)
 	{
-		new foodtype = GetItemTypeFoodType(GetItemType(itemid));
+		new foodtype = food_ItemTypeFoodType[GetItemType(itemid)];
 
 		if(foodtype != -1)
 		{
-			SetItemArrayDataAtCell(itemid, 0, food_cooked, 0);
-			SetItemArrayDataAtCell(itemid, food_Data[_:foodtype][food_maxBites] - random(food_Data[_:foodtype][food_maxBites] / 2), food_amount, 1);
+			SetItemArrayDataAtCell(itemid, 0, food_cooked, true);
+			SetItemArrayDataAtCell(itemid, food_Data[_:foodtype][food_maxBites] - random(food_Data[_:foodtype][food_maxBites] / 2), food_amount, true);
 		}
 	}
 }
 
-hook OnPlayerUseItem(playerid, itemid)
+hook OnPlayerUseItem(playerid, Item:itemid)
 {
-	dbg("global", LOG_CORE, "[OnPlayerUseItem] in /gamemodes/sss/core/item/food.pwn");
-
-	if(GetItemTypeFoodType(GetItemType(itemid)) != -1)
+	if(food_ItemTypeFoodType[GetItemType(itemid)] != -1)
 		_StartEating(playerid, itemid);
 
 	return Y_HOOKS_CONTINUE_RETURN_0;
@@ -100,9 +109,7 @@ hook OnPlayerUseItem(playerid, itemid)
 
 hook OnPlayerKeyStateChange(playerid, newkeys, oldkeys)
 {
-	dbg("global", LOG_CORE, "[OnPlayerKeyStateChange] in /gamemodes/sss/core/item/food.pwn");
-
-	if(oldkeys & 16 && food_CurrentItem[playerid] != -1)
+	if(oldkeys & 16 && food_CurrentItem[playerid] != INVALID_ITEM_ID)
 	{
 		_StopEating(playerid);
 	}
@@ -110,7 +117,7 @@ hook OnPlayerKeyStateChange(playerid, newkeys, oldkeys)
 	return 1;
 }
 
-_StartEating(playerid, itemid, continuing = false)
+_StartEating(playerid, Item:itemid, continuing = false)
 {
 	if(!IsPlayerIdle(playerid) && !continuing)
 		return;
@@ -120,7 +127,7 @@ _StartEating(playerid, itemid, continuing = false)
 
 	food_CurrentItem[playerid] = itemid;
 
-	if(CallLocalFunction("OnPlayerEat", "dd", playerid, itemid))
+	if(CallLocalFunction("OnPlayerEat", "dd", playerid, _:itemid))
 	{
 		_StopEating(playerid);
 		return;
@@ -137,10 +144,10 @@ _StopEating(playerid)
 	ClearAnimations(playerid);
 	StopHoldAction(playerid);
 
-	food_CurrentItem[playerid] = -1;
+	food_CurrentItem[playerid] = INVALID_ITEM_ID;
 }
 
-_EatItem(playerid, itemid)
+_EatItem(playerid, Item:itemid)
 {
 	if(!IsValidItem(itemid))
 		return 0;
@@ -148,20 +155,24 @@ _EatItem(playerid, itemid)
 	if(GetPlayerItem(playerid) != itemid)
 		return 0;
 
-	new foodtype = GetItemTypeFoodType(GetItemType(itemid));
+	new foodtype = food_ItemTypeFoodType[GetItemType(itemid)];
 
 	if(foodtype == -1)
 		return 0;
 
-	if(CallLocalFunction("OnPlayerEaten", "dd", playerid, itemid))
+	if(CallLocalFunction("OnPlayerEaten", "dd", playerid, _:itemid))
 	{
 		_StopEating(playerid);
 		return 0;
 	}
 
-	if(GetItemArrayDataAtCell(itemid, food_amount) > 0)
+	new amount, cooked;
+	GetItemArrayDataAtCell(itemid, amount, food_amount);
+	GetItemArrayDataAtCell(itemid, cooked, food_cooked);
+
+	if(amount > 0)
 	{
-		if(food_Data[foodtype][food_canCook] && GetItemArrayDataAtCell(itemid, food_cooked) == 0)
+		if(food_Data[foodtype][food_canCook] && cooked == 0)
 		{
 			SetPlayerFP(playerid, GetPlayerFP(playerid) + food_Data[foodtype][food_biteValue] * 0.7);
 
@@ -173,10 +184,10 @@ _EatItem(playerid, itemid)
 			SetPlayerFP(playerid, GetPlayerFP(playerid) + food_Data[foodtype][food_biteValue]);
 		}
 
-		SetItemArrayDataAtCell(itemid, GetItemArrayDataAtCell(itemid, food_amount) - 1, food_amount, 0);
+		SetItemArrayDataAtCell(itemid, amount - 1, food_amount, false);
 	}
 
-	if(GetItemArrayDataAtCell(itemid, food_amount) > 0)
+	if(amount > 0)
 	{
 		_StartEating(playerid, itemid, true);
 	}
@@ -193,9 +204,7 @@ _EatItem(playerid, itemid)
 
 hook OnHoldActionFinish(playerid)
 {
-	dbg("global", LOG_CORE, "[OnHoldActionFinish] in /gamemodes/sss/core/item/food.pwn");
-
-	if(food_CurrentItem[playerid] != -1)
+	if(food_CurrentItem[playerid] != INVALID_ITEM_ID)
 	{
 		_EatItem(playerid, food_CurrentItem[playerid]);
 		return Y_HOOKS_BREAK_RETURN_1;
@@ -204,25 +213,26 @@ hook OnHoldActionFinish(playerid)
 	return Y_HOOKS_CONTINUE_RETURN_0;
 }
 
-hook OnItemNameRender(itemid, ItemType:itemtype)
+hook OnItemNameRender(Item:itemid, ItemType:itemtype)
 {
-	dbg("global", LOG_CORE, "[OnItemNameRender] in /gamemodes/sss/core/item/food.pwn");
-
-	new foodtype = GetItemTypeFoodType(itemtype);
-
+	new foodtype = food_ItemTypeFoodType[itemtype];
 	if(foodtype != -1)
 	{
+		new data[e_FOOD_ITEM_DATA];
+		GetItemArrayData(itemid, data);
+
+		new amount = data[food_amount];
 		if(food_Data[foodtype][food_canCook])
 		{
-			if(GetItemArrayDataAtCell(itemid, food_cooked) == 1)
-				SetItemNameExtra(itemid, sprintf("Cooked, %d%%", floatround((float(GetItemArrayDataAtCell(itemid, food_amount)) / food_Data[foodtype][food_maxBites]) * 100.0)));
+			if(data[food_cooked] == 1)
+				SetItemNameExtra(itemid, sprintf("Cooked, %d%%", floatround((float(amount) / food_Data[foodtype][food_maxBites]) * 100.0)));
 
 			else
-				SetItemNameExtra(itemid, sprintf("Uncooked, %d%%", floatround((float(GetItemArrayDataAtCell(itemid, food_amount)) / food_Data[foodtype][food_maxBites]) * 100.0)));
+				SetItemNameExtra(itemid, sprintf("Uncooked, %d%%", floatround((float(amount) / food_Data[foodtype][food_maxBites]) * 100.0)));
 		}
 		else
 		{
-			SetItemNameExtra(itemid, sprintf("%d%%", floatround((float(GetItemArrayDataAtCell(itemid, food_amount)) / food_Data[foodtype][food_maxBites]) * 100.0)));
+			SetItemNameExtra(itemid, sprintf("%d%%", floatround((float(amount) / food_Data[foodtype][food_maxBites]) * 100.0)));
 		}
 	}
 }
@@ -305,34 +315,34 @@ stock GetFoodTypeDestroyOnEnd(foodtype)
 // Item specific
 
 // food_cooked
-stock GetFoodItemCooked(itemid)
+stock GetFoodItemCooked(Item:itemid)
 {
 	return GetItemArrayDataAtCell(itemid, food_cooked);
 }
 
-stock SetFoodItemCooked(itemid, value)
+stock Error:SetFoodItemCooked(Item:itemid, value)
 {
 	return SetItemArrayDataAtCell(itemid, value, food_cooked);
 }
 
 // food_amount
-stock GetFoodItemAmount(itemid)
+stock GetFoodItemAmount(Item:itemid)
 {
 	return GetItemArrayDataAtCell(itemid, food_amount);
 }
 
-stock SetFoodItemAmount(itemid, value)
+stock SetFoodItemAmount(Item:itemid, value)
 {
 	return SetItemArrayDataAtCell(itemid, value, food_amount);
 }
 
 // food_subType
-stock GetFoodItemSubType(itemid)
+stock GetFoodItemSubType(Item:itemid)
 {
 	return GetItemArrayDataAtCell(itemid, food_subType);
 }
 
-stock SetFoodItemSubType(itemid, value)
+stock SetFoodItemSubType(Item:itemid, value)
 {
 	return SetItemArrayDataAtCell(itemid, value, food_subType);
 }

@@ -1,107 +1,134 @@
+/*==============================================================================
+
+
+	Southclaws' Scavenge and Survive
+
+		Copyright (C) 2020 Barnaby "Southclaws" Keene
+
+		This Source Code Form is subject to the terms of the Mozilla Public
+		License, v. 2.0. If a copy of the MPL was not distributed with this
+		file, You can obtain one at http://mozilla.org/MPL/2.0/.
+
+
+==============================================================================*/
+
+
 LoadSettings()
 {
 	if(!fexist(SETTINGS_FILE))
 	{
-		err("Settings file `"SETTINGS_FILE"` not found. Creating and using default values.");
+		Logger_Log("settings file not found creating with defaults");
 
 		fclose(fopen(SETTINGS_FILE, io_write));
 	}
 
 	GetSettingString("server/motd", "Please update the 'server/motd' string in "SETTINGS_FILE"", gMessageOfTheDay);
+	GetSettingString("server/website", "www.southcla.ws", gWebsiteURL);
+	GetSettingInt("server/crash-on-exit", false, gCrashOnExit);
+
+	GetSettingStringArray("server/rules", "Please update the 'server/rules' array in '"SETTINGS_FILE"'.", MAX_RULE, gRuleList, gTotalRules, MAX_RULE_LEN);
+	GetSettingStringArray("server/staff", "StaffName", MAX_STAFF, gStaffList, gTotalStaff, MAX_STAFF_LEN);
 
 	GetSettingInt("server/max-uptime", 18000, gServerMaxUptime);
+	GetSettingInt("player/auto-ip-login", 0, gAutoLoginWithIP);
 	GetSettingInt("player/allow-pause-map", 0, gPauseMap);
 	GetSettingInt("player/interior-entry", 0, gInteriorEntry);
 	GetSettingInt("player/player-animations", 1, gPlayerAnimations);
 	GetSettingInt("player/vehicle-surfing", 0, gVehicleSurfing);
-	GetSettingFloat("player/nametag-distance", 3.0, gNameTagDistance);
+	GetSettingFloat("player/nametag-distance", 15.0, gNameTagDistance);
 	GetSettingInt("player/combat-log-window", 30, gCombatLogWindow);
 	GetSettingInt("player/login-freeze-time", 8, gLoginFreezeTime);
 	GetSettingInt("player/max-tab-out-time", 60, gMaxTaboutTime);
-	GetSettingInt("player/ping-limit", 600, gPingLimit);
-	GetSettingInt("discord/enabled", 0, gDiscord);
+	GetSettingInt("player/ping-limit", 400, gPingLimit);
 
-	SetGameModeText("Scavenge Survive by Southclaw");
+	// I'd appreciate if you left my credit and the proper gamemode name intact!
+	// Failure to do this will result in being blacklisted from the server list.
+	// And I'll be less inclined to help you with issues.
+	// Unless you have a decent reason to change the gamemode name (heavy mod)
+	// I'd still like to be credited for my work. Many servers have claimed
+	// they are the sole creator of the mode and this makes me sad and very
+	// hesitant to release my work completely free of charge.
+	SetGameModeText("Scavenge Survive by Southclaws");
 }
 
 
-stock GetSettingInt(path[], defaultvalue, &output, printsetting = true, openfile = true)
+stock GetSettingInt(const path[], defaultvalue, &output, printsetting = true, openfile = true)
 {
 	if(openfile)
-		file_Open(SETTINGS_FILE);
+		ini_open(SETTINGS_FILE);
 
-	if(!file_IsKey(path))
+	if(!ini_isKey(path))
 	{
-		file_SetVal(path, defaultvalue);
+		ini_setInt(path, defaultvalue);
 		output = defaultvalue;
-		file_Save(SETTINGS_FILE);
+		ini_close();
 
 		if(printsetting)
-			log(DISCORD_CHANNEL_INVALID, "[SETTING] Loaded default `%s`: %d", path, output);
+			Logger_Log("Setting default", Logger_S("path", path), Logger_I("output", output));
 	}
 	else
 	{
-		output = file_GetVal(path);
+		ini_getInt(path, output);
 
 		if(printsetting)
-			log(DISCORD_CHANNEL_INVALID, "[SETTING] Loaded `%s`: %d", path, output);
+			Logger_Log("Setting loaded", Logger_S("path", path), Logger_I("output", output));
 	}
 
 	if(openfile)
-		file_Close();
+		ini_close();
 }
 
-stock GetSettingFloat(path[], Float:defaultvalue, &Float:output, printsetting = true, openfile = true)
+stock GetSettingFloat(const path[], Float:defaultvalue, &Float:output, printsetting = true, openfile = true)
 {
 	if(openfile)
-		file_Open(SETTINGS_FILE);
+		ini_open(SETTINGS_FILE);
 
-	if(!file_IsKey(path))
+	if(!ini_isKey(path))
 	{
-		file_SetFloat(path, defaultvalue);
+		ini_setFloat(path, defaultvalue);
 		output = defaultvalue;
-		file_Save(SETTINGS_FILE);
+		ini_close();
 
 		if(printsetting)
-			log(DISCORD_CHANNEL_INVALID, "[SETTING] Loaded default `%s`: %f", path, output);
+			Logger_Log("Setting default", Logger_S("path", path), Logger_F("output", output));
 	}
 	else
 	{
-		output = file_GetFloat(path);
+		ini_getFloat(path, output);
 
 		if(printsetting)
-			log(DISCORD_CHANNEL_INVALID, "[SETTING] Loaded `%s`: %f", path, output);
+			Logger_Log("Setting loaded", Logger_S("path", path), Logger_F("output", output));
 	}
 
 	if(openfile)
-		file_Close();
+		ini_close();
 }
 
-stock GetSettingString(path[], defaultvalue[], output[], maxsize = sizeof(output), printsetting = true, openfile = true)
+stock GetSettingString(const path[], const defaultvalue[], output[], maxsize = sizeof(output), printsetting = true, openfile = true)
 {
 	if(openfile)
-		file_Open(SETTINGS_FILE);
+		ini_open(SETTINGS_FILE);
 
-	if(!file_IsKey(path))
+	if(!ini_isKey(path))
 	{
-		file_SetStr(path, defaultvalue);
+		ini_setString(path, defaultvalue);
 		output[0] = EOS;
 		strcat(output, defaultvalue, maxsize);
-		file_Save(SETTINGS_FILE);
+		ini_close();
 
 		if(printsetting)
-			log(DISCORD_CHANNEL_INVALID, "[SETTING] Loaded default `%s`: %s", path, output);
+			Logger_Log("Setting default", Logger_S("path", path), Logger_S("output", output));
 	}
 	else
 	{
-		file_GetStr(path, output, maxsize);
+		ini_getString(path, output, maxsize);
 
 		if(printsetting)
-			log(DISCORD_CHANNEL_INVALID, "[SETTING] Loaded `%s`: %s", path, output);
+			Logger_Log("Setting loaded", Logger_S("path", path), Logger_S("output", output));
 	}
 
 	if(openfile)
-		file_Close();
+		ini_close();
 }
 
 
@@ -109,9 +136,9 @@ stock GetSettingString(path[], defaultvalue[], output[], maxsize = sizeof(output
 	Arrays
 */
 
-stock GetSettingIntArray(path[], defaultvalue, max, output[], &outputtotal, printsetting = true)
+stock GetSettingIntArray(const path[], defaultvalue, max, output[], &outputtotal, printsetting = true)
 {
-	file_Open(SETTINGS_FILE);
+	ini_open(SETTINGS_FILE);
 
 	new tmpkey[MAX_KEY_LENGTH];
 
@@ -119,16 +146,16 @@ stock GetSettingIntArray(path[], defaultvalue, max, output[], &outputtotal, prin
 	{
 		format(tmpkey, sizeof(tmpkey), "%s/%d", path, outputtotal);
 
-		if(!file_IsKey(tmpkey))
+		if(!ini_isKey(tmpkey))
 		{
 			if(outputtotal == 0)
 			{
-				file_SetInt(tmpkey, defaultvalue);
-				file_Save(SETTINGS_FILE);
+				ini_setInt(tmpkey, defaultvalue);
+				ini_close();
 				output[0] = defaultvalue;
 
 				if(printsetting)
-					log(DISCORD_CHANNEL_INVALID, "[SETTING] Loaded default `%s`: %d", tmpkey, output[0]);
+					Logger_Log("Setting default", Logger_S("key", tmpkey), Logger_S("value", output[0]));
 			}
 
 			break;
@@ -139,12 +166,12 @@ stock GetSettingIntArray(path[], defaultvalue, max, output[], &outputtotal, prin
 		outputtotal++;
 	}
 
-	file_Close();
+	ini_close();
 }
 
-stock GetSettingFloatArray(path[], Float:defaultvalue, max, Float:output[], &outputtotal, printsetting = true)
+stock GetSettingFloatArray(const path[], Float:defaultvalue, max, Float:output[], &outputtotal, printsetting = true)
 {
-	file_Open(SETTINGS_FILE);
+	ini_open(SETTINGS_FILE);
 
 	new tmpkey[MAX_KEY_LENGTH];
 
@@ -152,16 +179,16 @@ stock GetSettingFloatArray(path[], Float:defaultvalue, max, Float:output[], &out
 	{
 		format(tmpkey, sizeof(tmpkey), "%s/%d", path, outputtotal);
 
-		if(!file_IsKey(tmpkey))
+		if(!ini_isKey(tmpkey))
 		{
 			if(outputtotal == 0)
 			{
-				file_SetFloat(tmpkey, defaultvalue);
-				file_Save(SETTINGS_FILE);
+				ini_setFloat(tmpkey, defaultvalue);
+				ini_close();
 				output[0] = defaultvalue;
 
 				if(printsetting)
-					log(DISCORD_CHANNEL_INVALID, "[SETTING] Loaded default `%s`: %f", tmpkey, output[0]);
+					Logger_Log("Setting default", Logger_S("key", tmpkey), Logger_S("value", output[0]));
 			}
 
 			break;
@@ -172,12 +199,12 @@ stock GetSettingFloatArray(path[], Float:defaultvalue, max, Float:output[], &out
 		outputtotal++;
 	}
 
-	file_Close();
+	ini_close();
 }
 
-stock GetSettingStringArray(path[], defaultvalue[], max, output[][], &outputtotal, outputmaxsize, printsetting = true)
+stock GetSettingStringArray(const path[], const defaultvalue[], max, output[][], &outputtotal, outputmaxsize, printsetting = true)
 {
-	file_Open(SETTINGS_FILE);
+	ini_open(SETTINGS_FILE);
 
 	new tmpkey[MAX_KEY_LENGTH];
 
@@ -185,17 +212,17 @@ stock GetSettingStringArray(path[], defaultvalue[], max, output[][], &outputtota
 	{
 		format(tmpkey, sizeof(tmpkey), "%s/%d", path, outputtotal);
 
-		if(!file_IsKey(tmpkey))
+		if(!ini_isKey(tmpkey))
 		{
 			if(outputtotal == 0)
 			{
-				file_SetStr(tmpkey, defaultvalue);
-				file_Save(SETTINGS_FILE);
+				ini_setString(tmpkey, defaultvalue);
+				ini_close();
 				output[0][0] = EOS;
 				strcat(output[0], defaultvalue, outputmaxsize);
 
 				if(printsetting)
-					log(DISCORD_CHANNEL_INVALID, "[SETTING] Loaded default `%s`: %s", tmpkey, output[0]);
+					Logger_Log("Setting default", Logger_S("key", tmpkey), Logger_S("value", output[0]));
 			}
 
 			break;
@@ -206,29 +233,29 @@ stock GetSettingStringArray(path[], defaultvalue[], max, output[][], &outputtota
 		outputtotal++;
 	}
 
-	file_Close();
+	ini_close();
 }
 
-stock UpdateSettingInt(path[], value)
+stock UpdateSettingInt(const path[], value)
 {
-	file_Open(SETTINGS_FILE);
-	file_SetVal(path, value);
-	file_Save(SETTINGS_FILE);
-	file_Close();
+	ini_open(SETTINGS_FILE);
+	ini_setInt(path, value);
+	ini_close();
+	ini_close();
 }
 
-stock UpdateSettingFloat(path[], Float:value)
+stock UpdateSettingFloat(const path[], Float:value)
 {
-	file_Open(SETTINGS_FILE);
-	file_SetFloat(path, value);
-	file_Save(SETTINGS_FILE);
-	file_Close();
+	ini_open(SETTINGS_FILE);
+	ini_setFloat(path, value);
+	ini_close();
+	ini_close();
 }
 
-stock UpdateSettingString(path[], value[])
+stock UpdateSettingString(const path[], value[])
 {
-	file_Open(SETTINGS_FILE);
-	file_SetStr(path, value);
-	file_Save(SETTINGS_FILE);
-	file_Close();
+	ini_open(SETTINGS_FILE);
+	ini_setString(path, value);
+	ini_close();
+	ini_close();
 }

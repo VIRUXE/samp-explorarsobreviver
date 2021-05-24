@@ -1,3 +1,18 @@
+/*==============================================================================
+
+
+	Southclaws' Scavenge and Survive
+
+		Copyright (C) 2020 Barnaby "Southclaws" Keene
+
+		This Source Code Form is subject to the terms of the Mozilla Public
+		License, v. 2.0. If a copy of the MPL was not distributed with this
+		file, You can obtain one at http://mozilla.org/MPL/2.0/.
+
+
+==============================================================================*/
+
+
 stock IsBaseWeaponMelee(weaponid)
 {
 	switch(weaponid)
@@ -50,27 +65,27 @@ stock IsBaseWeaponDriveby(weaponid)
 	return 0;
 }
 
-stock IsWeaponMelee(itemid)
+stock IsWeaponMelee(Item:itemid)
 {
 	return IsBaseWeaponMelee(GetItemWeaponBaseWeapon(GetItemTypeWeapon(GetItemType(itemid))));
 }
 
-stock IsWeaponThrowable(itemid)
+stock IsWeaponThrowable(Item:itemid)
 {
 	return IsBaseWeaponThrowable(GetItemWeaponBaseWeapon(GetItemTypeWeapon(GetItemType(itemid))));
 }
 
-stock IsWeaponClipBased(itemid)
+stock IsWeaponClipBased(Item:itemid)
 {
 	return IsBaseWeaponClipBased(GetItemWeaponBaseWeapon(GetItemTypeWeapon(GetItemType(itemid))));
 }
 
-stock IsWeaponNoAmmo(itemid)
+stock IsWeaponNoAmmo(Item:itemid)
 {
 	return IsBaseWeaponNoAmmo(GetItemWeaponBaseWeapon(GetItemTypeWeapon(GetItemType(itemid))));
 }
 
-stock IsWeaponDriveby(itemid)
+stock IsWeaponDriveby(Item:itemid)
 {
 	return IsBaseWeaponDriveby(GetItemWeaponBaseWeapon(GetItemTypeWeapon(GetItemType(itemid))));
 }

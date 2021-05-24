@@ -1,4 +1,20 @@
-#include <YSI\y_hooks>
+/*==============================================================================
+
+
+	Southclaws' Scavenge and Survive
+
+		Copyright (C) 2020 Barnaby "Southclaws" Keene
+
+		This Source Code Form is subject to the terms of the Mozilla Public
+		License, v. 2.0. If a copy of the MPL was not distributed with this
+		file, You can obtain one at http://mozilla.org/MPL/2.0/.
+
+
+==============================================================================*/
+
+
+#include <YSI_Coding\y_hooks>
+
 
 hook OnItemTypeDefined(uname[])
 {
@@ -6,13 +22,11 @@ hook OnItemTypeDefined(uname[])
 		SetItemTypeMaxArrayData(GetItemTypeFromUniqueName("Locator"), 1);
 }
 
-hook OnPlayerUseItemWithItem(playerid, itemid, withitemid)
+hook OnPlayerUseItemWithItem(playerid, Item:itemid, Item:withitemid)
 {
-	dbg("global", LOG_CORE, "[OnPlayerUseItemWithItem] in /gamemodes/sss/core/item/locator.pwn");
-
 	if(GetItemType(itemid) == item_Locator && GetItemType(withitemid) == item_MobilePhone)
 	{
-		SetItemExtraData(itemid, withitemid);
+		SetItemExtraData(itemid, _:withitemid);
 		SetItemExtraData(withitemid, 1);
 
 		ChatMsgLang(playerid, YELLOW, "LOCATORSYNC");
@@ -21,19 +35,20 @@ hook OnPlayerUseItemWithItem(playerid, itemid, withitemid)
 	return Y_HOOKS_CONTINUE_RETURN_0;
 }
 
-hook OnPlayerUseItem(playerid, itemid)
+hook OnPlayerUseItem(playerid, Item:itemid)
 {
-	dbg("global", LOG_CORE, "[OnPlayerUseItem] in /gamemodes/sss/core/item/locator.pwn");
-
 	if(GetItemType(itemid) != item_Locator)
 		return Y_HOOKS_CONTINUE_RETURN_0;
 
-	new phoneitemid = GetItemExtraData(itemid);
+	new Item:phoneitemid;
+	GetItemExtraData(itemid, _:phoneitemid);
 
 	if(!IsValidItem(phoneitemid) || GetItemType(phoneitemid) != item_MobilePhone)
 		return Y_HOOKS_CONTINUE_RETURN_0;
 
-	if(GetItemExtraData(phoneitemid) != 1)
+	new active;
+	GetItemExtraData(phoneitemid, active);
+	if(active != 1)
 		return Y_HOOKS_CONTINUE_RETURN_0;
 
 	new
@@ -56,12 +71,12 @@ hook OnPlayerUseItem(playerid, itemid)
 	return Y_HOOKS_CONTINUE_RETURN_0;
 }
 
-hook OnItemCreate(itemid)
+hook OnItemCreate(Item:itemid)
 {
-	dbg("global", LOG_CORE, "[OnItemCreate] in /gamemodes/sss/core/item/locator.pwn");
-
 	if(GetItemType(itemid) == item_Locator)
-		SetItemExtraData(itemid, INVALID_ITEM_ID);
+	{
+		SetItemExtraData(itemid, _:INVALID_ITEM_ID);
+	}
 
 	return Y_HOOKS_CONTINUE_RETURN_0;
 }

@@ -1,4 +1,19 @@
-#include <YSI\y_hooks>
+/*==============================================================================
+
+
+	Southclaws' Scavenge and Survive
+
+		Copyright (C) 2020 Barnaby "Southclaws" Keene
+
+		This Source Code Form is subject to the terms of the Mozilla Public
+		License, v. 2.0. If a copy of the MPL was not distributed with this
+		file, You can obtain one at http://mozilla.org/MPL/2.0/.
+
+
+==============================================================================*/
+
+
+#include <YSI_Coding\y_hooks>
 
 
 static
@@ -42,10 +57,10 @@ stock ClearPlayerKeyActionUI(playerid)
 	KeyActionsText[playerid][0] = EOS;
 }
 
-stock AddToolTipText(playerid, key[], use[])
+stock AddToolTipText(playerid, const key[], const use[])
 {
 	new tmp[128];
-	format(tmp, sizeof(tmp), "~y~%s ~w~%s~n~", key, use);
+	format(tmp, sizeof(tmp), "~>~~y~ %s ~w~%s~n~", key, use);
 	strcat(KeyActionsText[playerid], tmp);
 }
 
@@ -78,43 +93,43 @@ hook OnPlayerCloseContainer(playerid, containerid)
 	_UpdateKeyActions(playerid);
 }
 
-hook OnPlayerAddToInventory(playerid, itemid)
+hook OnPlayerAddToInventory(playerid, Item:itemid)
 {
 	_UpdateKeyActions(playerid);
 }
 
-hook OnItemRemovedFromInv(playerid, itemid, slot)
+hook OnItemRemovedFromInv(playerid, Item:itemid, slot)
 {
 	_UpdateKeyActions(playerid);
 }
 
-hook OnItemRemovedFromPlayer(playerid, itemid)
+hook OnItemRemovedFromPlayer(playerid, Item:itemid)
 {
 	_UpdateKeyActions(playerid);
 }
 
 // Pickup/drop item
-hook OnPlayerPickedUpItem(playerid, itemid)
+hook OnPlayerPickedUpItem(playerid, Item:itemid)
 {
 	_UpdateKeyActions(playerid);
 }
 
-hook OnPlayerDroppedItem(playerid, itemid)
+hook OnPlayerDroppedItem(playerid, Item:itemid)
 {
 	_UpdateKeyActions(playerid);
 }
 
-hook OnPlayerGetItem(playerid, itemid)
+hook OnPlayerGetItem(playerid, Item:itemid)
 {
 	_UpdateKeyActions(playerid);
 }
 
-hook OnPlayerGiveItem(playerid, targetid, itemid)
+hook OnPlayerGiveItem(playerid, targetid, Item:itemid)
 {
 	_UpdateKeyActions(playerid);
 }
 
-hook OnPlayerGivenItem(playerid, targetid, itemid)
+hook OnPlayerGivenItem(playerid, targetid, Item:itemid)
 {
 	_UpdateKeyActions(playerid);
 }
@@ -176,7 +191,9 @@ _UpdateKeyActions(playerid)
 		return;		
 	}
 
-	if(IsValidContainer(GetPlayerCurrentContainer(playerid)))
+	new Container:containerid;
+	GetPlayerCurrentContainer(playerid, containerid);
+	if(IsValidContainer(containerid))
 	{
 		HidePlayerKeyActionUI(playerid);
 		return;		
@@ -207,7 +224,7 @@ _UpdateKeyActions(playerid)
 	}
 
 	new
-		itemid = GetPlayerItem(playerid),
+		Item:itemid = GetPlayerItem(playerid),
 		invehiclearea = GetPlayerVehicleArea(playerid),
 		inplayerarea = -1;
 
@@ -224,7 +241,7 @@ _UpdateKeyActions(playerid)
 
 	foreach(new i : Player)
 	{
-		if(IsPlayerInPlayerArea(playerid, i))
+		if(IsPlayerNextToPlayer(playerid, i))
 		{
 			inplayerarea = i;
 			break;
@@ -254,20 +271,30 @@ _UpdateKeyActions(playerid)
 	// Single items
 
 	if(itemtype == item_Sign)
+	{
 		AddToolTipText(playerid, KEYTEXT_INTERACT, "Place sign");
+	}
 	else if(itemtype == item_Armour)
+	{
 		AddToolTipText(playerid, KEYTEXT_INTERACT, "Wear armour");
+	}
 	else if(itemtype == item_Crowbar)
+	{
 		AddToolTipText(playerid, KEYTEXT_INTERACT, "Deconstruct");
+	}
 	else if(itemtype == item_Shield)
+	{
 		AddToolTipText(playerid, KEYTEXT_INTERACT, "Place shield");
+	}
 	else if(itemtype == item_HandCuffs)
 	{
 		if(inplayerarea != -1)
 			AddToolTipText(playerid, KEYTEXT_INTERACT, "HandCuff player");
 	}
 	else if(itemtype == item_Wheel)
+	{
 		AddToolTipText(playerid, KEYTEXT_INTERACT, "Repair vehicle wheel");
+	}
 	else if(itemtype == item_GasCan)
 	{
 		if(invehiclearea != INVALID_VEHICLE_ID)
@@ -276,10 +303,14 @@ _UpdateKeyActions(playerid)
 				AddToolTipText(playerid, KEYTEXT_INTERACT, "Refuel vehicle");
 		}
 		else
+		{
 			AddToolTipText(playerid, KEYTEXT_INTERACT, "Fill at pump");
+		}
 	}
 	else if(itemtype == item_Clothes)
+	{
 		AddToolTipText(playerid, KEYTEXT_INTERACT, "Wear clothes");
+	}
 	else if(itemtype == item_Headlight)
 	{
 		if(invehiclearea != INVALID_VEHICLE_ID)
@@ -289,7 +320,9 @@ _UpdateKeyActions(playerid)
 		}
 	}
 	else if(itemtype == item_Pills)
+	{
 		AddToolTipText(playerid, KEYTEXT_INTERACT, "Take Pills");
+	}
 	else if(itemtype == item_AutoInjec)
 	{
 		if(inplayerarea == -1)
@@ -299,7 +332,9 @@ _UpdateKeyActions(playerid)
 			AddToolTipText(playerid, KEYTEXT_INTERACT, "Inject other player");
 	}
 	else if(itemtype == item_HerpDerp)
+	{
 		AddToolTipText(playerid, KEYTEXT_INTERACT, "Herp-a-derp");
+	}
 	else if(itemtype == item_Medkit || itemtype == item_Bandage || itemtype == item_DoctorBag)
 	{
 		if(inplayerarea != -1)
@@ -319,20 +354,30 @@ _UpdateKeyActions(playerid)
 	else
 	{
 		if(IsItemTypeFood(itemtype))
+		{
 			AddToolTipText(playerid, KEYTEXT_INTERACT, "Eat");
+		}
 		else if(IsItemTypeBag(itemtype))
 		{
 			AddToolTipText(playerid, KEYTEXT_INTERACT, "Open satchel");
 			AddToolTipText(playerid, KEYTEXT_PUT_AWAY, "Wear");
 		}
 		else if(GetHatFromItem(itemtype) != -1)
+		{
 			AddToolTipText(playerid, KEYTEXT_INTERACT, "Wear Hat");
+		}
 		else if(GetMaskFromItem(itemtype) != -1)
+		{
 			AddToolTipText(playerid, KEYTEXT_INTERACT, "Wear Hat");
+		}
 		else if(GetItemTypeExplosiveType(itemtype) != -1)
+		{
 			AddToolTipText(playerid, KEYTEXT_INTERACT, "Arm Explosive");
+		}
 		else if(GetItemTypeLiquidContainerType(itemtype) != -1)
+		{
 			AddToolTipText(playerid, KEYTEXT_INTERACT, "Drink");
+		}
 	}
 
 	if(GetItemTypeWeapon(itemtype) != -1)
@@ -341,7 +386,7 @@ _UpdateKeyActions(playerid)
 
 		foreach(new i : Player)
 		{
-			if(IsPlayerInPlayerArea(playerid, i))
+			if(IsPlayerNextToPlayer(playerid, i))
 			{
 				inplayerarea = i;
 				break;
@@ -353,12 +398,18 @@ _UpdateKeyActions(playerid)
 		AddToolTipText(playerid, KEYTEXT_DROP_ITEM, "(Hold) Unload");
 	}
 	else
+	{
 		AddToolTipText(playerid, KEYTEXT_PUT_AWAY, "Put away");
+	}
 
 	if(inplayerarea == -1)
+	{
 		AddToolTipText(playerid, KEYTEXT_DROP_ITEM, "Drop item");
+	}
 	else
+	{
 		AddToolTipText(playerid, KEYTEXT_DROP_ITEM, "Give item");
+	}
 
 	AddToolTipText(playerid, KEYTEXT_INVENTORY, "Open inventory");
 	ShowPlayerKeyActionUI(playerid);

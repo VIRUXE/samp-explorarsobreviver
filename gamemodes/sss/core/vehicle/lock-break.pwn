@@ -1,4 +1,19 @@
-#include <YSI\y_hooks>
+/*==============================================================================
+
+
+	Southclaws' Scavenge and Survive
+
+		Copyright (C) 2020 Barnaby "Southclaws" Keene
+
+		This Source Code Form is subject to the terms of the Mozilla Public
+		License, v. 2.0. If a copy of the MPL was not distributed with this
+		file, You can obtain one at http://mozilla.org/MPL/2.0/.
+
+
+==============================================================================*/
+
+
+#include <YSI_Coding\y_hooks>
 
 
 static
@@ -8,15 +23,11 @@ static
 
 hook OnPlayerConnect(playerid)
 {
-	dbg("global", LOG_CORE, "[OnPlayerConnect] in /gamemodes/sss/core/vehicle/lock-break.pwn");
-
 	cro_TargetVehicle[playerid] = INVALID_VEHICLE_ID;
 }
 
 hook OnPlayerInteractVehicle(playerid, vehicleid, Float:angle)
 {
-	dbg("global", LOG_CORE, "[OnPlayerInteractVehicle] in /gamemodes/sss/core/vehicle/lock-break.pwn");
-
 	if(GetItemType(GetPlayerItem(playerid)) == item_Crowbar)
 	{
 		if(GetVehicleLockState(vehicleid) == E_LOCK_STATE_EXTERNAL)
@@ -43,8 +54,6 @@ hook OnPlayerInteractVehicle(playerid, vehicleid, Float:angle)
 
 hook OnPlayerKeyStateChange(playerid, newkeys, oldkeys)
 {
-	dbg("global", LOG_CORE, "[OnPlayerKeyStateChange] in /gamemodes/sss/core/vehicle/lock-break.pwn");
-
 	if(oldkeys & 16)
 	{
 		StopBreakingVehicleLock(playerid);
@@ -111,8 +120,6 @@ public OnHoldActionUpdate(playerid, progress)
 
 hook OnHoldActionFinish(playerid)
 {
-	dbg("global", LOG_CORE, "[OnHoldActionFinish] in /gamemodes/sss/core/vehicle/lock-break.pwn");
-
 	if(cro_TargetVehicle[playerid] != INVALID_VEHICLE_ID)
 	{
 		if(cro_OpenType[playerid] == 0)

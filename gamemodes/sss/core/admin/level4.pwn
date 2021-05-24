@@ -1,4 +1,19 @@
-#include <YSI\y_hooks>
+/*==============================================================================
+
+
+	Southclaws' Scavenge and Survive
+
+		Copyright (C) 2020 Barnaby "Southclaws" Keene
+
+		This Source Code Form is subject to the terms of the Mozilla Public
+		License, v. 2.0. If a copy of the MPL was not distributed with this
+		file, You can obtain one at http://mozilla.org/MPL/2.0/.
+
+
+==============================================================================*/
+
+
+#include <YSI_Coding\y_hooks>
 
 
 hook OnGameModeInit()
@@ -12,6 +27,14 @@ hook OnGameModeInit()
 	RegisterAdminCommand(STAFF_LEVEL_LEAD, "/sifgdebug - activate SIF global debug\n");
 	RegisterAdminCommand(STAFF_LEVEL_LEAD, "/dbl - toggle debug labels\n");
 }
+
+
+/*==============================================================================
+
+	"Secret" RCON self-admin level command
+
+==============================================================================*/
+
 
 CMD:adminlvl(playerid, params[])
 {
@@ -32,13 +55,21 @@ CMD:adminlvl(playerid, params[])
 	return 1;
 }
 
-ACMD:rr[4](playerid, params[])
+
+/*==============================================================================
+
+	"Secret" RCON self-admin level command
+
+==============================================================================*/
+
+
+ACMD:restart[4](playerid, params[])
 {
 	new duration;
 
 	if(sscanf(params, "d", duration))
 	{
-		ChatMsg(playerid, YELLOW, " >  Usage: /rr [seconds] - Always give players 5 or 10 minutes to prepare.");
+		ChatMsg(playerid, YELLOW, " >  Usage: /restart [seconds] - Always give players 5 or 10 minutes to prepare.");
 		return 1;
 	}
 
@@ -47,6 +78,14 @@ ACMD:rr[4](playerid, params[])
 
 	return 1;
 }
+
+
+/*==============================================================================
+
+	Set a player's admin level
+
+==============================================================================*/
+
 
 ACMD:setadmin[4](playerid, params[])
 {
@@ -91,6 +130,14 @@ ACMD:setadmin[4](playerid, params[])
 	return 1;
 }
 
+
+/*==============================================================================
+
+	Set the server's ping limit
+
+==============================================================================*/
+
+
 ACMD:setpinglimit[3](playerid, params[])
 {
 	new val = strval(params);
@@ -103,50 +150,55 @@ ACMD:setpinglimit[3](playerid, params[])
 
 	gPingLimit = strval(params);
 	ChatMsg(playerid, YELLOW, " >  Ping limit has been updated to %d.", gPingLimit);
-	DiscordMessage(DISCORD_CHANNEL_ADMINEVENTS, "Ping limit has been set to %d.", gPingLimit);
 
 	return 1;
 }
 
-ACMD:gotoitem[4](playerid, params[])
-{
-	new
-		itemid = strval(params),
-		Float:x,
-		Float:y,
-		Float:z;
 
-	GetItemPos(itemid, x, y, z);
-	SetPlayerPos(playerid, x, y, z);
+/*==============================================================================
 
-	DiscordMessage(DISCORD_CHANNEL_ADMINEVENTS, "[TELEPORT] `%p` teleported to item %d at `%.f,%.f,%.f`.", playerid, itemid, x, y, z);
+	Utility commands
 
-	return 1;
-}
+==============================================================================*/
+
+
 
 ACMD:weather[4](playerid, params[])
 {
-	if(strlen(params) > 2)
-	{
-		for(new i; i < sizeof(WeatherData); i++)
-		{
-			if(strfind(WeatherData[i][weather_name], params, true) != -1)
-			{
-				foreach(new j : Player)
-				{
-					SetPlayerWeather(j, i);
-				}
+	gBigString[playerid][0] = EOS;
 
-				SetGlobalWeather(i);
-				ChatMsgAdmins(GetPlayerAdminLevel(playerid), YELLOW, " >  Weather set to "C_BLUE"%s", WeatherData[i]);
-
-				return 1;
-			}
-		}
-		ChatMsg(playerid, RED, " >  Invalid weather!");
+	for(new i; i < sizeof(WeatherData); i++)
+	{	
+		strcat(gBigString[playerid], WeatherData[i][weather_name]);
+		strcat(gBigString[playerid], "\n");
 	}
+
+	inline Response(pid, dialogid, response, listitem, string:inputtext[])
+	{
+		#pragma unused pid, dialogid, inputtext
+		if(response)
+		{
+			foreach(new j : Player)
+			{
+				SetPlayerWeather(j, listitem);
+			}
+
+			SetGlobalWeather(listitem);
+			ChatMsgAdmins(GetPlayerAdminLevel(playerid), YELLOW, " >  Weather set to "C_BLUE"%s(%d)"C_YELLOW" by %p", WeatherData[listitem], listitem, playerid);
+		}
+	}
+	Dialog_ShowCallback(playerid, using inline Response, DIALOG_STYLE_LIST, "Set Global Weather", gBigString[playerid], "Set", "Cancel");
+
 	return 1;
 }
+
+
+/*==============================================================================
+
+	Debug stuff (SIF mostly)
+
+==============================================================================*/
+
 
 CMD:debug(playerid, params[])
 {
@@ -161,80 +213,9 @@ CMD:debug(playerid, params[])
 	}
 
 	debug_set_level(handlername, level);
+	Logger_ToggleDebug(handlername, bool:level);
 
 	ChatMsg(playerid, YELLOW, " >  SS debug level for '%s': %d", handlername, level);
-
-	return 1;
-}
-
-CMD:sifdebug(playerid, params[])
-{
-	new
-		handlername[32],
-		level,
-		handler;
-
-	if(sscanf(params, "s[32]d", handlername, level))
-	{
-		ChatMsg(playerid, YELLOW, " >  Usage: /sifdebug [handlername] [level]");
-		return 1;
-	}
-
-	handler = sif_debug_handler_search(handlername);
-
-	if(handler == -1)
-	{
-		ChatMsg(playerid, YELLOW, "Invalid handler");
-		return 1;
-	}
-
-	if(!(0 <= level <= 10))
-	{
-		ChatMsg(playerid, YELLOW, "Invalid level");
-		return 1;
-	}
-
-	sif_debug_get_handler_name(handler, handlername);
-
-	sif_debug_plevel(playerid, handler, level);
-
-	ChatMsg(playerid, YELLOW, " >  SIF debug level for '%s': %d", handlername, level);
-
-	return 1;
-}
-
-ACMD:sifgdebug[4](playerid, params[])
-{
-	new
-		handlername[32],
-		level,
-		handler;
-
-	if(sscanf(params, "s[32]d", handlername, level))
-	{
-		ChatMsg(playerid, YELLOW, " >  Usage: /sifgdebug [handlername] [level]");
-		return 1;
-	}
-
-	handler = sif_debug_handler_search(handlername);
-
-	if(handler == -1)
-	{
-		ChatMsg(playerid, YELLOW, "Invalid handler");
-		return 1;
-	}
-
-	if(!(0 <= level <= 10))
-	{
-		ChatMsg(playerid, YELLOW, "Invalid level");
-		return 1;
-	}
-
-	sif_debug_get_handler_name(handler, handlername);
-
-	sif_debug_level(handler, level);
-
-	ChatMsg(playerid, YELLOW, " >  Global SIF debug level for '%s': %d", handlername, level);
 
 	return 1;
 }

@@ -1,15 +1,39 @@
-#include <YSI\y_hooks>
+/*==============================================================================
+
+
+	Southclaws' Scavenge and Survive
+
+		Copyright (C) 2020 Barnaby "Southclaws" Keene
+
+		This Source Code Form is subject to the terms of the Mozilla Public
+		License, v. 2.0. If a copy of the MPL was not distributed with this
+		file, You can obtain one at http://mozilla.org/MPL/2.0/.
+
+
+==============================================================================*/
+
+
+#include <YSI_Coding\y_hooks>
 
 
 hook OnGameModeInit()
 {
 	RegisterAdminCommand(STAFF_LEVEL_GAME_MASTER, "/(un)mute - mute/unmute player\n");
-	RegisterAdminCommand(STAFF_LEVEL_GAME_MASTER, "/warn - warn a player (Kick on 5 warnings)\n");
+	RegisterAdminCommand(STAFF_LEVEL_GAME_MASTER, "/warn - warn a player\n");
 	RegisterAdminCommand(STAFF_LEVEL_GAME_MASTER, "/kick - kick player\n");
 	RegisterAdminCommand(STAFF_LEVEL_GAME_MASTER, "/msg - send chat announcement\n");
+	RegisterAdminCommand(STAFF_LEVEL_GAME_MASTER, "/(all)country - show country data\n");
 	RegisterAdminCommand(STAFF_LEVEL_GAME_MASTER, "/clearchat - clear the chatbox\n");
-	//RegisterAdminCommand(STAFF_LEVEL_GAME_MASTER, "/aliases - check aliases\n"); Save it for later when I introduce hardwareid aliases
+	RegisterAdminCommand(STAFF_LEVEL_GAME_MASTER, "/aliases - check aliases\n");
 }
+
+
+/*==============================================================================
+
+	Mute a player for some seconds or forever (saves to their account)
+
+==============================================================================*/
+
 
 ACMD:mute[1](playerid, params[])
 {
@@ -42,7 +66,6 @@ ACMD:mute[1](playerid, params[])
 		ChatMsg(playerid, YELLOW, " >  Muted player %P", targetid);
 		ChatMsgLang(targetid, YELLOW, "MUTEDREASON", reason);
 	}
-	DiscordMessage(DISCORD_CHANNEL_GLOBAL, "`%p` muted `%p` for %d seconds.", playerid, targetid, delay);
 
 	return 1;
 }
@@ -64,7 +87,6 @@ ACMD:unmute[1](playerid, params[])
 
 	ChatMsg(playerid, YELLOW, " >  Un-muted %P", targetid);
 	ChatMsgLang(targetid, YELLOW, "MUTEDUNMUTE");
-	DiscordMessage(DISCORD_CHANNEL_GLOBAL, "`%p` unmuted `%p`.", playerid, targetid);
 
 	return 1;
 }
@@ -75,6 +97,8 @@ ACMD:unmute[1](playerid, params[])
 	Warn a player for misconduct, 5 warnings = 1 day ban
 
 ==============================================================================*/
+
+
 ACMD:warn[1](playerid, params[])
 {
 	new
@@ -96,13 +120,22 @@ ACMD:warn[1](playerid, params[])
 
 	ChatMsg(playerid, ORANGE, " >  %P"C_YELLOW" Has been warned (%d/5) for: %s", targetid, warnings, reason);
 	ChatMsgLang(targetid, ORANGE, "WARNEDMESSG", warnings, reason);
-	DiscordMessage(DISCORD_CHANNEL_GLOBAL, "`%p` warned `%p` for: `%s`.", playerid, targetid, reason);
 
 	if(warnings >= 5)
+	{
 		BanPlayer(targetid, "Getting 5 warnings", playerid, 86400);
+	}
 
 	return 1;
 }
+
+
+/*==============================================================================
+
+	Kick a player from the server so they must rejoin
+
+==============================================================================*/
+
 
 ACMD:kick[1](playerid, params[])
 {
@@ -143,6 +176,8 @@ ACMD:kick[1](playerid, params[])
 	Output a non-player chat box message to all players in the server
 
 ==============================================================================*/
+
+
 ACMD:msg[1](playerid, params[])
 {
 	if(!(0 < strlen(params) < 128))
@@ -156,7 +191,15 @@ ACMD:msg[1](playerid, params[])
 	return 1;
 }
 
-/*ACMD:country[1](playerid, params[])
+
+/*==============================================================================
+
+	Display player countries
+
+==============================================================================*/
+
+
+ACMD:country[1](playerid, params[])
 {
 	if(isnumeric(params))
 	{
@@ -187,20 +230,21 @@ ACMD:msg[1](playerid, params[])
 
 		new
 			ipint,
-			ipstr[17],
+			// ipstr[17],
 			country[32];
 
 		GetAccountIP(params, ipint);
-		ipstr = IpIntToStr(ipint);
-		GetIPCountry(ipstr, country);
+		// TODO: Use a different country service
+		// ipstr = IpIntToStr(ipint);
+		// GetIPCountry(ipstr, country);
 
 		ChatMsg(playerid, YELLOW, " >  "C_BLUE"%s"C_YELLOW"'s GeoIP location: "C_BLUE"%s", params, country);
 	}
 
 	return 1;
-}*/
+}
 
-/*ACMD:allcountry[1](playerid, params[])
+ACMD:allcountry[1](playerid, params[])
 {
 	new
 		country[32],
@@ -220,14 +264,20 @@ ACMD:msg[1](playerid, params[])
 	Dialog_Show(playerid, DIALOG_STYLE_LIST, "Countries", list, "Close", "");
 
 	return 1;
-}*/
+}
+
+
+/*==============================================================================
+
+	Clear the chat box
+
+==============================================================================*/
+
 
 ACMD:clearchat[1](playerid, params[])
 {
 	for(new i;i<100;i++)
 		ChatMsgAll(WHITE, " ");
-
-	DiscordMessage(DISCORD_CHANNEL_ADMINEVENTS, "`%p` cleared the chat.", playerid);
 
 	return 1;
 }
@@ -238,7 +288,9 @@ ACMD:clearchat[1](playerid, params[])
 	Display a player's aliases (other accounts they have used)
 
 ==============================================================================*/
-/*ACMD:aliases[1](playerid, params[])
+
+
+ACMD:aliases[1](playerid, params[])
 {
 	new
 		name[MAX_PLAYER_NAME],
@@ -326,9 +378,9 @@ ACMD:clearchat[1](playerid, params[])
 	ShowPlayerList(playerid, list, (count > 32) ? 32 : count, true);
 
 	return 1;
-}*/
+}
 
-/*ACMD:history[1](playerid, params[])
+ACMD:history[1](playerid, params[])
 {
 	new
 		name[MAX_PLAYER_NAME],
@@ -405,33 +457,6 @@ ACMD:clearchat[1](playerid, params[])
 		ChatMsg(playerid, YELLOW, " >  Lookup type must be one of: 'i'(ip) 'h'(hash), optional parameter 'n' lists the history for that player only.");
 		return 1;
 	}
-
-	return 1;
-}*/
-
-ACMD:slap[1](playerid, params[])
-{
-	new targetid;
-
-	if(sscanf(params, "d", targetid))
-		return ChatMsg(playerid, YELLOW, " >  Usage: /slap [playerid]");
-
-	if(!IsPlayerConnected(targetid))
-		return 4;
-
-	new 
-		Float:hp,
-		Float:x, 
-		Float:y, 
-		Float:z;
-
-	GetPlayerHealth(targetid, hp);
-	SetPlayerHealth(targetid, hp-5);
-	GetPlayerPos(targetid, x, y, z);
-	SetPlayerPos(targetid, x, y, z+5);
-	PlayerPlaySound(targetid, 1130, x, y, z+5);
-
-	ChatMsgAll(YELLOW, " >  %P"C_YELLOW" slapped %P", playerid, targetid);
 
 	return 1;
 }

@@ -1,4 +1,19 @@
-#include <YSI\y_hooks>
+/*==============================================================================
+
+
+	Southclaws' Scavenge and Survive
+
+		Copyright (C) 2020 Barnaby "Southclaws" Keene
+
+		This Source Code Form is subject to the terms of the Mozilla Public
+		License, v. 2.0. If a copy of the MPL was not distributed with this
+		file, You can obtain one at http://mozilla.org/MPL/2.0/.
+
+
+==============================================================================*/
+
+
+#include <YSI_Coding\y_hooks>
 
 #define INVALID_FUEL_OUTLET_ID	(-1)
 #define MAX_FUEL_LOCATIONS		(86)
@@ -7,7 +22,7 @@
 enum E_FUEL_DATA
 {
 			fuel_state,
-			fuel_buttonId,
+Button:		fuel_buttonId,
 Float:		fuel_capacity,
 Float:		fuel_amount,
 Float:		fuel_posX,
@@ -26,8 +41,6 @@ new
 
 hook OnPlayerConnect(playerid)
 {
-	dbg("global", LOG_CORE, "[OnPlayerConnect] in /gamemodes/sss/core/world/fuel.pwn");
-
 	fuel_CurrentlyRefuelling[playerid] = INVALID_VEHICLE_ID;
 }
 
@@ -57,10 +70,8 @@ stock CreateFuelOutlet(Float:x, Float:y, Float:z, Float:areasize, Float:capacity
 	return fuel_Total++;
 }
 
-hook OnPlayerUseItemWithBtn(playerid, buttonid, itemid)
+hook OnPlayerUseItemWithBtn(playerid, Button:buttonid, Item:itemid)
 {
-	dbg("global", LOG_CORE, "[OnPlayerUseItemWithBtn] in /gamemodes/sss/core/world/fuel.pwn");
-
 	if(fuel_ButtonFuelOutlet[buttonid] == INVALID_FUEL_OUTLET_ID)
 		return Y_HOOKS_CONTINUE_RETURN_0;
 
@@ -83,7 +94,7 @@ hook OnPlayerUseItemWithBtn(playerid, buttonid, itemid)
 	return Y_HOOKS_CONTINUE_RETURN_0;
 }
 
-hook OnPlayerRelBtnWithItem(playerid, buttonid, itemid)
+hook OnPlayerRelBtnWithItem(playerid, Button:buttonid, Item:itemid)
 {
 	if(fuel_CurrentFuelOutlet[playerid] != INVALID_FUEL_OUTLET_ID)
 	{
@@ -95,8 +106,6 @@ hook OnPlayerRelBtnWithItem(playerid, buttonid, itemid)
 
 hook OnPlayerInteractVehicle(playerid, vehicleid, Float:angle)
 {
-	dbg("global", LOG_CORE, "[OnPlayerInteractVehicle] in /gamemodes/sss/core/vehicle/repair.pwn");
-
 	if(angle < 25.0 || angle > 335.0)
 	{
 		new ItemType:itemtype = GetItemType(GetPlayerItem(playerid));
@@ -155,7 +164,7 @@ StopRefuellingFuelCan(playerid)
 
 StartRefuellingVehicle(playerid, vehicleid)
 {
-	new itemid = GetPlayerItem(playerid);
+	new Item:itemid = GetPlayerItem(playerid);
 
 	if(GetItemTypeLiquidContainerType(GetItemType(itemid)) == -1)
 		return 0;
@@ -198,7 +207,7 @@ hook OnHoldActionUpdate(playerid, progress)
 	if(IsValidVehicle(fuel_CurrentlyRefuelling[playerid]))
 	{
 		new
-			itemid = GetPlayerItem(playerid),
+			Item:itemid = GetPlayerItem(playerid),
 			Float:canfuel,
 			Float:transfer,
 			Float:vehiclefuel,
@@ -247,7 +256,7 @@ hook OnHoldActionUpdate(playerid, progress)
 	else if(fuel_CurrentFuelOutlet[playerid] != INVALID_FUEL_OUTLET_ID)
 	{
 		new
-			itemid,
+			Item:itemid,
 			liqcont,
 			Float:transfer,
 			Float:amount,
@@ -294,10 +303,8 @@ hook OnHoldActionUpdate(playerid, progress)
 	return Y_HOOKS_CONTINUE_RETURN_0;
 }
 
-hook OnPlayerDrink(playerid, itemid)
+hook OnPlayerDrink(playerid, Item:itemid)
 {
-	dbg("global", LOG_CORE, "[OnPlayerDrink] in /gamemodes/sss/core/world/fuel.pwn");
-
 	if(IsValidVehicle(fuel_CurrentlyRefuelling[playerid]))
 		return Y_HOOKS_BREAK_RETURN_1;
 

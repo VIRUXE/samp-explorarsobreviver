@@ -1,8 +1,23 @@
-#include <YSI\y_hooks>
+/*==============================================================================
+
+
+	Southclaws' Scavenge and Survive
+
+		Copyright (C) 2020 Barnaby "Southclaws" Keene
+
+		This Source Code Form is subject to the terms of the Mozilla Public
+		License, v. 2.0. If a copy of the MPL was not distributed with this
+		file, You can obtain one at http://mozilla.org/MPL/2.0/.
+
+
+==============================================================================*/
+
+
+#include <YSI_Coding\y_hooks>
 
 
 // Directory for storing player-saved vehicles
-#define DIRECTORY_VEHICLE			DIRECTORY_MAIN"vehicles/"
+#define DIRECTORY_VEHICLE			DIRECTORY_MAIN"vehicle/"
 
 
 enum
@@ -35,10 +50,6 @@ static
 static
 		pveh_SaveAnyVehicle[MAX_PLAYERS] = {1, ...};
 
-static
-bool:	veh_PrintEach = true,
-bool:	veh_PrintTotal = true;
-
 
 forward OnVehicleSave(vehicleid);
 
@@ -46,9 +57,6 @@ forward OnVehicleSave(vehicleid);
 hook OnScriptInit()
 {
 	DirectoryCheck(DIRECTORY_SCRIPTFILES DIRECTORY_VEHICLE);
-
-	GetSettingInt("player-vehicle/print-each", true, veh_PrintEach);
-	GetSettingInt("player-vehicle/print-total", true, veh_PrintTotal);
 }
 
 hook OnGameModeInit()
@@ -58,8 +66,6 @@ hook OnGameModeInit()
 
 hook OnPlayerConnect(playerid)
 {
-	dbg("global", LOG_CORE, "[OnPlayerConnect] in /gamemodes/sss/core/vehicle/player-vehicle.pwn");
-
 	new name[MAX_PLAYER_NAME];
 
 	GetPlayerName(playerid, name, MAX_PLAYER_NAME);
@@ -85,8 +91,6 @@ hook OnPlayerConnect(playerid)
 
 hook OnPlayerDisconnect(playerid, reason)
 {
-	dbg("global", LOG_CORE, "[OnPlayerDisconnect] in /gamemodes/sss/core/vehicle/player-vehicle.pwn");
-
 	if(IsValidVehicle(pveh_PlayerVehicle[playerid]))
 	{
 		pveh_OwnerPlayer[pveh_PlayerVehicle[playerid]] = INVALID_PLAYER_ID;
@@ -107,34 +111,36 @@ LoadPlayerVehicles()
 	DirectoryCheck(DIRECTORY_SCRIPTFILES DIRECTORY_VEHICLE);
 
 	new
-		dir:direc = dir_open(DIRECTORY_SCRIPTFILES DIRECTORY_VEHICLE),
-		item[28],
-		type;
+		path[128] = DIRECTORY_SCRIPTFILES DIRECTORY_VEHICLE,
+		Directory:direc,
+		entry[128],
+		ENTRY_TYPE:type,
+		trimlength = strlen("./scriptfiles/");
 
-	while(dir_list(direc, item, type))
+	direc = OpenDir(path);
+	if(direc == Directory:-1)
 	{
-		if(type == FM_FILE)
+		err("failed to open vehicles directory '%s': %d", path, _:direc);
+		return 1;
+	}
+
+	while(DirNext(direc, type, entry))
+	{
+		if(type == E_REGULAR)
 		{
-			if(!(6 < strlen(item) < MAX_PLAYER_NAME + 4))
+			if(strfind(entry, ".dat", false, 3) == -1)
 			{
-				err("File with a bad filename length: '%s' len: %d", item, strlen(item));
+				err("File with invalid extension: '%s'", entry);
 				continue;
 			}
 
-			if(strfind(item, ".dat", false, 3) == -1)
-			{
-				err("File with invalid extension: '%s'", item);
-				continue;
-			}
-
-			LoadPlayerVehicle(item);
+			LoadPlayerVehicle(entry[trimlength]);
 		}
 	}
 
-	dir_close(direc);
+	CloseDir(direc);
 
-	if(veh_PrintTotal)
-		log(DISCORD_CHANNEL_EVENTS, "[VEHICLE] Loaded a total of %d player vehicles", Iter_Count(veh_Index));
+	Logger_Log("loaded player vehicles", Logger_I("count", Iter_Count(veh_Index)));
 
 	return 1;
 }
@@ -147,17 +153,20 @@ LoadPlayerVehicles()
 ==============================================================================*/
 
 
-LoadPlayerVehicle(filename[])
+LoadPlayerVehicle(const filepath[])
 {
-	// TODO: move this directory formatting to the load loop.
 	new
-		filepath[64],
+		filename[32],
 		data[VEH_CELL_END],
 		length,
-		geid[GEID_LEN];
+		uuid[UUID_LEN];
 
-	filepath = DIRECTORY_VEHICLE;
-	strcat(filepath, filename);
+	PathBase(filepath, filename);
+	if(!(6 < strlen(filename) < MAX_PLAYER_NAME + 4))
+	{
+		err("File with a bad filename length: '%s' len: %d", filename, strlen(filename));
+		return 0;
+	}
 
 	length = modio_read(filepath, _T<A,C,T,V>, 1, data, false, false);
 
@@ -172,7 +181,7 @@ LoadPlayerVehicle(filename[])
 	{
 		if(data[0] == 0)
 		{
-			dbg("gamemodes/sss/core/vehicle/player-vehicle.pwn", 1, "Vehicle set to inactive (file: %s)", filename);
+			dbg("player-vehicle", 1, "Vehicle set to inactive (file: %s)", filename);
 			modio_finalise_read(modio_getsession_read(filepath));
 			return 0;
 		}
@@ -226,7 +235,7 @@ LoadPlayerVehicle(filename[])
 		}
 	}
 
-	modio_read(filepath, _T<G,E,I,D>, sizeof(geid), geid, false, false);
+	modio_read(filepath, _T<G,E,I,D>, sizeof(uuid), uuid, false, false);
 
 	new
 		vehicleid,
@@ -243,7 +252,7 @@ LoadPlayerVehicle(filename[])
 		data[VEH_CELL_COL1],
 		data[VEH_CELL_COL2],
 		_,
-		geid);
+		uuid);
 
 	if(!IsValidVehicle(vehicleid))
 	{
@@ -274,7 +283,7 @@ LoadPlayerVehicle(filename[])
 	SetVehicleExternalLock(vehicleid, E_LOCK_STATE:data[VEH_CELL_LOCKED]);
 
 	new
-		containerid,
+		Container:containerid,
 		trunksize;
 
 	trunksize = GetVehicleTypeTrunkSize(data[VEH_CELL_TYPE]);
@@ -287,11 +296,11 @@ LoadPlayerVehicle(filename[])
 			trailerid,
 			trailertrunksize,
 			trailername[MAX_VEHICLE_TYPE_NAME],
-			trailergeid[GEID_LEN];
+			traileruuid[UUID_LEN];
 
 		GetVehicleTypeName(data[VEH_CELL_TYPE], trailername);
 
-		modio_read(filepath, _T<T,G,E,I>, sizeof(trailergeid), trailergeid, false, false);
+		modio_read(filepath, _T<T,U,I,D>, sizeof(traileruuid), traileruuid, false, false);
 
 		trailerid = CreateWorldVehicle(
 			data[VEH_CELL_TYPE],
@@ -302,7 +311,7 @@ LoadPlayerVehicle(filename[])
 			data[VEH_CELL_COL1],
 			data[VEH_CELL_COL2],
 			_,
-			trailergeid);
+			traileruuid);
 
 		trailertrunksize = GetVehicleTypeTrunkSize(data[VEH_CELL_TYPE]);
 
@@ -329,7 +338,7 @@ LoadPlayerVehicle(filename[])
 		{
 			new
 				ItemType:itemtype,
-				itemid;
+				Item:itemid;
 
 			length = modio_read(filepath, _T<T,T,R,N>, ITEM_SERIALIZER_RAW_SIZE, itm_arr_Serialized, false, false);
 		
@@ -356,23 +365,34 @@ LoadPlayerVehicle(filename[])
 
 					AddItemToContainer(containerid, itemid);
 				}
+
 				ClearSerializer();
 			}
 		}
 
-		if(veh_PrintEach)
-			log(DISCORD_CHANNEL_EVENTS, "[VEHICLE] Loaded trailer `%s` (%d) L:%d %d items: %s for `%s` at `%.2f, %.2f, %.2f`", trailergeid, trailerid, data[VEH_CELL_LOCKED], itemcount, trailername, owner, data[VEH_CELL_POSX], data[VEH_CELL_POSY], data[VEH_CELL_POSZ], data[VEH_CELL_ROTZ]);
+		Logger_Log("loaded player trailer",
+			Logger_S("uuid", traileruuid),
+			Logger_I("id", trailerid),
+			Logger_I("locked", data[VEH_CELL_LOCKED]),
+			Logger_I("items", itemcount),
+			Logger_S("type", trailername),
+			Logger_S("owner", owner),
+			Logger_F("x", data[VEH_CELL_POSX]),
+			Logger_F("y", data[VEH_CELL_POSY]),
+			Logger_F("z", data[VEH_CELL_POSZ]),
+			Logger_F("r", data[VEH_CELL_ROTZ])
+		);
 	}
 
 	new itemcount;
 
 	if(trunksize > 0)
 	{
-		dbg("gamemodes/sss/core/vehicle/player-vehicle.pwn", 1, "[LoadPlayerVehicle] trunk size: %d", trunksize);
+		dbg("player-vehicle", 1, "[LoadPlayerVehicle] trunk size: %d", trunksize);
 
 		new
 			ItemType:itemtype,
-			itemid;
+			Item:itemid;
 
 		length = modio_read(filepath, _T<T,R,N,K>, ITEM_SERIALIZER_RAW_SIZE, itm_arr_Serialized, true);
 
@@ -382,13 +402,13 @@ LoadPlayerVehicle(filename[])
 
 			containerid = GetVehicleContainer(vehicleid);
 
-			dbg("gamemodes/sss/core/vehicle/player-vehicle.pwn", 1, "[LoadPlayerVehicle] modio read length:%d items:%d", length, itemcount);
+			dbg("player-vehicle", 1, "[LoadPlayerVehicle] modio read length:%d items:%d", length, itemcount);
 
 			for(new i; i < itemcount; i++)
 			{
 				itemtype = GetStoredItemType(i);
 
-				dbg("gamemodes/sss/core/vehicle/player-vehicle.pwn", 2, "[LoadPlayerVehicle] item %d/%d type:%d", i, itemcount, _:itemtype);
+				dbg("player-vehicle", 2, "[LoadPlayerVehicle] item %d/%d type:%d", i, itemcount, _:itemtype);
 
 				if(itemtype == INVALID_ITEM_TYPE)
 					break;
@@ -397,7 +417,7 @@ LoadPlayerVehicle(filename[])
 					break;
 
 				itemid = CreateItem(itemtype);
-				dbg("gamemodes/sss/core/vehicle/player-vehicle.pwn", 2, "[LoadPlayerVehicle] created item:%d container:%d", itemid, containerid);
+				dbg("player-vehicle", 2, "[LoadPlayerVehicle] created item:%d container:%d", _:itemid, _:containerid);
 
 				if(!IsItemTypeSafebox(itemtype) && !IsItemTypeBag(itemtype))
 					SetItemArrayDataFromStored(itemid, i);
@@ -409,21 +429,33 @@ LoadPlayerVehicle(filename[])
 		}
 	}
 
-	if(veh_PrintEach)
-		log(DISCORD_CHANNEL_EVENTS, "[VEHICLE] Loaded `%s` (%d) (`%s`) for `%s` `%.2f, %.2f, %.2f`", vehiclename, vehicleid, geid, owner, data[VEH_CELL_POSX], data[VEH_CELL_POSY], data[VEH_CELL_POSZ], data[VEH_CELL_ROTZ]);
+	Logger_Log("loaded player vehicle",
+		Logger_S("uuid", uuid),
+		Logger_I("id", vehicleid),
+		Logger_I("locked", data[VEH_CELL_LOCKED]),
+		Logger_I("items", itemcount),
+		Logger_S("type", vehiclename),
+		Logger_S("owner", owner),
+		Logger_F("x", data[VEH_CELL_POSX]),
+		Logger_F("y", data[VEH_CELL_POSY]),
+		Logger_F("z", data[VEH_CELL_POSZ]),
+		Logger_F("r", data[VEH_CELL_ROTZ])
+	);
 
 	return 1;
 }
 
+
+/*==============================================================================
+
+	Write vehicle data to file
+
+==============================================================================*/
+
+
 _SaveVehicle(vehicleid)
 {
-	if(GetVehicleVirtualWorld(vehicleid) > 0)// Only save vehicles for the virtual world that matters
-	{
-		//err("Tried saving a vehicle with virtual world %d", vehicleid);
-		return 0;
-	}
-
-	if(strlen(pveh_Owner[vehicleid]) < 3) 
+	if(strlen(pveh_Owner[vehicleid]) < 3)
 	{
 		err("Attempted to save vehicle %d with bad owner string '%s'", vehicleid, pveh_Owner[vehicleid]);
 		return 0;
@@ -431,7 +463,7 @@ _SaveVehicle(vehicleid)
 
 	if(CallLocalFunction("OnVehicleSave", "d", vehicleid))
 	{
-		dbg("gamemodes/sss/core/vehicle/player-vehicle.pwn", 1, "[_SaveVehicle] OnVehicleSave returned non-zero");
+		dbg("player-vehicle", 1, "[_SaveVehicle] OnVehicleSave returned non-zero");
 		return 0;
 	}
 
@@ -441,7 +473,7 @@ _SaveVehicle(vehicleid)
 		vehiclename[MAX_VEHICLE_TYPE_NAME],
 		active[1],
 		data[VEH_CELL_END],
-		geid[GEID_LEN];
+		uuid[UUID_LEN];
 
 	format(filename, sizeof(filename), DIRECTORY_VEHICLE"%s.dat", pveh_Owner[vehicleid]);
 
@@ -471,8 +503,8 @@ _SaveVehicle(vehicleid)
 
 	modio_push(filename, _T<D,A,T,A>, VEH_CELL_END, data);
 
-	geid = GetVehicleGEID(vehicleid);
-	modio_push(filename, _T<G,E,I,D>, GEID_LEN, geid);
+	uuid = GetVehicleUUID(vehicleid);
+	modio_push(filename, _T<G,E,I,D>, UUID_LEN, uuid);
 
 	// Now do trailers with the same modio parameters
 
@@ -481,8 +513,8 @@ _SaveVehicle(vehicleid)
 	if(IsValidVehicle(trailerid))
 	{
 		new
-			containerid = GetVehicleContainer(trailerid),
-			trailergeid[GEID_LEN];
+			Container:containerid = GetVehicleContainer(trailerid),
+			traileruuid[UUID_LEN];
 
 		data[VEH_CELL_TYPE] = GetVehicleType(trailerid);
 		GetVehicleHealth(trailerid, Float:data[VEH_CELL_HEALTH]);
@@ -497,19 +529,20 @@ _SaveVehicle(vehicleid)
 		// TDAT = Trailer Data
 		modio_push(filename, _T<T,D,A,T>, VEH_CELL_END, data);
 
-		// TGEI = Trailer GEID
-		trailergeid = GetVehicleGEID(trailerid);
-		modio_push(filename, _T<T,G,E,I>, GEID_LEN, trailergeid);
+		// TGEI = Trailer UUID
+		traileruuid = GetVehicleUUID(trailerid);
+		modio_push(filename, _T<T,U,I,D>, UUID_LEN, traileruuid);
 
 		new itemcount;
 
 		if(IsValidContainer(containerid))
 		{
-			new items[64];
+			new Item:items[64], size;
+			GetContainerSize(containerid, size);
 
-			for(new i, j = GetContainerSize(containerid); i < j; i++)
+			for(new i; i < size; i++)
 			{
-				items[i] = GetContainerSlotItem(containerid, i);
+				GetContainerSlotItem(containerid, i, items[i]);
 
 				if(!IsValidItem(items[i]))
 					break;
@@ -526,23 +559,22 @@ _SaveVehicle(vehicleid)
 		}
 
 		GetVehicleTypeName(GetVehicleType(trailerid), vehiclename);
-
-		if(veh_PrintEach)
-		{
-			log(DISCORD_CHANNEL_EVENTS, "[VEHICLE] Saved trailer %s (%d) L:%d %d items: %s for `%s` at `%.2f, %.2f, %.2f`",
-				trailergeid,
-				trailerid,
-				_:GetVehicleLockState(trailerid),
-				itemcount,
-				vehiclename,
-				pveh_Owner[trailerid],
-				Float:data[VEH_CELL_POSX],
-				Float:data[VEH_CELL_POSY],
-				Float:data[VEH_CELL_POSZ]);
-		}
+		
+		Logger_Log("saved player trailer",
+			Logger_S("uuid", traileruuid),
+			Logger_I("id", trailerid),
+			Logger_I("locked", _:GetVehicleLockState(trailerid)),
+			Logger_I("items", itemcount),
+			Logger_S("type", vehiclename),
+			Logger_S("owner", pveh_Owner[trailerid]),
+			Logger_F("x", data[VEH_CELL_POSX]),
+			Logger_F("y", data[VEH_CELL_POSY]),
+			Logger_F("z", data[VEH_CELL_POSZ]),
+			Logger_F("r", data[VEH_CELL_ROTZ])
+		);
 	}
 
-	new containerid = GetVehicleContainer(vehicleid);
+	new Container:containerid = GetVehicleContainer(vehicleid);
 
 	if(!IsValidContainer(containerid))
 	{
@@ -551,12 +583,14 @@ _SaveVehicle(vehicleid)
 	}
 
 	new
-		items[64],
+		size,
+		Item:items[64],
 		itemcount;
+	GetContainerSize(containerid, size);
 
-	for(new i, j = GetContainerSize(containerid); i < j; i++)
+	for(new i; i < size; i++)
 	{
-		items[i] = GetContainerSlotItem(containerid, i);
+		GetContainerSlotItem(containerid, i, items[i]);
 
 		if(!IsValidItem(items[i]))
 			break;
@@ -572,24 +606,33 @@ _SaveVehicle(vehicleid)
 
 	if(active[0])
 	{
-		if(veh_PrintEach)
-		{
-			log(DISCORD_CHANNEL_EVENTS, "[VEHICLE] Saved vehicle %s (GEID: %s ID: %d) Locked: %d Items: %d for `%s` at `%.2f, %.2f, %.2f`",
-				vehiclename,
-				geid,
-				vehicleid,
-				_:GetVehicleLockState(vehicleid),
-				itemcount,
-				pveh_Owner[vehicleid],
-				Float:data[VEH_CELL_POSX],
-				Float:data[VEH_CELL_POSY],
-				Float:data[VEH_CELL_POSZ]);
-		}
+		Logger_Log("saved player vehicle",
+			Logger_S("uuid", uuid),
+			Logger_I("id", vehicleid),
+			Logger_I("locked", _:GetVehicleLockState(vehicleid)),
+			Logger_I("items", itemcount),
+			Logger_S("type", vehiclename),
+			Logger_S("owner", pveh_Owner[vehicleid]),
+			Logger_F("x", data[VEH_CELL_POSX]),
+			Logger_F("y", data[VEH_CELL_POSY]),
+			Logger_F("z", data[VEH_CELL_POSZ]),
+			Logger_F("r", data[VEH_CELL_ROTZ])
+		);
 	}
 	else
 	{
-		if(veh_PrintEach)
-			log(DISCORD_CHANNEL_EVENTS, "[VEHICLE] Removing player vehicle %d (Owner: `%s`", vehicleid, pveh_Owner[vehicleid]);
+		Logger_Log("removed player vehicle",
+			Logger_S("uuid", uuid),
+			Logger_I("id", vehicleid),
+			Logger_I("locked", _:GetVehicleLockState(vehicleid)),
+			Logger_I("items", itemcount),
+			Logger_S("type", vehiclename),
+			Logger_S("owner", pveh_Owner[vehicleid]),
+			Logger_F("x", data[VEH_CELL_POSX]),
+			Logger_F("y", data[VEH_CELL_POSY]),
+			Logger_F("z", data[VEH_CELL_POSZ]),
+			Logger_F("r", data[VEH_CELL_ROTZ])
+		);
 	}
 
 	return 1;
@@ -605,8 +648,6 @@ _SaveVehicle(vehicleid)
 
 hook OnPlayerStateChange(playerid, newstate, oldstate)
 {
-	dbg("global", LOG_CORE, "[OnPlayerStateChange] in /gamemodes/sss/core/vehicle/player-vehicle.pwn");
-
 	if(newstate == PLAYER_STATE_DRIVER)
 	{
 		if(pveh_SaveAnyVehicle[playerid])
@@ -654,7 +695,7 @@ _SaveIfOwnedBy(vehicleid, playerid)
 
 _PlayerUpdateVehicle(playerid, vehicleid)
 {
-	dbg("gamemodes/sss/core/vehicle/player-vehicle.pwn", 1, "[_PlayerUpdateVehicle] %d %d (%s)", playerid, vehicleid, GetVehicleGEID(vehicleid));
+	dbg("player-vehicle", 1, "[_PlayerUpdateVehicle] %d %d (%s)", playerid, vehicleid, GetVehicleUUID(vehicleid));
 	if(IsPlayerOnAdminDuty(playerid))
 		return;
 
@@ -670,8 +711,6 @@ _PlayerUpdateVehicle(playerid, vehicleid)
 
 hook OnVehicleDestroyed(vehicleid)
 {
-	dbg("global", LOG_CORE, "[OnVehicleDestroyed] in /gamemodes/sss/core/vehicle/player-vehicle.pwn");
-
 	_SaveVehicle(vehicleid);
 
 	return Y_HOOKS_CONTINUE_RETURN_0;
@@ -679,7 +718,7 @@ hook OnVehicleDestroyed(vehicleid)
 
 _SetVehicleOwner(vehicleid, name[MAX_PLAYER_NAME], playerid = INVALID_PLAYER_ID)
 {
-	dbg("gamemodes/sss/core/vehicle/player-vehicle.pwn", 1, "[_SetVehicleOwner] %d (%s) '%s' %d", vehicleid, GetVehicleGEID(vehicleid), name, playerid);
+	dbg("player-vehicle", 1, "[_SetVehicleOwner] %d (%s) '%s' %d", vehicleid, GetVehicleUUID(vehicleid), name, playerid);
 
 	if(!IsValidVehicle(vehicleid))
 		return 0;
@@ -705,10 +744,14 @@ _SetVehicleOwner(vehicleid, name[MAX_PLAYER_NAME], playerid = INVALID_PLAYER_ID)
 
 _RemoveVehicleOwner(vehicleid)
 {
-	dbg("gamemodes/sss/core/vehicle/player-vehicle.pwn", 1, "[_RemoveVehicleOwner] %d (%s)", vehicleid, GetVehicleGEID(vehicleid));
+	dbg("player-vehicle", 1, "[_RemoveVehicleOwner] %d (%s)", vehicleid, GetVehicleUUID(vehicleid));
 
 	if(!IsValidVehicle(vehicleid))
 		return 0;
+
+	new filename[MAX_PLAYER_NAME + 22];
+	format(filename, sizeof(filename), DIRECTORY_VEHICLE"%s.dat", pveh_Owner[vehicleid]);
+	fremove(filename);
 
 	pveh_Owner[vehicleid][0] = EOS;
 	pveh_OwnerPlayer[vehicleid] = INVALID_PLAYER_ID;
@@ -724,7 +767,7 @@ _RemoveVehicleOwner(vehicleid)
 */
 _UpdatePlayerVehicle(playerid, vehicleid)
 {
-	dbg("gamemodes/sss/core/vehicle/player-vehicle.pwn", 1, "[_UpdatePlayerVehicle] %d %d (%s)", playerid, vehicleid, GetVehicleGEID(vehicleid));
+	dbg("player-vehicle", 1, "[_UpdatePlayerVehicle] %d %d (%s)", playerid, vehicleid, GetVehicleUUID(vehicleid));
 
 	if(!IsPlayerConnected(playerid))
 		return 0;
@@ -733,82 +776,36 @@ _UpdatePlayerVehicle(playerid, vehicleid)
 		return 0;
 
 	new name[MAX_PLAYER_NAME];
-
 	GetPlayerName(playerid, name, MAX_PLAYER_NAME);
 
 	if(isnull(pveh_Owner[vehicleid]))
 	{
-		// Vehicle has no owner, assign player as owner
-		// Set owner of player's old vehicle to null
-		dbg("gamemodes/sss/core/vehicle/player-vehicle.pwn", 1, "[_UpdatePlayerVehicle] Vehicle owner is null");
-
-		if(IsValidVehicle(pveh_PlayerVehicle[playerid]))
-		{
-			dbg("gamemodes/sss/core/vehicle/player-vehicle.pwn", 1, "[_UpdatePlayerVehicle] Player vehicle is %s (%d), removing", GetVehicleGEID(pveh_PlayerVehicle[playerid]), pveh_PlayerVehicle[playerid]);
-			_RemoveVehicleOwner(pveh_PlayerVehicle[playerid]);
-		}
-
+		_RemoveVehicleOwner(pveh_PlayerVehicle[playerid]);
 		_SetVehicleOwner(vehicleid, name, playerid);
 		_SaveVehicle(vehicleid);
 	}
 	else
 	{
-		// Vehicle has an owner
-		dbg("gamemodes/sss/core/vehicle/player-vehicle.pwn", 1, "[_UpdatePlayerVehicle] Vehicle owner is not null: '%s'", pveh_Owner[vehicleid]);
 		if(pveh_PlayerVehicle[playerid] == vehicleid)
 		{
-			// Vehicle's owner is the player, do nothing but save it
-			dbg("gamemodes/sss/core/vehicle/player-vehicle.pwn", 1, "[_UpdatePlayerVehicle] This vehicle belongs to the player in context");
 			_SaveVehicle(vehicleid);
 		}
 		else
 		{
-			// Vehicle's owner is not the player, check if the player already
-			// owns a vehicle
-			dbg("gamemodes/sss/core/vehicle/player-vehicle.pwn", 1, "[_UpdatePlayerVehicle] This vehicle does not belong to the player in context, swapping");
-
 			if(pveh_PlayerVehicle[playerid] != INVALID_VEHICLE_ID)
 			{
-				// Player owns a vehicle
-				dbg("gamemodes/sss/core/vehicle/player-vehicle.pwn", 1, "[_UpdatePlayerVehicle] Player in context already owns vehicle %s (%d) swapping owners", GetVehicleGEID(pveh_PlayerVehicle[playerid]), pveh_PlayerVehicle[playerid]);
-
-				// pveh_PlayerVehicle[playerid] = player's previous vehicle
-				// vehicleid = new vehicle
-
-				new
-					oldvehicleid,
-					oldownername[MAX_PLAYER_NAME],
-					oldplayerid = INVALID_PLAYER_ID;
-
-				oldvehicleid = pveh_PlayerVehicle[playerid];
-				strcat(oldownername, pveh_Owner[vehicleid]);
-				oldplayerid = pveh_OwnerPlayer[vehicleid];
-
-				_SetVehicleOwner(vehicleid, name, playerid);
-				_SetVehicleOwner(oldvehicleid, oldownername, oldplayerid);
-				_SaveVehicle(vehicleid);
-				_SaveVehicle(oldvehicleid);
+				_RemoveVehicleOwner(pveh_PlayerVehicle[playerid]);
 			}
-			else
-			{
-				// Player does not own a vehicle
-				// Remove the original owner's name from it
-				// Assign the player as the new owner and save the vehicle
-				dbg("gamemodes/sss/core/vehicle/player-vehicle.pwn", 1, "[_UpdatePlayerVehicle] Player in context does not own a vehicle, saving this one");
-				_SaveVehicle(vehicleid);
-				_SetVehicleOwner(vehicleid, name, playerid);
-				_SaveVehicle(vehicleid);
-			}
+			_RemoveVehicleOwner(vehicleid);
+			_SetVehicleOwner(vehicleid, name, playerid);
+			_SaveVehicle(vehicleid);
 		}
 	}
-
 	return 1;
 }
 
 hook OnPlayerSave(playerid, filename[])
 {
-	dbg("global", LOG_CORE, "[OnPlayerSave] in /gamemodes/sss/core/vehicle/player-vehicle.pwn");
-
 	new data[1];
 	data[0] = pveh_SaveAnyVehicle[playerid];
 
@@ -817,8 +814,6 @@ hook OnPlayerSave(playerid, filename[])
 
 hook OnPlayerLoad(playerid, filename[])
 {
-	dbg("global", LOG_CORE, "[OnPlayerLoad] in /gamemodes/sss/core/vehicle/player-vehicle.pwn");
-
 	new data[1];
 
 	modio_read(filename, _T<P,V,E,H>, 1, data);

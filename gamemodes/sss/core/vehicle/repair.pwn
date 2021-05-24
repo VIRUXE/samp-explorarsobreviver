@@ -1,4 +1,19 @@
-#include <YSI\y_hooks>
+/*==============================================================================
+
+
+	Southclaws' Scavenge and Survive
+
+		Copyright (C) 2020 Barnaby "Southclaws" Keene
+
+		This Source Code Form is subject to the terms of the Mozilla Public
+		License, v. 2.0. If a copy of the MPL was not distributed with this
+		file, You can obtain one at http://mozilla.org/MPL/2.0/.
+
+
+==============================================================================*/
+
+
+#include <YSI_Coding\y_hooks>
 
 
 static
@@ -8,15 +23,11 @@ Float:	fix_Progress[MAX_PLAYERS];
 
 hook OnPlayerConnect(playerid)
 {
-	dbg("global", LOG_CORE, "[OnPlayerConnect] in /gamemodes/sss/core/vehicle/repair.pwn");
-
 	fix_TargetVehicle[playerid] = INVALID_VEHICLE_ID;
 }
 
 hook OnPlayerInteractVehicle(playerid, vehicleid, Float:angle)
 {
-	dbg("global", LOG_CORE, "[OnPlayerInteractVehicle] in /gamemodes/sss/core/vehicle/repair.pwn");
-
 	if(angle < 25.0 || angle > 335.0)
 	{
 		new
@@ -83,8 +94,6 @@ hook OnPlayerInteractVehicle(playerid, vehicleid, Float:angle)
 
 hook OnPlayerKeyStateChange(playerid, newkeys, oldkeys)
 {
-	dbg("global", LOG_CORE, "[OnPlayerKeyStateChange] in /gamemodes/sss/core/vehicle/repair.pwn");
-
 	if(oldkeys & 16)
 	{
 		StopRepairingVehicle(playerid);
@@ -131,8 +140,6 @@ StopRepairingVehicle(playerid)
 
 hook OnHoldActionUpdate(playerid, progress)
 {
-	dbg("global", LOG_CORE, "[OnHoldActionUpdate] in /gamemodes/sss/core/vehicle/repair.pwn");
-
 	if(fix_TargetVehicle[playerid] != INVALID_VEHICLE_ID)
 	{
 		new ItemType:itemtype = GetItemType(GetPlayerItem(playerid));

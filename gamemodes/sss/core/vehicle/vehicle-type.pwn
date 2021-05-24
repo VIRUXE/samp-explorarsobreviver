@@ -1,3 +1,18 @@
+/*==============================================================================
+
+
+	Southclaws' Scavenge and Survive
+
+		Copyright (C) 2020 Barnaby "Southclaws" Keene
+
+		This Source Code Form is subject to the terms of the Mozilla Public
+		License, v. 2.0. If a copy of the MPL was not distributed with this
+		file, You can obtain one at http://mozilla.org/MPL/2.0/.
+
+
+==============================================================================*/
+
+
 /*
 	Parent class for vehicle types. A created vehicle is an instance of this.
 
@@ -11,7 +26,7 @@
 
 #define MAX_VEHICLE_GROUP		(12)
 #define MAX_VEHICLE_GROUP_NAME	(32)
-#define MAX_VEHICLE_TYPE		(82)
+#define MAX_VEHICLE_TYPE		(120)
 #define MAX_VEHICLE_TYPE_NAME	(32)
 #define INVALID_VEHICLE_TYPE	(-1)
 
@@ -76,7 +91,7 @@ new
 ==============================================================================*/
 
 
-stock DefineVehicleSpawnGroup(name[])
+stock DefineVehicleSpawnGroup(const name[])
 {
 	if(veh_GroupTotal == MAX_VEHICLE_GROUP - 1)
 		return -1;
@@ -88,7 +103,7 @@ stock DefineVehicleSpawnGroup(name[])
 	return veh_GroupTotal++;
 }
 
-stock DefineVehicleType(modelid, name[], group, category, size, Float:maxfuel, Float:fuelcons, lootindex[], trunksize, Float:spawnchance, flags = 0)
+stock DefineVehicleType(modelid, const name[], group, category, size, Float:maxfuel, Float:fuelcons, const lootindex[], trunksize, Float:spawnchance, flags = 0)
 {
 	if(veh_TypeTotal == MAX_VEHICLE_TYPE - 1)
 		return -1;
@@ -111,7 +126,7 @@ stock DefineVehicleType(modelid, name[], group, category, size, Float:maxfuel, F
 	return veh_TypeTotal++;
 }
 
-stock PickRandomVehicleTypeFromGroup(group, categories[], maxcategories, sizes[], maxsizes)
+stock PickRandomVehicleTypeFromGroup(group, const categories[], maxcategories, const sizes[], maxsizes)
 {
 	// log("[PickRandomVehicleTypeFromGroup] group: %d categories: %d sizes: %d", group, maxcategories, maxsizes);
 	new
@@ -145,7 +160,7 @@ stock PickRandomVehicleTypeFromGroup(group, categories[], maxcategories, sizes[]
 	return list[cell];
 }
 
-_IsMatchingCategory(vehicletype, categories[], maxcategories)
+_IsMatchingCategory(vehicletype, const categories[], maxcategories)
 {
 	for(new i; i <= maxcategories; i++)
 	{
@@ -159,7 +174,7 @@ _IsMatchingCategory(vehicletype, categories[], maxcategories)
 	return 0;
 }
 
-_IsMatchingSize(vehicletype, sizes[], maxsizes)
+_IsMatchingSize(vehicletype, const sizes[], maxsizes)
 {
 	for(new i; i <= maxsizes; i++)
 	{

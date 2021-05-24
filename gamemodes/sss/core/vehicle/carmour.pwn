@@ -1,14 +1,33 @@
-#include <YSI\y_hooks>
+/*==============================================================================
+
+
+	Southclaws' Scavenge and Survive
+
+		Copyright (C) 2020 Barnaby "Southclaws" Keene
+
+		This Source Code Form is subject to the terms of the Mozilla Public
+		License, v. 2.0. If a copy of the MPL was not distributed with this
+		file, You can obtain one at http://mozilla.org/MPL/2.0/.
+
+
+==============================================================================*/
+
+
+#include <YSI_Coding\y_hooks>
+
 
 #define DIRECTORY_CARMOUR	"carmour/"
 #define MAX_CARMOUR			(16)
 #define MAX_CARMOUR_PARTS	(64)
+
 
 enum E_ARMOUR_DATA
 {
 			arm_vehicleType,
 			arm_objCount
 }
+
+
 enum E_ARMOUR_LIST_DATA
 {
 			arm_model,
@@ -19,6 +38,7 @@ Float:		arm_rotX,
 Float:		arm_rotY,
 Float:		arm_rotZ
 }
+
 
 new
 			arm_Data[MAX_CARMOUR][E_ARMOUR_DATA],
@@ -34,37 +54,44 @@ hook OnGameModeInit()
 	LoadCarmour();
 }
 
+
+/*==============================================================================
+
+	Hooks and internal
+
+==============================================================================*/
+
+
 LoadCarmour()
 {
 	new
-		dir:dirhandle,
+		Directory:direc,
 		directory_with_root[256] = DIRECTORY_SCRIPTFILES,
-		item[64],
-		type,
-		next_path[256];
+		entry[64],
+		ENTRY_TYPE:type,
+		trimlength = strlen("./scriptfiles/"),
+		filename[32];
 
 	strcat(directory_with_root, DIRECTORY_CARMOUR);
 
-	dirhandle = dir_open(directory_with_root);
+	direc = OpenDir(directory_with_root);
 
-	if(!dirhandle)
+	if(direc == Directory:-1)
 	{
 		err("Reading directory '%s'.", directory_with_root);
 		return 0;
 	}
 
-	while(dir_list(dirhandle, item, type))
+	while(DirNext(direc, type, entry))
 	{
-		if(type == FM_FILE)
+		if(type == E_REGULAR)
 		{
-			next_path[0] = EOS;
-			format(next_path, sizeof(next_path), "%s%s", DIRECTORY_CARMOUR, item);
-
-			LoadOffsetsFromFile(next_path, item);
+			PathBase(entry, filename);
+			LoadOffsetsFromFile(entry[trimlength], filename);
 		}
 	}
 
-	dir_close(dirhandle);
+	CloseDir(direc);
 
 	return 1;
 }
@@ -136,7 +163,10 @@ LoadOffsetsFromFile(filename[], name[])
 
 	Iter_Add(arm_Index, id);
 
-	log(DISCORD_CHANNEL_EVENTS, "[CARMOUR] Loaded Carmour: %d objects for vehicle `%s`", listindex, name);
+	Logger_Log("loaded carmour",
+		Logger_I("objects", listindex),
+		Logger_S("vehicle_type", name)
+	);
 
 	return id;
 }
@@ -173,8 +203,6 @@ ApplyArmourToVehicle(vehicleid, armourid)
 
 hook OnVehicleCreated(vehicleid)
 {
-	dbg("global", LOG_CORE, "[OnVehicleCreated] in /gamemodes/sss/core/vehicle/carmour.pwn");
-
 	new vehicletype = GetVehicleType(vehicleid);
 
 	if(arm_VehicleTypeCarmour[vehicletype] != -1)

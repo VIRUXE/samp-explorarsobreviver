@@ -1,94 +1,71 @@
-#include <YSI\y_hooks>
+/*==============================================================================
+
+
+	Southclaws' Scavenge and Survive
+
+		Copyright (C) 2020 Barnaby "Southclaws" Keene
+
+		This Source Code Form is subject to the terms of the Mozilla Public
+		License, v. 2.0. If a copy of the MPL was not distributed with this
+		file, You can obtain one at http://mozilla.org/MPL/2.0/.
+
+
+==============================================================================*/
+
+
+#include <YSI_Coding\y_hooks>
 #include <YSI\y_va>
 
-#define DIRECTORY_LOGS				"logs/"
-#define MAX_LOG_HANDLER				(128)
-#define MAX_LOG_HANDLER_NAME		(32)
 
 enum
 {
-	LOG_NONE,
-	LOG_CORE,
-	LOG_DEEP,
-	LOG_LOOP
+	NONE,
+	CORE,
+	DEEP,
+	LOOP
 }
 
-enum e_DEBUG_HANDLER
-{
-	log_name[MAX_LOG_HANDLER_NAME],
-	log_level
-}
 
-static
-		log_Buffer[256],
-		log_Table[MAX_LOG_HANDLER][e_DEBUG_HANDLER],
-		log_Total;
-
-stock console(text[], va_args<>)
+stock log(const text[], va_args<>)
 {
+	new log_Buffer[256];
 	formatex(log_Buffer, sizeof(log_Buffer), text, va_start<1>);
 	print(log_Buffer);
 }
 
-stock log(discord_channel, text[], va_args<>)
+stock dbg(const handler[], level, const text[], va_args<>)
 {
-	formatex(log_Buffer, sizeof(log_Buffer), text, va_start<2>);
-	print(log_Buffer);
-
-	if(discord_channel != DISCORD_CHANNEL_INVALID)
-		DiscordMessage(discord_channel, log_Buffer);
-}
-
-stock dbg(handler[], level, text[], va_args<>)
-{
-	new idx = _debug_get_handler_index(handler);
-
-	if(level <= log_Table[idx][log_level])
+	new log_Buffer[256];
+	if(level <= GetSVarInt(handler))
 	{
 		formatex(log_Buffer, sizeof(log_Buffer), text, va_start<3>);
-		log(DISCORD_CHANNEL_DEV, "[DEBUG] `%s`", log_Buffer);
+		print(log_Buffer);
 	}
 }
 
-stock err(text[], va_args<>)
+stock err(const text[], va_args<>)
 {
+	new log_Buffer[256];
 	formatex(log_Buffer, sizeof(log_Buffer), text, va_start<1>);
-	log(DISCORD_CHANNEL_DEV, "[ERROR] `%s`", log_Buffer);
-	PrintBacktrace();
+	print(log_Buffer);
+	PrintAmxBacktrace();
 }
 
-_debug_get_handler_index(handler[])
+
+/*==============================================================================
+
+	Internal/utility
+
+==============================================================================*/
+
+
+stock debug_set_level(const handler[], level)
 {
-	for(new i; i < log_Total; ++i)
-	{
-		if(!strcmp(handler, log_Table[i][log_name]))
-			return i;
-	}
-
-	return -1;
-}
-
-stock debug_set_level(handler[], level)
-{
-	new idx = _debug_get_handler_index(handler);
-
-	if(idx == -1)
-	{
-		log_Table[log_Total][log_level] = level;
-		log_Total++;
-	}
-	else
-		log_Table[idx][log_level] = level;
-
+	SetSVarInt(handler, level);
 	return 1;
 }
 
-stock debug_conditional(handler[], level)
+stock debug_conditional(const handler[], level)
 {
-	new idx = _debug_get_handler_index(handler);
-
-	if(idx != -1)
-		return log_Table[idx][log_level] >= level;
-
-	return 0;
+	return GetSVarInt(handler) >= level;
 }

@@ -1,7 +1,29 @@
-#define ls(%0,%1) GetLanguageString(GetPlayerLanguage(%0), %1)
+/*==============================================================================
+
+
+	Southclaws' Scavenge and Survive
+
+		Copyright (C) 2020 Barnaby "Southclaws" Keene
+
+		This Source Code Form is subject to the terms of the Mozilla Public
+		License, v. 2.0. If a copy of the MPL was not distributed with this
+		file, You can obtain one at http://mozilla.org/MPL/2.0/.
+
+
+==============================================================================*/
+
 
 static
 	lang_PlayerLanguage[MAX_PLAYERS];
+
+
+#define ls(%0,%1) GetLanguageString(GetPlayerLanguage(%0), %1)
+
+hook OnPlayerConnect(playerid)
+{
+	lang_PlayerLanguage[playerid] = 0;
+	return Y_HOOKS_CONTINUE_RETURN_1;
+}
 
 stock GetPlayerLanguage(playerid)
 {
@@ -21,7 +43,9 @@ ShowLanguageMenu(playerid)
 	langcount = GetLanguageList(languages);
 
 	for(new i; i < langcount; i++)
+	{
 		format(langlist, sizeof(langlist), "%s%s\n", langlist, languages[i]);
+	}
 
 	inline Response(pid, dialogid, response, listitem, string:inputtext[])
 	{
@@ -31,16 +55,13 @@ ShowLanguageMenu(playerid)
 		{
 			lang_PlayerLanguage[playerid] = listitem;
 			ChatMsgLang(playerid, YELLOW, "LANGCHANGE");
-			log(DISCORD_CHANNEL_EVENTS, "[LANG] `%p` has changed his/her language to `%s`", playerid, languages[listitem]);
 		}
 	}
-	Dialog_ShowCallback(playerid, using inline Response, DIALOG_STYLE_LIST, "Choose your Language:", langlist, "Select", "Cancel");
+	Dialog_ShowCallback(playerid, using inline Response, DIALOG_STYLE_LIST, "Choose language:", langlist, "Select", "Cancel");
 }
 
 hook OnPlayerSave(playerid, filename[])
 {
-	dbg("global", LOG_CORE, "[OnPlayerSave] in /gamemodes/sss/core/player/language.pwn");
-
 	new data[1];
 	data[0] = lang_PlayerLanguage[playerid];
 
@@ -49,8 +70,6 @@ hook OnPlayerSave(playerid, filename[])
 
 hook OnPlayerLoad(playerid, filename[])
 {
-	dbg("global", LOG_CORE, "[OnPlayerLoad] in /gamemodes/sss/core/player/language.pwn");
-
 	new data[1];
 
 	modio_read(filename, _T<L,A,N,G>, 1, data);

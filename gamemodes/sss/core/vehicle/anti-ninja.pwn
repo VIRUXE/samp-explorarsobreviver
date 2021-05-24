@@ -1,4 +1,19 @@
-#include <YSI\y_hooks>
+/*==============================================================================
+
+
+	Southclaws' Scavenge and Survive
+
+		Copyright (C) 2020 Barnaby "Southclaws" Keene
+
+		This Source Code Form is subject to the terms of the Mozilla Public
+		License, v. 2.0. If a copy of the MPL was not distributed with this
+		file, You can obtain one at http://mozilla.org/MPL/2.0/.
+
+
+==============================================================================*/
+
+
+#include <YSI_Coding\y_hooks>
 
 
 /*
@@ -12,8 +27,6 @@ static
 
 hook OnPlayerConnect(playerid)
 {
-	dbg("global", LOG_CORE, "[OnPlayerConnect] in /gamemodes/sss/core/vehicle/anti-ninja.pwn");
-
 	anj_CurrentlyEntering[playerid] = INVALID_VEHICLE_ID;
 
 	return 1;
@@ -21,8 +34,6 @@ hook OnPlayerConnect(playerid)
 
 hook OnPlayerEnterVehicle(playerid, vehicleid, ispassenger)
 {
-	dbg("global", LOG_CORE, "[OnPlayerEnterVehicle] in /gamemodes/sss/core/vehicle/anti-ninja.pwn");
-
 	if(!ispassenger)
 	{
 		anj_CurrentlyEntering[playerid] = vehicleid;
@@ -40,8 +51,6 @@ timer CurrentlyEnteringCheck[3000](playerid)
 
 hook OnPlayerStateChange(playerid, newstate, oldstate)
 {
-	dbg("global", LOG_CORE, "[OnPlayerStateChange] in /gamemodes/sss/core/vehicle/anti-ninja.pwn");
-
 	if(oldstate == PLAYER_STATE_ONFOOT && newstate == PLAYER_STATE_DRIVER)
 	{
 		anj_CurrentlyEntering[playerid] = INVALID_VEHICLE_ID;
@@ -51,8 +60,6 @@ hook OnPlayerStateChange(playerid, newstate, oldstate)
 
 hook OnPlayerKeyStateChange(playerid, newkeys, oldkeys)
 {
-	dbg("global", LOG_CORE, "[OnPlayerKeyStateChange] in /gamemodes/sss/core/vehicle/anti-ninja.pwn");
-
 	if(newkeys & 8 || newkeys & 32)
 	{
 		if(anj_CurrentlyEntering[playerid] != INVALID_VEHICLE_ID)
@@ -79,7 +86,7 @@ hook OnPlayerKeyStateChange(playerid, newkeys, oldkeys)
 			if(targetid != INVALID_PLAYER_ID)
 			{
 				RemovePlayerFromVehicle(targetid);
-				SetPlayerPos(targetid, x + floatsin(-a + 90.0, degrees), y + floatcos(-a + 90.0, degrees), z);
+				//SetPlayerPos(targetid, x + floatsin(-a + 90.0, degrees), y + floatcos(-a + 90.0, degrees), z);
 			}
 
 			anj_CurrentlyEntering[playerid] = INVALID_VEHICLE_ID;

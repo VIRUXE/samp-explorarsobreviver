@@ -1,9 +1,38 @@
-#include <YSI\y_hooks>
+/*==============================================================================
+
+
+	Southclaws' Scavenge and Survive
+
+		Copyright (C) 2020 Barnaby "Southclaws" Keene
+
+		This Source Code Form is subject to the terms of the Mozilla Public
+		License, v. 2.0. If a copy of the MPL was not distributed with this
+		file, You can obtain one at http://mozilla.org/MPL/2.0/.
+
+
+==============================================================================*/
+
+
+#include <YSI_Coding\y_hooks>
+
+
+#define MAX_BLOOD_OBJECTS 15
 
 
 static
-Float:	bld_BleedRate[MAX_PLAYERS];
+Float:	bld_BleedRate[MAX_PLAYERS],
+bool:	Bleeding[MAX_PLAYERS],
+		BloodObjectIndex[MAX_PLAYERS],
+		BloodObjects[MAX_PLAYERS][MAX_BLOOD_OBJECTS];
 
+hook OnPlayerDisconnect(playerid, reason)
+{
+	for(new i; i < MAX_BLOOD_OBJECTS; i++)
+	{
+		if(IsValidDynamicObject(BloodObjects[playerid][i]))
+			DestroyDynamicObject(BloodObjects[playerid][i]);
+	}
+}
 
 hook OnPlayerScriptUpdate(playerid)
 {
@@ -26,7 +55,9 @@ hook OnPlayerScriptUpdate(playerid)
 	{
 		new
 			Float:hp = GetPlayerHP(playerid),
-			Float:slowrate = (((((100.0 - hp) / 360.0) * bld_BleedRate[playerid]) / GetPlayerWounds(playerid)) / 100.0);
+			Float:slowrate;
+		
+		GetPlayerBleedSlowRate(hp, bld_BleedRate[playerid], GetPlayerWounds(playerid), slowrate);
 
 		if(frandom(1.0) < 0.7)
 		{
@@ -55,12 +86,18 @@ hook OnPlayerScriptUpdate(playerid)
 			if(IsPlayerAttachedObjectSlotUsed(playerid, ATTACHSLOT_BLOOD))
 			{
 				if(frandom(0.1) < 0.1 - bld_BleedRate[playerid])
+				{
 					RemovePlayerAttachedObject(playerid, ATTACHSLOT_BLOOD);
+					Bleeding[playerid] = false;
+				}
 			}
 			else
 			{
 				if(frandom(0.1) < bld_BleedRate[playerid])
-					SetPlayerAttachedObject(playerid, ATTACHSLOT_BLOOD, 18706, 1,  0.088999, 0.020000, 0.044999,  0.088999, 0.020000, 0.044999,  1.179000, 1.510999, 0.005000);
+				{
+					SetPlayerAttachedObject(playerid, ATTACHSLOT_BLOOD, /*18706*/ 18706, 1,  0.088999, 0.020000, 0.044999,  0.088999, 0.020000, 0.044999,  1.179000, 1.510999, 0.005000);
+					Bleeding[playerid] = true;
+				}
 			}
 		}
 		else
@@ -89,6 +126,45 @@ hook OnPlayerScriptUpdate(playerid)
 			GivePlayerHP(playerid, 0.5);
 	}
 
+	if(Bleeding[playerid])
+	{
+		new
+			Float:x,
+			Float:y,
+			Float:z,
+			worldid = GetPlayerVirtualWorld(playerid),
+			interiorid = GetPlayerInterior(playerid),
+			idx = BloodObjectIndex[playerid];
+
+		idx++;
+		if(idx == MAX_BLOOD_OBJECTS)
+			idx = 0;
+
+		GetPlayerPos(playerid, x, y, z);
+
+		new Float:bx, Float:by, Float:bz;
+		
+		for(new i; i < MAX_BLOOD_OBJECTS; i++)
+		{
+			if(IsValidDynamicObject(BloodObjects[playerid][i]))
+			{
+				GetDynamicObjectPos(BloodObjects[playerid][i], bx, by, bz);
+				if(Distance(x, y, z, bx, by, bz) < 2)
+					return;
+			}
+		}
+
+		DestroyDynamicObject(BloodObjects[playerid][idx]);
+
+		new Float:cx, Float:cy, Float:cz, Float:crx, Float:cry, Float:crz;
+
+		CA_RayCastLineAngle(x, y, z, x, y, z - 600.0, cx, cy, cz, crx, cry, crz);
+
+		BloodObjects[playerid][idx] = CreateDynamicObject(19836, cx, cy, cz + 0.1, crx, cry, crz, worldid, interiorid);
+
+		BloodObjectIndex[playerid] = idx;
+	}
+
 	return;
 }
 
@@ -102,11 +178,15 @@ stock SetPlayerBleedRate(playerid, Float:rate)
 	return 1;
 }
 
-forward Float:GetPlayerBleedRate(playerid);
-stock Float:GetPlayerBleedRate(playerid)
+stock GetPlayerBleedRate(playerid, &Float:bleedrate)
 {
-	if(!IsValidPlayerID(playerid))
-		return 0.0;
+	if(!IsPlayerConnected(playerid))
+		return 0;
 
-	return bld_BleedRate[playerid];
+	bleedrate = bld_BleedRate[playerid];
+	return 1;
+}
+
+stock GetPlayerBleedSlowRate(Float:hp, Float:bleedrate, wounds, &Float:rate) {
+	rate = (((((100.0 - hp) / 360.0) * bleedrate) / wounds) / 100.0);
 }

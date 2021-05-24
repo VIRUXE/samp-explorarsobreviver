@@ -1,4 +1,19 @@
-#include <YSI\y_hooks>
+/*==============================================================================
+
+
+	Southclaws' Scavenge and Survive
+
+		Copyright (C) 2020 Barnaby "Southclaws" Keene
+
+		This Source Code Form is subject to the terms of the Mozilla Public
+		License, v. 2.0. If a copy of the MPL was not distributed with this
+		file, You can obtain one at http://mozilla.org/MPL/2.0/.
+
+
+==============================================================================*/
+
+
+#include <YSI_Coding\y_hooks>
 
 
 enum
@@ -15,8 +30,6 @@ static
 
 hook OnPlayerConnect(playerid)
 {
-	dbg("global", LOG_CORE, "[OnPlayerConnect] in /gamemodes/sss/core/char/infection.pwn");
-
 	infect_InfectionIntensity[playerid][0] = 0;
 	infect_InfectionIntensity[playerid][1] = 0;
 	infect_LastShake[playerid] = 0;
@@ -26,8 +39,6 @@ hook OnPlayerConnect(playerid)
 
 hook OnPlayerDeath(playerid, killerid, reason)
 {
-	dbg("global", LOG_CORE, "[OnPlayerDeath] in /gamemodes/sss/core/char/infection.pwn");
-
 	infect_InfectionIntensity[playerid][0] = 0;
 	infect_InfectionIntensity[playerid][1] = 0;
 	infect_LastShake[playerid] = 0;
@@ -87,14 +98,10 @@ stock SetPlayerInfectionIntensity(playerid, type, amount)
 
 hook OnPlayerSave(playerid, filename[])
 {
-	dbg("global", LOG_CORE, "[OnPlayerSave] in /gamemodes/sss/core/char/infection.pwn");
-
 	modio_push(filename, _T<I,N,F,C>, 2, infect_InfectionIntensity[playerid]);
 }
 
 hook OnPlayerLoad(playerid, filename[])
 {
-	dbg("global", LOG_CORE, "[OnPlayerLoad] in /gamemodes/sss/core/char/infection.pwn");
-
 	modio_read(filename, _T<I,N,F,C>, 2, infect_InfectionIntensity[playerid]);
 }

@@ -1,3 +1,18 @@
+/*==============================================================================
+
+
+	Southclaws' Scavenge and Survive
+
+		Copyright (C) 2020 Barnaby "Southclaws" Keene
+
+		This Source Code Form is subject to the terms of the Mozilla Public
+		License, v. 2.0. If a copy of the MPL was not distributed with this
+		file, You can obtain one at http://mozilla.org/MPL/2.0/.
+
+
+==============================================================================*/
+
+
 CreateLootVehicle(type, Float:x, Float:y, Float:z, Float:r)
 {
 	new
@@ -6,40 +21,19 @@ CreateLootVehicle(type, Float:x, Float:y, Float:z, Float:r)
 		colour1,
 		colour2;
 
-	new defaultColorVehicles[] =
-	{
-		407, // Firetruck
-		416, // Ambulance
-		420, // Taxi
-		427, // Enforcer
-		432, // Rhino
-		433, // Barracks
-		438, // Cabbie
-		490, // FBI Rancher
-		497, // Police Maverick
-		523, // HPV-1000
-		528, // FBI truck
-		544, // Firetruck LS
-		596, // Cop Car LS
-		597, // Cop Car SF
-		598, // Cop Car LV
-		599, // Police Ranger
-		601, // Swat Tank
-	};
-
 	model = GetVehicleTypeModel(type);
 
-	for(new i; i < sizeof(defaultColorVehicles); i++)
+	switch(model)
 	{
-		if(defaultColorVehicles[i] == model)
+		case 416, 433, 523, 427, 490, 528, 407, 544, 596, 597, 598, 599, 432, 601:
 		{
 			colour1 = -1;
 			colour2 = -1;
 		}
-		else
+		default:
 		{
-			colour1 = GetRandomVehicleColour();
-			colour2 = GetRandomVehicleColour();
+			colour1 = 128 + random(128);
+			colour2 = 128 + random(128);
 		}
 	}
 
@@ -68,7 +62,7 @@ GenerateVehicleData(vehicleid)
 	new
 		type,
 		category,
-	Float:maxfuel,
+		Float:maxfuel,
 		lootindexname[32],
 		lootindex,
 		trunksize,
@@ -82,24 +76,31 @@ GenerateVehicleData(vehicleid)
 	trunksize = GetVehicleTypeTrunkSize(type);
 
 // Health
+
 	chance = random(100);
 
 	if(chance < 1)
 		SetVehicleHP(vehicleid, 500 + random(200));
+
 	else if(chance < 5)
 		SetVehicleHP(vehicleid, 400 + random(200));
+
 	else
 		SetVehicleHP(vehicleid, 300 + random(200));
 
 // Fuel
+
 	chance = random(100);
 
 	if(chance < 1)
 		SetVehicleFuel(vehicleid, maxfuel / 2 + frandom(maxfuel / 2));
+
 	else if(chance < 5)
 		SetVehicleFuel(vehicleid, maxfuel / 4 + frandom(maxfuel / 3));
+
 	else if(chance < 10)
 		SetVehicleFuel(vehicleid, maxfuel / 8 + frandom(maxfuel / 4));
+
 	else
 		SetVehicleFuel(vehicleid, frandom(1.0));
 
@@ -118,8 +119,11 @@ GenerateVehicleData(vehicleid)
 			encode_tires(random(2), random(2), random(2), random(2)) );
 
 // Locks
+
 		if(maxfuel == 0.0)
+		{
 			SetVehicleParamsEx(vehicleid, 1, 0, 0, 0, 0, 0, 0);
+		}
 		else
 		{
 			new locked;
@@ -137,10 +141,15 @@ GenerateVehicleData(vehicleid)
 		}
 	}
 
+
 // Putting loot in trunks
-	if(lootindex != -1 && 0 < trunksize <= CNT_MAX_SLOTS)
+
+	if(lootindex != -1 && 0 < trunksize <= MAX_CONTAINER_SLOTS)
+	{
 		FillContainerWithLoot(GetVehicleContainer(vehicleid), random(trunksize / 3), lootindex);
+	}
 
 // Number plate
+
 	SetVehicleNumberPlate(vehicleid, RandomNumberPlateString());
 }

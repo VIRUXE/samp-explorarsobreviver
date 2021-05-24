@@ -1,3 +1,18 @@
+/*==============================================================================
+
+
+	Southclaws' Scavenge and Survive
+
+		Copyright (C) 2020 Barnaby "Southclaws" Keene
+
+		This Source Code Form is subject to the terms of the Mozilla Public
+		License, v. 2.0. If a copy of the MPL was not distributed with this
+		file, You can obtain one at http://mozilla.org/MPL/2.0/.
+
+
+==============================================================================*/
+
+
 #define MAX_ITEM_AMMO_TYPES		(20)
 #define MAX_AMMO_CALIBRE		(20)
 #define MAX_AMMO_CALIBRE_NAME	(32)
@@ -18,7 +33,8 @@ ItemType:	ammo_itemType,
 Float:		ammo_bleedrateMult,
 Float:		ammo_knockoutMult,
 Float:		ammo_penetration,
-			ammo_size
+			ammo_size,
+			ammo_notransfer
 }
 
 
@@ -29,7 +45,7 @@ static
 static
 			ammo_Data[MAX_ITEM_AMMO_TYPES][E_ITEM_AMMO_DATA],
 			ammo_Total,
-			ammo_ItemTypeAmmoType[ITM_MAX_TYPES] = {-1, ...},
+			ammo_ItemTypeAmmoType[MAX_ITEM_TYPE] = {-1, ...},
 ItemType:	ammo_ItemTypeLowerBound,
 ItemType:	ammo_ItemTypeUpperBound;
 
@@ -41,7 +57,7 @@ ItemType:	ammo_ItemTypeUpperBound;
 ==============================================================================*/
 
 
-stock DefineAmmoCalibre(name[], Float:bleedrate)
+stock DefineAmmoCalibre(const name[], Float:bleedrate)
 {
 	strcat(clbr_Data[clbr_Total][clbr_name], name, MAX_AMMO_CALIBRE_NAME);
 	clbr_Data[clbr_Total][clbr_bleedRate] = bleedrate;
@@ -49,7 +65,7 @@ stock DefineAmmoCalibre(name[], Float:bleedrate)
 	return clbr_Total++;
 }
 
-stock DefineItemTypeAmmo(ItemType:itemtype, name[], calibre, Float:bleedratemult, Float:knockoutmult, Float:penetration, size)
+stock DefineItemTypeAmmo(ItemType:itemtype, const name[], calibre, Float:bleedratemult, Float:knockoutmult, Float:penetration, size, bool:notransfer = false)
 {
 	SetItemTypeMaxArrayData(itemtype, 1);
 
@@ -60,6 +76,7 @@ stock DefineItemTypeAmmo(ItemType:itemtype, name[], calibre, Float:bleedratemult
 	ammo_Data[ammo_Total][ammo_knockoutMult] = knockoutmult;
 	ammo_Data[ammo_Total][ammo_penetration] = penetration;
 	ammo_Data[ammo_Total][ammo_size] = size;
+	ammo_Data[ammo_Total][ammo_notransfer] = notransfer;
 
 	ammo_ItemTypeAmmoType[itemtype] = ammo_Total;
 
@@ -80,18 +97,18 @@ stock DefineItemTypeAmmo(ItemType:itemtype, name[], calibre, Float:bleedratemult
 ==============================================================================*/
 
 
-hook OnItemNameRender(itemid, ItemType:itemtype)
+hook OnItemNameRender(Item:itemid, ItemType:itemtype)
 {
-	dbg("global", LOG_CORE, "[OnItemNameRender] in /gamemodes/sss/core/weapon/ammunition.pwn");
-
 	new ammotype = ammo_ItemTypeAmmoType[itemtype];
 
 	if(ammotype == -1)
-		return Y_HOOKS_CONTINUE_RETURN_0;
+		return 0;
 
 	new
-		amount = GetItemExtraData(itemid),
-		str[ITM_MAX_TEXT];
+		amount,
+		str[MAX_ITEM_TEXT];
+
+	GetItemExtraData(itemid, amount);
 
 	format(str, sizeof(str), "%d, %s, %s",
 		amount,
@@ -100,13 +117,11 @@ hook OnItemNameRender(itemid, ItemType:itemtype)
 
 	SetItemNameExtra(itemid, str);
 
-	return Y_HOOKS_CONTINUE_RETURN_0;
+	return 1;
 }
 
-hook OnItemCreate(itemid)
+hook OnItemCreate(Item:itemid)
 {
-	dbg("global", LOG_CORE, "[OnItemCreate] in /gamemodes/sss/core/weapon/ammunition.pwn");
-
 	if(GetItemLootIndex(itemid) != -1)
 	{
 		new ammotype = GetItemTypeAmmoType(GetItemType(itemid));
@@ -213,6 +228,15 @@ stock GetAmmoTypeSize(ammotype)
 	return ammo_Data[ammotype][ammo_size];
 }
 
+// ammo_notransfer
+stock IsAmmoTypeNoTransfer(ammotype)
+{
+	if(!(0 <= ammotype < ammo_Total))
+		return 0;
+
+	return ammo_Data[ammotype][ammo_notransfer];
+}
+
 
 stock GetItemTypeAmmoType(ItemType:itemtype)
 {
@@ -242,6 +266,17 @@ stock GetItemTypeMagSize(ItemType:itemtype)
 		return -1;
 
 	return ammo_Data[ammo_ItemTypeAmmoType[itemtype]][ammo_size];
+}
+
+stock IsItemTypeAmmoTypeNoTransfer(ammotype)
+{
+	if(!IsValidItemType(itemtype))
+		return -1;
+
+	if(ammo_ItemTypeAmmoType[itemtype] == -1)
+		return -1;
+
+	return ammo_Data[ammo_ItemTypeAmmoType[itemtype]][ammo_notransfer];
 }
 
 stock GetAmmoItemTypesOfCalibre(calibre, ItemType:output[], max = sizeof(output))

@@ -1,4 +1,19 @@
-#include <YSI\y_hooks>
+/*==============================================================================
+
+
+	Southclaws' Scavenge and Survive
+
+		Copyright (C) 2020 Barnaby "Southclaws" Keene
+
+		This Source Code Form is subject to the terms of the Mozilla Public
+		License, v. 2.0. If a copy of the MPL was not distributed with this
+		file, You can obtain one at http://mozilla.org/MPL/2.0/.
+
+
+==============================================================================*/
+
+
+#include <YSI_Coding\y_hooks>
 
 
 #define MAX_BANS_PER_PAGE (20)
@@ -72,7 +87,7 @@ ShowListOfBans(playerid, index = 0)
 	return 1;
 }
 
-ShowBanInfo(playerid, name[MAX_PLAYER_NAME])
+ShowBanInfo(playerid, const name[MAX_PLAYER_NAME])
 {
 	new
 		timestamp,
@@ -238,8 +253,6 @@ ShowUnbanPrompt(playerid)
 
 hook OnPlayerDialogPage(playerid, direction)
 {
-	dbg("global", LOG_CORE, "[OnPlayerDialogPage] in /gamemodes/sss/core/admin/ban-list.pwn");
-
 	if(banlist_ViewingList[playerid])
 	{
 		if(direction == 0)

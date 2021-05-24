@@ -1,4 +1,19 @@
-#include <YSI\y_hooks>
+/*==============================================================================
+
+
+	Southclaws' Scavenge and Survive
+
+		Copyright (C) 2020 Barnaby "Southclaws" Keene
+
+		This Source Code Form is subject to the terms of the Mozilla Public
+		License, v. 2.0. If a copy of the MPL was not distributed with this
+		file, You can obtain one at http://mozilla.org/MPL/2.0/.
+
+
+==============================================================================*/
+
+
+#include <YSI_Coding\y_hooks>
 
 
 #define MAX_BODY_LABEL (16)
@@ -14,7 +29,7 @@ Float:		bl_posY
 
 static
 Float:		bod_UIWidth		[MAX_PLAYERS] = {120.0, ...},
-Float:		bod_UIPositionX	[MAX_PLAYERS] = {100.0, ...},
+Float:		bod_UIPositionX	[MAX_PLAYERS] = {70.0, ...},
 Float:		bod_UIPositionY	[MAX_PLAYERS] = {120.0, ...},
 Float:		bod_UIFontSizeX	[MAX_PLAYERS] = {0.2, ...},
 Float:		bod_UIFontSizeY	[MAX_PLAYERS] = {1.0, ...},
@@ -32,8 +47,6 @@ PlayerText:	bod_BodyPreview	[MAX_PLAYERS] = {PlayerText:INVALID_TEXT_DRAW, ...},
 
 hook OnPlayerConnect(playerid)
 {
-	dbg("global", LOG_CORE, "[OnPlayerConnect] in /gamemodes/sss/core/ui/body-preview.pwn");
-
 	bod_LabelIndex0[playerid] = 0;
 	bod_LabelIndex1[playerid] = 0;
 
@@ -99,7 +112,6 @@ CreateBodyPreviewUI(playerid)
 
 stock ShowBodyPreviewUI(playerid)
 {
-	dbg("gamemodes/sss/core/ui/body-preview.pwn", 1, "[ShowBodyPreviewUI]");
 	PlayerTextDrawSetPreviewModel	(playerid, bod_BodyPreview[playerid], GetPlayerSkin(playerid));
 
 	PlayerTextDrawShow(playerid, bod_Header[playerid]);
@@ -112,13 +124,11 @@ stock ShowBodyPreviewUI(playerid)
 
 stock HideBodyPreviewUI(playerid)
 {
-	dbg("gamemodes/sss/core/ui/body-preview.pwn", 1, "[HideBodyPreviewUI]");
 	PlayerTextDrawHide(playerid, bod_Header[playerid]);
 	PlayerTextDrawHide(playerid, bod_Background[playerid]);
 	PlayerTextDrawHide(playerid, bod_Footer[playerid]);
 	PlayerTextDrawHide(playerid, bod_BodyPreview[playerid]);
 
-	dbg("gamemodes/sss/core/ui/body-preview.pwn", 2, "[HideBodyPreviewUI] LabelIndex0 %d LabelIndex1 %d", bod_LabelIndex0[playerid], bod_LabelIndex1[playerid]);
 	for(new i; i <= bod_LabelIndex0[playerid]; i++)
 	{
 		PlayerTextDrawDestroy(playerid, bod_LabelData0[playerid][i][bl_textdraw]);
@@ -139,10 +149,8 @@ stock HideBodyPreviewUI(playerid)
 	bod_Shown[playerid] = false;
 }
 
-stock SetBodyPreviewLabel(playerid, side, index, Float:spacing, string[], textcolour)
+stock SetBodyPreviewLabel(playerid, side, index, Float:spacing, const string[], textcolour)
 {
-	dbg("gamemodes/sss/core/ui/body-preview.pwn", 1, "[SetBodyPreviewLabel] side:%d index:%d spacing:%.2f string:'%s' col:%x", side, index, spacing, string, textcolour);
-
 	if(!bod_Shown[playerid])
 		return 0;
 
@@ -153,16 +161,12 @@ stock SetBodyPreviewLabel(playerid, side, index, Float:spacing, string[], textco
 	{
 		if(bod_LabelData0[playerid][index][bl_valid])
 		{
-			dbg("gamemodes/sss/core/ui/body-preview.pwn", 2, "[SetBodyPreviewLabel] Updating left side index: %d", index);
-
 			PlayerTextDrawSetString(playerid, bod_LabelData0[playerid][index][bl_textdraw], string);
 			PlayerTextDrawColor(playerid, bod_LabelData0[playerid][index][bl_textdraw], textcolour);
 			PlayerTextDrawShow(playerid, bod_LabelData0[playerid][index][bl_textdraw]);
 		}
 		else
 		{
-			dbg("gamemodes/sss/core/ui/body-preview.pwn", 2, "[SetBodyPreviewLabel] Adding to left side index: %d", index);
-
 			bod_LabelData0[playerid][index][bl_valid] = true;
 
 			if(index > bod_LabelIndex0[playerid])
@@ -196,16 +200,12 @@ stock SetBodyPreviewLabel(playerid, side, index, Float:spacing, string[], textco
 	{
 		if(bod_LabelData1[playerid][index][bl_valid])
 		{
-			dbg("gamemodes/sss/core/ui/body-preview.pwn", 2, "[SetBodyPreviewLabel] Updating right side index: %d", index);
-
 			PlayerTextDrawSetString(playerid, bod_LabelData1[playerid][index][bl_textdraw], string);
 			PlayerTextDrawColor(playerid, bod_LabelData1[playerid][index][bl_textdraw], textcolour);
 			PlayerTextDrawShow(playerid, bod_LabelData1[playerid][index][bl_textdraw]);
 		}
 		else
 		{
-			dbg("gamemodes/sss/core/ui/body-preview.pwn", 2, "[SetBodyPreviewLabel] Adding to right side index: %d", index);
-
 			bod_LabelData1[playerid][index][bl_valid] = true;
 
 			if(index > bod_LabelIndex1[playerid])
@@ -253,7 +253,7 @@ stock SetBodyPreviewUIOffsets(playerid, Float:x, Float:y)
 	return 1;
 }
 
-stock SetBodyPreviewFooterText(playerid, string[])
+stock SetBodyPreviewFooterText(playerid, const string[])
 {
 	if(!bod_Shown[playerid])
 		return 0;

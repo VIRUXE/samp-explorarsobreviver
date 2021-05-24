@@ -1,19 +1,30 @@
+/*==============================================================================
+
+
+	Southclaws' Scavenge and Survive
+
+		Copyright (C) 2020 Barnaby "Southclaws" Keene
+
+		This Source Code Form is subject to the terms of the Mozilla Public
+		License, v. 2.0. If a copy of the MPL was not distributed with this
+		file, You can obtain one at http://mozilla.org/MPL/2.0/.
+
+
+==============================================================================*/
+
+
 #define IsBadInteract(%0) GetPlayerSpecialAction(%0) == SPECIAL_ACTION_CUFFED || IsPlayerOnAdminDuty(%0) || IsPlayerKnockedOut(%0) || GetPlayerAnimationIndex(%0) == 1381
 
-hook OnPlayerPickUpItem(playerid, itemid)
+hook OnPlayerPickUpItem(playerid, Item:itemid)
 {
-	dbg("global", LOG_CORE, "[OnPlayerPickUpItem] in /gamemodes/sss/core/player/disallow-actions.pwn");
-
 	if(IsBadInteract(playerid))
 		return Y_HOOKS_BREAK_RETURN_1;
 
 	return Y_HOOKS_CONTINUE_RETURN_0;
 }
 
-hook OnPlayerGiveItem(playerid, targetid, itemid)
+hook OnPlayerGiveItem(playerid, targetid, Item:itemid)
 {
-	dbg("global", LOG_CORE, "[OnPlayerGiveItem] in /gamemodes/sss/core/player/disallow-actions.pwn");
-
 	if(IsBadInteract(playerid))
 		return Y_HOOKS_BREAK_RETURN_1;
 
@@ -28,8 +39,6 @@ hook OnPlayerGiveItem(playerid, targetid, itemid)
 
 hook OnItemRemoveFromCnt(containerid, slotid, playerid)
 {
-	dbg("global", LOG_CORE, "[OnItemRemoveFromCnt] in /gamemodes/sss/core/player/disallow-actions.pwn");
-
 	if(IsPlayerConnected(playerid))
 	{
 		if(IsBadInteract(playerid))
@@ -41,8 +50,6 @@ hook OnItemRemoveFromCnt(containerid, slotid, playerid)
 
 hook OnPlayerOpenInventory(playerid)
 {
-	dbg("global", LOG_CORE, "[OnPlayerOpenInventory] in /gamemodes/sss/core/player/disallow-actions.pwn");
-
 	if(IsBadInteract(playerid))
 		return Y_HOOKS_BREAK_RETURN_1;
 
@@ -51,18 +58,14 @@ hook OnPlayerOpenInventory(playerid)
 
 hook OnPlayerOpenContainer(playerid, containerid)
 {
-	dbg("global", LOG_CORE, "[OnPlayerOpenContainer] in /gamemodes/sss/core/player/disallow-actions.pwn");
-
 	if(IsBadInteract(playerid))
 		return Y_HOOKS_BREAK_RETURN_1;
 
 	return Y_HOOKS_CONTINUE_RETURN_0;
 }
 
-hook OnPlayerUseItem(playerid, itemid)
+hook OnPlayerUseItem(playerid, Item:itemid)
 {
-	dbg("global", LOG_CORE, "[OnPlayerUseItem] in /gamemodes/sss/core/player/disallow-actions.pwn");
-
 	if(IsBadInteract(playerid))
 		return Y_HOOKS_BREAK_RETURN_1;
 
@@ -75,10 +78,8 @@ hook OnPlayerUseItem(playerid, itemid)
 	return Y_HOOKS_CONTINUE_RETURN_0;
 }
 
-hook OnItemCreate(itemid)
+hook OnItemCreate(Item:itemid)
 {
-	dbg("global", LOG_CORE, "[OnItemCreate] in /gamemodes/sss/core/player/disallow-actions.pwn");
-
 	if(GetItemType(itemid) == ItemType:0)
 		return Y_HOOKS_BREAK_RETURN_0;
 

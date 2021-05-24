@@ -1,3 +1,21 @@
+/*==============================================================================
+
+
+	Southclaws' Scavenge and Survive
+
+		Copyright (C) 2020 Barnaby "Southclaws" Keene
+
+		This Source Code Form is subject to the terms of the Mozilla Public
+		License, v. 2.0. If a copy of the MPL was not distributed with this
+		file, You can obtain one at http://mozilla.org/MPL/2.0/.
+
+
+==============================================================================*/
+
+
+#include <YSI_Coding\y_hooks>
+
+
 enum E_COUNTRY_DATA
 {
 			cntr_Hostname[60],
@@ -24,8 +42,6 @@ forward OnLookupResponse(sessionid, response, data[]);
 
 hook OnPlayerLogin(playerid)
 {
-	dbg("global", LOG_CORE, "[OnPlayerLogin] in /gamemodes/sss/core/player/country.pwn");
-
 	_cntr_HandleLogin(playerid);
 
 	return Y_HOOKS_CONTINUE_RETURN_0;
@@ -33,8 +49,6 @@ hook OnPlayerLogin(playerid)
 
 hook OnPlayerRegister(playerid)
 {
-	dbg("global", LOG_CORE, "[OnPlayerRegister] in /gamemodes/sss/core/player/country.pwn");
-
 	_cntr_HandleLogin(playerid);
 
 	return Y_HOOKS_CONTINUE_RETURN_0;
@@ -143,7 +157,7 @@ public OnLookupResponse(sessionid, response, data[])
 	return;
 }
 
-_cntr_GetXMLData(string[], tag[], output[], &start, maxlength = sizeof(output))
+_cntr_GetXMLData(const string[], const tag[], output[], &start, maxlength = sizeof(output))
 {
 	new end = start = (strfind(string, tag, true, start) + strlen(tag) + 1);
 

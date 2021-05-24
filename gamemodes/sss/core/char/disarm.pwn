@@ -1,10 +1,23 @@
-#include <YSI\y_hooks>
+/*==============================================================================
+
+
+	Southclaws' Scavenge and Survive
+
+		Copyright (C) 2020 Barnaby "Southclaws" Keene
+
+		This Source Code Form is subject to the terms of the Mozilla Public
+		License, v. 2.0. If a copy of the MPL was not distributed with this
+		file, You can obtain one at http://mozilla.org/MPL/2.0/.
+
+
+==============================================================================*/
+
+
+#include <YSI_Coding\y_hooks>
 
 
 hook OnPlayerKeyStateChange(playerid, newkeys, oldkeys)
 {
-	dbg("global", LOG_CORE, "[OnPlayerKeyStateChange] in /gamemodes/sss/core/char/disarm.pwn");
-
 	if(GetPlayerWeapon(playerid) != 0 || IsValidItem(GetPlayerItem(playerid)))
 		return 1;
 
@@ -15,9 +28,9 @@ hook OnPlayerKeyStateChange(playerid, newkeys, oldkeys)
 	{
 		foreach(new i : Player)
 		{
-			if(IsPlayerInPlayerArea(playerid, i))
+			if(IsPlayerNextToPlayer(playerid, i))
 			{
-				if(IsPlayerKnockedOut(i) || GetPlayerAnimationIndex(i) == 1381) // Knocked out or cuffed?
+				if(IsPlayerKnockedOut(i) || GetPlayerAnimationIndex(i) == 1381)
 				{
 					DisarmPlayer(playerid, i);
 					break;
@@ -31,10 +44,10 @@ hook OnPlayerKeyStateChange(playerid, newkeys, oldkeys)
 
 DisarmPlayer(playerid, i)
 {
-	if(IsValidItem(GetPlayerItem(playerid))) // Has item in hand
+	if(IsValidItem(GetPlayerItem(playerid)))
 		return 0;
 
-	new itemid = GetPlayerItem(i);
+	new Item:itemid = GetPlayerItem(i);
 
 	if(IsValidItem(itemid))
 	{

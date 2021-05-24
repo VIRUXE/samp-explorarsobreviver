@@ -1,11 +1,29 @@
-#include <YSI\y_hooks>
+/*==============================================================================
+
+
+	Southclaws' Scavenge and Survive
+
+		Copyright (C) 2020 Barnaby "Southclaws" Keene
+
+		This Source Code Form is subject to the terms of the Mozilla Public
+		License, v. 2.0. If a copy of the MPL was not distributed with this
+		file, You can obtain one at http://mozilla.org/MPL/2.0/.
+
+
+==============================================================================*/
+
+
+#include <YSI_Coding\y_hooks>
+
 
 #define PILL_TYPE_ANTIBIOTICS	(0)
 #define PILL_TYPE_PAINKILL		(1)
 #define PILL_TYPE_LSD			(2)
 
+
 static
-	pill_CurrentlyTaking[MAX_PLAYERS];
+	Item:pill_CurrentlyTaking[MAX_PLAYERS];
+
 
 hook OnItemTypeDefined(uname[])
 {
@@ -15,29 +33,27 @@ hook OnItemTypeDefined(uname[])
 
 hook OnPlayerConnect(playerid)
 {
-	dbg("global", LOG_CORE, "[OnPlayerConnect] in /gamemodes/sss/core/item/pills.pwn");
-
-	pill_CurrentlyTaking[playerid] = -1;
+	pill_CurrentlyTaking[playerid] = INVALID_ITEM_ID;
 }
 
-hook OnItemCreate(itemid)
+hook OnItemCreate(Item:itemid)
 {
-	dbg("global", LOG_CORE, "[OnItemCreate] in /gamemodes/sss/core/item/pills.pwn");
-
 	if(GetItemLootIndex(itemid) != -1)
 	{
 		if(GetItemType(itemid) == item_Pills)
+		{
 			SetItemExtraData(itemid, random(3));
+		}
 	}
 }
 
-hook OnItemNameRender(itemid, ItemType:itemtype)
+hook OnItemNameRender(Item:itemid, ItemType:itemtype)
 {
-	dbg("global", LOG_CORE, "[OnItemNameRender] in /gamemodes/sss/core/item/pills.pwn");
-
 	if(itemtype == item_Pills)
 	{
-		switch(GetItemExtraData(itemid))
+		new type;
+		GetItemExtraData(itemid, type);
+		switch(type)
 		{
 			case PILL_TYPE_ANTIBIOTICS:		SetItemNameExtra(itemid, "Antibiotics");
 			case PILL_TYPE_PAINKILL:		SetItemNameExtra(itemid, "Painkiller");
@@ -47,22 +63,22 @@ hook OnItemNameRender(itemid, ItemType:itemtype)
 	}
 }
 
-hook OnPlayerUseItem(playerid, itemid)
+hook OnPlayerUseItem(playerid, Item:itemid)
 {
-	dbg("global", LOG_CORE, "[OnPlayerUseItem] in /gamemodes/sss/core/item/pills.pwn");
-
 	if(GetItemType(itemid) == item_Pills)
+	{
 		StartTakingPills(playerid);
+	}
 
 	return Y_HOOKS_CONTINUE_RETURN_0;
 }
 
 hook OnPlayerKeyStateChange(playerid, newkeys, oldkeys)
 {
-	dbg("global", LOG_CORE, "[OnPlayerKeyStateChange] in /gamemodes/sss/core/item/pills.pwn");
-
-	if(oldkeys & 16 && pill_CurrentlyTaking[playerid] != -1)
+	if(oldkeys & 16 && pill_CurrentlyTaking[playerid] != INVALID_ITEM_ID)
+	{
 		StopTakingPills(playerid);
+	}
 
 	return 1;
 }
@@ -79,12 +95,12 @@ StopTakingPills(playerid)
 	ClearAnimations(playerid);
 	StopHoldAction(playerid);
 
-	pill_CurrentlyTaking[playerid] = -1;
+	pill_CurrentlyTaking[playerid] = INVALID_ITEM_ID;
 }
 
 hook OnHoldActionFinish(playerid)
 {
-	if(pill_CurrentlyTaking[playerid] != -1)
+	if(pill_CurrentlyTaking[playerid] != INVALID_ITEM_ID)
 	{
 		if(!IsValidItem(pill_CurrentlyTaking[playerid]))
 			return Y_HOOKS_CONTINUE_RETURN_0;
@@ -92,7 +108,9 @@ hook OnHoldActionFinish(playerid)
 		if(GetPlayerItem(playerid) != pill_CurrentlyTaking[playerid])
 			return Y_HOOKS_CONTINUE_RETURN_0;
 
-		switch(GetItemExtraData(pill_CurrentlyTaking[playerid]))
+		new type;
+		GetItemExtraData(pill_CurrentlyTaking[playerid], type);
+		switch(type)
 		{
 			case PILL_TYPE_ANTIBIOTICS:
 			{
@@ -132,8 +150,6 @@ hook OnHoldActionFinish(playerid)
 
 hook OnPlayerDrugWearOff(playerid, drugtype)
 {
-	dbg("global", LOG_CORE, "[OnPlayerDrugWearOff] in /gamemodes/sss/core/item/pills.pwn");
-
 	if(drugtype == drug_Lsd)
 	{
 		SetTimeForPlayer(playerid, -1, -1, true);

@@ -1,3 +1,25 @@
+/*==============================================================================
+
+
+	Southclaws' Scavenge and Survive
+
+		Copyright (C) 2020 Barnaby "Southclaws" Keene
+
+		This Source Code Form is subject to the terms of the Mozilla Public
+		License, v. 2.0. If a copy of the MPL was not distributed with this
+		file, You can obtain one at http://mozilla.org/MPL/2.0/.
+
+
+==============================================================================*/
+
+
+/*==============================================================================
+
+	Lazy RCON commands
+
+==============================================================================*/
+
+
 ACMD:gamename[5](playerid,params[])
 {
 	if(!(0 < strlen(params) < 64))
@@ -35,11 +57,11 @@ ACMD:mapname[5](playerid,params[])
 	return 1;
 }
 
-/*ACMD:gmx[5](playerid, params[])
+ACMD:gmx[5](playerid, params[])
 {
 	RestartGamemode();
 	return 1;
-}*/
+}
 
 ACMD:loadfs[5](playerid, params[])
 {
@@ -92,26 +114,34 @@ ACMD:hud[5](playerid, params[])
 {
 	if(IsPlayerHudOn(playerid))
 	{
-		TogglePlayerHungerBar(playerid, false);
 		ToggleVersionInfo(playerid, false);
-		HideWatch(playerid);
 		TogglePlayerHUD(playerid, false);
 	}
 	else
 	{
-		TogglePlayerHungerBar(playerid, true);
 		ToggleVersionInfo(playerid, true);
-		ShowWatch(playerid);
 		TogglePlayerHUD(playerid, true);
 	}
-
-	return 1;
 }
 
 ACMD:nametags[5](playerid, params[])
 {
 	ToggleNameTagsForPlayer(playerid, !GetPlayerNameTagsToggle(playerid));
 	ChatMsg(playerid, YELLOW, " >  Nametags toggled %s", (GetPlayerNameTagsToggle(playerid)) ? ("on") : ("off"));
+
+	return 1;
+}
+
+ACMD:gotoitem[4](playerid, params[])
+{
+	new
+		Item:itemid = Item:strval(params),
+		Float:x,
+		Float:y,
+		Float:z;
+
+	GetItemPos(itemid, x, y, z);
+	SetPlayerPos(playerid, x, y, z);
 
 	return 1;
 }
@@ -153,10 +183,10 @@ ACMD:addloot[5](playerid, params[])
 ACMD:setitemhp[5](playerid, params[])
 {
 	new
-		itemid,
+		Item:itemid,
 		hitpoints;
 
-	if(sscanf(params, "dd", itemid, hitpoints))
+	if(sscanf(params, "dd", _:itemid, hitpoints))
 	{
 		ChatMsg(playerid, YELLOW, " >  Usage: /setitemhp [itemid] [hitpoints]");
 		return 1;
@@ -173,10 +203,13 @@ ACMD:setitemhp[5](playerid, params[])
 	Dev-"cheats"
 
 ==============================================================================*/
+
+
 ACMD:vw[5](playerid, params[])
 {
 	if(isnull(params))
 		ChatMsg(playerid, YELLOW, "Current VW: %d", GetPlayerVirtualWorld(playerid));
+
 	else
 		SetPlayerVirtualWorld(playerid, strval(params));
 
@@ -187,6 +220,7 @@ ACMD:iw[5](playerid, params[])
 {
 	if(isnull(params))
 		ChatMsg(playerid, YELLOW, "Current INT: %d", GetPlayerInterior(playerid));
+
 	else
 		SetPlayerInterior(playerid, strval(params));
 
@@ -231,7 +265,8 @@ ACMD:bleed[5](playerid, params[])
 
 	if(sscanf(params, "f", value))
 	{
-		ChatMsg(playerid, YELLOW, "Current bleed rate %f", GetPlayerBleedRate(playerid));
+		GetPlayerBleedRate(playerid, value);
+		ChatMsg(playerid, YELLOW, "Current bleed rate %f", value);
 		return 1;
 	}
 
@@ -250,7 +285,9 @@ ACMD:knockout[5](playerid, params[])
 
 ACMD:showdamage[5](playerid, params[])
 {
-	ShowActionText(playerid, sprintf("bleedrate: %f~n~wounds: %d", GetPlayerBleedRate(playerid), GetPlayerWounds(playerid)), 5000);
+	new Float:bleedrate;
+	GetPlayerBleedRate(playerid, bleedrate);
+	ShowActionText(playerid, sprintf("bleedrate: %f~n~wounds: %d", bleedrate, GetPlayerWounds(playerid)), 5000);
 	return 1;
 }
 

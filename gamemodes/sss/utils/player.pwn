@@ -1,3 +1,18 @@
+/*==============================================================================
+
+
+	Southclaws' Scavenge and Survive
+
+		Copyright (C) 2020 Barnaby "Southclaws" Keene
+
+		This Source Code Form is subject to the terms of the Mozilla Public
+		License, v. 2.0. If a copy of the MPL was not distributed with this
+		file, You can obtain one at http://mozilla.org/MPL/2.0/.
+
+
+==============================================================================*/
+
+
 stock TeleportPlayerToPlayer(playerid, targetid)
 {
 	new
@@ -50,7 +65,7 @@ stock TeleportPlayerToPlayer(playerid, targetid)
 	}
 }
 
-stock IsValidUsername(name[])
+stock IsValidUsername(const name[])
 {
 	new
 		i,
@@ -74,7 +89,7 @@ stock IsValidUsername(name[])
 	return 1;
 }
 
-stock GetPlayerIDFromName(name[], bool:ignorecase = false, bool:partialname = false)
+stock GetPlayerIDFromName(const name[], bool:ignorecase = false, bool:partialname = false)
 {
 	new
 		playerid = INVALID_PLAYER_ID,
@@ -112,13 +127,13 @@ stock GetPlayerIDFromName(name[], bool:ignorecase = false, bool:partialname = fa
 
 stock CancelPlayerMovement(playerid)
 {
-	new
+	/*new
 		Float:x,
 		Float:y,
 		Float:z;
 
 	GetPlayerPos(playerid, x, y, z);
-	SetPlayerPos(playerid, x, y, z);
+	SetPlayerPos(playerid, x, y, z);*/
 	ClearAnimations(playerid);
 	TogglePlayerControllable(playerid, true);
 }
@@ -197,33 +212,10 @@ stock IsPlayerInArea(playerid, Float:MinX, Float:MinY, Float:MaxX, Float:MaxY)
 	GetPlayerPos(playerid,x,y,pz);
 
 	if(x >= MinX && x <= MaxX && y >= MinY && y <= MaxY)
-		return 1;
-
-	return 0;
-}
-
-stock GetPlayerZone(playerid, zone[])
-{
-	for(new i; i < sizeof(Zones); i++)
 	{
-		if(IsPlayerInArea(playerid, Zones[i][zone_area][0], Zones[i][zone_area][1], Zones[i][zone_area][3], Zones[i][zone_area][4]))
-		{
-			zone[0] = EOS;
-			strcat(zone, Zones[i][zone_name], 28);
-			return 1;
-		}
+		return 1;
 	}
-
 	return 0;
-}
-
-stock GetPlayerZoneEx(playerid)
-{
-	new zone[MAX_ZONE_NAME];
-
-	GetPlayerZone(playerid, zone);
-
-	return zone;
 }
 
 stock Float:GetDistanceBetweenPlayers(playerid, targetid)
@@ -292,22 +284,6 @@ stock GetClosestPlayerFromPoint(Float:x, Float:y, Float:z, &Float:lowestdistance
 	}
 
 	return closestplayer;
-}
-
-GetXYInFrontOfPlayer(playerid, &Float:x, &Float:y, Float:distance)
-{	// Created by Y_Less
-
-	new Float:a;
-
-	GetPlayerPos(playerid, x, y, a);
-	GetPlayerFacingAngle(playerid, a);
-
-	if (GetPlayerVehicleID(playerid)) {
-	    GetVehicleZAngle(GetPlayerVehicleID(playerid), a);
-	}
-
-	x += (distance * floatsin(-a, degrees));
-	y += (distance * floatcos(-a, degrees));
 }
 
 new CameraModeNames[66][37]=

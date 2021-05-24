@@ -1,4 +1,19 @@
-#include <YSI\y_hooks>
+/*==============================================================================
+
+
+	Southclaws' Scavenge and Survive
+
+		Copyright (C) 2020 Barnaby "Southclaws" Keene
+
+		This Source Code Form is subject to the terms of the Mozilla Public
+		License, v. 2.0. If a copy of the MPL was not distributed with this
+		file, You can obtain one at http://mozilla.org/MPL/2.0/.
+
+
+==============================================================================*/
+
+
+#include <YSI_Coding\y_hooks>
 
 
 #define MAX_BAN_REASON (128)
@@ -63,7 +78,7 @@ hook OnGameModeInit()
 	stmt_BanSetDuration			= db_prepare(gAccounts, "UPDATE "ACCOUNTS_TABLE_BANS" SET "FIELD_BANS_DURATION" = ? WHERE "FIELD_BANS_NAME" = ? COLLATE NOCASE");
 }
 
-BanPlayer(playerid, reason[], byid, duration)
+BanPlayer(playerid, const reason[], byid, duration)
 {
 	new name[MAX_PLAYER_NAME];
 
@@ -91,7 +106,7 @@ BanPlayer(playerid, reason[], byid, duration)
 	return 0;
 }
 
-BanPlayerByName(name[], reason[], byid, duration)
+BanPlayerByName(const name[], const reason[], byid, duration)
 {
 	new
 		forname[MAX_PLAYER_NAME],
@@ -136,7 +151,7 @@ BanPlayerByName(name[], reason[], byid, duration)
 	return 1;
 }
 
-UpdateBanInfo(name[], reason[], duration)
+UpdateBanInfo(const name[], const reason[], duration)
 {
 	stmt_bind_value(stmt_BanUpdateInfo, 0, DB::TYPE_STRING, reason, MAX_BAN_REASON);
 	stmt_bind_value(stmt_BanUpdateInfo, 1, DB::TYPE_INTEGER, duration);
@@ -148,7 +163,7 @@ UpdateBanInfo(name[], reason[], duration)
 	return 0;
 }
 
-UnBanPlayer(name[])
+UnBanPlayer(const name[])
 {
 	if(!IsPlayerBanned(name))
 		return 0;
@@ -156,7 +171,9 @@ UnBanPlayer(name[])
 	stmt_bind_value(stmt_BanUnban, 0, DB::TYPE_STRING, name, MAX_PLAYER_NAME);
 
 	if(stmt_execute(stmt_BanUnban))
+	{
 		return 1;
+	}
 
 	return 0;
 }
@@ -192,7 +209,7 @@ BanCheck(playerid)
 					UnBanPlayer(name);
 
 					ChatMsgLang(playerid, YELLOW, "BANLIFMESSG", TimestampToDateTime(timestamp));
-					log(DISCORD_CHANNEL_ADMINEVENTS, "[BAN] Ban lifted automatically for %s", name);
+					log("[UNBAN] Ban lifted automatically for %s", name);
 
 					return 0;
 				}
@@ -237,7 +254,7 @@ public external_BanPlayer(name[], reason[], duration)
 	BanPlayerByName(name, reason, -1, duration);
 }
 
-stock IsPlayerBanned(name[])
+stock IsPlayerBanned(const name[])
 {
 	new count;
 
@@ -288,7 +305,7 @@ stock GetTotalBans()
 	return total;
 }
 
-stock GetBanInfo(name[], &timestamp, reason[], bannedby[], &duration)
+stock GetBanInfo(const name[], &timestamp, reason[], bannedby[], &duration)
 {
 	stmt_bind_value(stmt_BanGetInfo, 0, DB::TYPE_STRING, name, MAX_PLAYER_NAME);
 
@@ -305,7 +322,7 @@ stock GetBanInfo(name[], &timestamp, reason[], bannedby[], &duration)
 	return 1;
 }
 
-stock SetBanIpv4(name[], ipv4)
+stock SetBanIpv4(const name[], ipv4)
 {
 	stmt_bind_value(stmt_BanSetIpv4, 0, DB::TYPE_INTEGER, ipv4);
 	stmt_bind_value(stmt_BanSetIpv4, 1, DB::TYPE_STRING, name, MAX_PLAYER_NAME);
@@ -313,7 +330,7 @@ stock SetBanIpv4(name[], ipv4)
 	return stmt_execute(stmt_BanSetIpv4);
 }
 
-stock SetBanReason(name[], reason[])
+stock SetBanReason(const name[], reason[])
 {
 	stmt_bind_value(stmt_BanSetReason, 0, DB::TYPE_STRING, reason, MAX_BAN_REASON);
 	stmt_bind_value(stmt_BanSetReason, 1, DB::TYPE_STRING, name, MAX_PLAYER_NAME);
@@ -321,7 +338,7 @@ stock SetBanReason(name[], reason[])
 	return stmt_execute(stmt_BanSetReason);
 }
 
-stock SetBanDuration(name[], duration)
+stock SetBanDuration(const name[], duration)
 {
 	stmt_bind_value(stmt_BanSetDuration, 0, DB::TYPE_INTEGER, duration);
 	stmt_bind_value(stmt_BanSetDuration, 1, DB::TYPE_STRING, name, MAX_PLAYER_NAME);

@@ -1,4 +1,19 @@
-#include <YSI\y_hooks>
+/*==============================================================================
+
+
+	Southclaws' Scavenge and Survive
+
+		Copyright (C) 2020 Barnaby "Southclaws" Keene
+
+		This Source Code Form is subject to the terms of the Mozilla Public
+		License, v. 2.0. If a copy of the MPL was not distributed with this
+		file, You can obtain one at http://mozilla.org/MPL/2.0/.
+
+
+==============================================================================*/
+
+
+#include <YSI_Coding\y_hooks>
 
 
 #define MAX_WEATHER_TYPES	(20)
@@ -17,7 +32,8 @@ static
 	weather_CurrentMinute,
 	weather_PlayerWeather[MAX_PLAYERS],
 	weather_PlayerHour[MAX_PLAYERS],
-	weather_PlayerMinute[MAX_PLAYERS];
+	weather_PlayerMinute[MAX_PLAYERS],
+	weather_LastChange;
 
 new
 	WeatherData[MAX_WEATHER_TYPES][E_WEATHER_DATA]=
@@ -50,24 +66,34 @@ new
 
 hook OnGameModeInit()
 {
-	weather_Current = random(sizeof(WeatherData));
+	// Todo: custom weather array loaded from settings
 
-	//log("[WEATHER] Set to '%s'", WeatherData[weather_Current][weather_name]);
+	weather_Current = random(19);
+	weather_LastChange = GetTickCount();
 }
 
 hook OnPlayerConnect(playerid)
 {
-	dbg("global", LOG_CORE, "[OnPlayerConnect] in /gamemodes/sss/core/server/weather.pwn");
-
 	weather_PlayerWeather[playerid] = -1;
 	weather_PlayerHour[playerid] = -1;
 	weather_PlayerMinute[playerid] = -1;
 	_WeatherUpdateForPlayer(playerid);
 }
 
+hook OnPlayerSpawnChar(playerid)
+{
+	SetWeatherForPlayer(playerid, weather_Current);
+}
+
+hook OnPlayerSpawnNewChar(playerid)
+{
+	SetWeatherForPlayer(playerid, weather_Current);
+}
+
+
 task WeatherUpdate[600000]()
 {
-	if(random(100) < 65)
+	if(GetTickCountDifference(GetTickCount(), weather_LastChange) > 600000 && random(100) < 10)
 	{
 		new
 			list[MAX_WEATHER_TYPES],
@@ -80,11 +106,11 @@ task WeatherUpdate[600000]()
 		}
 
 		weather_Current = list[random(idx)];
-		_WeatherUpdate();
+		weather_LastChange = GetTickCount();
 
-		//ChatMsgAll(YELLOW, " >  The weather is now "C_BLUE"'%s'", WeatherData[weather_Current][weather_name]);
-		//log("[WEATHER] Set to '%s'", WeatherData[weather_Current][weather_name]);
+		_WeatherUpdate();
 	}
+
 }
 
 _WeatherUpdate()

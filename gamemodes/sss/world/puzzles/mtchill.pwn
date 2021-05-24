@@ -1,16 +1,31 @@
-#include <YSI\y_hooks>
+/*==============================================================================
+
+
+	Southclaws' Scavenge and Survive
+
+		Copyright (C) 2020 Barnaby "Southclaws" Keene
+
+		This Source Code Form is subject to the terms of the Mozilla Public
+		License, v. 2.0. If a copy of the MPL was not distributed with this
+		file, You can obtain one at http://mozilla.org/MPL/2.0/.
+
+
+==============================================================================*/
+
+
+#include <YSI_Coding\y_hooks>
 
 
 // Entities
 
 
 new
-	ch_gate,
-	ch_doorBtn,
+	Button:ch_gate,
+	Button:ch_doorBtn,
 	ch_door,
 	ch_walton,
-	ch_battery,
-	ch_fusebox,
+	Item:ch_battery,
+	Item:ch_fusebox,
 	ch_keypad,
 	ch_keypadprt;
 
@@ -24,7 +39,7 @@ new
 
 hook OnGameModeInit()
 {
-	new buttons[1];
+	new Button:buttons[1];
 
 
 	ch_gate = CreateButton(-2307.81, -1650.67, 484.36, "Press F to activate", 0);
@@ -34,7 +49,7 @@ hook OnGameModeInit()
 	CreateDoor(975, buttons,
 		-2312.10, -1652.69, 484.41,   0.00, 0.00, -154.50,
 		-2317.88, -1655.44, 484.41,   0.00, 0.00, -154.50,
-		.maxbuttons = 1, .movespeed = 1.0, .closedelay = -1);
+		.maxButtons = 1, .moveSpeed = 1.0, .closeDelay = -1);
 
 
 	ch_doorBtn = CreateButton(-2311.4900, -1647.7000, 484.3600, "Press F to use", 0, 0);
@@ -44,7 +59,7 @@ hook OnGameModeInit()
 	ch_door = CreateDoor(1498, buttons,
 		-2311.2200, -1647.4800, 482.7210, 0.0000, 0.0000, 25.1400,
 		-2311.2083, -1647.4178, 482.7395, 0.0000, 0.0000, 111.6000,
-		.maxbuttons = 1, .movespeed = 0.1, .closedelay = -1);
+		.maxButtons = 1, .moveSpeed = 0.1, .closeDelay = -1);
 
 //	-2310.5117, -1647.1541, 483.9890 inside door
 
@@ -58,7 +73,7 @@ hook OnGameModeInit()
 
 	ch_doorstate = false;
 
-	AddItemToContainer(CreateContainer("Generator", 6, CreateButton(-2318.9067, -1636.5662, 483.7031, "Generator")), CreateItem(item_Medkit));
+	// AddItemToContainer(CreateContainer("Generator", 6, CreateButton(-2318.9067, -1636.5662, 483.7031, "Generator")), CreateItem(item_Medkit));
 
 	// Building
 
@@ -232,8 +247,6 @@ hook OnGameModeInit()
 
 hook OnPlayerActivateDoor(playerid, doorid, newstate)
 {
-	dbg("global", LOG_CORE, "[OnPlayerActivateDoor] in /gamemodes/sss/world/puzzles/mtchill.pwn");
-
 	if(doorid == ch_door)
 	{
 		if(IsValidItem(GetPlayerItem(playerid)))
@@ -249,10 +262,8 @@ hook OnPlayerActivateDoor(playerid, doorid, newstate)
 	return Y_HOOKS_CONTINUE_RETURN_0;
 }
 
-hook OnPlayerUseItemWithBtn(playerid, buttonid, itemid)
+hook OnPlayerUseItemWithBtn(playerid, Button:buttonid, Item:itemid)
 {
-	dbg("global", LOG_CORE, "[OnPlayerUseItemWithBtn] in /gamemodes/sss/world/puzzles/mtchill.pwn");
-
 	if(buttonid == ch_doorBtn)
 	{
 		if(itemid == ch_fusebox)

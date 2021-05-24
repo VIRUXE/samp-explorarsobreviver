@@ -1,10 +1,23 @@
-#include <YSI\y_hooks>
+/*==============================================================================
 
 
-hook OnPlayerGiveDamage(playerid, issuerid, Float:amount, weaponid, bodypart)
+	Southclaws' Scavenge and Survive
+
+		Copyright (C) 2020 Barnaby "Southclaws" Keene
+
+		This Source Code Form is subject to the terms of the Mozilla Public
+		License, v. 2.0. If a copy of the MPL was not distributed with this
+		file, You can obtain one at http://mozilla.org/MPL/2.0/.
+
+
+==============================================================================*/
+
+
+#include <YSI_Coding\y_hooks>
+
+
+hook OnPlayerTakeDamage(playerid, issuerid, Float:amount, weaponid, bodypart)
 {
-	dbg("global", LOG_CORE, "[OnPlayerGiveDamage] in /gamemodes/sss/core/char/headgear-pop.pwn");
-
 	if(bodypart == BODY_PART_HEAD)
 	{
 		if(IsValidItem(GetPlayerHatItem(playerid)))
@@ -20,56 +33,65 @@ hook OnPlayerGiveDamage(playerid, issuerid, Float:amount, weaponid, bodypart)
 PopHat(playerid)
 {
 	new
-		itemid,
+		Item:itemid,
 		ItemType:itemtype,
 		Float:x,
 		Float:y,
 		Float:z,
-		Float:r,
-		objectid;
+		Float:rx,
+		Float:ry,
+		Float:rz,
+		objectid,
+		model;
 
 	itemid = RemovePlayerHatItem(playerid);
 	itemtype = GetItemType(itemid);
+	GetItemTypeRotation(itemtype, rx, ry, rz);
+	GetItemTypeModel(itemtype, model);
 	GetPlayerPos(playerid, x, y, z);
-	GetPlayerFacingAngle(playerid, r);
 
-	objectid = CreateDynamicObject(GetItemTypeModel(itemtype), x, y, z + 0.8, 0.0, 0.0, r);
-	MoveDynamicObject(objectid, x, y, z - FLOOR_OFFSET, 5.0, 0.0, 0.0, r + 360.0);
-	defer pop_DropHat(objectid, itemid, x, y, z, r);
+	objectid = CreateDynamicObject(model, x + 0.3, y, z + 0.8, rx, ry, rz);
+	MoveDynamicObject(objectid, x + 0.3, y, z - ITEM_FLOOR_OFFSET, 1.0, rx, ry, rz);
+	defer pop_DropHat(objectid, _:itemid, x + 0.3, y, z);
 }
 
 PopMask(playerid)
 {
 	new
-		itemid,
+		Item:itemid,
 		ItemType:itemtype,
 		Float:x,
 		Float:y,
 		Float:z,
-		Float:r,
-		objectid;
+		Float:rx,
+		Float:ry,
+		Float:rz,
+		objectid,
+		model;
 
 	itemid = RemovePlayerMaskItem(playerid);
 	itemtype = GetItemType(itemid);
+	GetItemTypeModel(itemtype, model);
+	GetItemTypeRotation(itemtype, rx, ry, rz);
+
 	GetPlayerPos(playerid, x, y, z);
-	GetPlayerFacingAngle(playerid, r);
 
-	objectid = CreateDynamicObject(GetItemTypeModel(itemtype), x, y, z + 0.8, 0.0, 0.0, r);
-	MoveDynamicObject(objectid, x, y, z - FLOOR_OFFSET, 5.0, 0.0, 0.0, r + 360.0);
-	defer pop_DropMask(objectid, itemid, x, y, z, r);
+	objectid = CreateDynamicObject(model, x, y - 0.3, z + 0.8, rx, ry, rz);
+	MoveDynamicObject(objectid, x, y - 0.3, z - ITEM_FLOOR_OFFSET, 1.0, rx, ry, rz);
+	defer pop_DropMask(objectid, _:itemid, x, y - 0.3, z);
 }
 
 
-timer pop_DropHat[500](o, it, Float:x, Float:y, Float:z, Float:r)
+timer pop_DropHat[1200](o, it, Float:x, Float:y, Float:z)
 {
 	DestroyDynamicObject(o);
-	CreateItemInWorld(it, x, y, z - FLOOR_OFFSET, 0.0, 0.0, r);
+	CreateItemInWorld(Item:it, x, y, z - ITEM_FLOOR_OFFSET, 0.0, 0.0, 0.0);
 }
 
-timer pop_DropMask[500](o, it, Float:x, Float:y, Float:z, Float:r)
+timer pop_DropMask[1200](o, it, Float:x, Float:y, Float:z)
 {
 	DestroyDynamicObject(o);
-	CreateItemInWorld(it, x, y, z - FLOOR_OFFSET, 0.0, 0.0, r);
+	CreateItemInWorld(Item:it, x, y, z - ITEM_FLOOR_OFFSET, 0.0, 0.0, 0.0);
 }
 
 CMD:pophat(playerid, params[])

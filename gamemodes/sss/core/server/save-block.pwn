@@ -1,3 +1,18 @@
+/*==============================================================================
+
+
+	Southclaws' Scavenge and Survive
+
+		Copyright (C) 2020 Barnaby "Southclaws" Keene
+
+		This Source Code Form is subject to the terms of the Mozilla Public
+		License, v. 2.0. If a copy of the MPL was not distributed with this
+		file, You can obtain one at http://mozilla.org/MPL/2.0/.
+
+
+==============================================================================*/
+
+
 #define MAX_SAVEBLOCK	(64)
 
 
@@ -42,8 +57,6 @@ SaveBlockAreaCheck(&Float:x, &Float:y, &Float:z)
 
 hook OnPlayerEnterDynArea(playerid, areaid)
 {
-	dbg("global", LOG_CORE, "[OnPlayerEnterDynArea] in /gamemodes/sss/core/server/save-block.pwn");
-
 	for(new i; i < saveblock_Total; i++)
 	{
 		if(areaid == saveblock_Data[i][saveblock_areaId])

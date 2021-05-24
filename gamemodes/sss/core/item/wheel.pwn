@@ -1,11 +1,24 @@
-#include <YSI\y_hooks>
+/*==============================================================================
+
+
+	Southclaws' Scavenge and Survive
+
+		Copyright (C) 2020 Barnaby "Southclaws" Keene
+
+		This Source Code Form is subject to the terms of the Mozilla Public
+		License, v. 2.0. If a copy of the MPL was not distributed with this
+		file, You can obtain one at http://mozilla.org/MPL/2.0/.
+
+
+==============================================================================*/
+
+
+#include <YSI_Coding\y_hooks>
 
 
 hook OnPlayerInteractVehicle(playerid, vehicleid, Float:angle)
 {
-	dbg("global", LOG_CORE, "[OnPlayerInteractVehicle] in /gamemodes/sss/core/item/wheel.pwn");
-
-	new itemid = GetPlayerItem(playerid);
+	new Item:itemid = GetPlayerItem(playerid);
 
 	if(GetItemType(itemid) == item_Wheel)
 	{
@@ -16,7 +29,7 @@ hook OnPlayerInteractVehicle(playerid, vehicleid, Float:angle)
 	return Y_HOOKS_CONTINUE_RETURN_0;
 }
 
-_WheelRepair(playerid, vehicleid, itemid)
+_WheelRepair(playerid, vehicleid, Item:itemid)
 {
 	new
 		wheel = GetPlayerVehicleTire(playerid, vehicleid),
@@ -36,7 +49,7 @@ _WheelRepair(playerid, vehicleid, itemid)
 			{
 				if(tires & 0b0010)
 				{
-					UpdateVehicleDamageStatus(vehicleid, panels, doors, lights, tires & 0b1110);
+					UpdateVehicleDamageStatus(vehicleid, panels, doors, lights, tires & 0b1101);
 					DestroyItem(itemid);
 					ShowActionText(playerid, ls(playerid, "TIREREPFT", true), 5000);
 				}
@@ -50,7 +63,7 @@ _WheelRepair(playerid, vehicleid, itemid)
 			{
 				if(tires & 0b0001)
 				{
-					UpdateVehicleDamageStatus(vehicleid, panels, doors, lights, tires & 0b1101);
+					UpdateVehicleDamageStatus(vehicleid, panels, doors, lights, tires & 0b1110);
 					DestroyItem(itemid);
 					ShowActionText(playerid, ls(playerid, "TIREREPRT", true), 5000);
 				}
@@ -209,7 +222,7 @@ ShowTireList(playerid, vehicleid)
 			return 0;
 
 		GetVehicleDamageStatus(gCurrentWheelFixVehicle[playerid], panels, doors, lights, tires);
-		new itemid = GetPlayerItem(playerid);
+		new Item:itemid = GetPlayerItem(playerid);
 
 		if(listitem == 0)
 		{

@@ -1,4 +1,19 @@
-#include <YSI\y_hooks>
+/*==============================================================================
+
+
+	Southclaws' Scavenge and Survive
+
+		Copyright (C) 2020 Barnaby "Southclaws" Keene
+
+		This Source Code Form is subject to the terms of the Mozilla Public
+		License, v. 2.0. If a copy of the MPL was not distributed with this
+		file, You can obtain one at http://mozilla.org/MPL/2.0/.
+
+
+==============================================================================*/
+
+
+#include <YSI_Coding\y_hooks>
 
 
 static
@@ -9,8 +24,6 @@ PlayerText:	BrightnessUI[MAX_PLAYERS] = {PlayerText:INVALID_TEXT_DRAW, ...};
 
 hook OnPlayerConnect(playerid)
 {
-	dbg("global", LOG_CORE, "[OnPlayerConnect] in /gamemodes/sss/core/player/brightness.pwn");
-
 	BrightnessLevel[playerid] = 255;
 
 	PlayerTextDrawBoxColor(playerid, BrightnessUI[playerid], BrightnessLevel[playerid]);
@@ -64,9 +77,13 @@ ptask BrightnessUpdate[100](playerid)
 	}
 
 	if(IsPlayerUnderDrugEffect(playerid, drug_Painkill))
+	{
 		PlayerTextDrawHide(playerid, BrightnessUI[playerid]);
+	}
 	else if(IsPlayerUnderDrugEffect(playerid, drug_Adrenaline))
+	{
 		PlayerTextDrawHide(playerid, BrightnessUI[playerid]);
+	}
 	else
 	{
 		PlayerTextDrawBoxColor(playerid, BrightnessUI[playerid], floatround((40.0 - hp) * 4.4));
@@ -76,21 +93,17 @@ ptask BrightnessUpdate[100](playerid)
 		{
 			if(GetTickCountDifference(GetTickCount(), GetPlayerKnockOutTick(playerid)) > 5000 * hp)
 			{
-				if(GetPlayerBleedRate(playerid) > 0.0)
+				new Float:bleedrate;
+				GetPlayerBleedRate(playerid, bleedrate);
+				if(bleedrate > 0.0)
 				{
 					if(frandom(40.0) < (50.0 - hp))
-					{
 						KnockOutPlayer(playerid, floatround(2000 * (50.0 - hp) + frandom(200 * (50.0 - hp))));
-						ShowActionText(playerid, "Bleeding...", 3000, 150);
-					}
 				}
 				else
 				{
 					if(frandom(40.0) < (40.0 - hp))
-					{
 						KnockOutPlayer(playerid, floatround(2000 * (40.0 - hp) + frandom(200 * (40.0 - hp))));
-						ShowActionText(playerid, "Stopped bleeding...", 3000, 150);
-					}
 				}
 			}
 		}

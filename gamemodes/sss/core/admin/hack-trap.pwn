@@ -1,8 +1,24 @@
+/*==============================================================================
+
+
+	Southclaws' Scavenge and Survive
+
+		Copyright (C) 2020 Barnaby "Southclaws" Keene
+
+		This Source Code Form is subject to the terms of the Mozilla Public
+		License, v. 2.0. If a copy of the MPL was not distributed with this
+		file, You can obtain one at http://mozilla.org/MPL/2.0/.
+
+
+==============================================================================*/
+
+#include <YSI_Coding\y_hooks>
+
 #define MAX_HACKTRAP	(64)
 
 
 new
-			hak_ItemID[MAX_HACKTRAP],
+       Item:hak_ItemID[MAX_HACKTRAP],
    Iterator:hak_Index<MAX_HACKTRAP>;
 
 
@@ -11,20 +27,18 @@ stock CreateHackerTrap(Float:x, Float:y, Float:z, lootindex)
 	new id = Iter_Free(hak_Index);
 
 	if(id == ITER_NONE)
-		return INVALID_ITEM_ID;
+		return -1;
 
 	hak_ItemID[id] = CreateLootItem(lootindex, x, y, z);
 
-	Iter_Add(hak_Index, id);
+	Iter_Add(hak_Index, _:id);
 
 	return id;
 }
 
 
-hook OnPlayerPickUpItem(playerid, itemid)
+hook OnPlayerPickUpItem(playerid, Item:itemid)
 {
-	dbg("global", LOG_CORE, "[OnPlayerPickUpItem] in /gamemodes/sss/core/admin/hack-trap.pwn");
-
 	foreach(new i : hak_Index)
 	{
 		if(itemid == hak_ItemID[i])

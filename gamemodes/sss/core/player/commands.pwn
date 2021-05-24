@@ -1,8 +1,17 @@
-CMD:welcome(playerid, params[])
-{
-	ShowWelcomeMessage(playerid, 0);
-	return 1;
-}
+/*==============================================================================
+
+
+	Southclaws' Scavenge and Survive
+
+		Copyright (C) 2020 Barnaby "Southclaws" Keene
+
+		This Source Code Form is subject to the terms of the Mozilla Public
+		License, v. 2.0. If a copy of the MPL was not distributed with this
+		file, You can obtain one at http://mozilla.org/MPL/2.0/.
+
+
+==============================================================================*/
+
 
 CMD:help(playerid, params[])
 {
@@ -11,9 +20,17 @@ CMD:help(playerid, params[])
 	return 1;
 }
 
-/*Turns this into 'adminlist'
+CMD:rules(playerid, params[])
+{
+	ChatMsg(playerid, YELLOW, " >  Rules List (total: %d)", gTotalRules);
 
-CMD:admins(playerid, params[]) 
+	for(new i; i < gTotalRules; i++)
+		ChatMsg(playerid, BLUE, sprintf(" >  "C_ORANGE"%s", gRuleList[i]));
+	
+	return 1;
+}
+
+CMD:admins(playerid, params[])
 {
 	ChatMsg(playerid, YELLOW, " >  Staff List (total: %d)", gTotalStaff);
 
@@ -21,11 +38,11 @@ CMD:admins(playerid, params[])
 		ChatMsg(playerid, BLUE, sprintf(" >  "C_ORANGE"%s", gStaffList[i]));
 	
 	return 1;
-}*/
+}
 
 CMD:credits(playerid, params[])
 {
-	ChatMsg(playerid, YELLOW, " >  Scavenge and Survive is developed by Southclaw (southclaw.net) and the following contributors:");
+	ChatMsg(playerid, YELLOW, " >  Scavenge and Survive is developed by Southclaws (www.southcla.ws) and the following contributors:");
 	ChatMsg(playerid, BLUE, " >  Y_Less - Tons of useful code, libraries and conversations");
 	ChatMsg(playerid, BLUE, " >  Viruxe - Lots of anti-cheat work");
 	ChatMsg(playerid, BLUE, " >  Kadaradam - Fishing, Trees and lots of bug fixes");
@@ -54,7 +71,7 @@ CMD:chatinfo(playerid, params[])
 	return 1;
 }
 
-/*CMD:restartinfo(playerid, params[])
+CMD:restartinfo(playerid, params[])
 {
 	gBigString[playerid][0] = EOS;
 
@@ -64,7 +81,7 @@ CMD:chatinfo(playerid, params[])
 	Dialog_Show(playerid, DIALOG_STYLE_MSGBOX, "Information about "C_BLUE"Server Restarts", gBigString[playerid], "Close", "");
 
 	return 1;
-}*/
+}
 
 CMD:tooltips(playerid, params[])
 {
@@ -78,23 +95,6 @@ CMD:tooltips(playerid, params[])
 		ChatMsgLang(playerid, YELLOW, "TOOLTIPSON");
 		SetPlayerToolTips(playerid, true);
 	}
-
-	return 1;
-}
-
-CMD:dropall(playerid, params[])
-{
-	new
-		Float:x,
-		Float:y,
-		Float:z,
-		Float:r;
-
-	GetPlayerPos(playerid, x, y, z);
-	GetPlayerFacingAngle(playerid, r);
-
-	ApplyAnimation(playerid, "ROB_BANK", "SHP_HandsUp_Scr", 4.0, 0, 1, 1, 1, 0);
-	DropItems(playerid, x, y, z, r, false);
 
 	return 1;
 }
@@ -155,10 +155,14 @@ CMD:changepass(playerid,params[])
 				ChatMsgLang(playerid, YELLOW, "PASSCHANGED", newpass);
 			}
 			else
+			{
 				ChatMsgLang(playerid, RED, "PASSCHERROR");
+			}
 		}
 		else
+		{
 			ChatMsgLang(playerid, RED, "PASSCHNOMAT");
+		}
 	}
 	return 1;
 }
@@ -176,4 +180,3 @@ CMD:pos(playerid, params[])
 
 	return 1;
 }
-

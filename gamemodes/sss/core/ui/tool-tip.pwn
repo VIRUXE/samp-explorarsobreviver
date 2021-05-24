@@ -1,11 +1,26 @@
-#include <YSI\y_hooks>
+/*==============================================================================
+
+
+	Southclaws' Scavenge and Survive
+
+		Copyright (C) 2020 Barnaby "Southclaws" Keene
+
+		This Source Code Form is subject to the terms of the Mozilla Public
+		License, v. 2.0. If a copy of the MPL was not distributed with this
+		file, You can obtain one at http://mozilla.org/MPL/2.0/.
+
+
+==============================================================================*/
+
+
+#include <YSI_Coding\y_hooks>
 
 
 static
 bool:		ToolTips[MAX_PLAYERS],
 PlayerText:	ToolTipText[MAX_PLAYERS] = {PlayerText:INVALID_TEXT_DRAW, ...};
 
-ShowHelpTip(playerid, text[], time = 0)
+ShowHelpTip(playerid, const text[], time = 0)
 {
 	if(!ToolTips[playerid])
 		return 0;
@@ -32,8 +47,6 @@ HideHelpTip(playerid)
 
 hook OnPlayerConnect(playerid)
 {
-	dbg("global", LOG_CORE, "[OnPlayerConnect] in /gamemodes/sss/core/ui/tip-text.pwn");
-
 	ToolTipText[playerid]			=CreatePlayerTextDraw(playerid, 150.000000, 350.000000, "Tip: You can access the trunks of cars by pressing F at the back");
 	PlayerTextDrawBackgroundColor	(playerid, ToolTipText[playerid], 255);
 	PlayerTextDrawFont				(playerid, ToolTipText[playerid], 1);
@@ -47,14 +60,12 @@ hook OnPlayerConnect(playerid)
 	PlayerTextDrawTextSize			(playerid, ToolTipText[playerid], 520.000000, 0.000000);
 }
 
-hook OnPlayerPickUpItem(playerid, itemid)
+hook OnPlayerPickUpItem(playerid, Item:itemid)
 {
-	dbg("global", LOG_CORE, "[OnPlayerPickUpItem] in /gamemodes/sss/core/ui/tip-text.pwn");
-
 	if(ToolTips[playerid])
 	{
 		new
-			itemname[ITM_MAX_NAME],
+			itemname[MAX_ITEM_NAME],
 			itemtipkey[12],
 			str[288];
 
@@ -72,10 +83,8 @@ hook OnPlayerPickUpItem(playerid, itemid)
 	}
 }
 
-hook OnPlayerDropItem(playerid, itemid)
+hook OnPlayerDropItem(playerid, Item:itemid)
 {
-	dbg("global", LOG_CORE, "[OnPlayerDropItem] in /gamemodes/sss/core/ui/tip-text.pwn");
-
 	if(ToolTips[playerid])
 		HideHelpTip(playerid);
 
@@ -84,7 +93,7 @@ hook OnPlayerDropItem(playerid, itemid)
 
 stock IsPlayerToolTipsOn(playerid)
 {
-	if(!IsValidPlayerID(playerid))
+	if(!IsPlayerConnected(playerid))
 		return 0;
 
 	return ToolTips[playerid];

@@ -1,4 +1,20 @@
-#include <YSI\y_hooks>
+/*==============================================================================
+
+
+	Southclaws' Scavenge and Survive
+
+		Copyright (C) 2020 Barnaby "Southclaws" Keene
+
+		This Source Code Form is subject to the terms of the Mozilla Public
+		License, v. 2.0. If a copy of the MPL was not distributed with this
+		file, You can obtain one at http://mozilla.org/MPL/2.0/.
+
+
+==============================================================================*/
+
+
+#include <YSI_Coding\y_hooks>
+
 
 // Keypad IDs
 enum
@@ -19,7 +35,8 @@ enum
 	k_Lockup
 }
 
-static
+
+new
 	code_ControlTower,
 	code_MainGate,
 	code_AirstripGate,
@@ -34,8 +51,8 @@ static
 	code_Headquarters,
 	code_Shaft,
 
-	btn_ControlTower,
-	btn_StorageWatch,
+	Button:btn_ControlTower,
+	Button:btn_StorageWatch,
 
 	lock_ControlTower,
 	lock_StorageWatch,
@@ -56,7 +73,7 @@ static
 hook OnGameModeInit()
 {
 	new
-		buttonid[2];
+		Button:buttonid[2];
 
 	code_ControlTower	= 1000 + random(8999);
 	code_MainGate		= 1000 + random(8999);
@@ -79,23 +96,23 @@ hook OnGameModeInit()
 	btn_StorageWatch = CreateButton(246.4888, 1861.1544, 14.0840, "Press "KEYTEXT_INTERACT" to interact");
 
 	// Main Gate Block
-	CreateObject(971, 96.88655, 1923.33936, 17.58039, 0.00000, 0.00000, 90.00000); // Gate
-	CreateObject(971, 96.88655, 1923.33936, 13.61467, 0.00000, 0.00000, 90.00000); // Keypad
-	CreateObject(19273, 117.87466, 1932.37390, 19.57730, 0.00000, 0.00000, 270.00000); // Keypad
+	CreateObject(971, 96.88655, 1923.33936, 17.58039, 0.00000, 0.00000, 90.00000);
+	CreateObject(971, 96.88655, 1923.33936, 13.61467, 0.00000, 0.00000, 90.00000);
+	CreateObject(19273, 117.87466, 1932.37390, 19.57730, 0.00000, 0.00000, 270.00000);
 
 	// Main Gate
-	buttonid[0] = CreateButton(117.8747, 1932.3739, 19.5773, "Press to activate gate"); // Button for Keypad on the gatehouse wall
+	buttonid[0] = CreateButton(117.8747, 1932.3739, 19.5773, "Press to activate gate");
 	door_Main = CreateDoor(19313, buttonid,
 		134.91060, 1941.52124, 21.77760, 0.00000, 0.00000, 0.00000,
 		120.9106, 1941.52124, 21.77760, 0.00000, 0.00000, 0.00000,
-		.maxbuttons = 1, .movesound = 6000, .stopsound = 6002, .closedelay = -1); // Gate behind the gatehouse
+		.maxButtons = 1, .moveSound = 6000, .stopSound = 6002, .closeDelay = -1);
 
 	// Airstrip Gate
-	buttonid[0] = CreateButton(280.7763, 1828.0514, 2.3915, "Press to activate gate"); // Computer inside the gatehouse
+	buttonid[0] = CreateButton(280.7763, 1828.0514, 2.3915, "Press to activate gate");
 	door_Airstrip = CreateDoor(19313, buttonid,
 		285.98541, 1822.31140, 20.09470, 0.00000, 0.00000, 270.00000,
 		285.98541, 1834.31140, 20.09470, 0.00000, 0.00000, 270.00000,
-		.maxbuttons = 1, .movesound = 6000, .stopsound = 6002, .closedelay = -1);
+		.maxButtons = 1, .moveSound = 6000, .stopSound = 6002, .closeDelay = -1);
 
 	// Main Blast Doors
 	buttonid[0] = CreateButton(210.3842, 1876.6578, 13.1406, "Press to activate door");
@@ -103,11 +120,11 @@ hook OnGameModeInit()
 	door_BlastDoor1 = CreateDoor(2927, buttonid,
 		215.9915, 1875.2880, 13.9389, 0.0, 0.0, 0.0,
 		219.8936, 1875.2880, 13.9389, 0.0, 0.0, 0.0,
-		.movesound = 6000, .stopsound = 6002, .movespeed = 0.4, .closedelay = -1);
+		.moveSound = 6000, .stopSound = 6002, .moveSpeed = 0.4, .closeDelay = -1);
 	door_BlastDoor2 = CreateDoor(2929, buttonid,
 		211.8555, 1875.2880, 13.9389, 0.0, 0.0, 0.0,
 		207.8556, 1875.2880, 13.9389, 0.0, 0.0, 0.0,
-		.movesound = 6000, .stopsound = 6002, .movespeed = 0.4, .closedelay = -1);
+		.moveSound = 6000, .stopSound = 6002, .moveSpeed = 0.4, .closeDelay = -1);
 
 	// First door - to storage room
 	buttonid[0] = CreateButton(237.4928, 1871.3110, 11.4609, "Press to activate door");
@@ -115,7 +132,7 @@ hook OnGameModeInit()
 	door_Storage = CreateDoor(5422, buttonid,
 		238.4573, 1872.2921, 12.4737, 0.0, 0.0, 0.0,
 		238.4573, 1872.2921, 14.6002, 0.0, 0.0, 0.0,
-		.movesound = 6000, .stopsound = 6002, .closedelay = -1);
+		.moveSound = 6000, .stopSound = 6002, .closeDelay = -1);
 
 	// Storage room to generator room
 	buttonid[0] = CreateButton(247.3196, 1842.8588, 8.7614, "Press to activate door");
@@ -123,7 +140,7 @@ hook OnGameModeInit()
 	door_Generator = CreateDoor(5422, buttonid,
 		248.275406, 1842.032104, 9.7770, 0.0, 0.0, 90.0,
 		248.270325, 1842.033691, 11.9806, 0.0, 0.0, 90.0,
-		.movesound = 6000, .stopsound = 6002, .closedelay = -1);
+		.moveSound = 6000, .stopSound = 6002, .closeDelay = -1);
 
 	// Big doors in storage room leading to passage
 	buttonid[0] = CreateButton(255.3204, 1842.7847, 8.7578, "Press to activate door");
@@ -131,7 +148,7 @@ hook OnGameModeInit()
 	door_PassageTop = CreateDoor(9093, buttonid,
 		256.3291, 1845.7827, 9.5281, 0.0, 0.0, 0.0,
 		256.3291, 1845.7827, 12.1, 0.0, 0.0, 0.0,
-		.movesound = 6000, .stopsound = 6002, .closedelay = -1);
+		.moveSound = 6000, .stopSound = 6002, .closeDelay = -1);
 
 	// Big doors in generator room leading to passage
 	buttonid[0] = CreateButton(255.5610, 1832.4649, 4.7109, "Press to activate door");
@@ -139,7 +156,7 @@ hook OnGameModeInit()
 	door_PassageBottom = CreateDoor(9093, buttonid,
 		256.3094, 1835.3549, 5.4820, 0.0, 0.0, 0.0,
 		256.3094, 1835.3549, 8.0035, 0.0, 0.0, 0.0,
-		.movesound = 6000, .stopsound = 6002, .closedelay = -1);
+		.moveSound = 6000, .stopSound = 6002, .closeDelay = -1);
 
 	// Generator room leading to walkway
 	buttonid[0] = CreateButton(249.3303, 1805.2384, 7.4796, "Press to activate door");
@@ -147,7 +164,7 @@ hook OnGameModeInit()
 	door_Catwalk = CreateDoor(5422, buttonid,
 		248.3001, 1805.8772, 8.5633, 0.0, 0.0, 90.0,
 		248.3001, 1805.8772, 10.8075, 0.0, 0.0, 90.0,
-		.movesound = 6000, .stopsound = 6002, .closedelay = -1);
+		.moveSound = 6000, .stopSound = 6002, .closeDelay = -1);
 
 	// Headquaters room
 	buttonid[0] = CreateButton(234.1869, 1821.3165, 7.4141, "Press to activate door");
@@ -155,11 +172,11 @@ hook OnGameModeInit()
 	door_Headquarters1 = CreateDoor(1508, buttonid,
 		233.793884, 1825.885498, 7.097370, 0.0, 0.0, 0.0,
 		233.793884, 1827.063477, 7.097370, 0.0, 0.0, 0.0,
-		.movesound = 6000, .stopsound = 6002, .closedelay = -1);
+		.moveSound = 6000, .stopSound = 6002, .closeDelay = -1);
 	door_Headquarters2 = CreateDoor(1508, buttonid,
 		233.793884, 1819.572388, 7.097370, 0.0, 0.0, 0.0,
 		233.793884, 1818.413452, 7.097370, 0.0, 0.0, 0.0,
-		.movesound = 6000, .stopsound = 6002, .closedelay = -1);
+		.moveSound = 6000, .stopSound = 6002, .closeDelay = -1);
 
 	// Labs to Shaft
 	buttonid[0] = CreateButton(269.4969, 1873.1721, 8.6094, "Press to activate door");
@@ -167,14 +184,16 @@ hook OnGameModeInit()
 	door_Shaft = CreateDoor(5422, buttonid,
 		268.0739, 1875.3544, 9.6097, 0.0, 0.0, 90.0,
 		268.0739, 1875.3544, 11.6097, 0.0, 0.0, 90.0,
-		.movesound = 6000, .stopsound = 6002, .closedelay = -1);
+		.moveSound = 6000, .stopSound = 6002, .closeDelay = -1);
 
 
 	buttonid[0] = CreateButton(279.1897, 1833.1392, 18.0874, "Press to enter", .label = 1);
 	buttonid[1] = CreateButton(279.2243, 1832.3821, 2.7813, "Press to enter", .label = 1);
-	LinkTP(buttonid[0], buttonid[1]);
+	// TODO: Rewrite this function!
+	// LinkTP(buttonid[0], buttonid[1]);
 
 	// Gatehouse
+
 	CreateDynamicObject(19357, 276.24899, 1828.42322, 3.32440,   0.00000, 0.00000, 0.00000);
 	CreateDynamicObject(19357, 276.25061, 1831.20764, 3.32440,   0.00000, 0.00000, 0.00000);
 	CreateDynamicObject(19357, 277.94299, 1832.67493, 3.32440,   0.00000, 0.00000, 90.00000);
@@ -205,6 +224,7 @@ hook OnGameModeInit()
 	CreateDynamicObject(2601, 277.76572, 1829.62732, 2.62449,   0.00000, 0.00000, -134.76004);
 
 	// Misc
+
 	CreateDynamicObject(2922, 96.66000, 1918.65002, 18.96000,   0.00000, 0.00000, -270.00000);
 	CreateDynamicObject(2922, 96.69000, 1918.67004, 18.96000,   0.00000, 0.00000, -90.00000);
 	CreateDynamicObject(2922, 209.78000, 1876.57996, 13.60000,   0.00000, 0.00000, -82.38000);
@@ -327,22 +347,13 @@ hook OnGameModeInit()
 	CreateDynamicObject(2922, 255.92000, 1832.43994, 5.12000,   0.00000, 0.00000, 90.00000);
 	CreateDynamicObject(3117, 246.71663, 1861.98657, 20.62875,   90.00000, 0.00000, 398.98010);
 	CreateDynamicObject(3095, 268.37225, 1884.12219, 15.74065,   0.00000, 0.00000, 0.00000);
-
-	CreateDynamicObject(19312, 191.14059, 1870.03906, 21.47660,   0.00000, 0.00000, 0.00000); // Surrounding fence without the original gates
 }
 
-hook OnPlayerConnect(playerid)
+hook OnButtonPress(playerid, Button:buttonid)
 {
-	RemoveBuildingForPlayer(playerid, 16094, 191.1406, 1870.0391, 21.4766, 0.25); // Original fence with gates
-}
-
-hook OnButtonPress(playerid, buttonid)
-{
-	dbg("global", LOG_CORE, "[OnButtonPress] in /gamemodes/sss/world/puzzles/area69.pwn");
-
 	if(buttonid == btn_ControlTower)
 	{
-		if(lock_ControlTower && !(IsPlayerOnAdminDuty(playerid) && GetPlayerAdminLevel(playerid) >= STAFF_LEVEL_DEVELOPER))
+		if(lock_ControlTower)
 		{
 			ShowKeypad(playerid, k_ControlTower, code_ControlTower);
 
@@ -350,12 +361,14 @@ hook OnButtonPress(playerid, buttonid)
 				HackKeypad(playerid, k_ControlTower, code_ControlTower);
 		}
 		else
-			ShowCodeList(playerid, k_ControlTower);
+		{
+			ShowCodeList1(playerid);
+		}
 	}
 
 	if(buttonid == btn_StorageWatch)
 	{
-		if(lock_StorageWatch && !(IsPlayerOnAdminDuty(playerid) && GetPlayerAdminLevel(playerid) >= STAFF_LEVEL_DEVELOPER))
+		if(lock_StorageWatch)
 		{
 			ShowKeypad(playerid, k_StorageWatch, code_StorageWatch);
 
@@ -363,7 +376,9 @@ hook OnButtonPress(playerid, buttonid)
 				HackKeypad(playerid, k_StorageWatch, code_ControlTower);
 		}
 		else
-			ShowCodeList(playerid, k_StorageWatch);
+		{
+			ShowCodeList2(playerid);
+		}
 	}
 
 	return Y_HOOKS_CONTINUE_RETURN_0;
@@ -371,8 +386,6 @@ hook OnButtonPress(playerid, buttonid)
 
 hook OnPlayerActivateDoor(playerid, doorid, newstate)
 {
-	dbg("global", LOG_CORE, "[OnPlayerActivateDoor] in /gamemodes/sss/world/puzzles/area69.pwn");
-
 	if(doorid == door_Main)
 		return PlayerActivateDoorButton(playerid, k_MainGate, code_ControlTower);
 
@@ -425,9 +438,7 @@ PlayerActivateDoorButton(playerid, keypad, code)
 
 hook OnPlayerKeypadEnter(playerid, keypadid, code, match)
 {
-	dbg("global", LOG_CORE, "[OnPlayerKeypadEnter] in /gamemodes/sss/world/puzzles/area69.pwn");
-
-	new itemid = GetPlayerItem(playerid);
+	new Item:itemid = GetPlayerItem(playerid);
 
 	if(GetItemType(itemid) == item_HackDevice)
 		DestroyItem(itemid);
@@ -437,7 +448,7 @@ hook OnPlayerKeypadEnter(playerid, keypadid, code, match)
 		if(code == match)
 		{
 			lock_ControlTower = 0;
-			ShowCodeList(playerid, k_ControlTower);
+			ShowCodeList1(playerid);
 			HideKeypad(playerid);
 		}
 	}
@@ -479,7 +490,7 @@ hook OnPlayerKeypadEnter(playerid, keypadid, code, match)
 		if(code == match)
 		{
 			lock_StorageWatch = 0;
-			ShowCodeList(playerid, k_StorageWatch);
+			ShowCodeList2(playerid);
 			HideKeypad(playerid);
 		}
 	}
@@ -545,44 +556,46 @@ hook OnPlayerKeypadEnter(playerid, keypadid, code, match)
 	return Y_HOOKS_CONTINUE_RETURN_0;
 }
 
-ShowCodeList(playerid, list)
+ShowCodeList1(playerid)
 {
 	new str[268];
 
-	if(list == k_ControlTower)
-	{
-		format(str, 268,
-			""C_ORANGE"Keycodes for security system. SECTOR 01:\n\n\
-			\t"C_WHITE"Control Tower:"C_YELLOW"\t%d\n\
-			\t"C_WHITE"Main gate:"C_YELLOW"\t\t%d\n\
-			\t"C_WHITE"Airstrip Gate:"C_YELLOW"\t\t%d\n\
-			\t"C_WHITE"Blast Door:"C_YELLOW"\t\t%d\n\
-			\t"C_WHITE"Inner Door 1:"C_YELLOW"\t\t%d\n\
-			\t"C_WHITE"Inner Door 2:"C_YELLOW"\t\t%d",
-			code_ControlTower,
-			code_MainGate,
-			code_AirstripGate,
-			code_BlastDoor,
-			code_Inner,
-			code_Storage);
-	}
-	else if(list == k_StorageWatch)
-	{
-		format(str, 268,
-			""C_ORANGE"Keycodes for security system. SECTOR 02:\n\n\
-			\t"C_WHITE"Generator:"C_YELLOW"\t\t%d\n\
-			\t"C_WHITE"Passage 1:"C_YELLOW"\t\t%d\n\
-			\t"C_WHITE"Passage 2:"C_YELLOW"\t\t%d\n\
-			\t"C_WHITE"Catwalk:"C_YELLOW"\t\t%d\n\
-			\t"C_WHITE"Headquarters:"C_YELLOW"\t\t%d\n\
-			\t"C_WHITE"Shaft:"C_YELLOW"\t\t\t%d",
-			code_Generator,
-			code_PassageTop,
-			code_PassageBottom,
-			code_Catwalk,
-			code_Headquarters,
-			code_Shaft);
-	}
+	format(str, 268,
+		""C_ORANGE"Keycodes for security system. SECTOR 01:\n\n\
+		\t"C_WHITE"Control Tower:"C_YELLOW"\t%d\n\
+		\t"C_WHITE"Main gate:"C_YELLOW"\t\t%d\n\
+		\t"C_WHITE"Airstrip Gate:"C_YELLOW"\t\t%d\n\
+		\t"C_WHITE"Blast Door:"C_YELLOW"\t\t%d\n\
+		\t"C_WHITE"Inner Door 1:"C_YELLOW"\t\t%d\n\
+		\t"C_WHITE"Inner Door 2:"C_YELLOW"\t\t%d",
+		code_ControlTower,
+		code_MainGate,
+		code_AirstripGate,
+		code_BlastDoor,
+		code_Inner,
+		code_Storage);
+
+	Dialog_Show(playerid, DIALOG_STYLE_MSGBOX, "Main Control", str, "Close", "");
+}
+
+ShowCodeList2(playerid)
+{
+	new str[268];
+
+	format(str, 268,
+		""C_ORANGE"Keycodes for security system. SECTOR 02:\n\n\
+		\t"C_WHITE"Generator:"C_YELLOW"\t\t%d\n\
+		\t"C_WHITE"Passage 1:"C_YELLOW"\t\t%d\n\
+		\t"C_WHITE"Passage 2:"C_YELLOW"\t\t%d\n\
+		\t"C_WHITE"Catwalk:"C_YELLOW"\t\t%d\n\
+		\t"C_WHITE"Headquarters:"C_YELLOW"\t\t%d\n\
+		\t"C_WHITE"Shaft:"C_YELLOW"\t\t\t%d",
+		code_Generator,
+		code_PassageTop,
+		code_PassageBottom,
+		code_Catwalk,
+		code_Headquarters,
+		code_Shaft);
 
 	Dialog_Show(playerid, DIALOG_STYLE_MSGBOX, "Main Control", str, "Close", "");
 }

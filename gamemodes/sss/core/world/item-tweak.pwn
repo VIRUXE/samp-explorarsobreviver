@@ -1,14 +1,29 @@
+/*==============================================================================
+
+
+	Southclaws' Scavenge and Survive
+
+		Copyright (C) 2020 Barnaby "Southclaws" Keene
+
+		This Source Code Form is subject to the terms of the Mozilla Public
+		License, v. 2.0. If a copy of the MPL was not distributed with this
+		file, You can obtain one at http://mozilla.org/MPL/2.0/.
+
+
+==============================================================================*/
+
+
 #define MAX_MOVEMENT_RANGE	(1.0)
 #define NO_GO_ZONE_SIZE		(2.2)
 #define TWK_AREA_IDENTIFIER	(1234)
 
 
-#include <YSI\y_hooks>
+#include <YSI_Coding\y_hooks>
 
 
 static
-			twk_Item[MAX_PLAYERS] = {INVALID_ITEM_ID, ...},
-			twk_Tweaker[ITM_MAX] = {INVALID_PLAYER_ID, ...},
+Item:		twk_Item[MAX_PLAYERS] = {INVALID_ITEM_ID, ...},
+			twk_Tweaker[MAX_ITEM] = {INVALID_PLAYER_ID, ...},
 Float:		twk_Origin[MAX_PLAYERS][3],
 			twk_Locked[MAX_PLAYERS],
 			twk_NoGoZone[MAX_PLAYERS] = {INVALID_STREAMER_ID, ...},
@@ -58,28 +73,31 @@ hook OnPlayerDisconnect(playerid, reason)
 ==============================================================================*/
 
 
-stock TweakItem(playerid, itemid)
+stock TweakItem(playerid, Item:itemid)
 {
-	dbg("gamemodes/sss/core/world/item-tweak.pwn", 1, "TweakItem %d %d", playerid, itemid);
-
 	new
-		geid[GEID_LEN],
-		data[2];
+		uuid[UUID_LEN],
+		data[2],
+		world,
+		interior;
 
-	GetItemGEID(itemid, geid);
+	GetItemUUID(itemid, uuid);
 
-	if(twk_Item[playerid] != -1)
-		err("twk_Item already set to %d", twk_Item[playerid]);
+	if(twk_Item[playerid] != INVALID_ITEM_ID)
+		err("twk_Item already set to %d", _:twk_Item[playerid]);
 
-	log(DISCORD_CHANNEL_EVENTS, "[TWEAK] `%p` Tweaked item %d (%s)", playerid, itemid, geid);
+	log("[TWEAK] %p Tweaked item %d (%s)", playerid, _:itemid, uuid);
+
+	GetItemWorld(itemid, world);
+	GetItemInterior(itemid, interior);
 
 	twk_Item[playerid] = itemid;
 	twk_Tweaker[itemid] = playerid;
 	GetItemPos(itemid, twk_Origin[playerid][0], twk_Origin[playerid][1], twk_Origin[playerid][2]);
-	twk_NoGoZone[playerid] = CreateDynamicSphere(twk_Origin[playerid][0], twk_Origin[playerid][1], twk_Origin[playerid][2], NO_GO_ZONE_SIZE, GetItemWorld(itemid), GetItemInterior(itemid));
+	twk_NoGoZone[playerid] = CreateDynamicSphere(twk_Origin[playerid][0], twk_Origin[playerid][1], twk_Origin[playerid][2], NO_GO_ZONE_SIZE, world, interior);
 
 	data[0] = TWK_AREA_IDENTIFIER;
-	data[1] = itemid;
+	data[1] = _:itemid;
 	Streamer_SetArrayData(STREAMER_TYPE_AREA, twk_NoGoZone[playerid], E_STREAMER_EXTRA_ID, data);
 
 	_twk_ShowUI(playerid);
@@ -118,23 +136,25 @@ _twk_Commit(playerid)
 		return 0;
 
 	new
-		geid[GEID_LEN],
+		uuid[UUID_LEN],
 		Float:x,
 		Float:y,
 		Float:z,
 		Float:rx,
 		Float:ry,
-		Float:rz;
+		Float:rz,
+		model;
 
-	GetItemGEID(twk_Item[playerid], geid);
+	GetItemUUID(twk_Item[playerid], uuid);
 	GetItemPos(twk_Item[playerid], x, y, z);
 	GetItemRot(twk_Item[playerid], rx, ry, rz);
+	GetItemTypeModel(GetItemType(twk_Item[playerid]), model);
 
-	log(DISCORD_CHANNEL_EVENTS, "[TWEAK] `%p` Tweaked item %d (%s) %d at `%.0f, %.0f, %.0f, %.0f, %.0f, %.0f`",
-		playerid, twk_Item[playerid], geid, GetItemTypeModel(GetItemType(twk_Item[playerid])),
+	log("[TWEAK] %p Tweaked item %d (%s) %d (%f, %f, %f, %f, %f, %f)",
+		playerid, _:twk_Item[playerid], uuid, model,
 		x, y, z, rx, ry, rz);
 
-	CallLocalFunction("OnItemTweakFinish", "dd", playerid, twk_Item[playerid]);
+	CallLocalFunction("OnItemTweakFinish", "dd", playerid, _:twk_Item[playerid]);
 
 	_twk_HideUI(playerid);
 	CancelSelectTextDraw(playerid);
@@ -191,32 +211,32 @@ hook OnPlayerClickPlayerTD(playerid, PlayerText:playertextid)
 	{
 		if(playertextid == twk_MoveF[playerid])
 		{
-			_twk_AdjustItemPos(playerid, 0.1, 0.0, 0.0);
+			_twk_AdjustItemPos(playerid, 0.05, 0.0, 0.0);
 		}
 
 		if(playertextid == twk_MoveB[playerid])
 		{
-			_twk_AdjustItemPos(playerid, 0.1, 180.0, 0.0);
+			_twk_AdjustItemPos(playerid, 0.05, 180.0, 0.0);
 		}
 
 		if(playertextid == twk_MoveL[playerid])
 		{
-			_twk_AdjustItemPos(playerid, 0.1, 90.0, 0.0);
+			_twk_AdjustItemPos(playerid, 0.05, 90.0, 0.0);
 		}
 
 		if(playertextid == twk_MoveR[playerid])
 		{
-			_twk_AdjustItemPos(playerid, 0.1, -90.0, 0.0);
+			_twk_AdjustItemPos(playerid, 0.05, -90.0, 0.0);
 		}
 
 		if(playertextid == twk_RotR[playerid])
 		{
-			_twk_AdjustItemPos(playerid, 0.0, 0.0, -5.0);
+			_twk_AdjustItemPos(playerid, 0.0, 0.0, -2.0);
 		}
 
 		if(playertextid == twk_RotL[playerid])
 		{
-			_twk_AdjustItemPos(playerid, 0.0, 0.0, 5.0);
+			_twk_AdjustItemPos(playerid, 0.0, 0.0, 2.0);
 		}
 
 		if(playertextid == twk_Unlock[playerid])
@@ -231,6 +251,18 @@ hook OnPlayerClickPlayerTD(playerid, PlayerText:playertextid)
 	}
 }
 
+hook OnPlayerClickTextDraw(playerid, Text:clickedid)
+{
+	if(clickedid == Text:65535)
+	{
+	 	if(twk_Locked[playerid])
+		{
+		    _twk_ToggleMouse(playerid, true);
+		}
+	}
+}
+
+
 hook OnPlayerKeyStateChange(playerid, newkeys, oldkeys)
 {
 	if(IsValidItem(twk_Item[playerid]))
@@ -243,7 +275,7 @@ hook OnPlayerKeyStateChange(playerid, newkeys, oldkeys)
 	}
 }
 
-hook OnPlayerUseItemWithItem(playerid, itemid, withitemid)
+hook OnPlayerUseItemWithItem(playerid, Item:itemid, Item:withitemid)
 {
 	if(IsValidItem(twk_Item[playerid]))
 		_twk_Commit(playerid);
@@ -255,13 +287,15 @@ hook OnPlayerStateChange(playerid, newstate, oldstate)
 		_twk_Commit(playerid);
 }
 
-hook OnPlayerDropItem(playerid, itemid)
+hook OnPlayerDropItem(playerid, Item:itemid)
 {
 	if(IsValidItem(twk_Item[playerid]))
 		_twk_Commit(playerid);
+
+	return Y_HOOKS_CONTINUE_RETURN_0;
 }
 
-hook OnPlayerGiveItem(playerid, targetid, itemid)
+hook OnPlayerGiveItem(playerid, targetid, Item:itemid)
 {
 	if(IsValidItem(twk_Item[playerid]))
 		_twk_Commit(playerid);
@@ -289,7 +323,7 @@ _twk_AdjustItemPos(playerid, Float:distance, Float:direction, /*Float:rx, Float:
 
 	if(!IsValidItem(twk_Item[playerid]))
 	{
-		err("Called on invalid item %d", twk_Item[playerid]);
+		err("Called on invalid item %d", _:twk_Item[playerid]);
 		_twk_Reset(playerid);
 		return 2;
 	}
@@ -326,7 +360,7 @@ _twk_AdjustItemPos(playerid, Float:distance, Float:direction, /*Float:rx, Float:
 	SetItemPos(twk_Item[playerid], new_x, new_y, new_z);
 	SetItemRot(twk_Item[playerid], rx, ry, rz);
 
-	CallLocalFunction("OnItemTweakUpdate", "dd", playerid, twk_Item[playerid]);
+	CallLocalFunction("OnItemTweakUpdate", "dd", playerid, _:twk_Item[playerid]);
 
 	return 0;
 }
@@ -448,17 +482,17 @@ hook OnPlayerEnterDynArea(playerid, areaid)
 	if(data[0] != TWK_AREA_IDENTIFIER)
 		return Y_HOOKS_CONTINUE_RETURN_0;
 
-	if(!IsValidItem(data[1]))
+	if(!IsValidItem(Item:data[1]))
 		return Y_HOOKS_CONTINUE_RETURN_0;
 
-	if(!IsPlayerConnected(twk_Tweaker[data[1]]))
+	if(!IsPlayerConnected(twk_Tweaker[Item:data[1]]))
 	{
 		err("Player entered area of tweaked item %d item has no connected player.", data[1]);
 		return Y_HOOKS_CONTINUE_RETURN_0;
 	}
 
 	ShowActionText(playerid, ls(playerid, "ITEMTWKBLOC"), 6000);
-	twk_NoGoZoneCount[twk_Tweaker[data[1]]]++;
+	twk_NoGoZoneCount[twk_Tweaker[Item:data[1]]]++;
 
 	return Y_HOOKS_CONTINUE_RETURN_0;
 }
@@ -471,16 +505,16 @@ hook OnPlayerLeaveDynArea(playerid, areaid)
 	if(data[0] != TWK_AREA_IDENTIFIER)
 		return Y_HOOKS_CONTINUE_RETURN_0;
 
-	if(!IsValidItem(data[1]))
+	if(!IsValidItem(Item:data[1]))
 		return Y_HOOKS_CONTINUE_RETURN_0;
 
-	if(!IsPlayerConnected(twk_Tweaker[data[1]]))
+	if(!IsPlayerConnected(twk_Tweaker[Item:data[1]]))
 	{
 		err("Player left area of tweaked item %d item has no connected player.", data[1]);
 		return Y_HOOKS_CONTINUE_RETURN_0;
 	}
 
-	twk_NoGoZoneCount[twk_Tweaker[data[1]]]--;
+	twk_NoGoZoneCount[twk_Tweaker[Item:data[1]]]--;
 
 	return Y_HOOKS_CONTINUE_RETURN_0;
 }

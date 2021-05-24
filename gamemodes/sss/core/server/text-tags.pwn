@@ -1,8 +1,24 @@
+/*==============================================================================
+
+
+	Southclaws' Scavenge and Survive
+
+		Copyright (C) 2020 Barnaby "Southclaws" Keene
+
+		This Source Code Form is subject to the terms of the Mozilla Public
+		License, v. 2.0. If a copy of the MPL was not distributed with this
+		file, You can obtain one at http://mozilla.org/MPL/2.0/.
+
+
+==============================================================================*/
+
+
 enum E_COLOUR_EMBED_DATA
 {
 	ce_char,
 	ce_colour[9]
 }
+
 
 new EmbedColours[9][E_COLOUR_EMBED_DATA]=
 {
@@ -17,7 +33,8 @@ new EmbedColours[9][E_COLOUR_EMBED_DATA]=
 	{'a', #C_AQUA}
 };
 
-stock TagScan(chat[], useColour = false, colour = WHITE)
+
+stock TagScan(const chat[], colour = WHITE)
 {
 	new
 		text[256],
@@ -43,17 +60,19 @@ stock TagScan(chat[], useColour = false, colour = WHITE)
 
 				if(IsPlayerConnected(id))
 				{
-					new	tmpName[MAX_PLAYER_NAME+17];
+					new
+						tmpName[MAX_PLAYER_NAME+17];
 
-					if(useColour)
-						format(tmpName, MAX_PLAYER_NAME+17, "%P%C", id, colour);
-					else
-						GetPlayerName(id, tmpName, sizeof(tmpName));
-					
+					format(tmpName, MAX_PLAYER_NAME+17, "%P%C", id, colour);
+
 					if(id<10)
+					{
 						strdel(text[a], 0, 2);
+					}
 					else
+					{
 						strdel(text[a], 0, 3);
+					}
 
 					strins(text[a], tmpName, 0);
 
@@ -62,11 +81,17 @@ stock TagScan(chat[], useColour = false, colour = WHITE)
 					tags++;
 					continue;
 				}
-				else a++;
+				else
+				{
+					a++;
+				}
 			}
-			else a++;
+			else
+			{
+				a++;
+			}
 		}
-		else if(text[a]=='&' && useColour)
+		else if(text[a]=='&')
 		{
 			if(IsCharAlphabetic(text[a+1]))
 			{
@@ -83,11 +108,20 @@ stock TagScan(chat[], useColour = false, colour = WHITE)
 						break;
 					}
 				}
-				if(replacements==0)a++;
+				if(replacements==0)
+				{
+					a++;
+				}
 			}
-			else a++;
+			else
+			{
+				a++;
+			}
 		}
-		else a++;
+		else
+		{
+			a++;
+		}
 	}
 	return text;
 }

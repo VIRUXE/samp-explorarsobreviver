@@ -1,4 +1,19 @@
-#include <YSI\y_hooks>
+/*==============================================================================
+
+
+	Southclaws' Scavenge and Survive
+
+		Copyright (C) 2020 Barnaby "Southclaws" Keene
+
+		This Source Code Form is subject to the terms of the Mozilla Public
+		License, v. 2.0. If a copy of the MPL was not distributed with this
+		file, You can obtain one at http://mozilla.org/MPL/2.0/.
+
+
+==============================================================================*/
+
+
+#include <YSI_Coding\y_hooks>
 
 
 #define UI_ELEMENT_TITLE	(0)
@@ -17,7 +32,7 @@ static
 	PlayerText:GearSlot_Tors[3],
 	PlayerText:GearSlot_Back[3],
 
-	inv_TempContainerID[MAX_PLAYERS],
+	Container:inv_TempContainerID[MAX_PLAYERS],
 	inv_InventoryOptionID[MAX_PLAYERS],
 
 	inv_EscInventory[MAX_PLAYERS],
@@ -29,8 +44,6 @@ forward CreatePlayerTile(playerid, &PlayerText:title, &PlayerText:tile, &PlayerT
 
 hook OnPlayerConnect(playerid)
 {
-	dbg("global", LOG_CORE, "[OnPlayerConnect] in /gamemodes/sss/core/char/inventory.pwn");
-
 	CreatePlayerTile(playerid, GearSlot_Head[0], GearSlot_Head[1], GearSlot_Head[2], 490.0, 120.0, 60.0, 60.0, 0xFFFFFF08, 0xFFFFFFFF);
 	CreatePlayerTile(playerid, GearSlot_Face[0], GearSlot_Face[1], GearSlot_Face[2], 560.0, 120.0, 60.0, 60.0, 0xFFFFFF08, 0xFFFFFFFF);
 	CreatePlayerTile(playerid, GearSlot_Hand[0], GearSlot_Hand[1], GearSlot_Hand[2], 490.0, 230.0, 60.0, 60.0, 0xFFFFFF08, 0xFFFFFFFF);
@@ -111,7 +124,6 @@ HidePlayerGear(playerid)
 		PlayerTextDrawHide(playerid, GearSlot_Tors[i]);
 		PlayerTextDrawHide(playerid, GearSlot_Back[i]);
 	}
-	CancelSelectTextDraw(playerid);
 }
 
 ShowPlayerHealthInfo(playerid)
@@ -123,13 +135,14 @@ ShowPlayerHealthInfo(playerid)
 		drugslist[MAX_DRUG_TYPE],
 		drugs,
 		drugname[MAX_DRUG_NAME],
-		Float:bleedrate = GetPlayerBleedRate(playerid),
+		Float:bleedrate,
 		Float:hunger = GetPlayerFP(playerid),
 		infected1 = GetPlayerInfectionIntensity(playerid, 0),
 		infected2 = GetPlayerInfectionIntensity(playerid, 1);
 
 	GetPlayerWoundsPerBodypart(playerid, bodypartwounds);
 	drugs = GetPlayerDrugsList(playerid, drugslist);
+	GetPlayerBleedRate(playerid, bleedrate);
 
 	inv_HealthInfoActive[playerid] = true;
 
@@ -190,15 +203,19 @@ HidePlayerHealthInfo(playerid)
 UpdatePlayerGear(playerid, show = 1)
 {
 	new
-		tmp[5 + ITM_MAX_NAME + ITM_MAX_TEXT],
-		itemid;
+		tmp[5 + MAX_ITEM_NAME + MAX_ITEM_TEXT],
+		Item:itemid,
+		ItemType:itemtype,
+		model;
 
 	itemid = GetPlayerHatItem(playerid);
+	itemtype = GetItemType(itemid);
+	GetItemTypeModel(itemtype, model);
 	if(IsValidItem(itemid))
 	{
 		GetItemTypeName(GetItemType(itemid), tmp);
 		PlayerTextDrawSetString(playerid, GearSlot_Head[UI_ELEMENT_ITEM], tmp);
-		PlayerTextDrawSetPreviewModel(playerid, GearSlot_Head[UI_ELEMENT_TILE], GetItemTypeModel(GetItemType(itemid)));
+		PlayerTextDrawSetPreviewModel(playerid, GearSlot_Head[UI_ELEMENT_TILE], model);
 		PlayerTextDrawSetPreviewRot(playerid, GearSlot_Head[UI_ELEMENT_TILE], -45.0, 0.0, -45.0, 1.0);
 	}
 	else
@@ -208,11 +225,13 @@ UpdatePlayerGear(playerid, show = 1)
 	}
 
 	itemid = GetPlayerMaskItem(playerid);
+	itemtype = GetItemType(itemid);
+	GetItemTypeModel(itemtype, model);
 	if(IsValidItem(itemid))
 	{
 		GetItemTypeName(GetItemType(itemid), tmp);
 		PlayerTextDrawSetString(playerid, GearSlot_Face[UI_ELEMENT_ITEM], tmp);
-		PlayerTextDrawSetPreviewModel(playerid, GearSlot_Face[UI_ELEMENT_TILE], GetItemTypeModel(GetItemType(itemid)));
+		PlayerTextDrawSetPreviewModel(playerid, GearSlot_Face[UI_ELEMENT_TILE], model);
 		PlayerTextDrawSetPreviewRot(playerid, GearSlot_Face[UI_ELEMENT_TILE], -45.0, 0.0, -45.0, 1.0);
 	}
 	else
@@ -222,12 +241,16 @@ UpdatePlayerGear(playerid, show = 1)
 	}
 
 	itemid = GetPlayerItem(playerid);
+	itemtype = GetItemType(itemid);
+	GetItemTypeModel(itemtype, model);
 	if(IsValidItem(itemid))
 	{
+		new size;
+		GetItemTypeSize(GetItemType(itemid), size);
 		GetItemName(itemid, tmp);
-		format(tmp, sizeof(tmp), "(%02d) %s", GetItemTypeSize(GetItemType(itemid)), tmp);
+		format(tmp, sizeof(tmp), "(%02d) %s", size, tmp);
 		PlayerTextDrawSetString(playerid, GearSlot_Hand[UI_ELEMENT_ITEM], tmp);
-		PlayerTextDrawSetPreviewModel(playerid, GearSlot_Hand[UI_ELEMENT_TILE], GetItemTypeModel(GetItemType(itemid)));
+		PlayerTextDrawSetPreviewModel(playerid, GearSlot_Hand[UI_ELEMENT_TILE], model);
 		PlayerTextDrawSetPreviewRot(playerid, GearSlot_Hand[UI_ELEMENT_TILE], -45.0, 0.0, -45.0, 1.0);
 	}
 	else
@@ -237,12 +260,16 @@ UpdatePlayerGear(playerid, show = 1)
 	}
 
 	itemid = GetPlayerHolsterItem(playerid);
+	itemtype = GetItemType(itemid);
+	GetItemTypeModel(itemtype, model);
 	if(IsValidItem(itemid))
 	{
+		new size;
+		GetItemTypeSize(GetItemType(itemid), size);
 		GetItemName(itemid, tmp);
-		format(tmp, sizeof(tmp), "(%02d) %s", GetItemTypeSize(GetItemType(itemid)), tmp);
+		format(tmp, sizeof(tmp), "(%02d) %s", size, tmp);
 		PlayerTextDrawSetString(playerid, GearSlot_Hols[UI_ELEMENT_ITEM], tmp);
-		PlayerTextDrawSetPreviewModel(playerid, GearSlot_Hols[UI_ELEMENT_TILE], GetItemTypeModel(GetItemType(itemid)));
+		PlayerTextDrawSetPreviewModel(playerid, GearSlot_Hols[UI_ELEMENT_TILE], model);
 		PlayerTextDrawSetPreviewRot(playerid, GearSlot_Hols[UI_ELEMENT_TILE], -45.0, 0.0, -45.0, 1.0);
 	}
 	else
@@ -264,11 +291,13 @@ UpdatePlayerGear(playerid, show = 1)
 	}
 
 	itemid = GetPlayerBagItem(playerid);
+	itemtype = GetItemType(itemid);
+	GetItemTypeModel(itemtype, model);
 	if(IsValidItem(itemid))
 	{
 		GetItemName(itemid, tmp);
 		PlayerTextDrawSetString(playerid, GearSlot_Back[UI_ELEMENT_ITEM], tmp);
-		PlayerTextDrawSetPreviewModel(playerid, GearSlot_Back[UI_ELEMENT_TILE], GetItemTypeModel(GetItemType(itemid)));
+		PlayerTextDrawSetPreviewModel(playerid, GearSlot_Back[UI_ELEMENT_TILE], model);
 		PlayerTextDrawSetPreviewRot(playerid, GearSlot_Back[UI_ELEMENT_TILE], 0.0, 0.0, -45.0, 1.0);
 	}
 	else
@@ -285,8 +314,6 @@ UpdatePlayerGear(playerid, show = 1)
 
 hook OnPlayerOpenInventory(playerid)
 {
-	dbg("global", LOG_CORE, "[OnPlayerOpenInventory] in /gamemodes/sss/core/char/inventory.pwn");
-
 	ShowPlayerGear(playerid);
 	UpdatePlayerGear(playerid);
 	ShowPlayerHealthInfo(playerid);
@@ -297,7 +324,14 @@ hook OnPlayerOpenInventory(playerid)
 
 hook OnPlayerCloseInventory(playerid)
 {
-	dbg("global", LOG_CORE, "[OnPlayerCloseInventory] in /gamemodes/sss/core/char/inventory.pwn");
+	new Container:containerid;
+	GetPlayerCurrentContainer(playerid, containerid);
+
+	Logger_Dbg("inventory", "OnPlayerCloseInventory",
+		Logger_I("playerid", playerid),
+		Logger_B("esc", inv_EscInventory[playerid]),
+		Logger_I("container", _:containerid)
+	);
 
 	HidePlayerGear(playerid);
 	HidePlayerHealthInfo(playerid);
@@ -313,8 +347,6 @@ hook OnPlayerCloseInventory(playerid)
 
 hook OnPlayerOpenContainer(playerid, containerid)
 {
-	dbg("global", LOG_CORE, "[OnPlayerOpenContainer] in /gamemodes/sss/core/char/inventory.pwn");
-
 	ShowPlayerGear(playerid);
 	UpdatePlayerGear(playerid);
 	ShowPlayerHealthInfo(playerid);
@@ -325,7 +357,11 @@ hook OnPlayerOpenContainer(playerid, containerid)
 
 hook OnPlayerCloseContainer(playerid, containerid)
 {
-	dbg("global", LOG_CORE, "[OnPlayerCloseContainer] in /gamemodes/sss/core/char/inventory.pwn");
+	Logger_Dbg("inventory", "OnPlayerCloseContainer",
+		Logger_I("playerid", playerid),
+		Logger_B("esc", inv_EscInventory[playerid]),
+		Logger_B("in_inv", IsPlayerViewingInventory(playerid))
+	);
 
 	HidePlayerGear(playerid);
 	HidePlayerHealthInfo(playerid);
@@ -339,10 +375,8 @@ hook OnPlayerCloseContainer(playerid, containerid)
 	return Y_HOOKS_CONTINUE_RETURN_0;
 }
 
-hook OnItemRemoveFromCnt(containerid, slotid, playerid)
+hook OnItemRemoveFromCnt(Container:containerid, slotid, playerid)
 {
-	dbg("global", LOG_CORE, "[OnItemRemoveFromCnt] in /gamemodes/sss/core/char/inventory.pwn");
-
 	if(IsPlayerConnected(playerid))
 	{
 		if(containerid == GetBagItemContainerID(GetPlayerBagItem(playerid)))
@@ -354,19 +388,15 @@ hook OnItemRemoveFromCnt(containerid, slotid, playerid)
 	return Y_HOOKS_CONTINUE_RETURN_0;
 }
 
-hook OnItemRemoveFromInv(playerid, itemid, slot)
+hook OnItemRemoveFromInv(playerid, Item:itemid, slot)
 {
-	dbg("global", LOG_CORE, "[OnItemRemoveFromInv] in /gamemodes/sss/core/char/inventory.pwn");
-
 	UpdatePlayerGear(playerid, 0);
 
 	return Y_HOOKS_CONTINUE_RETURN_0;
 }
 
-hook OnItemAddToInventory(playerid, itemid, slot)
+hook OnItemAddToInventory(playerid, Item:itemid, slot)
 {
-	dbg("global", LOG_CORE, "[OnItemAddToInventory] in /gamemodes/sss/core/char/inventory.pwn");
-
 	if(IsItemTypeCarry(GetItemType(itemid)))
 		return 1;
 
@@ -375,10 +405,8 @@ hook OnItemAddToInventory(playerid, itemid, slot)
 	return Y_HOOKS_CONTINUE_RETURN_0;
 }
 
-hook OnItemRemovedFromPlayer(playerid, itemid)
+hook OnItemRemovedFromPlayer(playerid, Item:itemid)
 {
-	dbg("global", LOG_CORE, "[OnItemRemovedFromPlayer] in /gamemodes/sss/core/char/inventory.pwn");
-
 	if(IsItemTypeCarry(GetItemType(itemid)))
 		SetPlayerSpecialAction(playerid, SPECIAL_ACTION_NONE);
 	
@@ -387,8 +415,6 @@ hook OnItemRemovedFromPlayer(playerid, itemid)
 
 hook OnPlayerClickPlayerTD(playerid, PlayerText:playertextid)
 {
-	dbg("global", LOG_CORE, "[OnPlayerClickPlayerTD] in /gamemodes/sss/core/char/inventory.pwn");
-
 	if(playertextid == GearSlot_Head[UI_ELEMENT_TILE])
 		_inv_HandleGearSlotClick_Head(playerid);
 
@@ -413,12 +439,13 @@ hook OnPlayerClickPlayerTD(playerid, PlayerText:playertextid)
 
 _inv_HandleGearSlotClick_Head(playerid)
 {
-	new itemid = GetPlayerHatItem(playerid);
+	new Item:itemid = GetPlayerHatItem(playerid);
 	
 	if(!IsValidItem(itemid))
 		return 0;
 
-	new containerid = GetPlayerCurrentContainer(playerid);
+	new Container:containerid;
+	GetPlayerCurrentContainer(playerid, containerid);
 
 	if(IsValidContainer(containerid))
 	{
@@ -492,12 +519,13 @@ _inv_HandleGearSlotClick_Head(playerid)
 
 _inv_HandleGearSlotClick_Face(playerid)
 {
-	new itemid = GetPlayerMaskItem(playerid);
+	new Item:itemid = GetPlayerMaskItem(playerid);
 	
 	if(!IsValidItem(itemid))
 		return 0;
 
-	new containerid = GetPlayerCurrentContainer(playerid);
+	new Container:containerid;
+	GetPlayerCurrentContainer(playerid, containerid);
 
 	if(IsValidContainer(containerid))
 	{
@@ -571,12 +599,13 @@ _inv_HandleGearSlotClick_Face(playerid)
 
 _inv_HandleGearSlotClick_Hand(playerid)
 {
-	new itemid = GetPlayerItem(playerid);
+	new Item:itemid = GetPlayerItem(playerid);
 	
 	if(!IsValidItem(itemid))
 		return 0;
 
-	new containerid = GetPlayerCurrentContainer(playerid);
+	new Container:containerid;
+	GetPlayerCurrentContainer(playerid, containerid);
 
 	if(IsValidContainer(containerid))
 	{
@@ -622,12 +651,13 @@ _inv_HandleGearSlotClick_Hand(playerid)
 
 _inv_HandleGearSlotClick_Hols(playerid)
 {
-	new itemid = GetPlayerHolsterItem(playerid);
+	new Item:itemid = GetPlayerHolsterItem(playerid);
 	
 	if(!IsValidItem(itemid))
 		return 0;
 
-	new containerid = GetPlayerCurrentContainer(playerid);
+	new Container:containerid;
+	GetPlayerCurrentContainer(playerid, containerid);
 
 	if(IsValidContainer(containerid))
 	{
@@ -677,8 +707,10 @@ _inv_HandleGearSlotClick_Tors(playerid)
 		return 0;
 
 	new
-		itemid = GetPlayerArmourItem(playerid),
-		containerid = GetPlayerCurrentContainer(playerid);
+		Item:itemid = GetPlayerArmourItem(playerid),
+		Container:containerid;
+
+	GetPlayerCurrentContainer(playerid, containerid);
 
 	if(IsValidContainer(containerid))
 	{
@@ -748,12 +780,14 @@ _inv_HandleGearSlotClick_Tors(playerid)
 
 _inv_HandleGearSlotClick_Back(playerid)
 {
-	new itemid = GetPlayerBagItem(playerid);
+	new Item:itemid = GetPlayerBagItem(playerid);
 	
 	if(!IsValidItem(itemid))
 		return 0;
 
-	if(GetPlayerCurrentContainer(playerid) == GetBagItemContainerID(itemid))
+	new Container:containerid;
+	GetPlayerCurrentContainer(playerid, containerid);
+	if(containerid == GetBagItemContainerID(itemid))
 	{
 		ClosePlayerContainer(playerid);
 
@@ -770,7 +804,7 @@ _inv_HandleGearSlotClick_Back(playerid)
 	}
 	else
 	{
-		inv_TempContainerID[playerid] = GetPlayerCurrentContainer(playerid);
+		GetPlayerCurrentContainer(playerid, inv_TempContainerID[playerid]);
 
 		DisplayContainerInventory(playerid, GetBagItemContainerID(itemid));
 	}
@@ -781,17 +815,15 @@ _inv_HandleGearSlotClick_Back(playerid)
 }
 
 
-hook OnPlayerViewCntOpt(playerid, containerid)
+hook OnPlayerViewCntOpt(playerid, Container:containerid)
 {
-	dbg("global", LOG_CORE, "[OnPlayerViewCntOpt] in /gamemodes/sss/core/char/inventory.pwn");
-
 	if(containerid == GetBagItemContainerID(GetPlayerBagItem(playerid)))
 	{
 		if(IsValidContainer(inv_TempContainerID[playerid]))
 		{
 			new
-				name[CNT_MAX_NAME],
-				str[9 + CNT_MAX_NAME];
+				name[MAX_CONTAINER_NAME],
+				str[9 + MAX_CONTAINER_NAME];
 
 			GetContainerName(inv_TempContainerID[playerid], name);
 			format(str, sizeof(str), "Move to %s", name);
@@ -803,10 +835,8 @@ hook OnPlayerViewCntOpt(playerid, containerid)
 	return Y_HOOKS_CONTINUE_RETURN_0;
 }
 
-hook OnPlayerSelectCntOpt(playerid, containerid, option)
+hook OnPlayerSelectCntOpt(playerid, Container:containerid, option)
 {
-	dbg("global", LOG_CORE, "[OnPlayerSelectCntOpt] in /gamemodes/sss/core/char/inventory.pwn");
-
 	if(containerid == GetBagItemContainerID(GetPlayerBagItem(playerid)))
 	{
 		if(IsValidContainer(inv_TempContainerID[playerid]))
@@ -815,10 +845,10 @@ hook OnPlayerSelectCntOpt(playerid, containerid, option)
 			{
 				new
 					slot,
-					itemid;
+					Item:itemid;
 
-				slot = GetPlayerContainerSlot(playerid);
-				itemid = GetContainerSlotItem(containerid, slot);
+				GetPlayerContainerSlot(playerid, slot);
+				GetContainerSlotItem(containerid, slot, itemid);
 
 				if(!IsValidItem(itemid))
 				{
@@ -845,34 +875,49 @@ hook OnPlayerSelectCntOpt(playerid, containerid, option)
 
 hook OnPlayerClickTextDraw(playerid, Text:clickedid)
 {
-	dbg("global", LOG_CORE, "[OnPlayerClickTextDraw] in /gamemodes/sss/core/char/inventory.pwn");
-
-	if(clickedid == Text:65535)
+	if(clickedid == INVALID_TEXT_DRAW)
 	{
 		if(IsPlayerViewingInventory(playerid))
 		{
-			HidePlayerGear(playerid);
-			HidePlayerHealthInfo(playerid);
-			ClosePlayerInventory(playerid);
-			inv_EscInventory[playerid] = true;
-			// DisplayPlayerInventory(playerid);
+			Logger_Dbg("inventory", "player closed inventory screen with escape",
+				Logger_I("playerid", playerid),
+				Logger_B("esc", inv_EscInventory[playerid])
+			);
+
+			// This code is commented because it causes a bug where sometimes
+			// the mouse cursor stays on screen after closing the dialogue by
+			// clicking "Close".
+			//
+			// HidePlayerGear(playerid);
+			// HidePlayerHealthInfo(playerid);
+			// ClosePlayerInventory(playerid, true);
+			// inv_EscInventory[playerid] = true;
+			// CancelSelectTextDraw(playerid);
+			DisplayPlayerInventory(playerid);
 		}
 
-		if(GetPlayerCurrentContainer(playerid) != INVALID_CONTAINER_ID)
+		new Container:containerid;
+		GetPlayerCurrentContainer(playerid, containerid);
+		if(containerid != INVALID_CONTAINER_ID)
 		{
-			HidePlayerGear(playerid);
-			HidePlayerHealthInfo(playerid);
-			ClosePlayerContainer(playerid);
-			inv_EscContainer[playerid] = true;
-			// DisplayContainerInventory(playerid, GetPlayerCurrentContainer(playerid));
+			Logger_Dbg("inventory", "player closed container screen with escape",
+				Logger_I("playerid", playerid),
+				Logger_B("esc", inv_EscInventory[playerid])
+			);
+
+			// See above.
+			// HidePlayerGear(playerid);
+			// HidePlayerHealthInfo(playerid);
+			// ClosePlayerContainer(playerid, true);
+			// inv_EscContainer[playerid] = true;
+			// CancelSelectTextDraw(playerid);
+			DisplayContainerInventory(playerid, containerid);
 		}
 	}
 }
 
 hook OnPlayerTakeDamage(playerid, issuerid, Float:amount, weaponid, bodypart)
 {
-	dbg("global", LOG_CORE, "[OnPlayerTakeDamage] in /gamemodes/sss/core/char/inventory.pwn");
-
 	if(IsPlayerSpawned(playerid))
 	{
 		if(inv_HealthInfoActive[playerid])

@@ -1,4 +1,19 @@
-#include <YSI\y_hooks>
+/*==============================================================================
+
+
+	Southclaws' Scavenge and Survive
+
+		Copyright (C) 2020 Barnaby "Southclaws" Keene
+
+		This Source Code Form is subject to the terms of the Mozilla Public
+		License, v. 2.0. If a copy of the MPL was not distributed with this
+		file, You can obtain one at http://mozilla.org/MPL/2.0/.
+
+
+==============================================================================*/
+
+
+#include <YSI_Coding\y_hooks>
 
 
 static
@@ -9,8 +24,6 @@ Timer:	WelcomeMessageTimer[MAX_PLAYERS],
 
 hook OnPlayerConnect(playerid)
 {
-	dbg("global", LOG_CORE, "[OnPlayerConnect] in /gamemodes/sss/core/player/welcome-message.pwn");
-
 	CanLeaveWelcomeMessage[playerid] = true;
 
 	return 1;
@@ -29,14 +42,15 @@ timer ShowWelcomeMessage[1000](playerid, count)
 
 	strcat(str,
 		"Avoid attacking unarmed players, they frighten easily but will return, and in greater numbers...\n\n\n\n\n\
-		"C_WHITE"Please take some time to look at the "C_BLUE"/help "C_WHITE"before diving into the game.\n\n\n\
-		Visit "C_YELLOW"http://chat.viruxe.party "C_WHITE"for more information.\n\n\n");
+		"C_TEAL"Please take some time to look at the "C_BLUE"/rules "C_TEAL"and "C_BLUE"/help "C_TEAL"before diving into the game.\n\n\n\
+		Visit "C_YELLOW"scavenge-survive.wikia.com "C_TEAL"for more information.\n\n\n");
 
 	if(count == 0)
 	{
 		button = "Accept";
 
 		CanLeaveWelcomeMessage[playerid] = true;
+		PlayerCreateNewCharacter(playerid);
 	}
 	else
 	{
@@ -56,10 +70,12 @@ timer ShowWelcomeMessage[1000](playerid, count)
 		#pragma unused pid, response, dialogid, listitem, inputtext
 
 		if(!CanLeaveWelcomeMessage[playerid])
+		{
 			ShowWelcomeMessage(playerid, WelcomeMessageCount[playerid] + 1);
+		}
 	}
 
-	Dialog_ShowCallback(playerid, using inline Response, DIALOG_STYLE_MSGBOX, "Welcome to Scavenge and Survive!", str, button, "");
+	Dialog_ShowCallback(playerid, using inline Response, DIALOG_STYLE_MSGBOX, "Welcome to the Server", str, button, "");
 
 	return 1;
 }

@@ -1,9 +1,16 @@
-Hook_HackDetect_SetPlayerPos(playerid, Float:x, Float:y, Float:z)
-{
-	HackDetect_SetPlayerPos(playerid, x, y, z);
-	return SetPlayerPos(playerid, x, y, z);
-}
-#define SetPlayerPos Hook_HackDetect_SetPlayerPos
+/*==============================================================================
+
+
+	Southclaws' Scavenge and Survive
+
+		Copyright (C) 2020 Barnaby "Southclaws" Keene
+
+		This Source Code Form is subject to the terms of the Mozilla Public
+		License, v. 2.0. If a copy of the MPL was not distributed with this
+		file, You can obtain one at http://mozilla.org/MPL/2.0/.
+
+
+==============================================================================*/
 
 Hook_SetPlayerSkin(playerid, skinid, retry_on_fail = true)
 {

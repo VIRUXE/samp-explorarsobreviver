@@ -1,3 +1,18 @@
+/*==============================================================================
+
+
+	Southclaws' Scavenge and Survive
+
+		Copyright (C) 2020 Barnaby "Southclaws" Keene
+
+		This Source Code Form is subject to the terms of the Mozilla Public
+		License, v. 2.0. If a copy of the MPL was not distributed with this
+		file, You can obtain one at http://mozilla.org/MPL/2.0/.
+
+
+==============================================================================*/
+
+
 // These are all the square water zones in SA-MP in this format: MinX, MinY, MaxX, MaxY, Height
 new Float:water_squares[][] = {
 	{-1584.0, -1826.0, -1360.0, -1642.0, 0.00000},
@@ -392,7 +407,7 @@ stock returnOrdinal(number)
 	return (((10 < (number % 100) < 14)) ? ordinal[3] : (0 < (number % 10) < 4) ? ordinal[((number % 10) - 1)] : ordinal[3]);
 }
 
-stock IsNumeric(string[])
+stock IsNumeric(const string[])
 {
 	for(new i,j=strlen(string);i<j;i++)if (string[i] > '9' || string[i] < '0') return 0;
 	return 1;

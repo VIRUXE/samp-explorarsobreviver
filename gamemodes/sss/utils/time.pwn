@@ -1,3 +1,18 @@
+/*==============================================================================
+
+
+	Southclaws' Scavenge and Survive
+
+		Copyright (C) 2020 Barnaby "Southclaws" Keene
+
+		This Source Code Form is subject to the terms of the Mozilla Public
+		License, v. 2.0. If a copy of the MPL was not distributed with this
+		file, You can obtain one at http://mozilla.org/MPL/2.0/.
+
+
+==============================================================================*/
+
+
 #define CTIME_DATE_TIME			"%A %b %d %Y at %X"
 #define CTIME_DATE_FILENAME		"%Y-%m-%d (%a-%d-%b)"
 #define CTIME_DATE_SHORT		"%x"
@@ -12,19 +27,14 @@ stock RoundTimestamp(timestamp, roundamount)
 	return timestamp - (timestamp % roundamount);
 }
 
-stock TimestampToDateTime(datetime, format[] = CTIME_DATE_TIME)
+stock TimestampToDateTime(datetime, const format[] = CTIME_DATE_TIME)
 {
-	new
-		str[64],
-		tm<timestamp>;
-
-	localtime(Time:datetime, timestamp);
-	strftime(str, 64, format, timestamp);
-
+	new str[64];
+	TimeFormat(Timestamp:datetime, format, str);
 	return str;
 }
 
-stock MsToString(millisecond, format[])
+stock MsToString(millisecond, const format[])
 {
 	new
 		tmp[4],
@@ -132,7 +142,7 @@ stock MsToString(millisecond, format[])
 	return result;
 }
 
-GetDurationFromString(string[])
+GetDurationFromString(const string[])
 {
 	new
 		value,

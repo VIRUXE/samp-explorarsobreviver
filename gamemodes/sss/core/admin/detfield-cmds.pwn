@@ -1,4 +1,19 @@
-#include <YSI\y_hooks>
+/*==============================================================================
+
+
+	Southclaws' Scavenge and Survive
+
+		Copyright (C) 2020 Barnaby "Southclaws" Keene
+
+		This Source Code Form is subject to the terms of the Mozilla Public
+		License, v. 2.0. If a copy of the MPL was not distributed with this
+		file, You can obtain one at http://mozilla.org/MPL/2.0/.
+
+
+==============================================================================*/
+
+
+#include <YSI_Coding\y_hooks>
 
 
 #define MAX_DETFIELD_PAGESIZE		(20)
@@ -43,8 +58,6 @@ Float:	dfm_MaxZ			[MAX_PLAYERS],
 
 hook OnPlayerConnect(playerid)
 {
-	dbg("global", LOG_CORE, "[OnPlayerConnect] in /gamemodes/sss/core/admin/detfield-cmds.pwn");
-
 	for(new i; i < MAX_DETFIELD_PAGESIZE; i++)
 		dfm_FieldList[playerid][i] = -1;
 
@@ -101,6 +114,7 @@ ACMD:field[2](playerid, params[])
 
 		if(ret == 1)
 			ChatMsg(playerid, YELLOW, " >  Displaying log entries for detection field '%s'.", name);
+
 		else
 			ChatMsg(playerid, YELLOW, " >  There are no log entries in '%s'.", name);
 	}
@@ -280,6 +294,7 @@ ShowDetfieldListOptions(playerid, detfieldid)
 						ShowDetfieldListOptions(playerid, detfieldid);
 					}
 				}
+
 				case 1:
 				{
 					if(IsPlayerOnAdminDuty(playerid))
@@ -293,18 +308,34 @@ ShowDetfieldListOptions(playerid, detfieldid)
 						SetPlayerPos(playerid, x, y, z);
 					}
 					else
+					{
 						ChatMsg(playerid, RED, " >  You must be on admin duty to do that.");
+					}
 				}
+
 				case 2:
-					ShowDetfieldExceptions(playerid, detfieldid);
+				{
+ 					if(exceptioncount > 0)
+						ShowDetfieldExceptions(playerid, detfieldid);
+					else
+						ShowDetfieldAddException(playerid, detfieldid, -1); 
+				}
+
 				case 3:
+				{
 					ShowDetfieldRenamePrompt(playerid, detfieldid);
+				}
+
 				case 4:
+				{
 					ShowDetfieldDeletePrompt(playerid, detfieldid);
+				}
 			}
 		}
 		else
+		{
 			ShowDetfieldList(playerid);
+		}
 	}
 	Dialog_ShowCallback(playerid, using inline Response, DIALOG_STYLE_LIST, name, sprintf("View Log\nGo to\nExceptions (%d)\nRename\nDelete", exceptioncount), "Select", "Back");
 
@@ -341,9 +372,13 @@ ShowDetfieldExceptions(playerid, detfieldid)
 		#pragma unused pid, dialogid, listitem, inputtext
 
 		if(response)
+		{
 			ShowDetfieldExceptionOptions(playerid, detfieldid, listitem);
+		}
 		else
+		{
 			ShowDetfieldListOptions(playerid, detfieldid);
+		}
 	}
 
 	Dialog_ShowCallback(playerid, using inline Response, DIALOG_STYLE_LIST, sprintf("%s Exceptions (%d)", name, count), list, "Options", "Back");
@@ -371,13 +406,20 @@ ShowDetfieldExceptionOptions(playerid, detfieldid, exceptionid)
 			switch(listitem)
 			{
 				case 0:
+				{
 					ShowDetfieldAddException(playerid, detfieldid, exceptionid);
+				}
+
 				case 1:
+				{
 					ShowDetfieldDeleteException(playerid, detfieldid, exceptionid);
+				}
 			}
 		}
 		else
+		{
 			ShowDetfieldExceptions(playerid, detfieldid);
+		}
 	}
 	Dialog_ShowCallback(playerid, using inline Response, DIALOG_STYLE_LIST, name, sprintf("Add exception\nDelete '%s'", name), "Select", "Back");
 
@@ -392,9 +434,9 @@ ShowDetfieldAddException(playerid, detfieldid, exceptionid)
 	dfm_CurrentMenu[playerid] = DFM_MENU_EXCEPTION_ADD;
 
 	new
-		fieldName[MAX_DETFIELD_NAME];
+		name[MAX_DETFIELD_NAME];
 
-	GetDetectionFieldName(detfieldid, fieldName);
+	GetDetectionFieldName(detfieldid, name);
 
 	inline Response(pid, dialogid, response, listitem, string:inputtext[])
 	{
@@ -402,40 +444,35 @@ ShowDetfieldAddException(playerid, detfieldid, exceptionid)
 
 		if(response)
 		{
-			new exceptionName[MAX_PLAYER_NAME];
-			strcat(exceptionName, inputtext);
+			new tmp[MAX_PLAYER_NAME];
+			strcat(tmp, inputtext);
 
-			new ret = AddDetectionFieldException(detfieldid, exceptionName);
+			new ret = AddDetectionFieldException(detfieldid, tmp);
 
 			if(ret)
 			{
-				new playerName[MAX_PLAYER_NAME];
-
-				GetPlayerName(playerid, playerName, sizeof(playerName));
-
-				if(!strcmp(exceptionName, playerName))
-					exceptionName = "himself";
-
-				DiscordMessage(DISCORD_CHANNEL_ADMINEVENTS, DISCORD_MENTION_DEV" `%p` added `%s` has an exception for detection field `%s`.", playerid, exceptionName, fieldName);
 				ShowDetfieldExceptions(playerid, detfieldid);
-
 				return 1;
 			}
+
 			if(ret == 0)
 			{
 				ChatMsg(playerid, RED, " >  Invalid detection field (error code 0)");
 				ShowDetfieldAddException(playerid, detfieldid, exceptionid);
 			}
+
 			if(ret == -1)
 			{
 				ChatMsg(playerid, RED, " >  Exception list is full (error code -1)");
 				ShowDetfieldExceptionOptions(playerid, detfieldid, exceptionid);
 			}
+
 			if(ret == -2)
 			{
 				ChatMsg(playerid, RED, " >  Invalid username (error code -2)");
 				ShowDetfieldAddException(playerid, detfieldid, exceptionid);
 			}
+
 			if(ret == -3)
 			{
 				ChatMsg(playerid, RED, " >  Username already in list (error code -3)");
@@ -443,9 +480,14 @@ ShowDetfieldAddException(playerid, detfieldid, exceptionid)
 			}
 		}
 		else
-			ShowDetfieldExceptionOptions(playerid, detfieldid, exceptionid);
+		{
+ 			if(exceptionid != -1)
+				ShowDetfieldExceptionOptions(playerid, detfieldid, exceptionid);
+			else
+				ShowDetfieldListOptions(playerid, detfieldid); 
+		}
 	}
-	Dialog_ShowCallback(playerid, using inline Response, DIALOG_STYLE_INPUT, sprintf("Add exception for %s", fieldName), "Type a nickname:", "Add", "Back");
+	Dialog_ShowCallback(playerid, using inline Response, DIALOG_STYLE_INPUT, sprintf("Add exception for %s", name), "Type a username:", "Add", "Back");
 
 	return 1;
 }
@@ -457,33 +499,20 @@ ShowDetfieldDeleteException(playerid, detfieldid, exceptionid)
 
 	dfm_CurrentMenu[playerid] = DFM_MENU_EXCEPTION_DEL;
 
-	new 
-		exceptionName[MAX_PLAYER_NAME],
-		playerName[MAX_PLAYER_NAME];
+	new name[MAX_PLAYER_NAME];
 
-	GetDetectionFieldExceptionName(detfieldid, exceptionid, exceptionName);
-	GetPlayerName(playerid, playerName, sizeof(playerName));
-
-	if(!strcmp(exceptionName, playerName))
-		exceptionName = "himself";
+	GetDetectionFieldExceptionName(detfieldid, exceptionid, name);
 
 	inline Response(pid, dialogid, response, listitem, string:inputtext[])
 	{
 		#pragma unused pid, dialogid, listitem, inputtext
 
 		if(!response)
-		{
-			new fieldName[MAX_DETFIELD_NAME];
-
-			GetDetectionFieldName(detfieldid, fieldName);
-
 			RemoveDetectionFieldExceptionID(detfieldid, exceptionid);
-			DiscordMessage(DISCORD_CHANNEL_ADMINEVENTS, DISCORD_MENTION_DEV" `%p` removed `%s` has an exception for detection field `%s`.", playerid, exceptionName, fieldName);
-		}
 
 		ShowDetfieldExceptions(playerid, detfieldid);
 	}
-	Dialog_ShowCallback(playerid, using inline Response, DIALOG_STYLE_MSGBOX, sprintf("Delete '%s'", exceptionName), "Are you sure?", "Back", "Delete");
+	Dialog_ShowCallback(playerid, using inline Response, DIALOG_STYLE_MSGBOX, sprintf("Delete '%s'", name), "Are you sure?", "Back", "Delete");
 
 	return 1;
 }
@@ -519,6 +548,7 @@ ShowDetfieldRenamePrompt(playerid, detfieldid)
 			if(ret == -2)
 				ChatMsg(playerid, RED, " >  Invalid detection field name. Must start with an alphabetic character and can contain only alphanumeric characters.");
 		}
+
 		ShowDetfieldListOptions(playerid, detfieldid);
 	}
 
@@ -547,6 +577,7 @@ ShowDetfieldDeletePrompt(playerid, detfieldid)
 
 		ShowDetfieldList(playerid);
 	}
+	
 	Dialog_ShowCallback(playerid, using inline Response, DIALOG_STYLE_MSGBOX, sprintf("Delete %s", name), "Are you sure?", "Back", "Delete");
 
 	return 1;
@@ -597,9 +628,13 @@ ShowDetfieldLog(playerid, detfieldid)
 		#pragma unused pid, dialogid, response, listitem, inputtext
 
 		if(response)
+		{
 			ShowDetfieldLogOptions(playerid, detfieldid, listitem);
+		}
 		else
+		{
 			ShowDetfieldListOptions(playerid, detfieldid);
+		}
 
 		HidePlayerPageButtons(playerid);
 		CancelSelectTextDraw(playerid);
@@ -638,7 +673,9 @@ ShowDetfieldLogOptions(playerid, detfieldid, logentry)
 							dfm_LogBuffer[playerid][logentry][DETLOG_BUFFER_POS_Z]);
 					}
 					else
+					{
 						ChatMsg(playerid, RED, " >  You must be on admin duty to do that.");
+					}
 				}
 
 				case 1:
@@ -657,7 +694,9 @@ ShowDetfieldLogOptions(playerid, detfieldid, logentry)
 			}
 		}
 		else
+		{
 			ShowDetfieldLog(playerid, detfieldid);
+		}
 	}
 	Dialog_ShowCallback(playerid, using inline Response, DIALOG_STYLE_LIST, name, "Go to\nDelete\nDelete all of this name", "Select", "Close");
 
@@ -676,7 +715,9 @@ ShowDetfieldNameFields(playerid, name[])
 	format(title, sizeof(title), "%s (last %d fields from index %d)", name, count, dfm_PageIndex[playerid]);
 
 	if(count == 0)
+	{
 		return 0;
+	}
 
 	// TODO: make proper pagination for this menu.
 	// ShowPlayerPageButtons(playerid);
@@ -694,8 +735,6 @@ ShowDetfieldNameFields(playerid, name[])
 
 hook OnPlayerDialogPage(playerid, direction)
 {
-	dbg("global", LOG_CORE, "[OnPlayerDialogPage] in /gamemodes/sss/core/admin/detfield-cmds.pwn");
-
 	if(dfm_CurrentMenu[playerid] == DFM_MENU_DFLIST)
 	{
 		if(direction == 0)
@@ -706,7 +745,9 @@ hook OnPlayerDialogPage(playerid, direction)
 				dfm_PageIndex[playerid] = 0;
 		}
 		else
+		{
 			dfm_PageIndex[playerid] += MAX_DETFIELD_PAGESIZE;
+		}
 
 		ShowDetfieldList(playerid);
 	}
@@ -721,7 +762,9 @@ hook OnPlayerDialogPage(playerid, direction)
 				dfm_LogIndex[playerid] = 0;
 		}
 		else
+		{
 			dfm_LogIndex[playerid] += MAX_DETFIELD_LOG_PAGESIZE;
+		}
 
 		ShowDetfieldLog(playerid, dfm_CurrentDetfield[playerid]);
 	}
@@ -729,12 +772,12 @@ hook OnPlayerDialogPage(playerid, direction)
 
 hook OnPlayerKeyStateChange(playerid, newkeys, oldkeys)
 {
-	dbg("global", LOG_CORE, "[OnPlayerKeyStateChange] in /gamemodes/sss/core/admin/detfield-cmds.pwn");
-
 	if(dfm_Editing[playerid])
 	{
 		if(newkeys == 128)
+		{
 			AddNewDetectionFieldPoint(playerid);
+		}
 	}
 
 	return 1;
@@ -761,19 +804,22 @@ AddNewDetectionFieldPoint(playerid)
 		new ret = AddDetectionField(dfm_Name[playerid], dfm_Points[playerid], dfm_MinZ[playerid], dfm_MaxZ[playerid], dfm_Exceptions[playerid]);
 
 		if(ret < 0)
+		{
 			ChatMsg(playerid, RED, " >  An error occurred (code: %d)", ret);
+		}
 		else
 		{
-			ChatMsg(playerid, YELLOW, " >  Point %d set to %.0f, %.0f. Field '%s' created.",
+			ChatMsg(playerid, YELLOW, " >  Point %d set to %f, %f. Field '%s' created.",
 				dfm_CurrentPoint[playerid] + 1,
 				dfm_Points[playerid][dfm_CurrentPoint[playerid] * 2],
 				dfm_Points[playerid][(dfm_CurrentPoint[playerid] * 2) + 1],
 				dfm_Name[playerid]);
-			log(DISCORD_CHANNEL_ADMINEVENTS, "[FIELD] `%p` created detection field `%s`.", playerid, dfm_Name[playerid]);
 		}
 	}
 	else
+	{
 		ChatMsg(playerid, YELLOW, " >  Point %d set to %f, %f. Move to the next point and press "C_BLUE"~k~~PED_LOCK_TARGET~", dfm_CurrentPoint[playerid] + 1, dfm_Points[playerid][dfm_CurrentPoint[playerid] * 2], dfm_Points[playerid][(dfm_CurrentPoint[playerid] * 2) + 1]);
+	}
 
 	dfm_CurrentPoint[playerid]++;
 }

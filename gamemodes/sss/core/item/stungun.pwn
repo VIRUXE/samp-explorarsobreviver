@@ -1,4 +1,19 @@
-#include <YSI\y_hooks>
+/*==============================================================================
+
+
+	Southclaws' Scavenge and Survive
+
+		Copyright (C) 2020 Barnaby "Southclaws" Keene
+
+		This Source Code Form is subject to the terms of the Mozilla Public
+		License, v. 2.0. If a copy of the MPL was not distributed with this
+		file, You can obtain one at http://mozilla.org/MPL/2.0/.
+
+
+==============================================================================*/
+
+
+#include <YSI_Coding\y_hooks>
 
 
 hook OnItemTypeDefined(uname[])
@@ -9,13 +24,13 @@ hook OnItemTypeDefined(uname[])
 
 hook OnPlayerMeleePlayer(playerid, targetid, Float:bleedrate, Float:knockmult)
 {
-	dbg("global", LOG_CORE, "[OnPlayerMeleePlayer] in /gamemodes/sss/core/item/stungun.pwn");
-
-	new itemid = GetPlayerItem(playerid);
+	new Item:itemid = GetPlayerItem(playerid);
 
 	if(GetItemType(itemid) == item_StunGun)
 	{
-		if(GetItemExtraData(itemid) == 1)
+		new charged;
+		GetItemExtraData(itemid, charged);
+		if(charged == 1)
 		{
 			new
 				Float:x,
@@ -27,7 +42,6 @@ hook OnPlayerMeleePlayer(playerid, targetid, Float:bleedrate, Float:knockmult)
 			KnockOutPlayer(targetid, 60000);
 			SetItemExtraData(itemid, 0);
 			CreateTimedDynamicObject(18724, x, y, z-1.0, 0.0, 0.0, 0.0, 1000);
-			ShowActionText(playerid, "You were stunned", 3000, 150);
 
 			return Y_HOOKS_BREAK_RETURN_1;
 		}
@@ -41,10 +55,8 @@ hook OnPlayerMeleePlayer(playerid, targetid, Float:bleedrate, Float:knockmult)
 	return Y_HOOKS_CONTINUE_RETURN_0;
 }
 
-hook OnPlayerUseItemWithItem(playerid, itemid, withitemid)
+hook OnPlayerUseItemWithItem(playerid, Item:itemid, Item:withitemid)
 {
-	dbg("global", LOG_CORE, "[OnPlayerUseItemWithItem] in /gamemodes/sss/core/item/stungun.pwn");
-
 	if(GetItemType(itemid) == item_StunGun && GetItemType(withitemid) == item_Battery)
 	{
 		SetItemExtraData(itemid, 1);
@@ -55,18 +67,18 @@ hook OnPlayerUseItemWithItem(playerid, itemid, withitemid)
 	return Y_HOOKS_CONTINUE_RETURN_0;
 }
 
-hook OnItemNameRender(itemid, ItemType:itemtype)
+hook OnItemNameRender(Item:itemid, ItemType:itemtype)
 {
-	dbg("global", LOG_CORE, "[OnItemNameRender] in /gamemodes/sss/core/item/stungun.pwn");
-
 	if(itemtype == item_StunGun)
 	{
-		if(GetItemExtraData(itemid) == 1)
+		new charged;
+		GetItemExtraData(itemid, charged);
+		if(charged == 1)
 			SetItemNameExtra(itemid, "Charged");
 
 		else
 			SetItemNameExtra(itemid, "Uncharged");
 	}
 
-	return Y_HOOKS_CONTINUE_RETURN_0;
+	//return Y_HOOKS_CONTINUE_RETURN_0;
 }

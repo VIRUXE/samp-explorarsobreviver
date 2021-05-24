@@ -1,4 +1,19 @@
-#include <YSI\y_hooks>
+/*==============================================================================
+
+
+	Southclaws' Scavenge and Survive
+
+		Copyright (C) 2020 Barnaby "Southclaws" Keene
+
+		This Source Code Form is subject to the terms of the Mozilla Public
+		License, v. 2.0. If a copy of the MPL was not distributed with this
+		file, You can obtain one at http://mozilla.org/MPL/2.0/.
+
+
+==============================================================================*/
+
+
+#include <YSI_Coding\y_hooks>
 
 
 static det_LineIds[MAX_DETFIELD][8];
@@ -6,8 +21,6 @@ static det_LineIds[MAX_DETFIELD][8];
 
 hook OnFilterScriptInit()
 {
-	dbg("global", LOG_CORE, "[OnFilterScriptInit] in /gamemodes/sss/core/admin/detfield-draw.pwn");
-
 	for(new i; i < MAX_DETFIELD; i++)
 	{
 		det_LineIds[i] = {

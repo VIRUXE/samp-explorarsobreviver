@@ -1,14 +1,27 @@
-#include <YSI\y_hooks>
+/*==============================================================================
 
 
-hook OnPlayerUseItem(playerid, itemid)
+	Southclaws' Scavenge and Survive
+
+		Copyright (C) 2020 Barnaby "Southclaws" Keene
+
+		This Source Code Form is subject to the terms of the Mozilla Public
+		License, v. 2.0. If a copy of the MPL was not distributed with this
+		file, You can obtain one at http://mozilla.org/MPL/2.0/.
+
+
+==============================================================================*/
+
+
+#include <YSI_Coding\y_hooks>
+
+
+hook OnPlayerUseItem(playerid, Item:itemid)
 {
-	dbg("global", LOG_CORE, "[OnPlayerUseItem] in /gamemodes/sss/core/item/shield.pwn");
-
 	if(GetItemType(itemid) == item_Shield)
 	{
 		ApplyAnimation(playerid, "BOMBER", "BOM_PLANT_IN", 5.0, 1, 0, 0, 0, 450);
-		defer shield_Down(playerid, itemid);
+		defer shield_Down(playerid, _:itemid);
 	}
 
 	return Y_HOOKS_CONTINUE_RETURN_0;
@@ -27,7 +40,7 @@ timer shield_Down[400](playerid, itemid)
 
 	RemoveCurrentItem(playerid);
 
-	CreateItemInWorld(itemid,
+	CreateItemInWorld(Item:itemid,
 		x + (0.5 * floatsin(-angle, degrees)),
 		y + (0.5 * floatcos(-angle, degrees)),
 		z - 0.2,
@@ -37,8 +50,6 @@ timer shield_Down[400](playerid, itemid)
 
 hook OnPlayerShootPlayer(playerid, targetid, bodypart, Float:bleedrate, Float:knockmult, Float:bulletvelocity, Float:distance)
 {
-	dbg("global", LOG_CORE, "[OnPlayerShootPlayer] in /gamemodes/sss/core/item/shield.pwn");
-
 	if(_HandleShieldHit(playerid, targetid, bodypart))
 		return Y_HOOKS_BREAK_RETURN_1;
 

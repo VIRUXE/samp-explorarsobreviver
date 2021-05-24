@@ -1,3 +1,18 @@
+/*==============================================================================
+
+
+	Southclaws' Scavenge and Survive
+
+		Copyright (C) 2020 Barnaby "Southclaws" Keene
+
+		This Source Code Form is subject to the terms of the Mozilla Public
+		License, v. 2.0. If a copy of the MPL was not distributed with this
+		file, You can obtain one at http://mozilla.org/MPL/2.0/.
+
+
+==============================================================================*/
+
+
 #define MAX_TRACERS						(512)
 #define TRACER_STREAMER_AREA_IDENTIFIER	(800)
 
@@ -66,8 +81,6 @@ stock DestroyTracer(id)
 
 hook OnDynamicObjectMoved(objectid)
 {
-	dbg("global", LOG_CORE, "[OnDynamicObjectMoved] in /gamemodes/sss/core/weapon/tracer.pwn");
-
 	tracer_HandleObjectMoved(objectid);
 
 	return Y_HOOKS_CONTINUE_RETURN_0;
@@ -92,8 +105,6 @@ tracer_HandleObjectMoved(objectid)
 
 hook OnPlayerWeaponShot(playerid, weaponid, hittype, hitid, Float:fX, Float:fY, Float:fZ)
 {
-	dbg("global", LOG_CORE, "[OnPlayerWeaponShot] in /gamemodes/sss/core/weapon/tracer.pwn");
-
 	if(IsBaseWeaponClipBased(weaponid))
 	{
 		new ItemType:ammoitemtype = GetItemWeaponItemAmmoItem(GetPlayerItem(playerid));
@@ -124,5 +135,5 @@ hook OnPlayerWeaponShot(playerid, weaponid, hittype, hitid, Float:fX, Float:fY, 
 		}
 	}
 
-	return Y_HOOKS_CONTINUE_RETURN_1;
+	return 1;
 }

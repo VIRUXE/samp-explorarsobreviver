@@ -1,4 +1,19 @@
-#include <YSI\y_hooks>
+/*==============================================================================
+
+
+	Southclaws' Scavenge and Survive
+
+		Copyright (C) 2020 Barnaby "Southclaws" Keene
+
+		This Source Code Form is subject to the terms of the Mozilla Public
+		License, v. 2.0. If a copy of the MPL was not distributed with this
+		file, You can obtain one at http://mozilla.org/MPL/2.0/.
+
+
+==============================================================================*/
+
+
+#include <YSI_Coding\y_hooks>
 
 
 #define MAX_WEPCACHE_LOCATIONS			(256)
@@ -19,7 +34,9 @@ Float:		wepc_DropLocationData[MAX_WEPCACHE_LOCATIONS][E_WEPCACHE_LOCATION_DATA],
 Float:		wepc_CurrentPosX,
 Float:		wepc_CurrentPosY,
 Float:		wepc_CurrentPosZ,
-			webc_ActiveDrop = -1;
+			webc_ActiveDrop = -1,
+Container:	webc_Containerid,
+Button:		webc_Button;
 
 
 hook OnGameModeInit()
@@ -114,50 +131,61 @@ WeaponsCacheDrop(Float:x, Float:y, Float:z)
 	wepc_CurrentPosY = y;
 	wepc_CurrentPosZ = z;
 
-	FillContainerWithLoot(
-		CreateContainer("Weapon Cache", 32,
-			CreateButton(x, y - 0.5, z + 1.0, "Weapon Cache")),
-		22 + random(11), GetLootIndexFromName("airdrop_military_weapons"));
+	webc_Containerid = CreateContainer("Weapon Cache", 32);
+	webc_Button = CreateButton(x, y - 0.5, z + 1.0, "Weapon Cache", .label = 1, .labeltext = "Weapon Cache");
+
+	FillContainerWithLoot(Container:webc_Containerid, 22 + random(11), GetLootIndexFromName("airdrop_military_weapons"));
 
 	defer WeaponsCacheSignal(1, x, y, z);
 
 	return 1;
 }
 
+hook OnButtonPress(playerid, Button:id)
+{
+	if(id == webc_Button)
+		DisplayContainerInventory(playerid, Container:webc_Containerid);
+}
+
+
 timer WeaponsCacheSignal[WEPCACHE_SIGNAL_INTERVAL](count, Float:x, Float:y, Float:z)
 {
-	// Gets a random supply drop location and uses it as a reference point.
+	// Gets a random weapons-cache drop location and uses it as a reference point.
 	// Announces the angle and distance from that location to the weapons cache.
 	new
-		locationlist[MAX_SUPPLY_DROP_LOCATIONS],
+		locationlist[MAX_WEPCACHE_LOCATIONS],
 		idx,
 		location,
-		name[MAX_SUPPLY_DROP_LOCATION_NAME],
 		Float:ref_x,
 		Float:ref_y,
 		Float:ref_z,
 		Float:angleto,
 		Float:distanceto;
 
-	for(new i, j = random(GetTotalSupplyDropLocations()); i < j; i++)
+	for(new i, j = random(Iter_Free(wepc_Index)); i < j; i++)
 	{
-		GetSupplyDropLocationPos(i, ref_x, ref_y, ref_z);
+		ref_x = wepc_DropLocationData[i][wepc_posX];
+		ref_y = wepc_DropLocationData[i][wepc_posY];
+		ref_z = wepc_DropLocationData[i][wepc_posZ];
 
 		if(Distance(ref_x, ref_y, ref_z, wepc_CurrentPosX, wepc_CurrentPosY, wepc_CurrentPosZ) < 1000.0)
+		{
 			locationlist[idx++] = i;
+		}
 	}
 
 	if(idx > 0)
 	{
 		location = locationlist[random(idx)];
 
-		GetSupplyDropLocationName(location, name);
-		GetSupplyDropLocationPos(location, ref_x, ref_y, ref_z);
+		ref_x = wepc_DropLocationData[location][wepc_posX];
+		ref_y = wepc_DropLocationData[location][wepc_posY];
+		ref_z = wepc_DropLocationData[location][wepc_posZ];
 
 		angleto = absoluteangle(360 - GetAngleToPoint(ref_x, ref_y, x, y));
 		distanceto = Distance2D(ref_x, ref_y, x, y);
 
-		ChatMsgAll(YELLOW, " >  WEAPONS CACHE SIGNAL: BEARING: %.1fDEG DISTANCE: %.1fM FROM: '%s'", angleto, distanceto, name);
+		ChatMsgAll(YELLOW, " >  [EBS]: WEAPONS CACHE SIGNAL: BEARING: %.1fDEG DISTANCE: %.1fM'", angleto, distanceto);
 	}
 	else
 	{
@@ -166,9 +194,13 @@ timer WeaponsCacheSignal[WEPCACHE_SIGNAL_INTERVAL](count, Float:x, Float:y, Floa
 	}
 
 	if(count < 3)
+	{
 		defer WeaponsCacheSignal(count + 1, x, y, z);
+	}
 	else
+	{
 		webc_ActiveDrop = -1;
+	}
 
 	return;
 }

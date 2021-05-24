@@ -1,4 +1,19 @@
-#include <YSI\y_hooks>
+/*==============================================================================
+
+
+	Southclaws' Scavenge and Survive
+
+		Copyright (C) 2020 Barnaby "Southclaws" Keene
+
+		This Source Code Form is subject to the terms of the Mozilla Public
+		License, v. 2.0. If a copy of the MPL was not distributed with this
+		file, You can obtain one at http://mozilla.org/MPL/2.0/.
+
+
+==============================================================================*/
+
+
+#include <YSI_Coding\y_hooks>
 
 
 static
@@ -16,8 +31,6 @@ Float:	death_RotZ[MAX_PLAYERS],
 
 hook OnPlayerConnect(playerid)
 {
-	dbg("global", LOG_CORE, "[OnPlayerConnect] in /gamemodes/sss/core/player/death.pwn");
-
 	death_LastKilledBy[playerid][0] = EOS;
 	death_LastKilledById[playerid] = INVALID_PLAYER_ID;
 
@@ -47,10 +60,12 @@ public OnPlayerDeath(playerid, killerid, reason)
 _OnDeath(playerid, killerid)
 {
 	if(!IsPlayerAlive(playerid) || IsPlayerOnAdminDuty(playerid))
+	{
 		return 0;
+	}
 
 	new
-		deathreason = GetLastHitByWeapon(playerid),
+		Item:deathreason = GetLastHitByWeapon(playerid),
 		deathreasonstring[256];
 
 	death_Dying[playerid] = true;
@@ -67,48 +82,61 @@ _OnDeath(playerid, killerid)
 		TogglePlayerSpectating(playerid, false);
 		death_PosZ[playerid] += 0.5;
 	}
-
-	HideWatch(playerid);
-	DropItems(playerid, death_PosX[playerid], death_PosY[playerid], death_PosZ[playerid], death_RotZ[playerid], true);
+	
+	DropItems(playerid, death_PosX[playerid], death_PosY[playerid], death_PosZ[playerid]);
 	RemovePlayerWeapon(playerid);
 	RemoveAllDrugs(playerid);
 	SpawnPlayer(playerid);
 
-	KillPlayer(playerid, killerid, deathreason);
+	KillPlayer(playerid, killerid, _:deathreason);
 
 	if(IsPlayerConnected(killerid))
 	{
+		log("[KILL] %p killed %p with %d at %f, %f, %f (%f)", killerid, playerid, _:deathreason, death_PosX[playerid], death_PosY[playerid], death_PosZ[playerid], death_RotZ[playerid]);
+
+		GetPlayerName(killerid, death_LastKilledBy[playerid], MAX_PLAYER_NAME);
 		death_LastKilledById[playerid] = killerid;
 
 		switch(deathreason)
 		{
 			case 0..3, 5..7, 10..15:
 				deathreasonstring = "They were beaten to death.";
+
 			case 4:
 				deathreasonstring = "They suffered small lacerations on the torso, possibly from a knife.";
+
 			case 8:
 				deathreasonstring = "Large lacerations cover the torso and head, looks like a finely sharpened sword.";
+
 			case 9:
 				deathreasonstring = "There's bits everywhere, probably suffered a chainsaw to the torso.";
+
 			case 16, 39, 35, 36, 255:
 				deathreasonstring = "They suffered massive concussion due to an explosion.";
+
 			case 18, 37:
 				deathreasonstring = "The entire body is charred and burnt.";
+
 			case 22..34, 38:
 				deathreasonstring = "They died of blood loss caused by what looks like bullets.";
+
 			case 41, 42:
 				deathreasonstring = "They were sprayed and suffocated by a high pressure substance.";
+
 			case 44, 45:
 				deathreasonstring = "Somehow, they were killed by goggles.";
+
 			case 43:
 				deathreasonstring = "Somehow, they were killed by a camera.";
+
 			default:
 				deathreasonstring = "They bled to death.";
 		}
-		log(DISCORD_CHANNEL_ADMINEVENTS, "[KILL] `%p` killed `%p` (`%s`) at `%.0f, %.0f, %.0f (%s)`", killerid, playerid, deathreasonstring, death_PosX[playerid], death_PosY[playerid], death_PosZ[playerid], GetPlayerZoneEx(playerid));
 	}
 	else
 	{
+		log("[DEATH] %p died because of %d at %f, %f, %f (%f)", playerid, _:deathreason, death_PosX[playerid], death_PosY[playerid], death_PosZ[playerid], death_RotZ[playerid]);
+
 		death_LastKilledBy[playerid][0] = EOS;
 		death_LastKilledById[playerid] = INVALID_PLAYER_ID;
 
@@ -116,42 +144,67 @@ _OnDeath(playerid, killerid)
 		{
 			case 53:
 				deathreasonstring = "They drowned.";
+
 			case 54:
 				deathreasonstring = "Most bones are broken, looks like they fell from a great height.";
+
 			case 255:
 				deathreasonstring = "They suffered massive concussion due to an explosion.";
+
 			default:
 				deathreasonstring = "They died for an unknown reason.";
 		}
-		log(DISCORD_CHANNEL_ADMINEVENTS, "[DEATH] `%p` died (`%s`) at `%.0f, %.0f, %.0f (%s)`", playerid, deathreasonstring, death_PosX[playerid], death_PosY[playerid], death_PosZ[playerid], GetPlayerZoneEx(playerid));
 	}
-	CreateGravestone(playerid, deathreasonstring, death_PosX[playerid], death_PosY[playerid], death_PosZ[playerid] - FLOOR_OFFSET, death_RotZ[playerid]);
+
+	//CreateGravestone(playerid, deathreasonstring, death_PosX[playerid], death_PosY[playerid], death_PosZ[playerid] - ITEM_FLOOR_OFFSET, death_RotZ[playerid]);
 
 	return 1;
 }
 
-DropItems(playerid, Float:x, Float:y, Float:z, Float:r, bool:death)
+DropItems(playerid, Float:x, Float:y, Float:z)
 {
 	new
-		itemid,
-		interior = GetPlayerInterior(playerid),
-		world = GetPlayerVirtualWorld(playerid);
+		Item:itemid;
 
+	new Float:cx, Float:cy, Float:cz;
+	CA_RayCastLine(x, y, z, x, y, z - 600.0, cx, cy, cz);
+
+	itemid = CreateItem(ItemType:item_Torso,  cx, cy, cz + 0.2);
+
+	// Head
+	//CreateDynamicObject(2908, cx, cy, cz + 0.2, 0.0, 0.0, 0.0);
+	
+	//arm
+	//CreateDynamicObject(2906, cx, cy, cz + 0.2, 0.0, 0.0, 60.0);
+	//CreateDynamicObject(2906, cx, cy, cz + 0.2, 0.0, 0.0, 60.0);
+
+	// Leg
+	/*cx += 0.6 * floatsin(-r, degrees);
+    cy += 0.6 * floatcos(-r, degrees);
+	CreateDynamicObject(2905, cx, cy, cz + 0.2, 0.0, 0.0, 270.0);
+
+	cx += 0.45 * floatsin(-r, degrees);
+    cy += 0.45 * floatcos(-r, degrees);
+	CreateDynamicObject(2905, cx, cy, cz + 0.2, 0.0, 0.0, -90.0);*/
+
+	new Container:containerid;
+
+	GetItemArrayDataAtCell(itemid, _:containerid, 0);
+
+	new name[MAX_PLAYER_NAME + 8];
+	GetPlayerName(playerid, name, MAX_PLAYER_NAME);
+	format(name, sizeof(name), "Body of %s", name);
+	SetContainerName(containerid, name);
+	SetItemLabel(itemid, name);
+	
 	/*
 		Held item
 	*/
-
 	itemid = GetPlayerItem(playerid);
 
 	if(IsValidItem(itemid))
 	{
-		CreateItemInWorld(itemid,
-			x + floatsin(345.0, degrees),
-			y + floatcos(345.0, degrees),
-			z - FLOOR_OFFSET,
-			.rz = r,
-			.world = world,
-			.interior = interior);
+		AddItemToContainer(containerid, itemid);
 	}
 
 	/*
@@ -164,34 +217,22 @@ DropItems(playerid, Float:x, Float:y, Float:z, Float:r, bool:death)
 	{
 		RemovePlayerHolsterItem(playerid);
 
-		CreateItemInWorld(itemid,
-			x + floatsin(15.0, degrees),
-			y + floatcos(15.0, degrees),
-			z - FLOOR_OFFSET,
-			.rz = r,
-			.world = world,
-			.interior = interior);
+		AddItemToContainer(containerid, itemid);
 	}
 
 	/*
 		Inventory
 	*/
 
-	for(new i; i < INV_MAX_SLOTS; i++)
+	for(new i; i < MAX_INVENTORY_SLOTS; i++)
 	{
-		itemid = GetInventorySlotItem(playerid, 0);
+		GetInventorySlotItem(playerid, 0, itemid);
 
 		if(!IsValidItem(itemid))
 			break;
 
 		RemoveItemFromInventory(playerid, 0);
-		CreateItemInWorld(itemid,
-			x + floatsin(45.0 + (90.0 * float(i)), degrees),
-			y + floatcos(45.0 + (90.0 * float(i)), degrees),
-			z - FLOOR_OFFSET,
-			.rz = r,
-			.world = world,
-			.interior = interior);
+		AddItemToContainer(containerid, itemid);
 	}
 
 	/*
@@ -204,10 +245,7 @@ DropItems(playerid, Float:x, Float:y, Float:z, Float:r, bool:death)
 	{
 		RemovePlayerBag(playerid);
 
-		SetItemPos(itemid, x + floatsin(180.0, degrees), y + floatcos(180.0, degrees), z - FLOOR_OFFSET);
-		SetItemRot(itemid, 0.0, 0.0, r, true);
-		SetItemInterior(itemid, interior);
-		SetItemWorld(itemid, world);
+		AddItemToContainer(containerid, itemid);
 	}
 
 	/*
@@ -218,13 +256,7 @@ DropItems(playerid, Float:x, Float:y, Float:z, Float:r, bool:death)
 
 	if(IsValidItem(itemid))
 	{
-		CreateItemInWorld(itemid,
-			x + floatsin(270.0, degrees),
-			y + floatcos(270.0, degrees),
-			z - FLOOR_OFFSET,
-			.rz = r,
-			.world = world,
-			.interior = interior);
+		AddItemToContainer(containerid, itemid);
 	}
 
 	/*
@@ -235,13 +267,7 @@ DropItems(playerid, Float:x, Float:y, Float:z, Float:r, bool:death)
 
 	if(IsValidItem(itemid))
 	{
-		CreateItemInWorld(itemid,
-			x + floatsin(280.0, degrees),
-			y + floatcos(280.0, degrees),
-			z - FLOOR_OFFSET,
-			.rz = r,
-			.world = world,
-			.interior = interior);
+		AddItemToContainer(containerid, itemid);
 	}
 
 	/*
@@ -250,23 +276,11 @@ DropItems(playerid, Float:x, Float:y, Float:z, Float:r, bool:death)
 
 	if(GetPlayerAP(playerid) > 0.0)
 	{
-		itemid = CreateItemInWorld(RemovePlayerArmourItem(playerid),
-			x + floatsin(80.0, degrees),
-			y + floatcos(80.0, degrees),
-			z - FLOOR_OFFSET,
-			.rz = r,
-			.world = world,
-			.interior = interior);
+		itemid = RemovePlayerArmourItem(playerid);
+		AddItemToContainer(containerid, itemid);
 
 		SetPlayerAP(playerid, 0.0);
 	}
-
-	/*
-		These items should only be dropped on death.
-	*/
-
-	if(!death)
-		return;
 
 	/*
 		Handcuffs
@@ -274,14 +288,8 @@ DropItems(playerid, Float:x, Float:y, Float:z, Float:r, bool:death)
 
 	if(GetPlayerSpecialAction(playerid) == SPECIAL_ACTION_CUFFED)
 	{
-		CreateItem(item_HandCuffs,
-			x + floatsin(135.0, degrees),
-			y + floatcos(135.0, degrees),
-			z - FLOOR_OFFSET,
-			.rz = r,
-			.world = world,
-			.interior = interior);
-
+		itemid = CreateItem(item_HandCuffs);
+		AddItemToContainer(containerid, itemid);
 		SetPlayerCuffs(playerid, false);
 	}
 
@@ -289,23 +297,17 @@ DropItems(playerid, Float:x, Float:y, Float:z, Float:r, bool:death)
 		Clothes item
 	*/
 
-	itemid = CreateItem(item_Clothes,
-		x + floatsin(90.0, degrees),
-		y + floatcos(90.0, degrees),
-		z - FLOOR_OFFSET,
-		.rz = r,
-		.world = world,
-		.interior = interior);
+	itemid = CreateItem(item_Clothes);
 
 	SetItemExtraData(itemid, GetPlayerClothes(playerid));
 
+	AddItemToContainer(containerid, itemid);
+	
 	return;
 }
 
 hook OnPlayerSpawn(playerid)
 {
-	dbg("global", LOG_CORE, "[OnPlayerSpawn] in /gamemodes/sss/core/player/death.pwn");
-
 	if(IsPlayerDead(playerid))
 	{
 		TogglePlayerSpectating(playerid, true);
@@ -356,8 +358,6 @@ timer SetDeathCamera[500](playerid)
 
 hook OnPlayerClickTextDraw(playerid, Text:clickedid)
 {
-	dbg("global", LOG_CORE, "[OnPlayerClickTextDraw] in /gamemodes/sss/core/player/death.pwn");
-
 	if(clickedid == DeathButton)
 	{
 		if(!IsPlayerDead(playerid))
@@ -368,11 +368,15 @@ hook OnPlayerClickTextDraw(playerid, Text:clickedid)
 		CancelSelectTextDraw(playerid);
 		TextDrawHideForPlayer(playerid, DeathText);
 		TextDrawHideForPlayer(playerid, DeathButton);
-		SpawnLoggedInPlayer(playerid);
+		SetPlayerBrightness(playerid, 255);
+		defer SpawnDeathDelay(playerid);
 	}
 
 	return 1;
 }
+
+timer SpawnDeathDelay[1500](playerid)
+	SpawnLoggedInPlayer(playerid);
 
 hook OnGameModeInit()
 {

@@ -1,3 +1,21 @@
+/*==============================================================================
+
+
+	Southclaws' Scavenge and Survive
+
+		Copyright (C) 2020 Barnaby "Southclaws" Keene
+
+		This Source Code Form is subject to the terms of the Mozilla Public
+		License, v. 2.0. If a copy of the MPL was not distributed with this
+		file, You can obtain one at http://mozilla.org/MPL/2.0/.
+
+		This file was originally written by Adam Kadar:
+		<https://github.com/kadaradam>
+
+
+==============================================================================*/
+
+
 CMD:recipes(playerid, params[])
 {
 	Dialog_ShowCraftTypes(playerid);
@@ -36,10 +54,10 @@ Dialog_ShowCraftList(playerid, type)
 	// 3 Workbench
 
 	new
-		f_str[512],
-		itemname[ITM_MAX_NAME];
+		f_str[700],
+		itemname[MAX_ITEM_NAME];
 
-	for(new i; i < GetCraftSetTotal(); i++)
+	for(new CraftSet:i; i < CraftSet:GetCraftSetTotal(); i++)
 	{
 		if(IsValidCraftSet(i))
 		{
@@ -70,14 +88,16 @@ Dialog_ShowCraftList(playerid, type)
 				if(!IsValidWorkbenchConstructionSet(consset))
 					continue;
 			}
-			GetItemTypeName(GetCraftSetResult(i), itemname);
+			new ItemType:resulttype;
+			GetCraftSetResult(i, resulttype);
+			GetItemTypeName(resulttype, itemname);
 		}
 		else
 		{
 			itemname = "INVALID CRAFT SET";
 		}
 
-		format(f_str, sizeof(f_str), "%s%i. %s\n", f_str, i, itemname);
+		format(f_str, sizeof(f_str), "%s%i. %s\n", f_str, _:i, itemname);
 	}
 
 	inline Response(pid, dialogid, response, listitem, string:inputtext[])
@@ -86,11 +106,11 @@ Dialog_ShowCraftList(playerid, type)
 		
 		if(response)
 		{
-			new consset;
+			new craftset;
 
-			sscanf(inputtext, "p<.>i{s[96]}", consset);
+			sscanf(inputtext, "p<.>i{s[96]}", craftset);
 
-			Dialog_ShowIngredients(playerid, consset);
+			Dialog_ShowIngredients(playerid, CraftSet:craftset);
 		}
 		else
 		{
@@ -100,22 +120,26 @@ Dialog_ShowCraftList(playerid, type)
 	Dialog_ShowCallback(playerid, using inline Response, DIALOG_STYLE_LIST, "Craftsets", f_str, "View", "Close");
 }
 
-Dialog_ShowIngredients(playerid, craftset)
+Dialog_ShowIngredients(playerid, CraftSet:craftset)
 {
 	if(!IsValidCraftSet(craftset))
 		return 1;
 
 	gBigString[playerid][0] = EOS;
 
-	new 
+	new
+		itemcount,
 		ItemType:itemType,
-		itemname[ITM_MAX_NAME],
-		toolname[ITM_MAX_NAME],
-		consset = GetCraftSetConstructSet(craftset);
+		itemname[MAX_ITEM_NAME],
+		toolname[MAX_ITEM_NAME],
+		consset = GetCraftSetConstructSet(craftset),
+		ItemType:resulttype;
+	GetCraftSetItemCount(craftset, itemcount);
+	GetCraftSetResult(craftset, resulttype);
 
-	for(new i; i < GetCraftSetItemCount(craftset); i++)
+	for(new i; i < itemcount; i++)
 	{
-		itemType = GetCraftSetItemType(craftset, i);
+		GetCraftSetItemType(craftset, i, itemType);
 		GetItemTypeName(itemType, itemname);
 		format(gBigString[playerid], sizeof(gBigString[]), "%s\t\t\t%s\n", gBigString[playerid], itemname);
 	}
@@ -133,7 +157,7 @@ Dialog_ShowIngredients(playerid, craftset)
 			"C_WHITE"Ingredients:	"C_YELLOW"\n%s", gBigString[playerid]);
 	}
 
-	GetItemTypeName(GetCraftSetResult(craftset), itemname);
+	GetItemTypeName(resulttype, itemname);
 
 	inline Response(pid, dialogid, response, listitem, string:inputtext[])
 	{

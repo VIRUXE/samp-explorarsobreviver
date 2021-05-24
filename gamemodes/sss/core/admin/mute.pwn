@@ -1,4 +1,20 @@
-#include <YSI\y_hooks>
+/*==============================================================================
+
+
+	Southclaws' Scavenge and Survive
+
+		Copyright (C) 2020 Barnaby "Southclaws" Keene
+
+		This Source Code Form is subject to the terms of the Mozilla Public
+		License, v. 2.0. If a copy of the MPL was not distributed with this
+		file, You can obtain one at http://mozilla.org/MPL/2.0/.
+
+
+==============================================================================*/
+
+
+#include <YSI_Coding\y_hooks>
+
 
 static
 		mute_Muted[MAX_PLAYERS],
@@ -47,13 +63,13 @@ timer UnMuteDelay[time](playerid, time)
 
 hook OnPlayerDisconnected(playerid)
 {
-	dbg("global", LOG_CORE, "[OnPlayerDisconnected] in /gamemodes/sss/core/admin/mute.pwn");
-
 	if(gServerRestarting)
 		return 1;
 
 	if(mute_Muted[playerid])
+	{
 		TogglePlayerMute(playerid, false);
+	}
 
 	return 1;
 }
@@ -84,7 +100,7 @@ stock GetPlayerMuteDuration(playerid)
 
 stock GetPlayerMuteRemainder(playerid)
 {
-	if(!IsValidPlayerID(playerid))
+	if(!IsPlayerConnected(playerid))
 		return 0;
 
 	if(!mute_Muted[playerid])

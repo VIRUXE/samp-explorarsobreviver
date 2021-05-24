@@ -1,8 +1,24 @@
-#include <YSI\y_hooks>
+/*==============================================================================
+
+
+	Southclaws' Scavenge and Survive
+
+		Copyright (C) 2020 Barnaby "Southclaws" Keene
+
+		This Source Code Form is subject to the terms of the Mozilla Public
+		License, v. 2.0. If a copy of the MPL was not distributed with this
+		file, You can obtain one at http://mozilla.org/MPL/2.0/.
+
+
+==============================================================================*/
+
+
+#include <YSI_Coding\y_hooks>
 
 
 hook OnGameModeInit()
 {
+	RegisterAdminCommand(STAFF_LEVEL_ADMINISTRATOR, "/whitelist - add/remove name or turn whitelist on/off\n");
 	RegisterAdminCommand(STAFF_LEVEL_ADMINISTRATOR, "/spec /free - spectate and freecam\n");
 	RegisterAdminCommand(STAFF_LEVEL_ADMINISTRATOR, "/ip - get a player's IP\n");
 	RegisterAdminCommand(STAFF_LEVEL_ADMINISTRATOR, "/vehicle - vehicle control (duty only)\n");
@@ -14,19 +30,133 @@ hook OnGameModeInit()
 	RegisterAdminCommand(STAFF_LEVEL_ADMINISTRATOR, "/delete(items/tents/defences/signs) - delete things\n");
 }
 
+
+/*==============================================================================
+
+	Add to/remove from/query/toggle the whitelist feature
+
+==============================================================================*/
+
+
+ACMD:whitelist[3](playerid, params[])
+{
+	new
+		command[7],
+		name[MAX_PLAYER_NAME];
+
+	if(sscanf(params, "s[7]S()[24]", command, name))
+	{
+		ChatMsg(playerid, YELLOW, " >  Usage: /whitelist [add/remove/on/off/auto/list] - the whitelist is currently %s (auto: %s)", IsWhitelistActive() ? ("on") : ("off"), IsWhitelistAuto() ? ("on") : ("off"));
+		return 1;
+	}
+
+	if(!strcmp(command, "add", true))
+	{
+		if(isnull(name))
+		{
+			ChatMsg(playerid, YELLOW, " >  Usage /whitelist add [name]");
+			return 1;
+		}
+
+		new result = AddNameToWhitelist(name);
+
+		if(result == 1)
+			ChatMsg(playerid, YELLOW, " >  Added "C_BLUE"%s "C_YELLOW"to whitelist.", name);
+
+		if(result == 0)
+			ChatMsg(playerid, YELLOW, " >  That name "C_ORANGE"is already "C_YELLOW"in the whitelist.");
+
+		if(result == -1)
+			ChatMsg(playerid, RED, " >  An error occurred.");
+	}
+	else if(!strcmp(command, "remove", true))
+	{
+		if(isnull(name))
+		{
+			ChatMsg(playerid, YELLOW, " >  Usage /whitelist remove [name]");
+			return 1;
+		}
+
+		new result = RemoveNameFromWhitelist(name);
+
+		if(result == 1)
+			ChatMsg(playerid, YELLOW, " >  Removed "C_BLUE"%s "C_YELLOW"from whitelist.", name);
+
+		if(result == 0)
+			ChatMsg(playerid, YELLOW, " >  That name "C_ORANGE"is not "C_YELLOW"in the whitelist.");
+
+		if(result == -1)
+			ChatMsg(playerid, RED, " >  An error occurred.");
+	}
+	else if(!strcmp(command, "on", true))
+	{
+		ChatMsgAdmins(1, YELLOW, " >  Whitelist activated, only whitelisted players may join.");
+		ToggleWhitelist(true);
+	}
+	else if(!strcmp(command, "off", true))
+	{
+		ChatMsgAdmins(1, YELLOW, " >  Whitelist deactivated, anyone may join the server.");
+		ToggleWhitelist(false);
+	}
+	else if(!strcmp(command, "auto", true))
+	{
+		if(!IsWhitelistAuto())
+		{
+			ChatMsgAdmins(1, YELLOW, " >  Whitelist automatic toggle activated.");
+			ToggleAutoWhitelist(true);
+
+			// UpdateSetting("whitelist-auto-toggle", 0);
+		}
+		else
+		{
+			ChatMsgAdmins(1, YELLOW, " >  Whitelist automatic toggle deactivated.");
+			ToggleAutoWhitelist(false);
+
+			// UpdateSetting("whitelist-auto-toggle", 0);
+		}
+	}
+	else if(!strcmp(command, "?", true))
+	{
+		if(IsNameInWhitelist(name))
+			ChatMsg(playerid, YELLOW, " >  That name "C_BLUE"is "C_YELLOW"in the whitelist.");
+
+		else
+			ChatMsg(playerid, YELLOW, " >  That name "C_ORANGE"is not "C_YELLOW"in the whitelist");
+	}
+	else if(!strcmp(command, "list", true))
+	{
+		new list[(MAX_PLAYER_NAME + 1) * MAX_PLAYERS];
+
+		foreach(new i : Player)
+		{
+			GetPlayerName(i, name, MAX_PLAYER_NAME);
+			format(list, sizeof(list), "%s%C%s\n", list, IsPlayerInWhitelist(i) ? (GREEN) : (RED), name);
+		}
+
+		Dialog_Show(playerid, DIALOG_STYLE_MSGBOX, "Whitelisted players", list, "Close");
+	}
+
+	return 1;
+}
+
+
 /*==============================================================================
 
 	Enter spectate mode on a specific player
 
 ==============================================================================*/
+
+
 ACMD:spec[2](playerid, params[])
 {
 	if(!(IsPlayerOnAdminDuty(playerid)))
 		return 6;
 
 	if(isnull(params))
+	{
 		ExitSpectateMode(playerid);
-	else if(isnumeric(params))
+	}
+	else
 	{
 		new targetid = strval(params);
 
@@ -44,9 +174,11 @@ ACMD:spec[2](playerid, params[])
 					return 1;
 				}
 			}
+
 			EnterSpectateMode(playerid, targetid);
 		}
 	}
+
 	return 1;
 }
 
@@ -57,6 +189,7 @@ ACMD:free[2](playerid)
 
 	if(GetPlayerSpectateType(playerid) == SPECTATE_TYPE_FREE)
 		ExitFreeMode(playerid);
+
 	else
 		EnterFreeMode(playerid);
 
@@ -69,6 +202,14 @@ ACMD:recam[2](playerid, params[])
 	return 1;
 }
 
+
+/*==============================================================================
+
+	Get IP
+
+==============================================================================*/
+
+
 ACMD:ip[3](playerid, params[])
 {
 	if(isnumeric(params))
@@ -79,6 +220,7 @@ ACMD:ip[3](playerid, params[])
 		{
 			if(targetid > 99)
 				ChatMsg(playerid, YELLOW, " >  Numeric value '%d' isn't a player ID that is currently online, treating it as a name.", targetid);
+
 			else
 				return 4;
 		}
@@ -103,6 +245,14 @@ ACMD:ip[3](playerid, params[])
 	return 1;
 }
 
+
+/*==============================================================================
+
+	Control vehicles
+
+==============================================================================*/
+
+
 ACMD:vehicle[3](playerid, params[])
 {
 	if(!IsPlayerOnAdminDuty(playerid) && GetPlayerAdminLevel(playerid) < STAFF_LEVEL_LEAD)
@@ -114,147 +264,138 @@ ACMD:vehicle[3](playerid, params[])
 
 	if(sscanf(params, "s[10]D(-1)", command, vehicleid))
 	{
-		ChatMsg(playerid, YELLOW, " >  Usage: /vehicle [get/goto/enter/owner/disable/delete/respawn/reset/lock/unlock/removekey] (id)");
+		ChatMsg(playerid, YELLOW, " >  Usage: /vehicle [get/goto/enter/owner/delete/respawn/reset/lock/unlock/removekey] [id]");
 		return 1;
 	}
 
 	if(vehicleid == -1)
-		vehicleid = GetPlayerCameraTargetVehicle(playerid);
+		vehicleid = GetPlayerVehicleID(playerid);
 
 	if(!IsValidVehicle(vehicleid))
 		return 4;
 
-	new 
-		vehiclename[MAX_VEHICLE_NAME],
-		vehicleowner[MAX_PLAYER_NAME],
-		zone[MAX_ZONE_NAME],
-		Float:vx,
-		Float:vy,
-		Float:vz,
-		Float:px,
-		Float:py,
-		Float:pz,
-		Float:pr;
-
-	vehiclename = GetVehicleName(vehicleid);
-	GetVehicleOwner(vehicleid, vehicleowner);
-	GetPlayerZone(playerid, zone);
-	GetVehiclePos(vehicleid, vx, vy, vz);
-	GetPlayerPos(playerid, px, py, pz);
-	GetPlayerFacingAngle(playerid, pr);
-
-	if(isnull(vehicleowner))
-		vehicleowner = "None";
-
 	if(!strcmp(command, "get"))
 	{
-		GetXYInFrontOfPlayer(playerid, px, py, 2.0);
-		SetVehiclePos(vehicleid, px, py, pz);
-		SetVehicleZAngle(vehicleid,  pr + 90.0);
+		new
+			Float:x,
+			Float:y,
+			Float:z;
 
-		log(DISCORD_CHANNEL_ADMINEVENTS, "[VEHICLE] `%p` (`%.0f, %.0f, %.0f`) teleported vehicle `%d` (Name: %s, Owner: %s, Location: `%.0f, %.0f, %.0f` (%s)) to him.", playerid, px,py,pz, vehicleid, vehiclename, vehicleowner, vy,vx,vz, zone);
+		GetPlayerPos(playerid, x, y, z);
+		PutPlayerInVehicle(playerid, vehicleid, 0);
+		SetVehiclePos(vehicleid, x, y, z);
+		SetPlayerPos(playerid, x, y, z + 2);
+		SetCameraBehindPlayer(playerid);
 
 		return 1;
 	}
+
 	if(!strcmp(command, "goto"))
 	{
-		SetPlayerPos(playerid, vx, vy, vz+5);
+		new
+			Float:x,
+			Float:y,
+			Float:z;
 
-		log(DISCORD_CHANNEL_ADMINEVENTS, "[VEHICLE] `%p` (`%.0f, %.0f, %.0f`) teleported to vehicle `%d` (Name: `%s`, Owner: `%s`, Location: `%.0f, %.0f, %.0f` (%s))", playerid, px,py,pz, vehicleid, vehiclename, vehicleowner, vy,vx,vz, zone);
+		GetVehiclePos(vehicleid, x, y, z);
+		SetPlayerPos(playerid, x, y, z);
 
 		return 1;
 	}
+
 	if(!strcmp(command, "enter"))
 	{
 		PutPlayerInVehicle(playerid, vehicleid, 0);
 
-		log(DISCORD_CHANNEL_ADMINEVENTS, "[VEHICLE] `%p` (`%.0f, %.0f, %.0f`) entered vehicle `%d` (Name: `%s`, Owner: `%s`, Location: `%.0f, %.0f, %.0f` (%s))", playerid, px,py,pz, vehicleid, vehiclename, vehicleowner, vy,vx,vz, zone);
-
 		return 1;
 	}
+
 	if(!strcmp(command, "owner"))
 	{
-		ChatMsg(playerid, YELLOW, " >  Vehicle owner: '%s'", vehicleowner);
-		log(DISCORD_CHANNEL_ADMINEVENTS, "[VEHICLE] `%p` checked the owner (`%s`) of vehicle `%d` (%s).", playerid, vehicleowner, vehicleid, vehiclename);
+		new owner[MAX_PLAYER_NAME];
+
+		GetVehicleOwner(vehicleid, owner);
+
+		ChatMsg(playerid, YELLOW, " >  Vehicle owner: '%s'", owner);
 
 		return 1;
 	}
-	if(!strcmp(command, "disable"))
+
+	if(!strcmp(command, "delete"))
 	{
 		DestroyWorldVehicle(vehicleid);
 
-		ChatMsg(playerid, YELLOW, " >  Vehicle %d disabled", vehicleid);
-		log(DISCORD_CHANNEL_ADMINEVENTS, "[VEHICLE] `%p` disabled vehicle `%d` (Name: `%s`, Owner: `%s`, Location: `%.0f, %.0f, %.0f` (%s))", playerid, vehicleid, vehiclename, vehicleowner, vy,vx,vz, zone);
+		ChatMsg(playerid, YELLOW, " >  Vehicle %d deleted", vehicleid);
 
 		return 1;
 	}
-	/*if(!strcmp(command, "delete"))
-	{
-		DestroyWorldVehicle(vehicleid, true);
 
-		ChatMsg(playerid, YELLOW, " >  Vehicle %d deleted", vehicleid);
-		log(DISCORD_CHANNEL_ADMINEVENTS, "`%p` deleted vehicle `%d` (Name: `%s`, Owner: `%s`, Location: `%.0f, %.0f, %.0f`).", playerid, vehicleid, vehiclename, vehicleowner, vy,vx,vz);
-
-		return 1;
-	}*/
 	if(!strcmp(command, "respawn"))
 	{
 		RespawnVehicle(vehicleid);
 
 		ChatMsg(playerid, YELLOW, " >  Vehicle %d respawned", vehicleid);
-		log(DISCORD_CHANNEL_ADMINEVENTS, "[VEHICLE] `%p` respawned vehicle `%d` (Name: `%s`, Owner: `%s`, Location: `%.0f, %.0f, %.0f` (%s))", playerid, vehicleid, vehiclename, vehicleowner, vy,vx,vz, zone);
 
 		return 1;
 	}
+
 	if(!strcmp(command, "reset"))
 	{
 		ResetVehicle(vehicleid);
 
 		ChatMsg(playerid, YELLOW, " >  Vehicle %d reset", vehicleid);
-		log(DISCORD_CHANNEL_ADMINEVENTS, "[VEHICLE] `%p` reset vehicle `%d` (Name: `%s`, Owner: `%s`, Location: `%.0f, %.0f, %.0f` (%s))", playerid, vehicleid, vehiclename, vehicleowner, vy,vx,vz, zone);
 
 		return 1;
 	}
+
 	if(!strcmp(command, "lock"))
 	{
 		SetVehicleExternalLock(vehicleid, E_LOCK_STATE_EXTERNAL);
 
 		ChatMsg(playerid, YELLOW, " >  Vehicle %d locked", vehicleid);
-		log(DISCORD_CHANNEL_ADMINEVENTS, "[VEHICLE] `%p` locked vehicle `%d` (Name: `%s`, Owner: `%s`, Location: `%.0f, %.0f, %.0f` (%s))", playerid, vehicleid, vehiclename, vehicleowner, vy,vx,vz, zone);
 
 		return 1;
 	}
+
 	if(!strcmp(command, "unlock"))
 	{
 		SetVehicleExternalLock(vehicleid, E_LOCK_STATE_OPEN);
 
 		ChatMsg(playerid, YELLOW, " >  Vehicle %d unlocked", vehicleid);
-		log(DISCORD_CHANNEL_ADMINEVENTS, "[VEHICLE] `%p` unlocked vehicle `%d` (Name: `%s`, Owner: `%s`, Location: `%.0f, %.0f, %.0f` (%s))", playerid, vehicleid, vehiclename, vehicleowner, vy,vx,vz, zone);
 
 		return 1;
 	}
+
 	if(!strcmp(command, "removekey"))
 	{
 		SetVehicleKey(vehicleid, 0);
 
-		ChatMsg(playerid, YELLOW, " >  Vehicle %d had it's key removed", vehicleid);
-		log(DISCORD_CHANNEL_ADMINEVENTS, "[VEHICLE] `%p` removed the key from vehicle `%d` (Name: `%s`, Owner: `%s`, Location: `%.0f, %.0f, %.0f` (%s))", playerid, vehicleid, vehiclename, vehicleowner, vy,vx,vz, zone);
+		ChatMsg(playerid, YELLOW, " >  Vehicle %d unlocked", vehicleid);
 
 		return 1;
 	}
+
 	if(!strcmp(command, "destroy"))
 	{
 		SetVehicleHealth(vehicleid, 0.0);
 
 		ChatMsg(playerid, YELLOW, " >  Vehicle %d set on fire", vehicleid);
-		log(DISCORD_CHANNEL_ADMINEVENTS, "[VEHICLE] `%p` set vehicle `%d` on fire (destroy) (Name: `%s`, Owner: `%s`, Location: `%.0f, %.0f, %.0f` (%s))", playerid, vehicleid, vehiclename, vehicleowner, vy,vx,vz, zone);
 
 		return 1;
 	}
+
 	ChatMsg(playerid, YELLOW, " >  Usage: /vehicle [get/enter/owner/delete/respawn/reset/lock/unlock] [id]");
 
 	return 1;
 }
+
+
+/*==============================================================================
+
+	Spawn a new item into the game world
+
+==============================================================================*/
+
 
 ACMD:move[3](playerid, params[])
 {
@@ -271,33 +412,23 @@ ACMD:move[3](playerid, params[])
 			Float:x,
 			Float:y,
 			Float:z,
-			Float:r,
-			zone[MAX_ZONE_NAME];
+			Float:r;
 
 		GetPlayerPos(playerid, x, y, z);
 		GetPlayerFacingAngle(playerid, r);
-		GetPlayerZone(playerid, zone);
 
-		if(direction[0] == 'f')
-		{
+		if(direction[0] == 'f') // forwards
 			x += amount * floatsin(-r, degrees), y += amount * floatcos(-r, degrees);
-			log(DISCORD_CHANNEL_ADMINEVENTS, "[MOVE] `%p` moved FORWARD `%.0f meters` at `%.0f, %.0f, %.0f` (%s)", playerid, amount, x, y, z, zone);
-		}
-		if(direction[0] == 'b')
-		{
+
+		if(direction[0] == 'b') // backwards
 			x -= amount * floatsin(-r, degrees), y -= amount * floatcos(-r, degrees);
-			log(DISCORD_CHANNEL_ADMINEVENTS, "[MOVE] `%p` moved BACKWARDS `%.0f meters` at `%.0f, %.0f, %.0f` (%s)", playerid, amount, x, y, z, zone);
-		}
-		if(direction[0] == 'u')
-		{
+
+		if(direction[0] == 'u') // up
 			z += amount;
-			log(DISCORD_CHANNEL_ADMINEVENTS, "[MOVE] `%p` moved UP `%.0f meters` at `%.0f, %.0f, %.0f` (%s)", playerid, amount, x, y, z, zone);
-		}
-		if(direction[0] == 'd')
-		{
+
+		if(direction[0] == 'd') // down
 			z -= amount;
-			log(DISCORD_CHANNEL_ADMINEVENTS, "[MOVE] `%p` moved DOWN `%.0f meters` at `%.0f, %.0f, %.0f` (%s)", playerid, amount, x, y, z, zone);
-		}
+
 		SetPlayerPos(playerid, x, y, z);
 
 		return 1;
@@ -308,28 +439,38 @@ ACMD:move[3](playerid, params[])
 	return 1;
 }
 
+
+/*==============================================================================
+
+	Spawn a new item into the game world
+
+==============================================================================*/
+
+
 ACMD:additem[3](playerid, params[])
 {
 	new
-		ItemType:type = INVALID_ITEM_TYPE,
-		itemname[ITM_MAX_NAME],
-		exdata[8];
+		query[32],
+		specifiers[32],
+		data[64];
 
-	if(sscanf(params, "p<,>dA<d>(-2147483648)[8]", _:type, exdata) != 0)
+	if(sscanf(params, "s[32]S()[32]S()[64]", query, specifiers, data))
 	{
-		new tmp[ITM_MAX_NAME];
+		ChatMsg(playerid, YELLOW, " >  Usage: /additem [itemid/itemname] [extradata format specifiers] [extradata array, comma separated]");
+		ChatMsg(playerid, YELLOW, " >  Example: `/additem gascan df 1, 4.5` create a petrol can with an integer and a float in extradata.");
+		return 1;
+	}
 
-		if(sscanf(params, "p<,>s[32]A<d>(-2147483648)[8]", tmp, exdata))
-		{
-			ChatMsg(playerid, YELLOW, " >  Usage: /additem [itemid/itemname], [optional:extradata array, comma separated]");
-			return 1;
-		}
-
-		for(new ItemType:i; i < ITM_MAX_TYPES; i++)
+	// if the "query" is not an integer type, search for the name
+	new ItemType:type = INVALID_ITEM_TYPE;
+	if(sscanf(query, "d", _:type))
+	{
+		new itemname[MAX_ITEM_NAME];
+		for(new ItemType:i; i < MAX_ITEM_TYPE; i++)
 		{
 			GetItemTypeUniqueName(i, itemname);
 
-			if(strfind(itemname, tmp, true) != -1)
+			if(strfind(itemname, query, true) != -1)
 			{
 				type = i;
 				break;
@@ -338,61 +479,68 @@ ACMD:additem[3](playerid, params[])
 
 		if(type == INVALID_ITEM_TYPE)
 		{
-			for(new ItemType:i; i < ITM_MAX_TYPES; i++)
+			for(new ItemType:i; i < MAX_ITEM_TYPE; i++)
 			{
 				GetItemTypeName(i, itemname);
 
-				if(strfind(itemname, tmp, true) != -1)
+				if(strfind(itemname, query, true) != -1)
 				{
 					type = i;
 					break;
 				}
 			}
 		}
-
 		if(type == INVALID_ITEM_TYPE)
 		{
-			ChatMsg(playerid, RED, " >  No items found matching: '%s'.", tmp);
+			ChatMsg(playerid, RED, " >  Invalid item type from string: '%s'", query);
 			return 1;
 		}
 	}
-
 	if(type == INVALID_ITEM_TYPE)
 	{
-		ChatMsg(playerid, RED, " >  Invalid item type: %d", _:type);
+		ChatMsg(playerid, RED, " >  Invalid item type from integer: '%d'", _:type);
 		return 1;
 	}
 
 	new
-		exdatasize,
-		typemaxsize = GetItemTypeArrayDataSize(type),
-		itemid,
+		exdata[32],
+		exdatalen = strlen(specifiers);
+	if(exdatalen > 0)
+	{
+		// generate a sscanf enum specifier format
+		new sscanf_format[32];
+		format(sscanf_format, sizeof sscanf_format, "p<,>e<%s>", specifiers);
+
+		// parse the extra data using the generated sscanf format string
+		if(strlen(data) && sscanf(data, sscanf_format, exdata))
+		{
+			ChatMsg(playerid, YELLOW, " >  Format of exdata did not match specifier: '%s'", sscanf_format);
+			return 1;
+		}
+	}
+
+	// create the item and hydrate its extradata array.
+	new
+		typemaxsize,
+		Item:itemid,
 		Float:x,
 		Float:y,
 		Float:z,
-		Float:r,
-		zone[MAX_ZONE_NAME];
+		Float:r;
 
-	for(new i; i < 8; ++i)
-	{
-		if(exdata[i] != cellmin)
-			++exdatasize;
-	}
-
-	if(exdatasize > typemaxsize)
-		exdatasize = typemaxsize;
-
+	GetItemTypeArrayDataSize(type, typemaxsize);
 	GetPlayerPos(playerid, x, y, z);
 	GetPlayerFacingAngle(playerid, r);
-	GetPlayerZone(playerid, zone);
 
 	itemid = CreateItem(type,
 		x + (0.5 * floatsin(-r, degrees)),
 		y + (0.5 * floatcos(-r, degrees)),
-		z - FLOOR_OFFSET, .rz = r);
+		z - ITEM_FLOOR_OFFSET, .rz = r);
 
-	if(exdatasize > 0)
-		SetItemArrayData(itemid, exdata, exdatasize);
+	if(exdatalen > 0)
+	{
+		SetItemArrayData(itemid, exdata, typemaxsize);
+	}
 
 	if(GetPlayerAdminLevel(playerid) < STAFF_LEVEL_LEAD)
 	{
@@ -400,15 +548,23 @@ ACMD:additem[3](playerid, params[])
 		{
 			#pragma unused pid, dialogid, response, listitem
 
-			log(DISCORD_CHANNEL_ADMINEVENTS, DISCORD_MENTION_STAFF"[ITEM] `%p` added item `%s` at `%.0f, %.0f, %.0f` (%s). Reason: `%s`", playerid, itemname, x,y,z, zone, inputtext);
+			new itemname[MAX_ITEM_NAME];
+			GetItemTypeName(type, itemname);
+			log("[ADDITEM] %p added item %s (d:%d) reason: %s", pid, itemname, _:type, inputtext);
 		}
 		Dialog_ShowCallback(playerid, using inline Response, DIALOG_STYLE_INPUT, "Justification", "Type a reason for adding this item:", "Enter", "");
 	}
-	else
-		log(DISCORD_CHANNEL_ADMINEVENTS, "[ITEM] `%p` added item `%s` at `%.0f, %.0f, %.0f` (%s)", playerid, itemname, x,y,z, zone);
 
 	return 1;
 }
+
+
+/*==============================================================================
+
+	Spawn a new vehicle into the game world
+
+==============================================================================*/
+
 
 ACMD:addvehicle[3](playerid, params[])
 {
@@ -422,41 +578,44 @@ ACMD:addvehicle[3](playerid, params[])
 
 	if(isnumeric(params))
 		type = strval(params);
+
 	else
 		type = GetVehicleTypeFromName(params, true, true);
 
 	if(!IsValidVehicleType(type))
 	{
-		ChatMsg(playerid, YELLOW, " >  Invalid vehicle type (%s). (Specify by name or type)", params);
+		ChatMsg(playerid, YELLOW, " >  Invalid vehicle type.");
 		return 1;
 	}
 
 	GetPlayerPos(playerid, x, y, z);
-	GetXYInFrontOfPlayer(playerid, x, y, 2.0);
 	GetPlayerFacingAngle(playerid, r);
 
-	vehicleid = CreateLootVehicle(type, x, y, z + 2.0, r + 90.0);
-	SetVehicleParamsEx(vehicleid, 1, 0, 0, 0, 0, 0, 0);
+	vehicleid = CreateLootVehicle(type, x, y, z, r);
 	SetVehicleFuel(vehicleid, 100000.0);
 	SetVehicleHealth(vehicleid, 990.0);
-	SetVehicleDamageData(vehicleid, encode_panels(0, 0, 0, 0, 0, 0, 0), encode_doors(0, 0, 0, 0), encode_lights(0, 0, 0, 0), encode_tires(0, 0, 0, 0));
-	SetVehicleExternalLock(vehicleid, E_LOCK_STATE_OPEN);
-	SetVehicleTrunkLock(vehicleid, false);
 
-	inline Response(pid, dialogid, response, listitem, string:inputtext[])
+	if(GetPlayerAdminLevel(playerid) < STAFF_LEVEL_LEAD)
 	{
-		#pragma unused dialogid, response, listitem
+		inline Response(pid, dialogid, response, listitem, string:inputtext[])
+		{
+			#pragma unused pid, dialogid, response, listitem
 
-		/*if(response)
-			reason = inputtext;
-		else
-			reason = "None given";*/
-		log(DISCORD_CHANNEL_ADMINEVENTS, "[VEHICLE] `%p` (`%.0f, %.0f, %.0f` - %s) added vehicle with ID `%d` (%s). Reason: `%s`", pid, x,y,z, GetPlayerZoneEx(playerid), type, GetVehicleName(vehicleid), inputtext);
+			log("[ADDVEHICLE] %p added vehicle %d reason: %s", pid, type, inputtext);
+		}
+		Dialog_ShowCallback(playerid, using inline Response, DIALOG_STYLE_INPUT, "Justification", "Type a reason for adding this vehicle:", "Enter", "");
 	}
-	Dialog_ShowCallback(playerid, using inline Response, DIALOG_STYLE_INPUT, "Justification", "Type a reason for adding this vehicle:", "Enter", "");
 
 	return 1;
 }
+
+
+/*==============================================================================
+
+	Reset a player's password
+
+==============================================================================*/
+
 
 ACMD:resetpassword[3](playerid, params[])
 {
@@ -471,15 +630,14 @@ ACMD:resetpassword[3](playerid, params[])
 	WP_Hash(buffer, MAX_PASSWORD_LEN, "password");
 
 	if(SetAccountPassword(params, buffer))
-	{
-		ChatMsg(playerid, YELLOW, " >  Password for '%s' reset. Tell the player to use /changepass on next login.", params);
-		log(DISCORD_CHANNEL_ADMINEVENTS, "[ACCOUNT] `%p` reset the password for `%s`.", playerid, params);
-	}
+		ChatMsg(playerid, YELLOW, " >  Password for '%s' reset.", params);
+
 	else
 		ChatMsg(playerid, RED, " >  An error occurred.");
 
 	return 1;
 }
+
 
 ACMD:setactive[3](playerid, params[])
 {
@@ -505,6 +663,13 @@ ACMD:setactive[3](playerid, params[])
 
 	return 1;
 }
+
+/*==============================================================================
+
+	Delete a bunch of a specific type of entity within a radius
+
+==============================================================================*/
+
 
 ACMD:delete[3](playerid, params[])
 {
@@ -541,12 +706,11 @@ ACMD:delete[3](playerid, params[])
 	{
 		foreach(new i : itm_Index)
 		{
-			GetItemPos(i, ix, iy, iz);
+			GetItemPos(Item:i, ix, iy, iz);
 
 			if(Distance(px, py, pz, ix, iy, iz) < range)
-				i = DestroyItem(i);
+				i = _:DestroyItem(Item:i);
 		}
-		log(DISCORD_CHANNEL_ADMINEVENTS, "[ITEM] `%p` deleted all `items` within %.0f meters.", playerid, range);
 
 		return 1;
 	}
@@ -556,10 +720,10 @@ ACMD:delete[3](playerid, params[])
 		{
 			GetTentPos(i, ix, iy, iz);
 
-			if(Distance(px, py, pz, ix, iy, iz) < range)
-				i = DestroyTent(i);
+			if(Distance(px, py, pz, ix, iy, iz) < range){
+				//i = DestroyTent(i);
+			}
 		}
-		log(DISCORD_CHANNEL_ADMINEVENTS, "[ITEM] `%p` deleted all `tents` within %.0f meters.", playerid, range);
 
 		return 1;
 	}
@@ -567,19 +731,21 @@ ACMD:delete[3](playerid, params[])
 	{
 		foreach(new i : itm_Index)
 		{
-			if(GetItemTypeDefenceType(GetItemType(i)) == INVALID_DEFENCE_TYPE)
+			if(GetItemTypeDefenceType(GetItemType(Item:i)) == INVALID_DEFENCE_TYPE)
 				continue;
 
-			GetItemPos(i, ix, iy, iz);
+			GetItemPos(Item:i, ix, iy, iz);
 
-			if(Distance(px, py, pz, ix, iy, iz) < range)
-				i = DestroyItem(i);
+			if(Distance(px, py, pz, ix, iy, iz) < range){
+				CallLocalFunction("OnDefenceDestroy", "d", i);
+				i = _:DestroyItem(Item:i);
+			}
 		}
-		log(DISCORD_CHANNEL_ADMINEVENTS, "[ITEM] `%p` deleted all `defences` within %.0f meters.", playerid, range);
 
 		return 1;
 	}
-	ChatMsg(playerid, YELLOW, " >  Usage: /delete [items/tents/defences] [optional:range(1.5)]");
+
+	ChatMsg(playerid, YELLOW, " >  Usage: /delete [items/tents/defences/signs] [optional:range(1.5)]");
 
 	return 1;
 }

@@ -1,4 +1,19 @@
-#include <YSI\y_hooks>
+/*==============================================================================
+
+
+	Southclaws' Scavenge and Survive
+
+		Copyright (C) 2020 Barnaby "Southclaws" Keene
+
+		This Source Code Form is subject to the terms of the Mozilla Public
+		License, v. 2.0. If a copy of the MPL was not distributed with this
+		file, You can obtain one at http://mozilla.org/MPL/2.0/.
+
+
+==============================================================================*/
+
+
+#include <YSI_Coding\y_hooks>
 
 
 #define MAX_REPORT_REASON_LENGTH	(128)
@@ -113,23 +128,26 @@ hook OnGameModeInit()
 	stmt_ReportGetUnread	= db_prepare(gAccounts, "SELECT COUNT(*) FROM "ACCOUNTS_TABLE_REPORTS" WHERE "FIELD_REPORTS_READ" = 0");
 }
 
-ReportPlayer(name[], reason[], reporter, type[], Float:posx, Float:posy, Float:posz, world, interior, infostring[])
-{
-	if(world > 0) // Report only for the virtual world that matters
-		return 0;
 
+/*==============================================================================
+
+	Core
+
+==============================================================================*/
+
+
+ReportPlayer(const name[], const reason[], reporter, const type[], Float:posx, Float:posy, Float:posz, world, interior, const infostring[])
+{
 	new reportername[MAX_PLAYER_NAME];
 
 	if(reporter == -1)
 	{
 		ChatMsgAdmins(1, YELLOW, " >  Server reported %s, reason: %s", name, reason);
-		log(DISCORD_CHANNEL_ADMINEVENTS, "[REPORT] Server reported `%s`. Reason: `%s` @everyone", name, reason);
 		reportername = "Server";
 	}
 	else
 	{
 		ChatMsgAdmins(1, YELLOW, " >  %p reported %s, reason: %s", reporter, name, reason);
-		log(DISCORD_CHANNEL_ADMINEVENTS, "[REPORT] `%p` reported `%s`. Reason: `%s` @everyone", reporter, name, reason);
 		GetPlayerName(reporter, reportername, MAX_PLAYER_NAME);
 	}
 
@@ -146,7 +164,9 @@ ReportPlayer(name[], reason[], reporter, type[], Float:posx, Float:posy, Float:p
 	stmt_bind_value(stmt_ReportInsert, 10, DB::TYPE_STRING, reportername, MAX_PLAYER_NAME);
 
 	if(stmt_execute(stmt_ReportInsert))
+	{
 		return 1;
+	}
 
 	return 0;
 }

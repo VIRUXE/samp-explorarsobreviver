@@ -1,4 +1,19 @@
-#include <YSI\y_hooks>
+/*==============================================================================
+
+
+	Southclaws' Scavenge and Survive
+
+		Copyright (C) 2020 Barnaby "Southclaws" Keene
+
+		This Source Code Form is subject to the terms of the Mozilla Public
+		License, v. 2.0. If a copy of the MPL was not distributed with this
+		file, You can obtain one at http://mozilla.org/MPL/2.0/.
+
+
+==============================================================================*/
+
+
+#include <YSI_Coding\y_hooks>
 
 
 enum e_item_object
@@ -30,8 +45,8 @@ Float:		spawn_PosZ[MAX_PLAYERS],
 Float:		spawn_RotZ[MAX_PLAYERS];
 
 new
-PlayerText:	ClassButtonMale[MAX_PLAYERS] = 		{PlayerText:INVALID_TEXT_DRAW, ...},
-PlayerText:	ClassButtonFemale[MAX_PLAYERS] = 	{PlayerText:INVALID_TEXT_DRAW, ...};
+PlayerText:	ClassButtonMale[MAX_PLAYERS] = {PlayerText:INVALID_TEXT_DRAW, ...},
+PlayerText:	ClassButtonFemale[MAX_PLAYERS] = {PlayerText:INVALID_TEXT_DRAW, ...};
 
 
 forward OnPlayerCreateChar(playerid);
@@ -48,13 +63,14 @@ hook OnGameModeInit()
 		resitems[16][32],
 		resitems_total,
 
-		bagtype[ITM_MAX_NAME];
+		bagtype[MAX_ITEM_NAME];
 
 	GetSettingString("spawn/bagtype", "Satchel", bagtype);
 	spawn_BagType = GetItemTypeFromUniqueName(bagtype, true);
 
 	if(!IsValidItemType(spawn_BagType))
 		err("spawn/bagtype item name '%s' results in invalid item type %d", bagtype, _:spawn_BagType);
+
 
 	GetSettingFloat("spawn/new-blood", 90.0, spawn_NewBlood);
 	GetSettingFloat("spawn/new-food", 80.0, spawn_NewFood);
@@ -85,10 +101,13 @@ hook OnGameModeInit()
 
 hook OnPlayerConnect(playerid)
 {
-	dbg("global", LOG_CORE, "[OnPlayerConnect] in /gamemodes/sss/core/player/spawn.pwn");
-
 	spawn_State[playerid] = false;
 
+//	defer LoadClassUI(playerid);
+//}
+//
+//timer LoadClassUI[1](playerid)
+//{
 	ClassButtonMale[playerid]		=CreatePlayerTextDraw(playerid, 250.000000, 200.000000, "~n~Male~n~~n~");
 	PlayerTextDrawAlignment			(playerid, ClassButtonMale[playerid], 2);
 	PlayerTextDrawBackgroundColor	(playerid, ClassButtonMale[playerid], 255);
@@ -118,30 +137,6 @@ hook OnPlayerConnect(playerid)
 	PlayerTextDrawSetSelectable		(playerid, ClassButtonFemale[playerid], true);
 }
 
-CMD:respawn(playerid)
-{
-	new	Float:x, Float:y, Float:z, Float:r;
-
-	GetPlayerPos(playerid, x, y, z);
-
-	if(IsPlayerInRangeOfDefaultPos(playerid, 20) || IsAtConnectionPos(x, y, z))
-	{
-		GenerateSpawnPoint(playerid, x, y, z, r);
-		Streamer_UpdateEx(playerid, x, y, z, 0, 0);
-		SetPlayerPos(playerid, x, y, z);
-		SetPlayerFacingAngle(playerid, r);
-
-		log(DISCORD_CHANNEL_ADMINEVENTS, "[RESPAWN] `%p` respawned at `%.0f,%.0f,%.0f`", playerid, x,y,z);
-	}
-	else
-	{
-		ChatMsg(playerid, YELLOW, " >  This only works if you've spawned at the whitehouse or the sea.");
-		log(DISCORD_CHANNEL_ADMINEVENTS, "[RESPAWN] `%p` tried respawning at `%.0f,%.0f,%.0f`", playerid, x,y,z);
-	}
-
-	return 1;
-}
-
 SpawnLoggedInPlayer(playerid)
 {
 	if(IsPlayerAlive(playerid))
@@ -154,7 +149,9 @@ SpawnLoggedInPlayer(playerid)
 			return 1;
 		}
 		else
-			err("@everyone PlayerSpawnExistingCharacter returned %d", ret);
+		{
+			err("PlayerSpawnExistingCharacter returned %d", ret);
+		}
 	}
 	
 	PlayerCreateNewCharacter(playerid);
@@ -169,9 +166,6 @@ PrepareForSpawn(playerid)
 
 	SetCameraBehindPlayer(playerid);
 	SetAllWeaponSkills(playerid, 500);
-
-	GangZoneShowForPlayer(playerid, MiniMapOverlay, 0x000000FF);
-	ShowWatch(playerid);
 	CancelSelectTextDraw(playerid);
 }
 
@@ -183,7 +177,11 @@ PlayerSpawnExistingCharacter(playerid)
 	if(!LoadPlayerChar(playerid))
 		return 2;
 
-	new	Float:x, Float:y, Float:z, Float:r;
+	new
+		Float:x,
+		Float:y,
+		Float:z,
+		Float:r;
 
 	GetPlayerSpawnPos(playerid, x, y, z);
 	GetPlayerSpawnRot(playerid, r);
@@ -202,22 +200,30 @@ PlayerSpawnExistingCharacter(playerid)
 		ChatMsgLang(playerid, YELLOW, "WARNCOUNTER", GetPlayerWarnings(playerid));
 	}
 
-	if(GetPlayerVirtualWorld(playerid) != 0)
-		DiscordMessage(DISCORD_CHANNEL_ADMINEVENTS, "@here `%p` is on virtual world %d.", playerid, GetPlayerVirtualWorld(playerid));
-
 	SetPlayerClothes(playerid, GetPlayerClothesID(playerid));
 	FreezePlayer(playerid, gLoginFreezeTime * 1000);
 
 	PrepareForSpawn(playerid);
 
 	if(GetPlayerStance(playerid) == 1)
+	{
 		ApplyAnimation(playerid, "SUNBATHE", "PARKSIT_M_OUT", 4.0, 0, 0, 0, 0, 0);
+	}
 	else if(GetPlayerStance(playerid) == 2)
+	{
 		ApplyAnimation(playerid, "SUNBATHE", "PARKSIT_M_OUT", 4.0, 0, 0, 0, 0, 0);
+	}
 	else if(GetPlayerStance(playerid) == 3)
+	{
 		ApplyAnimation(playerid, "ROB_BANK", "SHP_HandsUp_Scr", 4.0, 0, 1, 1, 1, 0);
+	}
 
-	log(DISCORD_CHANNEL_EVENTS, "[SPAWN] `%p` spawned existing character at `%.0f, %.0f, %.0f`", playerid, x, y, z);
+	Logger_Log("player spawned existing character",
+		Logger_P(playerid),
+		Logger_F("x", x),
+		Logger_F("y", y),
+		Logger_F("z", z),
+		Logger_F("r", r));
 
 	CallLocalFunction("OnPlayerSpawnChar", "d", playerid);
 
@@ -226,8 +232,6 @@ PlayerSpawnExistingCharacter(playerid)
 
 PlayerCreateNewCharacter(playerid)
 {
-	log(DISCORD_CHANNEL_EVENTS, "[SPAWN] `%p` is creating a new character.", playerid);
-
 	SetPlayerPos(playerid, DEFAULT_POS_X + 5, DEFAULT_POS_Y, DEFAULT_POS_Z);
 	SetPlayerFacingAngle(playerid, 0.0);
 	SetPlayerVirtualWorld(playerid, 0);
@@ -240,28 +244,27 @@ PlayerCreateNewCharacter(playerid)
 	SetPlayerBrightness(playerid, 255);
 	TogglePlayerControllable(playerid, false);
 
-	if(IsPlayerLoggedIn(playerid) && IsPlayerUsingAnticheat(playerid)) // Only show these buttons if player is using the an anticheat
+	if(IsPlayerLoggedIn(playerid))
 	{
 		PlayerTextDrawSetString(playerid, ClassButtonMale[playerid], sprintf("~n~%s~n~~n~", ls(playerid, "GENDER_M")));
 		PlayerTextDrawSetString(playerid, ClassButtonFemale[playerid], sprintf("~n~%s~n~~n~", ls(playerid, "GENDER_F")));
 		PlayerTextDrawShow(playerid, ClassButtonMale[playerid]);
 		PlayerTextDrawShow(playerid, ClassButtonFemale[playerid]);
+		SelectTextDraw(playerid, 0xFFFFFF88);
 	}
-	SelectTextDraw(playerid, 0xFFFFFF88);
 
 	CallLocalFunction("OnPlayerCreateChar", "d", playerid);
 }
 
 hook OnPlayerClickPlayerTD(playerid, PlayerText:playertextid)
 {
-	dbg("global", LOG_CORE, "[OnPlayerClickPlayerTD] in /gamemodes/sss/core/player/spawn.pwn");
-
-	if(CanPlayerLeaveWelcomeMessage(playerid))
+	if(playertextid == ClassButtonMale[playerid])
 	{
-		if(playertextid == ClassButtonMale[playerid])
-			PlayerSpawnNewCharacter(playerid, GENDER_MALE);
-		if(playertextid == ClassButtonFemale[playerid])
-			PlayerSpawnNewCharacter(playerid, GENDER_FEMALE);
+		PlayerSpawnNewCharacter(playerid, GENDER_MALE);
+	}
+	if(playertextid == ClassButtonFemale[playerid])
+	{
+		PlayerSpawnNewCharacter(playerid, GENDER_FEMALE);
 	}
 }
 
@@ -280,8 +283,8 @@ PlayerSpawnNewCharacter(playerid, gender)
 	SetAccountTotalSpawns(name, GetPlayerTotalSpawns(playerid));
 
 	new
-		backpackitem,
-		tmpitem,
+		Item:backpackitem,
+		Item:tmpitem,
 		Float:x,
 		Float:y,
 		Float:z,
@@ -386,7 +389,12 @@ PlayerSpawnNewCharacter(playerid, gender)
 
 	CallLocalFunction("OnPlayerSpawnNewChar", "d", playerid);
 
-	log(DISCORD_CHANNEL_EVENTS, "[SPAWN] `%p` spawned new character at `%.0f, %.0f, %.0f`", playerid, x, y, z);
+	Logger_Log("player spawned new character",
+		Logger_P(playerid),
+		Logger_F("x", x),
+		Logger_F("y", y),
+		Logger_F("z", z),
+		Logger_F("r", r));
 
 	return 1;
 }
@@ -402,7 +410,7 @@ PlayerSpawnNewCharacter(playerid, gender)
 // spawn_State
 stock IsPlayerSpawned(playerid)
 {
-	if(!IsValidPlayerID(playerid))
+	if(!IsPlayerConnected(playerid))
 		return 0;
 
 	return spawn_State[playerid];
@@ -410,7 +418,7 @@ stock IsPlayerSpawned(playerid)
 
 stock SetPlayerSpawnedState(playerid, bool:st)
 {
-	if(!IsValidPlayerID(playerid))
+	if(!IsPlayerConnected(playerid))
 		return 0;
 
 	spawn_State[playerid] = st;
@@ -418,9 +426,12 @@ stock SetPlayerSpawnedState(playerid, bool:st)
 	return 1;
 }
 
+// spawn_PosX
+// spawn_PosY
+// spawn_PosZ
 stock GetPlayerSpawnPos(playerid, &Float:x, &Float:y, &Float:z)
 {
-	if(!IsValidPlayerID(playerid))
+	if(!IsPlayerConnected(playerid))
 		return 0;
 
 	x = spawn_PosX[playerid];
@@ -442,9 +453,10 @@ stock SetPlayerSpawnPos(playerid, Float:x, Float:y, Float:z)
 	return 1;
 }
 
+// spawn_RotZ
 stock GetPlayerSpawnRot(playerid, &Float:r)
 {
-	if(!IsValidPlayerID(playerid))
+	if(!IsPlayerConnected(playerid))
 		return 0;
 
 	r = spawn_RotZ[playerid];
@@ -460,14 +472,6 @@ stock SetPlayerSpawnRot(playerid, Float:r)
 	spawn_RotZ[playerid] = r;
 
 	return 1;
-}
-
-IsPlayerInRangeOfDefaultPos(playerid, Float:range)
-{
-	if(IsPlayerInRangeOfPoint(playerid, range, DEFAULT_POS_X, DEFAULT_POS_Y, DEFAULT_POS_Z))
-		return 1;
-
-	return 0;
 }
 
 IsAtDefaultPos(Float:x, Float:y, Float:z)

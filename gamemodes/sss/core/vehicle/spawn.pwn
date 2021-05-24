@@ -1,6 +1,24 @@
-#include <YSI\y_hooks>
+/*==============================================================================
 
-#define DIRECTORY_VEHICLESPAWNS		"vehicle_spawns/"
+
+	Southclaws' Scavenge and Survive
+
+		Copyright (C) 2020 Barnaby "Southclaws" Keene
+
+		This Source Code Form is subject to the terms of the Mozilla Public
+		License, v. 2.0. If a copy of the MPL was not distributed with this
+		file, You can obtain one at http://mozilla.org/MPL/2.0/.
+
+
+==============================================================================*/
+
+
+#include <YSI_Coding\y_hooks>
+
+
+// The directory from which vehicle spawn positions are loaded
+#define DIRECTORY_VEHICLESPAWNS		"vspawn/"
+
 
 enum E_VEHICLE_SPAWN_DATA
 {
@@ -13,23 +31,22 @@ Float:	vspawn_posR,
 		vspawn_sizes[3]
 }
 
+
 static
 		veh_SpawnData[MAX_VEHICLES][E_VEHICLE_SPAWN_DATA],
 
 // Settings: Prefixed camel case here and dashed in settings.json
-Float:	veh_SpawnChance = 4.0, // Chance for each vehicle spawn point to have a loot vehicle spawned
-bool:	veh_PrintEach,
-bool:	veh_PrintTotal;
+Float:	veh_SpawnChance = 4.0;
 
-static	veh_DebugLabelType;
+
+// static	veh_DebugLabelType;
+
 
 hook OnScriptInit()
 {
 	DirectoryCheck(DIRECTORY_SCRIPTFILES DIRECTORY_VEHICLESPAWNS);
 
 	GetSettingFloat("vehicle-spawn/spawn-chance", 4.0, veh_SpawnChance);
-	GetSettingInt("vehicle-spawn/print-each", false, veh_PrintEach);
-	GetSettingInt("vehicle-spawn/print-total", true, veh_PrintTotal);
 }
 
 hook OnGameModeInit()
@@ -37,102 +54,67 @@ hook OnGameModeInit()
 	if(veh_SpawnChance == 0.0)
 		return Y_HOOKS_CONTINUE_RETURN_0;
 
-	LoadVehiclesFromFolder(DIRECTORY_VEHICLESPAWNS);
+	LoadVehiclesFromFolder(DIRECTORY_SCRIPTFILES DIRECTORY_VEHICLESPAWNS);
 
-	log(DISCORD_CHANNEL_EVENTS, "[VEHICLE] Loaded a total of %d spawn vehicles", Iter_Count(veh_Index));
+	new
+		vehicletypename[MAX_VEHICLE_TYPE_NAME],
+		vehicletypecount;
 
-	if(veh_PrintTotal)
+	for(new i; i < veh_TypeTotal; i++)
 	{
-		new
-			vehicletypename[MAX_VEHICLE_TYPE_NAME],
-			vehicletypecount;
+		vehicletypecount = GetVehicleTypeCount(i);
 
-		for(new i; i < veh_TypeTotal; i++)
+		if(vehicletypecount > 0)
 		{
-			vehicletypecount = GetVehicleTypeCount(i);
-
-			if(vehicletypecount > 0)
-			{
-				new coolVehs[][] = 
-				{
-					"Kart",
-					"Quad",
-					"Hotring",
-					"Coach",
-					"NRG",
-					"Monster",
-					"Bloodring Banger",
-					"Bandito",
-					"Rhino",
-					"Maverick",
-					"Police Maverick",
-					"Sandking",
-					"Turismo",
-					"Trailer",
-					"Swat Tank",
-					"Hunter"
-				};
-
-				GetVehicleTypeName(i, vehicletypename);
-
-				for(new v; v < sizeof(coolVehs); v++)
-				{
-					if(!strcmp(vehicletypename, coolVehs[v]))
-						DiscordMessage(DISCORD_CHANNEL_GLOBAL, "*spawned a %s*", vehicletypename);
-				}
-
-				log(DISCORD_CHANNEL_EVENTS, "[VEHICLE] Spawned %d `%s`", vehicletypecount, vehicletypename, i);
-			}
+			GetVehicleTypeName(i, vehicletypename);
+			Logger_Log("spawned new vehicles",
+				Logger_I("type_id", i),
+				Logger_S("type", vehicletypename),
+				Logger_I("count", vehicletypecount)
+			);
 		}
 	}
 
-	veh_DebugLabelType = DefineDebugLabelType("VEHICLESPAWN", 0xFFCCFFFF);
+	Logger_Log("loaded vehicles", Logger_I("count", Iter_Count(veh_Index)));
+
+	// TODO: re-add debug label library
+	// veh_DebugLabelType = DefineDebugLabelType("VEHICLESPAWN", 0xFFCCFFFF);
 
 	return Y_HOOKS_CONTINUE_RETURN_0;
 }
 
-LoadVehiclesFromFolder(foldername[])
+LoadVehiclesFromFolder(const directory_with_root[])
 {
-	//log("[LoadVehiclesFromFolder] Loading vehicles from: '%s'...", foldername);
-	
 	new
-		dir:dirhandle,
-		directory_with_root[256],
-		item[64],
-		type,
-		next_path[256];
+		Directory:direc,
+		entry[64],
+		ENTRY_TYPE:type,
+		trimlength = strlen("./scriptfiles/");
 
-	strcat(directory_with_root, DIRECTORY_SCRIPTFILES);
-	strcat(directory_with_root, foldername);
+	direc = OpenDir(directory_with_root);
 
-	dirhandle = dir_open(directory_with_root);
-
-	if(!dirhandle)
+	if(direc == Directory:-1)
 	{
-		err("[LoadVehiclesFromFolder] Reading directory '%s'.", foldername);
+		err("[LoadVehiclesFromFolder] Reading directory '%s'.", directory_with_root);
 		return 0;
 	}
 
-	while(dir_list(dirhandle, item, type))
+	while(DirNext(direc, type, entry))
 	{
-		if(type == FM_DIR && strcmp(item, "..") && strcmp(item, ".") && strcmp(item, "_"))
+		if(type == E_DIRECTORY && strcmp(entry, "..") && strcmp(entry, ".") && strcmp(entry, "_"))
 		{
-			next_path[0] = EOS;
-			format(next_path, sizeof(next_path), "%s%s/", foldername, item);
-			LoadVehiclesFromFolder(next_path);
+			LoadVehiclesFromFolder(entry);
 		}
-		if(type == FM_FILE)
+		if(type == E_REGULAR)
 		{
-			if(!strcmp(item[strlen(item) - 4], ".vpl"))
+			if(!strcmp(entry[strlen(entry) - 4], ".vpl"))
 			{
-				next_path[0] = EOS;
-				format(next_path, sizeof(next_path), "%s%s", foldername, item);
-				LoadVehiclesFromFile(next_path);
+				LoadVehiclesFromFile(entry[trimlength]);
 			}
 		}
 	}
 
-	dir_close(dirhandle);
+	CloseDir(direc);
 
 	return 1;
 }
@@ -169,6 +151,12 @@ LoadVehiclesFromFile(file[])
 		default_maxcategories,
 		default_sizes[4],
 		default_maxsizes;
+
+	if(!f)
+	{
+		err("Reading file '%s'.", file);
+		return 0;
+	}
 
 	while(fread(f, line))
 	{
@@ -208,10 +196,14 @@ LoadVehiclesFromFile(file[])
 					continue;
 				}
 				else
+				{
 					veh_SpawnData[count][vspawn_group] = default_group;
+				}
 			}
 			else
+			{
 				veh_SpawnData[count][vspawn_group] = GetVehicleGroupFromName(group);
+			}
 
 			if(veh_SpawnData[count][vspawn_group] != -1)
 			{
@@ -234,7 +226,7 @@ LoadVehiclesFromFile(file[])
 				else
 				{
 					if(!_CatStringToInts(categories, veh_SpawnData[count][vspawn_categories], strlen(categories)))
-						err("[VEHICLE] Invalid category character in '%s':%d", file, linenum);
+						err("[Vehicle] Invalid category character in '%s':%d", file, linenum);
 				}
 
 				/*
@@ -256,7 +248,7 @@ LoadVehiclesFromFile(file[])
 				else
 				{
 					if(!_SizeStringToInts(sizes, veh_SpawnData[count][vspawn_sizes], strlen(sizes)))
-						err("[VEHICLE] Invalid size character in '%s':%d", file, linenum);
+						err("[Vehicle] Invalid size character in '%s':%d", file, linenum);
 				}
 
 				type = PickRandomVehicleTypeFromGroup(veh_SpawnData[count][vspawn_group], veh_SpawnData[count][vspawn_categories], maxcategories, veh_SpawnData[count][vspawn_sizes], maxsizes);
@@ -275,10 +267,11 @@ LoadVehiclesFromFile(file[])
 					continue;
 			}
 
-			CreateDebugLabel(veh_DebugLabelType, count, posX, posY, posZ, sprintf("GRP: '%d' CAT: '%s' SIZ: '%s'",
-				veh_SpawnData[count][vspawn_group],
-				categories,
-				sizes));
+			// TODO: debug label library
+			// CreateDebugLabel(veh_DebugLabelType, count, posX, posY, posZ, sprintf("GRP: '%d' CAT: '%s' SIZ: '%s'",
+			// 	veh_SpawnData[count][vspawn_group],
+			// 	categories,
+			// 	sizes));
 
 			if(!IsValidVehicleType(type))
 				continue;
@@ -319,14 +312,17 @@ LoadVehiclesFromFile(file[])
 
 	fclose(f);
 
-	if(veh_PrintEach)
-		log(DISCORD_CHANNEL_EVENTS, "[VEHICLE] Loaded a total of %d vehicles from %s (from total %d spawns)", count, file, total);
+	Logger_Log("spawned vehicles",
+		Logger_I("count", count),
+		Logger_I("spawns", total),
+		Logger_S("file", file)
+	);
 
 	return 1;
 }
 
 
-_CatStringToInts(input[], output[], len)
+_CatStringToInts(const input[], output[], len)
 {
 	for(new i; i < len; i++)
 	{
@@ -347,7 +343,7 @@ _CatStringToInts(input[], output[], len)
 	return 1;
 }
 
-_SizeStringToInts(input[], output[], len)
+_SizeStringToInts(const input[], output[], len)
 {
 	for(new i; i < len; i++)
 	{

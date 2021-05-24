@@ -1,4 +1,25 @@
-#include <YSI\y_hooks>
+/*==============================================================================
+
+
+	Southclaws' Scavenge and Survive
+
+		Copyright (C) 2020 Barnaby "Southclaws" Keene
+
+		This Source Code Form is subject to the terms of the Mozilla Public
+		License, v. 2.0. If a copy of the MPL was not distributed with this
+		file, You can obtain one at http://mozilla.org/MPL/2.0/.
+
+		Rough usage:
+		Every time a player *starts* a skill oriented action, call
+		GetPlayerSkillTimeModifier and subtract the return value from the time.
+		Every time a player *finishes* a skill oriented action, call
+		PlayerGainSkillExperience with the skill name to level them up a bit.
+
+
+==============================================================================*/
+
+
+#include <YSI_Coding\y_hooks>
 
 
 #define MAX_PLAYER_SKILLS	(50)
@@ -21,8 +42,8 @@ Float:		skl_bound
 static
 			skl_PlayerSkills[MAX_PLAYERS][MAX_PLAYER_SKILLS][E_SKILL_DATA],
 			skl_PlayerSkillCount[MAX_PLAYERS],
-PlayerText:	skl_PlayerNotification,
-			skl_InventoryItem[MAX_PLAYERS];
+PlayerText:	skl_PlayerNotification;
+/*			skl_InventoryItem[MAX_PLAYERS];
 
 static
 				skl_Levels[5][E_SKILL_LEVEL_DATA] = {
@@ -31,12 +52,12 @@ static
 					{"Intermediate",	C_ORANGE,	0.33},
 					{"Experienced",		C_BLUE,		0.66},
 					{"Master",			C_PINK,		0.9}
-				};
+				};*/
 
 
 hook OnPlayerConnect(playerid)
 {
-	skl_PlayerNotification			=CreatePlayerTextDraw(playerid, 320.000000, 400.000000, "+Fishing");
+	skl_PlayerNotification			=CreatePlayerTextDraw(playerid, 320.000000, 430.000000, "+Fishing");
 	PlayerTextDrawAlignment			(playerid, skl_PlayerNotification, 2);
 	PlayerTextDrawBackgroundColor	(playerid, skl_PlayerNotification, 255);
 	PlayerTextDrawFont				(playerid, skl_PlayerNotification, 1);
@@ -46,7 +67,7 @@ hook OnPlayerConnect(playerid)
 	PlayerTextDrawSetProportional	(playerid, skl_PlayerNotification, 1);
 }
 
-stock PlayerGainSkillExperience(playerid, skillname[], Float:mult = 0.0)
+stock PlayerGainSkillExperience(playerid, const skillname[], Float:mult = 0.0)
 {
 	if(!IsPlayerConnected(playerid))
 		return 0;
@@ -65,8 +86,9 @@ stock PlayerGainSkillExperience(playerid, skillname[], Float:mult = 0.0)
 				2 * floatpower(skl_PlayerSkills[playerid][cell][skl_amount], 3)));
 
 	PlayerTextDrawSetString(playerid, skl_PlayerNotification, sprintf("+%s", skillname));
-	PlayerTextDrawShow(playerid, skl_PlayerNotification);
-	defer skl_HideUI(playerid);
+	// TODO: fix skills system!
+	// PlayerTextDrawShow(playerid, skl_PlayerNotification);
+	// defer skl_HideUI(playerid);
 
 	return 1;
 }
@@ -76,7 +98,7 @@ timer skl_HideUI[5000](playerid)
 	PlayerTextDrawHide(playerid, skl_PlayerNotification);
 }
 
-stock GetPlayerSkillTimeModifier(playerid, time, skillname[])
+stock GetPlayerSkillTimeModifier(playerid, time, const skillname[])
 {
 	if(!IsPlayerConnected(playerid))
 		return time;
@@ -89,7 +111,7 @@ stock GetPlayerSkillTimeModifier(playerid, time, skillname[])
 	return time;
 }
 
-stock Float:GetPlayerSkillValue(playerid, skillname[])
+stock Float:GetPlayerSkillValue(playerid, const skillname[])
 {
 	if(!IsPlayerConnected(playerid))
 		return 0.0;
@@ -102,7 +124,7 @@ stock Float:GetPlayerSkillValue(playerid, skillname[])
 	return 0.0;
 }
 
-_skl_SkillNameToID(playerid, skillname[])
+_skl_SkillNameToID(playerid, const skillname[])
 {
 	for(new i; i < skl_PlayerSkillCount[playerid]; i++)
 	{
@@ -112,7 +134,7 @@ _skl_SkillNameToID(playerid, skillname[])
 
 	return -1;
 }
-
+/*
 hook OnPlayerSave(playerid, filename[])
 {
 	if(skl_PlayerSkillCount[playerid] == 0)
@@ -132,7 +154,7 @@ hook OnPlayerSave(playerid, filename[])
 		while(skl_PlayerSkills[playerid][i][skl_name][tmp++] != EOS);
 
 		data[ptr++] = _:skl_PlayerSkills[playerid][i][skl_amount];
-		//log("skill value for '%s': %f", skl_PlayerSkills[playerid][i][skl_name], skl_PlayerSkills[playerid][i][skl_amount]);
+		log("skill value for '%s': %f", skl_PlayerSkills[playerid][i][skl_name], skl_PlayerSkills[playerid][i][skl_amount]);
 	}
 
 	modio_push(filename, _T<S,K,I,L>, ptr, data);
@@ -175,17 +197,17 @@ hook OnPlayerLoad(playerid, filename[])
 		}
 	}
 
-	/*for(new i; i < skl_PlayerSkillCount[playerid]; i++)
+	for(new i; i < skl_PlayerSkillCount[playerid]; i++)
 	{
 		log("skill '%s' value: %f", skl_PlayerSkills[playerid][i][skl_name], skl_PlayerSkills[playerid][i][skl_amount]);
-	}*/
+	}
 
 	return Y_HOOKS_CONTINUE_RETURN_1;
 }
 
 hook OnPlayerOpenInventory(playerid)
 {
-	//skl_InventoryItem[playerid] = AddInventoryListItem(playerid, "Skills");
+	skl_InventoryItem[playerid] = AddInventoryListItem(playerid, "Skills");
 }
 
 hook OnPlayerSelectExtraItem(playerid, item)
@@ -205,10 +227,13 @@ skl_ShowSkillList(playerid)
 		level,
 		levelname[13];
 
+	printf("skill count %d", skl_PlayerSkillCount[playerid]);
+
 	for(new i; i < skl_PlayerSkillCount[playerid]; i++)
 	{
 		skillname[0] = EOS;
 		strcat(skillname, skl_PlayerSkills[playerid][i][skl_name]);
+		printf("skill '%s'", skillname);
 
 		for(level = 0; level < 5; level++)
 		{
@@ -226,6 +251,8 @@ skl_ShowSkillList(playerid)
 			skl_Levels[level][skl_level]);
 	}
 
+	printf("skill string: '%s'", gBigString[playerid]);
+
 	inline Response(pid, dialogid, response, listitem, string:inputtext[])
 	{
 		#pragma unused pid, dialogid, inputtext, listitem, response
@@ -234,4 +261,4 @@ skl_ShowSkillList(playerid)
 	Dialog_ShowCallback(playerid, using inline Response, DIALOG_STYLE_LIST, "Skills", gBigString[playerid], "Back", "");
 
 	return 1;
-}
+}*/

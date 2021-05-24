@@ -1,4 +1,19 @@
-#include <YSI\y_hooks>
+/*==============================================================================
+
+
+	Southclaws' Scavenge and Survive
+
+		Copyright (C) 2020 Barnaby "Southclaws" Keene
+
+		This Source Code Form is subject to the terms of the Mozilla Public
+		License, v. 2.0. If a copy of the MPL was not distributed with this
+		file, You can obtain one at http://mozilla.org/MPL/2.0/.
+
+
+==============================================================================*/
+
+
+#include <YSI_Coding\y_hooks>
 
 
 Load_LV()
@@ -223,15 +238,15 @@ LV_District_Housing1()
 	CreateStaticLootSpawn(2682.087402, 2760.356933, 9.807769,		GetLootIndexFromName("world_industrial"), 15.0);
 	CreateStaticLootSpawn(2690.354003, 2760.979248, 9.809439,		GetLootIndexFromName("world_industrial"), 15.0);
 	CreateStaticLootSpawn(1757.060180, 2080.528076, 9.808440,		GetLootIndexFromName("world_industrial"), 15.0);
-	CreateStaticLootSpawn(2556.099853, 2805.576904, 18.992130,		GetLootIndexFromName("world_military"), 10.0); // KACC
-	CreateStaticLootSpawn(2608.043212, 2848.125976, 18.991350,		GetLootIndexFromName("world_military"), 10.0); // KACC
-	CreateStaticLootSpawn(2592.965576, 2825.459716, 18.992259,		GetLootIndexFromName("world_military"), 10.0); // KACC
-	CreateStaticLootSpawn(2575.728027, 2806.547363, 9.813300,		GetLootIndexFromName("world_military"), 10.0); // KACC
-	CreateStaticLootSpawn(2553.104980, 2838.295166, 9.815489,		GetLootIndexFromName("world_military"), 10.0); // KACC
-	CreateStaticLootSpawn(2597.803955, 2844.303222, 9.820159,		GetLootIndexFromName("world_military"), 10.0); // KACC
-	CreateStaticLootSpawn(2608.959960, 2711.654541, 35.523101,		GetLootIndexFromName("world_military"), 10.0); // KACC
-	CreateStaticLootSpawn(2627.283203, 2730.578613, 35.530288,		GetLootIndexFromName("world_military"), 10.0); // KACC
-	CreateStaticLootSpawn(2574.924316, 2832.747070, 18.992139,		GetLootIndexFromName("world_military"), 10.0); // KACC
+	CreateStaticLootSpawn(2556.099853, 2805.576904, 18.992130,		GetLootIndexFromName("world_military"), 10.0);
+	CreateStaticLootSpawn(2608.043212, 2848.125976, 18.991350,		GetLootIndexFromName("world_military"), 10.0);
+	CreateStaticLootSpawn(2592.965576, 2825.459716, 18.992259,		GetLootIndexFromName("world_military"), 10.0);
+	CreateStaticLootSpawn(2575.728027, 2806.547363, 9.813300,		GetLootIndexFromName("world_military"), 10.0);
+	CreateStaticLootSpawn(2553.104980, 2838.295166, 9.815489,		GetLootIndexFromName("world_military"), 10.0);
+	CreateStaticLootSpawn(2597.803955, 2844.303222, 9.820159,		GetLootIndexFromName("world_military"), 10.0);
+	CreateStaticLootSpawn(2608.959960, 2711.654541, 35.523101,		GetLootIndexFromName("world_military"), 10.0);
+	CreateStaticLootSpawn(2627.283203, 2730.578613, 35.530288,		GetLootIndexFromName("world_military"), 10.0);
+	CreateStaticLootSpawn(2574.924316, 2832.747070, 18.992139,		GetLootIndexFromName("world_military"), 10.0);
 	CreateStaticLootSpawn(1632.484252, 1767.917724, 9.815739,		GetLootIndexFromName("world_medical"), 15.0);
 	CreateStaticLootSpawn(1632.550903, 1775.344726, 9.815950,		GetLootIndexFromName("world_medical"), 15.0);
 	CreateStaticLootSpawn(1630.428710, 1793.544799, 9.817239,		GetLootIndexFromName("world_medical"), 15.0);
@@ -667,7 +682,7 @@ LV_District_KACC()
 {
 	ChatMsgAll(YELLOW, " >  Loading world region: 'LV_District_KACC' please wait...");
 
-	new buttonid[1];
+	new Button:buttonid[1];
 
 	// Requires "./scriptfiles/Maps/LV/KACC.map" to remove:
 	// RemoveBuildingForPlayer(playerid, 985, 2497.36523438, 2777.06933594, 11.55891800, 40.0);
@@ -680,12 +695,12 @@ LV_District_KACC()
 	CreateDoor(985, buttonid,
 		2497.36523438, 2777.06933594, 11.55891800, 0.00000000, 0.00000000, 90.00000000,
 		2497.36523438, 2785.06933594, 11.55891800, 0.00000000, 0.00000000, 90.00000000,
-		.movesound = 6000, .stopsound = 6002);
+		.moveSound = 6000, .stopSound = 6002);
 
 	CreateDoor(986, buttonid,
 		2497.35888672, 2769.11181641, 11.55891800, 0.00000000, 0.00000000, 90.00000000,
 		2497.36523438, 2761.11181641, 11.55891800, 0.00000000, 0.00000000, 90.00000000,
-		.movesound = 6000, .stopsound = 6002);
+		.moveSound = 6000, .stopSound = 6002);
 
 	CreateStaticLootSpawn(2586.707275, 2772.758544, 9.795619,		GetLootIndexFromName("world_civilian"), 12.0);
 	CreateStaticLootSpawn(2565.194091, 2769.974609, 9.801989,		GetLootIndexFromName("world_civilian"), 12.0);
@@ -716,15 +731,15 @@ LV_District_KACC()
 	CreateStaticLootSpawn(2536.573486, 2821.843994, 9.806509,		GetLootIndexFromName("world_industrial"), 15.0);
 	CreateStaticLootSpawn(2545.070556, 2808.533203, 9.812370,		GetLootIndexFromName("world_industrial"), 15.0);
 	CreateStaticLootSpawn(2568.860107, 2811.347900, 9.815910,		GetLootIndexFromName("world_industrial"), 15.0);
-	CreateStaticLootSpawn(2608.959960, 2711.654541, 35.523101,		GetLootIndexFromName("world_military"), 10.0); // KACC
-	CreateStaticLootSpawn(2574.924316, 2832.747070, 18.992139,		GetLootIndexFromName("world_military"), 10.0); // KACC
-	CreateStaticLootSpawn(2627.283203, 2730.578613, 35.530288,		GetLootIndexFromName("world_military"), 10.0); // KACC
-	CreateStaticLootSpawn(2592.965576, 2825.459716, 18.992259,		GetLootIndexFromName("world_military"), 10.0); // KACC
-	CreateStaticLootSpawn(2608.043212, 2848.125976, 18.991350,		GetLootIndexFromName("world_military"), 10.0); // KACC
-	CreateStaticLootSpawn(2553.104980, 2838.295166, 9.815489,		GetLootIndexFromName("world_military"), 10.0); // KACC
-	CreateStaticLootSpawn(2597.803955, 2844.303222, 9.820159,		GetLootIndexFromName("world_military"), 10.0); // KACC
-	CreateStaticLootSpawn(2556.099853, 2805.576904, 18.992130,		GetLootIndexFromName("world_military"), 10.0); // KACC
-	CreateStaticLootSpawn(2575.728027, 2806.547363, 9.813300,		GetLootIndexFromName("world_military"), 10.0); // KACC
+	CreateStaticLootSpawn(2608.959960, 2711.654541, 35.523101,		GetLootIndexFromName("world_military"), 10.0);
+	CreateStaticLootSpawn(2574.924316, 2832.747070, 18.992139,		GetLootIndexFromName("world_military"), 10.0);
+	CreateStaticLootSpawn(2627.283203, 2730.578613, 35.530288,		GetLootIndexFromName("world_military"), 10.0);
+	CreateStaticLootSpawn(2592.965576, 2825.459716, 18.992259,		GetLootIndexFromName("world_military"), 10.0);
+	CreateStaticLootSpawn(2608.043212, 2848.125976, 18.991350,		GetLootIndexFromName("world_military"), 10.0);
+	CreateStaticLootSpawn(2553.104980, 2838.295166, 9.815489,		GetLootIndexFromName("world_military"), 10.0);
+	CreateStaticLootSpawn(2597.803955, 2844.303222, 9.820159,		GetLootIndexFromName("world_military"), 10.0);
+	CreateStaticLootSpawn(2556.099853, 2805.576904, 18.992130,		GetLootIndexFromName("world_military"), 10.0);
+	CreateStaticLootSpawn(2575.728027, 2806.547363, 9.813300,		GetLootIndexFromName("world_military"), 10.0);
 	CreateStaticLootSpawn(2567.283203, 2717.487548, 21.935819,		GetLootIndexFromName("world_survivor"), 10.0);
 	CreateStaticLootSpawn(2507.060791, 2693.505615, 73.824958,		GetLootIndexFromName("world_survivor"), 10.0);
 	CreateStaticLootSpawn(2506.208251, 2687.707519, 73.825042,		GetLootIndexFromName("world_survivor"), 10.0);

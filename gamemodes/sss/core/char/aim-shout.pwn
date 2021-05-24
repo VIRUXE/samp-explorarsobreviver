@@ -1,4 +1,19 @@
-#include <YSI\y_hooks>
+/*==============================================================================
+
+
+	Southclaws' Scavenge and Survive
+
+		Copyright (C) 2020 Barnaby "Southclaws" Keene
+
+		This Source Code Form is subject to the terms of the Mozilla Public
+		License, v. 2.0. If a copy of the MPL was not distributed with this
+		file, You can obtain one at http://mozilla.org/MPL/2.0/.
+
+
+==============================================================================*/
+
+
+#include <YSI_Coding\y_hooks>
 
 
 static
@@ -8,8 +23,6 @@ static
 
 hook OnPlayerKeyStateChange(playerid, newkeys, oldkeys)
 {
-	dbg("global", LOG_CORE, "[OnPlayerKeyStateChange] in /gamemodes/sss/core/char/aim-shout.pwn");
-
 	if(IsPlayerInAnyVehicle(playerid))
 	{
 		if( (newkeys & 320) && (newkeys & 1) )
@@ -46,7 +59,7 @@ hook OnPlayerKeyStateChange(playerid, newkeys, oldkeys)
 
 stock GetPlayerAimShoutText(playerid, string[])
 {
-	if(!IsValidPlayerID(playerid))
+	if(!IsPlayerConnected(playerid))
 		return 0;
 
 	string[0] = EOS;
@@ -55,7 +68,7 @@ stock GetPlayerAimShoutText(playerid, string[])
 	return 1;
 }
 
-stock SetPlayerAimShoutText(playerid, string[])
+stock SetPlayerAimShoutText(playerid, const string[])
 {
 	if(!IsPlayerConnected(playerid))
 		return 0;
@@ -68,7 +81,7 @@ stock SetPlayerAimShoutText(playerid, string[])
 
 hook OnPlayerSave(playerid, filename[])
 {
-	modio_push(filename, _T<S,H,O,U>, strlen(aimshout_Text[playerid]), aimshout_Text[playerid]);
+	modio_push(filename, _T<S,H,O,U>, 128, aimshout_Text[playerid]);
 }
 
 hook OnPlayerLoad(playerid, filename[])

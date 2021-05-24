@@ -1,4 +1,19 @@
-#include <YSI\y_hooks>
+/*==============================================================================
+
+
+	Southclaws' Scavenge and Survive
+
+		Copyright (C) 2020 Barnaby "Southclaws" Keene
+
+		This Source Code Form is subject to the terms of the Mozilla Public
+		License, v. 2.0. If a copy of the MPL was not distributed with this
+		file, You can obtain one at http://mozilla.org/MPL/2.0/.
+
+
+==============================================================================*/
+
+
+#include <YSI_Coding\y_hooks>
 
 
 static
@@ -9,8 +24,6 @@ Text3D:	tags_NametagLOS[MAX_PLAYERS] = {Text3D:INVALID_3DTEXT_ID, ...};
 
 hook OnPlayerConnect(playerid)
 {
-	dbg("global", LOG_CORE, "[OnPlayerConnect] in /gamemodes/sss/core/admin/name-tags.pwn");
-
 	new
 		string[MAX_PLAYER_NAME + 6],
 		name[MAX_PLAYER_NAME],
@@ -51,8 +64,6 @@ hook OnPlayerConnect(playerid)
 
 hook OnPlayerDisconnect(playerid, reason)
 {
-	dbg("global", LOG_CORE, "[OnPlayerDisconnect] in /gamemodes/sss/core/admin/name-tags.pwn");
-
 	DestroyDynamic3DTextLabel(tags_Nametag[playerid]);
 	DestroyDynamic3DTextLabel(tags_NametagLOS[playerid]);
 

@@ -1,19 +1,36 @@
-#include <YSI\y_hooks>
+/*==============================================================================
+
+
+	Southclaws' Scavenge and Survive
+
+		Copyright (C) 2020 Barnaby "Southclaws" Keene
+
+		This Source Code Form is subject to the terms of the Mozilla Public
+		License, v. 2.0. If a copy of the MPL was not distributed with this
+		file, You can obtain one at http://mozilla.org/MPL/2.0/.
+
+
+==============================================================================*/
+
+
+#include <YSI_Coding\y_hooks>
+
 
 new
 		tab_Check[MAX_PLAYERS],
 bool:	tab_IsTabbed[MAX_PLAYERS],
 		tab_TabOutTick[MAX_PLAYERS];
 
+
 forward OnPlayerFocusChange(playerid, status);
+
 
 hook OnPlayerUpdate(playerid)
 {
-	dbg("global", LOG_CORE, "[OnPlayerUpdate] in /gamemodes/sss/core/player/alt-tab-check.pwn");
-
 	tab_Check[playerid] = 0;
 	return 1;
 }
+
 
 ptask AfkCheckUpdate[100](playerid)
 {
@@ -28,7 +45,9 @@ ptask AfkCheckUpdate[100](playerid)
 		Float:x,
 		Float:y,
 		Float:z,
-		playerstate = GetPlayerState(playerid);
+		playerstate;
+
+	playerstate = GetPlayerState(playerid);
 
 	if(playerstate <= 1)
 		GetPlayerVelocity(playerid, z, y, z);
@@ -47,7 +66,7 @@ ptask AfkCheckUpdate[100](playerid)
 
 	comparison += GetPlayerPing(playerid);
 
-	GetPlayerPos(playerid, x, y, z);
+	// ShowActionText(playerid, sprintf("%d :: %s%d - %d", playerstate, (tab_Check[playerid] > comparison) ? ("~r~") : ("~w~"), tab_Check[playerid], comparison), 0);
 
 	if(tab_Check[playerid] > comparison)
 	{
@@ -55,7 +74,7 @@ ptask AfkCheckUpdate[100](playerid)
 		{
 			CallLocalFunction("OnPlayerFocusChange", "dd", playerid, 0);
 
-			log(DISCORD_CHANNEL_EVENTS, "[FOCUS] `%p` unfocused from the game at `%.0f, %.0f, %.0f`", playerid, x, y, z);
+			log("[FOCUS] %p unfocused game", playerid);
 
 			if(gMaxTaboutTime == 0)
 			{
@@ -83,7 +102,7 @@ ptask AfkCheckUpdate[100](playerid)
 		{
 			CallLocalFunction("OnPlayerFocusChange", "dd", playerid, 1);
 
-			log(DISCORD_CHANNEL_EVENTS, "[FOCUS] `%p` focused back to the game", playerid);
+			log("[FOCUS] %p focused back to game", playerid);
 
 			tab_IsTabbed[playerid] = false;
 		}

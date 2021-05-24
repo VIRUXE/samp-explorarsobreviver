@@ -1,8 +1,31 @@
-#include <YSI\y_va>
+/*==============================================================================
+
+
+	Southclaws' Scavenge and Survive
+
+		Copyright (C) 2020 Barnaby "Southclaws" Keene
+
+		This Source Code Form is subject to the terms of the Mozilla Public
+		License, v. 2.0. If a copy of the MPL was not distributed with this
+		file, You can obtain one at http://mozilla.org/MPL/2.0/.
+
+
+==============================================================================*/
+
+
+#include <YSI_Coding\y_va>
 
 static stock gs_Buffer[256];
 
-stock ChatMsg(playerid, colour, fmat[], va_args<>)
+
+/*==============================================================================
+
+	Main Chat Functions
+
+==============================================================================*/
+
+
+stock ChatMsg(playerid, colour, const fmat[], va_args<>)
 {
 	formatex(gs_Buffer, sizeof(gs_Buffer), fmat, va_start<3>);
 	ChatMsgFlat(playerid, colour, gs_Buffer);
@@ -10,7 +33,7 @@ stock ChatMsg(playerid, colour, fmat[], va_args<>)
 	return 1;
 }
 
-stock ChatMsgAll(colour, fmat[], va_args<>)
+stock ChatMsgAll(colour, const fmat[], va_args<>)
 {
 	formatex(gs_Buffer, sizeof(gs_Buffer), fmat, va_start<2>);
 	ChatMsgAllFlat(colour, gs_Buffer);
@@ -18,7 +41,7 @@ stock ChatMsgAll(colour, fmat[], va_args<>)
 	return 1;
 }
 
-stock ChatMsgLang(playerid, colour, key[], va_args<>)
+stock ChatMsgLang(playerid, colour, const key[], va_args<>)
 {
 	formatex(gs_Buffer, sizeof(gs_Buffer), GetLanguageString(GetPlayerLanguage(playerid), key), va_start<3>);
 	ChatMsgFlat(playerid, colour, gs_Buffer);
@@ -26,7 +49,7 @@ stock ChatMsgLang(playerid, colour, key[], va_args<>)
 	return 1;
 }
 
-stock ChatMsgAdmins(level, colour, fmat[], va_args<>)
+stock ChatMsgAdmins(level, colour, const fmat[], va_args<>)
 {
 	formatex(gs_Buffer, sizeof(gs_Buffer), fmat, va_start<3>);
 	ChatMsgAdminsFlat(level, colour, gs_Buffer);
@@ -35,65 +58,78 @@ stock ChatMsgAdmins(level, colour, fmat[], va_args<>)
 }
 
 
-stock ChatMsgFlat(playerid, colour, string[])
+/*==============================================================================
+
+	"Flat" Message with no formatting, never actually needs to be used in-code.
+
+==============================================================================*/
+
+
+stock ChatMsgFlat(playerid, colour, const message[])
 {
-	if(strlen(string) > 127)
+	if(strlen(message) > 127)
 	{
 		new
+			string1[128],
 			string2[128],
 			splitpos;
 
 		for(new c = 128; c > 0; c--)
 		{
-			if(string[c] == ' ' || string[c] ==  ',' || string[c] ==  '.')
+			if(message[c] == ' ' || message[c] ==  ',' || message[c] ==  '.')
 			{
 				splitpos = c;
 				break;
 			}
 		}
 
-		strcat(string2, string[splitpos]);
-		string[splitpos] = EOS;
-		
-		SendClientMessage(playerid, colour, string);
+		strcat(string1, message, splitpos);
+		strcat(string2, message[splitpos]);
+
+		SendClientMessage(playerid, colour, string1);
 		SendClientMessage(playerid, colour, string2);
 	}
 	else
-		SendClientMessage(playerid, colour, string);
+	{
+		SendClientMessage(playerid, colour, message);
+	}
 	
 	return 1;
 }
 
-stock ChatMsgAllFlat(colour, string[])
+stock ChatMsgAllFlat(colour, const message[])
 {
-	if(strlen(string) > 127)
+	if(strlen(message) > 127)
 	{
 		new
+			string1[128],
 			string2[128],
 			splitpos;
 
 		for(new c = 128; c>0; c--)
 		{
-			if(string[c] == ' ' || string[c] ==  ',' || string[c] ==  '.')
+			if(message[c] == ' ' || message[c] ==  ',' || message[c] ==  '.')
 			{
 				splitpos = c;
 				break;
 			}
 		}
 
-		strcat(string2, string[splitpos]);
-		string[splitpos] = EOS;
+		strcat(string1, message, splitpos);
+		strcat(string2, message[splitpos]);
 
-		SendClientMessageToAll(colour, string);
+		SendClientMessageToAll(colour, string1);
 		SendClientMessageToAll(colour, string2);
 	}
 	else
-		SendClientMessageToAll(colour, string);
+	{
+		SendClientMessageToAll(colour, message);
+	}
 
 	return 1;
 }
 
-stock ChatMsgLangFlat(playerid, colour, key[])
+stock ChatMsgLangFlat(playerid, colour, const key[])
 {
 	ChatMsgFlat(playerid, colour, GetLanguageString(GetPlayerLanguage(playerid), key));
 

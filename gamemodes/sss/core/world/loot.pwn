@@ -1,4 +1,19 @@
-#include <YSI\y_hooks>
+/*==============================================================================
+
+
+	Southclaws' Scavenge and Survive
+
+		Copyright (C) 2020 Barnaby "Southclaws" Keene
+
+		This Source Code Form is subject to the terms of the Mozilla Public
+		License, v. 2.0. If a copy of the MPL was not distributed with this
+		file, You can obtain one at http://mozilla.org/MPL/2.0/.
+
+
+==============================================================================*/
+
+
+#include <YSI_Coding\y_hooks>
 
 
 #define MAX_LOOT_INDEX			(15)
@@ -26,7 +41,7 @@ Float:		loot_weight,
 			loot_size,
 			loot_index,
 
-			loot_items[MAX_ITEMS_PER_SPAWN],
+Item:		loot_items[MAX_ITEMS_PER_SPAWN],
 			loot_total
 }
 
@@ -40,8 +55,8 @@ static
 			loot_SpawnData[MAX_LOOT_SPAWN][E_LOOT_SPAWN_DATA],
 			loot_SpawnTotal,
 
-			loot_ItemTypeLimit[ITM_MAX_TYPES],
-			loot_ItemLootIndex[ITM_MAX] = {-1, ...},
+			loot_ItemTypeLimit[MAX_ITEM_TYPE],
+			loot_ItemLootIndex[MAX_ITEM] = {-1, ...},
 
 Float:		loot_SpawnMult = 1.0;
 
@@ -92,8 +107,8 @@ stock CreateStaticLootSpawn(Float:x, Float:y, Float:z, lootindex, Float:weight, 
 {
 	if(loot_SpawnTotal >= MAX_LOOT_SPAWN - 1)
 	{
-		err("Loot spawn limit reached.");
-		return -1;
+		err("Loot spawn limit reached. Set to 0");
+		loot_SpawnTotal = 0;
 	}
 
 	if(!(0 <= lootindex < loot_IndexTotal))
@@ -112,7 +127,7 @@ stock CreateStaticLootSpawn(Float:x, Float:y, Float:z, lootindex, Float:weight, 
 
 	loot_SpawnData[lootspawnid][loot_posX] = x;
 	loot_SpawnData[lootspawnid][loot_posY] = y;
-	loot_SpawnData[lootspawnid][loot_posZ] = z;
+	loot_SpawnData[lootspawnid][loot_posZ] = (z + 0.1032);
 	loot_SpawnData[lootspawnid][loot_world] = worldid;
 	loot_SpawnData[lootspawnid][loot_interior] = interiorid;
 	loot_SpawnData[lootspawnid][loot_weight] = weight;
@@ -123,7 +138,7 @@ stock CreateStaticLootSpawn(Float:x, Float:y, Float:z, lootindex, Float:weight, 
 		ItemType:samplelist[MAX_LOOT_INDEX_ITEMS],
 		samplelistsize,
 		ItemType:itemtype,
-		itemid,
+		Item:itemid,
 		Float:rot = frandom(360.0);
 
 	samplelistsize = _loot_GenerateSampleList(samplelist, lootindex);
@@ -155,7 +170,7 @@ stock CreateStaticLootSpawn(Float:x, Float:y, Float:z, lootindex, Float:weight, 
 		// Create the item
 		itemid = GetNextItemID();
 
-		if(!(0 <= itemid < ITM_MAX))
+		if(!(Item:0 <= itemid < MAX_ITEM))
 		{
 			err("Item limit reached while generating loot.");
 			return -1;
@@ -163,10 +178,16 @@ stock CreateStaticLootSpawn(Float:x, Float:y, Float:z, lootindex, Float:weight, 
 
 		loot_ItemLootIndex[itemid] = lootindex;
 
+		x = (x + (frandom(1.0) * floatsin(((360 / size) * i) + rot, degrees)));
+		y = (y + (frandom(1.0) * floatcos(((360 / size) * i) + rot, degrees)));
+
 		CreateItem(itemtype,
-			x + (frandom(1.0) * floatsin(((360 / size) * i) + rot, degrees)),
-			y + (frandom(1.0) * floatcos(((360 / size) * i) + rot, degrees)),
+			x,
+			y,
 			z, .rz = frandom(360.0), .world = worldid, .interior = interiorid);
+
+		
+		defer RespawnItem(_:itemid, x, y, z, lootindex, weight, size, worldid, interiorid);
 
 		loot_SpawnData[lootspawnid][loot_items][loot_SpawnData[lootspawnid][loot_total]] = itemid;
 		loot_SpawnData[lootspawnid][loot_total]++;
@@ -175,12 +196,82 @@ stock CreateStaticLootSpawn(Float:x, Float:y, Float:z, lootindex, Float:weight, 
 	return loot_SpawnTotal++;
 }
 
-stock CreateLootItem(lootindex, Float:x = 0.0, Float:y = 0.0, Float:z = 0.0, worldid = 0, interiorid = 0)
+timer RespawnItem[10000](itemid, Float:x, Float:y, Float:z, lootindex, Float:weight, size, worldid, interiorid)
+{
+	if(!IsValidItem(Item:itemid))
+	{
+		CreateStaticLootSpawn(x, y, z, lootindex, weight, size, worldid, interiorid);
+		return;
+	}
+
+	/*foreach(new i : Player)
+	{
+		if(IsPlayerInRangeOfPoint(i, 20.0, x, y, z))
+		{
+			defer RespawnItem(_:itemid, x, y, z, lootindex, weight, size, worldid, interiorid);
+			return;
+		}
+	}*/
+
+	new Float:tx, Float:ty, Float:tz;
+	GetItemPos(Item:itemid, tx, ty, tz);
+
+	if(Distance(x, y, z, tx, ty, tz) > 5.0)
+		CreateStaticLootSpawn(x, y, z, lootindex, weight, size, worldid, interiorid);
+	else
+		defer RespawnItem(_:itemid, x, y, z, lootindex, weight, size, worldid, interiorid);
+}
+
+hook OnPlayerDroppedItem(playerid, Item:itemid)
+{
+	if(IsItemTypeSafebox(GetItemType(itemid)))
+	{
+		new Container:containerid;
+		GetItemArrayDataAtCell(itemid, _:containerid, 0);
+		if(!IsContainerEmpty(containerid))
+		{
+			return Y_HOOKS_CONTINUE_RETURN_0;
+		}
+	}
+
+	if(IsItemTypeDefence(GetItemType(itemid)) && GetDefenceActive(Item:itemid))
+	{
+		return Y_HOOKS_CONTINUE_RETURN_0;
+	}
+		
+	new Float:tx, Float:ty, Float:tz;
+	GetItemPos(Item:itemid, tx, ty, tz);
+	defer DestroyUntilItem(_:itemid, tx, ty, tz);
+
+	return Y_HOOKS_CONTINUE_RETURN_0;
+}
+
+timer DestroyUntilItem[1800000](itemid, Float:x, Float:y, Float:z)
+{
+	if(!IsValidItem(Item:itemid))
+		return;
+
+	foreach(new i : Player)
+	{
+		if(IsPlayerInRangeOfPoint(i, 20.0, x, y, z))
+		{
+			defer DestroyUntilItem(_:itemid, x, y, z);
+			return;
+		}
+	}
+
+	new Float:tx, Float:ty, Float:tz;
+	GetItemPos(Item:itemid, tx, ty, tz);
+	if(tx == x && ty == y && tz == z)
+		DestroyItem(Item:itemid);
+}
+
+stock Item:CreateLootItem(lootindex, Float:x = 0.0, Float:y = 0.0, Float:z = 0.0, worldid = 0, interiorid = 0)
 {
 	if(!(0 <= lootindex < loot_IndexTotal))
 	{
 		err("Loot index (%d) is invalid.", lootindex);
-		return -1;
+		return INVALID_ITEM_ID;
 	}
 
 	new
@@ -191,7 +282,7 @@ stock CreateLootItem(lootindex, Float:x = 0.0, Float:y = 0.0, Float:z = 0.0, wor
 	samplelistsize = _loot_GenerateSampleList(samplelist, lootindex);
 
 	if(samplelistsize == 0)
-		return -1;
+		return INVALID_ITEM_ID;
 
 	// Generate an item from the sample list
 	if(!_loot_PickFromSampleList(samplelist, samplelistsize, itemtype))
@@ -206,9 +297,9 @@ stock CreateLootItem(lootindex, Float:x = 0.0, Float:y = 0.0, Float:z = 0.0, wor
 	if(loot_ItemTypeLimit[itemtype] > 0 && GetItemTypeCount(itemtype) > loot_ItemTypeLimit[itemtype])
 		return INVALID_ITEM_ID;
 
-	new itemid = GetNextItemID();
+	new Item:itemid = GetNextItemID();
 
-	if(!(0 <= itemid < ITM_MAX))
+	if(!(Item:0 <= itemid < MAX_ITEM))
 		return INVALID_ITEM_ID;
 
 	loot_ItemLootIndex[itemid] = lootindex;
@@ -218,7 +309,7 @@ stock CreateLootItem(lootindex, Float:x = 0.0, Float:y = 0.0, Float:z = 0.0, wor
 	return itemid;
 }
 
-stock FillContainerWithLoot(containerid, slots, lootindex)
+stock FillContainerWithLoot(Container:containerid, slots, lootindex)
 {
 	if(!(0 <= lootindex < loot_IndexTotal))
 	{
@@ -226,8 +317,8 @@ stock FillContainerWithLoot(containerid, slots, lootindex)
 		return -1;
 	}
 
-	// log("[FillContainerWithLoot] containerid %d, slots %d, lootindex %d", containerid, slots, lootindex);
-	new containersize = GetContainerSize(containerid);
+	new containersize;
+	GetContainerSize(containerid, containersize);
 
 	if(slots > containersize)
 		slots = containersize;
@@ -239,15 +330,17 @@ stock FillContainerWithLoot(containerid, slots, lootindex)
 		ItemType:samplelist[MAX_LOOT_INDEX_ITEMS],
 		samplelistsize,
 		items,
-		itemid,
-		ItemType:itemtype;
+		Item:itemid,
+		ItemType:itemtype,
+		freeslots;
 
 	samplelistsize = _loot_GenerateSampleList(samplelist, lootindex);
+	GetContainerFreeSlots(containerid, freeslots);
 
 	if(samplelistsize == 0)
 		return 0;
 
-	while(items < slots && samplelistsize > 0 && GetContainerFreeSlots(containerid) > 0)
+	while(items < slots && samplelistsize > 0 && freeslots > 0)
 	{
 		// Generate an item from the sample list
 
@@ -269,7 +362,7 @@ stock FillContainerWithLoot(containerid, slots, lootindex)
 		// Create the item
 		itemid = GetNextItemID();
 
-		if(!(0 <= itemid < ITM_MAX))
+		if(!(Item:0 <= itemid < MAX_ITEM))
 		{
 			err("Item limit reached while generating loot.");
 			return -1;
@@ -364,10 +457,8 @@ _loot_ContainerItemsOfType(containerid, ItemType:itemtype)
 	return count;
 }
 */
-hook OnItemDestroy(itemid)
+hook OnItemDestroy(Item:itemid)
 {
-	dbg("global", LOG_CORE, "[OnItemDestroy] in /gamemodes/sss/core/world/loot.pwn");
-
 	loot_ItemLootIndex[itemid] = -1;
 
 	return Y_HOOKS_CONTINUE_RETURN_0;
@@ -386,7 +477,7 @@ stock IsValidLootIndex(index)
 	return (0 <= index < loot_IndexTotal);
 }
 
-stock GetItemLootIndex(itemid)
+stock GetItemLootIndex(Item:itemid)
 {
 	if(!IsValidItem(itemid))
 		return -1;
@@ -448,7 +539,7 @@ stock GetLootSpawnTotalItems(lootspawn)
 	return loot_SpawnData[lootspawn][loot_total];
 }
 
-stock GetLootIndexFromName(name[])
+stock GetLootIndexFromName(const name[])
 {
 	for(new i; i < loot_IndexTotal; i++)
 	{

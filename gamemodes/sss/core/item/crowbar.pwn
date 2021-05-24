@@ -1,4 +1,19 @@
-#include <YSI\y_hooks>
+/*==============================================================================
+
+
+	Southclaws' Scavenge and Survive
+
+		Copyright (C) 2020 Barnaby "Southclaws" Keene
+
+		This Source Code Form is subject to the terms of the Mozilla Public
+		License, v. 2.0. If a copy of the MPL was not distributed with this
+		file, You can obtain one at http://mozilla.org/MPL/2.0/.
+
+
+==============================================================================*/
+
+
+#include <YSI_Coding\y_hooks>
 
 
 new
@@ -8,8 +23,6 @@ new
 
 hook OnPlayerConnect(playerid)
 {
-	dbg("global", LOG_CORE, "[OnPlayerConnect] in /gamemodes/sss/core/item/crowbar.pwn");
-
 	cbr_TargetVehicle[playerid] = INVALID_VEHICLE_ID;
 }
 
@@ -82,8 +95,6 @@ public OnHoldActionUpdate(playerid, progress)
 
 hook OnHoldActionFinish(playerid)
 {
-	dbg("global", LOG_CORE, "[OnHoldActionFinish] in /gamemodes/sss/core/item/crowbar.pwn");
-
 	if(cbr_TargetVehicle[playerid] != INVALID_VEHICLE_ID)
 	{
 		if(cbr_OpenType[playerid] == 0)

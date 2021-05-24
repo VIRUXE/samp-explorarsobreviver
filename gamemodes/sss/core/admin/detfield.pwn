@@ -1,4 +1,20 @@
-#include <YSI\y_hooks>
+/*==============================================================================
+
+
+	Southclaws' Scavenge and Survive
+
+		Copyright (C) 2020 Barnaby "Southclaws" Keene
+
+		This Source Code Form is subject to the terms of the Mozilla Public
+		License, v. 2.0. If a copy of the MPL was not distributed with this
+		file, You can obtain one at http://mozilla.org/MPL/2.0/.
+
+
+==============================================================================*/
+
+
+#include <YSI_Coding\y_hooks>
+
 
 #define MAX_DETFIELD				(128)
 #define MAX_DETFIELD_NAME			(64)
@@ -186,7 +202,7 @@ hook OnScriptInit()
 		CreateDetectionField(name, points, minz, maxz, exceptionlist);
 	}
 
-	log(DISCORD_CHANNEL_EVENTS, "[DETFIELD] Loaded %d Detection Fields", Iter_Count(det_Index));
+	Logger_Log("loaded detection fields", Logger_I("count", Iter_Count(det_Index)));
 
 	return 1;
 }
@@ -199,7 +215,7 @@ hook OnScriptInit()
 ==============================================================================*/
 
 
-stock CreateDetectionField(name[MAX_DETFIELD_NAME], Float:points[10], Float:minz, Float:maxz, exceptionlist[MAX_DETFIELD_EXCEPTIONS][MAX_PLAYER_NAME])
+stock CreateDetectionField(const name[MAX_DETFIELD_NAME], const Float:points[10], Float:minz, Float:maxz, const exceptionlist[MAX_DETFIELD_EXCEPTIONS][MAX_PLAYER_NAME])
 {
 	new id = Iter_Free(det_Index);
 
@@ -245,7 +261,7 @@ stock DestroyDetectionField(detfieldid)
 	return 1;
 }
 
-stock AddDetectionField(name[MAX_DETFIELD_NAME], Float:points[10], Float:minz, Float:maxz, exceptionlist[MAX_DETFIELD_EXCEPTIONS][MAX_PLAYER_NAME])
+stock AddDetectionField(const name[MAX_DETFIELD_NAME], Float:points[10], Float:minz, Float:maxz, const exceptionlist[MAX_DETFIELD_EXCEPTIONS][MAX_PLAYER_NAME])
 {
 	if(DetectionFieldExists(name))
 		return -1;
@@ -309,7 +325,7 @@ stock RemoveDetectionField(detfieldid)
 	return 1;
 }
 
-stock DetectionFieldExists(name[])
+stock DetectionFieldExists(const name[])
 {
 	new count;
 
@@ -327,7 +343,7 @@ stock DetectionFieldExists(name[])
 	return 0;
 }
 
-stock SetDetectionFieldName(detfieldid, name[MAX_DETFIELD_NAME])
+stock SetDetectionFieldName(detfieldid, const name[MAX_DETFIELD_NAME])
 {
 	if(!Iter_Contains(det_Index, detfieldid))
 		return 0;
@@ -518,7 +534,7 @@ stock GetDetectionFieldExceptionsList(detfieldid, list[], length, delimiter = '\
 	return i;
 }
 
-stock AddDetectionFieldException(detfieldid, name[MAX_PLAYER_NAME])
+stock AddDetectionFieldException(detfieldid, const name[MAX_PLAYER_NAME])
 {
 	if(!Iter_Contains(det_Index, detfieldid))
 		return 0;
@@ -674,7 +690,7 @@ stock DeleteDetectionFieldLogEntry(detfieldid, logentry)
 	return 1;
 }
 
-stock DeleteDetectionFieldLogsOfName(detfieldid, name[])
+stock DeleteDetectionFieldLogsOfName(detfieldid, const name[])
 {
 	if(!Iter_Contains(det_Index, detfieldid))
 		return 0;
@@ -698,8 +714,6 @@ stock DeleteDetectionFieldLogsOfName(detfieldid, name[])
 
 hook OnPlayerEnterDynArea(playerid, areaid)
 {
-	dbg("global", LOG_CORE, "[OnPlayerEnterDynArea] in /gamemodes/sss/core/admin/detfield.pwn");
-
 	foreach(new i : det_Index)
 	{
 		if(areaid == det_AreaID[i])
@@ -751,7 +765,10 @@ DetectionFieldLogPlayer(playerid, detfieldid)
 
 	format(line, sizeof(line), "%p, %s\r\n", playerid, TimestampToDateTime(gettime()));
 
-	log(DISCORD_CHANNEL_ADMINEVENTS, "[DETFIELD] `%p` entered `%s`", playerid, det_Name[detfieldid]);
+	Logger_Log("player entered detection field",
+		Logger_P(playerid),
+		Logger_S("field", det_Name[detfieldid])
+	);
 
 	return 1;
 }
@@ -820,7 +837,7 @@ stock GetDetectionFieldPos(detfieldid, &Float:x, &Float:y, &Float:z)
 	return 1;
 }
 
-stock GetDetectionFieldIdFromName(name[], bool:ignorecase = false)
+stock GetDetectionFieldIdFromName(const name[], bool:ignorecase = false)
 {
 	foreach(new i : det_Index)
 	{
@@ -862,7 +879,7 @@ stock GetDetectionFieldMaxZ(detfieldid, &Float:maxz)
 	return 1;
 }
 
-stock IsValidDetectionFieldName(name[])
+stock IsValidDetectionFieldName(const name[])
 {
 	if(!isalphabetic(name[0]))
 		return 0;
@@ -905,7 +922,7 @@ stock GetDetectionFieldExceptionName(detfieldid, exceptionid, name[MAX_PLAYER_NA
 	return 1;
 }
 
-stock IsNameInExceptionList(detfieldid, name[MAX_PLAYER_NAME])
+stock IsNameInExceptionList(detfieldid, const name[MAX_PLAYER_NAME])
 {
 	if(!Iter_Contains(det_Index, detfieldid))
 		return 0;

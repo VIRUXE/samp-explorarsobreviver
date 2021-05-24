@@ -1,16 +1,27 @@
-hook OnPlayerGetItem(playerid, itemid)
-{
-	dbg("global", LOG_CORE, "[OnPlayerGetItem] in /gamemodes/sss/core/weapon/interact.pwn");
+/*==============================================================================
 
+
+	Southclaws' Scavenge and Survive
+
+		Copyright (C) 2020 Barnaby "Southclaws" Keene
+
+		This Source Code Form is subject to the terms of the Mozilla Public
+		License, v. 2.0. If a copy of the MPL was not distributed with this
+		file, You can obtain one at http://mozilla.org/MPL/2.0/.
+
+
+==============================================================================*/
+
+
+hook OnPlayerGetItem(playerid, Item:itemid)
+{
 	UpdatePlayerWeaponItem(playerid);
 
 	return Y_HOOKS_CONTINUE_RETURN_0;
 }
 
-hook OnPlayerGivenItem(playerid, targetid, itemid)
+hook OnPlayerGivenItem(playerid, targetid, Item:itemid)
 {
-	dbg("global", LOG_CORE, "[OnPlayerGivenItem] in /gamemodes/sss/core/weapon/interact.pwn");
-
 	if(GetItemTypeWeapon(GetItemType(itemid)) != -1)
 	{
 		RemovePlayerWeapon(playerid);
@@ -20,10 +31,8 @@ hook OnPlayerGivenItem(playerid, targetid, itemid)
 	return Y_HOOKS_CONTINUE_RETURN_0;
 }
 
-hook OnPlayerDroppedItem(playerid, itemid)
+hook OnPlayerDroppedItem(playerid, Item:itemid)
 {
-	dbg("global", LOG_CORE, "[OnPlayerDroppedItem] in /gamemodes/sss/core/weapon/interact.pwn");
-
 	if(GetItemTypeWeapon(GetItemType(itemid)) != -1)
 	{
 		RemovePlayerWeapon(playerid);
@@ -32,10 +41,8 @@ hook OnPlayerDroppedItem(playerid, itemid)
 	return Y_HOOKS_CONTINUE_RETURN_0;
 }
 
-hook OnPlayerUseItemWithItem(playerid, itemid, withitemid)
+hook OnPlayerUseItemWithItem(playerid, Item:itemid, Item:withitemid)
 {
-	dbg("global", LOG_CORE, "[OnPlayerUseItemWithItem] in /gamemodes/sss/core/weapon/interact.pwn");
-
 	if(GetPlayerSpecialAction(playerid) == SPECIAL_ACTION_CUFFED || IsPlayerOnAdminDuty(playerid) || IsPlayerKnockedOut(playerid) || GetPlayerAnimationIndex(playerid) == 1381)
 		return 1;
 
@@ -44,7 +51,7 @@ hook OnPlayerUseItemWithItem(playerid, itemid, withitemid)
 	return Y_HOOKS_CONTINUE_RETURN_0;
 }
 
-_PickUpAmmoTransferCheck(playerid, helditemid, ammoitemid)
+_PickUpAmmoTransferCheck(playerid, Item:helditemid, Item:ammoitemid)
 {
 	new
 		ItemType:helditemtype,
@@ -90,14 +97,14 @@ _PickUpAmmoTransferCheck(playerid, helditemid, ammoitemid)
 			}
 
 			ApplyAnimation(playerid, "BOMBER", "BOM_PLANT_IN", 5.0, 1, 0, 0, 0, 450);
-			defer _TransferWeaponToWeapon(playerid, ammoitemid, helditemid);
+			defer _TransferWeaponToWeapon(playerid, _:ammoitemid, _:helditemid);
 
 			return 1;
 		}
 
 		ammotypeid = GetItemTypeAmmoType(ammoitemtype);
 
-		if(ammotypeid != -1) // Transfer ammo from ammo item to held weapon
+		if(ammotypeid != -1 && !IsAmmoTypeNoTransfer(ammotypeid)) // Transfer ammo from ammo item to held weapon
 		{
 			new heldcalibre = GetItemWeaponCalibre(heldtypeid);
 
@@ -151,7 +158,7 @@ _PickUpAmmoTransferCheck(playerid, helditemid, ammoitemid)
 			}
 
 			ApplyAnimation(playerid, "BOMBER", "BOM_PLANT_IN", 5.0, 1, 0, 0, 0, 450);
-			defer _TransferTinToWeapon(playerid, ammoitemid, helditemid);
+			defer _TransferTinToWeapon(playerid, _:ammoitemid, _:helditemid);
 
 			return 1;
 		}
@@ -159,7 +166,7 @@ _PickUpAmmoTransferCheck(playerid, helditemid, ammoitemid)
 
 	heldtypeid = GetItemTypeAmmoType(helditemtype);
 
-	if(heldtypeid != -1) // Player is holding an ammo item
+	if(heldtypeid != -1 && !IsAmmoTypeNoTransfer(heldtypeid)) // Player is holding an ammo item
 	{
 		new ammotypeid = GetItemTypeWeapon(ammoitemtype);
 
@@ -191,14 +198,14 @@ _PickUpAmmoTransferCheck(playerid, helditemid, ammoitemid)
 			}
 
 			ApplyAnimation(playerid, "BOMBER", "BOM_PLANT_IN", 5.0, 1, 0, 0, 0, 450);
-			defer _TransferWeaponToTin(playerid, ammoitemid, helditemid);
+			defer _TransferWeaponToTin(playerid, _:ammoitemid, _:helditemid);
 
 			return 1;
 		}
 
 		ammotypeid = GetItemTypeAmmoType(ammoitemtype);
 
-		if(ammotypeid != -1) // Transfer ammo from ammo item to held ammo item
+		if(ammotypeid != -1 && !IsAmmoTypeNoTransfer(ammotypeid)) // Transfer ammo from ammo item to held ammo item
 		{
 			/*if(GetItemExtraData(helditemid) == 0)
 			{
@@ -221,7 +228,7 @@ _PickUpAmmoTransferCheck(playerid, helditemid, ammoitemid)
 			}
 
 			ApplyAnimation(playerid, "BOMBER", "BOM_PLANT_IN", 5.0, 1, 0, 0, 0, 450);
-			defer _TransferTinToTin(playerid, ammoitemid, helditemid);
+			defer _TransferTinToTin(playerid, _:ammoitemid, _:helditemid);
 
 			return 1;
 		}
@@ -239,16 +246,16 @@ timer _TransferWeaponToWeapon[400](playerid, srcitem, tgtitem)
 		reserveammo,
 		remainder;
 
-	magammo = GetItemWeaponItemMagAmmo(srcitem);
-	reserveammo = GetItemWeaponItemReserve(srcitem);
+	magammo = GetItemWeaponItemMagAmmo(Item:srcitem);
+	reserveammo = GetItemWeaponItemReserve(Item:srcitem);
 
 	if(reserveammo + magammo > 0)
 	{
-		SetItemWeaponItemAmmoItem(tgtitem, GetItemWeaponItemAmmoItem(srcitem));
+		SetItemWeaponItemAmmoItem(Item:tgtitem, GetItemWeaponItemAmmoItem(Item:srcitem));
 		remainder = GivePlayerAmmo(playerid, reserveammo + magammo);
 
-		SetItemWeaponItemMagAmmo(srcitem, 0);
-		SetItemWeaponItemReserve(srcitem, remainder);
+		SetItemWeaponItemMagAmmo(Item:srcitem, 0);
+		SetItemWeaponItemReserve(Item:srcitem, remainder);
 
 		ShowActionText(playerid, sprintf(ls(playerid, "AMTRANSWTOW", true), (reserveammo + magammo) - remainder), 3000);
 	}
@@ -264,14 +271,17 @@ timer _TransferTinToWeapon[400](playerid, srcitem, tgtitem)
 		ammo,
 		remainder;
 
-	ammo = GetItemExtraData(srcitem);
+	GetItemExtraData(Item:srcitem, ammo);
 
 	if(ammo > 0)
 	{
-		SetItemWeaponItemAmmoItem(tgtitem, GetItemType(srcitem));
+		SetItemWeaponItemAmmoItem(Item:tgtitem, GetItemType(Item:srcitem));
 		remainder = GivePlayerAmmo(playerid, ammo);
 
-		SetItemExtraData(srcitem, remainder);
+		if(remainder)
+			SetItemExtraData(Item:srcitem, remainder);
+		else
+			DestroyItem(Item:srcitem);
 
 		ShowActionText(playerid, sprintf(ls(playerid, "AMTRANSTTOW", true), ammo - remainder), 3000);
 	}
@@ -283,12 +293,14 @@ timer _TransferTinToWeapon[400](playerid, srcitem, tgtitem)
 timer _TransferWeaponToTin[400](playerid, srcitem, tgtitem)
 {
 	new
-		existing = GetItemExtraData(tgtitem),
-		amount = GetItemWeaponItemMagAmmo(srcitem) + GetItemWeaponItemReserve(srcitem);
+		existing,
+		amount = GetItemWeaponItemMagAmmo(Item:srcitem) + GetItemWeaponItemReserve(Item:srcitem);
 
-	SetItemExtraData(tgtitem, existing + amount);
-	SetItemWeaponItemMagAmmo(srcitem, 0);
-	SetItemWeaponItemReserve(srcitem, 0);
+	GetItemExtraData(Item:tgtitem, existing);
+
+	SetItemExtraData(Item:tgtitem, existing + amount);
+	SetItemWeaponItemMagAmmo(Item:srcitem, 0);
+	SetItemWeaponItemReserve(Item:srcitem, 0);
 
 	ShowActionText(playerid, sprintf(ls(playerid, "AMTRANSWTOT", true), amount), 3000);
 
@@ -299,11 +311,14 @@ timer _TransferWeaponToTin[400](playerid, srcitem, tgtitem)
 timer _TransferTinToTin[400](playerid, srcitem, tgtitem)
 {
 	new
-		existing = GetItemExtraData(tgtitem),
-		amount = GetItemExtraData(srcitem);
+		existing,
+		amount;
 
-	SetItemExtraData(tgtitem, existing + amount);
-	SetItemExtraData(srcitem, 0);
+	GetItemExtraData(Item:tgtitem, existing);
+	GetItemExtraData(Item:srcitem, amount);
+
+	SetItemExtraData(Item:tgtitem, existing + amount);
+	SetItemExtraData(Item:srcitem, 0);
 
 	ShowActionText(playerid, sprintf(ls(playerid, "AMTRANSTTOT", true), amount), 3000);
 
@@ -320,16 +335,18 @@ timer _TransferTinToTin[400](playerid, srcitem, tgtitem)
 
 static
 	trans_ContainerOptionID[MAX_PLAYERS] = {-1, ...},
-	trans_SelectedItem[MAX_PLAYERS] = {INVALID_ITEM_ID, ...};
+	Item:trans_SelectedItem[MAX_PLAYERS] = {INVALID_ITEM_ID, ...};
 
 
-hook OnPlayerViewCntOpt(playerid, containerid)
+hook OnPlayerViewCntOpt(playerid, Container:containerid)
 {
 	new
-		itemid,
-		ItemType:itemtype;
+		Item:itemid,
+		ItemType:itemtype,
+		slot;
 
-	itemid = GetContainerSlotItem(containerid, GetPlayerContainerSlot(playerid));
+	GetPlayerContainerSlot(playerid, slot);
+	GetContainerSlotItem(containerid, slot, itemid);
 	itemtype = GetItemType(itemid);
 
 	if((GetItemTypeWeapon(itemtype) != -1 && GetItemTypeWeaponCalibre(itemtype) != -1) || GetItemTypeAmmoType(itemtype) != -1)
@@ -347,17 +364,22 @@ hook OnPlayerViewCntOpt(playerid, containerid)
 	return Y_HOOKS_CONTINUE_RETURN_0;
 }
 
-hook OnPlayerSelectCntOpt(playerid, containerid, option)
+hook OnPlayerSelectCntOpt(playerid, Container:containerid, option)
 {
 	if(option == trans_ContainerOptionID[playerid])
 	{
-		if(IsValidItem(trans_SelectedItem[playerid]) && trans_SelectedItem[playerid] != GetContainerSlotItem(containerid, GetPlayerContainerSlot(playerid)))
+		new Item:itemid;
+		new slot;
+		GetPlayerContainerSlot(playerid, slot);
+		GetContainerSlotItem(containerid, slot, itemid);
+		if(IsValidItem(trans_SelectedItem[playerid]) && trans_SelectedItem[playerid] != itemid)
 		{
 			DisplayTransferAmmoDialog(playerid, containerid);
 		}
 		else
 		{
-			trans_SelectedItem[playerid] = GetContainerSlotItem(containerid, GetPlayerContainerSlot(playerid));
+			GetPlayerContainerSlot(playerid, slot);
+			GetContainerSlotItem(containerid, slot, trans_SelectedItem[playerid]);
 			DisplayContainerInventory(playerid, containerid);
 		}
 	}
@@ -365,20 +387,22 @@ hook OnPlayerSelectCntOpt(playerid, containerid, option)
 	return Y_HOOKS_CONTINUE_RETURN_0;
 }
 
-DisplayTransferAmmoDialog(playerid, containerid, msg[] = "")
+DisplayTransferAmmoDialog(playerid, Container:containerid, msg[] = "")
 {
 	new
-		sourceitemid,
+		slot,
+		Item:sourceitemid,
 		ItemType:sourceitemtype,
-		sourceitemname[ITM_MAX_NAME],
-		targetitemid,
+		sourceitemname[MAX_ITEM_NAME],
+		Item:targetitemid,
 		ItemType:targetitemtype,
-		targetitemname[ITM_MAX_NAME];
+		targetitemname[MAX_ITEM_NAME];
 
+	GetPlayerContainerSlot(playerid, slot);
 	sourceitemid = trans_SelectedItem[playerid];
 	sourceitemtype = GetItemType(sourceitemid);
 	GetItemTypeName(sourceitemtype, sourceitemname);
-	targetitemid = GetContainerSlotItem(containerid, GetPlayerContainerSlot(playerid));
+	GetContainerSlotItem(containerid, slot, targetitemid);
 	targetitemtype = GetItemType(targetitemid);
 	GetItemTypeName(targetitemtype, targetitemname);
 
@@ -416,7 +440,9 @@ DisplayTransferAmmoDialog(playerid, containerid, msg[] = "")
 					// weapon to ammo
 					new
 						sourceitemammo = GetItemWeaponItemReserve(sourceitemid),
-						targetitemammo = GetItemArrayDataAtCell(targetitemid, 0);
+						targetitemammo;
+
+					GetItemArrayDataAtCell(targetitemid, targetitemammo, 0);
 
 					if(0 < amount <= sourceitemammo)
 					{
@@ -435,8 +461,10 @@ DisplayTransferAmmoDialog(playerid, containerid, msg[] = "")
 				{
 					// ammo to weapon
 					new
-						sourceitemammo = GetItemArrayDataAtCell(sourceitemid, 0),
+						sourceitemammo,
 						targetitemammo = GetItemWeaponItemReserve(targetitemid);
+
+					GetItemArrayDataAtCell(sourceitemid, sourceitemammo, 0);
 
 					if(0 < amount <= sourceitemammo)
 					{
@@ -453,8 +481,11 @@ DisplayTransferAmmoDialog(playerid, containerid, msg[] = "")
 				{
 					// ammo to ammo
 					new
-						sourceitemammo = GetItemArrayDataAtCell(sourceitemid, 0),
-						targetitemammo = GetItemArrayDataAtCell(targetitemid, 0);
+						sourceitemammo,
+						targetitemammo;
+
+					GetItemArrayDataAtCell(sourceitemid, sourceitemammo, 0);
+					GetItemArrayDataAtCell(targetitemid, targetitemammo, 0);
 
 					if(0 < amount <= sourceitemammo)
 					{

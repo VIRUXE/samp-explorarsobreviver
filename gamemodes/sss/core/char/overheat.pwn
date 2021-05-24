@@ -1,4 +1,19 @@
-#include <YSI\y_hooks>
+/*==============================================================================
+
+
+	Southclaws' Scavenge and Survive
+
+		Copyright (C) 2020 Barnaby "Southclaws" Keene
+
+		This Source Code Form is subject to the terms of the Mozilla Public
+		License, v. 2.0. If a copy of the MPL was not distributed with this
+		file, You can obtain one at http://mozilla.org/MPL/2.0/.
+
+
+==============================================================================*/
+
+
+#include <YSI_Coding\y_hooks>
 
 
 #define HEAT_MAX (40.0)
@@ -12,15 +27,11 @@ Timer:		OverheatUpdateTimer		[MAX_PLAYERS];
 
 hook OnPlayerConnect(playerid)
 {
-	dbg("global", LOG_CORE, "[OnPlayerConnect] in /gamemodes/sss/core/char/overheat.pwn");
-
 	OverheatBar = CreatePlayerProgressBar(playerid, 220.0, 380.0, 200.0, 20.0, RED, 30.0);
 }
 
 hook OnPlayerDisconnect(playerid, reason)
 {
-	dbg("global", LOG_CORE, "[OnPlayerDisconnect] in /gamemodes/sss/core/char/overheat.pwn");
-
 	DestroyPlayerProgressBar(playerid, OverheatBar);
 }
 
@@ -80,8 +91,6 @@ timer OverheatUpdate[100](playerid)
 
 hook OnPlayerKeyStateChange(playerid, newkeys, oldkeys)
 {
-	dbg("global", LOG_CORE, "[OnPlayerKeyStateChange] in /gamemodes/sss/core/char/overheat.pwn");
-
 	if(!IsPlayerInAnyVehicle(playerid))
 		return 1;
 
@@ -105,8 +114,6 @@ hook OnPlayerKeyStateChange(playerid, newkeys, oldkeys)
 
 hook OnPlayerStateChange(playerid, newstate, oldstate)
 {
-	dbg("global", LOG_CORE, "[OnPlayerStateChange] in /gamemodes/sss/core/char/overheat.pwn");
-
 	if(newstate == PLAYER_STATE_DRIVER)
 	{
 		new model = GetVehicleModel(GetPlayerVehicleID(playerid));
@@ -126,8 +133,6 @@ hook OnPlayerStateChange(playerid, newstate, oldstate)
 
 hook OnPlayerDeath(playerid, killerid, reason)
 {
-	dbg("global", LOG_CORE, "[OnPlayerDeath] in /gamemodes/sss/core/char/overheat.pwn");
-
 	stop OverheatUpdateTimer[playerid];
 	HidePlayerProgressBar(playerid, OverheatBar);
 }

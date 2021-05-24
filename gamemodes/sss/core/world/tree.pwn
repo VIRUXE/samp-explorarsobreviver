@@ -1,4 +1,19 @@
-#include <YSI\y_hooks>
+/*==============================================================================
+
+
+	Southclaws' Scavenge and Survive
+
+		Copyright (C) 2020 Barnaby "Southclaws" Keene
+
+		This Source Code Form is subject to the terms of the Mozilla Public
+		License, v. 2.0. If a copy of the MPL was not distributed with this
+		file, You can obtain one at http://mozilla.org/MPL/2.0/.
+
+
+==============================================================================*/
+
+
+#include <YSI_Coding\y_hooks>
 
 
 #define MAX_TREE_CATEGORIES				(5)
@@ -83,7 +98,7 @@ hook OnPlayerConnect(playerid)
 ==============================================================================*/
 
 
-DefineTreeCategory(name[])
+DefineTreeCategory(const name[])
 {
 	if(treeCategory_Total >= MAX_TREE_CATEGORIES)
 	{
@@ -253,8 +268,6 @@ timer _DeleteTree[2000](treeid, Float:x, Float:y, Float:z)
 		Float:woodAngle,
 		Float:woodDistance;
 
-	MapAndreas_FindZ_For2DCoord(x, y, z);
-
 	for(new i; i < treeSpecies_Data[tree_Data[treeid][tree_species]][tree_pieces]; i++)
 	{
 		woodAngle = frandom(360.0);
@@ -263,7 +276,7 @@ timer _DeleteTree[2000](treeid, Float:x, Float:y, Float:z)
 		x += woodDistance * floatsin(-woodAngle, degrees);
 		y += woodDistance * floatcos(-woodAngle, degrees);
 
-		CreateItem(treeSpecies_Data[tree_Data[treeid][tree_species]][tree_result_item], x, y, z + 0.088, .rz = frandom(360.0));
+		CreateItem(treeSpecies_Data[tree_Data[treeid][tree_species]][tree_result_item], x, y, z + 0.5, .rz = frandom(360.0));
 	}
 
 	DestroyTree(treeid);
@@ -277,11 +290,9 @@ hook OnPlayerEnterDynArea(playerid, areaid)
 
 	if(data[0] == TREE_STREAMER_AREA_IDENTIFIER)
 	{
-		dbg("global", LOG_CORE, "[_tree_EnterArea] Area tree area type for tree %i", data[1]);
-
 		new
-			toolname[ITM_MAX_NAME],
-			yieldname[ITM_MAX_NAME];
+			toolname[MAX_ITEM_NAME],
+			yieldname[MAX_ITEM_NAME];
 
 		GetItemTypeName(treeSpecies_Data[tree_Data[data[1]][tree_species]][tree_harvest_item], toolname);
 		GetItemTypeName(treeSpecies_Data[tree_Data[data[1]][tree_species]][tree_result_item], yieldname);
@@ -303,7 +314,6 @@ hook OnPlayerLeaveDynArea(playerid, areaid)
 
 	if(data[0] == TREE_STREAMER_AREA_IDENTIFIER)
 	{
-		dbg("global", LOG_CORE, "[_tree_LeaveArea] Area tree area type");
 		CallLocalFunction("OnPlayerLeaveTreeArea", "dd", playerid, data[1]);
 		tree_AtTree[playerid] = INVALID_TREE_ID;
 		return Y_HOOKS_CONTINUE_RETURN_0;
@@ -312,7 +322,7 @@ hook OnPlayerLeaveDynArea(playerid, areaid)
 	return Y_HOOKS_CONTINUE_RETURN_0;
 }
 
-hook OnPlayerUseItem(playerid, itemid)
+hook OnPlayerUseItem(playerid, Item:itemid)
 {
 	if(tree_AtTree[playerid] != INVALID_TREE_ID)
 	{
@@ -327,8 +337,6 @@ hook OnPlayerUseItem(playerid, itemid)
 
 hook OnPlayerKeyStateChange(playerid, newkeys, oldkeys)
 {
-	dbg("global", LOG_CORE, "[OnPlayerKeyStateChange] in /gamemodes/sss/core/item/chainsaw.pwn");
-
 	if(tree_CuttingTree[playerid] == INVALID_TREE_ID)
 		return Y_HOOKS_CONTINUE_RETURN_0;
 
@@ -363,8 +371,6 @@ _StopWoodCutting(playerid)
 
 hook OnHoldActionUpdate(playerid, progress)
 {
-	dbg("global", LOG_CORE, "[OnHoldActionUpdate] in /gamemodes/sss/core/item/chainsaw.pwn");
-
 	if(tree_CuttingTree[playerid] == INVALID_TREE_ID)
 		return Y_HOOKS_CONTINUE_RETURN_0;
 		
@@ -375,7 +381,7 @@ hook OnHoldActionUpdate(playerid, progress)
 	}
 
 	new
-		itemid,
+		Item:itemid,
 		ItemType:itemtype;
 
 	itemid = GetPlayerItem(playerid);
@@ -549,8 +555,8 @@ stock SetTreeHealth(treeid, Float:health)
 		return 0;
 
 	new
-		toolname[ITM_MAX_NAME],
-		yieldname[ITM_MAX_NAME];
+		toolname[MAX_ITEM_NAME],
+		yieldname[MAX_ITEM_NAME];
 
 	GetItemTypeName(treeSpecies_Data[tree_Data[treeid][tree_species]][tree_harvest_item], toolname);
 	GetItemTypeName(treeSpecies_Data[tree_Data[treeid][tree_species]][tree_result_item], yieldname);
@@ -584,7 +590,7 @@ stock GetRandomTreeSpecies(categoryid = -1)
 	}
 }
 
-stock GetTreeCategoryFromName(name[])
+stock GetTreeCategoryFromName(const name[])
 {
 	for(new i; i < treeCategory_Total; i++)
 	{

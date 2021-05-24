@@ -1,3 +1,18 @@
+/*==============================================================================
+
+
+	Southclaws' Scavenge and Survive
+
+		Copyright (C) 2020 Barnaby "Southclaws" Keene
+
+		This Source Code Form is subject to the terms of the Mozilla Public
+		License, v. 2.0. If a copy of the MPL was not distributed with this
+		file, You can obtain one at http://mozilla.org/MPL/2.0/.
+
+
+==============================================================================*/
+
+
 static
 		send_TargetName				[MAX_PLAYERS][MAX_PLAYER_NAME],
 		send_TargetType				[MAX_PLAYERS],
@@ -92,7 +107,7 @@ ShowReportMenu(playerid)
 
 					targetid = GetClosestPlayerFromPlayer(playerid, distance);
 
-					if(!IsPlayerConnected(targetid))
+					if(!IsPlayerConnected(targetid) || IsPlayerOnAdminDuty(targetid))
 					{
 						ChatMsgLang(playerid, RED, "REPNOPF100M");
 						return 1;
@@ -107,7 +122,6 @@ ShowReportMenu(playerid)
 					send_TargetType[playerid] = 4;
 				}
 			}
-			//DiscordMessage(DISCORD_CHANNEL_ADMINEVENTS, DISCORD_MENTION_STAFF"there is a new report made by `%p`", playerid);
 		}
 	}
 	Dialog_ShowCallback(playerid, using inline Response, DIALOG_STYLE_LIST, "Report a player", "Specific player ID (who is online now)\nSpecific Player Name (Who isn't online now)\nPlayer that last killed me\nPlayer closest to me", "Send", "Cancel");
@@ -142,7 +156,9 @@ ShowReportOnlinePlayer(playerid)
 			ShowReportReasonInput(playerid);
 		}
 		else
+		{
 			ShowReportMenu(playerid);
+		}
 	}
 	Dialog_ShowCallback(playerid, using inline Response, DIALOG_STYLE_LIST, "Report Online Player", list, "Report", "Back");
 
@@ -229,7 +245,6 @@ ACMD:deletereports[2](playerid, params[])
 {
 	DeleteReadReports();
 	ChatMsg(playerid, YELLOW, " >  All read reports deleted.");
-	DiscordMessage(DISCORD_CHANNEL_ADMINEVENTS, "All read reports have been deleted by `%p`", playerid);
 
 	return 1;
 }
@@ -316,9 +331,13 @@ ShowReport(playerid, reportlistitem)
 		#pragma unused pid, dialogid, listitem, inputtext
 
 		if(response)
+		{
 			ShowReportOptions(playerid);
+		}
 		else
+		{
 			ShowListOfReports(playerid);
+		}
 	}
 
 	Dialog_ShowCallback(playerid, using inline Response, DIALOG_STYLE_MSGBOX, report_CurrentReportList[playerid][reportlistitem][report_name], message, "Options", "Back");
@@ -337,7 +356,9 @@ ShowReportOptions(playerid)
 		strcat(options, "Go to position of report\n");
 
 		if(!strcmp(report_CurrentType[playerid], "TELE"))
+		{
 			strcat(options, "Go to teleport destination\n");
+		}
 
 		if(!strcmp(report_CurrentType[playerid], "CAM"))
 		{
@@ -346,10 +367,14 @@ ShowReportOptions(playerid)
 		}
 
 		if(!strcmp(report_CurrentType[playerid], "VTP"))
+		{
 			strcat(options, "Go to vehicle pos\n");
+		}
 	}
 	else
+	{
 		strcat(options, "(Go on duty to see more options)");	
+	}
 
 	inline Response(pid, dialogid, response, listitem, string:inputtext[])
 	{
@@ -360,25 +385,24 @@ ShowReportOptions(playerid)
 			switch(listitem)
 			{
 				case 0:
+				{
 					ShowReportBanPrompt(playerid);
+				}
 				case 1:
 				{
 					DeleteReport(report_CurrentReportList[playerid][report_CurrentItem[playerid]][report_rowid]);
-					DiscordMessage(DISCORD_CHANNEL_ADMINEVENTS, DISCORD_MENTION_STAFF" `%p` has deleted a report from `%s`.", playerid, report_CurrentReportList[playerid][report_CurrentItem[playerid]][report_name]);
 
 					ShowListOfReports(playerid);
 				}
 				case 2:
 				{
 					DeleteReportsOfPlayer(report_CurrentReportList[playerid][report_CurrentItem[playerid]][report_name]);
-					DiscordMessage(DISCORD_CHANNEL_ADMINEVENTS, DISCORD_MENTION_STAFF" `%p` has deleted all reports from `%s`.", playerid, report_CurrentReportList[playerid][report_CurrentItem[playerid]][report_name]);
 
 					ShowListOfReports(playerid);
 				}
 				case 3:
 				{
 					SetReportRead(report_CurrentReportList[playerid][report_CurrentItem[playerid]][report_rowid], 0);
-					DiscordMessage(DISCORD_CHANNEL_ADMINEVENTS, DISCORD_MENTION_STAFF" `%p` has read `%s`'s report.", playerid, report_CurrentReportList[playerid][report_CurrentItem[playerid]][report_name]);
 
 					ShowListOfReports(playerid);
 				}
@@ -470,7 +494,9 @@ ShowReportOptions(playerid)
 			}
 		}
 		else
+		{
 			ShowReport(playerid, report_CurrentItem[playerid]);
+		}
 	}
 	Dialog_ShowCallback(playerid, using inline Response, DIALOG_STYLE_LIST, report_CurrentReportList[playerid][report_CurrentItem[playerid]][report_name], options, "Select", "Back");
 }
@@ -509,8 +535,11 @@ ShowReportBanPrompt(playerid)
 			ShowListOfReports(playerid);
 		}
 		else
+		{
 			ShowReportOptions(playerid);
+		}
 	}
+
 	Dialog_ShowCallback(playerid, using inline Response, DIALOG_STYLE_INPUT, "Please enter ban duration", "Enter the ban duration below. You can type a number then one of either: 'days', 'weeks' or 'months'. Type 'forever' for perma-ban.", "Continue", "Cancel");
 
 	return 1;

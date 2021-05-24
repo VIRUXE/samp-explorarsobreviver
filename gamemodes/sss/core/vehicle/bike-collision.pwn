@@ -1,4 +1,19 @@
-#include <YSI\y_hooks>
+/*==============================================================================
+
+
+	Southclaws' Scavenge and Survive
+
+		Copyright (C) 2020 Barnaby "Southclaws" Keene
+
+		This Source Code Form is subject to the terms of the Mozilla Public
+		License, v. 2.0. If a copy of the MPL was not distributed with this
+		file, You can obtain one at http://mozilla.org/MPL/2.0/.
+
+
+==============================================================================*/
+
+
+#include <YSI_Coding\y_hooks>
 
 
 static
@@ -8,16 +23,12 @@ static
 
 hook OnPlayerDisconnect(playerid)
 {
-	dbg("global", LOG_CORE, "[OnPlayerDisconnect] in /gamemodes/sss/core/vehicle/bike-collision.pwn");
-
 	CollisionVehicle[playerid] = INVALID_VEHICLE_ID;
 	DestroyObject(CollisionObject[playerid]);
 }
 
 hook OnPlayerStateChange(playerid, newstate, oldstate)
 {
-	dbg("global", LOG_CORE, "[OnPlayerStateChange] in /gamemodes/sss/core/vehicle/bike-collision.pwn");
-
 	if(newstate == PLAYER_STATE_DRIVER)
 	{
 		new

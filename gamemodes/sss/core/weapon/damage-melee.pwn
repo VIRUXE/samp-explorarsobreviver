@@ -1,4 +1,19 @@
-#include <YSI\y_hooks>
+/*==============================================================================
+
+
+	Southclaws' Scavenge and Survive
+
+		Copyright (C) 2020 Barnaby "Southclaws" Keene
+
+		This Source Code Form is subject to the terms of the Mozilla Public
+		License, v. 2.0. If a copy of the MPL was not distributed with this
+		file, You can obtain one at http://mozilla.org/MPL/2.0/.
+
+
+==============================================================================*/
+
+
+#include <YSI_Coding\y_hooks>
 
 
 static
@@ -17,8 +32,6 @@ forward OnPlayerMeleePlayer(playerid, targetid, Float:bleedrate, Float:knockmult
 
 hook OnPlayerKeyStateChange(playerid, newkeys, oldkeys)
 {
-	dbg("global", LOG_CORE, "[OnPlayerKeyStateChange] in /gamemodes/sss/core/weapon/damage-melee.pwn");
-
 	if(newkeys & KEY_FIRE)
 	{
 		_HandleCustomMelee(playerid, GetItemType(GetPlayerItem(playerid)));
@@ -47,7 +60,7 @@ _HandleCustomMelee(playerid, ItemType:itemtype)
 	if(GetPlayerAnimationIndex(playerid) == 1381)
 		return 0;
 
-	if(_hd_IsPlayerInWater(playerid))
+	if(IsPlayerInWater(playerid))
 		return 0;
 
 	if(GetTickCountDifference(GetTickCount(), anm_AttackTick[playerid]) < 800)
@@ -99,6 +112,9 @@ _HandleCustomMelee(playerid, ItemType:itemtype)
 
 		if(Distance(px, py, pz, ix, iy, iz) < 2.0)
 		{
+			if(CA_RayCastLine(px, py, pz, ix, iy, iz, iz, iz, iz))
+				continue;
+
 			GetPlayerFacingAngle(playerid, pa);
 			angle = absoluteangle(pa - GetAngleToPoint(px, py, ix, iy));
 
@@ -129,8 +145,6 @@ _HandleCustomMelee(playerid, ItemType:itemtype)
 
 hook OnPlayerGiveDamage(playerid, damagedid, Float:amount, weaponid, bodypart)
 {
-	dbg("global", LOG_CORE, "[OnPlayerGiveDamage] in /gamemodes/sss/core/weapon/damage-melee.pwn");
-
 	if(weaponid == 0)
 		return _DoMeleeDamage(playerid, damagedid, 0.001, 0.5);
 
@@ -140,7 +154,7 @@ hook OnPlayerGiveDamage(playerid, damagedid, Float:amount, weaponid, bodypart)
 _HandleStandardMelee(playerid, targetid)
 {
 	new
-		itemid,
+		Item:itemid,
 		ItemType:itemtype,
 		weapontype,
 		baseweapon;

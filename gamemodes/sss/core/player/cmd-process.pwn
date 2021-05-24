@@ -1,3 +1,18 @@
+/*==============================================================================
+
+
+	Southclaws' Scavenge and Survive
+
+		Copyright (C) 2020 Barnaby "Southclaws" Keene
+
+		This Source Code Form is subject to the terms of the Mozilla Public
+		License, v. 2.0. If a copy of the MPL was not distributed with this
+		file, You can obtain one at http://mozilla.org/MPL/2.0/.
+
+
+==============================================================================*/
+
+
 public OnPlayerCommandText(playerid, cmdtext[])
 {
 	new
@@ -43,10 +58,8 @@ public OnPlayerCommandText(playerid, cmdtext[])
 	}
 	if(result == 1)
 	{
-		if(isnull(params))
-			result = CallLocalFunction(cmdfunction, "is", playerid, "\1");
-		else 
-			result = CallLocalFunction(cmdfunction, "is", playerid, params);
+		if(isnull(params))result = CallLocalFunction(cmdfunction, "is", playerid, "\1");
+		else result = CallLocalFunction(cmdfunction, "is", playerid, params);
 	}
 
 /*
@@ -60,22 +73,15 @@ public OnPlayerCommandText(playerid, cmdtext[])
 	// If a command returns 7, don't log it.
 
 	if(0 < result < 7)
-		log(DISCORD_CHANNEL_EVENTS, "[COMMAND] `%p`: %s", playerid, cmdtext);
+		log("[COMMAND] [%p]: %s", playerid, cmdtext);
 
-	if(result == 0) 
-		ChatMsgLang(playerid, ORANGE, "CMDERROR0");
-	else if	(result == 1) 
-		return 1; // valid command, do nothing.
-	else if	(result == 2) 
-		ChatMsgLang(playerid, ORANGE, "CMDERROR1");
-	else if	(result == 3) 
-		ChatMsgLang(playerid, RED, "CMDERROR2");
-	else if	(result == 4) 
-		ChatMsgLang(playerid, RED, "CMDERROR3");
-	else if	(result == 5) 
-		ChatMsgLang(playerid, RED, "CMDERROR4");
-	else if	(result == 6) 
-		ChatMsgLang(playerid, RED, "CMDERROR5");
+	if		(result == 0) ChatMsgLang(playerid, ORANGE, "CMDERROR0");
+	else if	(result == 1) return 1; // valid command, do nothing.
+	else if	(result == 2) ChatMsgLang(playerid, ORANGE, "CMDERROR1");
+	else if	(result == 3) ChatMsgLang(playerid, RED, "CMDERROR2");
+	else if	(result == 4) ChatMsgLang(playerid, RED, "CMDERROR3");
+	else if	(result == 5) ChatMsgLang(playerid, RED, "CMDERROR4");
+	else if	(result == 6) ChatMsgLang(playerid, RED, "CMDERROR5");
 
 	return 1;
 }
@@ -86,14 +92,14 @@ public OnRconLoginAttempt(ip[], password[], success)
 	{
 		new ipstring[16];
 
-		log(DISCORD_CHANNEL_ADMINEVENTS, "[RCON] Failed login by '%s' password: '%s'", ip, password);
+		log("[RCON] Failed login by %s password: %s", ip, password);
 
 		foreach(new i : Player)
 		{
 			GetPlayerIp(i, ipstring, sizeof(ipstring));
 
 			if(!strcmp(ip, ipstring, true))
-				ChatMsgAdmins(1, YELLOW, " >  Failed login by '%p' password: '%s'", i, password);
+				ChatMsgAdmins(1, YELLOW, " >  Failed login by %p password: %s", i, password);
 		}
 	}
 	return 1;

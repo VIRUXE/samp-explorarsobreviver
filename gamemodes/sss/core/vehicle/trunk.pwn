@@ -1,9 +1,24 @@
-#include <YSI\y_hooks>
+/*==============================================================================
+
+
+	Southclaws' Scavenge and Survive
+
+		Copyright (C) 2020 Barnaby "Southclaws" Keene
+
+		This Source Code Form is subject to the terms of the Mozilla Public
+		License, v. 2.0. If a copy of the MPL was not distributed with this
+		file, You can obtain one at http://mozilla.org/MPL/2.0/.
+
+
+==============================================================================*/
+
+
+#include <YSI_Coding\y_hooks>
 
 
 static
-			trunk_ContainerVehicle	[CNT_MAX] = {INVALID_VEHICLE_ID, ...},
-			trunk_ContainerID		[MAX_VEHICLES] = {INVALID_CONTAINER_ID, ...},
+			trunk_ContainerVehicle	[MAX_CONTAINER] = {INVALID_VEHICLE_ID, ...},
+Container:	trunk_ContainerID		[MAX_VEHICLES] = {INVALID_CONTAINER_ID, ...},
 			trunk_Locked			[MAX_VEHICLES],
 			trunk_CurrentVehicle	[MAX_PLAYERS] = {INVALID_VEHICLE_ID, ...};
 
@@ -17,8 +32,6 @@ static
 
 hook OnVehicleCreated(vehicleid)
 {
-	dbg("global", LOG_CORE, "[OnVehicleCreated] in /gamemodes/sss/core/vehicle/trunk.pwn");
-
 	new
 		vehicletype,
 		trunksize;
@@ -38,8 +51,6 @@ hook OnVehicleCreated(vehicleid)
 
 hook OnVehicleReset(oldid, newid)
 {
-	dbg("global", LOG_CORE, "[OnVehicleReset] in /gamemodes/sss/core/vehicle/trunk.pwn");
-
 	if(oldid != newid)
 	{
 		trunk_ContainerID[newid] = trunk_ContainerID[oldid];
@@ -51,8 +62,6 @@ hook OnVehicleReset(oldid, newid)
 
 hook OnPlayerInteractVehicle(playerid, vehicleid, Float:angle)
 {
-	dbg("global", LOG_CORE, "[OnPlayerInteractVehicle] in /gamemodes/sss/core/vehicle/trunk.pwn");
-
 	if(155.0 < angle < 205.0)
 	{
 		if(IsValidContainer(GetVehicleContainer(vehicleid)))
@@ -87,16 +96,14 @@ hook OnPlayerInteractVehicle(playerid, vehicleid, Float:angle)
 	return Y_HOOKS_CONTINUE_RETURN_0;
 }
 
-hook OnPlayerCloseContainer(playerid, containerid)
+hook OnPlayerCloseContainer(playerid, Container:containerid)
 {
-	dbg("global", LOG_CORE, "[OnPlayerCloseContainer] in /gamemodes/sss/core/vehicle/trunk.pwn");
-
 	if(IsValidVehicle(trunk_CurrentVehicle[playerid]))
 	{
 		if(containerid == GetVehicleContainer(trunk_CurrentVehicle[playerid]))
 		{
 			VehicleBootState(trunk_CurrentVehicle[playerid], 0);
-
+			VehicleTrunkUpdateSave(playerid);
 			trunk_CurrentVehicle[playerid] = INVALID_VEHICLE_ID;
 		}
 	}
@@ -104,30 +111,24 @@ hook OnPlayerCloseContainer(playerid, containerid)
 	return Y_HOOKS_CONTINUE_RETURN_0;
 }
 
-hook OnPlayerUseItem(playerid, itemid)
+hook OnPlayerUseItem(playerid, Item:itemid)
 {
-	dbg("global", LOG_CORE, "[OnPlayerUseItem] in /gamemodes/sss/core/vehicle/trunk.pwn");
-
 	if(IsPlayerAtAnyVehicleTrunk(playerid))
 		return Y_HOOKS_BREAK_RETURN_1;
 
 	return Y_HOOKS_CONTINUE_RETURN_0;
 }
 
-hook OnItemAddedToContainer(containerid, itemid, playerid)
+hook OnItemAddedToContainer(Container:containerid, Item:itemid, playerid)
 {
-	dbg("global", LOG_CORE, "[OnItemAddedToContainer] in /gamemodes/sss/core/vehicle/trunk.pwn");
-
 	if(IsPlayerConnected(playerid))
 		VehicleTrunkUpdateSave(playerid);
 
 	return Y_HOOKS_CONTINUE_RETURN_0;
 }
 
-hook OnItemRemovedFromCnt(containerid, slotid, playerid)
+hook OnItemRemovedFromCnt(Container:containerid, slotid, playerid)
 {
-	dbg("global", LOG_CORE, "[OnItemRemovedFromCnt] in /gamemodes/sss/core/vehicle/trunk.pwn");
-
 	if(IsPlayerConnected(playerid))
 		VehicleTrunkUpdateSave(playerid);
 
@@ -138,30 +139,16 @@ VehicleTrunkUpdateSave(playerid)
 {
 	if(IsValidVehicle(trunk_CurrentVehicle[playerid]))
 	{
-		new owner[MAX_PLAYER_NAME];
+		new
+			Float:x,
+			Float:y,
+			Float:z,
+			Float:r;
 
-		GetVehicleOwner(trunk_CurrentVehicle[playerid], owner);
-
-		if(!isnull(owner))
-		{
-			new name[MAX_PLAYER_NAME];
-
-			GetPlayerName(playerid, name, MAX_PLAYER_NAME);
-
-			if(!strcmp(owner, name))
-			{
-				new
-					Float:x,
-					Float:y,
-					Float:z,
-					Float:r;
-
-				SaveVehicle(trunk_CurrentVehicle[playerid]);
-				GetVehiclePos(trunk_CurrentVehicle[playerid], x, y, z);
-				GetVehicleZAngle(trunk_CurrentVehicle[playerid], r);
-				SetVehicleSpawnPoint(trunk_CurrentVehicle[playerid], x, y, z, r);
-			}
-		}
+		SaveVehicle(trunk_CurrentVehicle[playerid]);
+		GetVehiclePos(trunk_CurrentVehicle[playerid], x, y, z);
+		GetVehicleZAngle(trunk_CurrentVehicle[playerid], r);
+		SetVehicleSpawnPoint(trunk_CurrentVehicle[playerid], x, y, z, r);
 	}
 }
 
@@ -173,7 +160,7 @@ VehicleTrunkUpdateSave(playerid)
 ==============================================================================*/
 
 
-stock GetVehicleContainer(vehicleid)
+stock Container:GetVehicleContainer(vehicleid)
 {
 	if(!IsValidVehicle(vehicleid))
 		return INVALID_CONTAINER_ID;
@@ -181,7 +168,7 @@ stock GetVehicleContainer(vehicleid)
 	return trunk_ContainerID[vehicleid];
 }
 
-stock GetContainerTrunkVehicleID(containerid)
+stock GetContainerTrunkVehicleID(Container:containerid)
 {
 	if(!IsValidContainer(containerid))
 		return INVALID_VEHICLE_ID;

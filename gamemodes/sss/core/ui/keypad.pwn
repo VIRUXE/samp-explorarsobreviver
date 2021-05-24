@@ -1,4 +1,20 @@
-#include <YSI\y_hooks>
+/*==============================================================================
+
+
+	Southclaws' Scavenge and Survive
+
+		Copyright (C) 2020 Barnaby "Southclaws" Keene
+
+		This Source Code Form is subject to the terms of the Mozilla Public
+		License, v. 2.0. If a copy of the MPL was not distributed with this
+		file, You can obtain one at http://mozilla.org/MPL/2.0/.
+
+
+==============================================================================*/
+
+
+#include <YSI_Coding\y_hooks>
+
 
 new
 		PlayerText:kp_Background[MAX_PLAYERS],
@@ -24,12 +40,13 @@ new
 		kp_Value[MAX_PLAYERS],
 		kp_Match[MAX_PLAYERS],
 		kp_CurrentID[MAX_PLAYERS],
-		kp_CallbackResponse[MAX_PLAYERS][E_CALLBACK_DATA],
-		kp_CallbackCancel[MAX_PLAYERS][E_CALLBACK_DATA],
 		kp_Hacking[MAX_PLAYERS],
 Timer:	kp_HackTimer[MAX_PLAYERS],
 		kp_HackTries[MAX_PLAYERS],
 		kp_HackFailParticle[MAX_PLAYERS];
+
+static Func:kp_CallbackResponse[MAX_PLAYERS]<dddd>;
+static Func:kp_CallbackCancel[MAX_PLAYERS]<dddd>;
 
 
 #if defined FILTERSCRIPT
@@ -75,11 +92,14 @@ stock ShowKeypad(playerid, keypadid, match = -1)
 	kp_Match[playerid] = match;
 	kp_CurrentID[playerid] = keypadid;
 	KeypadUpdateDisplay(playerid);
+	
+	HideActionText(playerid);
+	PlayerPlaySound(playerid, 21002, 0.0, 0.0, 0.0); // Keyboard sound
 
 	return 1;
 }
 
-stock ShowKeypad_Callback(playerid, callback:response, callback:cancel, match = 0)
+stock ShowKeypad_Callback(playerid, Func:response<dddd>, Func:cancel<dddd>, match = 0)
 {
 	if(kp_CurrentID[playerid] != -1)
 		return 0;
@@ -99,6 +119,8 @@ stock HideKeypad(playerid)
 
 	if(kp_Hacking[playerid])
 	{
+		kp_Hacking[playerid] = 0;
+		kp_HackTries[playerid] = 0;
 		stop kp_HackTimer[playerid];
 		ClearAnimations(playerid);
 	}
@@ -126,6 +148,8 @@ stock HideKeypad(playerid)
 	kp_CurrentID[playerid] = -1;
 	kp_Value[playerid] = 0;
 	kp_Match[playerid] = 0;
+	
+	PlayerPlaySound(playerid, 21002, 0.0, 0.0, 0.0); // Keyboard sound
 
 	return 1;
 }
@@ -135,11 +159,11 @@ stock CancelKeypad(playerid)
 	if(kp_CurrentID[playerid] == -1)
 		return 0;
 
-	if(kp_CurrentID[playerid] == 0xFFFFFFFF)
-		Callback_Call(kp_CallbackCancel[playerid], playerid, 0xFFFFFFFF);
+	// if(kp_CurrentID[playerid] == 0xFFFFFFFF)
+	// 	@.kp_CallbackCancel[playerid](playerid, 0xFFFFFFFF);
 
-	else
-		CallLocalFunction("OnPlayerKeypadCancel", "dd", playerid, kp_CurrentID[playerid]);
+	// else
+	// 	CallLocalFunction("OnPlayerKeypadCancel", "dd", playerid, kp_CurrentID[playerid]);
 
 	HideKeypad(playerid);
 
@@ -148,22 +172,18 @@ stock CancelKeypad(playerid)
 
 stock HackKeypad(playerid, keypadid, match)
 {
-	kp_Hacking[playerid] = 1;
-	kp_HackTimer[playerid] = repeat HackKeypadUpdate(playerid, keypadid, match);
-	ApplyAnimation(playerid, "COP_AMBIENT", "COPBROWSE_LOOP", 4.0, 1, 0, 0, 0, 0);
+	if(kp_Hacking[playerid] != 1)
+	{
+		kp_Hacking[playerid] = 1;
+		kp_HackTimer[playerid] = repeat HackKeypadUpdate(playerid, keypadid, match);
+		ApplyAnimation(playerid, "COP_AMBIENT", "COPBROWSE_LOOP", 4.0, 1, 0, 0, 0, 0);
+	}
 }
 
 timer HackKeypadUpdate[100](playerid, keypadid, match)
 {
 	if(kp_HackTries[playerid] >= 100)
 	{
-		new
-			Float:x,
-			Float:y,
-			Float:z;
-
-		GetPlayerPos(playerid, x, y, z);
-
 		kp_Hacking[playerid] = 0;
 		kp_HackTries[playerid] = 0;
 		stop kp_HackTimer[playerid];
@@ -174,19 +194,21 @@ timer HackKeypadUpdate[100](playerid, keypadid, match)
 			ClearAnimations(playerid);
 			KeypadUpdateDisplay(playerid);
 			defer HackKeypadFinish(playerid, keypadid, match, match);
-
-			DiscordMessage(DISCORD_CHANNEL_ADMINEVENTS, DISCORD_MENTION_STAFF"`%p` succesfully hacked a keypad at `%f, %f, %f`.", playerid, x, y, z);
 		}
 		else
 		{
+			new
+				Float:x,
+				Float:y,
+				Float:z;
+
+			GetPlayerPos(playerid, x, y, z);
+
 			kp_HackFailParticle[playerid] = CreateDynamicObject(18724, x, y, z - 1.5, 0.0, 0.0, 0.0);
 			defer kp_PrtDestroy(playerid);
 			GivePlayerHP(playerid, -5);
 			KnockOutPlayer(playerid, 3000);
-			HideKeypad(playerid);
-			HackKeypadFinish(playerid, keypadid, kp_Value[playerid], match);
-
-			DiscordMessage(DISCORD_CHANNEL_ADMINEVENTS, DISCORD_MENTION_STAFF"`%p` failed hacking a keypad at `%f, %f, %f`.", playerid, x, y, z);
+			defer HackKeypadFinish(playerid, keypadid, kp_Value[playerid], match);
 		}
 
 		return;
@@ -202,7 +224,6 @@ timer HackKeypadUpdate[100](playerid, keypadid, match)
 
 timer HackKeypadFinish[1000](playerid, keypadid, code, match)
 {
-	HideKeypad(playerid);
 	CallLocalFunction("OnPlayerKeypadEnter", "dddd", playerid, keypadid, code, match);
 }
 
@@ -213,8 +234,6 @@ timer kp_PrtDestroy[2000](playerid)
 
 hook OnPlayerClickPlayerTD(playerid, PlayerText:playertextid)
 {
-	dbg("global", LOG_CORE, "[OnPlayerClickPlayerTD] in /gamemodes/sss/core/ui/keypad.pwn");
-
 	if(playertextid == kp_KeyEnter[playerid])
 		KeypadEnter(playerid);
 
@@ -256,8 +275,6 @@ hook OnPlayerClickPlayerTD(playerid, PlayerText:playertextid)
 
 hook OnPlayerClickTextDraw(playerid, Text:clickedid)
 {
-	dbg("global", LOG_CORE, "[OnPlayerClickTextDraw] in /gamemodes/sss/core/ui/keypad.pwn");
-
 	if(kp_CurrentID[playerid] != -1)
 	{
 		if(clickedid == Text:65535)
@@ -271,11 +288,11 @@ KeypadEnter(playerid)
 {
 	new ret;
 
-	if(kp_CurrentID[playerid] == 0xFFFFFFFF)
-		Callback_Call(kp_CallbackResponse[playerid], playerid, 0xFFFFFFFF, kp_Value[playerid], kp_Match[playerid]);
+	// if(kp_CurrentID[playerid] == 0xFFFFFFFF)
+	// 	@.cb(kp_CallbackResponse[playerid], playerid, 0xFFFFFFFF, kp_Value[playerid], kp_Match[playerid]);
 
-	else
-		ret = CallLocalFunction("OnPlayerKeypadEnter", "dddd", playerid, kp_CurrentID[playerid], kp_Value[playerid], kp_Match[playerid]);
+	// else
+	ret = CallLocalFunction("OnPlayerKeypadEnter", "dddd", playerid, kp_CurrentID[playerid], kp_Value[playerid], kp_Match[playerid]);
 
 	if(ret || kp_Value[playerid] == kp_Match[playerid])
 		HideKeypad(playerid);
@@ -290,6 +307,8 @@ KeypadAddNumber(playerid, number)
 
 	kp_Value[playerid] = result;
 	KeypadUpdateDisplay(playerid);
+	
+	PlayerPlaySound(playerid, 17006, 0.0, 0.0, 0.0); // Number sound
 
 	return 1;
 }
@@ -304,8 +323,6 @@ KeypadUpdateDisplay(playerid)
 
 hook OnPlayerConnect(playerid)
 {
-	dbg("global", LOG_CORE, "[OnPlayerConnect] in /gamemodes/sss/core/ui/keypad.pwn");
-
 	kp_LoadUI(playerid);
 }
 

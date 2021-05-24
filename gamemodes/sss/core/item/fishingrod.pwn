@@ -1,4 +1,22 @@
-#include <YSI\y_hooks>
+/*==============================================================================
+
+
+	Southclaws' Scavenge and Survive
+
+		Copyright (C) 2020 Barnaby "Southclaws" Keene
+
+		This Source Code Form is subject to the terms of the Mozilla Public
+		License, v. 2.0. If a copy of the MPL was not distributed with this
+		file, You can obtain one at http://mozilla.org/MPL/2.0/.
+
+
+	This source code was written & provided by Adam Kadar @ github.com/Kadaradam
+
+
+==============================================================================*/
+
+
+#include <YSI_Coding\y_hooks>
 
 
 #define MAX_FISHING_DISTANCE	(10000)
@@ -21,16 +39,12 @@ Timer:	fish_Timer[MAX_PLAYERS];
 
 hook OnPlayerConnect(playerid)
 {
-	dbg("global", LOG_CORE, "[OnPlayerConnect] in /gamemodes/sss/core/item/fishingrod.pwn");
-
 	fish_Status[playerid] = FISH_STATUS_NONE;
 	stop fish_Timer[playerid];
 }
 
-hook OnPlayerUseItem(playerid, itemid)
+hook OnPlayerUseItem(playerid, Item:itemid)
 {
-	dbg("global", LOG_CORE, "[OnPlayerUseItem] in /gamemodes/sss/core/item/fishingrod.pwn");
-
 	if(GetItemType(itemid) == item_FishRod)
 	{
 		_PlayerStartFishing(playerid);
@@ -43,8 +57,6 @@ hook OnPlayerUseItem(playerid, itemid)
 
 hook OnPlayerKeyStateChange(playerid, newkeys, oldkeys)
 {
-	dbg("global", LOG_CORE, "[OnPlayerKeyStateChange] in /gamemodes/sss/core/item/fishingrod.pwn");
-
 	if(GetItemType(GetPlayerItem(playerid)) == item_FishRod)
 	{
 		if(newkeys == 16)
@@ -97,7 +109,6 @@ _CatchFish(playerid, Float:distance)
 
 	x += (distance * floatsin(-a, degrees));
 	y += (distance * floatcos(-a, degrees));
-	MapAndreas_FindZ_For2DCoord(x, y, z);
 
 	if(IsPosInWater(x, y, z) && -0.01 < z < 0.01)
 	{
@@ -136,21 +147,23 @@ timer _TryCatch[catchtime](playerid, catchtime)
 timer _CatchDelay[floatround(fish_Distance[playerid], floatround_round) * 100](playerid)
 {
 	new
+		Item:itemid,
 		Float: x,
 		Float: y,
 		Float: z;
 
 	GetPlayerPos(playerid, x, y, z);
-	CreateItem(item_RawFish, x, y, z - FLOOR_OFFSET, 90.0);
-	// todo: multiple fish types
 
+	itemid = CreateItem(item_RawFish, x, y, z - ITEM_FLOOR_OFFSET, 90.0);
+	SetItemArrayDataAtCell(itemid, 0, food_cooked, true);
+	SetItemArrayDataAtCell(itemid, 4, food_amount, true);
+	// todo: multiple fish types
+	
 	_PlayerStopFishing(playerid);
 }
 
 hook OnHoldActionUpdate(playerid, progress)
 {
-	dbg("global", LOG_CORE, "[OnHoldActionUpdate] in /gamemodes/sss/core/item/fishingrod.pwn");
-
 	if(fish_Status[playerid] == FISH_STATUS_CASTING)
 		fish_Distance[playerid] = progress / 100;
 

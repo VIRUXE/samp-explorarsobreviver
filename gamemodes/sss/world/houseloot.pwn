@@ -1,4 +1,24 @@
-#include <YSI\y_hooks>
+/*==============================================================================
+
+
+	Southclaws' Scavenge and Survive
+
+		Copyright (C) 2020 Barnaby "Southclaws" Keene
+
+		This Source Code Form is subject to the terms of the Mozilla Public
+		License, v. 2.0. If a copy of the MPL was not distributed with this
+		file, You can obtain one at http://mozilla.org/MPL/2.0/.
+
+
+==============================================================================*/
+
+/*
+1550.28, -1643.03, 32.62
+1565.13, -1641.47, 35.88
+1565.40, -1641.81, 44.28
+*/
+
+#include <YSI_Coding\y_hooks>
 
 
 #define MAX_HOUSE_TYPES		(4)
@@ -86,7 +106,7 @@ Load_HouseLoot()
 							LootOffsets[j][k][0], LootOffsets[j][k][1], LootOffsets[j][k][2],
 							x, y, z);
 
-						CreateStaticLootSpawn(x, y, z, 3, 30, GetLootIndexFromName("world_civilian"));
+						CreateStaticLootSpawn(x, y, z, GetLootIndexFromName("world_civilian"), 30, 3);
 					}
 				}
 			}

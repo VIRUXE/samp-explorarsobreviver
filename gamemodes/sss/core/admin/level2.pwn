@@ -1,4 +1,20 @@
-#include <YSI\y_hooks>
+/*==============================================================================
+
+
+	Southclaws' Scavenge and Survive
+
+		Copyright (C) 2020 Barnaby "Southclaws" Keene
+
+		This Source Code Form is subject to the terms of the Mozilla Public
+		License, v. 2.0. If a copy of the MPL was not distributed with this
+		file, You can obtain one at http://mozilla.org/MPL/2.0/.
+
+
+==============================================================================*/
+
+
+#include <YSI_Coding\y_hooks>
+
 
 hook OnGameModeInit()
 {
@@ -10,9 +26,15 @@ hook OnGameModeInit()
 	RegisterAdminCommand(STAFF_LEVEL_MODERATOR, "/banlist - show list of bans\n");
 	RegisterAdminCommand(STAFF_LEVEL_MODERATOR, "/banned - check if banned\n");
 	RegisterAdminCommand(STAFF_LEVEL_MODERATOR, "/setmotd - set message of the day\n");
-	RegisterAdminCommand(STAFF_LEVEL_MODERATOR, "/field - manage detection fields\n");
-	RegisterAdminCommand(STAFF_LEVEL_MODERATOR, "/freezecam - no idea yet\n");
 }
+
+
+/*==============================================================================
+
+	Enter admin duty mode, disabling normal gameplay mechanics
+
+==============================================================================*/
+
 
 ACMD:duty[2](playerid, params[])
 {
@@ -22,17 +44,22 @@ ACMD:duty[2](playerid, params[])
 		return 1;
 	}
 
-	new bool:here;
+	if(IsPlayerOnAdminDuty(playerid))
+		TogglePlayerAdminDuty(playerid, false);
 
-	if(!strcmp(params, "here"))
-		here = true;
 	else
-		here = false;
-
-	TogglePlayerAdminDuty(playerid, .exitAtSameLocation = here);
+		TogglePlayerAdminDuty(playerid, true);
 
 	return 1;
 }
+
+
+/*==============================================================================
+
+	Teleport players to other players or yourself to 
+
+==============================================================================*/
+
 
 ACMD:goto[2](playerid, params[])
 {
@@ -50,14 +77,10 @@ ACMD:goto[2](playerid, params[])
 	if(!IsPlayerConnected(targetid))
 		return 4;
 
-	if(targetid == playerid)
-		return 0;
-
 	TeleportPlayerToPlayer(playerid, targetid);
 
 	ChatMsg(playerid, YELLOW, " >  You have teleported to %P", targetid);
 	ChatMsgLang(targetid, YELLOW, "TELEPORTEDT", playerid);
-	DiscordMessage(DISCORD_CHANNEL_ADMINEVENTS, "[TELEPORT] `%p` (%s) teleported to `%p` (%s).", playerid, GetPlayerZoneEx(playerid), targetid, GetPlayerZoneEx(targetid));
 
 	return 1;
 }
@@ -75,52 +98,48 @@ ACMD:get[2](playerid, params[])
 		return 1;
 	}
 
-	if(targetid == playerid)
-		return 1;
-
 	if(!IsPlayerConnected(targetid))
 		return 4;
-
-	new 
-		Float:x, 
-		Float:y, 
-		Float:z;
-
-	GetPlayerPos(targetid, x,y,z);
 
 	TeleportPlayerToPlayer(targetid, playerid);
 
 	ChatMsg(playerid, YELLOW, " >  You have teleported %P", targetid);
 	ChatMsgLang(targetid, YELLOW, "TELEPORTEDY", playerid);
-	DiscordMessage(DISCORD_CHANNEL_ADMINEVENTS, "[TELEPORT] `%p` (%s) teleported `%p` from `%.0f, %.0f, %.0f` (%s) to him.", playerid, GetPlayerZoneEx(playerid), targetid, x,y,z, GetPlayerZoneEx(targetid));
 
 	return 1;
 }
 
+
+/*==============================================================================
+
+	Teleport to a specific position
+
+==============================================================================*/
+
+
 ACMD:gotopos[2](playerid, params[])
 {
-	if(!(IsPlayerOnAdminDuty(playerid)) && GetPlayerAdminLevel(playerid) < STAFF_LEVEL_DEVELOPER)
-		return 6;
-
 	new
 		Float:x,
 		Float:y,
-		Float:z,
-		Float:px,
-		Float:py,
-		Float:pz;
+		Float:z;
 
 	if(sscanf(params, "fff", x, y, z) && sscanf(params, "p<,>fff", x, y, z))
 		return ChatMsg(playerid, YELLOW, "Usage: /gotopos x, y, z (With or without commas)");
 
-	GetPlayerPos(playerid, px,py,pz);
-	SetPlayerPos(playerid, x, y, z);
-
 	ChatMsg(playerid, YELLOW, " >  Teleported to %f, %f, %f", x, y, z);
-	DiscordMessage(DISCORD_CHANNEL_ADMINEVENTS, "[TELEPORT] `%p` (`%.0f, %.0f, %.0f` %s) teleported to `%.0f, %.0f, %.0f`", playerid, px,py,pz, GetPlayerZoneEx(playerid), x,y,z);
+	SetPlayerPos(playerid, x, y, z);
 
 	return 1;
 }
+
+
+/*==============================================================================
+
+	Freeze a player for questioning/investigation
+
+==============================================================================*/
+
 
 ACMD:freeze[2](playerid, params[])
 {
@@ -147,7 +166,6 @@ ACMD:freeze[2](playerid, params[])
 		ChatMsg(playerid, YELLOW, " >  Frozen %P (performing 'mod_sa' check)", targetid);
 		ChatMsgLang(targetid, YELLOW, "FREEZEFROZE");
 	}
-	DiscordMessage(DISCORD_CHANNEL_ADMINEVENTS, "[FREEZE] `%p` froze `%p` for %d seconds", playerid, targetid, delay);
 
 	return 1;
 }
@@ -166,10 +184,17 @@ ACMD:unfreeze[2](playerid, params[])
 
 	ChatMsg(playerid, YELLOW, " >  Unfrozen %P", targetid);
 	ChatMsgLang(targetid, YELLOW, "FREEZEUNFRE");
-	DiscordMessage(DISCORD_CHANNEL_ADMINEVENTS, "[FREEZE] `%p` unfroze `%p`", playerid, targetid);
 
 	return 1;
 }
+
+
+/*==============================================================================
+
+	Ban a player from the server for a set time or forever
+
+==============================================================================*/
+
 
 ACMD:ban[2](playerid, params[])
 {
@@ -187,6 +212,7 @@ ACMD:ban[2](playerid, params[])
 
 		if(IsPlayerConnected(targetid))
 			GetPlayerName(targetid, name, MAX_PLAYER_NAME);
+
 		else
 			ChatMsg(playerid, YELLOW, " >  Numeric value '%d' isn't a player ID that is currently online, treating it as a name.", targetid);
 	}
@@ -215,15 +241,21 @@ ACMD:unban[2](playerid, params[])
 		return ChatMsg(playerid, YELLOW, " >  Usage: /unban [player name]");
 
 	if(UnBanPlayer(name))
-	{
 		ChatMsg(playerid, YELLOW, " >  Unbanned "C_BLUE"%s"C_YELLOW".", name);
-		DiscordMessage(DISCORD_CHANNEL_GLOBAL, "`%p` unbanned `%s`.", playerid, name);
-	}
+
 	else
 		ChatMsg(playerid, YELLOW, " >  Player '%s' is not banned.");
 
 	return 1;
 }
+
+
+/*==============================================================================
+
+	Show the list of banned players and check if someone is banned
+
+==============================================================================*/
+
 
 ACMD:banlist[2](playerid, params[])
 {
@@ -252,11 +284,20 @@ ACMD:banned[2](playerid, params[])
 
 	if(IsPlayerBanned(name))
 		ShowBanInfo(playerid, name);
+
 	else
 		ChatMsg(playerid, YELLOW, " >  Player '%s' "C_BLUE"isn't "C_YELLOW"banned.", name);
 
 	return 1;
 }
+
+
+/*==============================================================================
+
+	Set the message of the day
+
+==============================================================================*/
+
 
 ACMD:setmotd[2](playerid, params[])
 {
@@ -267,7 +308,6 @@ ACMD:setmotd[2](playerid, params[])
 	}
 
 	ChatMsgAll(YELLOW, " >  MOTD updated: "C_BLUE"%s", gMessageOfTheDay);
-	DiscordMessage(DISCORD_CHANNEL_GLOBAL, "`%p` set the MoTD to `%s`.", playerid, gMessageOfTheDay);
 
 	return 1;
 }

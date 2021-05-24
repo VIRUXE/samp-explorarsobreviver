@@ -1,14 +1,22 @@
-#include <YSI\y_hooks>
+/*==============================================================================
+
+
+	Southclaws' Scavenge and Survive
+
+		Copyright (C) 2020 Barnaby "Southclaws" Keene
+
+		This Source Code Form is subject to the terms of the Mozilla Public
+		License, v. 2.0. If a copy of the MPL was not distributed with this
+		file, You can obtain one at http://mozilla.org/MPL/2.0/.
+
+
+==============================================================================*/
+
+
+#include <YSI_Coding\y_hooks>
 
 
 #define IDLE_FOOD_RATE (0.004)
-
-
-static 
-PlayerBar:HungerBar[MAX_PLAYERS],
-PlayerText:HungerBarBackground[MAX_PLAYERS],
-PlayerText:HungerBarForeground[MAX_PLAYERS];
-
 
 hook OnPlayerScriptUpdate(playerid)
 {
@@ -19,41 +27,37 @@ hook OnPlayerScriptUpdate(playerid)
 		return;
 
 	new
-		infectionIntensity = GetPlayerInfectionIntensity(playerid, 0),
-		anim = GetPlayerAnimationIndex(playerid),
-		k,
-		ud,
-		lr,
-		Float:food;
-
-	GetPlayerKeys(playerid, k, ud, lr);
-	food = GetPlayerFP(playerid);
-
-	if(infectionIntensity)
-		food -= IDLE_FOOD_RATE;
-
-	if(anim == 43) // Sitting
-		food -= IDLE_FOOD_RATE * 0.2;
-	else if(anim == 1159) // Crouching
-		food -= IDLE_FOOD_RATE * 1.1;
-	else if(anim == 1195) // Jumping
-		food -= IDLE_FOOD_RATE * 3.2;	
-	else if(anim == 1231) // Running
-	{
-		if(k & KEY_WALK) // Walking
-			food -= IDLE_FOOD_RATE * 1.2;
-		else if(k & KEY_SPRINT) // Sprinting
-			food -= IDLE_FOOD_RATE * 2.2;
-		else if(k & KEY_JUMP) // Jump
-			food -= IDLE_FOOD_RATE * 3.2;
-		else
-			food -= IDLE_FOOD_RATE * 2.0;
-	}
-	else
-		food -= IDLE_FOOD_RATE; // Default rate
+		intensity = GetPlayerInfectionIntensity(playerid, 0),
+		E_MOVEMENT_TYPE:movementstate,
+		Float:food = GetPlayerFP(playerid);
 
 	if(food > 100.0)
 		food = 100.0;
+
+	if(intensity)
+	{
+		food -= IDLE_FOOD_RATE;
+	}
+
+	GetPlayerMovementState(playerid, movementstate);
+
+	switch(movementstate)
+	{
+		case E_MOVEMENT_TYPE_UNKNOWN:	food -= IDLE_FOOD_RATE;
+		case E_MOVEMENT_TYPE_IDLE:		food -= IDLE_FOOD_RATE;
+		case E_MOVEMENT_TYPE_SITTING:	food -= IDLE_FOOD_RATE * 0.2;
+		case E_MOVEMENT_TYPE_CROUCHING:	food -= IDLE_FOOD_RATE * 1.1;
+		case E_MOVEMENT_TYPE_JUMPING:	food -= IDLE_FOOD_RATE * 3.2;
+		case E_MOVEMENT_TYPE_WALKING:	food -= IDLE_FOOD_RATE * 1.2;
+		case E_MOVEMENT_TYPE_RUNNING:	food -= IDLE_FOOD_RATE * 1.8;
+		case E_MOVEMENT_TYPE_STOPPING:	food -= IDLE_FOOD_RATE;
+		case E_MOVEMENT_TYPE_SPRINTING:	food -= IDLE_FOOD_RATE * 2.2;
+		case E_MOVEMENT_TYPE_CLIMBING:	food -= IDLE_FOOD_RATE * 3.5;
+		case E_MOVEMENT_TYPE_FALLING:	food -= IDLE_FOOD_RATE;
+		case E_MOVEMENT_TYPE_LANDING:	food -= IDLE_FOOD_RATE * 2.0;
+		case E_MOVEMENT_TYPE_SWIMMING:	food -= IDLE_FOOD_RATE * 4.0;
+		case E_MOVEMENT_TYPE_DIVING:	food -= IDLE_FOOD_RATE * 2.2;
+	}
 
 	if(!IsPlayerUnderDrugEffect(playerid, drug_Morphine) && !IsPlayerUnderDrugEffect(playerid, drug_Air))
 	{
@@ -61,15 +65,17 @@ hook OnPlayerScriptUpdate(playerid)
 		{
 			if(!IsPlayerUnderDrugEffect(playerid, drug_Adrenaline))
 			{
-				if(infectionIntensity == 0)
+				if(intensity == 0)
 					SetPlayerDrunkLevel(playerid, 0);
 			}
 			else
+			{
 				SetPlayerDrunkLevel(playerid, 2000 + floatround((31.0 - food) * 300.0));
+			}
 		}
 		else
 		{
-			if(infectionIntensity == 0)
+			if(intensity == 0)
 				SetPlayerDrunkLevel(playerid, 0);
 		}
 	}
@@ -80,50 +86,7 @@ hook OnPlayerScriptUpdate(playerid)
 	if(food < 0.0)
 		food = 0.0;
 
-	if(IsPlayerHudOn(playerid))
-		SetPlayerProgressBarValue(playerid, HungerBar[playerid], food);
-
 	SetPlayerFP(playerid, food);
 
 	return;
-}
-
-stock TogglePlayerHungerBar(playerid, bool:toggle)
-{
-	if(toggle)
-		ShowPlayerProgressBar(playerid, HungerBar[playerid]);
-	else
-		HidePlayerProgressBar(playerid, HungerBar[playerid]);
-}
-
-hook OnPlayerConnect(playerid)
-{
-	dbg("global", LOG_CORE, "[OnPlayerConnect] in /gamemodes/sss/core/char/food.pwn");
-
-	//HungerBar[playerid] = CreatePlayerProgressBar(playerid, 548.000000, 36.000000, 62.000000, 3.200000, 536354815, 100.0000, 0);
-
-	HungerBar[playerid] = CreatePlayerProgressBar(playerid, 626.0, 100.0, 10.0, 100.0, -2130771840, 100.0, BAR_DIRECTION_UP);
-	HungerBarBackground[playerid]	=CreatePlayerTextDraw(playerid, 612.000000, 101.000000, "_");
-	PlayerTextDrawBackgroundColor	(playerid, HungerBarBackground[playerid], 255);
-	PlayerTextDrawFont				(playerid, HungerBarBackground[playerid], 1);
-	PlayerTextDrawLetterSize		(playerid, HungerBarBackground[playerid], 0.500000, -10.200000);
-	PlayerTextDrawColor				(playerid, HungerBarBackground[playerid], -1);
-	PlayerTextDrawSetOutline		(playerid, HungerBarBackground[playerid], 0);
-	PlayerTextDrawSetProportional	(playerid, HungerBarBackground[playerid], 1);
-	PlayerTextDrawSetShadow			(playerid, HungerBarBackground[playerid], 1);
-	PlayerTextDrawUseBox			(playerid, HungerBarBackground[playerid], 1);
-	PlayerTextDrawBoxColor			(playerid, HungerBarBackground[playerid], 255);
-	PlayerTextDrawTextSize			(playerid, HungerBarBackground[playerid], 618.000000, 10.000000);
-
-	HungerBarForeground[playerid]	=CreatePlayerTextDraw(playerid, 613.000000, 100.000000, "_");
-	PlayerTextDrawBackgroundColor	(playerid, HungerBarForeground[playerid], 255);
-	PlayerTextDrawFont				(playerid, HungerBarForeground[playerid], 1);
-	PlayerTextDrawLetterSize		(playerid, HungerBarForeground[playerid], 0.500000, -10.000000);
-	PlayerTextDrawColor				(playerid, HungerBarForeground[playerid], -1);
-	PlayerTextDrawSetOutline		(playerid, HungerBarForeground[playerid], 0);
-	PlayerTextDrawSetProportional	(playerid, HungerBarForeground[playerid], 1);
-	PlayerTextDrawSetShadow			(playerid, HungerBarForeground[playerid], 1);
-	PlayerTextDrawUseBox			(playerid, HungerBarForeground[playerid], 1);
-	PlayerTextDrawBoxColor			(playerid, HungerBarForeground[playerid], -2130771840);
-	PlayerTextDrawTextSize			(playerid, HungerBarForeground[playerid], 617.000000, 10.000000);
 }

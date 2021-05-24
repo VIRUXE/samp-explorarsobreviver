@@ -1,3 +1,18 @@
+/*==============================================================================
+
+
+	Southclaws' Scavenge and Survive
+
+		Copyright (C) 2020 Barnaby "Southclaws" Keene
+
+		This Source Code Form is subject to the terms of the Mozilla Public
+		License, v. 2.0. If a copy of the MPL was not distributed with this
+		file, You can obtain one at http://mozilla.org/MPL/2.0/.
+
+
+==============================================================================*/
+
+
 #define MAX_LIQUID_TYPES (64)
 #define MAX_LIQUID_NAME (32)
 
@@ -17,7 +32,7 @@ static
 		liq_NextMask = 1;
 
 
-stock DefineLiquidType(name[], Float:foodvalue, ...)
+stock DefineLiquidType(const name[], Float:foodvalue, ...)
 {
 	if(liq_Total >= MAX_LIQUID_TYPES - 1)
 	{
