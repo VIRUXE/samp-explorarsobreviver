@@ -27,7 +27,7 @@
 ==============================================================================*/
 
 #undef MAX_PLAYERS
-#define MAX_PLAYERS						(50)
+#define MAX_PLAYERS						(32)
 
 // YSI
 #define _DEBUG							0
