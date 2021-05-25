@@ -77,7 +77,7 @@ hook OnPlayerPickUpItem(playerid, Item:itemid)
 		format(itemtipkey, sizeof(itemtipkey), "%s_T", itemname);
 		itemtipkey[11] = EOS;
 		
-		format(str, sizeof(str), "%s~n~~n~~b~Type /tooltips to toggle these messages", ls(playerid, itemtipkey, true));
+		format(str, sizeof(str), "%s~n~~n~~b~Type /tooltips to toggle these messages", ls(playerid, itemtipkey));
 
 		ShowHelpTip(playerid, str, 20000);
 	}

@@ -159,6 +159,17 @@ Dialog_ShowIngredients(playerid, CraftSet:craftset)
 
 	GetItemTypeName(resulttype, itemname);
 
+	new itemtipkey[12];
+
+	if(strlen(itemname) > 9)
+		itemname[9] = EOS;
+
+	format(itemtipkey, sizeof(itemtipkey), "%s_T", itemname);
+	itemtipkey[11] = EOS;
+
+	strcat(gBigString[playerid], "\n");
+	strcat(gBigString[playerid], ls(playerid, itemtipkey));
+
 	inline Response(pid, dialogid, response, listitem, string:inputtext[])
 	{
 		#pragma unused pid, dialogid, listitem, inputtext

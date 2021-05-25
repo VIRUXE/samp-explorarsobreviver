@@ -44,6 +44,14 @@ atr_PosCheck(playerid, Float:x, Float:y, Float:z)
 	{
 		if(CA_RayCastLine(x, y, z, x, y, z + 600.0, z, z, z))
 		{
+			if(atr_Check[playerid] >= 50)
+			{
+				new name[MAX_PLAYER_NAME];
+				GetPlayerName(playerid, name, MAX_PLAYER_NAME);
+				ReportPlayer(name, "Atravessou algum objeto", -1, "Anti-Raid", x, y, z, GetPlayerVirtualWorld(playerid), GetPlayerInterior(playerid), "");
+				atr_Check[playerid] = 1;
+			}
+			atr_Check[playerid] ++;
 			return 1;
 		}
 		atr_Check[playerid] = 0;

@@ -35,7 +35,7 @@ new PlayerMobileInfo[MAX_PLAYERS][pMobileInfo];
 public OnPlayerConnect(playerid)
 {
     new gpciStr[64];
-	gpci(playerid, gpciStr);
+	gpci(playerid, gpciStr, 64);
     if(!strcmp(gpciStr, MOBILE_AUTH_KEY)) // system for older version, will be deprecated
 		PlayerMobileInfo[playerid][isMobile] = true;
 	else
@@ -77,6 +77,24 @@ public OnPlayerDisconnect(playerid, reason)
 #if defined mob_OnPlayerDisconnect
 	forward mob_OnPlayerDisconnect(playerid, reason);
 #endif
+
+//TogglePlayerControllable 
+IRPC:15(playerid, BitStream:bs)
+{
+	if(PlayerMobileInfo[playerid][isMobile])
+		return 0;
+
+	return 1;
+}
+
+//SetPlayerSpecialAction  
+IRPC:88(playerid, BitStream:bs)
+{
+	if(PlayerMobileInfo[playerid][isMobile])
+		SendClientMessage(playerid, -1 , "SetPlayerSpecialAction");
+		
+	return 1;
+}
 
 IRawPacket:ID_CUSTOM_SYNC(playerid, BitStream:bs)
 {

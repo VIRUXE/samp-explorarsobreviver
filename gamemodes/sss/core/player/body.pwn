@@ -86,7 +86,7 @@ LoadPlayerBodys()
 
 /*==============================================================================
 
-	Load vehicle (individual)
+	Load body (individual)
 
 ==============================================================================*/
 
@@ -456,12 +456,28 @@ hook OnPlayerSelectCntOpt(playerid, Container:containerid, option)
 	return Y_HOOKS_CONTINUE_RETURN_0;
 }
 
+// GiveTakeDamage
+const GIVEDAM = 115;
+
+IRPC:GIVEDAM(playerid, BitStream:bs){
+	if(IsPlayerMobile(playerid))
+	{
+		new actorid = GetPlayerTargetDynamicActor(playerid);
+
+		if(!IsValidDynamicActor(actorid))
+			actorid = GetPlayerCameraTargetDynActor(playerid);
+
+		if(IsValidDynamicActor(actorid))
+		{
+			CallLocalFunction("OnPlayerGiveDamageDynamicActor", "ddfdd", playerid, actorid, 30.0, GetPlayerWeapon(playerid), 0);
+			return 0;
+		}
+	}
+	return 1;
+}
 
 public OnPlayerGiveDamageDynamicActor(playerid, actorid, Float:amount, weaponid, bodypart)
 {
-	if(IsPlayerMobile(playerid))
-		amount = 30.0;
-		
 	new Float:x, Float:y, Float:z, Float:health;
 
 	GetDynamicActorPos(actorid, x, y, z);
@@ -691,7 +707,7 @@ public OnPlayerGiveDamageDynamicActor(playerid, actorid, Float:amount, weaponid,
 		ShowHitMarker(playerid, GetItemTypeWeaponBaseWeapon(itemtype));
 	}
 
-	//ChatMsg(playerid, -1, "Actorid: %d, Amount: %0.2f, Weaponid: %d, bodypart: %d", actorid, Float:amount, weaponid, bodypart);
+	ChatMsg(playerid, -1, "Actorid: %d, Amount: %0.2f, Weaponid: %d, bodypart: %d", actorid, Float:amount, weaponid, bodypart);
 	return 1;
 }
 

@@ -372,7 +372,7 @@ TogglePlayerAdminDuty(playerid, toggle)
 				CreateItemInWorld(itemid, x, y, z - ITEM_FLOOR_OFFSET);
 		}
 
-		Logout(playerid, 0); // docombatlogcheck = 0
+		Logout(playerid, 1); // docombatlogcheck = 1
 
 		RemovePlayerArmourItem(playerid);
 

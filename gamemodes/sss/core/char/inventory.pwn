@@ -38,6 +38,14 @@ static
 	inv_EscInventory[MAX_PLAYERS],
 	inv_EscContainer[MAX_PLAYERS];
 
+/*
+	inv_GearSlot_Head[MAX_PLAYERS],
+	inv_GearSlot_Face[MAX_PLAYERS],
+	inv_GearSlot_Hand[MAX_PLAYERS],
+	inv_GearSlot_Hols[MAX_PLAYERS],
+	inv_GearSlot_Tors[MAX_PLAYERS],
+	inv_GearSlot_Back[MAX_PLAYERS],
+*/
 
 forward CreatePlayerTile(playerid, &PlayerText:title, &PlayerText:tile, &PlayerText:item, Float:x, Float:y, Float:width, Float:height, colour, overlaycolour);
 
@@ -110,6 +118,54 @@ ShowPlayerGear(playerid)
 
 	return 1;
 }
+/*
+hook OnPlayerOpenInventory(playerid)
+{
+	if(IsValidItem(GetPlayerBagItem(playerid)))
+		inv_GearSlot_Back[playerid] = AddInventoryListItem(playerid, "Abrir Mochila");
+
+	if(IsValidItem(GetPlayerItem(playerid)))
+		inv_GearSlot_Hand[playerid] = AddInventoryListItem(playerid, "Aguardar item da mão");
+
+	if(IsValidItem(GetPlayerHolsterItem(playerid)))
+		inv_GearSlot_Hols[playerid] = AddInventoryListItem(playerid, "Aguardar item do coldre");
+
+	if(IsValidItem(GetPlayerHatItem(playerid)))
+		inv_GearSlot_Head[playerid] = AddInventoryListItem(playerid, "Remover Acessório da Cabeça");
+
+	if(IsValidItem(GetPlayerMaskItem(playerid)))
+		inv_GearSlot_Face[playerid] = AddInventoryListItem(playerid, "Remover Acessório do Rosto");
+
+	if(IsValidItem(GetPlayerArmourItem(playerid)))
+		inv_GearSlot_Tors[playerid] = AddInventoryListItem(playerid, "Pegar colete");
+
+
+	return Y_HOOKS_CONTINUE_RETURN_0;
+}
+
+hook OnPlayerSelectExtraItem(playerid, item)
+{
+	if(item == inv_GearSlot_Head[playerid])
+		_inv_HandleGearSlotClick_Head(playerid);
+
+	if(item == inv_GearSlot_Face[playerid])
+		_inv_HandleGearSlotClick_Face(playerid);
+
+	if(item == inv_GearSlot_Hand[playerid])
+		_inv_HandleGearSlotClick_Hand(playerid);
+
+	if(item == inv_GearSlot_Hols[playerid])
+		_inv_HandleGearSlotClick_Hols(playerid);
+
+	if(item == inv_GearSlot_Tors[playerid])
+		_inv_HandleGearSlotClick_Tors(playerid);
+
+	if(item == inv_GearSlot_Back[playerid])
+		_inv_HandleGearSlotClick_Back(playerid);
+
+	return Y_HOOKS_CONTINUE_RETURN_0;
+}
+*/
 
 HidePlayerGear(playerid)
 {
@@ -884,16 +940,12 @@ hook OnPlayerClickTextDraw(playerid, Text:clickedid)
 				Logger_B("esc", inv_EscInventory[playerid])
 			);
 
-			// This code is commented because it causes a bug where sometimes
-			// the mouse cursor stays on screen after closing the dialogue by
-			// clicking "Close".
-			//
-			// HidePlayerGear(playerid);
-			// HidePlayerHealthInfo(playerid);
-			// ClosePlayerInventory(playerid, true);
-			// inv_EscInventory[playerid] = true;
-			// CancelSelectTextDraw(playerid);
-			DisplayPlayerInventory(playerid);
+			HidePlayerGear(playerid);
+			HidePlayerHealthInfo(playerid);
+			ClosePlayerInventory(playerid, true);
+			inv_EscInventory[playerid] = true;
+			CancelSelectTextDraw(playerid);
+			//DisplayPlayerInventory(playerid);
 		}
 
 		new Container:containerid;
@@ -905,13 +957,12 @@ hook OnPlayerClickTextDraw(playerid, Text:clickedid)
 				Logger_B("esc", inv_EscInventory[playerid])
 			);
 
-			// See above.
-			// HidePlayerGear(playerid);
-			// HidePlayerHealthInfo(playerid);
-			// ClosePlayerContainer(playerid, true);
-			// inv_EscContainer[playerid] = true;
-			// CancelSelectTextDraw(playerid);
-			DisplayContainerInventory(playerid, containerid);
+			HidePlayerGear(playerid);
+			HidePlayerHealthInfo(playerid);
+			ClosePlayerContainer(playerid, true);
+			inv_EscContainer[playerid] = true;
+			CancelSelectTextDraw(playerid);
+			//DisplayContainerInventory(playerid, containerid);
 		}
 	}
 }

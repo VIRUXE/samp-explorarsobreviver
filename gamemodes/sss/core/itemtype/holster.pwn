@@ -152,8 +152,7 @@ stock RemovePlayerHolsterItem(playerid)
 
 hook OnPlayerKeyStateChange(playerid, newkeys, oldkeys)
 {
-	//if(newkeys & KEY_YES)
-	if((newkeys & KEY_LOOK_BEHIND) || (newkeys & KEY_SUBMISSION) || (newkeys & KEY_YES))
+	if(newkeys & KEY_YES)
 	{
 		if(_HolsterChecks(playerid))
 		{

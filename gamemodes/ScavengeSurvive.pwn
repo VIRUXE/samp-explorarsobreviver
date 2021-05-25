@@ -152,6 +152,7 @@ public OnGameModeInit()
 #include <progress2>				// By Toribio/Southclaws:	https://github.com/Southclaws/progress2
 #include <fsutil>					// By Southclaws:			https://github.com/Southclaws/pawn-fsutil
 
+#include <dialogs>             		// By Gammix (Edited and Fixed by Kolor4dO)
 #include <ini>						// By Southclaws:			https://github.com/Southclaws/SimpleINI
 #include <modio>					// By Southclaws:			https://github.com/Southclaws/modio
 #include <personal-space>
@@ -174,9 +175,7 @@ public OnGameModeInit()
 #include <attachment-fix>           // By BrunoBM16:            https://github.com/Jelly23/Proper-attachments-fix
 #include <optud>             		// By BrunoBM16:          	https://github.com/Jelly23/OnPlayerTurnUpsideDown
 #include <BustAim>             		// By YashasSamaga:         https://github.com/YashasSamaga/BustAim-AntiAimbfot
-
 #include <mobile>             		// By Jekmant
-
 
 native WP_Hash(buffer[], len, const str[]);
 									// By Y_Less:				https://github.com/Southclaws/samp-whirlpool
@@ -283,14 +282,14 @@ native WP_Hash(buffer[], len, const str[]);
 
 
 // Key text
-#define KEYTEXT_INTERACT			"F/ENTER"
-#define KEYTEXT_RELOAD				"TAB"
-#define KEYTEXT_PUT_AWAY			"Y"
-#define KEYTEXT_DROP_ITEM			"N"
-#define KEYTEXT_INVENTORY			"H"
-#define KEYTEXT_ENGINE				"Y"
-#define KEYTEXT_LIGHTS				"N"
-#define KEYTEXT_DOORS				"Mouse Button/2"
+#define KEYTEXT_INTERACT			"~k~~VEHICLE_ENTER_EXIT~"
+#define KEYTEXT_RELOAD				"~k~~PED_ANSWER_PHONE~"
+#define KEYTEXT_PUT_AWAY			"~k~~CONVERSATION_YES~"
+#define KEYTEXT_DROP_ITEM			"~k~~CONVERSATION_NO~"
+#define KEYTEXT_INVENTORY			"~k~~GROUP_CONTROL_BWD~"
+#define KEYTEXT_ENGINE				"~k~~CONVERSATION_YES~"
+#define KEYTEXT_LIGHTS				"~k~~CONVERSATION_NO~"
+#define KEYTEXT_DOORS				"~k~~TOGGLE_SUBMISSIONS~"
 #define KEYTEXT_RADIO				"R"
 
 
@@ -568,6 +567,7 @@ new stock
 #include "sss/core/item/refine-machine.pwn"
 #include "sss/core/item/water-purifier.pwn"
 #include "sss/core/item/plot-pole.pwn"
+#include "sss/core/item/trash.pwn" // By Kolor4dO
 //#include "sss/core/item/name.pwn"
 
 // ITEMS (HATS/MASKS)

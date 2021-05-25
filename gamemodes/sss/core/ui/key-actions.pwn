@@ -60,7 +60,24 @@ stock ClearPlayerKeyActionUI(playerid)
 stock AddToolTipText(playerid, const key[], const use[])
 {
 	new tmp[128];
-	format(tmp, sizeof(tmp), "~>~~y~ %s ~w~%s~n~", key, use);
+
+	if(IsPlayerMobile(playerid))
+	{
+		if(!strcmp(key, KEYTEXT_INTERACT)) strcat(tmp, "F");
+		else if(!strcmp(key, KEYTEXT_RELOAD)) strcat(tmp, "TAB");
+		else if(!strcmp(key, KEYTEXT_PUT_AWAY)) strcat(tmp, "Y");
+		else if(!strcmp(key, KEYTEXT_DROP_ITEM)) strcat(tmp, "N");
+		else if(!strcmp(key, KEYTEXT_INVENTORY)) strcat(tmp, "H");
+		else if(!strcmp(key, KEYTEXT_ENGINE)) strcat(tmp, "Y");
+		else if(!strcmp(key, KEYTEXT_LIGHTS)) strcat(tmp, "N");
+		else if(!strcmp(key, KEYTEXT_DOORS)) strcat(tmp, "2");
+		else if(!strcmp(key, KEYTEXT_RADIO)) strcat(tmp, "R");
+
+		format(tmp, sizeof(tmp), "~y~%s ~w~%s~n~", tmp, use);
+	}
+	else
+		format(tmp, sizeof(tmp), "~y~%s ~w~%s~n~", key, use);
+
 	strcat(KeyActionsText[playerid], tmp);
 }
 
