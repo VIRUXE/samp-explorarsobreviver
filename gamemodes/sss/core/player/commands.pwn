@@ -116,6 +116,18 @@ timer Suicide[3000](playerid)
 	SetPlayerHP(playerid, -100.0);
 }
 */
+
+CMD:som(playerid, params[])
+{
+	new sound;
+	if(!sscanf(params, "d", sound))
+	{
+		PlayerPlaySound(playerid, sound, 0.0, 0.0, 0.0);
+		return 1;
+	}
+	return 1;
+}
+
 CMD:changepass(playerid,params[])
 {
 	new

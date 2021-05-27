@@ -1,5 +1,61 @@
 #include <YSI_Coding\y_hooks>
 
+static NexCheatName[53][45] = {
+	{"AirBreak(onfoot)"},
+	{"AirBreak(in vehicle)"},
+	{"teleport hack(onfoot)"},
+	{"teleport hack(vehicle)"},
+	{"tp hack(into/between vehicles)"},
+	{"tp hack(vehicle to player)"},
+	{"teleport hack(pickups)"},
+	{"FlyHack (onfoot)"},
+	{"FlyHack (in vehicle)"},
+	{"SpeedHack (onfoot)"},
+	{"SpeedHack (in vehicle)"},
+	{"Health hack (in vehicle)"},
+	{"Health hack (onfoot)"},
+	{"Armour hack"},
+	{"Money hack"},
+	{"Weapon hack"},
+	{"Ammo hack (add)"},
+	{"Ammo hack (infinite)"},
+	{"Special actions hack"},
+	{"GodMode from bullets(onfoot)"},
+	{"GodMode from bullets(vehicle)"},
+	{"Invisible hack"},
+	{"lagcomp-spoof"},
+	{"Tuning hack"},
+	{"Parkour mod"},
+	{"Quick turn"},
+	{"Rapid fire"},
+	{"FakeSpawn"},
+	{"FakeKill"},
+	{"Pro Aim"},
+	{"CJ run"},
+	{"CarShot"},
+	{"CarJack"},
+	{"UnFreeze"},
+	{"AFK Ghost"},
+	{"Full Aiming"},
+	{"Fake NPC"},
+	{"Reconnect"},
+	{"High ping"},
+	{"Dialog hack"},
+	{"Protection from sandbox"},
+	{"Protection from invalid version"},
+	{"Rcon hack"},
+	{"Tuning crasher"},
+	{"Invalid seat crasher"},
+	{"Dialog crasher"},
+	{"Attached object crasher"},
+	{"Weapon Crasher"},
+	{"Protection from connection flood in one slot"},
+	{"callback functions flood"},
+	{"flood by seat changing"},
+	{"DoS"},
+	{"NOPs"}
+};
+
 forward OnCheatDetected(playerid, const ip_address[], type, code);
 public OnCheatDetected(playerid, const ip_address[], type, code)
 {
@@ -9,10 +65,8 @@ public OnCheatDetected(playerid, const ip_address[], type, code)
 	}
 	else
 	{
-		if(IsPlayerInTutorial(playerid) || IsPlayerOnAdminDuty(playerid)){
-			atr_Check[playerid] = 0;
+		if(IsPlayerInTutorial(playerid) || IsPlayerOnAdminDuty(playerid))
 			return 1;
-		}
 
 		switch(code)
 		{
@@ -25,7 +79,7 @@ public OnCheatDetected(playerid, const ip_address[], type, code)
 				GetPlayerName(playerid, name, 24);
 				GetPlayerPos(playerid, Pos[0], Pos[1], Pos[2]);
 
-				ReportPlayer(name, sprintf("NexAc #%s", code), -1, "NEX-AC", Pos[0], Pos[1], Pos[2], GetPlayerVirtualWorld(playerid), GetPlayerInterior(playerid), sprintf("%.1f, %.1f, %.1f", Pos[0], Pos[1], Pos[2]) );
+				ReportPlayer(name, NexCheatName[code], -1, "NEX-AC", Pos[0], Pos[1], Pos[2], GetPlayerVirtualWorld(playerid), GetPlayerInterior(playerid), sprintf("%.1f, %.1f, %.1f", Pos[0], Pos[1], Pos[2]) );
 			}
 		}
 		//AntiCheatKickWithDesync(playerid, code);
@@ -33,6 +87,20 @@ public OnCheatDetected(playerid, const ip_address[], type, code)
 	return 1;
 }
 
+forward OnCheatWarning(playerid, const ip_address[], type, code, code2, count);
+public OnCheatWarning(playerid, const ip_address[], type, code, code2, count)
+{
+	if(!type)
+	{
+		if(IsPlayerInTutorial(playerid) || IsPlayerOnAdminDuty(playerid))
+			return 1;
+			
+		ChatMsgAdmins(1, RED,
+			"[NEX Anti-Cheat] AVISO: %P(id:%d) "C_RED"foi detectado sutilmente com %s",
+				playerid, playerid, NexCheatName[code]);
+	}
+	return 1;
+}
 /*==============================================================================
 
 	Anti-Parkour

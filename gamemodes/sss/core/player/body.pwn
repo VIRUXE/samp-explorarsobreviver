@@ -457,7 +457,7 @@ hook OnPlayerSelectCntOpt(playerid, Container:containerid, option)
 }
 
 //OnCameraTarget 
-IRPC:168(playerid, BitStream:bs)
+/*IRPC:168(playerid, BitStream:bs)
 {
 	new ObjectTarget, VehicleTarget, PlayerTarget, ActorTarget;
 	BS_ReadValue(bs,
@@ -472,7 +472,8 @@ IRPC:168(playerid, BitStream:bs)
 			ObjectTarget, VehicleTarget, PlayerTarget, ActorTarget);
 
 	return 1;
-}
+}*/
+
 // GiveTakeDamage
 const GIVEDAM = 115;
 
@@ -486,27 +487,77 @@ IRPC:GIVEDAM(playerid, BitStream:bs){
 		PR_UINT32, dBodypart
 	);
 
-	ChatMsg(playerid, -1,
+	/*ChatMsg(playerid, -1,
 		"bGiveOrTake:%d, wPlayerID:%d, damage_amount:%0.2f, dWeaponID:%d, dBodypart:%d",
-			bGiveOrTake, wPlayerID, damage_amount, dWeaponID, dBodypart);
+			bGiveOrTake, wPlayerID, damage_amount, dWeaponID, dBodypart);*/
 	
 	if(IsPlayerMobile(playerid))
 	{
-		new actorid = GetPlayerTargetActor(playerid);
+		new 
+			Float:x,
+			Float:y,
+			Float:z,
+			Float:cx,
+			Float:cy,
+			Float:cz;
 
-		if(!IsValidDynamicActor(actorid))
-			actorid = GetPlayerCameraTargetActor(playerid);
+		GetPlayerPos(playerid, cx, cy, cz);
 
-		if(IsValidActor(actorid))
+		foreach(new i : body_Count)
 		{
-			CallLocalFunction("OnPlayerGiveDamageDynamicActor", "ddfdd", playerid, actorid, damage_amount, dWeaponID, dBodypart);
-			return 0;
+			GetDynamicActorPos(i, x, y, z);
+			
+			if(Distance(cx, cy, cz, x, y, z) < 5.0)
+			{
+				if(!CA_RayCastLine(x, y, z, cx, cy, cz,  cx, cy, cz))
+				{
+					ShowActionText(playerid,
+						sprintf("~w~Use ~g~/mc %d~n~~w~para matar o corpo de ~w~~h~%s", i, body_PlayerName[i]),
+						3000);
+				}
+			}
 		}
 	}
 
 	if(wPlayerID == playerid || !IsPlayerConnected(wPlayerID))
 		return 0;
 
+	return 1;
+}
+
+CMD:mc(playerid, params[])
+{
+	if(IsPlayerMobile(playerid))
+	{
+		new STREAMER_TAG_ACTOR:actorid;
+
+		if(sscanf(params, "d", STREAMER_TAG_ACTOR:actorid))
+		{
+			ChatMsg(playerid, RED, "[Mobile] > Use /mv [id do corpo]");
+			return 1;
+		}
+
+		new 
+			Float:x,
+			Float:y,
+			Float:z,
+			Float:cx,
+			Float:cy,
+			Float:cz;
+
+		GetDynamicActorPos(actorid, x, y, z);
+		GetPlayerPos(playerid, cx, cy, cz);
+
+		if(Distance(cx, cy, cz, x, y, z) < 5.0)
+		{
+			if(!CA_RayCastLine(x, y, z, cx, cy, cz,  cx, cy, cz))
+			{
+				CallLocalFunction("OnPlayerGiveDamageDynamicActor", "ddfdd", playerid, actorid, 100.0, 0, 1);
+			}
+			else ChatMsg(playerid, RED, "[Mobile] > Você não pode matar por que há algum objeto entre você e o corpo.");
+		}
+		else ChatMsg(playerid, RED, "[Mobile] > Você está muito longe do corpo.");
+	}
 	return 1;
 }
 
@@ -527,6 +578,18 @@ public OnPlayerGiveDamageDynamicActor(playerid, actorid, Float:amount, weaponid,
 	
 	if((health- amount) < 1.0)
 	{
+		new forname[MAX_PLAYER_NAME];
+		foreach(new i : Player)
+		{
+			GetPlayerName(i, forname, MAX_PLAYER_NAME);
+
+			if(!strcmp(forname, body_PlayerName[actorid]))
+			{
+				Kick(i);
+				return 1;
+			}
+		}
+
 		new
 			ItemType:itemtype,
 			Item:itemid,
@@ -741,7 +804,7 @@ public OnPlayerGiveDamageDynamicActor(playerid, actorid, Float:amount, weaponid,
 		ShowHitMarker(playerid, GetItemTypeWeaponBaseWeapon(itemtype));
 	}
 
-	ChatMsg(playerid, -1, "Actorid: %d, Amount: %0.2f, Weaponid: %d, bodypart: %d", actorid, Float:amount, weaponid, bodypart);
+	//ChatMsg(playerid, -1, "Actorid: %d, Amount: %0.2f, Weaponid: %d, bodypart: %d", actorid, Float:amount, weaponid, bodypart);
 	return 1;
 }
 

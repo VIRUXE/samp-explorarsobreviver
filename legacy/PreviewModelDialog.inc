@@ -649,7 +649,7 @@ static Prev_UpdateListitems(playerid, page, selected, totalItems) {
 				TextDrawColor(Prev@ModelTD[textdrawid][0], DIALOG_PREVIEW_SELECT_COLOR);
 				TextDrawShowForPlayer(playerid, Prev@ModelTD[textdrawid][0]);
 
-				if(zoom != 0.0)
+				/*if(zoom != 0.0)
 				{
 					TextDrawShowForPlayer(playerid, Prev@ModelTD[textdrawid][2]);
 					TextDrawShowForPlayer(playerid, Prev@ModelTD[textdrawid][3]);
@@ -665,7 +665,7 @@ static Prev_UpdateListitems(playerid, page, selected, totalItems) {
 					format(string, sizeof string, "%0.1f", zoom);
 					PlayerTextDrawSetString(playerid, Prev@ModelTextPTD[playerid][textdrawid][2], string);
 					PlayerTextDrawShow(playerid, Prev@ModelTextPTD[playerid][textdrawid][2]);
-				}
+				}*/
 			} else {
 				TextDrawColor(Prev@ModelTD[textdrawid][0], DIALOG_PREVIEW_UNSELECT_COLOR);
 				TextDrawShowForPlayer(playerid, Prev@ModelTD[textdrawid][0]);
@@ -957,6 +957,7 @@ public OnPlayerClickTextDraw(playerid, Text:clickedid) {
 	}
 
 	if (Prev@PlayerDialogID[playerid] != -1) {
+		PlayerPlaySound (playerid, 1145, 0.0, 0.0, 0.0);
  		if (clickedid == Text:INVALID_TEXT_DRAW || clickedid == RIGHT_BUTTON_TEXTDRAW) {
 		    new dialogid = Prev@PlayerDialogID[playerid];
 		    new listitem = ((Prev@PlayerDialogPage[playerid] * (MAX_DIALOG_PREVIEW_ROWS * MAX_DIALOG_PREVIEW_COLUMNS)) + Prev@PlayerDialogListitem[playerid]);
@@ -1124,6 +1125,7 @@ public OnPlayerClickTextDraw(playerid, Text:clickedid) {
 						TextDrawShowForPlayer(playerid, Prev@ModelTD[i][0]);
 
 						// Zoom
+						/*
 						new listitem = ((Prev@PlayerDialogPage[playerid] * (MAX_DIALOG_PREVIEW_ROWS * MAX_DIALOG_PREVIEW_COLUMNS)) + i);
 						new Pointer:listitemPointer = Pointer:MEM_get_val(Prev@PlayerListitemPointer[playerid], listitem);
 						if(MEM_get_val(listitemPointer, 5) != 0.0)
@@ -1142,7 +1144,7 @@ public OnPlayerClickTextDraw(playerid, Text:clickedid) {
 							format(string, sizeof string, "%0.1f", Float:MEM_get_val(Pointer:MEM_get_val(Prev@PlayerListitemPointer[playerid], listitem), 5));
 							PlayerTextDrawSetString(playerid, Prev@ModelTextPTD[playerid][i][2], string);
 							PlayerTextDrawShow(playerid, Prev@ModelTextPTD[playerid][i][2]);
-						}
+						}*/
 						Prev@PlayerDialogListitem[playerid] = i;
 					    Prev@PlayerDialogTickCount[playerid] = GetTickCount();
 					}

@@ -45,9 +45,11 @@ atr_PosCheck(playerid, Float:x, Float:y, Float:z)
 		return 1;
 	}
 
+	new Float:tmp;
+
 	if(atr_Check[playerid] == 1)
 	{
-		if(CA_RayCastLine(x, y, z, x, y, z + 600.0, z, z, z))
+		if(CA_RayCastLine(x, y, z, x, y, z + 600.0, tmp, tmp, tmp))
 		{
 			if(atr_Check[playerid] >= 50)
 			{
@@ -64,7 +66,7 @@ atr_PosCheck(playerid, Float:x, Float:y, Float:z)
 		atr_SetY[playerid] = y;
 		atr_SetZ[playerid] = z;
 	}
-	else if(CA_RayCastLine(atr_SetX[playerid] + 0.2, atr_SetY[playerid] + 0.2, atr_SetZ[playerid] + 0.6, x - 0.2, y - 0.2, z - 0.6, z, z, z))
+	else if(CA_RayCastLine(atr_SetX[playerid] + 0.2, atr_SetY[playerid] + 0.2, atr_SetZ[playerid] + 0.6, x - 0.2, y - 0.2, z - 0.6, tmp, tmp, tmp))
 	{
 		atr_Check[playerid] = 1;
 		return 1;

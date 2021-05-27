@@ -78,24 +78,6 @@ public OnPlayerDisconnect(playerid, reason)
 	forward mob_OnPlayerDisconnect(playerid, reason);
 #endif
 
-//TogglePlayerControllable 
-IRPC:15(playerid, BitStream:bs)
-{
-	if(PlayerMobileInfo[playerid][isMobile])
-		return 0;
-
-	return 1;
-}
-
-//SetPlayerSpecialAction  
-IRPC:88(playerid, BitStream:bs)
-{
-	if(PlayerMobileInfo[playerid][isMobile])
-		return 0;
-		
-	return 1;
-}
-
 IRawPacket:ID_CUSTOM_SYNC(playerid, BitStream:bs)
 {
 	new bytes, rpcid;
@@ -125,4 +107,13 @@ stock bool:IsPlayerMobile(playerid)
 stock bool:IsPlayerHaveAutoaim(playerid)
 {
     return PlayerMobileInfo[playerid][isHaveAutoaim];
+}
+
+//TogglePlayerControllable 
+IRPC:15(playerid, BitStream:bs)
+{
+	if(PlayerMobileInfo[playerid][isMobile])
+		return 0;
+
+	return 1;
 }

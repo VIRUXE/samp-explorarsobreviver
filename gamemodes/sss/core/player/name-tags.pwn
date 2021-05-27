@@ -2,7 +2,7 @@
 
 static Text3D: player_Nametag[MAX_PLAYERS] = {Text3D:INVALID_3DTEXT_ID, ...};
 
-hook OnPlayerSpawn(playerid)
+ptask UpdatePlayerTag[2000](playerid)
 {
 	foreach(new i : Player)
 		ShowPlayerNameTagForPlayer(playerid, i, IsPlayerMobile(playerid));

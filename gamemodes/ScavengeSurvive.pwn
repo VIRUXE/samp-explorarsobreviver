@@ -27,11 +27,11 @@
 ==============================================================================*/
 
 #undef MAX_PLAYERS
-#define MAX_PLAYERS						(32)
+#define MAX_PLAYERS						(10)
 
 // YSI
 #define _DEBUG							0
-#define CGEN_MEMORY						(69864)//(69420)
+#define CGEN_MEMORY						(71000)//(69420)
 
 #define YSI_NO_VERSION_CHECK
 #define YSI_NO_OPTIMISATION_MESSAGE
@@ -150,6 +150,7 @@ public OnGameModeInit()
 #include <progress2>				// By Toribio/Southclaws:	https://github.com/Southclaws/progress2
 #include <fsutil>					// By Southclaws:			https://github.com/Southclaws/pawn-fsutil
 
+#include <mobile>             		// By Jekmant
 #include <PreviewModelDialog>       // By Agneese-Saini			https://github.com/Agneese-Saini/SA-MP/blob/master/pawno/include/PreviewModelDialog
 #include <ini>						// By Southclaws:			https://github.com/Southclaws/SimpleINI
 #include <modio>					// By Southclaws:			https://github.com/Southclaws/modio
@@ -173,7 +174,6 @@ public OnGameModeInit()
 #include <attachment-fix>           // By BrunoBM16:            https://github.com/Jelly23/Proper-attachments-fix
 #include <optud>             		// By BrunoBM16:          	https://github.com/Jelly23/OnPlayerTurnUpsideDown
 #include <BustAim>             		// By YashasSamaga:         https://github.com/YashasSamaga/BustAim-AntiAimbfot
-#include <mobile>             		// By Jekmant
 
 native WP_Hash(buffer[], len, const str[]);
 									// By Y_Less:				https://github.com/Southclaws/samp-whirlpool
