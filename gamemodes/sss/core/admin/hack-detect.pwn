@@ -9,6 +9,11 @@ public OnCheatDetected(playerid, const ip_address[], type, code)
 	}
 	else
 	{
+		if(IsPlayerInTutorial(playerid) || IsPlayerOnAdminDuty(playerid)){
+			atr_Check[playerid] = 0;
+			return 1;
+		}
+
 		switch(code)
 		{
 			case 40: SendClientMessage(playerid, AC_DEFAULT_COLOR, MAX_CONNECTS_MSG);

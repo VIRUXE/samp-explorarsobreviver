@@ -33,10 +33,7 @@ static
 	PlayerText:GearSlot_Back[3],
 
 	Container:inv_TempContainerID[MAX_PLAYERS],
-	inv_InventoryOptionID[MAX_PLAYERS],
-
-	inv_EscInventory[MAX_PLAYERS],
-	inv_EscContainer[MAX_PLAYERS];
+	inv_InventoryOptionID[MAX_PLAYERS];
 
 /*
 	inv_GearSlot_Head[MAX_PLAYERS],
@@ -52,12 +49,12 @@ forward CreatePlayerTile(playerid, &PlayerText:title, &PlayerText:tile, &PlayerT
 
 hook OnPlayerConnect(playerid)
 {
-	CreatePlayerTile(playerid, GearSlot_Head[0], GearSlot_Head[1], GearSlot_Head[2], 490.0, 120.0, 60.0, 60.0, 0xFFFFFF08, 0xFFFFFFFF);
-	CreatePlayerTile(playerid, GearSlot_Face[0], GearSlot_Face[1], GearSlot_Face[2], 560.0, 120.0, 60.0, 60.0, 0xFFFFFF08, 0xFFFFFFFF);
-	CreatePlayerTile(playerid, GearSlot_Hand[0], GearSlot_Hand[1], GearSlot_Hand[2], 490.0, 230.0, 60.0, 60.0, 0xFFFFFF08, 0xFFFFFFFF);
-	CreatePlayerTile(playerid, GearSlot_Hols[0], GearSlot_Hols[1], GearSlot_Hols[2], 560.0, 230.0, 60.0, 60.0, 0xFFFFFF08, 0xFFFFFFFF);
-	CreatePlayerTile(playerid, GearSlot_Tors[0], GearSlot_Tors[1], GearSlot_Tors[2], 490.0, 340.0, 60.0, 60.0, 0xFFFFFF08, 0xFFFFFFFF);
-	CreatePlayerTile(playerid, GearSlot_Back[0], GearSlot_Back[1], GearSlot_Back[2], 560.0, 340.0, 60.0, 60.0, 0xFFFFFF08, 0xFFFFFFFF);
+	CreatePlayerTile(playerid, GearSlot_Head[0], GearSlot_Head[1], GearSlot_Head[2], 505.0, 120.0, 60.0, 60.0, 0xFFFFFF08, 0xFFFFFFFF);
+	CreatePlayerTile(playerid, GearSlot_Face[0], GearSlot_Face[1], GearSlot_Face[2], 575.0, 120.0, 60.0, 60.0, 0xFFFFFF08, 0xFFFFFFFF);
+	CreatePlayerTile(playerid, GearSlot_Hand[0], GearSlot_Hand[1], GearSlot_Hand[2], 505.0, 230.0, 60.0, 60.0, 0xFFFFFF08, 0xFFFFFFFF);
+	CreatePlayerTile(playerid, GearSlot_Hols[0], GearSlot_Hols[1], GearSlot_Hols[2], 575.0, 230.0, 60.0, 60.0, 0xFFFFFF08, 0xFFFFFFFF);
+	CreatePlayerTile(playerid, GearSlot_Tors[0], GearSlot_Tors[1], GearSlot_Tors[2], 505.0, 340.0, 60.0, 60.0, 0xFFFFFF08, 0xFFFFFFFF);
+	CreatePlayerTile(playerid, GearSlot_Back[0], GearSlot_Back[1], GearSlot_Back[2], 575.0, 340.0, 60.0, 60.0, 0xFFFFFF08, 0xFFFFFFFF);
 
 	PlayerTextDrawSetString(playerid, GearSlot_Head[0], "Head");
 	PlayerTextDrawSetString(playerid, GearSlot_Face[0], "Face");
@@ -272,7 +269,7 @@ UpdatePlayerGear(playerid, show = 1)
 		GetItemTypeName(GetItemType(itemid), tmp);
 		PlayerTextDrawSetString(playerid, GearSlot_Head[UI_ELEMENT_ITEM], tmp);
 		PlayerTextDrawSetPreviewModel(playerid, GearSlot_Head[UI_ELEMENT_TILE], model);
-		PlayerTextDrawSetPreviewRot(playerid, GearSlot_Head[UI_ELEMENT_TILE], -45.0, 0.0, -45.0, 1.0);
+		PlayerTextDrawSetPreviewRot(playerid, GearSlot_Head[UI_ELEMENT_TILE], -45.0, 0.0, -45.0, 0.6);
 	}
 	else
 	{
@@ -288,7 +285,7 @@ UpdatePlayerGear(playerid, show = 1)
 		GetItemTypeName(GetItemType(itemid), tmp);
 		PlayerTextDrawSetString(playerid, GearSlot_Face[UI_ELEMENT_ITEM], tmp);
 		PlayerTextDrawSetPreviewModel(playerid, GearSlot_Face[UI_ELEMENT_TILE], model);
-		PlayerTextDrawSetPreviewRot(playerid, GearSlot_Face[UI_ELEMENT_TILE], -45.0, 0.0, -45.0, 1.0);
+		PlayerTextDrawSetPreviewRot(playerid, GearSlot_Face[UI_ELEMENT_TILE], -45.0, 0.0, -45.0, 0.6);
 	}
 	else
 	{
@@ -307,7 +304,7 @@ UpdatePlayerGear(playerid, show = 1)
 		format(tmp, sizeof(tmp), "(%02d) %s", size, tmp);
 		PlayerTextDrawSetString(playerid, GearSlot_Hand[UI_ELEMENT_ITEM], tmp);
 		PlayerTextDrawSetPreviewModel(playerid, GearSlot_Hand[UI_ELEMENT_TILE], model);
-		PlayerTextDrawSetPreviewRot(playerid, GearSlot_Hand[UI_ELEMENT_TILE], -45.0, 0.0, -45.0, 1.0);
+		PlayerTextDrawSetPreviewRot(playerid, GearSlot_Hand[UI_ELEMENT_TILE], -45.0, 0.0, -45.0, 0.6);
 	}
 	else
 	{
@@ -326,7 +323,7 @@ UpdatePlayerGear(playerid, show = 1)
 		format(tmp, sizeof(tmp), "(%02d) %s", size, tmp);
 		PlayerTextDrawSetString(playerid, GearSlot_Hols[UI_ELEMENT_ITEM], tmp);
 		PlayerTextDrawSetPreviewModel(playerid, GearSlot_Hols[UI_ELEMENT_TILE], model);
-		PlayerTextDrawSetPreviewRot(playerid, GearSlot_Hols[UI_ELEMENT_TILE], -45.0, 0.0, -45.0, 1.0);
+		PlayerTextDrawSetPreviewRot(playerid, GearSlot_Hols[UI_ELEMENT_TILE], -45.0, 0.0, -45.0, 0.6);
 	}
 	else
 	{
@@ -338,7 +335,7 @@ UpdatePlayerGear(playerid, show = 1)
 	{
 		PlayerTextDrawSetString(playerid, GearSlot_Tors[UI_ELEMENT_ITEM], sprintf("Armour (%.0f)", GetPlayerAP(playerid)));
 		PlayerTextDrawSetPreviewModel(playerid, GearSlot_Tors[UI_ELEMENT_TILE], 19515);
-		PlayerTextDrawSetPreviewRot(playerid, GearSlot_Tors[UI_ELEMENT_TILE], -45.0, 0.0, -45.0, 1.0);
+		PlayerTextDrawSetPreviewRot(playerid, GearSlot_Tors[UI_ELEMENT_TILE], -45.0, 0.0, -45.0, 0.6);
 	}
 	else
 	{
@@ -354,7 +351,7 @@ UpdatePlayerGear(playerid, show = 1)
 		GetItemName(itemid, tmp);
 		PlayerTextDrawSetString(playerid, GearSlot_Back[UI_ELEMENT_ITEM], tmp);
 		PlayerTextDrawSetPreviewModel(playerid, GearSlot_Back[UI_ELEMENT_TILE], model);
-		PlayerTextDrawSetPreviewRot(playerid, GearSlot_Back[UI_ELEMENT_TILE], 0.0, 0.0, -45.0, 1.0);
+		PlayerTextDrawSetPreviewRot(playerid, GearSlot_Back[UI_ELEMENT_TILE], 0.0, 0.0, -45.0, 0.6);
 	}
 	else
 	{
@@ -373,8 +370,6 @@ hook OnPlayerOpenInventory(playerid)
 	ShowPlayerGear(playerid);
 	UpdatePlayerGear(playerid);
 	ShowPlayerHealthInfo(playerid);
-	SelectTextDraw(playerid, 0xFFFF00FF);
-
 	return Y_HOOKS_CONTINUE_RETURN_0;
 }
 
@@ -385,18 +380,11 @@ hook OnPlayerCloseInventory(playerid)
 
 	Logger_Dbg("inventory", "OnPlayerCloseInventory",
 		Logger_I("playerid", playerid),
-		Logger_B("esc", inv_EscInventory[playerid]),
 		Logger_I("container", _:containerid)
 	);
 
 	HidePlayerGear(playerid);
 	HidePlayerHealthInfo(playerid);
-
-	if(inv_EscInventory[playerid])
-		inv_EscInventory[playerid] = false;
-
-	else
-		CancelSelectTextDraw(playerid);
 
 	return Y_HOOKS_CONTINUE_RETURN_0;
 }
@@ -406,7 +394,6 @@ hook OnPlayerOpenContainer(playerid, containerid)
 	ShowPlayerGear(playerid);
 	UpdatePlayerGear(playerid);
 	ShowPlayerHealthInfo(playerid);
-	SelectTextDraw(playerid, 0xFFFF00FF);
 
 	return Y_HOOKS_CONTINUE_RETURN_0;
 }
@@ -415,18 +402,11 @@ hook OnPlayerCloseContainer(playerid, containerid)
 {
 	Logger_Dbg("inventory", "OnPlayerCloseContainer",
 		Logger_I("playerid", playerid),
-		Logger_B("esc", inv_EscInventory[playerid]),
 		Logger_B("in_inv", IsPlayerViewingInventory(playerid))
 	);
 
 	HidePlayerGear(playerid);
 	HidePlayerHealthInfo(playerid);
-
-	if(inv_EscContainer[playerid])
-		inv_EscContainer[playerid] = false;
-
-	else
-		CancelSelectTextDraw(playerid);
 
 	return Y_HOOKS_CONTINUE_RETURN_0;
 }
@@ -927,44 +907,6 @@ hook OnPlayerSelectCntOpt(playerid, Container:containerid, option)
 	}
 
 	return Y_HOOKS_CONTINUE_RETURN_0;
-}
-
-hook OnPlayerClickTextDraw(playerid, Text:clickedid)
-{
-	if(clickedid == INVALID_TEXT_DRAW)
-	{
-		if(IsPlayerViewingInventory(playerid))
-		{
-			Logger_Dbg("inventory", "player closed inventory screen with escape",
-				Logger_I("playerid", playerid),
-				Logger_B("esc", inv_EscInventory[playerid])
-			);
-
-			HidePlayerGear(playerid);
-			HidePlayerHealthInfo(playerid);
-			ClosePlayerInventory(playerid, true);
-			inv_EscInventory[playerid] = true;
-			CancelSelectTextDraw(playerid);
-			//DisplayPlayerInventory(playerid);
-		}
-
-		new Container:containerid;
-		GetPlayerCurrentContainer(playerid, containerid);
-		if(containerid != INVALID_CONTAINER_ID)
-		{
-			Logger_Dbg("inventory", "player closed container screen with escape",
-				Logger_I("playerid", playerid),
-				Logger_B("esc", inv_EscInventory[playerid])
-			);
-
-			HidePlayerGear(playerid);
-			HidePlayerHealthInfo(playerid);
-			ClosePlayerContainer(playerid, true);
-			inv_EscContainer[playerid] = true;
-			CancelSelectTextDraw(playerid);
-			//DisplayContainerInventory(playerid, containerid);
-		}
-	}
 }
 
 hook OnPlayerTakeDamage(playerid, issuerid, Float:amount, weaponid, bodypart)

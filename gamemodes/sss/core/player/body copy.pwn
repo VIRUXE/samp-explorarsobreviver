@@ -393,7 +393,7 @@ CreateBody(const name[], Float:x, Float:y, Float:z, Float:a, w, i, s)
 	if(IsValidDynamic3DTextLabel(body_NameTag[id]))
 		DestroyDynamic3DTextLabel(body_NameTag[id]);
 
-	body_NameTag[id] = CreateDynamic3DTextLabel(body_PlayerName[id], 0xB8B8B8FF, x, y, z + 1.0, gNameTagDistance, INVALID_PLAYER_ID, INVALID_VEHICLE_ID, 1, w, i);
+	body_NameTag[id] = CreateDynamic3DTextLabel(sprintf("%s{FFFFFF}(Corpo)", body_PlayerName[id]), 0xB8B8B8FF, x, y, z + 1.0, gNameTagDistance, INVALID_PLAYER_ID, INVALID_VEHICLE_ID, 1, w, i);
 
 	Iter_Add(body_Count, id);
 

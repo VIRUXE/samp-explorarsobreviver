@@ -586,6 +586,9 @@ public OnScriptInit()
 	if(gPlayerAnimations)
 		UsePlayerPedAnims();
 
+	SetNameTagDrawDistance(gNameTagDistance);
+    ShowNameTags(1);
+
 	EnableStuntBonusForAll(false);
 	ManualVehicleEngineAndLights();
 	AllowInteriorWeapons(true);

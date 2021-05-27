@@ -534,7 +534,7 @@ _ReloadWeapon(playerid)
 	switch(itmw_Data[itmw_ItemTypeWeapon[itemtype]][itmw_baseWeapon])
 	{
 		default:
-			ApplyAnimation(playerid, "COLT45", "COLT45_RELOAD", 2.0, 0, 1, 1, 0, 0);
+			ApplyAnimation(playerid, "COLT45", "COLT45_RELOAD", 2.0, 0, 1, 1, 0, 0, 1);
 	}
 
 	UpdatePlayerWeaponItem(playerid);
@@ -787,7 +787,7 @@ timer _UnloadWeapon[300](playerid, _itemid)
 	UpdatePlayerWeaponItem(playerid);
 	itmw_DropItemID[playerid] = INVALID_ITEM_ID;
 
-	ApplyAnimation(playerid, "BOMBER", "BOM_PLANT_IN", 5.0, 1, 0, 0, 0, 450);
+	ApplyAnimation(playerid, "BOMBER", "BOM_PLANT_IN", 5.0, 1, 0, 0, 0, 450, 1);
 	ShowActionText(playerid, ls(playerid, "WEAPAUNLOAD", true), 3000);
 
 	return;

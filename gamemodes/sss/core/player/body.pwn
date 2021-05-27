@@ -393,7 +393,7 @@ CreateBody(const name[], Float:x, Float:y, Float:z, Float:a, w, i, s)
 	if(IsValidDynamic3DTextLabel(body_NameTag[id]))
 		DestroyDynamic3DTextLabel(body_NameTag[id]);
 
-	body_NameTag[id] = CreateDynamic3DTextLabel(body_PlayerName[id], 0xB8B8B8FF, x, y, z + 1.0, gNameTagDistance, INVALID_PLAYER_ID, INVALID_VEHICLE_ID, 1, w, i);
+	body_NameTag[id] = CreateDynamic3DTextLabel(sprintf("%s (Corpo)", body_PlayerName[id]), 0xB8B8B8FF, x, y, z + 1.0, gNameTagDistance, INVALID_PLAYER_ID, INVALID_VEHICLE_ID, 1, w, i);
 
 	Iter_Add(body_Count, id);
 
@@ -456,23 +456,57 @@ hook OnPlayerSelectCntOpt(playerid, Container:containerid, option)
 	return Y_HOOKS_CONTINUE_RETURN_0;
 }
 
+//OnCameraTarget 
+IRPC:168(playerid, BitStream:bs)
+{
+	new ObjectTarget, VehicleTarget, PlayerTarget, ActorTarget;
+	BS_ReadValue(bs,
+		PR_UINT16, ObjectTarget,
+		PR_UINT16, VehicleTarget,
+		PR_UINT16, PlayerTarget,
+		PR_UINT16, ActorTarget
+	);
+
+	ChatMsg(playerid, -1,
+		"ObjectTarget:%d, VehicleTarget:%d, PlayerTarget:%d, ActorTarget:%d",
+			ObjectTarget, VehicleTarget, PlayerTarget, ActorTarget);
+
+	return 1;
+}
 // GiveTakeDamage
 const GIVEDAM = 115;
 
 IRPC:GIVEDAM(playerid, BitStream:bs){
+	new bool:bGiveOrTake, wPlayerID, Float:damage_amount, dWeaponID, dBodypart;
+	BS_ReadValue(bs,
+		PR_BOOL, bGiveOrTake,
+		PR_UINT16, wPlayerID,
+		PR_FLOAT, damage_amount,
+		PR_UINT32, dWeaponID,
+		PR_UINT32, dBodypart
+	);
+
+	ChatMsg(playerid, -1,
+		"bGiveOrTake:%d, wPlayerID:%d, damage_amount:%0.2f, dWeaponID:%d, dBodypart:%d",
+			bGiveOrTake, wPlayerID, damage_amount, dWeaponID, dBodypart);
+	
 	if(IsPlayerMobile(playerid))
 	{
-		new actorid = GetPlayerTargetDynamicActor(playerid);
+		new actorid = GetPlayerTargetActor(playerid);
 
 		if(!IsValidDynamicActor(actorid))
-			actorid = GetPlayerCameraTargetDynActor(playerid);
+			actorid = GetPlayerCameraTargetActor(playerid);
 
-		if(IsValidDynamicActor(actorid))
+		if(IsValidActor(actorid))
 		{
-			CallLocalFunction("OnPlayerGiveDamageDynamicActor", "ddfdd", playerid, actorid, 30.0, GetPlayerWeapon(playerid), 0);
+			CallLocalFunction("OnPlayerGiveDamageDynamicActor", "ddfdd", playerid, actorid, damage_amount, dWeaponID, dBodypart);
 			return 0;
 		}
 	}
+
+	if(wPlayerID == playerid || !IsPlayerConnected(wPlayerID))
+		return 0;
+
 	return 1;
 }
 

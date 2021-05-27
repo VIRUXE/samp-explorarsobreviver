@@ -91,7 +91,7 @@ IRPC:15(playerid, BitStream:bs)
 IRPC:88(playerid, BitStream:bs)
 {
 	if(PlayerMobileInfo[playerid][isMobile])
-		SendClientMessage(playerid, -1 , "SetPlayerSpecialAction");
+		return 0;
 		
 	return 1;
 }

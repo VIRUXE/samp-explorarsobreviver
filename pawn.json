@@ -5,6 +5,7 @@
 	"output": "gamemodes/ScavengeSurvive.amx",
 	"local": true,
 	"dependencies": [
+		"maddinat0r/samp-discord-connector",
 		"urShadow/Pawn.RakNet",
 		"Pottus/ColAndreas",
 		"NexiusTailer/Nex-AC",

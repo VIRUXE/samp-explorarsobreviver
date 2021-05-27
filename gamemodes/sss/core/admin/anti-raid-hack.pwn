@@ -40,6 +40,11 @@ atr_PosCheck(playerid, Float:x, Float:y, Float:z)
 	if(!IsPlayerConnected(playerid))
 	    return 0;
 
+	if(IsPlayerInTutorial(playerid) || IsPlayerOnAdminDuty(playerid)){
+		atr_Check[playerid] = 0;
+		return 1;
+	}
+
 	if(atr_Check[playerid] == 1)
 	{
 		if(CA_RayCastLine(x, y, z, x, y, z + 600.0, z, z, z))
