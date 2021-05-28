@@ -47,7 +47,7 @@ atr_PosCheck(playerid, Float:x, Float:y, Float:z)
 
 	new Float:tmp;
 
-	if(atr_Check[playerid] == 1)
+	if(atr_Check[playerid])
 	{
 		if(CA_RayCastLine(x, y, z, x, y, z + 600.0, tmp, tmp, tmp))
 		{

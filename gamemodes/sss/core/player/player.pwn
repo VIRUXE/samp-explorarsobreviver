@@ -151,6 +151,13 @@ timer LoadAccountDelay[5000](playerid)
 		return;
 	}
 
+	if(!IsPlayerInWhitelist(playerid))
+	{
+		WhitelistWarn(playerid);
+		defer LoadAccountDelay(playerid);
+		return;
+	}
+
 	new Error:e = LoadAccount(playerid);
 	if(IsError(e)) // LoadAccount aborted, kick player.
 	{
@@ -188,14 +195,6 @@ timer LoadAccountDelay[5000](playerid)
 			Logger_P(playerid)
 		);
 		Login(playerid);
-	}
-
-	if(e == Error:3) // Account does exist, but not in whitelist
-	{
-		Logger_Log("LoadAccount: account not in whitelist",
-			Logger_P(playerid)
-		);
-		WhitelistKick(playerid);
 	}
 
 	if(e == Error:4) // Account does exists, but is disabled

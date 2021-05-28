@@ -98,7 +98,7 @@ BanPlayer(playerid, const reason[], byid, duration)
 	if(stmt_execute(stmt_BanInsert))
 	{
 		ChatMsgLang(playerid, YELLOW, "BANNEDMESSG", reason);
-		defer KickPlayerDelay(playerid);
+		KickPlayer(playerid, reason);
 
 		return 1;
 	}
@@ -135,7 +135,7 @@ BanPlayerByName(const name[], const reason[], byid, duration)
 	else
 	{
 		ip = GetPlayerIpAsInt(id);
-		defer KickPlayerDelay(id);
+		KickPlayer(id, "BanPlayer");
 	}
 
 	stmt_bind_value(stmt_BanInsert, 0, DB::TYPE_STRING, name, MAX_PLAYER_NAME);
@@ -231,7 +231,7 @@ BanCheck(playerid)
 			stmt_bind_value(stmt_BanSetIpv4, 1, DB::TYPE_PLAYER_NAME, playerid);
 			stmt_execute(stmt_BanSetIpv4);
 
-			defer KickPlayerDelay(playerid);
+			KickPlayer(playerid, reason);
 
 			return 1;
 		}

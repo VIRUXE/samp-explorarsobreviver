@@ -236,17 +236,6 @@ Error:LoadAccount(playerid)
 		return NoError(4);
 	}
 
-	if(IsWhitelistActive())
-	{
-		ChatMsgLang(playerid, YELLOW, "WHITELISTAC");
-
-		if(!IsPlayerInWhitelist(playerid))
-		{
-			ChatMsgLang(playerid, YELLOW, "WHITELISTNO");
-			return NoError(3);
-		}
-	}
-
 	SetPlayerAliveState(playerid, alive);
 	acc_IsNewPlayer[playerid] = false;
 	acc_HasAccount[playerid] = true;
@@ -298,17 +287,6 @@ Error:CreateAccount(playerid, const password[])
 
 	SetPlayerAimShoutText(playerid, "Drop your weapon!");
 
-	if(IsWhitelistActive())
-	{
-		ChatMsgLang(playerid, YELLOW, "WHITELISTAC");
-		if(!IsPlayerInWhitelist(playerid))
-		{
-			ChatMsgLang(playerid, YELLOW, "WHITELISTNO");
-			WhitelistKick(playerid);
-			return NoError(0);
-		}
-	}
-
 	CheckAdminLevel(playerid);
 
 	if(GetPlayerAdminLevel(playerid) > 0)
@@ -319,7 +297,8 @@ Error:CreateAccount(playerid, const password[])
 	acc_LoggedIn[playerid] = true;
 	SetPlayerToolTips(playerid, true);
 
-	PlayerCreateNewCharacter(playerid);
+	//PlayerCreateNewCharacter(playerid);
+	DisplayLoginPrompt(playerid);
 
 	CallLocalFunction("OnPlayerRegister", "d", playerid);
 

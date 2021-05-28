@@ -126,9 +126,9 @@ public OnGameModeInit()
 
 #include <crashdetect>				// By Zeex					https://github.com/Zeex/samp-plugin-crashdetect
 #include <sscanf2>					// By Y_Less:				https://github.com/maddinat0r/sscanf
-
 #include <Pawn.RakNet>              // By urShadow:             https://github.com/urShadow/Pawn.RakNet
-
+#include <PawnPlus>					// By IllidanS4:			https://github.com/IllidanS4/PawnPlus
+#include <advanced_kicks>			// By Mergevos:				https://github.com/Mergevos/samp-advanced-kicks
 #include <YSI_Core\y_utils>			// By Y_Less, 4:			https://github.com/Misiur/YSI-Includes
 #include <YSI_Coding\y_va>
 #include <YSI_Coding\y_timers>
@@ -136,9 +136,7 @@ public OnGameModeInit()
 #include <YSI_Coding\y_iterate>
 #include <YSI_Storage\y_ini>
 #include <YSI_Visual\y_dialog>
-
 #include "sss\core\server\hooks.pwn"// Internal library for hooking functions before they are used in external libraries.
-
 #include <ColAndreas>               // By Pottus:               https://github.com/Pottus/ColAndreas
 #include <streamer>					// By Incognito, v2.8.2:	https://github.com/samp-incognito/samp-streamer-plugin/releases/tag/v2.82
 #include <sqlitei>					// By Slice, v0.9.7:		https://github.com/oscar-broman/sqlitei
@@ -146,10 +144,8 @@ public OnGameModeInit()
 #include <strlib>					// By Slice:				https://github.com/oscar-broman/strlib
 #include <md-sort>					// By Slice:				https://github.com/oscar-broman/md-sort
 #include <chrono>					// By Southclaws:			https://github.com/Southclaws/pawn-chrono
-
 #include <progress2>				// By Toribio/Southclaws:	https://github.com/Southclaws/progress2
 #include <fsutil>					// By Southclaws:			https://github.com/Southclaws/pawn-fsutil
-
 #include <mobile>             		// By Jekmant
 #include <PreviewModelDialog>       // By Agneese-Saini			https://github.com/Agneese-Saini/SA-MP/blob/master/pawno/include/PreviewModelDialog
 #include <ini>						// By Southclaws:			https://github.com/Southclaws/SimpleINI
@@ -174,10 +170,11 @@ public OnGameModeInit()
 #include <attachment-fix>           // By BrunoBM16:            https://github.com/Jelly23/Proper-attachments-fix
 #include <optud>             		// By BrunoBM16:          	https://github.com/Jelly23/OnPlayerTurnUpsideDown
 #include <BustAim>             		// By YashasSamaga:         https://github.com/YashasSamaga/BustAim-AntiAimbfot
+#include <discord-connector>		// By maddinat0r:			https://github.com/maddinat0r/samp-discord-connector
+//#include<tgconnector>				// By Sreyas-Sreelal		https://github.com/Sreyas-Sreelal/tgconnector
 
 native WP_Hash(buffer[], len, const str[]);
 									// By Y_Less:				https://github.com/Southclaws/samp-whirlpool
-
 
 /*==============================================================================
 
@@ -397,6 +394,9 @@ new stock
 #include "sss/core/player/language.pwn"
 
 #include "sss/core/admin/anti-raid-hack.pwn"
+#include "sss/core/admin/discord.pwn"
+//#include "sss/core/admin/telegram.pwn"
+
 
 /*
 	PARENT SYSTEMS
@@ -641,8 +641,7 @@ new stock
 static
 Text:RestartCount = Text:INVALID_TEXT_DRAW;
 
-main()
-{
+main() {
 	print("[main] Finished initialising Southclaws' Scavenge and Survive");
 
 	gServerInitialising = false;
