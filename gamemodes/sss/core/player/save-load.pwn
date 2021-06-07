@@ -377,8 +377,10 @@ LoadPlayerChar(playerid)
 		);
 	}
 
-	SetPlayerVirtualWorld(playerid, player_data[PLY_CELL_WORLD]);
 	SetPlayerInterior(playerid, player_data[PLY_CELL_INTERIOR]);
+	SetPlayerVirtualWorld(playerid, player_data[PLY_CELL_WORLD]);	
+
+	
 
 /*
 	Held item

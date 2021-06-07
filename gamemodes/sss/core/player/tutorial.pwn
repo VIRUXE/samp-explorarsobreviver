@@ -93,11 +93,13 @@ hook OnPlayerClickPlayerTD(playerid, PlayerText:playertextid)
 			case 13: SetPlayerClothesID(playerid, skin_IndiF);
 		}
 
+
+		SetPlayerClothes(playerid, GetPlayerClothesID(playerid));
+		SetPlayerGender(playerid, GetClothesGender(GetPlayerClothesID(playerid)));
+		
 		SetPlayerHP(playerid, 100.0);
 		SetPlayerAP(playerid, 0.0);
 		SetPlayerFP(playerid, 80.0);
-		SetPlayerClothes(playerid, GetPlayerClothesID(playerid));
-		SetPlayerGender(playerid, GetClothesGender(GetPlayerClothesID(playerid)));
 		SetPlayerBleedRate(playerid, 0.0);
 
 		SetPlayerAliveState(playerid, false);

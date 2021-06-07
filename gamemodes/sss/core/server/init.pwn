@@ -273,7 +273,7 @@ ItemType:		item_CorPanel		= INVALID_ITEM_TYPE,
 ItemType:		item_ShipDoor		= INVALID_ITEM_TYPE,
 ItemType:		item_InsulDoor		= INVALID_ITEM_TYPE,
 ItemType:		item_InsulPanel		= INVALID_ITEM_TYPE,
-ItemType:		item_SmallPanel		= INVALID_ITEM_TYPE,
+ItemType:		item_MilitaryGate	= INVALID_ITEM_TYPE,
 ItemType:		item_WoodPanel		= INVALID_ITEM_TYPE,
 // 130
 ItemType:		item_Flare			= INVALID_ITEM_TYPE,
@@ -464,7 +464,10 @@ ItemType:		item_BandanaBlue	= INVALID_ITEM_TYPE,
 ItemType:		item_BandanaGrey	= INVALID_ITEM_TYPE,
 // 300
 ItemType:		item_BandanaWhite	= INVALID_ITEM_TYPE,
-ItemType:		item_BandanaPattern	= INVALID_ITEM_TYPE;
+ItemType:		item_BandanaPattern	= INVALID_ITEM_TYPE,
+ItemType:		item_Cuntainer		= INVALID_ITEM_TYPE,
+ItemType:		item_RedCrate		= INVALID_ITEM_TYPE,
+ItemType:		item_MetalGate1		= INVALID_ITEM_TYPE;
 
 // VEHICLE TYPES
 new stock
@@ -586,8 +589,9 @@ public OnScriptInit()
 	if(gPlayerAnimations)
 		UsePlayerPedAnims();
 
-	SetNameTagDrawDistance(gNameTagDistance);
+	SetNameTagDrawDistance(300);
     ShowNameTags(1);
+	DisableNameTagLOS();
 
 	EnableStuntBonusForAll(false);
 	ManualVehicleEngineAndLights();
@@ -714,7 +718,7 @@ public OnScriptInit()
 	item_SignShot		= DefineItemType("Sign",				"SignShot",			3265,	3,	0.0, 0.0, 0.0,			0.0,	0.081356, 0.034642, -0.167247, 0.000000, 0.000000, 240.265777, .maxhitpoints = 3);
 	item_Mailbox		= DefineItemType("Mailbox",				"Mailbox",			3407,	3,	0.0, 0.0, 0.0,			0.0,	0.081356, 0.034642, -0.167247, 0.000000, 0.000000, 240.265777, .maxhitpoints = 3);
 	item_Pumpkin		= DefineItemType("Pumpkin",				"Pumpkin",			19320,	5,	0.0, 0.0, 0.0,			0.3,	0.105948, 0.279332, -0.253927, 246.858016, 0.000000, 0.000000, true, .maxhitpoints = 5);
-	item_Nailbat		= DefineItemType("Nailbat",				"Nailbat",			2045,	3,	0.0, 0.0, 0.0,			0.0,	.maxhitpoints = 3);
+	item_Nailbat		= DefineItemType("Nailbat",				"Nailbat",			2045,	3,	0.0, 0.0, 0.0,			0.0,	0.071999,-0.025000,0.315999,99.899986,0.000000,0.199999,	.maxhitpoints = 3);
 // 110
 	item_ZorroMask		= DefineItemType("Zorro Mask",			"ZorroMask",		18974,	1,	0.0, 0.0, 0.0,			0.0,	0.193932, 0.050861, 0.017257, 90.000000, 0.000000, 0.000000, .maxhitpoints = 1);
 	item_Barbecue		= DefineItemType("BBQ",					"Barbecue",			19831,	6,	0.0, 0.0, 0.0,			-0.0313,0.321000, -0.611000, 0.084999,  66.000007, -163.699981, 80.899917, true, .maxhitpoints = 6);
@@ -725,17 +729,17 @@ public OnScriptInit()
 	item_CanDrink		= DefineItemType("Can",					"CanDrink",			2601,	1,	0.0, 0.0, 0.0,			0.054,	0.064848, 0.059404, 0.017578, 0.000000, 359.136199, 30.178396, .maxhitpoints = 1);
 	item_Detergent		= DefineItemType("Detergent",			"Detergent",		1644,	1,	0.0, 0.0, 0.0,			0.1,	0.081913, 0.047686, -0.026389, 95.526962, 0.546049, 358.890563, .maxhitpoints = 1);
 	item_Dice			= DefineItemType("Dice",				"Dice",				1851,	5,	0.0, 0.0, 0.0,			0.136,	0.031958, 0.131180, -0.214385, 69.012298, 16.103448, 10.308629, true, .maxhitpoints = 5);
-	item_Dynamite		= DefineItemType("Dynamite",			"Dynamite",			1654,	2,									.maxhitpoints = 2);
+	item_Dynamite		= DefineItemType("Dynamite",			"Dynamite",			1654,	2,	0.0, 0.0, 0.0,			0.0,	0.048000,0.106999,0.065999,0.000000,-3.399999,143.300079,	 .maxhitpoints = 2);
 // 120
-	item_Door			= DefineItemType("Metal Door",			"Door",				18553,	9,	0.0, 90.0, 90.0,		0.0,	0.313428, -0.507642, -1.340901, 336.984893, 348.837493, 113.141563, true, .buttonz = ITEM_FLOOR_OFFSET / 2, .maxhitpoints = 2);
+	item_Door			= DefineItemType("Wood Door",			"Door",				1497,	8,	270.0, 0.0, 0.0,		0.0,	-0.073999,0.401213,0.939999,337.887634,172.861953,68.495330, true, .buttonz = ITEM_FLOOR_OFFSET / 2, .maxhitpoints = 4);
 	item_MetPanel		= DefineItemType("Metal Panel",			"MetPanel",			1965,	10,	0.0, 90.0, 0.0,			0.0,	0.070050, 0.008440, -0.180277, 338.515014, 349.801025, 33.250347, true, .buttonz = ITEM_FLOOR_OFFSET / 3, .maxhitpoints = 5);
-	item_MetalGate		= DefineItemType("Metal Gate",			"MetalGate",		19303,	10,	270.0, 0.0, 0.0,		0.0,	0.057177, 0.073761, -0.299014,  -19.439863, -10.153647, 105.119079, true, .buttonz = ITEM_FLOOR_OFFSET / 2, .maxhitpoints = 4);
+	item_MetalGate		= DefineItemType("Metal Gate",			"MetalGate",		19303,	10,	270.0, 0.0, 0.0,		0.0,	-0.128823,0.758761,-0.508013,-19.839876,-10.353648,105.119079, true, .buttonz = ITEM_FLOOR_OFFSET / 2, .maxhitpoints = 4);
 	item_CrateDoor		= DefineItemType("Crate Door",			"CrateDoor",		3062,	9,	90.0, 90.0, 0.0,		0.0,	0.150177, -0.097238, -0.299014,  -19.439863, -10.153647, 105.119079, true, .buttonz = ITEM_FLOOR_OFFSET / 3, .maxhitpoints = 5);
 	item_CorPanel		= DefineItemType("Corrugated Metal",	"CorPanel",			2904,	10,	90.0, 90.0, 0.0,		0.0,	-0.365094, 1.004213, -0.665850, 337.887634, 172.861953, 68.495330, true, .buttonz = ITEM_FLOOR_OFFSET / 2, .maxhitpoints = 6);
-	item_ShipDoor		= DefineItemType("Ship Door",			"ShipDoor",			2944,	10,	180.0, 90.0, 0.0,		0.0,	0.134831, -0.039784, -0.298796, 337.887634, 172.861953, 162.198867, true, .buttonz = ITEM_FLOOR_OFFSET / 2, .maxhitpoints = 9);
-	item_InsulDoor		= DefineItemType("Insulated Doorway",	"InsulDoor",		19398,	10,	0.0, 90.0, 0.0,			0.0,	-0.087715, 0.483874, 1.109397, 	337.887634, 172.861953, 162.198867, true, .buttonz = ITEM_FLOOR_OFFSET / 2, .maxhitpoints = 7);
-	item_InsulPanel		= DefineItemType("Insulated Panel",		"InsulPanel",		19371,	8,	0.0, 90.0, 0.0,			0.0,	-0.087715, 0.5, -0.49, 337.887634, 172.861953, 162.198867, true, .buttonz = ITEM_FLOOR_OFFSET / 2, .maxhitpoints = 7);
-	item_SmallPanel		= DefineItemType("Small Metal Panel",	"SmallPanel",		19843,	11,	0.0, 0.0, 0.0,			0.0,	-0.068822, 0.989761, -0.620014,  -114.639907, -10.153647, 170.419097, true, .buttonz = ITEM_FLOOR_OFFSET / 2, .maxhitpoints = 5);
+	item_ShipDoor		= DefineItemType("Ship Door",			"ShipDoor",			2944,	10,	0.0, 90.0, 0.0,		0.0,	0.134831, -0.039784, -0.298796, 337.887634, 172.861953, 162.198867, true, .buttonz = ITEM_FLOOR_OFFSET / 2, .maxhitpoints = 9);
+	item_InsulDoor		= DefineItemType("Insulated Doorway",	"InsulDoor",		19398,	8,	0.0, 90.0, 0.0,			0.0,	-0.087714,1.606874,-0.771602,-111.012359,172.861953,-169.801147, true, .buttonz = ITEM_FLOOR_OFFSET / 4, .maxhitpoints = 7);
+	item_InsulPanel		= DefineItemType("Insulated Panel",		"InsulPanel",		19371,	10,	0.0, 90.0, 0.0,			0.0,	-0.339715,1.431000,-0.739000,337.887634,170.962066,162.198867, true, .buttonz = ITEM_FLOOR_OFFSET / 2, .maxhitpoints = 7);
+	item_MilitaryGate	= DefineItemType("Military Gate",		"MilitaryGate",		2929,	12, 90.0, 0.0, 0.0,			0.0,	-0.564093,1.766212,-0.924849,337.887634,172.861953,68.495330, true, .buttonz = ITEM_FLOOR_OFFSET / 2, .maxhitpoints = 15);
 	item_WoodPanel		= DefineItemType("Wood Ramp",			"WoodPanel",		5153,	11,	360.0, 23.537, 0.0,		0.0,	-0.342762, 0.908910, -0.453703, 296.326019, 46.126548, 226.118209, true, .buttonz = ITEM_FLOOR_OFFSET / 2, .maxhitpoints = 7);
 // 130
 	item_Flare			= DefineItemType("Flare",				"Flare",			345,	2,									.maxhitpoints = 2);
@@ -927,6 +931,10 @@ public OnScriptInit()
 // 300
 	item_BandanaWhite	= DefineItemType("Bandana",				"BandanaWh",		18919,	1,	0.0, 0.0, 0.0,			0.0,	0.095999, 0.064999, 0.000000, -1.300025, -67.899948, -92.999908);
 	item_BandanaPattern	= DefineItemType("Bandana",				"BandanaPat",		18920,	1,	0.0, 0.0, 0.0,			0.0,	0.095999, 0.064999, 0.000000, -1.300025, -67.899948, -92.999908);
+	
+	item_Cuntainer		= DefineItemType("Cuntainer",			"Container",		19321,	15,	0.0, 180.0, 0.0,		0.0,	0.0, 0.0, 0.0, 0.0, 0.0, 0.0, false, .buttonz = ITEM_FLOOR_OFFSET / 2, .maxhitpoints = 20);
+	item_RedCrate		= DefineItemType("Red Crate",			"RedCrate",			2669,	15,	0.0, 180.0, 0.0,		0.0,	0.0, 0.0, 0.0, 0.0, 0.0, 0.0, false, .buttonz = ITEM_FLOOR_OFFSET / 2, .maxhitpoints = 20);
+	item_MetalGate1		= DefineItemType("Grande Grande",		"MetalGate1",		19870,	15,	90.0, 0.0, 0.0,		0.0,	0.0, 0.0, 0.0, 0.0, 0.0, 0.0, false, .buttonz = ITEM_FLOOR_OFFSET / 2, .maxhitpoints = 15);
 
 	// SETTING ITEM TYPE SCRAP VALUE
 	SetItemTypeScrapValue(item_Knuckles,		1);
@@ -972,7 +980,7 @@ public OnScriptInit()
 	SetItemTypeScrapValue(item_CrateDoor, 		4);
 	SetItemTypeScrapValue(item_CorPanel,		9);
 	SetItemTypeScrapValue(item_ShipDoor, 		12);
-	SetItemTypeScrapValue(item_SmallPanel, 		4);
+	SetItemTypeScrapValue(item_MilitaryGate, 	4);
 	SetItemTypeScrapValue(item_Keypad,			1);
 	SetItemTypeScrapValue(item_Ammo9mm,			1);
 	SetItemTypeScrapValue(item_Ammo50,			1);
@@ -1138,6 +1146,8 @@ public OnScriptInit()
 	DefineItemTypeWeapon(item_FryingPan,		0,							-1,				0.01,			_:1.06,	0,		anim_Blunt);
 	DefineItemTypeWeapon(item_Fork,				0,							-1,				0.17,			0,		0,		anim_Stab);
 	DefineItemTypeWeapon(item_Broom,			0,							-1,				0.11,			_:1.1,	0,		anim_Heavy);
+	DefineItemTypeWeapon(item_Nailbat,			0,							-1,				0.30,			_:3.30,	0,		anim_Heavy);
+
 	//					itemtype				baseweapon					calibre			bleedrate		koprob	n/a		animset
 	DefineItemTypeWeapon(item_Knuckles,			WEAPON_BRASSKNUCKLE,		-1,				0.05,			20,		0);
 	DefineItemTypeWeapon(item_GolfClub,			WEAPON_GOLFCLUB,			-1,				0.07,			35,		0);
@@ -1287,17 +1297,21 @@ public OnScriptInit()
 
 
 	// DEFENSIVE ITEM TYPE DEFINITIONS
-	DefineDefenceItem(item_Door,		0.0, 0.0, 90.0,		0.0, 90.0, 90.0,	1.26817, false);
-	DefineDefenceItem(item_MetPanel,	90.0, 90.0, 0.0,	0.0, 90.0, 0.0,		0.02708, true);
-	DefineDefenceItem(item_MetalGate,	0.0, 0.0, 0.0,		270.0, 0.0, 0.0,	1.20759, true);
-	DefineDefenceItem(item_CrateDoor,	0.0, 90.0, 0.0,		90.0, 90.0, 0.0,	1.52665, true);
-	DefineDefenceItem(item_CorPanel,	0.0, 90.0, 0.0,		90.0, 90.0, 0.0,	1.21428, true);
-	DefineDefenceItem(item_ShipDoor,	90.0, 90.0, 0.0,	180.0, 90.0, 0.0,	1.39421, true);
-	DefineDefenceItem(item_InsulDoor,	0.0, 0.0, 90.0,		0.0, 90.0, 90.0,	1.72882, false);
-	DefineDefenceItem(item_InsulPanel,	0.0, 0.0, 90.0,		0.0, 90.0, 90.0,	1.71953, false);
-	DefineDefenceItem(item_SmallPanel,	90.0, 0.0, 0.0,		0.0, 0.0, 0.0,		0.48333, true);
-	DefineDefenceItem(item_WoodPanel,	90.0, 0.0, 23.5,	0.0, 0.0, 0.0,		1.0161, false);
-	DefineDefenceItem(item_LargeFrame,	0.0, 0.0, 0.0,		0.0, 0.0, 0.0,		1.4, false);
+	DefineDefenceItem(item_Door,		0.0, 0.0, 90.0, false,	true);
+	DefineDefenceItem(item_MetPanel,	0.0, 0.0, 90.0, false,	true);
+	DefineDefenceItem(item_MetalGate,	90.0, 0.0, 0.0, true,	true);
+	DefineDefenceItem(item_CrateDoor,	0.0, 0.0, 90.0, false,	true);
+	DefineDefenceItem(item_CorPanel,	90.0, 0.0, 0.0, true,	true);
+	DefineDefenceItem(item_ShipDoor,	0.0, 0.0, 90.0, false,	true);
+	DefineDefenceItem(item_InsulDoor,	0.0, 0.0, 90.0, false,	false);
+	DefineDefenceItem(item_InsulPanel,	0.0, 90.0, 0.0, 	false,	false);
+	DefineDefenceItem(item_MilitaryGate,90.0, 0.0, 0.0, true,	true);
+	DefineDefenceItem(item_WoodPanel,	0.0, 0.0, 0.0, 	false,	false);
+	DefineDefenceItem(item_LargeFrame,	0.0, 0.0, 0.0, 	false,	false);
+	DefineDefenceItem(item_Cuntainer,	0.0, 90.0, 0.0, true,	false);
+	DefineDefenceItem(item_RedCrate,	0.0, 90.0, 0.0, false,	false);
+	DefineDefenceItem(item_MetalGate1,	90.0, 0.0, 0.0, true,	true);
+	
 
 
 	// SAFEBOX ITEM TYPE DEFINITIONS
@@ -1364,6 +1378,10 @@ public OnScriptInit()
 	SetCraftSetConstructible(18500, item_Screwdriver, DefineItemCraftSet(item_Key, item_Key, false, item_Key, true, item_Motor, false), .tweak = false);
 	SetCraftSetConstructible(30000, item_Sledgehammer, DefineItemCraftSet(item_LargeFrame, item_RefinedMetal, false, item_RefinedMetal, false, item_RefinedMetal, false, item_RefinedMetal, false), item_Crowbar, 22000, .defence = true);
 
+	SetCraftSetConstructible(3000, item_Sledgehammer, DefineItemCraftSet(item_Cuntainer, item_CrateDoor, false, item_CrateDoor, false, item_CrateDoor, false, item_CrateDoor, false, item_CrateDoor, false), item_Crowbar, 25000, true, true);
+	SetCraftSetConstructible(3000, item_Sledgehammer, DefineItemCraftSet(item_RedCrate, item_MilitaryGate, false, item_MilitaryGate, false, item_MetalGate, false), item_Crowbar, 25000, true, true);
+	SetCraftSetConstructible(3000, item_Sledgehammer, DefineItemCraftSet(item_MetalGate1, item_MetalGate, false, item_MetalGate, false), item_Crowbar, 25000, true, true);
+	
 	// items created with a workbench
 	SetConstructionSetWorkbench(SetCraftSetConstructible(16000, item_Screwdriver, DefineItemCraftSet(item_IedBomb, item_FireworkBox, false, item_PowerSupply, false)));
 	SetConstructionSetWorkbench(SetCraftSetConstructible(15000, item_Screwdriver, DefineItemCraftSet(item_TntTimebomb, item_Explosive, false, item_Timer, false)));

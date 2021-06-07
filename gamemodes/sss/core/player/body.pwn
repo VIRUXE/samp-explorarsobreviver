@@ -19,6 +19,7 @@ enum
 }
 
 static
+	body_skin[MAX_BODY],
 	body_PlayerName[MAX_BODY][MAX_PLAYER_NAME],
 	Text3D:body_NameTag[MAX_BODY] = {Text3D:INVALID_3DTEXT_ID, ...};
 	
@@ -348,7 +349,7 @@ hook OnPlayerLoadAccount(playerid)
 	foreach(new i : body_Count){
 		if(!strcmp(body_PlayerName[i], name) && !isnull(body_PlayerName[i]))
 		{
-			if(GetDynamicActorVirtualWorld(i) != GetPlayerVirtualWorld(playerid))
+			if(GetDynamicActorVirtualWorld(i) == 33)
 			{
 				ChatMsg(playerid, RED, " > You were killed while you were away. :(");
 				SetAccountAliveState(name, 0);
@@ -382,18 +383,19 @@ CreateBody(const name[], Float:x, Float:y, Float:z, Float:a, w, i, s)
 		return -1;
 	}
 
-	id = CreateDynamicActor(s, x, y, z, a, false, 100.0, w, i);
+	id = CreateDynamicActor(s, x, y, z + 0.15, a, false, 100.0, w, i); // 0.15 = for fix in-vehicle bug!!
 
 	if(!IsValidDynamicActor(id))
 		return 0;
 
 	body_PlayerName[id][0] = EOS;
 	strcat(body_PlayerName[id], name);
+	body_skin[id] = s;
 	
 	if(IsValidDynamic3DTextLabel(body_NameTag[id]))
 		DestroyDynamic3DTextLabel(body_NameTag[id]);
 
-	body_NameTag[id] = CreateDynamic3DTextLabel(sprintf("%s (Corpo)", body_PlayerName[id]), 0xB8B8B8FF, x, y, z + 1.0, gNameTagDistance, INVALID_PLAYER_ID, INVALID_VEHICLE_ID, 1, w, i);
+	body_NameTag[id] = CreateDynamic3DTextLabel(sprintf("%s{FFFFFF}(Corpo)", body_PlayerName[id]), 0xB8B8B8FF, x, y, z + 1.0, gNameTagDistance, INVALID_PLAYER_ID, INVALID_VEHICLE_ID, 1, w, i);
 
 	Iter_Add(body_Count, id);
 
@@ -491,6 +493,15 @@ IRPC:GIVEDAM(playerid, BitStream:bs){
 		"bGiveOrTake:%d, wPlayerID:%d, damage_amount:%0.2f, dWeaponID:%d, dBodypart:%d",
 			bGiveOrTake, wPlayerID, damage_amount, dWeaponID, dBodypart);*/
 	
+	/*if(wPlayerID > 999) // Is Body
+	{
+		SetPlayerHealth(wPlayerID, -damage_amount);
+		CallLocalFunction("OnPlayerGiveDamageDynamicActor", "ddfdd",
+			playerid, wPlayerID - 1000, damage_amount, dWeaponID, dBodypart);
+		return 0;
+	}*/
+		
+
 	if(IsPlayerMobile(playerid))
 	{
 		new 
@@ -560,6 +571,76 @@ CMD:mc(playerid, params[])
 	}
 	return 1;
 }
+/*
+public OnDynamicActorStreamIn(STREAMER_TAG_ACTOR:actorid, forplayerid)
+{
+	new BitStream:bsha = BS_New();
+    BS_WriteValue(bsha,
+        PR_INT16, actorid)
+    );
+    PR_SendRPC(bsha, forplayerid, 172); // Hide Actor
+	BS_Delete(bsha);
+
+	new BitStream:bs = BS_New();
+    BS_WriteValue(bs,
+        PR_INT16, 1000 + actorid,
+        PR_UINT32, 0,
+        PR_UINT8, 0,
+        PR_UINT8, 6,
+        PR_STRING, sprintf("c_%d", actorid)
+    );
+    PR_SendRPC(bs, forplayerid, 137); // ServerJoin
+	BS_Delete(bs);
+
+	new Float:x, Float:y, Float:z, Float:a;
+	GetDynamicActorPos(actorid, x, y, z);
+	GetDynamicActorFacingAngle(actorid, a);
+	new BitStream:bsw = BS_New();
+    BS_WriteValue(bsw,
+        PR_UINT16, 1000 + actorid,
+        PR_UINT8, 33, 
+        PR_UINT32, body_skin[actorid],
+        PR_FLOAT, x,
+        PR_FLOAT, y,
+        PR_FLOAT, z,
+        PR_FLOAT, a,
+        PR_UINT32, 0,
+        PR_UINT8, 0
+    );
+    PR_SendRPC(bsw, forplayerid, 32); // WorldAdd
+    BS_Delete(bsw);
+
+   	for(new i = 0; i < MAX_PLAYER_ATTACHED_OBJECTS; i++)
+	{
+		if(IsPlayerAttachedObjectSlotUsed(playerid, i))
+		{
+			new BitStream:bs_att = BS_New();
+			BS_WriteValue(
+				bs_att,
+				PR_UINT16, playerid,
+				PR_UINT32, i,
+				PR_BOOL, 1,
+				PR_UINT32, attchEnum[playerid][i][ModelID],
+				PR_UINT32, attchEnum[playerid][i][Bone],
+				PR_FLOAT, attchEnum[playerid][i][ox],
+				PR_FLOAT, attchEnum[playerid][i][oy],
+				PR_FLOAT, attchEnum[playerid][i][oz],
+				PR_FLOAT, attchEnum[playerid][i][rx],
+				PR_FLOAT, attchEnum[playerid][i][ry],
+				PR_FLOAT, attchEnum[playerid][i][rz],
+				PR_FLOAT, attchEnum[playerid][i][sx],
+				PR_FLOAT, attchEnum[playerid][i][sy],
+				PR_FLOAT, attchEnum[playerid][i][sz],
+				PR_UINT32, attchEnum[playerid][i][color1],
+				PR_UINT32, attchEnum[playerid][i][color2]
+			);
+			BS_RPC(bs_att, forplayerid, 113);
+			BS_Delete(bs_att);
+		}
+	}
+	return 1;
+}
+*/
 
 public OnPlayerGiveDamageDynamicActor(playerid, actorid, Float:amount, weaponid, bodypart)
 {
@@ -600,7 +681,7 @@ public OnPlayerGiveDamageDynamicActor(playerid, actorid, Float:amount, weaponid,
 
 		CA_RayCastLine(x, y, z, x, y, z - 600.0, cx, cy, cz);
 
-		itemid = CreateItem(ItemType:item_Torso, cx, cy, cz + 0.2);
+		itemid = CreateItem(ItemType:item_Torso, cx, cy, cz + 0.2, .world = GetPlayerVirtualWorld(playerid), .interior = GetPlayerInterior(playerid));
 
 		GetItemArrayDataAtCell(itemid, _:containerid, 0);
 

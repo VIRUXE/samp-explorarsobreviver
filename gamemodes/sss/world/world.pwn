@@ -15,6 +15,7 @@
 
 #include "sss/world/spawn.pwn"
 
+#include "sss/world/gl_property.pwn"
 #include "sss/world/zones/ls.pwn"
 #include "sss/world/zones/sf.pwn"
 #include "sss/world/zones/lv.pwn"

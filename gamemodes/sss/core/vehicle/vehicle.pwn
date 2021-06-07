@@ -730,6 +730,9 @@ HideVehicleUI(playerid)
 
 public OnPlayerEnterVehicle(playerid, vehicleid, ispassenger)
 {
+	if(IsItemTypeCarry(ItemType:GetItemType(GetPlayerItem(playerid))))
+		PlayerDropItem(playerid);
+
 	if(!ispassenger)
 		veh_Entering[playerid] = vehicleid;
 
@@ -755,6 +758,7 @@ public OnVehicleDamageStatusUpdate(vehicleid, playerid)
 	return 1;
 }
 
+/*
 hook OnUnoccupiedVehicleUpd(vehicleid, playerid, passenger_seat, Float:new_x, Float:new_y, Float:new_z, Float:vel_x, Float:vel_y, Float:vel_z)
 {
 	if(IsValidVehicle(GetTrailerVehicleID(vehicleid)))
@@ -829,7 +833,7 @@ hook OnUnoccupiedVehicleUpd(vehicleid, playerid, passenger_seat, Float:new_x, Fl
 	}
 
 	return Y_HOOKS_CONTINUE_RETURN_1;
-}
+}*/
 
 IsVehicleValidOutOfBounds(vehicleid)
 {

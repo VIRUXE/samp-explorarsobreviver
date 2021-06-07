@@ -15,10 +15,50 @@
 
 ==============================================================================*/
 
+#define MODEL_SELECTION_CRAFT_MENU 	(10)
+#define MODEL_SELECTION_ITEM_MENU 	(11)
 
 CMD:recipes(playerid, params[])
 {
 	Dialog_ShowCraftTypes(playerid);
+	return 1;
+}
+
+CMD:crafts(playerid, params[])
+{
+	Dialog_ShowCraftTypes(playerid);
+	return 1;
+}
+
+
+CMD:item(playerid, params[])
+{
+	new
+		type[8];
+
+	if(sscanf(params, "s[8]", type))
+	{
+		ChatMsg(playerid, YELLOW, " >  Usage: /Item [optional: defence/box]");
+	}
+
+	new 
+		List:LItem = list_new(),
+		model,
+		itemname[MAX_ITEM_NAME];
+
+	for(new ItemType:i; i < MAX_ITEM_TYPE; i++)
+	{
+		if(!IsValidItemType(i))
+			continue;
+
+		GetItemTypeModel(i, model);
+		GetItemTypeName(i, itemname);
+		AddModelMenuItem(LItem, model, itemname);
+	}
+
+	ShowModelSelectionMenu(playerid, "Item List", MODEL_SELECTION_ITEM_MENU, LItem);
+
+	
 	return 1;
 }
 
@@ -46,6 +86,8 @@ Dialog_ShowCraftTypes(playerid)
 	Dialog_ShowCallback(playerid, using inline Response, DIALOG_STYLE_LIST, "Recipes", "Combination Recipes\nConstruction Recipes\nWorkbench Recipes\n"C_GREEN"Help", "Select", "Close");
 }
 
+new CraftSet:PlayerListCraft[MAX_PLAYERS][MAX_CONSTRUCT_SET];
+
 Dialog_ShowCraftList(playerid, type)
 {
 	// 0 All
@@ -54,8 +96,10 @@ Dialog_ShowCraftList(playerid, type)
 	// 3 Workbench
 
 	new
-		f_str[700],
-		itemname[MAX_ITEM_NAME];
+		itemname[MAX_ITEM_NAME],
+		List:LCraft = list_new(),
+		model,
+		items;
 
 	for(new CraftSet:i; i < CraftSet:GetCraftSetTotal(); i++)
 	{
@@ -91,33 +135,56 @@ Dialog_ShowCraftList(playerid, type)
 			new ItemType:resulttype;
 			GetCraftSetResult(i, resulttype);
 			GetItemTypeName(resulttype, itemname);
+			GetItemTypeModel(resulttype, model);
 		}
 		else
 		{
 			itemname = "INVALID CRAFT SET";
 		}
 
-		format(f_str, sizeof(f_str), "%s%i. %s\n", f_str, _:i, itemname);
+		PlayerListCraft[playerid][items++] = i;
+		AddModelMenuItem(LCraft, model, itemname);
 	}
 
-	inline Response(pid, dialogid, response, listitem, string:inputtext[])
+	ShowModelSelectionMenu(playerid, "Craftsets", MODEL_SELECTION_CRAFT_MENU, LCraft);
+}
+
+public OnModelSelectionResponse(playerid, extraid, index, modelid, response)
+{
+	if(extraid == MODEL_SELECTION_ITEM_MENU)
 	{
-		#pragma unused pid, dialogid, listitem
-		
-		if(response)
+		if(response == MODEL_RESPONSE_SELECT)
 		{
-			new craftset;
+			new
+				itemname[MAX_ITEM_NAME],
+				itemtipkey[12],
+				str[288];
 
-			sscanf(inputtext, "p<.>i{s[96]}", craftset);
+			GetItemTypeUniqueName(ItemType:index, itemname);
 
-			Dialog_ShowIngredients(playerid, CraftSet:craftset);
+			if(strlen(itemname) > 9)
+				itemname[9] = EOS;
+
+			format(itemtipkey, sizeof(itemtipkey), "%s_T", itemname);
+			itemtipkey[11] = EOS;
+			
+			format(str, sizeof(str), "%", ls(playerid, itemtipkey));
+
+			ShowHelpTip(playerid, str, 10000);
+		}
+	}
+
+    if(extraid == MODEL_SELECTION_CRAFT_MENU)
+    {
+		if(response == MODEL_RESPONSE_SELECT)
+		{
+			Dialog_ShowIngredients(playerid, CraftSet:PlayerListCraft[playerid][index]);
 		}
 		else
 		{
 			Dialog_ShowCraftTypes(playerid);
 		}
-	}
-	Dialog_ShowCallback(playerid, using inline Response, DIALOG_STYLE_LIST, "Craftsets", f_str, "View", "Close");
+    }
 }
 
 Dialog_ShowIngredients(playerid, CraftSet:craftset)
@@ -134,6 +201,7 @@ Dialog_ShowIngredients(playerid, CraftSet:craftset)
 		toolname[MAX_ITEM_NAME],
 		consset = GetCraftSetConstructSet(craftset),
 		ItemType:resulttype;
+
 	GetCraftSetItemCount(craftset, itemcount);
 	GetCraftSetResult(craftset, resulttype);
 

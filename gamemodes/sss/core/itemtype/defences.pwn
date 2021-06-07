@@ -16,39 +16,29 @@
 #include <YSI_Coding\y_hooks>
 
 
-#define MAX_DEFENCE_ITEM		(11)
-#define MAX_DEFENCE				(6000)
+#define MAX_DEFENCE_ITEM		(14)
 #define INVALID_DEFENCE_ID		(-1)
 #define INVALID_DEFENCE_TYPE	(-1)
 
 
-enum
-{
-	DEFENCE_POSE_HORIZONTAL,
-	DEFENCE_POSE_VERTICAL,
-	DEFENCE_POSE_SUPPORTED,
-}
-
 enum E_DEFENCE_ITEM_DATA
 {
 ItemType:	def_itemtype,
-Float:		def_verticalRotX,
-Float:		def_verticalRotY,
-Float:		def_verticalRotZ,
-Float:		def_horizontalRotX,
-Float:		def_horizontalRotY,
-Float:		def_horizontalRotZ,
-Float:		def_placeOffsetZ,
+Float:		def_openRotX,
+Float:		def_openRotY,
+Float:		def_openRotZ,
+bool:		def_correctZ,
 bool:		def_movable
 }
 
 enum e_DEFENCE_DATA
 {
 bool:		def_active,
-			def_pose,
+bool:		def_open,
 			def_motor,
 			def_keypad,
 			def_pass,
+			def_Owner[MAX_PLAYER_NAME],
 			def_mod,
 }
 
@@ -59,14 +49,16 @@ static
 			def_ItemTypeDefenceType[MAX_ITEM_TYPE] = {INVALID_DEFENCE_TYPE, ...};
 
 static
-			def_TweakArrow[MAX_PLAYERS] = {INVALID_OBJECT_ID, ...},
+			def_OpenObject[MAX_PLAYERS] = {INVALID_OBJECT_ID, ...},
 Item:		def_CurrentDefenceItem[MAX_PLAYERS],
 Item:		def_CurrentDefenceEdit[MAX_PLAYERS],
 Item:		def_CurrentDefenceOpen[MAX_PLAYERS],
 			def_LastPassEntry[MAX_PLAYERS],
+			def_LastPassword[MAX_PLAYERS],
 			def_Cooldown[MAX_PLAYERS],
 			def_PassFails[MAX_PLAYERS],
-			def_Col[MAX_ITEM];
+			def_Col[MAX_ITEM],
+Timer:		MoveDefenceDelay[MAX_PLAYERS];
 
 stock CreateDefenceColision(Item:itemid)
 {
@@ -103,6 +95,7 @@ hook OnPlayerConnect(playerid)
 	def_LastPassEntry[playerid] = 0;
 	def_Cooldown[playerid] = 2000;
 	def_PassFails[playerid] = 0;
+	def_LastPassword[playerid] = 0;
 }
 
 
@@ -113,18 +106,15 @@ hook OnPlayerConnect(playerid)
 ==============================================================================*/
 
 
-stock DefineDefenceItem(ItemType:itemtype, Float:v_rx, Float:v_ry, Float:v_rz, Float:h_rx, Float:h_ry, Float:h_rz, Float:zoffset, bool:movable)
+stock DefineDefenceItem(ItemType:itemtype, Float:v_rx, Float:v_ry, Float:v_rz, bool:cz, bool:movable)
 {
 	SetItemTypeMaxArrayData(itemtype, e_DEFENCE_DATA);
 
 	def_TypeData[def_TypeTotal][def_itemtype] = itemtype;
-	def_TypeData[def_TypeTotal][def_verticalRotX] = v_rx;
-	def_TypeData[def_TypeTotal][def_verticalRotY] = v_ry;
-	def_TypeData[def_TypeTotal][def_verticalRotZ] = v_rz;
-	def_TypeData[def_TypeTotal][def_horizontalRotX] = h_rx;
-	def_TypeData[def_TypeTotal][def_horizontalRotY] = h_ry;
-	def_TypeData[def_TypeTotal][def_horizontalRotZ] = h_rz;
-	def_TypeData[def_TypeTotal][def_placeOffsetZ] = zoffset;
+	def_TypeData[def_TypeTotal][def_openRotX] = v_rx;
+	def_TypeData[def_TypeTotal][def_openRotY] = v_ry;
+	def_TypeData[def_TypeTotal][def_openRotZ] = v_rz;
+	def_TypeData[def_TypeTotal][def_correctZ] = cz;
 	def_TypeData[def_TypeTotal][def_movable] = movable;
 	def_ItemTypeDefenceType[itemtype] = def_TypeTotal;
 
@@ -158,10 +148,6 @@ ActivateDefenceItem(Item:itemid)
 	GetItemTypeName(def_TypeData[defencetype][def_itemtype], itemtypename);
 	GetItemArrayData(itemid, itemdata);
 
-	itemdata[def_active] = true;
-
-	SetItemArrayData(itemid, itemdata, e_DEFENCE_DATA);
-
 	if(itemdata[def_motor])
 	{
 		SetButtonText(buttonid, sprintf(""KEYTEXT_INTERACT" to open %s", itemtypename));
@@ -172,43 +158,41 @@ ActivateDefenceItem(Item:itemid)
 		SetButtonText(buttonid, sprintf(""KEYTEXT_INTERACT" to modify %s", itemtypename));
 		SetItemLabel(itemid, sprintf("%d/%d", GetItemHitPoints(itemid), GetItemTypeMaxHitPoints(itemtype)));
 	}
+	
+	SetButtonSize(buttonid, 2.2);
+
+	itemdata[def_active] = true;
+
+	SetItemArrayData(itemid, itemdata, e_DEFENCE_DATA);
 	return 0;
 }
 
-DeconstructDefence(Item:itemid)
+DeconstructDefence(Item:itemid, playerid)
 {
 	new
 		Float:x,
 		Float:y,
 		Float:z,
-		ItemType:itemtype,
-		itemdata[e_DEFENCE_DATA];
+		ItemType:itemtype = GetItemType(itemid),
+		itemdata[e_DEFENCE_DATA],
+		Button:buttonid;
 
-	GetItemPos(itemid, x, y, z);
-	itemtype = GetItemType(itemid);
+	GetPlayerPos(playerid, x, y, z);
 	GetItemArrayData(itemid, itemdata);
-
-	if(itemdata[def_motor])
-	{
-		if(itemdata[def_pose] == DEFENCE_POSE_VERTICAL)
-			z -= def_TypeData[def_ItemTypeDefenceType[itemtype]][def_placeOffsetZ];
-	}
-	else
-	{
-		if(itemdata[def_pose] == DEFENCE_POSE_VERTICAL)
-			z -= def_TypeData[def_ItemTypeDefenceType[itemtype]][def_placeOffsetZ];
-	}
+	GetItemButtonID(itemid, Button:buttonid);
 
 	new itemtypename[MAX_ITEM_NAME];
 	GetItemTypeName(def_TypeData[def_ItemTypeDefenceType[itemtype]][def_itemtype], itemtypename);
+
+	SetButtonText(Button:buttonid, sprintf("%s", itemtypename));
     SetItemLabel(itemid, sprintf("%s", itemtypename), 0xFFFF00FF);
 
-	SetItemPos(itemid, x, y, z);
+	SetItemPos(itemid, x, y, z - ITEM_FLOOR_OFFSET);
 	SetItemRot(itemid, 0.0, 0.0, 0.0, true);
 
 	SetItemArrayDataAtCell(itemid, 0, def_keypad);
 	SetItemArrayDataAtCell(itemid, 0, def_motor);
-	SetItemArrayDataAtCell(itemid, 0, def_pose);
+	SetItemArrayDataAtCell(itemid, false, def_open);
 
 	SetItemArrayDataAtCell(itemid, 0, 0);
 
@@ -222,7 +206,6 @@ DeconstructDefence(Item:itemid)
 	Internal
 
 ==============================================================================*/
-
 
 hook OnPlayerPickUpItem(playerid, Item:itemid)
 {
@@ -259,13 +242,14 @@ hook OnPlayerUseItemWithItem(playerid, Item:itemid, Item:withitemid)
 		{
 			new ItemType:itemtype = GetItemType(itemid);
 
-			if(itemtype == item_Hammer || itemtype == item_Screwdriver)
+			if(itemtype == item_Screwdriver)
 				StartBuildingDefence(playerid, withitemid);
 		}
 	}
 
 	return Y_HOOKS_CONTINUE_RETURN_0;
 }
+
 
 hook OnPlayerKeyStateChange(playerid, newkeys, oldkeys)
 {
@@ -317,6 +301,23 @@ StopBuildingDefence(playerid)
 	return;
 }
 
+hook OnPlayerSave(playerid, filename[])
+{
+	new data[1];
+	data[0] = def_LastPassword[playerid];
+
+	modio_push(filename, _T<D,P,A,W>, 1, data);
+}
+
+hook OnPlayerLoad(playerid, filename[])
+{
+	new data[1];
+
+	modio_read(filename, _T<D,P,A,W>, 1, data);
+
+	def_LastPassword[playerid] = data[0];
+}
+
 _InteractDefence(playerid, Item:itemid)
 {
 	new data[e_DEFENCE_DATA];
@@ -325,7 +326,14 @@ _InteractDefence(playerid, Item:itemid)
 
 	if(data[def_motor])
 	{
-		if(data[def_keypad] == 1)
+		if(def_LastPassword[playerid] == data[def_pass] && def_LastPassword[playerid] != 0)
+		{
+			ShowActionText(playerid, ls(playerid, "DEFMOVINGIT"), 3000);
+			stop MoveDefenceDelay[playerid];
+			MoveDefenceDelay[playerid] = defer MoveDefence(_:itemid, playerid);
+			PlayerPlaySound(playerid, 21002, 0.0, 0.0, 0.0); // Keyboard sound
+		}
+		else if(data[def_keypad] == 1)
 		{
 			if(data[def_pass] == 0)
 			{
@@ -382,7 +390,8 @@ _InteractDefence(playerid, Item:itemid)
 		else
 		{
 			ShowActionText(playerid, ls(playerid, "DEFMOVINGIT"), 3000);
-			defer MoveDefence(_:itemid, playerid);
+			stop MoveDefenceDelay[playerid];
+			MoveDefenceDelay[playerid] = defer MoveDefence(_:itemid, playerid);
 		}
 	}
 
@@ -390,25 +399,35 @@ _InteractDefence(playerid, Item:itemid)
 }
 
 _InteractDefenceWithItem(playerid, Item:itemid, Item:tool)
-{
+{	
 	new
 		defencetype,
 		ItemType:tooltype,
-		Float:angle,
-		Float:angletoplayer,
-		Button:buttonid;
+		pName[MAX_PLAYER_NAME],
+		itemdata[e_DEFENCE_DATA];
 
 	defencetype = def_ItemTypeDefenceType[GetItemType(itemid)];
 	tooltype = GetItemType(tool);
-	GetItemRot(itemid, angle, angle, angle);
-	GetItemButtonID(itemid, buttonid);
-	GetButtonAngleToPlayer(playerid, buttonid, angletoplayer);
 
-	angle = absoluteangle((angle - def_TypeData[defencetype][def_verticalRotZ]) - angletoplayer);
+	GetPlayerName(playerid, pName, MAX_PLAYER_NAME);
+	GetItemArrayData(itemid, itemdata);
 
-	// ensures the player can only perform these actions on the back-side.
-	if(!(90.0 < angle < 270.0))
+	if(strcmp(pName, itemdata[def_Owner], false))
+	{
+		new Float:tx, Float:ty, Float:tz, Float:ix, Float:iy, Float:iz, tents;
+		GetItemPos(itemid, ix, iy, iz);
+
+		foreach(new i : tnt_Index)
+		{
+			GetTentPos(i, tx, ty, tz);
+			if(Distance(ix, iy, iz, tx, ty, tz) < 20.0)
+				tents ++;
+		}
+		if(tents > 0)
+			ChatMsg(playerid, RED,
+				" > Você precisa ser o dono dessa defesa para edita-la ou destrua todas as tendas próximas.");
 		return 0;
+	}
 
 	if(tooltype == item_Crowbar)
 	{
@@ -513,19 +532,20 @@ hook OnHoldActionFinish(playerid)
 			return Y_HOOKS_BREAK_RETURN_0;
 
 		new
-			Item:itemid = def_CurrentDefenceItem[playerid],
-			ItemType:itemtype,
-			pose;
+			Item:itemid = def_CurrentDefenceItem[playerid];
 
-		itemtype = GetItemType(GetPlayerItem(playerid));
+		new Float:x, Float:y, Float:z, Float:ang;
+		GetItemPos(itemid, x, y, z);
+		GetPlayerFacingAngle(playerid, ang);
 
-		if(itemtype == item_Screwdriver)
-			pose = DEFENCE_POSE_VERTICAL;
+		x += 1 * floatsin(-ang, degrees), y += 1 * floatcos(-ang, degrees);
 
-		if(itemtype == item_Hammer)
-			pose = DEFENCE_POSE_HORIZONTAL;
+		SetItemPos(itemid, x, y, z);
+		
+		ConvertItemToDefenceItem(itemid);
 
-		ConvertItemToDefenceItem(itemid, pose);
+		SetItemRot(itemid, 0.0, 0.0, ang - 30.0);
+
 
 		if(!IsValidItem(itemid))
 		{
@@ -533,31 +553,10 @@ hook OnHoldActionFinish(playerid)
 			return Y_HOOKS_BREAK_RETURN_0;
 		}
 
-		new
-			uuid[UUID_LEN],
-			Float:x,
-			Float:y,
-			Float:z,
-			Float:rx,
-			Float:ry,
-			Float:rz,
-			model;
-
-		GetItemUUID(itemid, uuid);
-		GetItemPos(itemid, x, y, z);
-		GetItemRot(itemid, rx, ry, rz);
-		GetItemTypeModel(GetItemType(itemid), model);
-
-		log("[CONSTRUCT] %p Built defence %d (%s) (%d, %f, %f, %f, %f, %f, %f)",
-			playerid, _:itemid, uuid, model, x, y, z, rx, ry, rz);
-
 		StopBuildingDefence(playerid);
+
 		TweakItem(playerid, itemid);
-		_UpdateDefenceTweakArrow(playerid, itemid);
 		PlayerGainSkillExperience(playerid, "Construction");
-
-		ShowHelpTip(playerid, ls(playerid, "TIPTWEAKDEF"));
-
 		return Y_HOOKS_BREAK_RETURN_0;
 	}
 
@@ -578,6 +577,20 @@ hook OnHoldActionFinish(playerid)
 
 			DestroyItem(itemid);
 			ClearAnimations(playerid);
+
+			new
+				Float:x,
+				Float:y,
+				Float:z,
+				Float:rx,
+				Float:ry,
+				Float:rz;
+
+			GetItemPos(def_CurrentDefenceEdit[playerid], x, y, z);
+			GetItemRot(def_CurrentDefenceEdit[playerid], rx, ry, rz);
+
+			TweakItem(playerid, def_CurrentDefenceEdit[playerid]);
+			DefenceOpenObject(playerid, def_CurrentDefenceEdit[playerid]);
 		}
 
 		if(itemtype == item_Keypad)
@@ -620,7 +633,7 @@ hook OnHoldActionFinish(playerid)
 			ShowActionText(playerid, ls(playerid, "DEFDISMANTL"));
 			GetItemTypeModel(GetItemType(def_CurrentDefenceEdit[playerid]), model);
 
-			DeconstructDefence(def_CurrentDefenceEdit[playerid]);
+			DeconstructDefence(def_CurrentDefenceEdit[playerid], playerid);
 
 			log("[CROWBAR] %p broke defence %d (%s) (%d, %f, %f, %f, %f, %f, %f)",
 				playerid, _:def_CurrentDefenceEdit[playerid], uuid,
@@ -667,8 +680,10 @@ hook OnPlayerKeypadEnter(playerid, keypadid, code, match)
 		{
 			if(code == match)
 			{
+				def_LastPassword[playerid] = match;
 				ShowActionText(playerid, ls(playerid, "DEFMOVINGIT"), 3000);
-				defer MoveDefence(_:def_CurrentDefenceOpen[playerid], playerid);
+				stop MoveDefenceDelay[playerid];
+				MoveDefenceDelay[playerid] = defer MoveDefence(_:def_CurrentDefenceOpen[playerid], playerid);
 				def_CurrentDefenceOpen[playerid] = INVALID_ITEM_ID;
 			}
 			else
@@ -706,97 +721,78 @@ hook OnPlayerKeypadEnter(playerid, keypadid, code, match)
 	return Y_HOOKS_CONTINUE_RETURN_0;
 }
 
-ConvertItemToDefenceItem(Item:itemid, pose)
+ConvertItemToDefenceItem(Item:itemid)
 {
 	new ret = ActivateDefenceItem(itemid);
 	if(ret)
 		return ret;
 
-	SetItemArrayDataAtCell(itemid, pose, def_pose);
+	SetItemArrayDataAtCell(itemid, false, def_open);
 
 	new
-		ItemType:itemtype = GetItemType(itemid),
-		Float:x,
-		Float:y,
-		Float:z,
-		Float:rx,
-		Float:ry,
+		ItemType:itemtype = GetItemType(itemid), model,
+		Float:x, Float:y, Float:z, objectid,
+		Float:minx, Float:miny, Float:minz, Float:maxx, Float:maxy, Float:maxz,
 		Float:rz;
 
+	GetItemObjectID(itemid, objectid);
+	GetItemTypeModel(itemtype, model);
+	CA_GetModelBoundingBox(model, minx, miny, minz, maxx, maxy, maxz);
 	GetItemPos(itemid, x, y, z);
-	GetItemRot(itemid, rx, ry, rz);
+	GetItemRot(itemid, rz, rz, rz);
+	SetItemPos(itemid, x, y, z + floatabs(minz));
+	SetItemRot(itemid, 0.0, 0.0, rz);
 
-	if(pose == DEFENCE_POSE_HORIZONTAL)
-	{
-		rx = def_TypeData[def_ItemTypeDefenceType[itemtype]][def_horizontalRotX];
-		ry = def_TypeData[def_ItemTypeDefenceType[itemtype]][def_horizontalRotY];
-		rz += def_TypeData[def_ItemTypeDefenceType[itemtype]][def_horizontalRotZ];
-	}
-	else if(pose == DEFENCE_POSE_VERTICAL)
-	{
-		z += def_TypeData[def_ItemTypeDefenceType[itemtype]][def_placeOffsetZ];
-		rx = def_TypeData[def_ItemTypeDefenceType[itemtype]][def_verticalRotX];
-		ry = def_TypeData[def_ItemTypeDefenceType[itemtype]][def_verticalRotY];
-		rz += def_TypeData[def_ItemTypeDefenceType[itemtype]][def_verticalRotZ];
-	}
-
-	SetItemPos(itemid, x, y, z);
-	SetItemRot(itemid, rx, ry, rz);
 	return CallLocalFunction("OnDefenceCreate", "d", _:itemid);
 }
 
-_UpdateDefenceTweakArrow(playerid, Item:itemid)
+DefenceOpenObject(playerid, Item:itemid)
 {
-	new
-		Float:x,
-		Float:y,
-		Float:z,
-		Float:rx,
-		Float:ry,
-		Float:rz,
-		world,
-		interior;
+	new hasmotor;
+	GetItemArrayDataAtCell(itemid, hasmotor, _:def_motor);
+	if(!hasmotor)
+		return 0;
 
+	new 
+		world, interior, ItemType:itemtype = GetItemType(itemid), model, objectid,
+		Float:x, Float:y, Float:z, Float:rx, Float:ry, Float:rz;
+	
 	GetItemPos(itemid, x, y, z);
 	GetItemRot(itemid, rx, ry, rz);
 	GetItemWorld(itemid, world);
 	GetItemInterior(itemid, interior);
+	GetItemTypeModel(itemtype, model);
+	GetItemObjectID(itemid, objectid);
 
-	if(!IsValidDynamicObject(def_TweakArrow[playerid]))
-		def_TweakArrow[playerid] = CreateDynamicObject(19132, x, y, z, 0.0, 0.0, 0.0, world, interior);
+	new Float:minx, Float:miny, Float:minz, Float:maxx, Float:maxy, Float:maxz;
+	if(def_TypeData[def_ItemTypeDefenceType[itemtype]][def_correctZ])
+		CA_GetModelBoundingBox(model, minx, miny, minz, maxx, maxy, maxz);
 
-	else
-		SetDynamicObjectPos(def_TweakArrow[playerid], x, y, z);
+	rx += def_TypeData[def_ItemTypeDefenceType[itemtype]][def_openRotX];
+	ry += def_TypeData[def_ItemTypeDefenceType[itemtype]][def_openRotY];
+	rz += def_TypeData[def_ItemTypeDefenceType[itemtype]][def_openRotZ];
+	z += minz;
 
-	new pose;
-	GetItemArrayDataAtCell(itemid, pose, def_pose);
-	if(pose == DEFENCE_POSE_VERTICAL)
-	{
-		SetDynamicObjectRot(def_TweakArrow[playerid],
-			rx - def_TypeData[def_ItemTypeDefenceType[GetItemType(itemid)]][def_verticalRotX] + 90,
-			ry - def_TypeData[def_ItemTypeDefenceType[GetItemType(itemid)]][def_verticalRotY],
-			rz - def_TypeData[def_ItemTypeDefenceType[GetItemType(itemid)]][def_verticalRotZ]);
-	}
-	else
-	{
-		SetDynamicObjectRot(def_TweakArrow[playerid],
-			rx - def_TypeData[def_ItemTypeDefenceType[GetItemType(itemid)]][def_horizontalRotX],
-			ry - def_TypeData[def_ItemTypeDefenceType[GetItemType(itemid)]][def_horizontalRotY],
-			rz - def_TypeData[def_ItemTypeDefenceType[GetItemType(itemid)]][def_horizontalRotZ]);
-	}
+	if(!IsValidDynamicObject(def_OpenObject[playerid]))
+		def_OpenObject[playerid] = CreateDynamicObject(model, x, y, z, rx, ry, rz, world, interior);
+
+	SetDynamicObjectPos(def_OpenObject[playerid], x, y, z);
+	SetDynamicObjectRot(def_OpenObject[playerid], rx, ry, rz);
+
+	for(new i = 0; i < 15; i++)
+		SetDynamicObjectMaterial(def_OpenObject[playerid], i, -1, "none", "none", 0xBE00FF00);
+
+	return 1;
 }
 
 hook OnItemTweakUpdate(playerid, Item:itemid)
 {
-	if(def_TweakArrow[playerid] != INVALID_OBJECT_ID)
-	{
-		_UpdateDefenceTweakArrow(playerid, itemid);
-	}
+	DefenceOpenObject(playerid, itemid);
 }
 
 hook OnItemTweakFinish(playerid, Item:itemid)
 {
-	if(def_TweakArrow[playerid] != INVALID_OBJECT_ID)
+	if(def_ItemTypeDefenceType[GetItemType(itemid)] != -1)
 	{
 		new
 			Float:x,
@@ -804,20 +800,30 @@ hook OnItemTweakFinish(playerid, Item:itemid)
 			Float:z,
 			Float:rx,
 			Float:ry,
-			Float:rz;
+			Float:rz,
+			itemdata[e_DEFENCE_DATA];
 
 		GetItemPos(itemid, x, y, z);
 		GetItemRot(itemid, rx, ry, rz);
-		
+		GetItemArrayData(itemid, itemdata);
+		GetPlayerName(playerid, itemdata[def_Owner], MAX_PLAYER_NAME);
+		SetItemArrayData(itemid, itemdata, e_DEFENCE_DATA);
+
 		CA_DestroyObject(def_Col[itemid]);
 		new ItemType:itemtype, model;
 		itemtype = GetItemType(Item:itemid);
 		GetItemTypeModel(itemtype, model);
+	
 		def_Col[itemid] = CA_CreateObject(model, x, y, z, rx, ry, rz, true);
 		CA_SetObjectExtraID(def_Col[itemid], 0, _:itemid);
-
-		DestroyDynamicObject(def_TweakArrow[playerid]);
-		def_TweakArrow[playerid] = INVALID_OBJECT_ID;
+		CallLocalFunction("OnDefenceModified", "d", _:itemid);
+	}
+	if(def_OpenObject[playerid] != INVALID_OBJECT_ID)
+	{
+		stop MoveDefenceDelay[playerid];
+		MoveDefenceDelay[playerid] = defer MoveDefence(_:itemid, playerid);
+		DestroyDynamicObject(def_OpenObject[playerid]);
+		def_OpenObject[playerid] = INVALID_OBJECT_ID;
 	}
 }
 
@@ -910,7 +916,8 @@ ShowEnterPassDialog_KeypadAdv(playerid, msg = 0)
 			if(pass == defpass && strlen(inputtext) >= 4)
 			{
 				ShowActionText(playerid, ls(playerid, "DEFMOVINGIT"), 3000);
-				defer MoveDefence(_:def_CurrentDefenceOpen[playerid], playerid);
+				stop MoveDefenceDelay[playerid];
+				MoveDefenceDelay[playerid] = defer MoveDefence(_:def_CurrentDefenceOpen[playerid], playerid);
 				def_CurrentDefenceOpen[playerid] = INVALID_ITEM_ID;
 			}
 			else
@@ -951,80 +958,51 @@ ShowEnterPassDialog_KeypadAdv(playerid, msg = 0)
 	return 1;
 }
 
-timer MoveDefence[1500](itemid, playerid)
+timer MoveDefence[1000](itemid, playerid)
 {
-	new
-		Float:px,
-		Float:py,
-		Float:pz,
-		Float:ix,
-		Float:iy,
-		Float:iz;
+	new objectid;
+	GetItemObjectID(Item:itemid, objectid);
+	if(IsDynamicObjectMoving(objectid))
+		return;
 
-	GetItemPos(Item:itemid, ix, iy, iz);
+	new ItemType:itemtype = GetItemType(Item:itemid),
+		Float:x, Float:y, Float:z, Float:rx, Float:ry, Float:rz,
+		Float:px, Float:py, Float:pz, bool:open, model;
 
-	foreach(new i : Player)
+	GetPlayerPos(playerid, px, py, pz);
+	GetItemPos(Item:itemid, x, y, z);
+	GetDynamicObjectRot(objectid, rx, ry, rz);
+	GetItemArrayDataAtCell(Item:itemid, open, def_open);
+	GetItemTypeModel(itemtype, model);
+
+
+	if(open)
 	{
-		GetPlayerPos(i, px, py, pz);
-
-		if(Distance(px, py, pz, ix, iy, iz) < 4.0)
-		{
-			defer MoveDefence(itemid, playerid);
-
-			return;
-		}
-	}
-
-	new
-		ItemType:itemtype = GetItemType(Item:itemid),
-		Float:rx,
-		Float:ry,
-		Float:rz,
-		uuid[UUID_LEN],
-		pose;
-
-	GetItemRot(Item:itemid, rx, ry, rz);
-	GetItemUUID(Item:itemid, uuid);
-	GetItemArrayDataAtCell(Item:itemid, pose, def_pose);
-
-	if(pose == DEFENCE_POSE_HORIZONTAL)
-	{
-		rx = def_TypeData[def_ItemTypeDefenceType[itemtype]][def_verticalRotX];
-		ry = def_TypeData[def_ItemTypeDefenceType[itemtype]][def_verticalRotY];
-		rz += def_TypeData[def_ItemTypeDefenceType[itemtype]][def_verticalRotZ];
-		iz += def_TypeData[def_ItemTypeDefenceType[itemtype]][def_placeOffsetZ];
-
-		SetItemPos(Item:itemid, ix, iy, iz);
-		SetItemRot(Item:itemid, rx, ry, rz);
-
-		SetItemArrayDataAtCell(Item:itemid, DEFENCE_POSE_VERTICAL, def_pose);
-
-		log("[DEFMOVE] Player %p moved defence %d (%s) into CLOSED position at %.1f, %.1f, %.1f", playerid, itemid, uuid, ix, iy, iz);
-		CallLocalFunction("OnDefenceMove", "d", itemid);
+		rx -= def_TypeData[def_ItemTypeDefenceType[itemtype]][def_openRotX];
+		ry -= def_TypeData[def_ItemTypeDefenceType[itemtype]][def_openRotY];
+		rz -= def_TypeData[def_ItemTypeDefenceType[itemtype]][def_openRotZ];
+		SetItemArrayDataAtCell(Item:itemid, false, def_open);
 	}
 	else
 	{
-		rx = def_TypeData[def_ItemTypeDefenceType[itemtype]][def_horizontalRotX];
-		ry = def_TypeData[def_ItemTypeDefenceType[itemtype]][def_horizontalRotY];
-		rz += def_TypeData[def_ItemTypeDefenceType[itemtype]][def_horizontalRotZ];
-		iz -= def_TypeData[def_ItemTypeDefenceType[itemtype]][def_placeOffsetZ];
-
-		SetItemPos(Item:itemid, ix, iy, iz);
-		SetItemRot(Item:itemid, rx, ry, rz);
-
-		SetItemArrayDataAtCell(Item:itemid, DEFENCE_POSE_HORIZONTAL, def_pose);
-
-		log("[DEFMOVE] Player %p moved defence %d (%s) into OPEN position at %.1f, %.1f, %.1f", playerid, itemid, uuid, ix, iy, iz);
-		CallLocalFunction("OnDefenceMove", "d", itemid);
+		rx += def_TypeData[def_ItemTypeDefenceType[itemtype]][def_openRotX];
+		ry += def_TypeData[def_ItemTypeDefenceType[itemtype]][def_openRotY];
+		rz += def_TypeData[def_ItemTypeDefenceType[itemtype]][def_openRotZ];
+		if(def_TypeData[def_ItemTypeDefenceType[itemtype]][def_correctZ])
+		{
+			new Float:minx, Float:miny, Float:minz, Float:maxx, Float:maxy, Float:maxz;
+			CA_GetModelBoundingBox(model, minx, miny, minz, maxx, maxy, maxz);
+			z += minz;
+		}
+		SetItemArrayDataAtCell(Item:itemid, true, def_open);
 	}
 
-	CA_DestroyObject(def_Col[Item:itemid]);
-		
-	new model;
-	GetItemTypeModel(itemtype, model);
-	def_Col[Item:itemid] = CA_CreateObject(model, ix, iy, iz, rx, ry, rz, true);
-	CA_SetObjectExtraID(def_Col[Item:itemid], 0, _:itemid);
+	MoveDynamicObject(objectid, x, y, z, 0.75, rx, ry, rz);
 
+	CA_DestroyObject(def_Col[Item:itemid]);
+	def_Col[Item:itemid] = CA_CreateObject(model, x, y, z, rx, ry, rz, true);
+	CA_SetObjectExtraID(def_Col[Item:itemid], 0, _:itemid);
+	//SetPlayerPos(playerid, px, py, pz);
 	return;
 }
 
@@ -1106,46 +1084,6 @@ stock ItemType:GetDefenceTypeItemType(defencetype)
 		return INVALID_ITEM_TYPE;
 
 	return def_TypeData[defencetype][def_itemtype];
-}
-
-// def_verticalRotX
-// def_verticalRotY
-// def_verticalRotZ
-stock GetDefenceTypeVerticalRot(defencetype, &Float:x, &Float:y, &Float:z)
-{
-	if(!(0 <= defencetype < def_TypeTotal))
-		return 0;
-
-	x = def_TypeData[defencetype][def_verticalRotX];
-	y = def_TypeData[defencetype][def_verticalRotY];
-	z = def_TypeData[defencetype][def_verticalRotZ];
-
-	return 1;
-}
-
-// def_horizontalRotX
-// def_horizontalRotY
-// def_horizontalRotZ
-stock GetDefenceTypeHorizontalRot(defencetype, &Float:x, &Float:y, &Float:z)
-{
-	if(!(0 <= defencetype < def_TypeTotal))
-		return 0;
-
-	x = def_TypeData[defencetype][def_horizontalRotX];
-	y = def_TypeData[defencetype][def_horizontalRotY];
-	z = def_TypeData[defencetype][def_horizontalRotZ];
-
-	return 1;
-}
-
-// def_placeOffsetZ
-forward Float:GetDefenceTypeOffsetZ(defencetype);
-stock Float:GetDefenceTypeOffsetZ(defencetype)
-{
-	if(!(0 <= defencetype < def_TypeTotal))
-		return 0.0;
-
-	return def_TypeData[defencetype][def_placeOffsetZ];
 }
 
 // def_type

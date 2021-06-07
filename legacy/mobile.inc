@@ -109,10 +109,14 @@ stock bool:IsPlayerHaveAutoaim(playerid)
     return PlayerMobileInfo[playerid][isHaveAutoaim];
 }
 
-//TogglePlayerControllable 
-IRPC:15(playerid, BitStream:bs)
+//SendDialogResponse 
+ORPC:62(playerid, BitStream:bs)
 {
-	if(PlayerMobileInfo[playerid][isMobile])
+	new wDialogID;
+	BS_ReadValue(bs, PR_UINT16, wDialogID);
+
+	// Fix Close Dialog
+	if(wDialogID == -1 && PlayerMobileInfo[playerid][isMobile])
 		return 0;
 
 	return 1;

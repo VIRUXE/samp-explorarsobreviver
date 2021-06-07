@@ -33,14 +33,20 @@ hook OnPlayerConnect(playerid)
 {
 	death_LastKilledBy[playerid][0] = EOS;
 	death_LastKilledById[playerid] = INVALID_PLAYER_ID;
-
+	TextDrawHideForPlayer(playerid, DeathText);
+	TextDrawHideForPlayer(playerid, DeathButton);
 	return 1;
+}
+
+hook OnPlayerDisconnect(playerid, reason)
+{
+	death_Dying[playerid] = false;
 }
 
 public OnPlayerDeath(playerid, killerid, reason)
 {
 	if(GetTickCountDifference(GetTickCount(), death_LastDeath[playerid]) < 1000)
-		return -1;
+		return 0;
 
 	death_LastDeath[playerid] = GetTickCount();
 
@@ -78,8 +84,8 @@ _OnDeath(playerid, killerid)
 	if(IsPlayerInAnyVehicle(playerid))
 	{
 		RemovePlayerFromVehicle(playerid);
-		TogglePlayerSpectating(playerid, true);
-		TogglePlayerSpectating(playerid, false);
+		//TogglePlayerSpectating(playerid, true);
+		//TogglePlayerSpectating(playerid, false);
 		death_PosZ[playerid] += 0.5;
 	}
 	
@@ -156,6 +162,9 @@ _OnDeath(playerid, killerid)
 		}
 	}
 
+
+	//CreateDynamic3DTextLabel(deathreasonstring, -1, death_PosX[playerid], death_PosY[playerid], death_PosZ[playerid] - 0.1, 2.0);
+
 	//CreateGravestone(playerid, deathreasonstring, death_PosX[playerid], death_PosY[playerid], death_PosZ[playerid] - ITEM_FLOOR_OFFSET, death_RotZ[playerid]);
 
 	return 1;
@@ -169,7 +178,7 @@ DropItems(playerid, Float:x, Float:y, Float:z)
 	new Float:cx, Float:cy, Float:cz;
 	CA_RayCastLine(x, y, z, x, y, z - 600.0, cx, cy, cz);
 
-	itemid = CreateItem(ItemType:item_Torso,  cx, cy, cz + 0.2);
+	itemid = CreateItem(ItemType:item_Torso,  cx, cy, cz + 0.2, .world = GetPlayerVirtualWorld(playerid), .interior = GetPlayerInterior(playerid));
 
 	// Head
 	//CreateDynamicObject(2908, cx, cy, cz + 0.2, 0.0, 0.0, 0.0);
@@ -196,6 +205,16 @@ DropItems(playerid, Float:x, Float:y, Float:z)
 	format(name, sizeof(name), "Body of %s", name);
 	SetContainerName(containerid, name);
 	SetItemLabel(itemid, name);
+	
+	/*
+		Clothes item
+	*/
+
+	itemid = CreateItem(item_Clothes);
+
+	SetItemExtraData(itemid, GetPlayerClothes(playerid));
+
+	AddItemToContainer(containerid, itemid);
 	
 	/*
 		Held item
@@ -292,16 +311,6 @@ DropItems(playerid, Float:x, Float:y, Float:z)
 		AddItemToContainer(containerid, itemid);
 		SetPlayerCuffs(playerid, false);
 	}
-
-	/*
-		Clothes item
-	*/
-
-	itemid = CreateItem(item_Clothes);
-
-	SetItemExtraData(itemid, GetPlayerClothes(playerid));
-
-	AddItemToContainer(containerid, itemid);
 	
 	return;
 }
@@ -310,9 +319,7 @@ hook OnPlayerSpawn(playerid)
 {
 	if(IsPlayerDead(playerid))
 	{
-		TogglePlayerSpectating(playerid, true);
 		TogglePlayerControllable(playerid, false);
-
 		defer SetDeathCamera(playerid);
 
 		SetPlayerCameraPos(playerid,
@@ -335,6 +342,10 @@ timer SetDeathCamera[500](playerid)
 	if(!IsPlayerDead(playerid))
 		return;
 
+	TogglePlayerSpectating(playerid, true);
+
+	SelectTextDraw(playerid, 0xFFFFFF88);
+	
 	InterpolateCameraPos(playerid,
 		death_PosX[playerid] - floatsin(-death_RotZ[playerid], degrees),
 		death_PosY[playerid] - floatcos(-death_RotZ[playerid], degrees),
@@ -375,7 +386,7 @@ hook OnPlayerClickTextDraw(playerid, Text:clickedid)
 	return 1;
 }
 
-timer SpawnDeathDelay[1500](playerid)
+timer SpawnDeathDelay[1200](playerid)
 	SpawnLoggedInPlayer(playerid);
 
 hook OnGameModeInit()

@@ -204,6 +204,10 @@ _DisplaySafeboxDialog(playerid, Item:itemid, animation)
 
 	new Container:containerid;
 	GetItemArrayDataAtCell(itemid, _:containerid, 0);
+
+	if(box_ContainerSafebox[containerid] != itemid)
+		return 0;
+		
 	DisplayContainerInventory(playerid, containerid);
 	box_CurrentBoxItem[playerid] = itemid;
 
@@ -231,6 +235,7 @@ hook OnPlayerPickUpItem(playerid, Item:itemid)
 	{
 		return Y_HOOKS_BREAK_RETURN_1;
 	}
+	
 	return Y_HOOKS_CONTINUE_RETURN_1;
 }
 

@@ -49,14 +49,17 @@ atr_PosCheck(playerid, Float:x, Float:y, Float:z)
 
 	if(atr_Check[playerid])
 	{
-		if(CA_RayCastLine(x, y, z, x, y, z + 600.0, tmp, tmp, tmp))
+		if(GetPlayerCurrentInt(playerid) != -1)
 		{
-			if(atr_Check[playerid] >= 50)
+			GetPropertyExit( GetPlayerCurrentInt(playerid), atr_SetX[playerid], atr_SetY[playerid], atr_SetZ[playerid] );
+		}
+		else if(CA_RayCastLine(x, y, z, x, y, z + 600.0, tmp, tmp, tmp))
+		{
+			if(atr_Check[playerid] == 50 || atr_Check[playerid] == 100)
 			{
 				new name[MAX_PLAYER_NAME];
 				GetPlayerName(playerid, name, MAX_PLAYER_NAME);
 				ReportPlayer(name, "Atravessou algum objeto", -1, "Anti-Raid", x, y, z, GetPlayerVirtualWorld(playerid), GetPlayerInterior(playerid), "");
-				atr_Check[playerid] = 1;
 			}
 			atr_Check[playerid] ++;
 			return 1;
@@ -66,9 +69,10 @@ atr_PosCheck(playerid, Float:x, Float:y, Float:z)
 		atr_SetY[playerid] = y;
 		atr_SetZ[playerid] = z;
 	}
-	else if(CA_RayCastLine(atr_SetX[playerid] + 0.2, atr_SetY[playerid] + 0.2, atr_SetZ[playerid] + 0.6, x - 0.2, y - 0.2, z - 0.6, tmp, tmp, tmp))
+	else if(CA_RayCastLine(atr_SetX[playerid] + 0.15, atr_SetY[playerid] + 0.15, atr_SetZ[playerid] + 0.3, x - 0.15, y - 0.15, z - 0.3, tmp, tmp, tmp))
 	{
 		atr_Check[playerid] = 1;
+		StopHoldAction(playerid);
 		return 1;
 	}
 	else {
@@ -91,13 +95,17 @@ hook OnPlayerLoad(playerid, filename[])
 	new data[1];
 	modio_read(filename, _T<A,R,A,D>, 1, data);
 
+	atr_Check[playerid] = data[0];
 	stop AntiRaidTimer[playerid];
-	AntiRaidTimer[playerid] = defer SetPlayerAntiRaid(playerid, data[0]);
+	AntiRaidTimer[playerid] = defer SetPlayerAntiRaid(playerid, data[0], 0);
 }
 
-timer SetPlayerAntiRaid[3000](playerid, check)
+timer SetPlayerAntiRaid[500](playerid, check, timer)
 {
 	atr_Check[playerid] = check;
+
+	if(timer < 5)
+		AntiRaidTimer[playerid] = defer SetPlayerAntiRaid(playerid, check, timer + 1);	
 }
 
 //SetPlayerPos
@@ -114,6 +122,14 @@ ORPC:12(playerid, BitStream:bs){
 	);
 
 	return 1;
+}
+
+public OnPlayerInteriorChange(playerid, newinteriorid, oldinteriorid)
+{
+	if(newinteriorid != 0)
+		GetPropertyExit( GetPlayerCurrentInt(playerid), atr_SetX[playerid], atr_SetY[playerid], atr_SetZ[playerid] );
+
+    return 1;
 }
 
 // GiveTakeDamage

@@ -17,7 +17,7 @@
 
 
 static
-	Item:arm_PlayerArmourItem[MAX_PLAYERS];
+	Item:arm_PlayerArmourItem[MAX_PLAYERS] = {INVALID_ITEM_ID, ...};
 
 
 hook OnItemTypeDefined(uname[])

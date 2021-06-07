@@ -23,7 +23,7 @@
 ==============================================================================*/
 
 
-#define MAX_CONSTRUCT_SET (48)
+#define MAX_CONSTRUCT_SET (50)
 #define MAX_CONSTRUCT_SET_ITEMS (BTN_MAX_INRANGE)
 
 
@@ -272,7 +272,7 @@ hook OnHoldActionFinish(playerid)
 		PlayerGainSkillExperience(playerid, uniqueid);
 
 		if(cons_Data[cons_CraftsetConstructSet[cons_Constructing[playerid]]][cons_defence])
-			ConvertItemToDefenceItem(itemid, 0);
+			ConvertItemToDefenceItem(itemid);
 
 		if(cons_Data[cons_CraftsetConstructSet[cons_Constructing[playerid]]][cons_tweak])
 			TweakItem(playerid, itemid);

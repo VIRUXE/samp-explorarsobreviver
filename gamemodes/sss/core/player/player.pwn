@@ -151,11 +151,14 @@ timer LoadAccountDelay[5000](playerid)
 		return;
 	}
 
-	if(!IsPlayerInWhitelist(playerid))
+	if(IsWhitelistActive() && !IsWhitelistAuto())
 	{
-		WhitelistWarn(playerid);
-		defer LoadAccountDelay(playerid);
-		return;
+		if(!IsPlayerInWhitelist(playerid))
+		{
+			WhitelistWarn(playerid);
+			defer LoadAccountDelay(playerid);
+			return;
+		}
 	}
 
 	new Error:e = LoadAccount(playerid);
@@ -324,7 +327,7 @@ public OnPlayerRequestSpawn(playerid)
 
 	SetSpawnInfo(playerid, 0, 0, DEFAULT_POS_X, DEFAULT_POS_Y, DEFAULT_POS_Z, 0.0, 0, 0, 0, 0, 0, 0);
 
-	return 1;
+	return 0;
 }
 
 public OnPlayerClickTextDraw(playerid, Text:clickedid)
@@ -361,7 +364,7 @@ public OnPlayerSpawn(playerid)
 
 	PlayerPlaySound(playerid, 1186, 0.0, 0.0, 0.0);
 	PreloadPlayerAnims(playerid);
-	SetAllWeaponSkills(playerid, 500);
+
 	Streamer_Update(playerid);
 
 	return 1;

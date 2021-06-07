@@ -30,9 +30,9 @@ Float:		bl_posY
 static
 Float:		bod_UIWidth		[MAX_PLAYERS] = {120.0, ...},
 Float:		bod_UIPositionX	[MAX_PLAYERS] = {70.0, ...},
-Float:		bod_UIPositionY	[MAX_PLAYERS] = {120.0, ...},
-Float:		bod_UIFontSizeX	[MAX_PLAYERS] = {0.2, ...},
-Float:		bod_UIFontSizeY	[MAX_PLAYERS] = {1.0, ...},
+Float:		bod_UIPositionY	[MAX_PLAYERS] = {150.0, ...},
+Float:		bod_UIFontSizeX	[MAX_PLAYERS] = {0.25, ...},
+Float:		bod_UIFontSizeY	[MAX_PLAYERS] = {1.05, ...},
 PlayerText:	bod_Header		[MAX_PLAYERS] = {PlayerText:INVALID_TEXT_DRAW, ...},
 PlayerText:	bod_Background	[MAX_PLAYERS] = {PlayerText:INVALID_TEXT_DRAW, ...},
 PlayerText:	bod_Footer		[MAX_PLAYERS] = {PlayerText:INVALID_TEXT_DRAW, ...},
@@ -67,7 +67,7 @@ CreateBodyPreviewUI(playerid)
 	bod_Header[playerid]			=CreatePlayerTextDraw(playerid, bod_UIPositionX[playerid], bod_UIPositionY[playerid], "Health status and wounds");
 	PlayerTextDrawAlignment			(playerid, bod_Header[playerid], 2);
 	PlayerTextDrawFont				(playerid, bod_Header[playerid], 1);
-	PlayerTextDrawLetterSize		(playerid, bod_Header[playerid], 0.2, 1.0);
+	PlayerTextDrawLetterSize		(playerid, bod_Header[playerid], bod_UIFontSizeX[playerid], bod_UIFontSizeY[playerid]);
 	PlayerTextDrawColor				(playerid, bod_Header[playerid], -1);
 	PlayerTextDrawSetOutline		(playerid, bod_Header[playerid], 0);
 	PlayerTextDrawSetProportional	(playerid, bod_Header[playerid], 1);
@@ -90,13 +90,13 @@ CreateBodyPreviewUI(playerid)
 	bod_Footer[playerid]			=CreatePlayerTextDraw(playerid, bod_UIPositionX[playerid], bod_UIPositionY[playerid] + 204.0, "Not Healthy");
 	PlayerTextDrawAlignment			(playerid, bod_Footer[playerid], 2);
 	PlayerTextDrawFont				(playerid, bod_Footer[playerid], 1);
-	PlayerTextDrawLetterSize		(playerid, bod_Footer[playerid], 0.2, 1.0);
+	PlayerTextDrawLetterSize		(playerid, bod_Footer[playerid],bod_UIFontSizeX[playerid], bod_UIFontSizeY[playerid]);
 	PlayerTextDrawColor				(playerid, bod_Footer[playerid], -1);
 	PlayerTextDrawSetOutline		(playerid, bod_Footer[playerid], 0);
 	PlayerTextDrawSetProportional	(playerid, bod_Footer[playerid], 1);
 	PlayerTextDrawSetShadow			(playerid, bod_Footer[playerid], 1);
 	PlayerTextDrawUseBox			(playerid, bod_Footer[playerid], 1);
-	PlayerTextDrawTextSize			(playerid, bod_Footer[playerid], 0.000000, bod_UIWidth[playerid]);
+	PlayerTextDrawTextSize			(playerid, bod_Footer[playerid], 0.0, bod_UIWidth[playerid]);
 
 	bod_BodyPreview[playerid]		=CreatePlayerTextDraw(playerid, bod_UIPositionX[playerid] - (bod_UIWidth[playerid] * 0.666666667), bod_UIPositionY[playerid] + 10.0, "~n~");
 	PlayerTextDrawAlignment			(playerid, bod_BodyPreview[playerid], 2);

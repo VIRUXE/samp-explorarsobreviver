@@ -17,8 +17,8 @@ public DCC_OnMessageCreate(DCC_Message:message)
         msg[24],
         user_id[DCC_ID_SIZE],
         user_name[DCC_USERNAME_SIZE],
-        bool:is_bot,
-        color = RED;
+        bool:is_bot;//,
+        //color = RED;
 
     DCC_GetMessageId(DCC_Message:message, dest);
     DCC_GetMessageChannel(DCC_Message:message, channel);
@@ -30,10 +30,29 @@ public DCC_OnMessageCreate(DCC_Message:message)
     DCC_IsUserBot(author, is_bot);
     
     if(is_bot)
+        return 0;
+
+    if(strfind(msg, "/tab", true) == 0)
+    {
+        new DCC_Embed:embed = DCC_CreateEmbed();
+
+        DCC_SetEmbedTitle(embed, "Jogadores online");
+
+        foreach(new i : Player)
+        {
+            DCC_AddEmbedField(embed, "id",      sprintf("%d", i), true);
+            DCC_AddEmbedField(embed, "name",    sprintf("%p", i), true);
+            DCC_AddEmbedField(embed, "score",   sprintf("%d", GetPlayerScore(i)), true);
+            DCC_AddEmbedField(embed, "ping",    sprintf("%d", GetPlayerPing(i)), true);
+        }
+            
+        //DCC_SetEmbedColor(embed, GREEN);
+        DCC_SendChannelEmbedMessage(channel, embed, "");
+        //DCC_DeleteMessage(DCC_Message:message);
         return 1;
+    }
 
-
-    if(!strcmp(msg, "/status ", false))
+    if(strfind(msg, "/status ", true) != -1)
     {
         strdel(msg, 0, 8);
         
@@ -41,15 +60,16 @@ public DCC_OnMessageCreate(DCC_Message:message)
 
         if(!IsPlayerConnected(id))
             return 1;
-            
-        new sName[MAX_PLAYER_NAME];
-        GetPlayerName(id, sName, MAX_PLAYER_NAME);
-
-        new DCC_Embed:emb = DCC_CreateEmbed(sName,
-            sprintf("%p - ID: %d  -  Score: %d", id, id, GetPlayerScore(id)),
-           "", "", YELLOW, "", "", sprintf("https://assets.open.mp/assets/images/skins/%d.png", GetPlayerSkin(id)));
-
-        DCC_SendChannelEmbedMessage(channel, emb, "Player Status");
+ 
+        new DCC_Embed:embed = DCC_CreateEmbed();
+        DCC_SetEmbedTitle(embed, sprintf("%p(id:%d)", id, id));
+        DCC_SetEmbedThumbnail(embed, sprintf("https://assets.open.mp/assets/images/skins/%d.png", GetPlayerSkin(id)));
+        DCC_AddEmbedField(embed, "Score", sprintf("%d", GetPlayerScore(id)), true);
+        DCC_AddEmbedField(embed, "Ping", sprintf("%d", GetPlayerPing(id)), true);
+        //DCC_SetEmbedColor(embed, YELLOW);
+        DCC_SendChannelEmbedMessage(channel, embed, "", "OnPostPlayerStat", "i", id);
+        //DCC_DeleteMessage(DCC_Message:message);
+        return 1;
     }
     else if(channel == whitelist)
     {
@@ -85,7 +105,7 @@ public DCC_OnMessageCreate(DCC_Message:message)
             }
             else
             {
-                color = GREEN;
+                //color = GREEN;
                 AddNameToWhitelist(msg, true);
                 AddNameToWhitelist(user_id);
 
@@ -95,11 +115,22 @@ public DCC_OnMessageCreate(DCC_Message:message)
             }
         }
 
-        DCC_SendChannelEmbedMessage(DCC_Channel:channel,
-            DCC_CreateEmbed(user_name, str, "", "", color), "[WhiteList]");
+        DCC_SendChannelMessage(DCC_Channel:channel, str);
+
+        //DCC_SendChannelEmbedMessage(DCC_Channel:channel,
+            //DCC_CreateEmbed(user_name, str, "", "", color), "[WhiteList]");
 
         DCC_DeleteMessage(DCC_Message:message);
-        return 0;
+        return 1;
     }
     return 1;
+}
+
+forward OnPostPlayerStat(playerid);
+public OnPostPlayerStat(playerid)
+{
+	/*new DCC_Message:message = DCC_GetCreatedMessage();
+    DCC_CreateReaction(message, DCC_CreateEmoji(":ES:"));
+    DCC_CreateReaction(message, DCC_CreateEmoji("🔨"));   
+//	DCC_SetMessagePersistant(message, true);*/
 }

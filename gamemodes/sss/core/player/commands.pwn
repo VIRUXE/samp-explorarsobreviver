@@ -12,7 +12,6 @@
 
 ==============================================================================*/
 
-
 CMD:help(playerid, params[])
 {
 	Dialog_Show(playerid, DIALOG_STYLE_MSGBOX, "General Information", ls(playerid, "GENCOMDHELP"), "Close", "");

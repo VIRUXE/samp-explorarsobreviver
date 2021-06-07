@@ -65,7 +65,7 @@
 
 // SS/item
 #define MAX_ITEM						Item:32768
-#define MAX_ITEM_TYPE					(ItemType:302)
+#define MAX_ITEM_TYPE					(ItemType:306)
 #define MAX_ITEM_NAME					(20)
 #define MAX_ITEM_TEXT					(64)
 #define MAX_CONTAINER_SLOTS				(100)
@@ -76,6 +76,8 @@
 #pragma warning disable 208 // TODO: Fix reparse issues and remove!
 #pragma dynamic 64000
 
+#pragma warning disable 214 // Temporary fix remove const warning
+#pragma warning disable 239 // Temporary fix remove const warning
 
 /*==============================================================================
 
@@ -124,32 +126,39 @@ public OnGameModeInit()
 
 ==============================================================================*/
 
-#include <crashdetect>				// By Zeex					https://github.com/Zeex/samp-plugin-crashdetect
-#include <sscanf2>					// By Y_Less:				https://github.com/maddinat0r/sscanf
-#include <Pawn.RakNet>              // By urShadow:             https://github.com/urShadow/Pawn.RakNet
-#include <PawnPlus>					// By IllidanS4:			https://github.com/IllidanS4/PawnPlus
-#include <advanced_kicks>			// By Mergevos:				https://github.com/Mergevos/samp-advanced-kicks
-#include <YSI_Core\y_utils>			// By Y_Less, 4:			https://github.com/Misiur/YSI-Includes
+#include <crashdetect>
+#include <sscanf2>
+
+#include <YSI_Core\y_utils>
 #include <YSI_Coding\y_va>
 #include <YSI_Coding\y_timers>
 #include <YSI_Coding\y_hooks>
 #include <YSI_Coding\y_iterate>
 #include <YSI_Storage\y_ini>
 #include <YSI_Visual\y_dialog>
+
+#undef IsNaN // Temporary fix
+
 #include "sss\core\server\hooks.pwn"// Internal library for hooking functions before they are used in external libraries.
-#include <ColAndreas>               // By Pottus:               https://github.com/Pottus/ColAndreas
-#include <streamer>					// By Incognito, v2.8.2:	https://github.com/samp-incognito/samp-streamer-plugin/releases/tag/v2.82
-#include <sqlitei>					// By Slice, v0.9.7:		https://github.com/oscar-broman/sqlitei
-#include <formatex>					// By Slice:				http://forum.sa-mp.com/showthread.php?t=313488
-#include <strlib>					// By Slice:				https://github.com/oscar-broman/strlib
-#include <md-sort>					// By Slice:				https://github.com/oscar-broman/md-sort
-#include <chrono>					// By Southclaws:			https://github.com/Southclaws/pawn-chrono
-#include <progress2>				// By Toribio/Southclaws:	https://github.com/Southclaws/progress2
-#include <fsutil>					// By Southclaws:			https://github.com/Southclaws/pawn-fsutil
-#include <mobile>             		// By Jekmant
-#include <PreviewModelDialog>       // By Agneese-Saini			https://github.com/Agneese-Saini/SA-MP/blob/master/pawno/include/PreviewModelDialog
-#include <ini>						// By Southclaws:			https://github.com/Southclaws/SimpleINI
-#include <modio>					// By Southclaws:			https://github.com/Southclaws/modio
+
+#include <PreviewModelDialog>
+#include <Pawn.RakNet>
+#include <PawnPlus>
+#include <advanced_kicks>
+#include <ColAndreas> 
+#include <streamer>
+#include <nex-ac>
+#include <sqlitei>
+#include <formatex>
+#include <strlib>
+#include <md-sort>
+#include <chrono>
+#include <progress2>
+#include <eSelection>
+#include <fsutil>
+#include <mobile>
+#include <ini>
+#include <modio>
 #include <personal-space>
 #include <button>
 #include <door>
@@ -162,19 +171,17 @@ public OnGameModeInit()
 #include <container-dialog>
 #include <craft>
 #include <debug-labels>
-#include <weapon-data>				// By Southclaws:			https://github.com/Southclaws/AdvancedWeaponData
-#include <linegen>					// By Southclaws:			https://github.com/Southclaws/Line
-#include <zipline>					// By Southclaws:			https://github.com/Southclaws/Zipline
-#include <ladders>					// By Southclaws:			https://github.com/Southclaws/Ladder
-#include <nex-ac>					// By NexiusTailer:			https://github.com/NexiusTailer/Nex-AC
-#include <attachment-fix>           // By BrunoBM16:            https://github.com/Jelly23/Proper-attachments-fix
-#include <optud>             		// By BrunoBM16:          	https://github.com/Jelly23/OnPlayerTurnUpsideDown
-#include <BustAim>             		// By YashasSamaga:         https://github.com/YashasSamaga/BustAim-AntiAimbfot
-#include <discord-connector>		// By maddinat0r:			https://github.com/maddinat0r/samp-discord-connector
-//#include<tgconnector>				// By Sreyas-Sreelal		https://github.com/Sreyas-Sreelal/tgconnector
+#include <weapon-data>
+#include <linegen>
+#include <zipline>
+#include <ladders>
+#include <attachment-fix>
+#include <optud>
+#include <BustAim>
+#include <discord-connector>
 
 native WP_Hash(buffer[], len, const str[]);
-									// By Y_Less:				https://github.com/Southclaws/samp-whirlpool
+
 
 /*==============================================================================
 
@@ -469,6 +476,7 @@ new stock
 #include "sss/core/player/recipes.pwn"
 //#include "sss/core/player/widescreen.pwn"
 #include "sss/core/player/name-tags.pwn"
+#include "sss/core/player/score.pwn"
 //#include "sss/core/player/friend.pwn" // By Kolorado
 
 // CHARACTER SCRIPTS
@@ -509,7 +517,7 @@ new stock
 //#include "sss/core/ui/watch.pwn"
 #include "sss/core/ui/keypad.pwn"
 #include "sss/core/ui/body-preview.pwn"
-#include "sss/core/ui/status.pwn"
+//#include "sss/core/ui/status.pwn"
 
 // WORLD ENTITIES
 #include "sss/core/world/fuel.pwn"
@@ -519,6 +527,7 @@ new stock
 #include "sss/core/world/item-tweak.pwn"
 
 // ITEM TYPE CATEGORIES
+#include "sss/core/itemtype/tent.pwn"
 #include "sss/core/itemtype/defences.pwn"
 #include "sss/core/itemtype/furniture.pwn"
 #include "sss/core/itemtype/liquid-container.pwn"
@@ -558,7 +567,7 @@ new stock
 #include "sss/core/item/largeframe.pwn"
 #include "sss/core/item/barbecue.pwn"
 #include "sss/core/item/campfire.pwn"
-#include "sss/core/item/tent.pwn"
+//#include "sss/core/item/tent.pwn"
 #include "sss/core/item/sign.pwn"
 #include "sss/core/item/workbench.pwn"
 #include "sss/core/item/scrap-machine.pwn"

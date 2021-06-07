@@ -115,7 +115,7 @@ hook OnItemNameRender(Item:itemid, ItemType:itemtype)
 
 hook OnPlayerKeyStateChange(playerid, newkeys, oldkeys)
 {
-	if(newkeys == 16)
+	if(newkeys & 16)
 	{
 		new Item:itemid = GetPlayerItem(playerid);
 

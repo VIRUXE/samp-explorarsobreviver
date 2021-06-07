@@ -44,8 +44,9 @@ stock TeleportPlayerToPlayer(playerid, targetid)
 		py -= floatcos(-ang, degrees);
 	}
 
-	SetPlayerVirtualWorld(playerid, virtualworld);
 	SetPlayerInterior(playerid, interior);
+	SetPlayerVirtualWorld(playerid, virtualworld);
+	
 
 	if(IsPlayerInAnyVehicle(playerid))
 	{

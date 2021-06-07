@@ -1,5 +1,181 @@
 #include <YSI_Coding\y_hooks>
 
+
+/*==============================================================================
+
+	Anti Infinity Run
+
+==============================================================================*/
+
+new Timer:IsPlayerRunning[MAX_PLAYERS], sprintcount[MAX_PLAYERS];
+
+hook OnPlayerSpawn(playerid)
+{
+	stop IsPlayerRunning[playerid];
+	sprintcount[playerid] = 0;
+}
+
+hook OnPlayerUpdate(playerid)
+{
+	if(GetPlayerAnimationIndex(playerid) == 1266)
+	{
+		stop IsPlayerRunning[playerid];
+		sprintcount[playerid] = 0;
+		IsPlayerRunning[playerid] = defer CheckPlayerRun(playerid);
+	}
+	if(GetPlayerAnimationIndex(playerid) == 471)
+	{
+		stop IsPlayerRunning[playerid];
+		sprintcount[playerid] = 0;
+	}
+
+	if(GetPlayerTotalVelocity(playerid) == 0 && sprintcount[playerid] > 0)
+		sprintcount[playerid]--;
+
+	return 1;
+}
+
+timer CheckPlayerRun[1000](playerid)
+{
+	if(!IsPlayerConnected(playerid))
+		return;
+
+	sprintcount[playerid] ++;
+
+	if(sprintcount[playerid] == 70)
+	{
+		new
+			name[MAX_PLAYER_NAME],
+			Float:px,
+			Float:py,
+			Float:pz;
+
+		GetPlayerName(playerid, name, MAX_PLAYER_NAME);
+		GetPlayerPos(playerid, px, py, pz);
+
+		ReportPlayer(name, "Infinity Run Test", -1, "InfinityRun", px, py, pz, GetPlayerVirtualWorld(playerid), GetPlayerInterior(playerid), "");
+
+		ChatMsgAdmins(3, RED, "[Anti-Infinity Run Test] %p(%d) detected with infinity run mod. Velocity: %0.1f", playerid, playerid, GetPlayerTotalVelocity(playerid));
+	}
+}
+
+/*==============================================================================
+
+	Anti Wallhack
+
+==============================================================================*/
+
+// WorldPlayerAdd
+/*ORPC:32(playerid, BitStream:bs)
+{
+	new streamid;
+    BS_ReadValue(bs, PR_UINT16, streamid);
+
+	defer CheckPlayersStream(playerid, streamid);
+	
+
+	return 1;
+}*/
+
+timer CheckPlayersStream[100](playerid, streamid)
+{
+	if(!IsPlayerStreamedIn(playerid, streamid))
+		return;
+
+	new BitStream:bsn = BS_New();
+	BS_WriteValue(bsn, PR_UINT16, streamid, PR_UINT8, 14, PR_STRING, "Digite_Lock2", PR_UINT8, 1);
+	PR_SendRPC(bsn, playerid, 11); //SetPlayerName
+	BS_Delete(bsn);
+	return;
+}
+
+// WorldPlayerRemove
+ORPC:163(playerid, BitStream:bs)
+{
+	new streamid;
+    BS_ReadValue(bs, PR_UINT16, streamid);
+    
+	new BitStream:bsn = BS_New(), name[MAX_PLAYER_NAME];
+	GetPlayerName(streamid, name, MAX_PLAYER_NAME);
+	BS_WriteValue(bsn, PR_UINT16, streamid, PR_UINT8, sizeof(name), PR_STRING, name, PR_UINT8, 1);
+	PR_SendRPC(bsn, playerid, 11); //SetPlayerName
+	BS_Delete(bsn);
+	return 1;
+}
+
+
+// UpdateScoresAndPings
+IRPC:155(playerid, BitStream:bs)
+{
+	new wPlayerID, score, PlayerTarget;
+	BS_ReadValue(bs,
+		PR_UINT16, wPlayerID,
+		PR_UINT32, score,
+		PR_UINT32, PlayerTarget
+	);
+
+	new BitStream:bsu = BS_New();
+	BS_WriteValue(bsu,
+		PR_UINT16, wPlayerID,
+		PR_UINT32, score,
+		PR_UINT32, PlayerTarget
+	);
+
+	PR_SendRPC(bsu, playerid, 155);
+	BS_Delete(bsu);
+
+	return 0;
+}
+
+CMD:lock2(playerid, params[])
+{
+	new name[24], Float:Pos[3];
+
+	GetPlayerName(playerid, name, 24);
+	GetPlayerPos(playerid, Pos[0], Pos[1], Pos[2]);
+
+	ReportPlayer(name, "WallHack", -1, "WallHack", Pos[0], Pos[1], Pos[2], GetPlayerVirtualWorld(playerid), GetPlayerInterior(playerid), sprintf("%.1f, %.1f, %.1f", Pos[0], Pos[1], Pos[2]) );
+	
+	return 0;
+}
+
+/*==============================================================================
+
+	Test
+
+==============================================================================*/
+
+/*
+public OnIncomingRawPacket(playerid, packetid, BitStream:bs)
+{
+	if(IsPlayerConnected(playerid))
+	{
+		static const valid_packets[] = {
+			6, 14, 19, 23, 28, 30, 31, 36, 55, 207, 208, 209,
+			210,211, 212, 203, 200, 201, 202, 204, 205, 206
+		};
+
+		new bool:isvalidpacket;
+
+		for(new i = 0; i < sizeof(valid_packets); i++)
+			if(packetid == valid_packets[i])
+				isvalidpacket = true;
+
+		if(!isvalidpacket)
+		{
+			//return 0;
+		}
+	}
+	return 1;
+}*/
+
+
+/*==============================================================================
+
+	Nex-AntiCheat
+
+==============================================================================*/
+
 static NexCheatName[53][45] = {
 	{"AirBreak(onfoot)"},
 	{"AirBreak(in vehicle)"},
@@ -68,6 +244,10 @@ public OnCheatDetected(playerid, const ip_address[], type, code)
 		if(IsPlayerInTutorial(playerid) || IsPlayerOnAdminDuty(playerid))
 			return 1;
 
+		
+		if(gServerInitialising || GetTickCountDifference(GetTickCount(), gServerInitialiseTick) < 5000)
+			return 1;
+			
 		switch(code)
 		{
 			case 40: SendClientMessage(playerid, AC_DEFAULT_COLOR, MAX_CONNECTS_MSG);
@@ -82,7 +262,12 @@ public OnCheatDetected(playerid, const ip_address[], type, code)
 				ReportPlayer(name, NexCheatName[code], -1, "NEX-AC", Pos[0], Pos[1], Pos[2], GetPlayerVirtualWorld(playerid), GetPlayerInterior(playerid), sprintf("%.1f, %.1f, %.1f", Pos[0], Pos[1], Pos[2]) );
 			}
 		}
-		//AntiCheatKickWithDesync(playerid, code);
+
+		if(IsPlayerDataLoaded(playerid))
+		{
+			//ChatMsg(playerid, RED, "Você foi kickado por suspeita de %s.", NexCheatName[code]);
+			//AntiCheatKickWithDesync(playerid, code);
+		}
 	}
 	return 1;
 }
@@ -95,7 +280,7 @@ public OnCheatWarning(playerid, const ip_address[], type, code, code2, count)
 		if(IsPlayerInTutorial(playerid) || IsPlayerOnAdminDuty(playerid))
 			return 1;
 			
-		ChatMsgAdmins(1, RED,
+		ChatMsgAdmins(6, RED,
 			"[NEX Anti-Cheat] AVISO: %P(id:%d) "C_RED"foi detectado sutilmente com %s",
 				playerid, playerid, NexCheatName[code]);
 	}
@@ -273,6 +458,9 @@ ptask UpdatePlayerPSU[500](playerid)
 
 hook OnPlayerStateChange(playerid, newstate, oldstate)
 {
+	if(GetPlayerAdminLevel(playerid) != 0)
+		return 1;
+		
 	if(newstate == PLAYER_STATE_DRIVER)
 	{
 		new

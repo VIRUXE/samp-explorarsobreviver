@@ -280,6 +280,7 @@ PlayerSpawnNewCharacter(playerid, gender)
 	SetPlayerTotalSpawns(playerid, GetPlayerTotalSpawns(playerid) + 1);
 
 	SetAccountLastSpawnTimestamp(name, gettime());
+
 	SetAccountTotalSpawns(name, GetPlayerTotalSpawns(playerid));
 
 	new

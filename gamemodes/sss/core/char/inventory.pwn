@@ -24,37 +24,26 @@
 static
 	inv_GearActive[MAX_PLAYERS],
 	inv_HealthInfoActive[MAX_PLAYERS],
-
 	PlayerText:GearSlot_Head[3],
 	PlayerText:GearSlot_Face[3],
 	PlayerText:GearSlot_Hand[3],
 	PlayerText:GearSlot_Hols[3],
 	PlayerText:GearSlot_Tors[3],
 	PlayerText:GearSlot_Back[3],
-
 	Container:inv_TempContainerID[MAX_PLAYERS],
 	inv_InventoryOptionID[MAX_PLAYERS];
 
-/*
-	inv_GearSlot_Head[MAX_PLAYERS],
-	inv_GearSlot_Face[MAX_PLAYERS],
-	inv_GearSlot_Hand[MAX_PLAYERS],
-	inv_GearSlot_Hols[MAX_PLAYERS],
-	inv_GearSlot_Tors[MAX_PLAYERS],
-	inv_GearSlot_Back[MAX_PLAYERS],
-*/
 
 forward CreatePlayerTile(playerid, &PlayerText:title, &PlayerText:tile, &PlayerText:item, Float:x, Float:y, Float:width, Float:height, colour, overlaycolour);
 
-
 hook OnPlayerConnect(playerid)
 {
-	CreatePlayerTile(playerid, GearSlot_Head[0], GearSlot_Head[1], GearSlot_Head[2], 505.0, 120.0, 60.0, 60.0, 0xFFFFFF08, 0xFFFFFFFF);
-	CreatePlayerTile(playerid, GearSlot_Face[0], GearSlot_Face[1], GearSlot_Face[2], 575.0, 120.0, 60.0, 60.0, 0xFFFFFF08, 0xFFFFFFFF);
-	CreatePlayerTile(playerid, GearSlot_Hand[0], GearSlot_Hand[1], GearSlot_Hand[2], 505.0, 230.0, 60.0, 60.0, 0xFFFFFF08, 0xFFFFFFFF);
-	CreatePlayerTile(playerid, GearSlot_Hols[0], GearSlot_Hols[1], GearSlot_Hols[2], 575.0, 230.0, 60.0, 60.0, 0xFFFFFF08, 0xFFFFFFFF);
-	CreatePlayerTile(playerid, GearSlot_Tors[0], GearSlot_Tors[1], GearSlot_Tors[2], 505.0, 340.0, 60.0, 60.0, 0xFFFFFF08, 0xFFFFFFFF);
-	CreatePlayerTile(playerid, GearSlot_Back[0], GearSlot_Back[1], GearSlot_Back[2], 575.0, 340.0, 60.0, 60.0, 0xFFFFFF08, 0xFFFFFFFF);
+	CreatePlayerTile(playerid, GearSlot_Head[0], GearSlot_Head[1], GearSlot_Head[2], 507.0, 120.0, 55.0, 55.0, 0xFFFFFF08, 0xFFFFFFFF);
+	CreatePlayerTile(playerid, GearSlot_Face[0], GearSlot_Face[1], GearSlot_Face[2], 577.0, 120.0, 55.0, 55.0, 0xFFFFFF08, 0xFFFFFFFF);
+	CreatePlayerTile(playerid, GearSlot_Hand[0], GearSlot_Hand[1], GearSlot_Hand[2], 507.0, 230.0, 55.0, 55.0, 0xFFFFFF08, 0xFFFFFFFF);
+	CreatePlayerTile(playerid, GearSlot_Hols[0], GearSlot_Hols[1], GearSlot_Hols[2], 577.0, 230.0, 55.0, 55.0, 0xFFFFFF08, 0xFFFFFFFF);
+	CreatePlayerTile(playerid, GearSlot_Tors[0], GearSlot_Tors[1], GearSlot_Tors[2], 507.0, 340.0, 55.0, 55.0, 0xFFFFFF08, 0xFFFFFFFF);
+	CreatePlayerTile(playerid, GearSlot_Back[0], GearSlot_Back[1], GearSlot_Back[2], 577.0, 340.0, 55.0, 55.0, 0xFFFFFF08, 0xFFFFFFFF);
 
 	PlayerTextDrawSetString(playerid, GearSlot_Head[0], "Head");
 	PlayerTextDrawSetString(playerid, GearSlot_Face[0], "Face");
@@ -63,7 +52,6 @@ hook OnPlayerConnect(playerid)
 	PlayerTextDrawSetString(playerid, GearSlot_Tors[0], "Torso");
 	PlayerTextDrawSetString(playerid, GearSlot_Back[0], "Back");
 }
-
 
 CreatePlayerTile(playerid, &PlayerText:title, &PlayerText:tile, &PlayerText:item, Float:x, Float:y, Float:width, Float:height, colour, overlaycolour)
 {
@@ -115,54 +103,6 @@ ShowPlayerGear(playerid)
 
 	return 1;
 }
-/*
-hook OnPlayerOpenInventory(playerid)
-{
-	if(IsValidItem(GetPlayerBagItem(playerid)))
-		inv_GearSlot_Back[playerid] = AddInventoryListItem(playerid, "Abrir Mochila");
-
-	if(IsValidItem(GetPlayerItem(playerid)))
-		inv_GearSlot_Hand[playerid] = AddInventoryListItem(playerid, "Aguardar item da mão");
-
-	if(IsValidItem(GetPlayerHolsterItem(playerid)))
-		inv_GearSlot_Hols[playerid] = AddInventoryListItem(playerid, "Aguardar item do coldre");
-
-	if(IsValidItem(GetPlayerHatItem(playerid)))
-		inv_GearSlot_Head[playerid] = AddInventoryListItem(playerid, "Remover Acessório da Cabeça");
-
-	if(IsValidItem(GetPlayerMaskItem(playerid)))
-		inv_GearSlot_Face[playerid] = AddInventoryListItem(playerid, "Remover Acessório do Rosto");
-
-	if(IsValidItem(GetPlayerArmourItem(playerid)))
-		inv_GearSlot_Tors[playerid] = AddInventoryListItem(playerid, "Pegar colete");
-
-
-	return Y_HOOKS_CONTINUE_RETURN_0;
-}
-
-hook OnPlayerSelectExtraItem(playerid, item)
-{
-	if(item == inv_GearSlot_Head[playerid])
-		_inv_HandleGearSlotClick_Head(playerid);
-
-	if(item == inv_GearSlot_Face[playerid])
-		_inv_HandleGearSlotClick_Face(playerid);
-
-	if(item == inv_GearSlot_Hand[playerid])
-		_inv_HandleGearSlotClick_Hand(playerid);
-
-	if(item == inv_GearSlot_Hols[playerid])
-		_inv_HandleGearSlotClick_Hols(playerid);
-
-	if(item == inv_GearSlot_Tors[playerid])
-		_inv_HandleGearSlotClick_Tors(playerid);
-
-	if(item == inv_GearSlot_Back[playerid])
-		_inv_HandleGearSlotClick_Back(playerid);
-
-	return Y_HOOKS_CONTINUE_RETURN_0;
-}
-*/
 
 HidePlayerGear(playerid)
 {
@@ -269,7 +209,7 @@ UpdatePlayerGear(playerid, show = 1)
 		GetItemTypeName(GetItemType(itemid), tmp);
 		PlayerTextDrawSetString(playerid, GearSlot_Head[UI_ELEMENT_ITEM], tmp);
 		PlayerTextDrawSetPreviewModel(playerid, GearSlot_Head[UI_ELEMENT_TILE], model);
-		PlayerTextDrawSetPreviewRot(playerid, GearSlot_Head[UI_ELEMENT_TILE], -45.0, 0.0, -45.0, 0.6);
+		PlayerTextDrawSetPreviewRot(playerid, GearSlot_Head[UI_ELEMENT_TILE], 0.0, 0.0, 0.0, 1.0);
 	}
 	else
 	{
@@ -285,7 +225,7 @@ UpdatePlayerGear(playerid, show = 1)
 		GetItemTypeName(GetItemType(itemid), tmp);
 		PlayerTextDrawSetString(playerid, GearSlot_Face[UI_ELEMENT_ITEM], tmp);
 		PlayerTextDrawSetPreviewModel(playerid, GearSlot_Face[UI_ELEMENT_TILE], model);
-		PlayerTextDrawSetPreviewRot(playerid, GearSlot_Face[UI_ELEMENT_TILE], -45.0, 0.0, -45.0, 0.6);
+		PlayerTextDrawSetPreviewRot(playerid, GearSlot_Face[UI_ELEMENT_TILE], 0.0, 0.0, 0.0, 1.0);
 	}
 	else
 	{
@@ -304,7 +244,7 @@ UpdatePlayerGear(playerid, show = 1)
 		format(tmp, sizeof(tmp), "(%02d) %s", size, tmp);
 		PlayerTextDrawSetString(playerid, GearSlot_Hand[UI_ELEMENT_ITEM], tmp);
 		PlayerTextDrawSetPreviewModel(playerid, GearSlot_Hand[UI_ELEMENT_TILE], model);
-		PlayerTextDrawSetPreviewRot(playerid, GearSlot_Hand[UI_ELEMENT_TILE], -45.0, 0.0, -45.0, 0.6);
+		PlayerTextDrawSetPreviewRot(playerid, GearSlot_Hand[UI_ELEMENT_TILE], 0.0, 0.0, 0.0, 1.0);
 	}
 	else
 	{
@@ -323,7 +263,7 @@ UpdatePlayerGear(playerid, show = 1)
 		format(tmp, sizeof(tmp), "(%02d) %s", size, tmp);
 		PlayerTextDrawSetString(playerid, GearSlot_Hols[UI_ELEMENT_ITEM], tmp);
 		PlayerTextDrawSetPreviewModel(playerid, GearSlot_Hols[UI_ELEMENT_TILE], model);
-		PlayerTextDrawSetPreviewRot(playerid, GearSlot_Hols[UI_ELEMENT_TILE], -45.0, 0.0, -45.0, 0.6);
+		PlayerTextDrawSetPreviewRot(playerid, GearSlot_Hols[UI_ELEMENT_TILE], 0.0, 0.0, 0.0, 1.0);
 	}
 	else
 	{
@@ -335,7 +275,7 @@ UpdatePlayerGear(playerid, show = 1)
 	{
 		PlayerTextDrawSetString(playerid, GearSlot_Tors[UI_ELEMENT_ITEM], sprintf("Armour (%.0f)", GetPlayerAP(playerid)));
 		PlayerTextDrawSetPreviewModel(playerid, GearSlot_Tors[UI_ELEMENT_TILE], 19515);
-		PlayerTextDrawSetPreviewRot(playerid, GearSlot_Tors[UI_ELEMENT_TILE], -45.0, 0.0, -45.0, 0.6);
+		PlayerTextDrawSetPreviewRot(playerid, GearSlot_Tors[UI_ELEMENT_TILE], 0.0, 0.0, 0.0, 1.0);
 	}
 	else
 	{
@@ -351,7 +291,7 @@ UpdatePlayerGear(playerid, show = 1)
 		GetItemName(itemid, tmp);
 		PlayerTextDrawSetString(playerid, GearSlot_Back[UI_ELEMENT_ITEM], tmp);
 		PlayerTextDrawSetPreviewModel(playerid, GearSlot_Back[UI_ELEMENT_TILE], model);
-		PlayerTextDrawSetPreviewRot(playerid, GearSlot_Back[UI_ELEMENT_TILE], 0.0, 0.0, -45.0, 0.6);
+		PlayerTextDrawSetPreviewRot(playerid, GearSlot_Back[UI_ELEMENT_TILE], 0.0, 0.0, 0.0, 1.0);
 	}
 	else
 	{
@@ -375,17 +315,8 @@ hook OnPlayerOpenInventory(playerid)
 
 hook OnPlayerCloseInventory(playerid)
 {
-	new Container:containerid;
-	GetPlayerCurrentContainer(playerid, containerid);
-
-	Logger_Dbg("inventory", "OnPlayerCloseInventory",
-		Logger_I("playerid", playerid),
-		Logger_I("container", _:containerid)
-	);
-
 	HidePlayerGear(playerid);
 	HidePlayerHealthInfo(playerid);
-
 	return Y_HOOKS_CONTINUE_RETURN_0;
 }
 
@@ -394,20 +325,13 @@ hook OnPlayerOpenContainer(playerid, containerid)
 	ShowPlayerGear(playerid);
 	UpdatePlayerGear(playerid);
 	ShowPlayerHealthInfo(playerid);
-
 	return Y_HOOKS_CONTINUE_RETURN_0;
 }
 
 hook OnPlayerCloseContainer(playerid, containerid)
 {
-	Logger_Dbg("inventory", "OnPlayerCloseContainer",
-		Logger_I("playerid", playerid),
-		Logger_B("in_inv", IsPlayerViewingInventory(playerid))
-	);
-
 	HidePlayerGear(playerid);
 	HidePlayerHealthInfo(playerid);
-
 	return Y_HOOKS_CONTINUE_RETURN_0;
 }
 

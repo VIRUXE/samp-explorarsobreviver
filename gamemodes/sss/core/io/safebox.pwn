@@ -71,7 +71,7 @@ hook OnPlayerDroppedItem(playerid, Item:itemid)
 		GetPlayerPos(playerid, x, y, z);
 		GetItemUUID(itemid, uuid);
 
-		SafeboxSaveCheck(playerid, itemid);
+		SafeboxSaveCheck(itemid);
 	}
 
 	return Y_HOOKS_CONTINUE_RETURN_0;
@@ -92,7 +92,7 @@ hook OnPlayerCloseContainer(playerid, Container:containerid)
 		GetPlayerPos(playerid, x, y, z);
 		GetItemUUID(itemid, uuid);
 
-		SafeboxSaveCheck(playerid, itemid);
+		SafeboxSaveCheck(itemid);
 		ClearAnimations(playerid);
 	}
 
@@ -106,7 +106,7 @@ hook OnItemAddedToContainer(Container:containerid, Item:itemid, playerid)
 		new Item:safeboxitem = GetContainerSafeboxItem(containerid);
 
 		if(IsValidItem(safeboxitem) && IsItemTypeSafebox(GetItemType(itemid)))
-			SafeboxSaveCheck(playerid, safeboxitem);
+			SafeboxSaveCheck(safeboxitem);
 	}
 
 	return Y_HOOKS_CONTINUE_RETURN_0;
@@ -119,7 +119,7 @@ hook OnItemRemovedFromCnt(Container:containerid, slotid, playerid)
 		new Item:safeboxitem = GetContainerSafeboxItem(containerid);
 
 		if(IsValidItem(safeboxitem) && IsItemTypeSafebox(GetItemType(safeboxitem)))
-			SafeboxSaveCheck(playerid, safeboxitem);
+			SafeboxSaveCheck(safeboxitem);
 	}
 
 	return Y_HOOKS_CONTINUE_RETURN_0;
@@ -133,41 +133,19 @@ hook OnItemDestroy(Item:itemid)
 	return Y_HOOKS_CONTINUE_RETURN_0;
 }
 
-SafeboxSaveCheck(playerid, Item:itemid)
+SafeboxSaveCheck(Item:itemid)
 {
 	new
 		ret = SaveSafeboxItem(itemid),
-		uuid[UUID_LEN];
+		uname[MAX_ITEM_NAME];
 
-	GetItemUUID(itemid, uuid);
+	GetItemTypeName(GetItemType(itemid), uname);
 
 	if(ret == 0)
-	{
-		SetItemLabel(itemid, sprintf("SAVED (itemid: %d, uuid: %s)", _:itemid, uuid), 0xFFFF00FF, 2.0);
-	}
+		SetItemLabel(itemid, uname, 0xFFFF00FF, 2.0);
 	else
-	{
-		SetItemLabel(itemid, sprintf("NOT SAVED (itemid: %d, uuid: %s)", _:itemid, uuid), 0xFF0000FF, 2.0);
+		SetItemLabel(itemid, uname, 0xFF0000FF, 2.0);
 
-		if(ret == 1)
-			ChatMsg(playerid, YELLOW, "ERROR: Can't save item %d GEID: %s: Invalid item.", _:itemid, uuid);
-
-		if(ret == 2)
-			ChatMsg(playerid, YELLOW, "ERROR: Can't save item %d GEID: %s: Item isn't safebox.", _:itemid, uuid);
-
-		if(ret == 3)
-			ChatMsg(playerid, YELLOW, "ERROR: Can't save item %d GEID: %s: Item not in world.", _:itemid, uuid);
-
-		if(ret == 4)
-			ChatMsg(playerid, YELLOW, "ERROR: Can't save item %d GEID: %s: Container empty", _:itemid, uuid);
-
-		if(ret == 5)
-		{
-			new containerid;
-			GetItemArrayDataAtCell(itemid, containerid, 0);
-			ChatMsg(playerid, YELLOW, "ERROR: Can't save item %d GEID: %s: Invalid container (%d).", _:itemid, uuid, containerid);
-		}
-	}
 	return 1;
 }
 

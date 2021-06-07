@@ -110,20 +110,6 @@ ACMD:unloadfs[5](playerid, params[])
 ==============================================================================*/
 
 
-ACMD:hud[5](playerid, params[])
-{
-	if(IsPlayerHudOn(playerid))
-	{
-		ToggleVersionInfo(playerid, false);
-		TogglePlayerHUD(playerid, false);
-	}
-	else
-	{
-		ToggleVersionInfo(playerid, true);
-		TogglePlayerHUD(playerid, true);
-	}
-}
-
 ACMD:nametags[5](playerid, params[])
 {
 	ToggleNameTagsForPlayer(playerid, !GetPlayerNameTagsToggle(playerid));
@@ -350,4 +336,27 @@ ACMD:setskill[5](playerid, params[])
 	PlayerGainSkillExperience(playerid, skill, amount);
 
 	return 1;
+}
+
+ACMD:editatt[5](playerid, params[])
+{
+	EditAttachedObject(playerid, 0);
+	return 1;
+}
+public OnPlayerEditAttachedObject( playerid, response, index, modelid, boneid,
+                                   Float:fOffsetX, Float:fOffsetY, Float:fOffsetZ,
+                                   Float:fRotX, Float:fRotY, Float:fRotZ,
+                                   Float:fScaleX, Float:fScaleY, Float:fScaleZ )
+{
+    new debug_string[256+1];
+	format(debug_string,256,"SetPlayerAttachedObject(playerid,%d,%d,%d,%f,%f,%f,%f,%f,%f,%f,%f,%f)",
+           index,modelid,boneid,fOffsetX,fOffsetY,fOffsetZ,fRotX,fRotY,fRotZ,fScaleX,fScaleY,fScaleZ);
+
+	print(debug_string);
+    SendClientMessage(playerid, 0xFFFFFFFF, debug_string);
+    
+    SetPlayerAttachedObject(playerid,index,modelid,boneid,fOffsetX,fOffsetY,fOffsetZ,fRotX,fRotY,fRotZ,fScaleX,fScaleY,fScaleZ);
+    SendClientMessage(playerid, 0xFFFFFFFF, "You finished editing an attached object");
+    
+    return 1;
 }
