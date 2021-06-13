@@ -242,66 +242,6 @@ stock DestroyPlayerBag(playerid)
 	return 1;
 }
 
-/*
-	Automatically determines whether to add to the player's inventory or bag.
-*/
-stock AddItemToPlayer(playerid, Item:itemid, useinventory = false, playeraction = true)
-{
-	new ItemType:itemtype = GetItemType(itemid);
-
-	if(IsItemTypeCarry(itemtype) || IsValidHolsterItem(itemtype))
-		return -1;
-
-	new required;
-
-	if(useinventory)
-		required = AddItemToInventory(playerid, itemid);
-
-	if(required == 0)
-		return 0;
-
-	if(!IsValidItem(bag_PlayerBagID[playerid]))
-	{
-		if(required > 0)
-			ShowActionText(playerid, sprintf(ls(playerid, "CNTEXTRASLO", true), required), 3000, 150);
-
-		return -3;
-	}
-
-	new Container:containerid;
-	GetItemArrayDataAtCell(bag_PlayerBagID[playerid], _:containerid, 1);
-
-	if(!IsValidContainer(containerid))
-		return -3;
-
-	new
-		itemsize,
-		freeslots;
-
-	GetItemTypeSize(GetItemType(itemid), itemsize);
-	GetContainerFreeSlots(containerid, freeslots);
-
-	if(itemsize > freeslots)
-	{
-		ShowActionText(playerid, sprintf(ls(playerid, "BAGEXTRASLO", true), itemsize - freeslots), 3000, 150);
-		return -4;
-	}
-
-	if(playeraction)
-	{
-		ShowActionText(playerid, ls(playerid, "BAGITMADDED", true), 3000, 150);
-		ApplyAnimation(playerid, "PED", "PHONE_IN", 4.0, 1, 0, 0, 0, 300);
-		bag_PuttingInBag[playerid] = true;
-		defer bag_PutItemIn(playerid, _:itemid, _:containerid);
-	}
-	else
-	{
-		return AddItemToContainer(containerid, itemid, playerid);
-	}
-
-	return 0;
-}
-
 /*==============================================================================
 
 	Internal Functions and Hooks
@@ -452,11 +392,6 @@ _BagEquipHandler(playerid)
 
 		return 0;
 	}
-	else
-	{
-		AddItemToPlayer(playerid, itemid, true);
-	}
-
 	return 1;
 }
 
@@ -581,29 +516,49 @@ hook OnItemAddToInventory(playerid, Item:itemid, slot)
 
 hook OnPlayerAddToInventory(playerid, Item:itemid, success)
 {
+	new ItemType:itemtype = GetItemType(itemid);
+
+	if(IsItemTypeBag(itemtype))
+		return Y_HOOKS_BREAK_RETURN_1;
+
+	if(IsItemTypeCarry(itemtype) || IsValidHolsterItem(itemtype))
+		return Y_HOOKS_BREAK_RETURN_1;
+
 	if(success)
 	{
-		new ItemType:itemtype = GetItemType(itemid);
-
-		if(IsItemTypeBag(itemtype))
-			return Y_HOOKS_BREAK_RETURN_1;
-
-		if(IsItemTypeCarry(itemtype) || IsValidHolsterItem(itemtype))
-			return Y_HOOKS_BREAK_RETURN_1;
+		ShowActionText(playerid, ls(playerid, "INVITMADDED", true), 3000, 150);
 	}
 	else
 	{
-		new ItemType:itemtype = GetItemType(itemid);
-
-		if(IsItemTypeBag(itemtype))
-			return Y_HOOKS_BREAK_RETURN_1;
-
-		if(IsItemTypeCarry(itemtype) || IsValidHolsterItem(itemtype))
-			return Y_HOOKS_BREAK_RETURN_1;
-
 		new
 			itemsize,
 			freeslots;
+
+		if(IsValidItem(bag_PlayerBagID[playerid]))
+		{
+			new Container:containerid;
+			GetItemArrayDataAtCell(bag_PlayerBagID[playerid], _:containerid, 1);
+
+			if(IsValidContainer(containerid))
+			{
+				GetItemTypeSize(GetItemType(itemid), itemsize);
+				GetContainerFreeSlots(containerid, freeslots);
+
+				if(itemsize > freeslots)
+				{
+					ShowActionText(playerid, sprintf(ls(playerid, "BAGEXTRASLO", true), itemsize - freeslots), 3000, 150);
+				}
+				else 
+				{
+					ShowActionText(playerid, ls(playerid, "BAGITMADDED", true), 3000, 150);
+					ApplyAnimation(playerid, "PED", "PHONE_IN", 4.0, 1, 0, 0, 0, 300);
+					bag_PuttingInBag[playerid] = true;
+					defer bag_PutItemIn(playerid, _:itemid, _:containerid);
+				}
+				
+				return Y_HOOKS_CONTINUE_RETURN_0;
+			}
+		}
 
 		GetItemTypeSize(GetItemType(itemid), itemsize);
 		GetInventoryFreeSlots(playerid, freeslots);

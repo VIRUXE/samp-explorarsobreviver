@@ -121,34 +121,27 @@ hook OnPlayerConnect(playerid)
     Player_Trash[playerid] = -1;
 }
 
-
-hook OnPlayerKeyStateChange(playerid, newkeys, oldkeys)
-{
-	if(oldkeys & 16)
-	{
-	    if(Player_Trash[playerid] != -1)
-		{
-			StopHoldAction(playerid);
-			ClearAnimations(playerid);
-			Player_Trash[playerid] = -1;
-		}
-	}
-}
-
 hook OnButtonPress(playerid, Button:buttonid)
 {
-    for(new i = 0; i < MAX_TRASH; i++){
-		if(buttonid == Button:Trash_Button[i]){
-		    if(disable_Trash[i])
-			{
-		        ShowActionText(playerid, "~r~Nada encontrado.");
+	if(Player_Trash[playerid] != -1)
+	{
+		StopHoldAction(playerid);
+		ClearAnimations(playerid);
+		Player_Trash[playerid] = -1;
+	} else {
+		for(new i = 0; i < MAX_TRASH; i++){
+			if(buttonid == Button:Trash_Button[i]){
+				if(disable_Trash[i])
+				{
+					ShowActionText(playerid, "~r~Nada encontrado.");
+					break;
+				}
+				StartHoldAction(playerid, 5000);
+				ApplyAnimation(playerid, "BOMBER", "BOM_Plant_Loop", 4.0, 1, 0, 0, 0, 0);
+				Player_Trash[playerid] = i;
+				PlayerPlaySound(playerid,1131,0.0,0.0,0.0);
 				break;
-		    }
-		    StartHoldAction(playerid, 5000);
-			ApplyAnimation(playerid, "BOMBER", "BOM_Plant_Loop", 4.0, 1, 0, 0, 0, 0);
-			Player_Trash[playerid] = i;
-			PlayerPlaySound(playerid,1131,0.0,0.0,0.0);
-			break;
+			}
 		}
 	}
 	return Y_HOOKS_BREAK_RETURN_1;

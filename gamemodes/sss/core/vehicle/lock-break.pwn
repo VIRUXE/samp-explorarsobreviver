@@ -52,38 +52,33 @@ hook OnPlayerInteractVehicle(playerid, vehicleid, Float:angle)
 	return Y_HOOKS_CONTINUE_RETURN_0;
 }
 
-hook OnPlayerKeyStateChange(playerid, newkeys, oldkeys)
-{
-	if(oldkeys & 16)
-	{
-		StopBreakingVehicleLock(playerid);
-	}
-}
-
 StartBreakingVehicleLock(playerid, vehicleid, type)
 {
-	if(type == 0)
-	{
-		if(GetVehicleLockState(vehicleid) == E_LOCK_STATE_OPEN)
-			return 0;
+	if(cro_TargetVehicle[playerid] != INVALID_VEHICLE_ID) {
+	StopBreakingVehicleLock(playerid);
+	} else {
+		if(type == 0)
+		{
+			if(GetVehicleLockState(vehicleid) == E_LOCK_STATE_OPEN)
+				return 0;
 
-		cro_OpenType[playerid] = 0;
-		ShowActionText(playerid, ls(playerid, "LOCKBREAKDR"), 6000);
+			cro_OpenType[playerid] = 0;
+			ShowActionText(playerid, ls(playerid, "LOCKBREAKDR"), 6000);
+		}
+
+		if(type == 1)
+		{
+			if(!IsVehicleTrunkLocked(vehicleid))
+				return 0;
+
+			cro_OpenType[playerid] = 1;
+			ShowActionText(playerid, ls(playerid, "LOCKBREAKTR"), 6000);
+		}
+
+		cro_TargetVehicle[playerid] = vehicleid;
+		ApplyAnimation(playerid, "POLICE", "DOOR_KICK", 3.0, 1, 1, 1, 0, 0);
+		StartHoldAction(playerid, 3000);
 	}
-
-	if(type == 1)
-	{
-		if(!IsVehicleTrunkLocked(vehicleid))
-			return 0;
-
-		cro_OpenType[playerid] = 1;
-		ShowActionText(playerid, ls(playerid, "LOCKBREAKTR"), 6000);
-	}
-
-	cro_TargetVehicle[playerid] = vehicleid;
-	ApplyAnimation(playerid, "POLICE", "DOOR_KICK", 3.0, 1, 1, 1, 0, 0);
-	StartHoldAction(playerid, 3000);
-
 	return 1;
 }
 

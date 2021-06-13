@@ -35,13 +35,15 @@ hook OnPlayerKeyStateChange(playerid, newkeys, oldkeys)
 
 	if(newkeys & 16)
 	{
+		StopApplyingHandcuffs(playerid);
+
 		new Item:itemid = GetPlayerItem(playerid);
 
 		if(GetItemType(itemid) == item_HandCuffs)
 		{
 			foreach(new i : Character)
 			{
-				if(i == playerid)
+				if(i == playerid || IsPlayerOnAdminDuty(i))
 					continue;
 
 				if(IsPlayerNextToPlayer(playerid, i))
@@ -63,7 +65,7 @@ hook OnPlayerKeyStateChange(playerid, newkeys, oldkeys)
 		{
 			foreach(new i : Character)
 			{
-				if(i == playerid)
+				if(i == playerid || IsPlayerOnAdminDuty(i))
 					continue;
 
 				if(IsPlayerNextToPlayer(playerid, i))
@@ -84,10 +86,6 @@ hook OnPlayerKeyStateChange(playerid, newkeys, oldkeys)
 				}
 			}
 		}
-	}
-	if(oldkeys & 16)
-	{
-		StopApplyingHandcuffs(playerid);
 	}
 	return 1;
 }

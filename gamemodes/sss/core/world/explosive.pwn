@@ -192,6 +192,14 @@ hook OnPlayerUseItem(playerid, Item:itemid)
 
 	if(exp_ItemTypeExplosive[itemtype] != INVALID_EXPLOSIVE_TYPE)
 	{
+		if(IsValidItem(exp_ArmingItem[playerid]))
+		{
+			StopHoldAction(playerid);
+			CancelPlayerMovement(playerid);
+			exp_ArmingItem[playerid] = INVALID_ITEM_ID;
+			return Y_HOOKS_CONTINUE_RETURN_0;
+		}
+
 		if(exp_Data[exp_ItemTypeExplosive[itemtype]][exp_trigger] == TIMED)
 		{
 			PlayerDropItem(playerid);
@@ -273,6 +281,14 @@ hook OnPlayerUseItemWithItem(playerid, Item:itemid, Item:withitemid)
 	if(GetItemType(itemid) != exp_RadioTriggerItemType)
 		return Y_HOOKS_CONTINUE_RETURN_0;
 
+	if(IsValidItem(exp_ArmingItem[playerid]))
+	{
+		StopHoldAction(playerid);
+		CancelPlayerMovement(playerid);
+		exp_ArmingItem[playerid] = INVALID_ITEM_ID;
+		return Y_HOOKS_CONTINUE_RETURN_0;
+	}
+
 	new ItemType:itemtype = GetItemType(withitemid);
 
 	if(exp_ItemTypeExplosive[itemtype] == INVALID_EXPLOSIVE_TYPE)
@@ -330,16 +346,6 @@ hook OnHoldActionFinish(playerid)
 				exp_ArmingItem[playerid] = INVALID_ITEM_ID;
 			}
 		}
-	}
-}
-
-hook OnPlayerKeyStateChange(playerid, newkeys, oldkeys)
-{
-	if(RELEASED(16) && IsValidItem(exp_ArmingItem[playerid]))
-	{
-		StopHoldAction(playerid);
-		CancelPlayerMovement(playerid);
-		exp_ArmingItem[playerid] = INVALID_ITEM_ID;
 	}
 }
 

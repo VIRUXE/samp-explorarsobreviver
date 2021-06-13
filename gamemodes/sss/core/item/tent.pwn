@@ -427,7 +427,7 @@ StopRemovingTent(playerid)
 
 hook OnPlayerKeyStateChange(playerid, newkeys, oldkeys)
 {
-	if(oldkeys & 16)
+	if(newkeys & 16)
 	{
 		if(tnt_CurrentTentItem[playerid] != INVALID_ITEM_ID)
 		{

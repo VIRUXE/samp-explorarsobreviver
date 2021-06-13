@@ -416,7 +416,8 @@ hook OnPlayerStateChange(playerid, newstate, oldstate)
 {
 	if(newstate == PLAYER_STATE_DRIVER || newstate == PLAYER_STATE_PASSENGER)
 	{
-		ShowPlayerDialog(playerid, -1, DIALOG_STYLE_MSGBOX, " ", " ", " ", " ");
+		//ShowPlayerDialog(playerid, -1, DIALOG_STYLE_MSGBOX, " ", " ", " ", " ");
+		CancelSelectTextDraw(playerid);
 		HidePlayerGear(playerid);
 	}
 
@@ -425,8 +426,17 @@ hook OnPlayerStateChange(playerid, newstate, oldstate)
 
 hook OnPlayerEnterVehicle(playerid, vehicleid, ispassenger)
 {
-	if(IsPlayerKnockedOut(playerid))
+	if(IsPlayerKnockedOut(playerid)) {
+		new
+			Float:x,
+			Float:y,
+			Float:z;
+
+		GetPlayerPos(playerid, x, y, z);
+		SetPlayerPos(playerid, x, y, z);
+		CancelPlayerMovement(playerid);
 		return 0;
+	}
 
 	if(GetPlayerSurfingVehicleID(playerid) == vehicleid)
 		CancelPlayerMovement(playerid);

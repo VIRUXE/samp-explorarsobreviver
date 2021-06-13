@@ -37,7 +37,7 @@ hook OnPlayerGiveItem(playerid, targetid, Item:itemid)
 	return Y_HOOKS_CONTINUE_RETURN_0;
 }
 
-hook OnItemRemoveFromCnt(containerid, slotid, playerid)
+hook OnItemRemoveFromCnt(Container:containerid, slotid, playerid)
 {
 	if(IsPlayerConnected(playerid))
 	{
@@ -56,7 +56,7 @@ hook OnPlayerOpenInventory(playerid)
 	return Y_HOOKS_CONTINUE_RETURN_0;
 }
 
-hook OnPlayerOpenContainer(playerid, containerid)
+hook OnPlayerOpenContainer(playerid, Container:containerid)
 {
 	if(IsBadInteract(playerid))
 		return Y_HOOKS_BREAK_RETURN_1;

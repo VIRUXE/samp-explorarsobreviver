@@ -457,7 +457,7 @@ _SaveVehicle(vehicleid)
 {
 	if(strlen(pveh_Owner[vehicleid]) < 3)
 	{
-		err("Attempted to save vehicle %d with bad owner string '%s'", vehicleid, pveh_Owner[vehicleid]);
+		printf("Attempted to save vehicle %d with bad owner string '%s'", vehicleid, pveh_Owner[vehicleid]);
 		return 0;
 	}
 

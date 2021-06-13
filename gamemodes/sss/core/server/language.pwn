@@ -107,9 +107,9 @@ stock LoadAllLanguages()
 
 	direc = OpenDir(DIRECTORY_SCRIPTFILES DIRECTORY_LANGUAGES);
 
-	// Force load English first since that's the default language.
-	default_entries = LoadLanguage(DIRECTORY_LANGUAGES"English", "English");
-	Logger_Log("default language English loaded", Logger_I("entries", default_entries));
+	// Force load Portugues first since that's the default language.
+	default_entries = LoadLanguage(DIRECTORY_LANGUAGES"Portugues", "Portugues");
+	Logger_Log("default language Portugues loaded", Logger_I("entries", default_entries));
 
 	if(direc == Directory:-1)
 	{
@@ -119,7 +119,7 @@ stock LoadAllLanguages()
 
 	if(default_entries == 0)
 	{
-		err("No default entries loaded! Please add the 'English' langfile to '%s'.", DIRECTORY_SCRIPTFILES DIRECTORY_LANGUAGES);
+		err("No default entries loaded! Please add the 'Portugues' langfile to '%s'.", DIRECTORY_SCRIPTFILES DIRECTORY_LANGUAGES);
 		for(;;) {}
 	}
 
@@ -127,7 +127,7 @@ stock LoadAllLanguages()
 	{
 		if(type == E_REGULAR)
 		{
-			if(!strcmp(entry, "English"))
+			if(!strcmp(entry, "Portugues"))
 				continue;
 
 			PathBase(entry, filename);
@@ -415,7 +415,7 @@ stock GetLanguageString(languageid, const key[], bool:encode = false)
 		{
 			printf("Key not found: '%s' in language '%s'", key, lang_Name[languageid]);
 
-			// return english if key not found
+			// return portugues if key not found
 			if(languageid != 0)
 				strcat(result, GetLanguageString(0, key, encode), MAX_LANGUAGE_ENTRY_LENGTH);
 		}

@@ -335,31 +335,24 @@ hook OnPlayerUseItem(playerid, Item:itemid)
 	return Y_HOOKS_CONTINUE_RETURN_0;
 }
 
-hook OnPlayerKeyStateChange(playerid, newkeys, oldkeys)
-{
-	if(tree_CuttingTree[playerid] == INVALID_TREE_ID)
-		return Y_HOOKS_CONTINUE_RETURN_0;
-
-	if(oldkeys == 16)
-		_StopWoodCutting(playerid);
-
-	return Y_HOOKS_CONTINUE_RETURN_0;
-}
-
 _StartWoodCutting(playerid, treeid)
 {
-	new
-		mult = 1000,
-		start = floatround(treeSpecies_Data[tree_Data[treeid][tree_species]][tree_max_health]) / floatround(treeSpecies_Data[tree_Data[treeid][tree_species]][tree_chop_damage]),
-		end = floatround(tree_Data[treeid][tree_health]) / floatround(treeSpecies_Data[tree_Data[treeid][tree_species]][tree_chop_damage]);
+	if(tree_CuttingTree[playerid] != INVALID_TREE_ID) {
+		_StopWoodCutting(playerid);
+	} else {
+		new
+			mult = 1000,
+			start = floatround(treeSpecies_Data[tree_Data[treeid][tree_species]][tree_max_health]) / floatround(treeSpecies_Data[tree_Data[treeid][tree_species]][tree_chop_damage]),
+			end = floatround(tree_Data[treeid][tree_health]) / floatround(treeSpecies_Data[tree_Data[treeid][tree_species]][tree_chop_damage]);
 
-	mult = GetPlayerSkillTimeModifier(playerid, mult, "Forestry");
+		mult = GetPlayerSkillTimeModifier(playerid, mult, "Forestry");
 
-	StartHoldAction(playerid, floatround(1.1 * (mult * start)), mult * (start - end));
+		StartHoldAction(playerid, floatround(1.1 * (mult * start)), mult * (start - end));
 
-	SetPlayerToFaceTree(playerid, treeid);
-	ApplyAnimation(playerid, "CHAINSAW", "CSAW_G", 4.0, 1, 0, 0, 0, 0, 1);
-	tree_CuttingTree[playerid] = treeid;
+		SetPlayerToFaceTree(playerid, treeid);
+		ApplyAnimation(playerid, "CHAINSAW", "CSAW_G", 4.0, 1, 0, 0, 0, 0, 1);
+		tree_CuttingTree[playerid] = treeid;
+	}
 }
 
 _StopWoodCutting(playerid)

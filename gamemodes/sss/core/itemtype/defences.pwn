@@ -250,26 +250,20 @@ hook OnPlayerUseItemWithItem(playerid, Item:itemid, Item:withitemid)
 	return Y_HOOKS_CONTINUE_RETURN_0;
 }
 
-
-hook OnPlayerKeyStateChange(playerid, newkeys, oldkeys)
-{
-	if(oldkeys & 16)
-	{
-		StopBuildingDefence(playerid);
-	}
-}
-
 StartBuildingDefence(playerid, Item:itemid)
 {
-	new itemtypename[MAX_ITEM_NAME];
+	if(def_CurrentDefenceItem[playerid] != INVALID_ITEM_ID) {
+		StopBuildingDefence(playerid);
+	} else {
+		new itemtypename[MAX_ITEM_NAME];
 
-	GetItemTypeName(GetItemType(itemid), itemtypename);
+		GetItemTypeName(GetItemType(itemid), itemtypename);
 
-	def_CurrentDefenceItem[playerid] = itemid;
-	StartHoldAction(playerid, GetPlayerSkillTimeModifier(playerid, 10000, "Construction"));
-	ApplyAnimation(playerid, "BOMBER", "BOM_Plant_Loop", 4.0, 1, 0, 0, 0, 0);
-	ShowActionText(playerid, sprintf(ls(playerid, "DEFBUILDING"), itemtypename));
-
+		def_CurrentDefenceItem[playerid] = itemid;
+		StartHoldAction(playerid, GetPlayerSkillTimeModifier(playerid, 10000, "Construction"));
+		ApplyAnimation(playerid, "BOMBER", "BOM_Plant_Loop", 4.0, 1, 0, 0, 0, 0);
+		ShowActionText(playerid, sprintf(ls(playerid, "DEFBUILDING"), itemtypename));
+	}
 	return 1;
 }
 
@@ -534,18 +528,7 @@ hook OnHoldActionFinish(playerid)
 		new
 			Item:itemid = def_CurrentDefenceItem[playerid];
 
-		new Float:x, Float:y, Float:z, Float:ang;
-		GetItemPos(itemid, x, y, z);
-		GetPlayerFacingAngle(playerid, ang);
-
-		x += 1 * floatsin(-ang, degrees), y += 1 * floatcos(-ang, degrees);
-
-		SetItemPos(itemid, x, y, z);
-		
 		ConvertItemToDefenceItem(itemid);
-
-		SetItemRot(itemid, 0.0, 0.0, ang - 30.0);
-
 
 		if(!IsValidItem(itemid))
 		{
@@ -590,7 +573,7 @@ hook OnHoldActionFinish(playerid)
 			GetItemRot(def_CurrentDefenceEdit[playerid], rx, ry, rz);
 
 			TweakItem(playerid, def_CurrentDefenceEdit[playerid]);
-			DefenceOpenObject(playerid, def_CurrentDefenceEdit[playerid]);
+			DefenceOpenObject(playerid, def_CurrentDefenceEdit[playerid], x, y, z, rx, ry, rz);
 		}
 
 		if(itemtype == item_Keypad)
@@ -729,24 +712,21 @@ ConvertItemToDefenceItem(Item:itemid)
 
 	SetItemArrayDataAtCell(itemid, false, def_open);
 
-	new
-		ItemType:itemtype = GetItemType(itemid), model,
-		Float:x, Float:y, Float:z, objectid,
-		Float:minx, Float:miny, Float:minz, Float:maxx, Float:maxy, Float:maxz,
-		Float:rz;
+	new modelid, Float:new_x, Float:new_y, Float:new_z,
+		Float:new_rx, Float:new_ry, Float:new_rz,
+		Float:minx, Float:miny, Float:minz, Float:maxx, Float:maxy, Float:maxz;
 
-	GetItemObjectID(itemid, objectid);
-	GetItemTypeModel(itemtype, model);
-	CA_GetModelBoundingBox(model, minx, miny, minz, maxx, maxy, maxz);
-	GetItemPos(itemid, x, y, z);
-	GetItemRot(itemid, rz, rz, rz);
-	SetItemPos(itemid, x, y, z + floatabs(minz));
-	SetItemRot(itemid, 0.0, 0.0, rz);
+	GetItemPos(itemid, new_x, new_y, new_z);
+	GetItemRot(itemid, new_rx, new_ry, new_rz);
+	GetItemTypeModel(GetItemType(itemid), modelid);
+	CA_GetModelBoundingBox(modelid, minx, miny, minz, maxx, maxy, maxz);
 
+	SetItemPos(itemid, new_x, new_y, new_z + floatabs(minz));
+	SetItemRot(itemid, 0.0, 0.0, new_rz);
 	return CallLocalFunction("OnDefenceCreate", "d", _:itemid);
 }
 
-DefenceOpenObject(playerid, Item:itemid)
+DefenceOpenObject(playerid, Item:itemid, Float:x, Float:y, Float:z, Float:rx, Float:ry, Float:rz)
 {
 	new hasmotor;
 	GetItemArrayDataAtCell(itemid, hasmotor, _:def_motor);
@@ -754,11 +734,8 @@ DefenceOpenObject(playerid, Item:itemid)
 		return 0;
 
 	new 
-		world, interior, ItemType:itemtype = GetItemType(itemid), model, objectid,
-		Float:x, Float:y, Float:z, Float:rx, Float:ry, Float:rz;
+		world, interior, ItemType:itemtype = GetItemType(itemid), model, objectid;
 	
-	GetItemPos(itemid, x, y, z);
-	GetItemRot(itemid, rx, ry, rz);
 	GetItemWorld(itemid, world);
 	GetItemInterior(itemid, interior);
 	GetItemTypeModel(itemtype, model);
@@ -774,7 +751,7 @@ DefenceOpenObject(playerid, Item:itemid)
 	z += minz;
 
 	if(!IsValidDynamicObject(def_OpenObject[playerid]))
-		def_OpenObject[playerid] = CreateDynamicObject(model, x, y, z, rx, ry, rz, world, interior);
+		def_OpenObject[playerid] = CreateDynamicObject(model, x, y, z, rx, ry, rz, world, interior, playerid);
 
 	SetDynamicObjectPos(def_OpenObject[playerid], x, y, z);
 	SetDynamicObjectRot(def_OpenObject[playerid], rx, ry, rz);
@@ -785,9 +762,9 @@ DefenceOpenObject(playerid, Item:itemid)
 	return 1;
 }
 
-hook OnItemTweakUpdate(playerid, Item:itemid)
+hook OnItemTweakUpdate(playerid, Item:itemid, Float:x, Float:y, Float:z, Float:rx, Float:ry, Float:rz)
 {
-	DefenceOpenObject(playerid, itemid);
+	DefenceOpenObject(playerid, itemid, x, y, z, rx, ry, rz);
 }
 
 hook OnItemTweakFinish(playerid, Item:itemid)
@@ -1116,7 +1093,9 @@ stock GetDefenceKeypad(Item:itemid)
 // def_pass
 stock GetDefencePass(Item:itemid)
 {
-	return GetItemArrayDataAtCell(itemid, def_pass);
+	new pass;
+	GetItemArrayDataAtCell(itemid, pass, def_pass);
+	return pass;
 }
 
 // def_active

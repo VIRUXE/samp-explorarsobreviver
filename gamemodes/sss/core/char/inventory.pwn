@@ -34,16 +34,16 @@ static
 	inv_InventoryOptionID[MAX_PLAYERS];
 
 
-forward CreatePlayerTile(playerid, &PlayerText:title, &PlayerText:tile, &PlayerText:item, Float:x, Float:y, Float:width, Float:height, colour, overlaycolour);
+forward CreatePlayerTile(playerid, &PlayerText:title, &PlayerText:tile, &PlayerText:item, Float:x, Float:y, Float:width, Float:height);
 
 hook OnPlayerConnect(playerid)
 {
-	CreatePlayerTile(playerid, GearSlot_Head[0], GearSlot_Head[1], GearSlot_Head[2], 507.0, 120.0, 55.0, 55.0, 0xFFFFFF08, 0xFFFFFFFF);
-	CreatePlayerTile(playerid, GearSlot_Face[0], GearSlot_Face[1], GearSlot_Face[2], 577.0, 120.0, 55.0, 55.0, 0xFFFFFF08, 0xFFFFFFFF);
-	CreatePlayerTile(playerid, GearSlot_Hand[0], GearSlot_Hand[1], GearSlot_Hand[2], 507.0, 230.0, 55.0, 55.0, 0xFFFFFF08, 0xFFFFFFFF);
-	CreatePlayerTile(playerid, GearSlot_Hols[0], GearSlot_Hols[1], GearSlot_Hols[2], 577.0, 230.0, 55.0, 55.0, 0xFFFFFF08, 0xFFFFFFFF);
-	CreatePlayerTile(playerid, GearSlot_Tors[0], GearSlot_Tors[1], GearSlot_Tors[2], 507.0, 340.0, 55.0, 55.0, 0xFFFFFF08, 0xFFFFFFFF);
-	CreatePlayerTile(playerid, GearSlot_Back[0], GearSlot_Back[1], GearSlot_Back[2], 577.0, 340.0, 55.0, 55.0, 0xFFFFFF08, 0xFFFFFFFF);
+	CreatePlayerTile(playerid, GearSlot_Head[0], GearSlot_Head[1], GearSlot_Head[2], 507.0, 163.0, 53.0, 55.0);
+	CreatePlayerTile(playerid, GearSlot_Face[0], GearSlot_Face[1], GearSlot_Face[2], 577.0, 163.0, 53.0, 55.0);
+	CreatePlayerTile(playerid, GearSlot_Hand[0], GearSlot_Hand[1], GearSlot_Hand[2], 507.0, 263.0, 53.0, 55.0);
+	CreatePlayerTile(playerid, GearSlot_Hols[0], GearSlot_Hols[1], GearSlot_Hols[2], 577.0, 263.0, 53.0, 55.0);
+	CreatePlayerTile(playerid, GearSlot_Tors[0], GearSlot_Tors[1], GearSlot_Tors[2], 507.0, 363.0, 53.0, 55.0);
+	CreatePlayerTile(playerid, GearSlot_Back[0], GearSlot_Back[1], GearSlot_Back[2], 577.0, 363.0, 53.0, 55.0);
 
 	PlayerTextDrawSetString(playerid, GearSlot_Head[0], "Head");
 	PlayerTextDrawSetString(playerid, GearSlot_Face[0], "Face");
@@ -53,31 +53,33 @@ hook OnPlayerConnect(playerid)
 	PlayerTextDrawSetString(playerid, GearSlot_Back[0], "Back");
 }
 
-CreatePlayerTile(playerid, &PlayerText:title, &PlayerText:tile, &PlayerText:item, Float:x, Float:y, Float:width, Float:height, colour, overlaycolour)
+CreatePlayerTile(playerid, &PlayerText:title, &PlayerText:tile, &PlayerText:item, Float:x, Float:y, Float:width, Float:height)
 {
 	title							=CreatePlayerTextDraw(playerid, x + width / 2.0, y - 12.0, "_");
 	PlayerTextDrawAlignment			(playerid, title, 2);
 	PlayerTextDrawBackgroundColor	(playerid, title, 255);
-	PlayerTextDrawFont				(playerid, title, 2);
-	PlayerTextDrawLetterSize		(playerid, title, 0.15, 1.0);
+	PlayerTextDrawFont				(playerid, title, 1);
+	PlayerTextDrawLetterSize		(playerid, title, 0.20, 1.00);
 	PlayerTextDrawColor				(playerid, title, -1);
 	PlayerTextDrawSetOutline		(playerid, title, 1);
 	PlayerTextDrawSetProportional	(playerid, title, 1);
+	PlayerTextDrawBoxColor			(playerid, title, 255);
 	PlayerTextDrawTextSize			(playerid, title, height, width - 4);
 	PlayerTextDrawUseBox			(playerid, title, true);
 
 	tile							=CreatePlayerTextDraw(playerid, x, y, "_");
 	PlayerTextDrawFont				(playerid, tile, TEXT_DRAW_FONT_MODEL_PREVIEW);
-	PlayerTextDrawBackgroundColor	(playerid, tile, colour);
-	PlayerTextDrawColor				(playerid, tile, overlaycolour);
+	PlayerTextDrawBackgroundColor	(playerid, tile, 175);
+	PlayerTextDrawBoxColor			(playerid, tile, 175);
+	PlayerTextDrawColor				(playerid, tile, -1);
 	PlayerTextDrawTextSize			(playerid, tile, width, height);
 	PlayerTextDrawSetSelectable		(playerid, tile, true);
 
 	item							=CreatePlayerTextDraw(playerid, x + width / 2.0, y + height, "_");
 	PlayerTextDrawAlignment			(playerid, item, 2);
 	PlayerTextDrawBackgroundColor	(playerid, item, 255);
-	PlayerTextDrawFont				(playerid, item, 2);
-	PlayerTextDrawLetterSize		(playerid, item, 0.15, 1.0);
+	PlayerTextDrawFont				(playerid, item, 1);
+	PlayerTextDrawLetterSize		(playerid, item, 0.20, 1.00);
 	PlayerTextDrawColor				(playerid, item, -1);
 	PlayerTextDrawSetOutline		(playerid, item, 1);
 	PlayerTextDrawSetProportional	(playerid, item, 1);
@@ -88,7 +90,7 @@ ShowPlayerGear(playerid)
 {
 	if(!IsPlayerConnected(playerid))
 		return 0;
-
+		
 	inv_GearActive[playerid] = true;
 
 	for(new i; i < 3; i++)

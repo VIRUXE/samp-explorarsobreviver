@@ -179,6 +179,10 @@ _wb_ClearWorkbench(Item:itemid)
 
 _wb_StartWorking(playerid, Item:itemid, buildtime)
 {
+	if(wb_CurrentWorkbench[playerid] != INVALID_ITEM_ID) {
+			dbg("workbench", 1, "[OnPlayerKeyStateChange] stopping workbench build");
+			_wb_StopWorking(playerid);
+	} else {
 	new Container:containerid, Container:containerid2;
 
 	GetItemArrayDataAtCell(itemid, _:containerid, 0);
@@ -192,6 +196,7 @@ _wb_StartWorking(playerid, Item:itemid, buildtime)
 		if(containerid2 == containerid)
 		{
 			ShowPlayerDialog(i, -1, DIALOG_STYLE_MSGBOX, " ", " ", " ", " ");
+			CancelSelectTextDraw(playerid);
 			HidePlayerGear(i);
 		}
 	}
@@ -203,6 +208,7 @@ _wb_StartWorking(playerid, Item:itemid, buildtime)
 	ApplyAnimation(playerid, "INT_SHOP", "SHOP_CASHIER", 4.0, 1, 0, 0, 0, 0, 1);
 	StartHoldAction(playerid, buildtime);
 	wb_CurrentWorkbench[playerid] = itemid;
+	}
 }
 
 _wb_StopWorking(playerid)
@@ -229,20 +235,6 @@ _wb_CreateResult(Item:itemid, CraftSet:craftset)
 	GetCraftSetResult(craftset, resulttype);
 
 	CreateItem(resulttype, x, y, z + 0.95, 0.0, 0.0, rz - 95.0 + frandom(10.0));
-}
-
-hook OnPlayerKeyStateChange(playerid, newkeys, oldkeys)
-{
-	if(RELEASED(16))
-	{
-		if(wb_CurrentWorkbench[playerid] != INVALID_ITEM_ID)
-		{
-			dbg("workbench", 1, "[OnPlayerKeyStateChange] stopping workbench build");
-			_wb_StopWorking(playerid);
-		}
-	}
-
-	return 1;
 }
 
 hook OnHoldActionFinish(playerid)

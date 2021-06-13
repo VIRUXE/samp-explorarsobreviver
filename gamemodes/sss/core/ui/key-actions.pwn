@@ -100,12 +100,12 @@ hook OnPlayerCloseInventory(playerid)
 	_UpdateKeyActions(playerid);
 }
 
-hook OnPlayerOpenContainer(playerid, containerid)
+hook OnPlayerOpenContainer(playerid, Container:containerid)
 {
 	HidePlayerKeyActionUI(playerid);
 }
 
-hook OnPlayerCloseContainer(playerid, containerid)
+hook OnPlayerCloseContainer(playerid, Container:containerid)
 {
 	_UpdateKeyActions(playerid);
 }

@@ -232,6 +232,14 @@ hook OnPlayerExitVehicle(playerid, vehicleid)
 	}
 }
 
+// ExitVehicle
+IRPC:154(playerid, BitStream:bs){
+	if(knockout_KnockedOut[playerid])
+		return 0;
+		
+	return 1;
+}
+
 hook OnPlayerKeyStateChange(playerid, newkeys, oldkeys)
 {
 	if(knockout_KnockedOut[playerid])

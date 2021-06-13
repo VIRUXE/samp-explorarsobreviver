@@ -777,6 +777,7 @@ ACMD:additem[3](playerid, params[])
 		Float:r;
 
 	GetItemTypeArrayDataSize(type, typemaxsize);
+
 	GetPlayerPos(playerid, x, y, z);
 	GetPlayerFacingAngle(playerid, r);
 

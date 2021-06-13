@@ -164,19 +164,22 @@ _StartDrinking(playerid, Item:itemid, continuing = false)
 	if(!IsPlayerIdle(playerid) && !continuing)
 		return;
 
-	if(CallLocalFunction("OnPlayerDrink", "dd", playerid, _:itemid))
-	{
-		if(continuing)
+	if(liq_CurrentItem[playerid] != INVALID_ITEM_ID) {
 			_StopDrinking(playerid);
+	} else {
+		if(CallLocalFunction("OnPlayerDrink", "dd", playerid, _:itemid))
+		{
+			if(continuing)
+				_StopDrinking(playerid);
 
-		return;
+			return;
+		}
+
+		liq_CurrentItem[playerid] = itemid;
+
+		ApplyAnimation(playerid, "BAR", "dnk_stndM_loop", 3.0, 0, 1, 1, 0, 0, 1);
+		StartHoldAction(playerid, 1000);
 	}
-
-	liq_CurrentItem[playerid] = itemid;
-
-	ApplyAnimation(playerid, "BAR", "dnk_stndM_loop", 3.0, 0, 1, 1, 0, 0, 1);
-	StartHoldAction(playerid, 1000);
-
 	return;
 }
 
@@ -239,15 +242,6 @@ hook OnHoldActionFinish(playerid)
 	}
 
 	return Y_HOOKS_CONTINUE_RETURN_0;
-}
-
-hook OnPlayerKeyStateChange(playerid, newkeys, oldkeys)
-{
-	if(oldkeys & 16 && !(newkeys & 16))
-	{
-		if(liq_CurrentItem[playerid] != INVALID_ITEM_ID)
-			_StopDrinking(playerid);
-	}
 }
 
 hook OnPlayerCrafted(playerid, CraftSet:craftset, result)

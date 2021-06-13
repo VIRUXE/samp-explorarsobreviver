@@ -141,19 +141,33 @@ hook OnPlayerUseItem(playerid, Item:itemid)
 					dbg("craft-construct", 2, "[OnPlayerUseItem] Tool matches current item, begin holdaction");
 					if(!CallLocalFunction("OnPlayerConstruct", "dd", playerid, cons_CraftsetConstructSet[craftset]))
 					{
-						new
-							uniqueid[MAX_ITEM_NAME],
-							ItemType:result;
-						GetCraftSetResult(craftset, result);
+						if(cons_Constructing[playerid] != INVALID_CRAFTSET)
+						{
+							StopHoldAction(playerid);
+							ClearAnimations(playerid);
+							HideActionText(playerid);
+							_ResetSelectedItems(playerid);
 
-						GetItemTypeName(result, uniqueid);
-						StartHoldAction(playerid, GetPlayerSkillTimeModifier(playerid, cons_Data[cons_CraftsetConstructSet[craftset]][cons_buildtime], uniqueid));
-						ApplyAnimation(playerid, "BOMBER", "BOM_Plant_Loop", 4.0, 1, 0, 0, 0, 0, 1);
-						ShowActionText(playerid, ls(playerid, "CONSTRUCTIN", true));
+							cons_Constructing[playerid] = INVALID_CRAFTSET;
+						}
+						else if(cons_Deconstructing[playerid] != INVALID_CRAFTSET)
+						{
+							StopRemovingConstructedItem(playerid);
+						} else {
+							new
+								uniqueid[MAX_ITEM_NAME],
+								ItemType:result;
+							GetCraftSetResult(craftset, result);
 
-						cons_Constructing[playerid] = craftset;
+							GetItemTypeName(result, uniqueid);
+							StartHoldAction(playerid, GetPlayerSkillTimeModifier(playerid, cons_Data[cons_CraftsetConstructSet[craftset]][cons_buildtime], uniqueid));
+							ApplyAnimation(playerid, "BOMBER", "BOM_Plant_Loop", 4.0, 1, 0, 0, 0, 0, 1);
+							ShowActionText(playerid, ls(playerid, "CONSTRUCTIN", true));
 
-						return Y_HOOKS_BREAK_RETURN_1;
+							cons_Constructing[playerid] = craftset;
+
+							return Y_HOOKS_BREAK_RETURN_1;
+						}
 					}
 					else
 					{
@@ -180,8 +194,22 @@ hook OnPlayerUseItemWithItem(playerid, Item:itemid, Item:withitemid)
 			dbg("craft-construct", 2, "[OnPlayerUseItemWithItem] craftset is a construction set");
 			if(GetItemType(itemid) == cons_Data[cons_CraftsetConstructSet[craftset]][cons_removalTool])
 			{
-				dbg("craft-construct", 2, "[OnPlayerUseItemWithItem] held item is removal tool of craft set");
-				StartRemovingConstructedItem(playerid, withitemid, craftset);
+				if(cons_Constructing[playerid] != INVALID_CRAFTSET)
+				{
+					StopHoldAction(playerid);
+					ClearAnimations(playerid);
+					HideActionText(playerid);
+					_ResetSelectedItems(playerid);
+
+					cons_Constructing[playerid] = INVALID_CRAFTSET;
+				}
+				else if(cons_Deconstructing[playerid] != INVALID_CRAFTSET)
+				{
+					StopRemovingConstructedItem(playerid);
+				} else {
+					dbg("craft-construct", 2, "[OnPlayerUseItemWithItem] held item is removal tool of craft set");
+					StartRemovingConstructedItem(playerid, withitemid, craftset);
+				}
 			}
 		}
 	}
@@ -321,26 +349,6 @@ hook OnHoldActionFinish(playerid)
 				CreateItem(recipedata[i][craft_itemType], x + frandom(0.6), y + frandom(0.6), z, 0.0, 0.0, frandom(360.0), world, interior);
 			}
 
-			StopRemovingConstructedItem(playerid);
-		}
-	}
-}
-
-hook OnPlayerKeyStateChange(playerid, newkeys, oldkeys)
-{
-	if(RELEASED(16))
-	{
-		if(cons_Constructing[playerid] != INVALID_CRAFTSET)
-		{
-			StopHoldAction(playerid);
-			ClearAnimations(playerid);
-			HideActionText(playerid);
-			_ResetSelectedItems(playerid);
-
-			cons_Constructing[playerid] = INVALID_CRAFTSET;
-		}
-		else if(cons_Deconstructing[playerid] != INVALID_CRAFTSET)
-		{
 			StopRemovingConstructedItem(playerid);
 		}
 	}

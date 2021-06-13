@@ -499,7 +499,7 @@ stock ShowElevatorDialog(playerid)
 	    strcat(string, "\n");
 	}
 
-	ShowPlayerDialog(playerid, DIALOG_ID, DIALOG_STYLE_LIST, "Elevator", string, "Accept", "Cancel");
+	(playerid, DIALOG_ID, DIALOG_STYLE_LIST, "Elevator", string, "Accept", "Cancel");
 
 	return 1;
 }

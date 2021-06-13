@@ -96,6 +96,7 @@ IRawPacket:ID_CUSTOM_SYNC(playerid, BitStream:bs)
         PlayerMobileInfo[playerid][isMobile] = true; // system for newer version
 		PlayerMobileInfo[playerid][isHaveAutoaim] = bool:autoaim;
 	}
+	else printf("Mobile: Send RPCID: %d", rpcid); // Test
 	return 1;
 }
 
@@ -109,15 +110,19 @@ stock bool:IsPlayerHaveAutoaim(playerid)
     return PlayerMobileInfo[playerid][isHaveAutoaim];
 }
 
-//SendDialogResponse 
-ORPC:62(playerid, BitStream:bs)
+stock m_GetPlayerAnimationIndex(playerid)
 {
-	new wDialogID;
-	BS_ReadValue(bs, PR_UINT16, wDialogID);
+	new anim = GetPlayerAnimationIndex(playerid);
+    if(PlayerMobileInfo[playerid][isMobile] && anim == 0)
+		anim = 1183;
 
-	// Fix Close Dialog
-	if(wDialogID == -1 && PlayerMobileInfo[playerid][isMobile])
-		return 0;
-
-	return 1;
+    return anim;
 }
+
+#if defined _ALS_GetPlayerAnimationIndex
+#undef GetPlayerAnimationIndex
+#else
+#define _ALS_GetPlayerAnimationIndex
+#endif
+ 
+#define GetPlayerAnimationIndex m_GetPlayerAnimationIndex

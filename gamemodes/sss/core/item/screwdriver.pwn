@@ -42,31 +42,23 @@ hook OnPlayerUseItemWithItem(playerid, Item:itemid, Item:withitemid)
 
 			if(trigger == RADIO || trigger == MOTION)
 			{
-				new armed;
-				GetItemExtraData(withitemid, armed);
-				if(armed == 1)
-				{
-					StartHoldAction(playerid, 2000);
-					ApplyAnimation(playerid, "BOMBER", "BOM_Plant_Loop", 4.0, 1, 0, 0, 0, 0);
-					scr_TargetItem[playerid] = withitemid;
+				if(IsValidItem(scr_TargetItem[playerid])) {
+					StopHoldAction(playerid);
+				} else {
+					new armed;
+					GetItemExtraData(withitemid, armed);
+					if(armed == 1)
+					{
+						StartHoldAction(playerid, 2000);
+						ApplyAnimation(playerid, "BOMBER", "BOM_Plant_Loop", 4.0, 1, 0, 0, 0, 0);
+						scr_TargetItem[playerid] = withitemid;
+					}
 				}
 			}
 		}
 	}
 
 	return Y_HOOKS_CONTINUE_RETURN_0;
-}
-
-
-hook OnPlayerKeyStateChange(playerid, newkeys, oldkeys)
-{
-	if(oldkeys & 16)
-	{
-		if(IsValidItem(scr_TargetItem[playerid]))
-			StopHoldAction(playerid);
-	}
-
-	return 1;
 }
 
 hook OnHoldActionFinish(playerid)

@@ -139,7 +139,11 @@ world_civilian, 1.0
 1.0,	Cross
 0.5,	WoodLog
 1.0,	Flashlight
-1.0,	LaserPoint
+0.65,	LaserPointR
+0.2,	LaserPointB
+0.2,	LaserPointY
+0.2,	LaserPointG
+0.1,	LaserPointP
 0.1,	HerpDerp
 1.0,	Flag
 0.1,	EasterEgg

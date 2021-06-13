@@ -59,15 +59,13 @@ hook OnPlayerKeyStateChange(playerid, newkeys, oldkeys)
 {
 	if(GetItemType(GetPlayerItem(playerid)) == item_FishRod)
 	{
-		if(newkeys == 16)
-		{
-			if(fish_Status[playerid] == FISH_STATUS_WAITING)
-				_PlayerStopFishing(playerid);
-		}
-		else if(oldkeys == 16)
+		if(newkeys & 16)
 		{
 			if(fish_Status[playerid] == FISH_STATUS_CASTING)
 				_CatchFish(playerid, fish_Distance[playerid]);
+
+			if(fish_Status[playerid] == FISH_STATUS_WAITING)
+				_PlayerStopFishing(playerid);
 		}
 	}
 	return 1;
@@ -75,13 +73,14 @@ hook OnPlayerKeyStateChange(playerid, newkeys, oldkeys)
 
 _PlayerStartFishing(playerid)
 {
-	if(fish_Status[playerid] != FISH_STATUS_NONE)
+	if(fish_Status[playerid] != FISH_STATUS_NONE) {
 		_PlayerStopFishing(playerid);
+	} else {
+		StartHoldAction(playerid, MAX_FISHING_DISTANCE);
+		fish_Status[playerid] = FISH_STATUS_CASTING;
 
-	StartHoldAction(playerid, MAX_FISHING_DISTANCE);
-	fish_Status[playerid] = FISH_STATUS_CASTING;
-
-	ApplyAnimation(playerid, "SAMP", "FishingIdle", 4.1, 1, 0, 0, 0, 0);
+		ApplyAnimation(playerid, "SAMP", "FishingIdle", 4.1, 1, 0, 0, 0, 0);
+	}
 }
 
 _PlayerStopFishing(playerid)

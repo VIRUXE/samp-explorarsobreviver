@@ -156,7 +156,9 @@ hook OnPlayerClickPlayerTD(playerid, PlayerText:playertextid)
         PlayerTutorial_Item[19][playerid] = CreateItem(item_PumpShotgun, 959.1787,2082.9680,9.8603, .rz = frandom(360.0), .world = playerid + 1);
         PlayerTutorial_Item[20][playerid] = CreateItem(item_AmmoBuck, 961.2108,2083.3938,9.8603, .rz = frandom(360.0), .world = playerid + 1);
         
-		new ItemType:itemtype = GetItemType(PlayerTutorial_Item[20][playerid]);
+		SetItemExtraData(PlayerTutorial_Item[20][playerid], 12);
+
+		/*new ItemType:itemtype = GetItemType(PlayerTutorial_Item[20][playerid]);
 		new magsize = GetItemTypeWeaponMagSize(itemtype);
 		SetItemWeaponItemMagAmmo(PlayerTutorial_Item[20][playerid], magsize);
 
@@ -167,7 +169,7 @@ hook OnPlayerClickPlayerTD(playerid, PlayerText:playertextid)
 
 		ammotypes = GetAmmoItemTypesOfCalibre(calibre, ammotypelist);
 
-		SetItemWeaponItemAmmoItem(PlayerTutorial_Item[20][playerid], ammotypelist[random(ammotypes)]);
+		SetItemWeaponItemAmmoItem(PlayerTutorial_Item[20][playerid], ammotypelist[random(ammotypes)]);*/
 		
 		PlayerTutorial_Item[21][playerid] = CreateItem(item_GasCan, 938.4733,2063.2769,9.8603, .rz = frandom(360.0), .world = playerid + 1);
 		SetLiquidItemLiquidType(PlayerTutorial_Item[21][playerid], liquid_Petrol);

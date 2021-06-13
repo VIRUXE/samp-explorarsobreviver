@@ -141,21 +141,16 @@ public OnPlayerInteractVehicle(playerid, vehicleid, Float:angle)
 	return Y_HOOKS_CONTINUE_RETURN_0;
 }
 
-hook OnPlayerKeyStateChange(playerid, newkeys, oldkeys)
-{
-	if(oldkeys & 16)
-	{
-		StopCraftingKey(playerid);
-	}
-}
-
 StartCraftingKey(playerid, vehicleid)
 {
-	lsk_TargetVehicle[playerid] = vehicleid;
-	ApplyAnimation(playerid, "COP_AMBIENT", "COPBROWSE_LOOP", 4.0, 1, 0, 0, 0, 0);
+	if(IsValidVehicle(lsk_TargetVehicle[playerid])) {
+		StopCraftingKey(playerid);
+	} else {
+		lsk_TargetVehicle[playerid] = vehicleid;
+		ApplyAnimation(playerid, "COP_AMBIENT", "COPBROWSE_LOOP", 4.0, 1, 0, 0, 0, 0);
 
-	StartHoldAction(playerid, 3000);
-
+		StartHoldAction(playerid, 3000);
+	}
 	return 0;
 }
 

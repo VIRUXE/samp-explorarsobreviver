@@ -71,31 +71,25 @@ hook OnPlayerUseItem(playerid, Item:itemid)
 {
 	if(GetItemType(itemid) == item_AutoInjec)
 	{
-		new targetid = playerid;
+		if(inj_CurrentItem[playerid] != INVALID_ITEM_ID) {
+			StopInjecting(playerid);
+		} else {
+			new targetid = playerid;
 
-		foreach(new i : Player)
-		{
-			if(IsPlayerNextToPlayer(playerid, i))
+			foreach(new i : Player)
 			{
-				targetid = i;
-				break;
+				if(IsPlayerNextToPlayer(playerid, i))
+				{
+					targetid = i;
+					break;
+				}
 			}
-		}
 
-		StartInjecting(playerid, targetid);
+			StartInjecting(playerid, targetid);
+		}
 	}
 
 	return Y_HOOKS_CONTINUE_RETURN_0;
-}
-
-hook OnPlayerKeyStateChange(playerid, newkeys, oldkeys)
-{
-	if(oldkeys & 16 && inj_CurrentItem[playerid] != INVALID_ITEM_ID)
-	{
-		StopInjecting(playerid);
-	}
-
-	return 1;
 }
 
 StartInjecting(playerid, targetid)

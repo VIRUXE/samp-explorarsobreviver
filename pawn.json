@@ -44,7 +44,8 @@
 		"Southclaws/samp-zipline",
 		"Southclaws/samp-ladders",
 		"NexiusTailer/Nex-AC",
-		"TommyB123/eSelection"
+		"TommyB123/eSelection",
+		"Southclaws/samp-animbrowse"
 	],
 	"build": {
 		"args": [

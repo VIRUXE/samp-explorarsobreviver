@@ -30,7 +30,7 @@ Float:		bl_posY
 static
 Float:		bod_UIWidth		[MAX_PLAYERS] = {120.0, ...},
 Float:		bod_UIPositionX	[MAX_PLAYERS] = {70.0, ...},
-Float:		bod_UIPositionY	[MAX_PLAYERS] = {150.0, ...},
+Float:		bod_UIPositionY	[MAX_PLAYERS] = {163.0, ...},
 Float:		bod_UIFontSizeX	[MAX_PLAYERS] = {0.25, ...},
 Float:		bod_UIFontSizeY	[MAX_PLAYERS] = {1.05, ...},
 PlayerText:	bod_Header		[MAX_PLAYERS] = {PlayerText:INVALID_TEXT_DRAW, ...},
@@ -72,6 +72,7 @@ CreateBodyPreviewUI(playerid)
 	PlayerTextDrawSetOutline		(playerid, bod_Header[playerid], 0);
 	PlayerTextDrawSetProportional	(playerid, bod_Header[playerid], 1);
 	PlayerTextDrawSetShadow			(playerid, bod_Header[playerid], 1);
+	PlayerTextDrawBoxColor			(playerid, bod_Header[playerid], 255);
 	PlayerTextDrawUseBox			(playerid, bod_Header[playerid], 1);
 	PlayerTextDrawTextSize			(playerid, bod_Header[playerid], 0.0, bod_UIWidth[playerid]);
 
@@ -84,7 +85,7 @@ CreateBodyPreviewUI(playerid)
 	PlayerTextDrawSetProportional	(playerid, bod_Background[playerid], 1);
 	PlayerTextDrawSetShadow			(playerid, bod_Background[playerid], 1);
 	PlayerTextDrawUseBox			(playerid, bod_Background[playerid], 1);
-	PlayerTextDrawBoxColor			(playerid, bod_Background[playerid], 128);
+	PlayerTextDrawBoxColor			(playerid, bod_Background[playerid], 175);
 	PlayerTextDrawTextSize			(playerid, bod_Background[playerid], 0.0, bod_UIWidth[playerid]);
 
 	bod_Footer[playerid]			=CreatePlayerTextDraw(playerid, bod_UIPositionX[playerid], bod_UIPositionY[playerid] + 204.0, "Not Healthy");
@@ -120,6 +121,7 @@ stock ShowBodyPreviewUI(playerid)
 	PlayerTextDrawShow(playerid, bod_BodyPreview[playerid]);
 
 	bod_Shown[playerid] = true;
+	return 1;
 }
 
 stock HideBodyPreviewUI(playerid)

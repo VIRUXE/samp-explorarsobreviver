@@ -33,9 +33,7 @@ Float:		skin_lootSpawnChance,
 
 static
 			skin_Total,
-			skin_Data[MAX_SKINS][E_SKIN_DATA];
-
-static
+			skin_Data[MAX_SKINS][E_SKIN_DATA],
 			skin_CurrentSkin[MAX_PLAYERS],
 Item:		skin_CurrentlyUsing[MAX_PLAYERS];
 
@@ -117,6 +115,11 @@ hook OnPlayerKeyStateChange(playerid, newkeys, oldkeys)
 {
 	if(newkeys & 16)
 	{
+		if(skin_CurrentlyUsing[playerid] != INVALID_ITEM_ID)
+		{
+			StopUsingClothes(playerid);
+		}
+		
 		new Item:itemid = GetPlayerItem(playerid);
 
 		if(GetItemType(itemid) == item_Clothes)
@@ -129,14 +132,6 @@ hook OnPlayerKeyStateChange(playerid, newkeys, oldkeys)
 
 			else
 				ShowActionText(playerid, ls(playerid, "CLOTHESWRGE", true), 3000, 130);
-		}
-	}
-
-	if(oldkeys == 16)
-	{
-		if(skin_CurrentlyUsing[playerid] != INVALID_ITEM_ID)
-		{
-			StopUsingClothes(playerid);
 		}
 	}
 

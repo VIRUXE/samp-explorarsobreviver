@@ -220,7 +220,7 @@ _DisplaySafeboxDialog(playerid, Item:itemid, animation)
 	return 1;
 }
 
-hook OnPlayerCloseContainer(playerid, containerid)
+hook OnPlayerCloseContainer(playerid, Container:containerid)
 {
 	if(IsValidItem(box_CurrentBoxItem[playerid]))
 	{

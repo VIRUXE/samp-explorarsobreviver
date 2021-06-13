@@ -94,10 +94,10 @@ new currentInt[MAX_PLAYERS] = {-1};
 //  [ Array of property type iconid's and strings for property type ]
 new propIcons[MAX_TYPES][E_P_TYPES] =	{
 											{ 0, "" }, 					// TYPE_EMPTY ( not used )
-											{ 19605, "House" }, 			// TYPE_HOUSE green house icon
-											{ 19605, "Business" }, 		// TYPE_BUSINESS blue house icon
-											{ 19605, "Bank" }, 			// TYPE_BANK dollar sign icon
-											{ 19605, "Police Station" }	// TYPE_COP Bribe Star 1247
+											{ 19133, "House" }, 			// TYPE_HOUSE green house icon
+											{ 19133, "Business" }, 		// TYPE_BUSINESS blue house icon
+											{ 19133, "Bank" }, 			// TYPE_BANK dollar sign icon
+											{ 19133, "Police Station" }	// TYPE_COP Bribe Star 1247
 										};
 										
 new	propFile[MAX_TYPES][64] =   {
@@ -344,9 +344,9 @@ ReadInteriorInfo( const fileName[] )
 			/*CreateDynamic3DTextLabel("Press F to exit", 
 				WHITE, interiorInfo[uniqId][inExitX],
 					interiorInfo[uniqId][inExitY],
-					interiorInfo[uniqId][inExitZ], 20.0);*/
+					interiorInfo[uniqId][inExitZ], 20.0);*
 
-			/*
+			
 			printf( "ReadInteriorInfo(%d, %d, %f, %f, %f, %f ( %s ))",
 					uniqId,
 					interiorInfo[uniqId][inIntID],
@@ -354,7 +354,8 @@ ReadInteriorInfo( const fileName[] )
 					interiorInfo[uniqId][inExitY],
 					interiorInfo[uniqId][inExitZ],
 					interiorInfo[uniqId][inExitA],
-					interiorInfo[uniqId][inName] );*/
+					interiorInfo[uniqId][inName] );
+			*/
 
 		}
 		//printf( "Interiors File read successfully" );
@@ -442,8 +443,8 @@ PutPlayerInProperty( playerid, propId)
 CreateProperty( uniqIntId, iconId,  Float:entX, Float:entY, Float:entZ, Float:entA, p_type, name[64]="", owner=-1, price=0 )
 {
 	if( (unid+1) < MAX_PROPERTIES ){
-		new Id = CreateDynamicPickup( 19133 , 1, entX, entY, entZ);
-		printf( "CreateProperty(%d, %d, %f, %f, %f, %f, %d)", uniqIntId, iconId, entX, entY, entZ, entA, p_type );
+		new Id = CreateDynamicPickup( iconId , 1, entX, entY, entZ);
+		//printf( "CreateProperty(%d, %d, %f, %f, %f, %f, %d)", uniqIntId, iconId, entX, entY, entZ, entA, p_type );
 		propPickups[Id] = unid;
 		properties[unid][eEntX] 	= entX;
 		properties[unid][eEntY] 	= entY;
@@ -560,7 +561,8 @@ public OnPlayerPickUpDynamicPickup(playerid, STREAMER_TAG_PICKUP:pickupid)
 		
 		SetPlayerVirtualWorld( playerid, 0 );
 		
-		GameTextForPlayer(playerid, "_", 3000, 3);
+		//GameTextForPlayer(playerid, "_", 3000, 3);
+		ChatMsg(playerid, YELLOW, " > Você entrou no interior id: %d", id);
 		currentInt[playerid] = -1;
 		defer ResetPickup(playerid);
 		return 1;

@@ -96,6 +96,21 @@ hook OnPlayerInteractVehicle(playerid, vehicleid, Float:angle)
 	return Y_HOOKS_CONTINUE_RETURN_0;
 }
 
+hook OnPlayerOpenContainer(playerid, Container:containerid)
+{
+	new vehicleid = trunk_ContainerVehicle[containerid];
+
+	if(IsValidVehicle(vehicleid))
+	{
+		if(!IsPlayerAtVehicleTrunk(playerid, vehicleid))
+		{
+			err("player has opened a trunk of vehicle %d without being near it.", vehicleid);
+			//return Y_HOOKS_BREAK_RETURN_1;
+		}
+	}
+	return Y_HOOKS_CONTINUE_RETURN_0;
+}
+
 hook OnPlayerCloseContainer(playerid, Container:containerid)
 {
 	if(IsValidVehicle(trunk_CurrentVehicle[playerid]))

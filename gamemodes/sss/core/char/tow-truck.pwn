@@ -26,7 +26,7 @@ hook OnPlayerKeyStateChange(playerid, newkeys, oldkeys)
 	if(GetVehicleModel(vehicleid) != 525)
 		return 1;
 
-	if(newkeys == KEY_ACTION)
+	if(newkeys & KEY_ACTION)
 	{
 		new
 			Float:vx1,

@@ -70,18 +70,6 @@ CMD:chatinfo(playerid, params[])
 	return 1;
 }
 
-CMD:restartinfo(playerid, params[])
-{
-	gBigString[playerid][0] = EOS;
-
-	strcat(gBigString[playerid], sprintf(ls(playerid, "GENCOMDRES1"), floatround(gServerMaxUptime / 3600)));
-	strcat(gBigString[playerid], ls(playerid, "GENCOMDRES2"));
-
-	Dialog_Show(playerid, DIALOG_STYLE_MSGBOX, "Information about "C_BLUE"Server Restarts", gBigString[playerid], "Close", "");
-
-	return 1;
-}
-
 CMD:tooltips(playerid, params[])
 {
 	if(IsPlayerToolTipsOn(playerid))

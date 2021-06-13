@@ -366,7 +366,7 @@ PlayerSpawnNewCharacter(playerid, gender)
 			if(spawn_ResItems[i][e_itmobj_exdata] != 0)
 				SetItemExtraData(tmpitem, spawn_ResItems[i][e_itmobj_exdata]);
 
-			AddItemToPlayer(playerid, tmpitem, true, false);
+			AddItemToInventory(playerid, tmpitem);
 		}
 
 		if(IsNewPlayer(playerid))
@@ -381,7 +381,7 @@ PlayerSpawnNewCharacter(playerid, gender)
 				if(spawn_NewItems[i][e_itmobj_exdata] != 0)
 					SetItemExtraData(tmpitem, spawn_NewItems[i][e_itmobj_exdata]);
 
-				AddItemToPlayer(playerid, tmpitem, true, false);
+				AddItemToInventory(playerid, tmpitem);
 			}
 		}
 	}

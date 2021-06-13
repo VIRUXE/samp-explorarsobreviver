@@ -35,8 +35,8 @@ Float:		wepc_CurrentPosX,
 Float:		wepc_CurrentPosY,
 Float:		wepc_CurrentPosZ,
 			webc_ActiveDrop = -1,
-Container:	webc_Containerid,
-Button:		webc_Button;
+Container:	webc_Containerid = INVALID_CONTAINER_ID,
+Button:		webc_Button = INVALID_BUTTON_ID;
 
 
 hook OnGameModeInit()
@@ -130,6 +130,12 @@ WeaponsCacheDrop(Float:x, Float:y, Float:z)
 	wepc_CurrentPosX = x;
 	wepc_CurrentPosY = y;
 	wepc_CurrentPosZ = z;
+
+	if(webc_Containerid != INVALID_CONTAINER_ID)
+		DestroyContainer(webc_Containerid);
+
+	if(webc_Button != INVALID_BUTTON_ID)
+		DestroyButton(webc_Button);
 
 	webc_Containerid = CreateContainer("Weapon Cache", 32);
 	webc_Button = CreateButton(x, y - 0.5, z + 1.0, "Weapon Cache", .label = 1, .labeltext = "Weapon Cache");

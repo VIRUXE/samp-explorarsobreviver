@@ -1019,15 +1019,16 @@ stock GetItemTypeWeaponFlags(ItemType:itemtype)
 stock GetItemWeaponItemMagAmmo(Item:itemid)
 {
 	dbg("weapon-core", 3, "GetItemWeaponItemMagAmmo itemid:%d", _:itemid);
-	new ret;
-	GetItemArrayDataAtCell(itemid, ret, WEAPON_ITEM_ARRAY_CELL_MAG);
+	new ret, Error:e;
+	e = GetItemArrayDataAtCell(itemid, ret, WEAPON_ITEM_ARRAY_CELL_MAG);
+	if(IsError(e))
+		return Handled();
 	return ret < 0 ? 0 : ret;
 }
 
 stock Error:SetItemWeaponItemMagAmmo(Item:itemid, amount)
 {
 	dbg("weapon-core", 3, "SetItemWeaponItemMagAmmo itemid:%d, amount:%d", _:itemid, amount);
-
 	if(amount == 0)
 	{
 		if(GetItemWeaponItemReserve(itemid) == 0)
@@ -1052,7 +1053,6 @@ stock GetItemWeaponItemReserve(Item:itemid)
 stock Error:SetItemWeaponItemReserve(Item:itemid, amount)
 {
 	dbg("weapon-core", 3, "SetItemWeaponItemReserve itemid:%d, amount:%d", _:itemid, amount);
-
 	if(amount == 0)
 	{
 		if(GetItemWeaponItemMagAmmo(itemid) == 0)
@@ -1067,8 +1067,11 @@ stock Error:SetItemWeaponItemReserve(Item:itemid, amount)
 stock ItemType:GetItemWeaponItemAmmoItem(Item:itemid)
 {
 	dbg("weapon-core", 3, "GetItemWeaponItemAmmoItem itemid:%d", _:itemid);
-	new ItemType:itemtype;
-	GetItemArrayDataAtCell(itemid, _:itemtype, WEAPON_ITEM_ARRAY_CELL_AMMOITEM);
+	new ItemType:itemtype, Error:e;
+	e = GetItemArrayDataAtCell(itemid, _:itemtype, WEAPON_ITEM_ARRAY_CELL_AMMOITEM);
+	if(IsError(e))
+		Handled();
+
 	return itemtype;
 }
 
@@ -1076,8 +1079,25 @@ stock Error:SetItemWeaponItemAmmoItem(Item:itemid, ItemType:itemtype)
 {
 	dbg("weapon-core", 3, "SetItemWeaponItemAmmoItem itemid:%d, itemtype:%d", _:itemid, _:itemtype);
 	SetItemArrayDataSize(itemid, 4);
-
+	
 	return SetItemArrayDataAtCell(itemid, _:itemtype, WEAPON_ITEM_ARRAY_CELL_AMMOITEM);
+}
+
+// WEAPON_ITEM_ARRAY_CELL_MODS
+stock GetItemWeaponMods(Item:itemid)
+{
+	dbg("weapon-core", 3, "GetItemWeaponMods itemid:%d", _:itemid);
+	new modtype, Error:e;
+	e = GetItemArrayDataAtCell(itemid, modtype, WEAPON_ITEM_ARRAY_CELL_MODS);
+	if(IsError(e))
+		return Handled();
+	return modtype;
+}
+
+stock Error:SetItemWeaponMods(Item:itemid, modtype)
+{
+	dbg("weapon-core", 3, "SetItemWeaponAmmoItem itemid:%d, modtype:%d", _:itemid, modtype);
+	return SetItemArrayDataAtCell(itemid, modtype, WEAPON_ITEM_ARRAY_CELL_MODS);
 }
 
 // From player
@@ -1086,7 +1106,7 @@ stock GetPlayerMagAmmo(playerid)
 {
 	if(!IsPlayerConnected(playerid))
 		return 0;
-
+		
 	return GetItemWeaponItemMagAmmo(GetPlayerItem(playerid));
 }
 

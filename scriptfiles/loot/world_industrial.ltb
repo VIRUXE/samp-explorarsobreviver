@@ -48,7 +48,11 @@ world_industrial, 1.0
 12.0,	Bottle
 14.0,	Bucket
 15.0,	Flashlight
-2.0,	LaserPoint
+1.65,	LaserPointR
+1.2,	LaserPointB
+1.2,	LaserPointY
+1.2,	LaserPointG
+1.1,	LaserPointP
 12.0,	Broom
 2.0,	Canister
 3.0,	WoodLog

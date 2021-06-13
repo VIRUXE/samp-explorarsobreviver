@@ -64,23 +64,23 @@ hook OnPlayerKeyStateChange(playerid, newkeys, oldkeys)
 
 	if(itemtype == item_Medkit || itemtype == item_Bandage || itemtype == item_DoctorBag || itemtype == item_AntiSepBandage)
 	{
-		if(newkeys == 16)
+		if(newkeys & 16)
 		{
 			if(IsPlayerKnockedOut(playerid))
 				return 0;
 
-			med_HealTarget[playerid] = playerid;
-			foreach(new i : Character)
-			{
-				if(IsPlayerNextToPlayer(playerid, i) && !IsPlayerInAnyVehicle(i))
-					med_HealTarget[playerid] = i;
-			}
+			if(IsPlayerConnected(med_HealTarget[playerid])) {
+				PlayerStopHeal(playerid);
+			} else {
+				med_HealTarget[playerid] = playerid;
+				foreach(new i : Character)
+				{
+					if(IsPlayerNextToPlayer(playerid, i) && !IsPlayerInAnyVehicle(i))
+						med_HealTarget[playerid] = i;
+				}
 
-			PlayerStartHeal(playerid, med_HealTarget[playerid]);
-		}
-		if(oldkeys == 16)
-		{
-			PlayerStopHeal(playerid);
+				PlayerStartHeal(playerid, med_HealTarget[playerid]);
+			}
 		}
 	}
 

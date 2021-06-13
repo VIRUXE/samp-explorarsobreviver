@@ -207,7 +207,7 @@ ItemType:		item_Hammer			= INVALID_ITEM_TYPE,
 ItemType:		item_Shield			= INVALID_ITEM_TYPE,
 ItemType:		item_Flashlight		= INVALID_ITEM_TYPE,
 ItemType:		item_StunGun		= INVALID_ITEM_TYPE,
-ItemType:		item_LaserPoint		= INVALID_ITEM_TYPE,
+ItemType:		item_LaserPointR	= INVALID_ITEM_TYPE,
 ItemType:		item_Screwdriver	= INVALID_ITEM_TYPE,
 // 70
 ItemType:		item_MobilePhone	= INVALID_ITEM_TYPE,
@@ -467,8 +467,11 @@ ItemType:		item_BandanaWhite	= INVALID_ITEM_TYPE,
 ItemType:		item_BandanaPattern	= INVALID_ITEM_TYPE,
 ItemType:		item_Cuntainer		= INVALID_ITEM_TYPE,
 ItemType:		item_RedCrate		= INVALID_ITEM_TYPE,
-ItemType:		item_MetalGate1		= INVALID_ITEM_TYPE;
-
+ItemType:		item_MetalGate1		= INVALID_ITEM_TYPE,
+ItemType:		item_LaserPointB	= INVALID_ITEM_TYPE,
+ItemType:		item_LaserPointY	= INVALID_ITEM_TYPE,
+ItemType:		item_LaserPointP	= INVALID_ITEM_TYPE,
+ItemType:		item_LaserPointG	= INVALID_ITEM_TYPE;
 // VEHICLE TYPES
 new stock
 	veht_Bobcat,
@@ -673,7 +676,7 @@ public OnScriptInit()
 	item_Shield			= DefineItemType("Shield",				"Shield",			18637,	8,	0.0, 0.0, 0.0,			0.0,	-0.262389, 0.016478, -0.151046, 103.597534, 6.474381, 38.321765, .maxhitpoints = 8);
 	item_Flashlight		= DefineItemType("Flashlight",			"Flashlight",		18641,	2,	90.0, 0.0, 0.0,			0.0,	0.061910, 0.022700, 0.039052, 190.938354, 0.000000, 0.000000, .maxhitpoints = 2);
 	item_StunGun		= DefineItemType("Stun Gun",			"StunGun",			18642,	1,	90.0, 0.0, 0.0,			0.0,	0.079878, 0.014009, 0.029525, 180.000000, 0.000000, 0.000000, .maxhitpoints = 1);
-	item_LaserPoint		= DefineItemType("Laser Pointer",		"LaserPoint",		18643,	1,	0.0, 0.0, 90.0,			0.0,	0.066244, 0.010838, -0.000024, 6.443027, 287.441467, 0.000000, .maxhitpoints = 1);
+	item_LaserPointR	= DefineItemType("Laser Pointer",		"LaserPointR",		18643,	1,	0.0, 0.0, 90.0,			0.0,	0.066244, 0.010838, -0.000024, 6.443027, 287.441467, 0.000000, .maxhitpoints = 1);
 	item_Screwdriver	= DefineItemType("Screwdriver",			"Screwdriver",		18644,	1,	90.0, 0.0, 0.0,			0.0,	0.099341, 0.021018, 0.009145, 193.644195, 0.000000, 0.000000, .maxhitpoints = 1);
 // 70
 	item_MobilePhone	= DefineItemType("Mobile Phone",		"MobilePhone",		18865,	1,	0.0, 0.0, 0.0,			0.0,	0.103904, -0.003697, -0.015173, 94.655189, 184.031860, 0.000000, .maxhitpoints = 1);
@@ -935,6 +938,17 @@ public OnScriptInit()
 	item_Cuntainer		= DefineItemType("Cuntainer",			"Container",		19321,	15,	0.0, 180.0, 0.0,		0.0,	0.0, 0.0, 0.0, 0.0, 0.0, 0.0, false, .buttonz = ITEM_FLOOR_OFFSET / 2, .maxhitpoints = 20);
 	item_RedCrate		= DefineItemType("Red Crate",			"RedCrate",			2669,	15,	0.0, 180.0, 0.0,		0.0,	0.0, 0.0, 0.0, 0.0, 0.0, 0.0, false, .buttonz = ITEM_FLOOR_OFFSET / 2, .maxhitpoints = 20);
 	item_MetalGate1		= DefineItemType("Grande Grande",		"MetalGate1",		19870,	15,	90.0, 0.0, 0.0,		0.0,	0.0, 0.0, 0.0, 0.0, 0.0, 0.0, false, .buttonz = ITEM_FLOOR_OFFSET / 2, .maxhitpoints = 15);
+	
+	item_LaserPointB	= DefineItemType("Laser Pointer",		"LaserPointB",		19080,	1,	0.0, 0.0, 90.0,			0.0,	0.066244, 0.010838, -0.000024, 6.443027, 287.441467, 0.000000, .maxhitpoints = 1);
+	item_LaserPointY	= DefineItemType("Laser Pointer",		"LaserPointY",		19084,	1,	0.0, 0.0, 90.0,			0.0,	0.066244, 0.010838, -0.000024, 6.443027, 287.441467, 0.000000, .maxhitpoints = 1);
+	item_LaserPointP	= DefineItemType("Laser Pointer",		"LaserPointP",		19081,	1,	0.0, 0.0, 90.0,			0.0,	0.066244, 0.010838, -0.000024, 6.443027, 287.441467, 0.000000, .maxhitpoints = 1);
+	item_LaserPointG	= DefineItemType("Laser Pointer",		"LaserPointG",		19083,	1,	0.0, 0.0, 90.0,			0.0,	0.066244, 0.010838, -0.000024, 6.443027, 287.441467, 0.000000, .maxhitpoints = 1);
+
+	
+	//item_Rope			= DefineItemType("Rope",				"Rope",				19088,	1,	0.0, 0.0, 0.0,		0.0,	0.0, 0.0, 0.0, 0.0, 0.0, 0.0, false, -1, 1, .maxhitpoints = 1);
+
+
+
 
 	// SETTING ITEM TYPE SCRAP VALUE
 	SetItemTypeScrapValue(item_Knuckles,		1);
@@ -958,7 +972,11 @@ public OnScriptInit()
 	SetItemTypeScrapValue(item_Hammer,			1);
 	SetItemTypeScrapValue(item_Flashlight,		1);
 	SetItemTypeScrapValue(item_StunGun,			1);
-	SetItemTypeScrapValue(item_LaserPoint,		1);
+	SetItemTypeScrapValue(item_LaserPointR,		1);
+	SetItemTypeScrapValue(item_LaserPointB,		1);
+	SetItemTypeScrapValue(item_LaserPointY,		1);
+	SetItemTypeScrapValue(item_LaserPointP,		1);
+	SetItemTypeScrapValue(item_LaserPointG,		1);
 	SetItemTypeScrapValue(item_Screwdriver,		1);
 	SetItemTypeScrapValue(item_MobilePhone,		1);
 	SetItemTypeScrapValue(item_Pager,			1);

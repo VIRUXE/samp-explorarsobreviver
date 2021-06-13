@@ -357,25 +357,38 @@ hook OnPlayerUseItemWithItem(playerid, Item:itemid, Item:withitemid)
 		new tentid;
 		GetItemExtraData(withitemid, tentid);
 
-		if(!IsValidTent(tentid))
-		{
-			if(GetItemType(itemid) == item_Hammer)
+		if(tnt_CurrentTentItem[playerid] != INVALID_ITEM_ID){
+			new ItemType:itemtype = GetItemType(GetPlayerItem(playerid));
+
+			if(itemtype == item_Hammer)
 			{
-				StartBuildingTent(playerid, withitemid);
-				return Y_HOOKS_BREAK_RETURN_1;
+				StopBuildingTent(playerid);
 			}
-		}
-		else
-		{
-			if(GetItemType(itemid) == item_Crowbar)
+			else if(itemtype == item_Crowbar)
 			{
-				StartRemovingTent(playerid, withitemid);
-				return Y_HOOKS_BREAK_RETURN_1;
+				StopRemovingTent(playerid);
+			}
+		} else {
+			if(!IsValidTent(tentid))
+			{
+				if(GetItemType(itemid) == item_Hammer)
+				{
+					StartBuildingTent(playerid, withitemid);
+					return Y_HOOKS_BREAK_RETURN_1;
+				}
 			}
 			else
 			{
-				DisplayContainerInventory(playerid, tnt_Data[tentid][tnt_containerId]);
-				return Y_HOOKS_BREAK_RETURN_1;
+				if(GetItemType(itemid) == item_Crowbar)
+				{
+					StartRemovingTent(playerid, withitemid);
+					return Y_HOOKS_BREAK_RETURN_1;
+				}
+				else
+				{
+					DisplayContainerInventory(playerid, tnt_Data[tentid][tnt_containerId]);
+					return Y_HOOKS_BREAK_RETURN_1;
+				}
 			}
 		}
 	}
@@ -423,28 +436,6 @@ StopRemovingTent(playerid)
 	tnt_CurrentTentItem[playerid] = INVALID_ITEM_ID;
 
 	return;
-}
-
-hook OnPlayerKeyStateChange(playerid, newkeys, oldkeys)
-{
-	if(oldkeys & 16)
-	{
-		if(tnt_CurrentTentItem[playerid] != INVALID_ITEM_ID)
-		{
-			new ItemType:itemtype = GetItemType(GetPlayerItem(playerid));
-
-			if(itemtype == item_Hammer)
-			{
-				StopBuildingTent(playerid);
-			}
-			else if(itemtype == item_Crowbar)
-			{
-				StopRemovingTent(playerid);
-			}
-		}
-	}
-
-	return 1;
 }
 
 hook OnHoldActionFinish(playerid)

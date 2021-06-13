@@ -102,20 +102,15 @@ hook OnItemCreate(Item:itemid)
 hook OnPlayerUseItem(playerid, Item:itemid)
 {
 	if(food_ItemTypeFoodType[GetItemType(itemid)] != -1)
-		_StartEating(playerid, itemid);
-
+	{
+		if(food_CurrentItem[playerid] != INVALID_ITEM_ID)
+			_StopEating(playerid);
+		else
+			_StartEating(playerid, itemid);
+	}
 	return Y_HOOKS_CONTINUE_RETURN_0;
 }
 
-hook OnPlayerKeyStateChange(playerid, newkeys, oldkeys)
-{
-	if(oldkeys & 16 && food_CurrentItem[playerid] != INVALID_ITEM_ID)
-	{
-		_StopEating(playerid);
-	}
-
-	return 1;
-}
 
 _StartEating(playerid, Item:itemid, continuing = false)
 {
