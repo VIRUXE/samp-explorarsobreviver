@@ -84,3 +84,4 @@ scriptfiles/.git/
 ScavengeSurvive.exe
 ScavengeSurvive
 *.code-workspace
+gamemodes/config.pwn
