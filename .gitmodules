@@ -1,3 +1,6 @@
 [submodule "misc/maps"]
 	path = misc/maps
 	url = https://github.com/VIRUXEParty/ExplorarSobreviver-Mapas
+[submodule "scriptfiles/maps"]
+	path = scriptfiles/maps
+	url = https://github.com/VIRUXEParty/ExplorarSobreviver-Mapas
