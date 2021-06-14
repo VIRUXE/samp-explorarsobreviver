@@ -54,7 +54,6 @@ static
 			itmw_ItemTypeWeapon[MAX_ITEM_TYPE] = {-1, ...};
 
 static
-PlayerText:	WeaponAmmoUI[MAX_PLAYERS] = {PlayerText:INVALID_TEXT_DRAW, ...},
 			tick_LastReload[MAX_PLAYERS],
 			tick_GetWeaponTick[MAX_PLAYERS],
 Timer:		itmw_RepeatingFireTimer[MAX_PLAYERS],
@@ -74,17 +73,6 @@ forward ItemType:GetItemWeaponItemAmmoItem(Item:itemid);
 
 hook OnPlayerConnect(playerid)
 {
-	WeaponAmmoUI[playerid]			=CreatePlayerTextDraw(playerid, 520.411254, 62.649990, "500/500");
-	PlayerTextDrawAlignment			(playerid, WeaponAmmoUI[playerid], 2);
-	PlayerTextDrawBackgroundColor	(playerid, WeaponAmmoUI[playerid], 255);
-	PlayerTextDrawFont				(playerid, WeaponAmmoUI[playerid], 1);
-	PlayerTextDrawLetterSize		(playerid, WeaponAmmoUI[playerid], 0.278114, 1.372495);
-	PlayerTextDrawColor				(playerid, WeaponAmmoUI[playerid], -1);
-	PlayerTextDrawSetShadow(playerid, WeaponAmmoUI[playerid], 0);
-	PlayerTextDrawSetOutline		(playerid, WeaponAmmoUI[playerid], 1);
-	PlayerTextDrawSetProportional	(playerid, WeaponAmmoUI[playerid], 1);
-	PlayerTextDrawTextSize			(playerid, WeaponAmmoUI[playerid], 1613.000000, -118.533325);
-
 	itmw_DropItemID[playerid] = INVALID_ITEM_ID;
 }
 
@@ -290,7 +278,6 @@ stock RemovePlayerWeapon(playerid)
 	if(!IsPlayerConnected(playerid))
 		return 0;
 
-	PlayerTextDrawHide(playerid, WeaponAmmoUI[playerid]);
 	ResetPlayerWeapons(playerid);
 
 	return 1;
@@ -559,22 +546,10 @@ _UpdateWeaponUI(playerid)
 	if(itmw_Data[itmw_ItemTypeWeapon[itemtype]][itmw_calibre] == NO_CALIBRE)
 	{
 		dbg("weapon-core", 2, "weapon is not clip based");
-		PlayerTextDrawHide(playerid, WeaponAmmoUI[playerid]);
 		return;
 	}
 
 	dbg("weapon-core", 2, "[_UpdateWeaponUI] item %d magammo %d reserve %d", _:itemid, GetItemWeaponItemMagAmmo(itemid), GetItemWeaponItemReserve(itemid));
-
-	new str[8];
-
-	if(itmw_Data[itmw_ItemTypeWeapon[itemtype]][itmw_maxReserveMags] > 0)
-		format(str, 8, "%d/%d", GetItemWeaponItemMagAmmo(itemid), GetItemWeaponItemReserve(itemid));
-
-	else
-		format(str, 8, "%d", GetItemWeaponItemMagAmmo(itemid));
-
-	PlayerTextDrawSetString(playerid, WeaponAmmoUI[playerid], str);
-	PlayerTextDrawShow(playerid, WeaponAmmoUI[playerid]);
 
 	return;
 }

@@ -38,12 +38,12 @@ forward CreatePlayerTile(playerid, &PlayerText:title, &PlayerText:tile, &PlayerT
 
 hook OnPlayerConnect(playerid)
 {
-	CreatePlayerTile(playerid, GearSlot_Head[0], GearSlot_Head[1], GearSlot_Head[2], 507.0, 163.0, 53.0, 55.0);
-	CreatePlayerTile(playerid, GearSlot_Face[0], GearSlot_Face[1], GearSlot_Face[2], 577.0, 163.0, 53.0, 55.0);
-	CreatePlayerTile(playerid, GearSlot_Hand[0], GearSlot_Hand[1], GearSlot_Hand[2], 507.0, 263.0, 53.0, 55.0);
-	CreatePlayerTile(playerid, GearSlot_Hols[0], GearSlot_Hols[1], GearSlot_Hols[2], 577.0, 263.0, 53.0, 55.0);
-	CreatePlayerTile(playerid, GearSlot_Tors[0], GearSlot_Tors[1], GearSlot_Tors[2], 507.0, 363.0, 53.0, 55.0);
-	CreatePlayerTile(playerid, GearSlot_Back[0], GearSlot_Back[1], GearSlot_Back[2], 577.0, 363.0, 53.0, 55.0);
+	CreatePlayerTile(playerid, GearSlot_Head[0], GearSlot_Head[1], GearSlot_Head[2], 517.0, 183.0, 53.0, 55.0);
+	CreatePlayerTile(playerid, GearSlot_Face[0], GearSlot_Face[1], GearSlot_Face[2], 580.0, 183.0, 53.0, 55.0);
+	CreatePlayerTile(playerid, GearSlot_Hand[0], GearSlot_Hand[1], GearSlot_Hand[2], 517.0, 283.0, 53.0, 55.0);
+	CreatePlayerTile(playerid, GearSlot_Hols[0], GearSlot_Hols[1], GearSlot_Hols[2], 580.0, 283.0, 53.0, 55.0);
+	CreatePlayerTile(playerid, GearSlot_Tors[0], GearSlot_Tors[1], GearSlot_Tors[2], 517.0, 383.0, 53.0, 55.0);
+	CreatePlayerTile(playerid, GearSlot_Back[0], GearSlot_Back[1], GearSlot_Back[2], 580.0, 383.0, 53.0, 55.0);
 
 	PlayerTextDrawSetString(playerid, GearSlot_Head[0], "Head");
 	PlayerTextDrawSetString(playerid, GearSlot_Face[0], "Face");
@@ -171,10 +171,10 @@ ShowPlayerHealthInfo(playerid)
 		SetBodyPreviewLabel(playerid, 1, tmp++, 35.0, "Bleeding", RGBAToHex(truncateforbyte(floatround(bleedrate * 3200.0)), truncateforbyte(255 - floatround(bleedrate * 3200.0)), 0, 255));
 
 	if(hunger < 66.6)
-		SetBodyPreviewLabel(playerid, 1, tmp++, 20.0, "Hungry", RGBAToHex(truncateforbyte(floatround((66.6 - hunger) * 4.8)), truncateforbyte(255 - floatround((66.6 - hunger) * 4.8)), 0, 255));
+		SetBodyPreviewLabel(playerid, 1, tmp++, 20.0, "Hunger/Thirst", RGBAToHex(truncateforbyte(floatround((66.6 - hunger) * 4.8)), truncateforbyte(255 - floatround((66.6 - hunger) * 4.8)), 0, 255));
 
 	if(infected1)
-		SetBodyPreviewLabel(playerid, 1, tmp++, 20.0, "Food Infect", 0xFF0000FF);
+		SetBodyPreviewLabel(playerid, 1, tmp++, 20.0, "Food/Liquid Infect", 0xFF0000FF);
 
 	if(infected2)
 		SetBodyPreviewLabel(playerid, 1, tmp++, 20.0, "Wound Infect", 0xFF0000FF);

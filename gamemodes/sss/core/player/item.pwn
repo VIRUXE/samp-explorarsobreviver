@@ -32,7 +32,7 @@ hook OnPlayerConnect(playerid){
 	PlayerTextDrawSetProportional(playerid, item_TD[playerid][0], 1);
 	PlayerTextDrawSetSelectable(playerid, item_TD[playerid][0], 0);
 	PlayerTextDrawSetPreviewModel(playerid, item_TD[playerid][0], 1271);
-	PlayerTextDrawSetPreviewRot(playerid, item_TD[playerid][0], -10.000000, 0.000000, -20.000000, 1.000000);
+	PlayerTextDrawSetPreviewRot(playerid, item_TD[playerid][0], 0.000000, 0.000000, 0.000000, 1.000000);
 	PlayerTextDrawSetPreviewVehCol(playerid, item_TD[playerid][0], 1, 1);
 
 	item_TD[playerid][1] = CreatePlayerTextDraw(playerid, 175.000000, 429.000000, "Large Box");
@@ -50,26 +50,44 @@ hook OnPlayerConnect(playerid){
 	PlayerTextDrawSetSelectable(playerid, item_TD[playerid][1], 0);
 }
 
+UpdatePlayerPreviewItem(playerid){
+	new iname[MAX_ITEM_NAME + MAX_ITEM_TEXT];
+	GetItemName(GetPlayerItem(playerid), iname);
+	PlayerTextDrawSetString(playerid, item_TD[playerid][1], iname);
+	PlayerTextDrawShow(playerid, item_TD[playerid][1]);
+}
+
 hook OnPlayerGetItem(playerid, Item:itemid){
 	new 
 		modelid,
-		ItemType:itype = GetItemType(itemid),
-		iname[MAX_ITEM_NAME + MAX_ITEM_TEXT];
+		ItemType:itype = GetItemType(itemid);
 
 	GetItemTypeModel(itype, modelid);
-	GetItemName(itemid, iname);
-
 	PlayerTextDrawSetPreviewModel(playerid, item_TD[playerid][0], modelid);
-	PlayerTextDrawSetString(playerid, item_TD[playerid][1], iname);
-
 	PlayerTextDrawShow(playerid, item_TD[playerid][0]);
-	PlayerTextDrawShow(playerid, item_TD[playerid][1]);
+
+	UpdatePlayerPreviewItem(playerid);
 
 	// Temporary fix Special Action on mobile
 	if(IsItemTypeCarry(itype) && IsPlayerMobile(playerid)) {
 		RemovePlayerAttachedObject(playerid, ITEM_ATTACH_INDEX);
 	}
 
+}
+
+/*
+hook OnPlayerWeaponShot(playerid, weaponid, hittype, hitid, Float:fX, Float:fY, Float:fZ){
+	UpdatePlayerPreviewItem(i);
+}*/
+
+
+hook OnItemArrayDataChanged(Item:itemid)
+{
+	foreach(new i : Player){
+		if(GetPlayerItem(i) == itemid){
+			UpdatePlayerPreviewItem(i);
+		}
+	}
 }
 
 hook OnItemDestroy(Item:itemid){

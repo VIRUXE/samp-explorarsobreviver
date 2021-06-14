@@ -471,7 +471,9 @@ ItemType:		item_MetalGate1		= INVALID_ITEM_TYPE,
 ItemType:		item_LaserPointB	= INVALID_ITEM_TYPE,
 ItemType:		item_LaserPointY	= INVALID_ITEM_TYPE,
 ItemType:		item_LaserPointP	= INVALID_ITEM_TYPE,
-ItemType:		item_LaserPointG	= INVALID_ITEM_TYPE;
+ItemType:		item_LaserPointG	= INVALID_ITEM_TYPE,
+ItemType:		item_Barrel			= INVALID_ITEM_TYPE;
+
 // VEHICLE TYPES
 new stock
 	veht_Bobcat,
@@ -944,7 +946,9 @@ public OnScriptInit()
 	item_LaserPointP	= DefineItemType("Laser Pointer",		"LaserPointP",		19081,	1,	0.0, 0.0, 90.0,			0.0,	0.066244, 0.010838, -0.000024, 6.443027, 287.441467, 0.000000, .maxhitpoints = 1);
 	item_LaserPointG	= DefineItemType("Laser Pointer",		"LaserPointG",		19083,	1,	0.0, 0.0, 90.0,			0.0,	0.066244, 0.010838, -0.000024, 6.443027, 287.441467, 0.000000, .maxhitpoints = 1);
 
+	item_Barrel			= DefineItemType("Barrel",				"Barrel",			3632,	11,	0.0, 0.0, 0.0,			0.436,	0.121982,0.446166,-0.302850,-109.444541,-7.581885,354.313049, true, .maxhitpoints = 1);
 	
+
 	//item_Rope			= DefineItemType("Rope",				"Rope",				19088,	1,	0.0, 0.0, 0.0,		0.0,	0.0, 0.0, 0.0, 0.0, 0.0, 0.0, false, -1, 1, .maxhitpoints = 1);
 
 

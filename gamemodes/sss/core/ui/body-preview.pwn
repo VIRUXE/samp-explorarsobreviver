@@ -30,7 +30,7 @@ Float:		bl_posY
 static
 Float:		bod_UIWidth		[MAX_PLAYERS] = {120.0, ...},
 Float:		bod_UIPositionX	[MAX_PLAYERS] = {70.0, ...},
-Float:		bod_UIPositionY	[MAX_PLAYERS] = {163.0, ...},
+Float:		bod_UIPositionY	[MAX_PLAYERS] = {183.0, ...},
 Float:		bod_UIFontSizeX	[MAX_PLAYERS] = {0.25, ...},
 Float:		bod_UIFontSizeY	[MAX_PLAYERS] = {1.05, ...},
 PlayerText:	bod_Header		[MAX_PLAYERS] = {PlayerText:INVALID_TEXT_DRAW, ...},
