@@ -1,7 +1,0 @@
-// By: H20
-
-// Objetos Removidos
-
-RemoveBuildingForPlayer(playerid, 17566, 2520.7344, -1673.8359, 15.5469, 0.25);
-
-// Objetos
