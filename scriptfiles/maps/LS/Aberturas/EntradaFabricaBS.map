@@ -1,0 +1,9 @@
+// By: H20
+
+// Objetos Removidos
+
+RemoveBuildingForPlayer(playerid, 3059, 2522.008, -1272.93, 35.609, 0.25);
+
+// Objetos
+
+CreateObject(17946, 2534.05981, -1290.31555, 36.94530,   360.00000, 0.00000, 1.00000);
