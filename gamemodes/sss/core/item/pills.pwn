@@ -75,7 +75,7 @@ hook OnPlayerUseItem(playerid, Item:itemid)
 
 hook OnPlayerKeyStateChange(playerid, newkeys, oldkeys)
 {
-	if(oldkeys & 16 && pill_CurrentlyTaking[playerid] != INVALID_ITEM_ID)
+	if(newkeys & 16 && pill_CurrentlyTaking[playerid] != INVALID_ITEM_ID)
 	{
 		StopTakingPills(playerid);
 	}

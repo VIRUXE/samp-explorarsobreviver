@@ -94,7 +94,7 @@ ACMD:unmute[1](playerid, params[])
 
 /*==============================================================================
 
-	Warn a player for misconduct, 5 warnings = 1 day ban
+	Warn a player for misconduct
 
 ==============================================================================*/
 
@@ -114,17 +114,8 @@ ACMD:warn[1](playerid, params[])
 	if(GetPlayerAdminLevel(targetid) >= GetPlayerAdminLevel(playerid) && playerid != targetid)
 		return 3;
 
-	new warnings = GetPlayerWarnings(targetid) + 1;
-
-	SetPlayerWarnings(targetid, warnings);
-
-	ChatMsg(playerid, ORANGE, " >  %P"C_YELLOW" Has been warned (%d/5) for: %s", targetid, warnings, reason);
-	ChatMsgLang(targetid, ORANGE, "WARNEDMESSG", warnings, reason);
-
-	if(warnings >= 5)
-	{
-		BanPlayer(targetid, "Getting 5 warnings", playerid, 86400);
-	}
+	ChatMsg(playerid, ORANGE, " >  %P"C_YELLOW" Has been warned for: %s", targetid, reason);
+	ChatMsgLang(targetid, ORANGE, "WARNEDMESSG", reason);
 
 	return 1;
 }

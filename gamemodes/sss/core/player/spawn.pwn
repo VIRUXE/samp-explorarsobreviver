@@ -192,14 +192,6 @@ PlayerSpawnExistingCharacter(playerid)
 
 	SetPlayerGender(playerid, GetClothesGender(GetPlayerClothes(playerid)));
 
-	if(GetPlayerWarnings(playerid) > 0)
-	{
-		if(GetPlayerWarnings(playerid) >= 5)	
-			SetPlayerWarnings(playerid, 0);
-
-		ChatMsgLang(playerid, YELLOW, "WARNCOUNTER", GetPlayerWarnings(playerid));
-	}
-
 	SetPlayerClothes(playerid, GetPlayerClothesID(playerid));
 	FreezePlayer(playerid, gLoginFreezeTime * 1000);
 

@@ -110,11 +110,11 @@ GetPlayerInfo(name[])
 		lastlog,
 		spawntime,
 		totalspawns,
-		warnings,
+		VIP,
 		hash[41],
 		active;
 
-	GetAccountData(name, pass, ipv4, alive, regdate, lastlog, spawntime, totalspawns, warnings, hash, active);
+	GetAccountData(name, pass, ipv4, alive, regdate, lastlog, spawntime, totalspawns, VIP, hash, active);
 
 	ip = IpIntToStr(ipv4);
 	// TODO: use a different country service
@@ -130,7 +130,7 @@ GetPlayerInfo(name[])
 		Last Login:\t\t%s\n\
 		Days Survived:\t%d\n\
 		Lives Lived:\t\t%d\n\
-		Warnings:\t\t%d",
+		VIP:\t\t%d",
 
 		ip,
 		country,
@@ -139,7 +139,7 @@ GetPlayerInfo(name[])
 		TimestampToDateTime(lastlog),
 		dayslived,
 		totalspawns,
-		warnings);
+		VIP);
 
 	return info;
 }

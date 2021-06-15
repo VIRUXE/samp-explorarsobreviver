@@ -594,9 +594,9 @@ public OnScriptInit()
 	if(gPlayerAnimations)
 		UsePlayerPedAnims();
 
-	SetNameTagDrawDistance(300);
-    ShowNameTags(1);
-	DisableNameTagLOS();
+	SetNameTagDrawDistance(0.0);
+    ShowNameTags(0);
+	//DisableNameTagLOS();
 
 	EnableStuntBonusForAll(false);
 	ManualVehicleEngineAndLights();

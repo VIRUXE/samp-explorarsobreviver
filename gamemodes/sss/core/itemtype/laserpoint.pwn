@@ -20,14 +20,16 @@ hook OnPlayerUseItemWithItem(playerid, Item:itemid, Item:withitemid){
 	if(GetItemType(withitemid) == item_LaserPointR || GetItemType(withitemid) == item_LaserPointB ||
 		GetItemType(withitemid) == item_LaserPointY || GetItemType(withitemid) == item_LaserPointG ||
 		GetItemType(withitemid) == item_LaserPointP){
+		
+		if(!GetItemWeaponMods(GetPlayerItem(playerid))){
+			new model = GetItemWeaponBaseWeapon(GetItemTypeWeapon(GetItemType(GetPlayerItem(playerid))));
 
-		new model = GetItemWeaponBaseWeapon(GetItemTypeWeapon(GetItemType(GetPlayerItem(playerid))));
-
-		if(model == WEAPON_SILENCED || model == WEAPON_SHOTGSPA || model == WEAPON_AK47 ||
-			model == WEAPON_M4 || model == WEAPON_SNIPER || model == WEAPON_MP5){
-			ApplyAnimation(playerid, "BOMBER", "BOM_PLANT_IN", 5.0, 1, 0, 0, 0, 450, 1);
-			SetItemWeaponMods(GetPlayerItem(playerid), _:GetItemType(withitemid));
-			DestroyItem(withitemid);
+			if(model == WEAPON_SILENCED || model == WEAPON_SHOTGSPA || model == WEAPON_AK47 ||
+				model == WEAPON_M4 || model == WEAPON_SNIPER || model == WEAPON_MP5){
+				ApplyAnimation(playerid, "BOMBER", "BOM_PLANT_IN", 5.0, 1, 0, 0, 0, 450, 1);
+				SetItemWeaponMods(GetPlayerItem(playerid), _:GetItemType(withitemid));
+				DestroyItem(withitemid);
+			}
 		}
 	}
 	return Y_HOOKS_CONTINUE_RETURN_0;

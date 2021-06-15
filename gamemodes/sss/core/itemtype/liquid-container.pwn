@@ -152,8 +152,12 @@ hook OnPlayerUseItem(playerid, Item:itemid)
 {
 	if(liq_ItemTypeLiquidContainer[GetItemType(itemid)] != INVALID_LIQUID_CONTAINER)
 	{
-		if(GetTickCountDifference(GetTickCount(), liq_UseWithItemTick[playerid]) > 10)
-			_StartDrinking(playerid, itemid);
+		if(liq_CurrentItem[playerid] != INVALID_ITEM_ID) {
+			_StopDrinking(playerid);
+		} else {
+			if(GetTickCountDifference(GetTickCount(), liq_UseWithItemTick[playerid]) > 10)
+				_StartDrinking(playerid, itemid);
+		}
 	}
 
 	return Y_HOOKS_CONTINUE_RETURN_0;

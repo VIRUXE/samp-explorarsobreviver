@@ -105,7 +105,6 @@ VEHICLSAVED= >  Vehicle ~y~%s~w~ saved!
 VEHMODEALLV= >  Vehicle save mode set to 'All vehicles'. When you enter ANY vehicle, it will be saved for you.
 VEHMODEOWNV= >  Vehicle save mode set to: 'Own vehicle'. Only your own vehicle will be saved when you drive it. If you enter another vehicle as a driver, it won't overwrite your current vehicle.
 VEHMODEHELP= >  Usage: /vsave [on / off] - Save vehicles when exited or entered. When 'off', you will only be able to save your own vehicle.
-WARNCOUNTER= >  You have %d/5 warnings.
 MUTEDPERMAN= >  You are muted permanently.
 MUTEDTIMERM= >  You are muted. Time remaining: %s
 MUTEDFLOODM= >  Muted from global chat for {C_ORANGE}30 {C_RED}seconds for chat flooding
@@ -149,7 +148,7 @@ BANLIFMESSG= >  Your ban from %s has been lifted. Do not break the rules again.
 MUTEDANTIME= >  Muted from global chat for {C_ORANGE}%d {C_YELLOW}seconds, Reason: {C_BLUE}%s
 MUTEDREASON= >  Muted from global chat, Reason: {C_BLUE}%s
 MUTEDUNMUTE= >  You are now un-muted.
-WARNEDMESSG= >  You been warned (%d/5) for: %s. 5 warnings = 1 day ban.
+WARNEDMESSG= >  You been warned for: %s.
 FREEZETIMER= >  Frozen by admin for %d seconds
 FREEZEFROZE= >  Frozen by admin
 FREEZEUNFRE= >  You are now unfrozen.

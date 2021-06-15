@@ -118,20 +118,20 @@ hook OnPlayerKeyStateChange(playerid, newkeys, oldkeys)
 		if(skin_CurrentlyUsing[playerid] != INVALID_ITEM_ID)
 		{
 			StopUsingClothes(playerid);
-		}
-		
-		new Item:itemid = GetPlayerItem(playerid);
+		} else {
+			new Item:itemid = GetPlayerItem(playerid);
 
-		if(GetItemType(itemid) == item_Clothes)
-		{
-			new skinid;
-			GetItemExtraData(itemid, skinid);
+			if(GetItemType(itemid) == item_Clothes)
+			{
+				new skinid;
+				GetItemExtraData(itemid, skinid);
 
-			if(skin_Data[skinid][skin_gender] == GetPlayerGender(playerid))
-				StartUsingClothes(playerid, itemid);
+				if(skin_Data[skinid][skin_gender] == GetPlayerGender(playerid))
+					StartUsingClothes(playerid, itemid);
 
-			else
-				ShowActionText(playerid, ls(playerid, "CLOTHESWRGE", true), 3000, 130);
+				else
+					ShowActionText(playerid, ls(playerid, "CLOTHESWRGE", true), 3000, 130);
+			}
 		}
 	}
 
@@ -144,6 +144,7 @@ StartUsingClothes(playerid, Item:itemid)
 	CancelPlayerMovement(playerid);
 	skin_CurrentlyUsing[playerid] = itemid;
 }
+
 StopUsingClothes(playerid)
 {
 	if(skin_CurrentlyUsing[playerid] != INVALID_ITEM_ID)

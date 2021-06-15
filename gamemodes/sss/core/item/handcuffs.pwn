@@ -35,52 +35,55 @@ hook OnPlayerKeyStateChange(playerid, newkeys, oldkeys)
 
 	if(newkeys & 16)
 	{
-		StopApplyingHandcuffs(playerid);
-
-		new Item:itemid = GetPlayerItem(playerid);
-
-		if(GetItemType(itemid) == item_HandCuffs)
+		if(cuf_TargetPlayer[playerid] != INVALID_PLAYER_ID)
 		{
-			foreach(new i : Character)
+			StopApplyingHandcuffs(playerid);
+		} else {
+			new Item:itemid = GetPlayerItem(playerid);
+
+			if(GetItemType(itemid) == item_HandCuffs)
 			{
-				if(i == playerid || IsPlayerOnAdminDuty(i))
-					continue;
-
-				if(IsPlayerNextToPlayer(playerid, i))
+				foreach(new i : Character)
 				{
-					if(GetPlayerItem(i) == INVALID_ITEM_ID && GetPlayerWeapon(i) == 0 && cuf_BeingCuffedBy[i] == INVALID_PLAYER_ID)
+					if(i == playerid || IsPlayerOnAdminDuty(i))
+						continue;
+
+					if(IsPlayerNextToPlayer(playerid, i))
 					{
-						ApplyAnimation(playerid, "CASINO", "DEALONE", 4.0, 1, 0, 0, 0, 0);
-						StartHoldAction(playerid, 3000);
-
-						cuf_TargetPlayer[playerid] = i;
-						cuf_BeingCuffedBy[i] = playerid;
-
-						return 1;
-					}
-				}
-			}
-		}
-		else
-		{
-			foreach(new i : Character)
-			{
-				if(i == playerid || IsPlayerOnAdminDuty(i))
-					continue;
-
-				if(IsPlayerNextToPlayer(playerid, i))
-				{
-					if(GetPlayerSpecialAction(i) == SPECIAL_ACTION_CUFFED)
-					{
-						if(GetPlayerItem(playerid) == INVALID_ITEM_ID && GetPlayerWeapon(playerid) == 0 && cuf_BeingCuffedBy[playerid] == INVALID_PLAYER_ID)
+						if(GetPlayerItem(i) == INVALID_ITEM_ID && GetPlayerWeapon(i) == 0 && cuf_BeingCuffedBy[i] == INVALID_PLAYER_ID)
 						{
-							cuf_TargetPlayer[playerid] = i;
-							cuf_BeingCuffedBy[i] = playerid;
-
 							ApplyAnimation(playerid, "CASINO", "DEALONE", 4.0, 1, 0, 0, 0, 0);
 							StartHoldAction(playerid, 3000);
 
+							cuf_TargetPlayer[playerid] = i;
+							cuf_BeingCuffedBy[i] = playerid;
+
 							return 1;
+						}
+					}
+				}
+			}
+			else
+			{
+				foreach(new i : Character)
+				{
+					if(i == playerid || IsPlayerOnAdminDuty(i))
+						continue;
+
+					if(IsPlayerNextToPlayer(playerid, i))
+					{
+						if(GetPlayerSpecialAction(i) == SPECIAL_ACTION_CUFFED)
+						{
+							if(GetPlayerItem(playerid) == INVALID_ITEM_ID && GetPlayerWeapon(playerid) == 0 && cuf_BeingCuffedBy[playerid] == INVALID_PLAYER_ID)
+							{
+								cuf_TargetPlayer[playerid] = i;
+								cuf_BeingCuffedBy[i] = playerid;
+
+								ApplyAnimation(playerid, "CASINO", "DEALONE", 4.0, 1, 0, 0, 0, 0);
+								StartHoldAction(playerid, 3000);
+
+								return 1;
+							}
 						}
 					}
 				}

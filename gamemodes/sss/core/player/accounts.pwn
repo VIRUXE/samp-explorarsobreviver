@@ -25,7 +25,7 @@
 #define FIELD_PLAYER_LASTLOG		"lastlog"	// 05
 #define FIELD_PLAYER_SPAWNTIME		"spawntime"	// 06
 #define FIELD_PLAYER_TOTALSPAWNS	"spawns"	// 07
-#define FIELD_PLAYER_WARNINGS		"warnings"	// 08
+#define FIELD_PLAYER_VIP			"VIP"	// 08
 #define FIELD_PLAYER_GPCI			"gpci"		// 19
 #define FIELD_PLAYER_ACTIVE			"active"	// 10
 
@@ -39,7 +39,7 @@ enum
 	FIELD_ID_PLAYER_LASTLOG,
 	FIELD_ID_PLAYER_SPAWNTIME,
 	FIELD_ID_PLAYER_TOTALSPAWNS,
-	FIELD_ID_PLAYER_WARNINGS,
+	FIELD_ID_PLAYER_VIP,
 	FIELD_ID_PLAYER_GPCI,
 	FIELD_ID_PLAYER_ACTIVE
 }
@@ -78,8 +78,8 @@ DBStatement:	stmt_AccountSetSpawnTime,
 DBStatement:	stmt_AccountGetTotalSpawns,
 DBStatement:	stmt_AccountSetTotalSpawns,
 
-DBStatement:	stmt_AccountGetWarnings,
-DBStatement:	stmt_AccountSetWarnings,
+DBStatement:	stmt_AccountGetVIP,
+DBStatement:	stmt_AccountSetVIP,
 
 DBStatement:	stmt_AccountGetGpci,
 DBStatement:	stmt_AccountSetGpci,
@@ -105,7 +105,7 @@ hook OnGameModeInit()
 		"FIELD_PLAYER_LASTLOG" INTEGER,\
 		"FIELD_PLAYER_SPAWNTIME" INTEGER,\
 		"FIELD_PLAYER_TOTALSPAWNS" INTEGER,\
-		"FIELD_PLAYER_WARNINGS" INTEGER,\
+		"FIELD_PLAYER_VIP" INTEGER,\
 		"FIELD_PLAYER_GPCI" TEXT,\
 		"FIELD_PLAYER_ACTIVE")");
 
@@ -116,7 +116,7 @@ hook OnGameModeInit()
 	stmt_AccountExists			= db_prepare(gAccounts, "SELECT COUNT(*) FROM "ACCOUNTS_TABLE_PLAYER" WHERE "FIELD_PLAYER_NAME"=? COLLATE NOCASE");
 	stmt_AccountCreate			= db_prepare(gAccounts, "INSERT INTO "ACCOUNTS_TABLE_PLAYER" VALUES(?,?,?,1,?,?,0,0,0,?,1)");
 	stmt_AccountLoad			= db_prepare(gAccounts, "SELECT * FROM "ACCOUNTS_TABLE_PLAYER" WHERE "FIELD_PLAYER_NAME"=? COLLATE NOCASE");
-	stmt_AccountUpdate			= db_prepare(gAccounts, "UPDATE "ACCOUNTS_TABLE_PLAYER" SET "FIELD_PLAYER_ALIVE"=?, "FIELD_PLAYER_WARNINGS"=? WHERE "FIELD_PLAYER_NAME"=? COLLATE NOCASE");
+	stmt_AccountUpdate			= db_prepare(gAccounts, "UPDATE "ACCOUNTS_TABLE_PLAYER" SET "FIELD_PLAYER_ALIVE"=?, "FIELD_PLAYER_VIP"=? WHERE "FIELD_PLAYER_NAME"=? COLLATE NOCASE");
 
 	stmt_AccountGetPassword		= db_prepare(gAccounts, "SELECT "FIELD_PLAYER_PASS" FROM "ACCOUNTS_TABLE_PLAYER" WHERE "FIELD_PLAYER_NAME"=? COLLATE NOCASE");
 	stmt_AccountSetPassword		= db_prepare(gAccounts, "UPDATE "ACCOUNTS_TABLE_PLAYER" SET "FIELD_PLAYER_PASS"=? WHERE "FIELD_PLAYER_NAME"=? COLLATE NOCASE");
@@ -139,8 +139,8 @@ hook OnGameModeInit()
 	stmt_AccountGetTotalSpawns	= db_prepare(gAccounts, "SELECT "FIELD_PLAYER_TOTALSPAWNS" FROM "ACCOUNTS_TABLE_PLAYER" WHERE "FIELD_PLAYER_NAME"=? COLLATE NOCASE");
 	stmt_AccountSetTotalSpawns	= db_prepare(gAccounts, "UPDATE "ACCOUNTS_TABLE_PLAYER" SET "FIELD_PLAYER_TOTALSPAWNS"=? WHERE "FIELD_PLAYER_NAME"=? COLLATE NOCASE");
 
-	stmt_AccountGetWarnings		= db_prepare(gAccounts, "SELECT "FIELD_PLAYER_WARNINGS" FROM "ACCOUNTS_TABLE_PLAYER" WHERE "FIELD_PLAYER_NAME"=? COLLATE NOCASE");
-	stmt_AccountSetWarnings		= db_prepare(gAccounts, "UPDATE "ACCOUNTS_TABLE_PLAYER" SET "FIELD_PLAYER_WARNINGS"=? WHERE "FIELD_PLAYER_NAME"=? COLLATE NOCASE");
+	stmt_AccountGetVIP			= db_prepare(gAccounts, "SELECT "FIELD_PLAYER_VIP" FROM "ACCOUNTS_TABLE_PLAYER" WHERE "FIELD_PLAYER_NAME"=? COLLATE NOCASE");
+	stmt_AccountSetVIP			= db_prepare(gAccounts, "UPDATE "ACCOUNTS_TABLE_PLAYER" SET "FIELD_PLAYER_VIP"=? WHERE "FIELD_PLAYER_NAME"=? COLLATE NOCASE");
 
 	stmt_AccountGetGpci			= db_prepare(gAccounts, "SELECT "FIELD_PLAYER_GPCI" FROM "ACCOUNTS_TABLE_PLAYER" WHERE "FIELD_PLAYER_NAME"=? COLLATE NOCASE");
 	stmt_AccountSetGpci			= db_prepare(gAccounts, "UPDATE "ACCOUNTS_TABLE_PLAYER" SET "FIELD_PLAYER_GPCI"=? WHERE "FIELD_PLAYER_NAME"=? COLLATE NOCASE");
@@ -184,7 +184,7 @@ Error:LoadAccount(playerid)
 		lastlog,
 		spawntime,
 		spawns,
-		warnings,
+		VIP,
 		active;
 
 	GetPlayerName(playerid, name, MAX_PLAYER_NAME);
@@ -218,7 +218,7 @@ Error:LoadAccount(playerid)
 	stmt_bind_result_field(stmt_AccountLoad, FIELD_ID_PLAYER_LASTLOG, DB::TYPE_INTEGER, lastlog);
 	stmt_bind_result_field(stmt_AccountLoad, FIELD_ID_PLAYER_SPAWNTIME, DB::TYPE_INTEGER, spawntime);
 	stmt_bind_result_field(stmt_AccountLoad, FIELD_ID_PLAYER_TOTALSPAWNS, DB::TYPE_INTEGER, spawns);
-	stmt_bind_result_field(stmt_AccountLoad, FIELD_ID_PLAYER_WARNINGS, DB::TYPE_INTEGER, warnings);
+	stmt_bind_result_field(stmt_AccountLoad, FIELD_ID_PLAYER_VIP, DB::TYPE_INTEGER, VIP);
 	stmt_bind_result_field(stmt_AccountLoad, FIELD_ID_PLAYER_ACTIVE, DB::TYPE_INTEGER, active);
 
 	if(!stmt_execute(stmt_AccountLoad))
@@ -245,7 +245,7 @@ Error:LoadAccount(playerid)
 	SetPlayerLastLogin(playerid, lastlog);
 	SetPlayerCreationTimestamp(playerid, spawntime);
 	SetPlayerTotalSpawns(playerid, spawns);
-	SetPlayerWarnings(playerid, warnings);
+	SetPlayerVIP(playerid, VIP);
 
 	if(gAutoLoginWithIP && GetPlayerIpAsInt(playerid) == ipv4)
 	{
@@ -708,7 +708,7 @@ SavePlayerData(playerid)
 		}
 
 		stmt_bind_value(stmt_AccountUpdate, 0, DB::TYPE_INTEGER, 1);
-		stmt_bind_value(stmt_AccountUpdate, 1, DB::TYPE_INTEGER, GetPlayerWarnings(playerid));
+		stmt_bind_value(stmt_AccountUpdate, 1, DB::TYPE_INTEGER, GetPlayerVIP(playerid));
 		stmt_bind_value(stmt_AccountUpdate, 2, DB::TYPE_PLAYER_NAME, playerid);
 
 		if(!stmt_execute(stmt_AccountUpdate))
@@ -723,7 +723,7 @@ SavePlayerData(playerid)
 	{
 		dbg("accounts", 2, "[SavePlayerData] Player is dead");
 		stmt_bind_value(stmt_AccountUpdate, 0, DB::TYPE_INTEGER, 0);
-		stmt_bind_value(stmt_AccountUpdate, 1, DB::TYPE_INTEGER, GetPlayerWarnings(playerid));
+		stmt_bind_value(stmt_AccountUpdate, 1, DB::TYPE_INTEGER, GetPlayerVIP(playerid));
 		stmt_bind_value(stmt_AccountUpdate, 2, DB::TYPE_PLAYER_NAME, playerid);
 
 		if(!stmt_execute(stmt_AccountUpdate))
@@ -743,7 +743,7 @@ SavePlayerData(playerid)
 ==============================================================================*/
 
 
-stock GetAccountData(name[], pass[], &ipv4, &alive, &regdate, &lastlog, &spawntime, &totalspawns, &warnings, gpci[], &active)
+stock GetAccountData(name[], pass[], &ipv4, &alive, &regdate, &lastlog, &spawntime, &totalspawns, &VIP, gpci[], &active)
 {
 	stmt_bind_value(stmt_AccountLoad, 0, DB::TYPE_STRING, name, MAX_PLAYER_NAME);
 	stmt_bind_result_field(stmt_AccountLoad, FIELD_ID_PLAYER_PASS, DB::TYPE_STRING, pass, MAX_PASSWORD_LEN);
@@ -753,7 +753,7 @@ stock GetAccountData(name[], pass[], &ipv4, &alive, &regdate, &lastlog, &spawnti
 	stmt_bind_result_field(stmt_AccountLoad, FIELD_ID_PLAYER_LASTLOG, DB::TYPE_INTEGER, lastlog);
 	stmt_bind_result_field(stmt_AccountLoad, FIELD_ID_PLAYER_SPAWNTIME, DB::TYPE_INTEGER, spawntime);
 	stmt_bind_result_field(stmt_AccountLoad, FIELD_ID_PLAYER_TOTALSPAWNS, DB::TYPE_INTEGER, totalspawns);
-	stmt_bind_result_field(stmt_AccountLoad, FIELD_ID_PLAYER_WARNINGS, DB::TYPE_INTEGER, warnings);
+	stmt_bind_result_field(stmt_AccountLoad, FIELD_ID_PLAYER_VIP, DB::TYPE_INTEGER, VIP);
 	stmt_bind_result_field(stmt_AccountLoad, FIELD_ID_PLAYER_GPCI, DB::TYPE_STRING, gpci, 41);
 	stmt_bind_result_field(stmt_AccountLoad, FIELD_ID_PLAYER_ACTIVE, DB::TYPE_INTEGER, active);
 
@@ -941,26 +941,26 @@ stock SetAccountTotalSpawns(const name[], spawns)
 	return stmt_execute(stmt_AccountSetTotalSpawns);
 }
 
-// FIELD_ID_PLAYER_WARNINGS
-stock GetAccountWarnings(const name[], &warnings)
+// FIELD_ID_PLAYER_VIP
+stock GetAccountVIP(const name[], &VIP)
 {
-	stmt_bind_result_field(stmt_AccountGetWarnings, 0, DB::TYPE_INTEGER, warnings);
-	stmt_bind_value(stmt_AccountGetWarnings, 0, DB::TYPE_STRING, name, MAX_PLAYER_NAME);
+	stmt_bind_result_field(stmt_AccountGetVIP, 0, DB::TYPE_INTEGER, VIP);
+	stmt_bind_value(stmt_AccountGetVIP, 0, DB::TYPE_STRING, name, MAX_PLAYER_NAME);
 
-	if(!stmt_execute(stmt_AccountGetWarnings))
+	if(!stmt_execute(stmt_AccountGetVIP))
 		return 0;
 
-	stmt_fetch_row(stmt_AccountGetWarnings);
+	stmt_fetch_row(stmt_AccountGetVIP);
 
 	return 1;
 }
 
-stock SetAccountWarnings(const name[], warnings)
+stock SetAccountVIP(const name[], VIP)
 {
-	stmt_bind_value(stmt_AccountSetWarnings, 0, DB::TYPE_INTEGER, warnings);
-	stmt_bind_value(stmt_AccountSetWarnings, 1, DB::TYPE_STRING, name, MAX_PLAYER_NAME);
+	stmt_bind_value(stmt_AccountSetVIP, 0, DB::TYPE_INTEGER, VIP);
+	stmt_bind_value(stmt_AccountSetVIP, 1, DB::TYPE_STRING, name, MAX_PLAYER_NAME);
 
-	return stmt_execute(stmt_AccountSetWarnings);
+	return stmt_execute(stmt_AccountSetVIP);
 }
 
 // FIELD_ID_PLAYER_GPCI

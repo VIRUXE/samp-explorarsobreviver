@@ -103,14 +103,14 @@ hook OnPlayerUseItem(playerid, Item:itemid)
 {
 	if(food_ItemTypeFoodType[GetItemType(itemid)] != -1)
 	{
-		if(food_CurrentItem[playerid] != INVALID_ITEM_ID)
-			_StopEating(playerid);
-		else
+		if(food_CurrentItem[playerid] == INVALID_ITEM_ID)
 			_StartEating(playerid, itemid);
+		else
+			_StopEating(playerid);
+
 	}
 	return Y_HOOKS_CONTINUE_RETURN_0;
 }
-
 
 _StartEating(playerid, Item:itemid, continuing = false)
 {

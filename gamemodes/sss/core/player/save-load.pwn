@@ -41,7 +41,7 @@ enum
 	PLY_CELL_STANCE,
 	PLY_CELL_BLEEDING,
 	PLY_CELL_CUFFED,
-	PLY_CELL_WARNS,
+	PLY_CELL_VIP,
 	PLY_CELL_FREQ,
 	PLY_CELL_CHATMODE,
 	PLY_CELL_UNUSED,
@@ -131,7 +131,7 @@ SavePlayerChar(playerid)
 
 	GetPlayerBleedRate(playerid, Float:player_data[PLY_CELL_BLEEDING]);
 	player_data[PLY_CELL_CUFFED] = (GetPlayerSpecialAction(playerid) == SPECIAL_ACTION_CUFFED);
-	player_data[PLY_CELL_WARNS] = GetPlayerWarnings(playerid);
+	player_data[PLY_CELL_VIP] = GetPlayerVIP(playerid);
 	player_data[PLY_CELL_FREQ] = _:GetPlayerRadioFrequency(playerid);
 	player_data[PLY_CELL_CHATMODE] = GetPlayerChatMode(playerid);
 	player_data[PLY_CELL_TOOLTIPS] = IsPlayerToolTipsOn(playerid);
@@ -347,7 +347,7 @@ LoadPlayerChar(playerid)
 	SetPlayerStance(playerid, player_data[PLY_CELL_STANCE]);
 	SetPlayerBleedRate(playerid, Float:player_data[PLY_CELL_BLEEDING]);
 	SetPlayerCuffs(playerid, player_data[PLY_CELL_CUFFED]);
-	SetPlayerWarnings(playerid, player_data[PLY_CELL_WARNS]);
+	SetPlayerVIP(playerid, player_data[PLY_CELL_VIP]);
 	SetPlayerRadioFrequency(playerid, Float:player_data[PLY_CELL_FREQ]);
 	SetPlayerChatMode(playerid, player_data[PLY_CELL_CHATMODE]);
 	SetPlayerToolTips(playerid, bool:player_data[PLY_CELL_TOOLTIPS]);

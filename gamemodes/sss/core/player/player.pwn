@@ -29,7 +29,7 @@ enum E_PLAYER_DATA
 			ply_RegisterTimestamp,
 			ply_LastLogin,
 			ply_TotalSpawns,
-			ply_Warnings,
+			ply_VIP,
 
 			// Character Data
 bool:		ply_Alive,
@@ -222,7 +222,7 @@ ResetVariables(playerid)
 {
 	ply_Data[playerid][ply_Password][0]			= EOS;
 	ply_Data[playerid][ply_IP]					= 0;
-	ply_Data[playerid][ply_Warnings]			= 0;
+	ply_Data[playerid][ply_VIP]			= 0;
 
 	ply_Data[playerid][ply_Alive]				= false;
 	ply_Data[playerid][ply_HitPoints]			= 100.0;
@@ -564,21 +564,21 @@ stock SetPlayerTotalSpawns(playerid, amount)
 	return 1;
 }
 
-// ply_Warnings
-stock GetPlayerWarnings(playerid)
+// ply_VIP
+stock GetPlayerVIP(playerid)
 {
 	if(!IsPlayerConnected(playerid))
 		return 0;
 
-	return ply_Data[playerid][ply_Warnings];
+	return ply_Data[playerid][ply_VIP];
 }
 
-stock SetPlayerWarnings(playerid, timestamp)
+stock SetPlayerVIP(playerid, timestamp)
 {
 	if(!IsPlayerConnected(playerid))
 		return 0;
 
-	ply_Data[playerid][ply_Warnings] = timestamp;
+	ply_Data[playerid][ply_VIP] = timestamp;
 
 	return 1;
 }

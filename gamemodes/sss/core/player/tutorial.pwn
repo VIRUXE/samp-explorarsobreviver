@@ -158,19 +158,6 @@ hook OnPlayerClickPlayerTD(playerid, PlayerText:playertextid)
         
 		SetItemExtraData(PlayerTutorial_Item[20][playerid], 12);
 
-		/*new ItemType:itemtype = GetItemType(PlayerTutorial_Item[20][playerid]);
-		new magsize = GetItemTypeWeaponMagSize(itemtype);
-		SetItemWeaponItemMagAmmo(PlayerTutorial_Item[20][playerid], magsize);
-
-		new calibre = GetItemTypeWeaponCalibre(itemtype);
-		new
-			ItemType:ammotypelist[4],
-			ammotypes;
-
-		ammotypes = GetAmmoItemTypesOfCalibre(calibre, ammotypelist);
-
-		SetItemWeaponItemAmmoItem(PlayerTutorial_Item[20][playerid], ammotypelist[random(ammotypes)]);*/
-		
 		PlayerTutorial_Item[21][playerid] = CreateItem(item_GasCan, 938.4733,2063.2769,9.8603, .rz = frandom(360.0), .world = playerid + 1);
 		SetLiquidItemLiquidType(PlayerTutorial_Item[21][playerid], liquid_Petrol);
         SetLiquidItemLiquidAmount(PlayerTutorial_Item[21][playerid], 15);

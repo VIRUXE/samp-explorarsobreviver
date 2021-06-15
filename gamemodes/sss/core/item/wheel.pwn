@@ -24,13 +24,13 @@ hook OnPlayerConnect(playerid)
 
 hook OnPlayerInteractVehicle(playerid, vehicleid, Float:angle)
 {
-	if(wheel_Interact[playerid] != -1)
-		return Y_HOOKS_BREAK_RETURN_0;
-		
 	new Item:itemid = GetPlayerItem(playerid);
 
 	if(GetItemType(itemid) == item_Wheel)
 	{
+		if(wheel_Interact[playerid] != -1)
+			return Y_HOOKS_BREAK_RETURN_0;
+
 		if(_WheelRepair(playerid, vehicleid, itemid))
 			return Y_HOOKS_BREAK_RETURN_0;
 	}
@@ -67,7 +67,7 @@ _WheelRepair(playerid, vehicleid, Item:itemid)
 					ShowActionText(playerid, ls(playerid, "TIREREPFT", true), 5000);
 
 					SetPlayerFacingAngle(playerid, r - 180);
-					SetPlayerPos(playerid, x - (0.5 * floatsin(-r, degrees)), y - (0.5 * floatcos(-r, degrees)), z);
+					SetPlayerPos(playerid, x - (0.8 * floatsin(-r, degrees)), y - (0.8 * floatcos(-r, degrees)), z);
 					wheel_Interact[playerid] = wheel;
 
 					StopHoldAction(playerid);
@@ -89,7 +89,7 @@ _WheelRepair(playerid, vehicleid, Item:itemid)
 					ShowActionText(playerid, ls(playerid, "TIREREPRT", true), 5000);
 
 					SetPlayerFacingAngle(playerid, r - 180);
-					SetPlayerPos(playerid, x - (0.5 * floatsin(-r, degrees)), y - (0.5 * floatcos(-r, degrees)), z);
+					SetPlayerPos(playerid, x - (0.8 * floatsin(-r, degrees)), y - (0.8 * floatcos(-r, degrees)), z);
 					wheel_Interact[playerid] = wheel;
 					StopHoldAction(playerid);
 					StartHoldAction(playerid, 7000);
@@ -118,7 +118,7 @@ _WheelRepair(playerid, vehicleid, Item:itemid)
 					ShowActionText(playerid, ls(playerid, "TIREREPFL", true), 5000);
 
 					SetPlayerFacingAngle(playerid, r - 180);
-					SetPlayerPos(playerid, x - (0.5 * floatsin(-r, degrees)), y - (0.5 * floatcos(-r, degrees)), z);
+					SetPlayerPos(playerid, x - (0.8 * floatsin(-r, degrees)), y - (0.8 * floatcos(-r, degrees)), z);
 					wheel_Interact[playerid] = wheel;
 					StopHoldAction(playerid);
 					StartHoldAction(playerid, 7000);
@@ -138,7 +138,7 @@ _WheelRepair(playerid, vehicleid, Item:itemid)
 					DestroyItem(itemid);
 					ShowActionText(playerid, ls(playerid, "TIREREPFR", true), 5000);
 					SetPlayerFacingAngle(playerid, r - 180);
-					SetPlayerPos(playerid, x - (0.5 * floatsin(-r, degrees)), y - (0.5 * floatcos(-r, degrees)), z);
+					SetPlayerPos(playerid, x - (0.8 * floatsin(-r, degrees)), y - (0.8 * floatcos(-r, degrees)), z);
 					wheel_Interact[playerid] = wheel;
 					StopHoldAction(playerid);
 					StartHoldAction(playerid, 7000);
@@ -158,7 +158,7 @@ _WheelRepair(playerid, vehicleid, Item:itemid)
 					DestroyItem(itemid);
 					ShowActionText(playerid, ls(playerid, "TIREREPBL", true), 5000);
 					SetPlayerFacingAngle(playerid, r - 180);
-					SetPlayerPos(playerid, x - (0.5 * floatsin(-r, degrees)), y - (0.5 * floatcos(-r, degrees)), z);
+					SetPlayerPos(playerid, x - (0.8 * floatsin(-r, degrees)), y - (0.8 * floatcos(-r, degrees)), z);
 					wheel_Interact[playerid] = wheel;
 					StopHoldAction(playerid);
 					StartHoldAction(playerid, 7000);
@@ -180,7 +180,7 @@ _WheelRepair(playerid, vehicleid, Item:itemid)
 					DestroyItem(itemid);
 					ShowActionText(playerid, ls(playerid, "TIREREPBR", true), 5000);
 					SetPlayerFacingAngle(playerid, r - 180);
-					SetPlayerPos(playerid, x - (0.5 * floatsin(-r, degrees)), y - (0.5 * floatcos(-r, degrees)), z);
+					SetPlayerPos(playerid, x - (0.8 * floatsin(-r, degrees)), y - (0.8 * floatcos(-r, degrees)), z);
 					wheel_Interact[playerid] = wheel;
 					StopHoldAction(playerid);
 					StartHoldAction(playerid, 7000);
@@ -205,6 +205,7 @@ hook OnHoldActionFinish(playerid)
 	if(wheel_Interact[playerid] != -1)
 	{
 		ApplyAnimation(playerid, "CAR", "FIXN_CAR_OUT", 4.0, 0, 0, 0, 0, 0);
+		wheel_Interact[playerid] = -1;
 		return Y_HOOKS_BREAK_RETURN_1;
 	}
 
