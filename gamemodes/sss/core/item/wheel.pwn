@@ -15,30 +15,30 @@
 
 #include <YSI_Coding\y_hooks>
 
-static wheel_Interact[MAX_PLAYERS] = {-1, ...};
+static 
+	Timer:UpdateVehWheel[MAX_PLAYERS],
+	PlayerUpdateWheel[MAX_PLAYERS] = {INVALID_VEHICLE_ID, ...};
 
-hook OnPlayerConnect(playerid)
+hook OnPlayerDisconnect(playerid, reason)
 {
-	wheel_Interact[playerid] = -1;
+	stop UpdateVehWheel[playerid];
+	PlayerUpdateWheel[playerid] = INVALID_VEHICLE_ID;
 }
 
 hook OnPlayerInteractVehicle(playerid, vehicleid, Float:angle)
 {
 	new Item:itemid = GetPlayerItem(playerid);
 
-	if(GetItemType(itemid) == item_Wheel)
+	if(GetItemType(itemid) == item_Wheel && PlayerUpdateWheel[playerid] == INVALID_VEHICLE_ID)
 	{
-		if(wheel_Interact[playerid] != -1)
-			return Y_HOOKS_BREAK_RETURN_0;
-
-		if(_WheelRepair(playerid, vehicleid, itemid))
+		if(_WheelRepair(playerid, vehicleid))
 			return Y_HOOKS_BREAK_RETURN_0;
 	}
 
 	return Y_HOOKS_CONTINUE_RETURN_0;
 }
 
-_WheelRepair(playerid, vehicleid, Item:itemid)
+_WheelRepair(playerid, vehicleid)
 {
 	new
 		wheel = GetPlayerVehicleTire(playerid, vehicleid),
@@ -46,13 +46,9 @@ _WheelRepair(playerid, vehicleid, Item:itemid)
 		panels,
 		doors,
 		lights,
-		tires,
-		Float:x, Float:y, Float:z,
-		Float:r;
+		tires;
 
 	GetVehicleDamageStatus(vehicleid, panels, doors, lights, tires);
-	GetPlayerPos(playerid, x, y, z);
-	GetPlayerFacingAngle(playerid, r);
 	
 	if(GetVehicleTypeCategory(vehicletype) == VEHICLE_CATEGORY_MOTORBIKE && GetVehicleTypeModel(vehicletype) != 471)
 	{
@@ -62,21 +58,16 @@ _WheelRepair(playerid, vehicleid, Item:itemid)
 			{
 				if(tires & 0b0010)
 				{
-					UpdateVehicleDamageStatus(vehicleid, panels, doors, lights, tires & 0b1101);
-					DestroyItem(itemid);
-					ShowActionText(playerid, ls(playerid, "TIREREPFT", true), 5000);
-
-					SetPlayerFacingAngle(playerid, r - 180);
-					SetPlayerPos(playerid, x - (0.8 * floatsin(-r, degrees)), y - (0.8 * floatcos(-r, degrees)), z);
-					wheel_Interact[playerid] = wheel;
-
-					StopHoldAction(playerid);
+					stop UpdateVehWheel[playerid];
+					UpdateVehWheel[playerid] = defer upVehWheel(playerid, vehicleid, panels, doors, lights, tires & 0b1101);
+					ShowActionText(playerid, ls(playerid, "TIREREPFT"), 7000);
+					PlayerUpdateWheel[playerid] = vehicleid;
 					StartHoldAction(playerid, 7000);
-					ApplyAnimation(playerid, "CAR", "FIXN_CAR_LOOP", 4.0, 0, 0, 0, 1, 0);
+					ApplyAnimation(playerid, "BOMBER", "BOM_Plant_Loop", 4.0, 1, 0, 0, 0, 0);
 				}
 				else
 				{
-					ShowActionText(playerid, ls(playerid, "TIRENOTBROK", true), 5000);
+					ShowActionText(playerid, ls(playerid, "TIRENOTBROK"), 2000);
 				}
 			}
 
@@ -84,20 +75,16 @@ _WheelRepair(playerid, vehicleid, Item:itemid)
 			{
 				if(tires & 0b0001)
 				{
-					UpdateVehicleDamageStatus(vehicleid, panels, doors, lights, tires & 0b1110);
-					DestroyItem(itemid);
-					ShowActionText(playerid, ls(playerid, "TIREREPRT", true), 5000);
-
-					SetPlayerFacingAngle(playerid, r - 180);
-					SetPlayerPos(playerid, x - (0.8 * floatsin(-r, degrees)), y - (0.8 * floatcos(-r, degrees)), z);
-					wheel_Interact[playerid] = wheel;
-					StopHoldAction(playerid);
+					stop UpdateVehWheel[playerid];
+					UpdateVehWheel[playerid] = defer upVehWheel(playerid, vehicleid, panels, doors, lights, tires & 0b1110);
+					ShowActionText(playerid, ls(playerid, "TIREREPRT"), 7000);
+					PlayerUpdateWheel[playerid] = vehicleid;
 					StartHoldAction(playerid, 7000);
-					ApplyAnimation(playerid, "CAR", "FIXN_CAR_LOOP", 4.0, 0, 0, 0, 1, 0);
+					ApplyAnimation(playerid, "BOMBER", "BOM_Plant_Loop", 4.0, 1, 0, 0, 0, 0);
 				}
 				else
 				{
-					ShowActionText(playerid, ls(playerid, "TIRENOTBROK", true), 5000);
+					ShowActionText(playerid, ls(playerid, "TIRENOTBROK"), 2000);
 				}
 			}
 
@@ -113,20 +100,16 @@ _WheelRepair(playerid, vehicleid, Item:itemid)
 			{
 				if(tires & 0b1000)
 				{
-					UpdateVehicleDamageStatus(vehicleid, panels, doors, lights, tires & 0b0111);
-					DestroyItem(itemid);
-					ShowActionText(playerid, ls(playerid, "TIREREPFL", true), 5000);
-
-					SetPlayerFacingAngle(playerid, r - 180);
-					SetPlayerPos(playerid, x - (0.8 * floatsin(-r, degrees)), y - (0.8 * floatcos(-r, degrees)), z);
-					wheel_Interact[playerid] = wheel;
-					StopHoldAction(playerid);
+					stop UpdateVehWheel[playerid];
+					UpdateVehWheel[playerid] = defer upVehWheel(playerid, vehicleid, panels, doors, lights, tires & 0b0111);
+					ShowActionText(playerid, ls(playerid, "TIREREPFL"), 7000);
+					PlayerUpdateWheel[playerid] = vehicleid;
 					StartHoldAction(playerid, 7000);
-					ApplyAnimation(playerid, "CAR", "FIXN_CAR_LOOP", 4.0, 0, 0, 0, 1, 0);
+					ApplyAnimation(playerid, "BOMBER", "BOM_Plant_Loop", 4.0, 1, 0, 0, 0, 0);
 				}
 				else
 				{
-					ShowActionText(playerid, ls(playerid, "TIRENOTBROK", true), 5000);
+					ShowActionText(playerid, ls(playerid, "TIRENOTBROK"), 2000);
 				}
 			}
 
@@ -134,19 +117,16 @@ _WheelRepair(playerid, vehicleid, Item:itemid)
 			{
 				if(tires & 0b0010)
 				{
-					UpdateVehicleDamageStatus(vehicleid, panels, doors, lights, tires & 0b1101);
-					DestroyItem(itemid);
-					ShowActionText(playerid, ls(playerid, "TIREREPFR", true), 5000);
-					SetPlayerFacingAngle(playerid, r - 180);
-					SetPlayerPos(playerid, x - (0.8 * floatsin(-r, degrees)), y - (0.8 * floatcos(-r, degrees)), z);
-					wheel_Interact[playerid] = wheel;
-					StopHoldAction(playerid);
+					stop UpdateVehWheel[playerid];
+					UpdateVehWheel[playerid] = defer upVehWheel(playerid, vehicleid, panels, doors, lights, tires & 0b1101);
+					ShowActionText(playerid, ls(playerid, "TIREREPFR"), 7000);
+					PlayerUpdateWheel[playerid] = vehicleid;
 					StartHoldAction(playerid, 7000);
-					ApplyAnimation(playerid, "CAR", "FIXN_CAR_LOOP", 4.0, 0, 0, 0, 1, 0);
+					ApplyAnimation(playerid, "BOMBER", "BOM_Plant_Loop", 4.0, 1, 0, 0, 0, 0);
 				}
 				else
 				{
-					ShowActionText(playerid, ls(playerid, "TIRENOTBROK", true), 5000);
+					ShowActionText(playerid, ls(playerid, "TIRENOTBROK"), 2000);
 				}
 			}
 
@@ -154,19 +134,16 @@ _WheelRepair(playerid, vehicleid, Item:itemid)
 			{
 				if(tires & 0b0100)
 				{
-					UpdateVehicleDamageStatus(vehicleid, panels, doors, lights, tires & 0b1011);
-					DestroyItem(itemid);
-					ShowActionText(playerid, ls(playerid, "TIREREPBL", true), 5000);
-					SetPlayerFacingAngle(playerid, r - 180);
-					SetPlayerPos(playerid, x - (0.8 * floatsin(-r, degrees)), y - (0.8 * floatcos(-r, degrees)), z);
-					wheel_Interact[playerid] = wheel;
-					StopHoldAction(playerid);
+					stop UpdateVehWheel[playerid];
+					UpdateVehWheel[playerid] = defer upVehWheel(playerid, vehicleid, panels, doors, lights, tires & 0b1011);
+					ShowActionText(playerid, ls(playerid, "TIREREPBL"), 7000);
+					PlayerUpdateWheel[playerid] = vehicleid;
 					StartHoldAction(playerid, 7000);
-					ApplyAnimation(playerid, "CAR", "FIXN_CAR_LOOP", 4.0, 0, 0, 0, 1, 0);
+					ApplyAnimation(playerid, "BOMBER", "BOM_Plant_Loop", 4.0, 1, 0, 0, 0, 0);
 				}
 				else
 				{
-					ShowActionText(playerid, ls(playerid, "TIRENOTBROK", true), 5000);
+					ShowActionText(playerid, ls(playerid, "TIRENOTBROK"), 2000);
 				}
 			}
 
@@ -174,21 +151,16 @@ _WheelRepair(playerid, vehicleid, Item:itemid)
 			{
 				if(tires & 0b0001)
 				{
-					wheel_Interact[playerid] = wheel;
+					stop UpdateVehWheel[playerid];
+					UpdateVehWheel[playerid] = defer upVehWheel(playerid, vehicleid, panels, doors, lights, tires & 0b1110);
+					ShowActionText(playerid, ls(playerid, "TIREREPBR"), 7000);
+					PlayerUpdateWheel[playerid] = vehicleid;
 					StartHoldAction(playerid, 7000);
-					UpdateVehicleDamageStatus(vehicleid, panels, doors, lights, tires & 0b1110);
-					DestroyItem(itemid);
-					ShowActionText(playerid, ls(playerid, "TIREREPBR", true), 5000);
-					SetPlayerFacingAngle(playerid, r - 180);
-					SetPlayerPos(playerid, x - (0.8 * floatsin(-r, degrees)), y - (0.8 * floatcos(-r, degrees)), z);
-					wheel_Interact[playerid] = wheel;
-					StopHoldAction(playerid);
-					StartHoldAction(playerid, 7000);
-					ApplyAnimation(playerid, "CAR", "FIXN_CAR_LOOP", 4.0, 0, 0, 0, 1, 0);
+					ApplyAnimation(playerid, "BOMBER", "BOM_Plant_Loop", 4.0, 1, 0, 0, 0, 0);
 				}
 				else
 				{
-					ShowActionText(playerid, ls(playerid, "TIRENOTBROK", true), 5000);
+					ShowActionText(playerid, ls(playerid, "TIRENOTBROK"), 2000);
 				}
 			}
 
@@ -200,14 +172,72 @@ _WheelRepair(playerid, vehicleid, Item:itemid)
 	return 1;
 }
 
-hook OnHoldActionFinish(playerid)
-{
-	if(wheel_Interact[playerid] != -1)
-	{
-		ApplyAnimation(playerid, "CAR", "FIXN_CAR_OUT", 4.0, 0, 0, 0, 0, 0);
-		wheel_Interact[playerid] = -1;
+timer upVehWheel[7000](playerid, vehicleid, panels, doors, lights, tires){
+	StopHoldAction(playerid);
+	DestroyItem(GetPlayerItem(playerid));
+	ClearAnimations(playerid);
+	PlayerUpdateWheel[playerid] = INVALID_VEHICLE_ID;
+	UpdateVehicleDamageStatus(vehicleid, panels, doors, lights, tires);
+	PlayerPlaySound(playerid, 4202, 0.0, 0.0, 0.0);
+	ShowActionText(playerid, ls(playerid, "TIREREPP", true), 2000);
+}
+
+hook OnPlayerOpenInventory(playerid){
+	if(PlayerUpdateWheel[playerid] != INVALID_VEHICLE_ID) {
+		stop UpdateVehWheel[playerid];
+		PlayerUpdateWheel[playerid] = INVALID_VEHICLE_ID;
+		ClearAnimations(playerid);
+	}
+	return Y_HOOKS_CONTINUE_RETURN_0;
+}
+
+hook OnPlayerOpenContainer(playerid, containerid){
+	if(PlayerUpdateWheel[playerid] != INVALID_VEHICLE_ID) {
+		stop UpdateVehWheel[playerid];
+		PlayerUpdateWheel[playerid] = INVALID_VEHICLE_ID;
+		ClearAnimations(playerid);
+	}
+	return Y_HOOKS_CONTINUE_RETURN_0;
+}
+
+hook OnPlayerDropItem(playerid, Item:itemid){
+	if(PlayerUpdateWheel[playerid] != INVALID_VEHICLE_ID) {
+		stop UpdateVehWheel[playerid];
+		PlayerUpdateWheel[playerid] = INVALID_VEHICLE_ID;
+		ClearAnimations(playerid);
+	}
+	return Y_HOOKS_CONTINUE_RETURN_0;
+}
+
+hook OnItemRemovedFromPlayer(playerid, Item:itemid){
+	if(PlayerUpdateWheel[playerid] != INVALID_VEHICLE_ID) {
+		stop UpdateVehWheel[playerid];
+		PlayerUpdateWheel[playerid] = INVALID_VEHICLE_ID;
+		ClearAnimations(playerid);
+	}
+}
+
+hook OnPlayerEnterVehicle(playerid, vehicleid, ispassenger){
+	if(PlayerUpdateWheel[playerid] != INVALID_VEHICLE_ID) {
+		stop UpdateVehWheel[playerid];
+		PlayerUpdateWheel[playerid] = INVALID_VEHICLE_ID;
+		ClearAnimations(playerid);
+	}
+	return 1;
+}
+
+hook OnHoldActionUpdate(playerid, progress){
+	if(PlayerUpdateWheel[playerid] != INVALID_VEHICLE_ID) {
+		ClearAnimations(playerid);
 		return Y_HOOKS_BREAK_RETURN_1;
 	}
 
 	return Y_HOOKS_CONTINUE_RETURN_0;
+}
+
+hook OnHoldActionFinish(playerid){
+	if(PlayerUpdateWheel[playerid] != INVALID_VEHICLE_ID) {
+		return Y_HOOKS_BREAK_RETURN_1;
+	}
+	return Y_HOOKS_CONTINUE_RETURN_1;
 }

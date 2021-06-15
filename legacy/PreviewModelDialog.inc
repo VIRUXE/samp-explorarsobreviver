@@ -877,7 +877,7 @@ public OnPlayerClickTextDraw(playerid, Text:clickedid) {
 
 			Prev_HidePlayerDialog(playerid);
 
-			CallLocalFunction("OnDialogModelResponse", "iiiis", playerid, dialogid, 0, listitem, inputtext);
+			CallLocalFunction("OnDialogModelResponse", "iiii", playerid, dialogid, 0, listitem);
 
 		} else if (clickedid == SCROLL_BAR_UP_TEXTDRAW) {
 			if (Prev@PlayerDialogPage[playerid] > 0) {
@@ -913,7 +913,7 @@ public OnPlayerClickTextDraw(playerid, Text:clickedid) {
 
 			Prev_HidePlayerDialog(playerid);
 
-			CallLocalFunction("OnDialogModelResponse", "iiiis", playerid, dialogid, 1, listitem, inputtext);
+			CallLocalFunction("OnDialogModelResponse", "iiii", playerid, dialogid, 1, listitem);
 
 		} else {
 			for (new i = 0; i < (MAX_DIALOG_PREVIEW_ROWS * MAX_DIALOG_PREVIEW_COLUMNS); i++) {
@@ -927,7 +927,7 @@ public OnPlayerClickTextDraw(playerid, Text:clickedid) {
 
 						Prev_HidePlayerDialog(playerid);
 
-						CallLocalFunction("OnDialogModelResponse", "iiiis", playerid, dialogid, 1, listitem, inputtext);
+						CallLocalFunction("OnDialogModelResponse", "iiii", playerid, dialogid, 1, listitem);
 
 					} else {
 						// reset previous listitem

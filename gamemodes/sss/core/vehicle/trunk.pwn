@@ -43,7 +43,7 @@ hook OnVehicleCreated(vehicleid)
 	{
 		new vehicletypename[MAX_VEHICLE_TYPE_NAME];
 		GetVehicleTypeName(vehicletype, vehicletypename);
-		trunk_ContainerID[vehicleid] = CreateContainer(sprintf("%s trunk", vehicletypename), trunksize);
+		trunk_ContainerID[vehicleid] = CreateContainer(vehicletypename, trunksize);
 		trunk_ContainerVehicle[trunk_ContainerID[vehicleid]] = vehicleid;
 		trunk_Locked[vehicleid] = false;
 	}

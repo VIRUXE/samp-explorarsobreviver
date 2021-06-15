@@ -15,8 +15,7 @@
 
 ==============================================================================*/
 
-#define MODEL_SELECTION_CRAFT_MENU 	(10)
-#define MODEL_SELECTION_ITEM_MENU 	(11)
+#define CRAFT_DIALOG 	(90)
 
 CMD:recipes(playerid, params[])
 {
@@ -27,38 +26,6 @@ CMD:recipes(playerid, params[])
 CMD:crafts(playerid, params[])
 {
 	Dialog_ShowCraftTypes(playerid);
-	return 1;
-}
-
-
-CMD:item(playerid, params[])
-{
-	new
-		type[8];
-
-	if(sscanf(params, "s[8]", type))
-	{
-		ChatMsg(playerid, YELLOW, " >  Usage: /Item [optional: defence/box]");
-	}
-
-	new 
-		List:LItem = list_new(),
-		model,
-		itemname[MAX_ITEM_NAME];
-
-	for(new ItemType:i; i < MAX_ITEM_TYPE; i++)
-	{
-		if(!IsValidItemType(i))
-			continue;
-
-		GetItemTypeModel(i, model);
-		GetItemTypeName(i, itemname);
-		AddModelMenuItem(LItem, model, itemname);
-	}
-
-	ShowModelSelectionMenu(playerid, "Item List", MODEL_SELECTION_ITEM_MENU, LItem);
-
-	
 	return 1;
 }
 
@@ -97,7 +64,7 @@ Dialog_ShowCraftList(playerid, type)
 
 	new
 		itemname[MAX_ITEM_NAME],
-		List:LCraft = list_new(),
+		LCraft[270],
 		model,
 		items;
 
@@ -143,48 +110,21 @@ Dialog_ShowCraftList(playerid, type)
 		}
 
 		PlayerListCraft[playerid][items++] = i;
-		AddModelMenuItem(LCraft, model, itemname);
+		format(LCraft, sizeof(LCraft), "%s%d\t%s\n", LCraft, model, itemname);
 	}
 
-	ShowModelSelectionMenu(playerid, "Craftsets", MODEL_SELECTION_CRAFT_MENU, LCraft);
+	ShowPlayerDialog(playerid, CRAFT_DIALOG, DIALOG_STYLE_PREVIEW_MODEL, "Craftsets", LCraft, ">", "~R~X");
 }
 
-public OnModelSelectionResponse(playerid, extraid, index, modelid, response)
-{
-	if(extraid == MODEL_SELECTION_ITEM_MENU)
-	{
-		if(response == MODEL_RESPONSE_SELECT)
-		{
-			new
-				itemname[MAX_ITEM_NAME],
-				itemtipkey[12],
-				str[288];
-
-			GetItemTypeUniqueName(ItemType:index, itemname);
-
-			if(strlen(itemname) > 9)
-				itemname[9] = EOS;
-
-			format(itemtipkey, sizeof(itemtipkey), "%s_T", itemname);
-			itemtipkey[11] = EOS;
-			
-			format(str, sizeof(str), "%", ls(playerid, itemtipkey));
-
-			ShowHelpTip(playerid, str, 10000);
+hook OnDialogModelResponse(playerid, dialogid, response, listitem){
+	if(dialogid == CRAFT_DIALOG){
+		if(response) {
+			Dialog_ShowIngredients(playerid, CraftSet:PlayerListCraft[playerid][listitem]);
 		}
-	}
-
-    if(extraid == MODEL_SELECTION_CRAFT_MENU)
-    {
-		if(response == MODEL_RESPONSE_SELECT)
-		{
-			Dialog_ShowIngredients(playerid, CraftSet:PlayerListCraft[playerid][index]);
-		}
-		else
-		{
+		else {
 			Dialog_ShowCraftTypes(playerid);
-		}
-    }
+		}	
+	}
 }
 
 Dialog_ShowIngredients(playerid, CraftSet:craftset)
@@ -238,6 +178,8 @@ Dialog_ShowIngredients(playerid, CraftSet:craftset)
 	strcat(gBigString[playerid], "\n");
 	strcat(gBigString[playerid], ls(playerid, itemtipkey));
 
+	GetItemTypeName(resulttype, itemname);
+	
 	inline Response(pid, dialogid, response, listitem, string:inputtext[])
 	{
 		#pragma unused pid, dialogid, listitem, inputtext
