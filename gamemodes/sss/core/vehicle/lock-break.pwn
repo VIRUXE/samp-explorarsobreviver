@@ -24,6 +24,7 @@ static
 hook OnPlayerConnect(playerid)
 {
 	cro_TargetVehicle[playerid] = INVALID_VEHICLE_ID;
+	cro_OpenType[playerid] = -1;
 }
 
 hook OnPlayerInteractVehicle(playerid, vehicleid, Float:angle)
@@ -55,7 +56,7 @@ hook OnPlayerInteractVehicle(playerid, vehicleid, Float:angle)
 StartBreakingVehicleLock(playerid, vehicleid, type)
 {
 	if(cro_TargetVehicle[playerid] != INVALID_VEHICLE_ID) {
-	StopBreakingVehicleLock(playerid);
+		StopBreakingVehicleLock(playerid);
 	} else {
 		if(type == 0)
 		{
