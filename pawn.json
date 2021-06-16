@@ -7,7 +7,7 @@
 	"dependencies": [
 		"sampctl/samp-stdlib",
 		"urShadow/Pawn.RakNet:1.4.1",
-		"Pottus/ColAndreas",
+		"Pottus/ColAndreas:1.5.0",
 		"maddinat0r/samp-discord-connector:v0.3.5",
 		"Southclaws/samp-nolog:0.2.1",
 		"Southclaws/samp-stdlib:0.3.7-R2-2-1",
