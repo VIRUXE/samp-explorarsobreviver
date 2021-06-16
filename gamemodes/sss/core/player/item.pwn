@@ -18,7 +18,7 @@
 new PlayerText:item_TD[MAX_PLAYERS][2];
 
 hook OnPlayerConnect(playerid){
-	item_TD[playerid][0] = CreatePlayerTextDraw(playerid, 288.000000, 405.000000, "Preview_Model");
+	item_TD[playerid][0] = CreatePlayerTextDraw(playerid, 297.000000, 405.000000, "Preview_Model");
 	PlayerTextDrawFont(playerid, item_TD[playerid][0], 5);
 	PlayerTextDrawLetterSize(playerid, item_TD[playerid][0], 0.600000, 2.000000);
 	PlayerTextDrawTextSize(playerid, item_TD[playerid][0], 53.000000, 39.000000);
@@ -35,7 +35,7 @@ hook OnPlayerConnect(playerid){
 	PlayerTextDrawSetPreviewRot(playerid, item_TD[playerid][0], 0.000000, 0.000000, 0.000000, 1.000000);
 	PlayerTextDrawSetPreviewVehCol(playerid, item_TD[playerid][0], 1, 1);
 
-	item_TD[playerid][1] = CreatePlayerTextDraw(playerid, 313.000000, 435.000000, "Large Box");
+	item_TD[playerid][1] = CreatePlayerTextDraw(playerid, 320.000000, 435.000000, "Large Box");
 	PlayerTextDrawFont(playerid, item_TD[playerid][1], 1);
 	PlayerTextDrawLetterSize(playerid, item_TD[playerid][1], 0.254165, 1.250000);
 	PlayerTextDrawTextSize(playerid, item_TD[playerid][1], 280.000000, 254.000000);
@@ -102,11 +102,20 @@ hook OnPlayerDisconnect(playerid, reason){
 	PlayerTextDrawDestroy(playerid, item_TD[playerid][1]);
 }
 
+/*==============================================================================
+	Temporary fix long pickup on mobile
+==============================================================================*/
+
+hook OnButtonPress(playerid, Button:id) {
+	new Item:itemid = GetItemFromButtonID(id);
+	if(IsValidItem(itemid) && IsItemTypeLongPickup(GetItemType(itemid)) && IsPlayerMobile(playerid)){
+		PlayerPickUpItem(playerid, itemid);
+	}
+	return Y_HOOKS_BREAK_RETURN_1;
+}
 
 /*==============================================================================
-
 	Anti Drop item bug
-	
 ==============================================================================*/
 
 hook OnPlayerDroppedItem(playerid, Item:itemid){
