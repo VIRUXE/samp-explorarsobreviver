@@ -30,9 +30,7 @@ static
 PlayerText:	ClassButtonTutorial		[MAX_PLAYERS],
 bool:		PlayerInTutorial		[MAX_PLAYERS],
 			PlayerTutorialVehicle	[MAX_PLAYERS],
-Item:		PlayerTutorial_Item     [MAX_TUTORIAL_ITEMS][MAX_PLAYERS],
-bool:		PlayerTutorial_VozInv   [MAX_PLAYERS],
-bool:		PlayerTutorial_VozCnt   [MAX_PLAYERS];
+Item:		PlayerTutorial_Item     [MAX_TUTORIAL_ITEMS][MAX_PLAYERS];
 
 hook OnPlayerConnect(playerid)
 {
@@ -115,10 +113,6 @@ hook OnPlayerClickPlayerTD(playerid, PlayerText:playertextid)
 		SetPlayerBrightness(playerid, 255);
 
 		PlayerInTutorial[playerid] = true;
-		
-		PlayerTutorial_VozInv[playerid] = false;
-		PlayerTutorial_VozCnt[playerid] = false;
-
 
 		//	Vehicle
 		
@@ -243,10 +237,6 @@ hook OnPlayerOpenInventory(playerid)
 {
 	if(PlayerInTutorial[playerid])
 	{
-	    if(!PlayerTutorial_VozInv[playerid])
-	    {
-            PlayerTutorial_VozInv[playerid] = true;
-		}
   		for(new i = 0; i < 20; i++)
 			SendClientMessage(playerid, GREEN, "");
 			
@@ -261,19 +251,16 @@ hook OnPlayerOpenContainer(playerid, Container:containerid)
 {
 	if(PlayerInTutorial[playerid])
 	{
-		new Container:bagcontainer;
-		GetItemArrayDataAtCell(GetPlayerBagItem(playerid), _:bagcontainer, 1);
-		if(containerid == bagcontainer)
-		{
-		    if(!PlayerTutorial_VozCnt[playerid])
-		    {
-                PlayerTutorial_VozCnt[playerid] = true;
+		new Container:bagcontainer, Error:e;
+		e = GetItemArrayDataAtCell(GetPlayerBagItem(playerid), _:bagcontainer, 1);
+		if(!IsError(e)) {
+			if(containerid == bagcontainer)
+			{
+				for(new i = 0; i < 20; i++)
+					SendClientMessage(playerid, GREEN, "");
+				
+				ChatMsg(playerid, WHITE, ""C_GREEN"> "C_WHITE" %s", ls(playerid, "TUTORINTBAG"));
 			}
-			
-  			for(new i = 0; i < 20; i++)
-				SendClientMessage(playerid, GREEN, "");
-			
-			ChatMsg(playerid, WHITE, ""C_GREEN"> "C_WHITE" %s", ls(playerid, "TUTORINTBAG"));
 		}
 	}
 
@@ -344,21 +331,23 @@ hook OnItemAddedToContainer(Container:containerid, Item:itemid, playerid)
 	{
 		if(PlayerInTutorial[playerid])
 		{
-			new Container:bagcontainer;
-			GetItemArrayDataAtCell(GetPlayerBagItem(playerid), _:bagcontainer, 1);
-			if(containerid == bagcontainer)
-			{
-				for(new i = 0; i < 20; i++)
-					SendClientMessage(playerid, GREEN, "");
+			new Container:bagcontainer, Error:e;
+			e = GetItemArrayDataAtCell(GetPlayerBagItem(playerid), _:bagcontainer, 1);
+			if(!IsError(e)) {
+				if(containerid == bagcontainer)
+				{
+					for(new i = 0; i < 20; i++)
+						SendClientMessage(playerid, GREEN, "");
 
-				ChatMsg(playerid, WHITE, ""C_GREEN"> "C_WHITE" %s", ls(playerid, "TUTORADDBAG"));
-			}
-			else
-			{
-				for(new i = 0; i < 20; i++)
-					SendClientMessage(playerid, GREEN, "");
+					ChatMsg(playerid, WHITE, ""C_GREEN"> "C_WHITE" %s", ls(playerid, "TUTORADDBAG"));
+				}
+				else
+				{
+					for(new i = 0; i < 20; i++)
+						SendClientMessage(playerid, GREEN, "");
 
-				ChatMsg(playerid, WHITE, ""C_GREEN"> "C_WHITE" %s", ls(playerid, "TUTORADDCNT"));
+					ChatMsg(playerid, WHITE, ""C_GREEN"> "C_WHITE" %s", ls(playerid, "TUTORADDCNT"));
+				}
 			}
 		}
 	}
