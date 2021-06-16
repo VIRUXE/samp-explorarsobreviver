@@ -158,7 +158,7 @@ hook OnPlayerUseItemWithItem(playerid, Item:itemid, Item:withitemid)
 {
 	if(atr_Check[playerid])
 	{
-		Dialog_Show(playerid, DIALOG_STYLE_MSGBOX, "Anti-Raid Protection", ls(playerid, "ANTRAIDP"), "Close", "");
+		Dialog_Show(playerid, DIALOG_STYLE_MSGBOX, "Anti-Raid Protection", ls(playerid, "ANTRAIDP"), ""C_RED"X", "");
 		return Y_HOOKS_BREAK_RETURN_1;
 	}
 	return Y_HOOKS_CONTINUE_RETURN_0;
@@ -168,7 +168,7 @@ hook OnPlayerPickUpItem(playerid, Item:itemid)
 {
 	if(atr_Check[playerid])
 	{
-		Dialog_Show(playerid, DIALOG_STYLE_MSGBOX, "Anti-Raid Protection", ls(playerid, "ANTRAIDP"), "Close", "");
+		Dialog_Show(playerid, DIALOG_STYLE_MSGBOX, "Anti-Raid Protection", ls(playerid, "ANTRAIDP"), ""C_RED"X", "");
 		return Y_HOOKS_BREAK_RETURN_1;
 	}
 	return Y_HOOKS_CONTINUE_RETURN_0;
@@ -178,7 +178,7 @@ hook OnPlayerGiveItem(playerid, targetid, Item:itemid)
 {
 	if(atr_Check[playerid])
 	{
-		Dialog_Show(playerid, DIALOG_STYLE_MSGBOX, "Anti-Raid Protection", ls(playerid, "ANTRAIDP"), "Close", "");
+		Dialog_Show(playerid, DIALOG_STYLE_MSGBOX, "Anti-Raid Protection", ls(playerid, "ANTRAIDP"), ""C_RED"X", "");
 		return Y_HOOKS_BREAK_RETURN_1;
 	}
 	if(atr_Check[targetid])
@@ -193,7 +193,7 @@ hook OnItemRemoveFromCnt(containerid, slotid, playerid)
 	{
 		if(atr_Check[playerid])
 		{
-			Dialog_Show(playerid, DIALOG_STYLE_MSGBOX, "Anti-Raid Protection", ls(playerid, "ANTRAIDP"), "Close", "");
+			Dialog_Show(playerid, DIALOG_STYLE_MSGBOX, "Anti-Raid Protection", ls(playerid, "ANTRAIDP"), ""C_RED"X", "");
 			return Y_HOOKS_BREAK_RETURN_1;
 		}
 	}
@@ -204,7 +204,7 @@ hook OnPlayerOpenInventory(playerid)
 {
 	if(atr_Check[playerid])
 	{
-		Dialog_Show(playerid, DIALOG_STYLE_MSGBOX, "Anti-Raid Protection", ls(playerid, "ANTRAIDP"), "Close", "");
+		Dialog_Show(playerid, DIALOG_STYLE_MSGBOX, "Anti-Raid Protection", ls(playerid, "ANTRAIDP"), ""C_RED"X", "");
 		return Y_HOOKS_BREAK_RETURN_1;
 	}
 	return Y_HOOKS_CONTINUE_RETURN_0;
@@ -214,7 +214,7 @@ hook OnPlayerOpenContainer(playerid, containerid)
 {
 	if(atr_Check[playerid])
 	{
-		Dialog_Show(playerid, DIALOG_STYLE_MSGBOX, "Anti-Raid Protection", ls(playerid, "ANTRAIDP"), "Close", "");
+		Dialog_Show(playerid, DIALOG_STYLE_MSGBOX, "Anti-Raid Protection", ls(playerid, "ANTRAIDP"), ""C_RED"X", "");
 		return Y_HOOKS_BREAK_RETURN_1;
 	}
 	return Y_HOOKS_CONTINUE_RETURN_0;
@@ -224,7 +224,7 @@ hook OnPlayerUseItem(playerid, Item:itemid)
 {
 	if(atr_Check[playerid])
 	{
-		Dialog_Show(playerid, DIALOG_STYLE_MSGBOX, "Anti-Raid Protection", ls(playerid, "ANTRAIDP"), "Close", "");
+		Dialog_Show(playerid, DIALOG_STYLE_MSGBOX, "Anti-Raid Protection", ls(playerid, "ANTRAIDP"), ""C_RED"X", "");
 		return Y_HOOKS_BREAK_RETURN_1;
 	}
 	return Y_HOOKS_CONTINUE_RETURN_0;
@@ -234,7 +234,7 @@ hook OnPlayerDropItem(playerid, Item:itemid)
 {
 	if(atr_Check[playerid])
 	{
-		Dialog_Show(playerid, DIALOG_STYLE_MSGBOX, "Anti-Raid Protection", ls(playerid, "ANTRAIDP"), "Close", "");
+		Dialog_Show(playerid, DIALOG_STYLE_MSGBOX, "Anti-Raid Protection", ls(playerid, "ANTRAIDP"), ""C_RED"X", "");
 		return Y_HOOKS_BREAK_RETURN_1;
 	}
 	return Y_HOOKS_CONTINUE_RETURN_0;
