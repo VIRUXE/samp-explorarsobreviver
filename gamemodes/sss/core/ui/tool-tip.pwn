@@ -17,7 +17,7 @@
 
 
 static
-bool:		ToolTips[MAX_PLAYERS],
+bool:		ToolTips[MAX_PLAYERS] = {bool:true, ...},
 PlayerText:	ToolTipText[MAX_PLAYERS] = {PlayerText:INVALID_TEXT_DRAW, ...};
 
 ShowHelpTip(playerid, const text[], time = 0)
@@ -47,17 +47,18 @@ HideHelpTip(playerid)
 
 hook OnPlayerConnect(playerid)
 {
-	ToolTipText[playerid]			=CreatePlayerTextDraw(playerid, 150.000000, 350.000000, "Tip: You can access the trunks of cars by pressing F at the back");
-	PlayerTextDrawBackgroundColor	(playerid, ToolTipText[playerid], 255);
-	PlayerTextDrawFont				(playerid, ToolTipText[playerid], 1);
-	PlayerTextDrawLetterSize		(playerid, ToolTipText[playerid], 0.300000, 1.499999);
-	PlayerTextDrawColor				(playerid, ToolTipText[playerid], 16711935);
-	PlayerTextDrawSetOutline		(playerid, ToolTipText[playerid], 1);
-	PlayerTextDrawSetProportional	(playerid, ToolTipText[playerid], 1);
-	PlayerTextDrawSetShadow			(playerid, ToolTipText[playerid], 0);
-	PlayerTextDrawUseBox			(playerid, ToolTipText[playerid], 1);
-	PlayerTextDrawBoxColor			(playerid, ToolTipText[playerid], 0);
-	PlayerTextDrawTextSize			(playerid, ToolTipText[playerid], 520.000000, 0.000000);
+	ToolTipText[playerid] = CreatePlayerTextDraw(playerid, 12.894577, 182.983322, "Tip: You can access the trunks of cars by pressing F at the back");
+	PlayerTextDrawLetterSize(playerid, ToolTipText[playerid], 0.279665, 1.952331);
+	PlayerTextDrawTextSize(playerid, ToolTipText[playerid], 182.651519, 35.466674);
+	PlayerTextDrawAlignment(playerid, ToolTipText[playerid], 1);
+	PlayerTextDrawColor(playerid, ToolTipText[playerid], -1);
+	PlayerTextDrawUseBox(playerid, ToolTipText[playerid], true);
+	PlayerTextDrawBoxColor(playerid, ToolTipText[playerid], 100);
+	PlayerTextDrawSetShadow(playerid, ToolTipText[playerid], 1);
+	PlayerTextDrawSetOutline(playerid, ToolTipText[playerid], 0);
+	PlayerTextDrawBackgroundColor(playerid, ToolTipText[playerid], 255);
+	PlayerTextDrawFont(playerid, ToolTipText[playerid], 1);
+	PlayerTextDrawSetProportional(playerid, ToolTipText[playerid], 1);
 }
 
 hook OnPlayerPickUpItem(playerid, Item:itemid)
@@ -77,13 +78,37 @@ hook OnPlayerPickUpItem(playerid, Item:itemid)
 		format(itemtipkey, sizeof(itemtipkey), "%s_T", itemname);
 		itemtipkey[11] = EOS;
 		
-		format(str, sizeof(str), "%s~n~~n~~b~Type /tooltips to toggle these messages", ls(playerid, itemtipkey));
+		format(str, sizeof(str), "~r~!~w~ %s", ls(playerid, itemtipkey));
 
 		ShowHelpTip(playerid, str, 20000);
 	}
 }
 
 hook OnPlayerDropItem(playerid, Item:itemid)
+{
+	if(ToolTips[playerid])
+		HideHelpTip(playerid);
+
+	return Y_HOOKS_CONTINUE_RETURN_0;
+}
+
+hook OnPlayerGiveItem(playerid, targetid, Item:itemid)
+{
+	if(ToolTips[playerid])
+		HideHelpTip(playerid);
+
+	return Y_HOOKS_CONTINUE_RETURN_0;
+}
+
+hook OnPlayerOpenInventory(playerid)
+{
+	if(ToolTips[playerid])
+		HideHelpTip(playerid);
+
+	return Y_HOOKS_CONTINUE_RETURN_0;
+}
+
+hook OnPlayerOpenContainer(playerid, containerid)
 {
 	if(ToolTips[playerid])
 		HideHelpTip(playerid);
