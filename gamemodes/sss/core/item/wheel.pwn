@@ -25,16 +25,11 @@ hook OnPlayerDisconnect(playerid, reason)
 	PlayerUpdateWheel[playerid] = INVALID_VEHICLE_ID;
 }
 
-hook OnPlayerInteractVehicle(playerid, vehicleid, Float:angle)
-{
+hook OnPlayerInteractVehicle(playerid, vehicleid, Float:angle){
 	new Item:itemid = GetPlayerItem(playerid);
-
-	if(GetItemType(itemid) == item_Wheel && PlayerUpdateWheel[playerid] == INVALID_VEHICLE_ID)
-	{
-		if(_WheelRepair(playerid, vehicleid))
-			return Y_HOOKS_BREAK_RETURN_0;
+	if(GetItemType(itemid) == item_Wheel && PlayerUpdateWheel[playerid] == INVALID_VEHICLE_ID){
+		_WheelRepair(playerid, vehicleid);
 	}
-
 	return Y_HOOKS_CONTINUE_RETURN_0;
 }
 
@@ -183,52 +178,36 @@ timer upVehWheel[7000](playerid, vehicleid, panels, doors, lights, tires){
 }
 
 hook OnPlayerOpenInventory(playerid){
-	if(PlayerUpdateWheel[playerid] != INVALID_VEHICLE_ID) {
-		stop UpdateVehWheel[playerid];
-		StopHoldAction(playerid);
-		PlayerUpdateWheel[playerid] = INVALID_VEHICLE_ID;
-		ClearAnimations(playerid);
-	}
+	StopInstallWheel(playerid);
 	return Y_HOOKS_CONTINUE_RETURN_0;
 }
 
 hook OnPlayerOpenContainer(playerid, containerid){
-	if(PlayerUpdateWheel[playerid] != INVALID_VEHICLE_ID) {
-		stop UpdateVehWheel[playerid];
-		StopHoldAction(playerid);
-		PlayerUpdateWheel[playerid] = INVALID_VEHICLE_ID;
-		ClearAnimations(playerid);
-	}
+	StopInstallWheel(playerid);
 	return Y_HOOKS_CONTINUE_RETURN_0;
 }
 
 hook OnPlayerDropItem(playerid, Item:itemid){
-	if(PlayerUpdateWheel[playerid] != INVALID_VEHICLE_ID) {
-		stop UpdateVehWheel[playerid];
-		StopHoldAction(playerid);
-		PlayerUpdateWheel[playerid] = INVALID_VEHICLE_ID;
-		ClearAnimations(playerid);
-	}
+	StopInstallWheel(playerid);
 	return Y_HOOKS_CONTINUE_RETURN_0;
 }
 
 hook OnItemRemovedFromPlayer(playerid, Item:itemid){
-	if(PlayerUpdateWheel[playerid] != INVALID_VEHICLE_ID) {
-		stop UpdateVehWheel[playerid];
-		StopHoldAction(playerid);
-		PlayerUpdateWheel[playerid] = INVALID_VEHICLE_ID;
-		ClearAnimations(playerid);
-	}
+	StopInstallWheel(playerid);
 }
 
 hook OnPlayerEnterVehicle(playerid, vehicleid, ispassenger){
+	StopInstallWheel(playerid);
+	return 1;
+}
+
+StopInstallWheel(playerid) {
 	if(PlayerUpdateWheel[playerid] != INVALID_VEHICLE_ID) {
 		stop UpdateVehWheel[playerid];
 		StopHoldAction(playerid);
 		PlayerUpdateWheel[playerid] = INVALID_VEHICLE_ID;
 		ClearAnimations(playerid);
 	}
-	return 1;
 }
 
 hook OnHoldActionUpdate(playerid, progress){
@@ -241,8 +220,5 @@ hook OnHoldActionUpdate(playerid, progress){
 }
 
 hook OnHoldActionFinish(playerid){
-	if(PlayerUpdateWheel[playerid] != INVALID_VEHICLE_ID) {
-		return Y_HOOKS_BREAK_RETURN_1;
-	}
-	return Y_HOOKS_CONTINUE_RETURN_1;
+
 }
