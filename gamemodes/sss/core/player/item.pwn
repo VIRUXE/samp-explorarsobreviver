@@ -18,7 +18,7 @@
 new PlayerText:item_TD[MAX_PLAYERS][2];
 
 hook OnPlayerConnect(playerid){
-	item_TD[playerid][0] = CreatePlayerTextDraw(playerid, 297.000000, 405.000000, "Preview_Model");
+	item_TD[playerid][0] = CreatePlayerTextDraw(playerid, 291.000000, 405.000000, "Preview_Model");
 	PlayerTextDrawFont(playerid, item_TD[playerid][0], 5);
 	PlayerTextDrawLetterSize(playerid, item_TD[playerid][0], 0.600000, 2.000000);
 	PlayerTextDrawTextSize(playerid, item_TD[playerid][0], 53.000000, 39.000000);
