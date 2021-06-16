@@ -220,9 +220,18 @@ _DrinkItem(playerid, Item:itemid)
 	{
 		new
 			liquidtype,
-			Float:liquidamount;
-		GetItemArrayDataAtCell(itemid, liquidtype, LIQUID_ITEM_ARRAY_CELL_TYPE);
-		GetItemArrayDataAtCell(itemid, _:liquidamount, LIQUID_ITEM_ARRAY_CELL_AMOUNT);
+			Float:liquidamount,
+			Error:e;
+
+		e = GetItemArrayDataAtCell(itemid, liquidtype, LIQUID_ITEM_ARRAY_CELL_TYPE);
+
+		if(IsError(e))
+			return Handled();
+
+		e = GetItemArrayDataAtCell(itemid, _:liquidamount, LIQUID_ITEM_ARRAY_CELL_AMOUNT);
+
+		if(IsError(e))
+			return Handled();
 
 		SetPlayerFP(playerid, GetPlayerFP(playerid) + GetLiquidFoodValue(liquidtype));
 		SetItemArrayDataAtCell(itemid, _:(liquidamount - 0.2), LIQUID_ITEM_ARRAY_CELL_AMOUNT, true);
@@ -329,8 +338,12 @@ stock Float:GetLiquidItemLiquidAmount(Item:itemid)
 	if(liq_ItemTypeLiquidContainer[GetItemType(itemid)] == -1)
 		return 0.0;
 
-	new Float:amount;
-	GetItemArrayDataAtCell(itemid, _:amount, LIQUID_ITEM_ARRAY_CELL_AMOUNT);
+	new Float:amount, Error:e;
+	e = GetItemArrayDataAtCell(itemid, _:amount, LIQUID_ITEM_ARRAY_CELL_AMOUNT);
+
+	if(IsError(e))
+		return 0.0;
+
 	return amount;
 }
 
