@@ -30,7 +30,7 @@ forward OnHoldActionFinish(playerid);
 
 hook OnPlayerConnect(playerid)
 {
-	ActionBar = CreatePlayerProgressBar(playerid, 285.0, 366.0, 57.50, 5.19, GREY, 100.0);
+	ActionBar = CreatePlayerProgressBar(playerid, 291.0, 390.0, 57.50, 5.19, GREY, 100.0);
 }
 
 hook OnPlayerDisconnect(playerid, reason)
