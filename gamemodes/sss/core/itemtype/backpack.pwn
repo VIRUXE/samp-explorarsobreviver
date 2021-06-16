@@ -676,48 +676,51 @@ hook OnPlayerSelectInvOpt(playerid, option)
 }
 
 hook OnPlayerViewCntOpt(playerid, Container:containerid){
-	new Container:bagcontainerid, Error:e;
-	e = GetItemArrayDataAtCell(bag_PlayerBagID[playerid], _:bagcontainerid, 1);
-	if(!IsError(e)) {
-		if(IsValidItem(bag_PlayerBagID[playerid]) && containerid != bagcontainerid){
-			bag_InventoryOptionID[playerid] = AddContainerOption(playerid, "Move to bag");
+	if(IsValidItem(bag_PlayerBagID[playerid])){
+		new Container:bagcontainerid, Error:e;
+		e = GetItemArrayDataAtCell(bag_PlayerBagID[playerid], _:bagcontainerid, 1);
+		if(!IsError(e)) {
+			if(IsValidItem(bag_PlayerBagID[playerid]) && containerid != bagcontainerid){
+				bag_InventoryOptionID[playerid] = AddContainerOption(playerid, "Move to bag");
+			}
 		}
 	}
 }
 
 hook OnPlayerSelectCntOpt(playerid, Container:containerid, option)
 {
-	new Container:bagcontainerid, Error:e;
-	e = GetItemArrayDataAtCell(bag_PlayerBagID[playerid], _:bagcontainerid, 1);
+	if(IsValidItem(bag_PlayerBagID[playerid])){
+		new Container:bagcontainerid, Error:e;
+		e = GetItemArrayDataAtCell(bag_PlayerBagID[playerid], _:bagcontainerid, 1);
 
-	if(!IsError(e)) {
-		if(IsValidItem(bag_PlayerBagID[playerid]) && containerid != bagcontainerid)
-		{
-			if(option == bag_InventoryOptionID[playerid])
+		if(!IsError(e)) {
+			if(IsValidItem(bag_PlayerBagID[playerid]) && containerid != bagcontainerid)
 			{
-				new
-					slot,
-					Item:itemid;
-
-				GetPlayerContainerSlot(playerid, slot);
-				GetContainerSlotItem(containerid, slot, itemid);
-
-				if(!IsValidItem(itemid))
+				if(option == bag_InventoryOptionID[playerid])
 				{
+					new
+						slot,
+						Item:itemid;
+
+					GetPlayerContainerSlot(playerid, slot);
+					GetContainerSlotItem(containerid, slot, itemid);
+
+					if(!IsValidItem(itemid))
+					{
+						DisplayContainerInventory(playerid, containerid);
+						return Y_HOOKS_CONTINUE_RETURN_0;
+					}
+
+					new required = AddItemToContainer(bagcontainerid, itemid, playerid);
+
+					if(required > 0)
+						ShowActionText(playerid, sprintf(ls(playerid, "BAGEXTRASLO", true), required), 3000, 150);
+
 					DisplayContainerInventory(playerid, containerid);
-					return Y_HOOKS_CONTINUE_RETURN_0;
 				}
-
-				new required = AddItemToContainer(bagcontainerid, itemid, playerid);
-
-				if(required > 0)
-					ShowActionText(playerid, sprintf(ls(playerid, "BAGEXTRASLO", true), required), 3000, 150);
-
-				DisplayContainerInventory(playerid, containerid);
 			}
 		}
 	}
-
 	return Y_HOOKS_CONTINUE_RETURN_0;
 }
 
