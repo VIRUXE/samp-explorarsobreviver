@@ -124,7 +124,7 @@ hook OnPlayerClickPlayerTD(playerid, PlayerText:playertextid)
 			encode_panels(random(4), random(4), random(4), random(4), random(4), random(4), random(4)),
 			encode_doors(random(5), random(5), random(5), random(5)),
 			encode_lights(random(2), random(2), random(2), random(2)),
-			encode_tires(0, 1, 0, 0) );
+			encode_tires(1, 1, 1, 0) );
 
 		//	Items
 		
