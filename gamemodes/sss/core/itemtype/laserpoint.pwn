@@ -36,7 +36,7 @@ hook OnPlayerUseItemWithItem(playerid, Item:itemid, Item:withitemid){
 }
 
 hook OnPlayerDropItem(playerid, Item:itemid){
-	if(GetItemWeaponMods(GetPlayerItem(playerid))){
+	if(GetItemWeaponMods(GetPlayerItem(playerid)) > 300){
 		new Float:x, Float:y, Float:z;
 		GetPlayerPos(playerid, x, y, z);
 		ApplyAnimation(playerid, "BOMBER", "BOM_PLANT_IN", 5.0, 1, 0, 0, 0, 450, 1);
@@ -49,7 +49,7 @@ hook OnPlayerDropItem(playerid, Item:itemid){
 }
 
 hook OnPlayerUpdate(playerid){
-	if(GetItemWeaponMods(GetPlayerItem(playerid))) {
+	if(GetItemWeaponMods(GetPlayerItem(playerid)) > 300) {
 		new model;
 		GetItemTypeModel(ItemType:GetItemWeaponMods(GetPlayerItem(playerid)), model);
 		switch (GetItemWeaponBaseWeapon(GetItemTypeWeapon(GetItemType(GetPlayerItem(playerid))))){
