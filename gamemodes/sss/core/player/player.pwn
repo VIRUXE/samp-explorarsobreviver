@@ -208,8 +208,6 @@ timer LoadAccountDelay[5000](playerid)
 		KickPlayer(playerid, "Account inactive");
 	}
 
-	CheckForExtraAccounts(playerid);
-
 	return;
 }
 

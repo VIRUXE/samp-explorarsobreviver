@@ -181,11 +181,18 @@ stock GetAccountAliasesByAll(name[], list[][MAX_PLAYER_NAME], &count, max, &admi
 	return 1;
 }
 
+hook OnPlayerLogin(playerid)
+{
+    CheckForExtraAccounts(playerid);
+}
+
+hook OnPlayerRegister(playerid)
+{
+    CheckForExtraAccounts(playerid);
+}
+
 CheckForExtraAccounts(playerid)
 {
-	if(!IsPlayerRegistered(playerid) || !IsPlayerLoggedIn(playerid))
-		return 0;
-
 	new
 		name[MAX_PLAYER_NAME],
 		list[6][MAX_PLAYER_NAME],
