@@ -9,7 +9,11 @@ world_military, 1.0
 12.0,	Parachute
 10.0,	Armour
 30.0,	Shield
-45.0,	HelmArmy
+15.0,    HelmArmy
+15.0,    PoliceCap
+15.0,    SwatHelmet
+15.0,    PoliceHelm
+15.0,    ArmyHelmet2
 
 # weapons
 0.5,	M77RMRifle

@@ -2,7 +2,7 @@
 
 hook OnGameModeInit(){
 	new tmp;
-	tmp = DefineBagType("Travel Rucksack",	item_Rucksack,		19);
+	tmp = DefineBagType("Mochila de Acampar",	item_Rucksack,		19);
 
 	SetBagOffsetsForSkin(tmp, 60, 0.110999, -0.005999, 0.000000, 2.900000, 89.699996, 0.000000, 1.000000, 1.000000, 1.000000);
 	SetBagOffsetsForSkin(tmp, 170, 0.110999, -0.005999, 0.000000, 2.900000, 89.699996, 0.000000, 1.000000, 1.000000, 1.000000);

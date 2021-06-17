@@ -26,7 +26,6 @@ world_survivor, 1.0
 20.0,	CanDrink
 15.0,	Pizza
 18.0,	Burger
-10.0,	GasMask
 9.9,	Meat
 
 # weapons and ammo
@@ -51,3 +50,26 @@ world_survivor, 1.0
 0.01,	DogsBreath
 0.01,	LenKnocksRifle
 0.10,   Nailbat
+
+# clothes etc
+20.0,	Clothes
+5.0,    BandanaBl
+5.0,    BandanaGr
+5.0,    BandanaWh
+5.0,    BandanaPat
+20.0,    GasMask
+10.0,    HockeyMask
+11.0,    DevilMask
+15.0,    CluckinBellHat1
+15.0,    Balaclava
+18.0,    TruckCap
+17.0,    BoaterHat
+17.0,    BowlerHat
+17.0,    TopHat
+10.5,    XmasHat
+16.0,    PizzaHat
+14.0,    WitchesHat
+18.0,    StrawHat
+18.0,    fire_hat1
+18.0,    fire_hat2
+17.0,    headphones04

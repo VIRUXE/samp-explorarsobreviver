@@ -27,7 +27,7 @@
 ==============================================================================*/
 
 #undef MAX_PLAYERS
-#define MAX_PLAYERS						(10)
+#define MAX_PLAYERS						(1000)
 
 // YSI
 #define _DEBUG							0
@@ -65,7 +65,7 @@
 
 // SS/item
 #define MAX_ITEM						Item:32768
-#define MAX_ITEM_TYPE					(ItemType:312)
+#define MAX_ITEM_TYPE					(ItemType:323)
 #define MAX_ITEM_NAME					(20)
 #define MAX_ITEM_TEXT					(64)
 #define MAX_CONTAINER_SLOTS				(100)
@@ -178,6 +178,7 @@ public OnGameModeInit()
 #include <optud>
 #include <BustAim>
 #include <discord-connector>
+#include <mapfix>
 
 native WP_Hash(buffer[], len, const str[]);
 
@@ -566,41 +567,64 @@ new stock
 #include "sss/core/item/largeframe.pwn"
 #include "sss/core/item/barbecue.pwn"
 #include "sss/core/item/campfire.pwn"
-//#include "sss/core/item/tent.pwn"
 #include "sss/core/item/sign.pwn"
 #include "sss/core/item/workbench.pwn"
 #include "sss/core/item/scrap-machine.pwn"
 #include "sss/core/item/refine-machine.pwn"
 #include "sss/core/item/water-purifier.pwn"
 #include "sss/core/item/plot-pole.pwn"
-#include "sss/core/item/trash.pwn" // By Kolor4dO
-//#include "sss/core/item/name.pwn"
+#include "sss/core/item/trash.pwn"
 
-// ITEMS (HATS/MASKS)
-#include "sss/core/apparel/armyhelm.pwn"
-#include "sss/core/apparel/cowboyhat.pwn"
-#include "sss/core/apparel/truckcap.pwn"
-#include "sss/core/apparel/boaterhat.pwn"
-#include "sss/core/apparel/bowlerhat.pwn"
-#include "sss/core/apparel/policecap.pwn"
-#include "sss/core/apparel/tophat.pwn"
-#include "sss/core/apparel/xmashat.pwn"
-#include "sss/core/apparel/witcheshat.pwn"
-#include "sss/core/apparel/policehelm.pwn"
-#include "sss/core/apparel/zorromask.pwn"
-#include "sss/core/apparel/gasmask.pwn"
-#include "sss/core/apparel/hockeymask.pwn"
-#include "sss/core/apparel/bandana.pwn"
+// HATS
+#include "sss/core/apparel/hats/HelmArmy.pwn"
+#include "sss/core/apparel/hats/TruckCap.pwn"
+#include "sss/core/apparel/hats/BoaterHat.pwn"
+#include "sss/core/apparel/hats/fire_hat2.pwn"
+#include "sss/core/apparel/hats/BowlerHat.pwn"
+#include "sss/core/apparel/hats/PoliceCap.pwn"
+#include "sss/core/apparel/hats/TopHat.pwn"
+#include "sss/core/apparel/hats/SwatHelmet.pwn"
+#include "sss/core/apparel/hats/XmasHat.pwn"
+#include "sss/core/apparel/hats/PizzaHat.pwn"
+#include "sss/core/apparel/hats/WitchesHat.pwn"
+#include "sss/core/apparel/hats/PoliceHelm.pwn"
+#include "sss/core/apparel/hats/StrawHat.pwn"
+#include "sss/core/apparel/hats/fire_hat1.pwn"
+#include "sss/core/apparel/hats/headphones04.pwn"
+#include "sss/core/apparel/hats/ArmyHelmet2.pwn"
+/*#include "sss/core/apparel/hats/CowboyHat.pwn"
+#include "sss/core/apparel/hats/CaptainsCap.pwn"
+#include "sss/core/apparel/hats/CapBack5.pwn"
+#include "sss/core/apparel/hats/CapBack4.pwn"
+#include "sss/core/apparel/hats/CapBack3.pwn"
+#include "sss/core/apparel/hats/CapBack2.pwn"
+#include "sss/core/apparel/hats/CapBack1.pwn"*/
+
+// MASKS
+#include "sss/core/apparel/masks/GasMask.pwn"
+#include "sss/core/apparel/masks/BandanaBlue.pwn"
+#include "sss/core/apparel/masks/BandanaPattern.pwn"
+#include "sss/core/apparel/masks/HockeyMask.pwn"
+//#include "sss/core/apparel/masks/MaskGreen.pwn"
+//#include "sss/core/apparel/masks/MaskRed.pwn"
+#include "sss/core/apparel/masks/BandanaWhite.pwn"
+#include "sss/core/apparel/masks/DiaboMask.pwn"
+#include "sss/core/apparel/masks/BandanaGrey.pwn"
+#include "sss/core/apparel/masks/CluckinBellHat1.pwn"
+#include "sss/core/apparel/masks/Balaclava.pwn"
+//#include "sss/core/apparel/masks/GimpMask1.pwn"
+//#include "sss/core/apparel/masks/ZorroMask.pwn"
+//#include "sss/core/apparel/masks/PussyMask.pwn"
 
 // BAGS
-#include "sss/core/apparel/Backpack.pwn"
-#include "sss/core/apparel/Daypack.pwn"
-#include "sss/core/apparel/HeartShapedBox.pwn"
-#include "sss/core/apparel/LargeBackpack.pwn"
-#include "sss/core/apparel/MediumBag.pwn"
-#include "sss/core/apparel/ParaBag.pwn"
-#include "sss/core/apparel/Rucksack.pwn"
-#include "sss/core/apparel/Satchel.pwn"
+#include "sss/core/apparel/bags/Backpack.pwn"
+#include "sss/core/apparel/bags/Daypack.pwn"
+#include "sss/core/apparel/bags/HeartShapedBox.pwn"
+#include "sss/core/apparel/bags/LargeBackpack.pwn"
+#include "sss/core/apparel/bags/MediumBag.pwn"
+#include "sss/core/apparel/bags/ParaBag.pwn"
+#include "sss/core/apparel/bags/Rucksack.pwn"
+#include "sss/core/apparel/bags/Satchel.pwn"
 
 // ADMINISTRATION TOOLS
 #include "sss/core/admin/report.pwn"

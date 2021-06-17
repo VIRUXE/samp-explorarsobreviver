@@ -2,7 +2,7 @@
 
 hook OnGameModeInit(){
 	new tmp;
-	tmp = DefineBagType("Small Bag",			item_Satchel,		7);
+	tmp = DefineBagType("Mochila Pequena",			item_Satchel,		7);
 
 	SetBagOffsetsForSkin(tmp, 60, 0.241894, -0.160918, 0.181463, 0.000000, 90.000000, 0.000000, 1.000000, 1.000000, 1.000000);
 	SetBagOffsetsForSkin(tmp, 170, 0.241894, -0.160918, 0.181463, 0.000000, 90.000000, 0.000000, 1.000000, 1.000000, 1.000000);

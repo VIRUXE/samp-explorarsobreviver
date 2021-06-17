@@ -16,7 +16,7 @@
 #include <YSI_Coding\y_hooks>
 
 
-#define MAX_SKINS		(29)
+#define MAX_SKINS		(55)
 #define MAX_SKIN_NAME	(32)
 
 

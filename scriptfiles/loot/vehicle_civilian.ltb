@@ -96,12 +96,26 @@ vehicle_civilian, 1.0
 
 # clothes etc
 46.0,	Clothes
-10.0,	BoaterHat
-10.0,	BowlerHat
-10.0,	TopHat
-30.0,	CowboyHat
-20.0,	TruckCap
-30.0,	HockeyMask
+15.0,    BandanaBl
+15.0,    BandanaGr
+15.0,    BandanaWh
+15.0,    BandanaPat
+17.0,    GasMask
+13.0,    HockeyMask
+11.0,    DevilMask
+15.0,    CluckinBellHat1
+15.0,    Balaclava
+18.0,    TruckCap
+17.0,    BoaterHat
+17.0,    BowlerHat
+17.0,    TopHat
+10.5,    XmasHat
+16.0,    PizzaHat
+14.0,    WitchesHat
+18.0,    StrawHat
+18.0,    fire_hat1
+18.0,    fire_hat2
+17.0,    headphones04
 
 # crafting, construction and base stuff
 10.0,	Motor

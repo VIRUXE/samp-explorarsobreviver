@@ -16,7 +16,7 @@
 #include <YSI_Coding\y_hooks>
 
 
-#define MAX_MASK_ITEMS	(32)
+#define MAX_MASK_ITEMS	(12)
 
 
 enum E_MASK_SKIN_DATA
@@ -35,7 +35,7 @@ Float:		mask_scaleZ
 
 new
 ItemType:	mask_ItemType[MAX_MASK_ITEMS],
-			mask_Data[MAX_MASK_ITEMS][MAX_SKINS][E_MASK_SKIN_DATA],
+			mask_Data[MAX_MASK_ITEMS][312][E_MASK_SKIN_DATA],
 			mask_Total,
 			mask_ItemTypeMask[MAX_ITEM_TYPE] = {-1, ...},
 Item:		mask_CurrentMaskItem[MAX_PLAYERS];
@@ -103,6 +103,8 @@ stock SetPlayerMaskItem(playerid, Item:itemid)
 	if(mask_CurrentMaskItem[playerid] == itemid)
 	    return 0;
 	    
+	skinid = GetPlayerSkin(playerid);
+	
 	new model;
 	GetItemTypeModel(itemtype, model);
 

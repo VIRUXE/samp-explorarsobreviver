@@ -98,12 +98,26 @@ world_civilian, 1.0
 
 # clothes etc
 55.0,	Clothes
-20.0,	TruckCap
-12.0,	HockeyMask
-6.0,	CowboyHat
-1.0,	BoaterHat
-1.0,	BowlerHat
-1.0,	TopHat
+5.0,    BandanaBl
+5.0,    BandanaGr
+5.0,    BandanaWh
+5.0,    BandanaPat
+7.0,    GasMask
+3.0,    HockeyMask
+1.0,    DevilMask
+5.0,    CluckinBellHat1
+5.0,    Balaclava
+8.0,    TruckCap
+7.0,    BoaterHat
+7.0,    BowlerHat
+7.0,    TopHat
+0.5,    XmasHat
+6.0,    PizzaHat
+4.0,    WitchesHat
+8.0,    StrawHat
+8.0,    fire_hat1
+8.0,    fire_hat2
+7.0,    headphones04
 
 # crafting, construction and base stuff
 10.0,	Motor

@@ -16,7 +16,7 @@
 #include <YSI_Coding\y_hooks>
 
 
-#define MAX_HAT_ITEMS	(32)
+#define MAX_HAT_ITEMS	(18)
 
 
 enum E_HAT_SKIN_DATA
@@ -35,7 +35,7 @@ Float:		hat_scaleZ
 
 new
 ItemType:	hat_ItemType[MAX_HAT_ITEMS],
-			hat_Data[MAX_HAT_ITEMS][MAX_SKINS][E_HAT_SKIN_DATA],
+			hat_Data[MAX_HAT_ITEMS][312][E_HAT_SKIN_DATA],
 			hat_Total,
 			hat_ItemTypeHat[MAX_ITEM_TYPE] = {-1, ...},
 Item:		hat_CurrentHatItem[MAX_PLAYERS] = {INVALID_ITEM_ID, ...};
@@ -103,6 +103,8 @@ stock SetPlayerHatItem(playerid, Item:itemid)
 	if(hat_CurrentHatItem[playerid] == itemid)
 		return 0;
 		
+	skinid = GetPlayerSkin(playerid);
+
 	new model;
 	GetItemTypeModel(itemtype, model);
 
@@ -116,7 +118,7 @@ stock SetPlayerHatItem(playerid, Item:itemid)
 	RemoveCurrentItem(GetItemHolder(itemid));
 	    
    	if(IsValidItem(hat_CurrentHatItem[playerid]))
-    		GiveWorldItemToPlayer(playerid, hat_CurrentHatItem[playerid]);
+    	GiveWorldItemToPlayer(playerid, hat_CurrentHatItem[playerid]);
 
 	hat_CurrentHatItem[playerid] = itemid;
 

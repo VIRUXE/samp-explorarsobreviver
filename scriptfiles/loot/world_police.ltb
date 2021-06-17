@@ -5,6 +5,11 @@ world_police, 1.0
 16.0,	Medkit
 20.0,	MobilePhone
 20.0,	GasMask
+8.0,    HelmArmy
+8.0,    PoliceCap
+8.0,    SwatHelmet
+8.0,    PoliceHelm
+8.0,    ArmyHelmet2
 
 # police stuff
 45.0,	HandCuffs
