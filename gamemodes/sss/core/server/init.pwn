@@ -513,7 +513,9 @@ ItemType:		item_CapBack4		= INVALID_ITEM_TYPE,
 ItemType:		item_CapBack3		= INVALID_ITEM_TYPE,
 ItemType:		item_CapBack2		= INVALID_ITEM_TYPE,
 // 320
-ItemType:		item_CapBack1		= INVALID_ITEM_TYPE;
+ItemType:		item_CapBack1		= INVALID_ITEM_TYPE,
+ItemType:		item_Map			= INVALID_ITEM_TYPE;
+
 
 
 // VEHICLE TYPES
@@ -636,10 +638,9 @@ public OnScriptInit()
 	if(gPlayerAnimations)
 		UsePlayerPedAnims();
 
-	SetNameTagDrawDistance(0.0);
-    ShowNameTags(0);
-	//DisableNameTagLOS();
-
+	SetNameTagDrawDistance(gNameTagDistance);
+    ShowNameTags(1);
+	
 	EnableStuntBonusForAll(false);
 	ManualVehicleEngineAndLights();
 	AllowInteriorWeapons(true);
@@ -999,6 +1000,7 @@ public OnScriptInit()
 	item_CapBack2		= DefineItemType("Boné",				"CapBack2",			18940,	1,	180.0, 0.0, 0.0,		0.0,	0.062216, 0.055396, 0.001138, 90.000000, 0.000000, 180.000000, .maxhitpoints = 1);
 // 320
 	item_CapBack1		= DefineItemType("Boné",				"CapBack1",			18939,	1,	180.0, 0.0, 0.0,		0.0,	0.062216, 0.055396, 0.001138, 90.000000, 0.000000, 180.000000, .maxhitpoints = 1);
+	item_Map			= DefineItemType("Map",					"Map",	  			19167,	1,	0.0, 0.0, 0.0,			0.2,	0.062216, 0.055396, 0.001138, 90.000000, 0.000000, 180.000000, .maxhitpoints = 1);
 
 
 	// SETTING ITEM TYPE SCRAP VALUE
@@ -1396,7 +1398,7 @@ public OnScriptInit()
 	DefineSafeboxType(item_ToolBox,			8);
 	DefineSafeboxType(item_GunCase,			5, false, false);
 	DefineSafeboxType(item_Cupboard,		5, false, false);
-	DefineSafeboxType(item_Torso,			100);
+	DefineSafeboxType(item_Torso,			90);
 	
 	// SEED TYPE DEFINITIONS
 	DefineSeedType("Tomato", item_Tomato,	4, 631, 0.90649);

@@ -58,14 +58,14 @@
 #define BTN_TELEPORT_FREEZE_TIME		(3000)
 
 // SS/inventory
-#define MAX_INVENTORY_SLOTS				(6)
+#define MAX_INVENTORY_SLOTS				(7)
 
 // SS/button
 #define BTN_MAX							Button:32768
 
 // SS/item
 #define MAX_ITEM						Item:32768
-#define MAX_ITEM_TYPE					(ItemType:323)
+#define MAX_ITEM_TYPE					(ItemType:324)
 #define MAX_ITEM_NAME					(20)
 #define MAX_ITEM_TEXT					(64)
 #define MAX_CONTAINER_SLOTS				(100)
@@ -246,7 +246,7 @@ native WP_Hash(buffer[], len, const str[]);
 #define BLACK						0x000000FF
 #define WHITE						0xFFFFFFFF
 #define CHAT_LOCAL					0xADABD1FF
-#define CHAT_RADIO					0xCFD1ABFF
+#define CHAT_RADIO					0x00FF00FF
 
 
 // Embedding Colours
@@ -474,7 +474,6 @@ new stock
 #include "sss/core/player/whitelist.pwn"
 #include "sss/core/player/country.pwn"
 #include "sss/core/player/recipes.pwn"
-#include "sss/core/player/name-tags.pwn"
 #include "sss/core/player/score.pwn"
 #include "sss/core/player/item.pwn"
 
@@ -538,6 +537,7 @@ new stock
 #include "sss/core/itemtype/masks.pwn"
 #include "sss/core/itemtype/holster.pwn"
 #include "sss/core/itemtype/laserpoint.pwn"
+#include "sss/core/itemtype/map.pwn"
 
 // ITEMS
 #include "sss/core/item/food.pwn"
