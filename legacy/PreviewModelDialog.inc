@@ -340,7 +340,7 @@ static Prev_CreatePlayerTextDraws(playerid, header[], button1[], button2[], butt
 	*/
     Prev@HeaderPTD[playerid] = CreatePlayerTextDraw(playerid, 144.0000, 183.0000, header);
 	PlayerTextDrawFont(playerid, Prev@HeaderPTD[playerid], 2);
-	PlayerTextDrawLetterSize(playerid, Prev@HeaderPTD[playerid], 0.25, 1.2);
+	PlayerTextDrawLetterSize(playerid, Prev@HeaderPTD[playerid], 0.238, 1.2);
 	PlayerTextDrawColor(playerid, Prev@HeaderPTD[playerid], -1);
 	PlayerTextDrawSetShadow(playerid, Prev@HeaderPTD[playerid], 0);
 	PlayerTextDrawSetOutline(playerid, Prev@HeaderPTD[playerid], 0);
@@ -647,10 +647,10 @@ static Prev_HidePlayerDialog(playerid) {
 }
 
 static Prev_FetchListitemData(const listitem[], &modelid, text[], &Float:rx, &Float:ry, &Float:rz, &Float:zoom, &color1, &color2, text_size = sizeof(text)) {
-	rx = 0.0;
+	rx = -45.0;
 	ry = 0.0;
-	rz = 0.0;
-	zoom = 0.95;
+	rz = -45.0;
+	zoom = 0.85;
 	color1 = -1;
 	color2 = -1;
 
@@ -973,6 +973,7 @@ stock Prev_ShowPlayerDialog(playerid, dialogid, style, caption[], info[], button
 
 	if (Prev@PlayerDialogID[playerid] != -1 && style != DIALOG_STYLE_PREVIEW_MODEL) {
 		Prev_HidePlayerDialog(playerid);
+		return 0;
   	}
 
 	if (Prev@PlayerDialogID[playerid] != -1 && style == DIALOG_STYLE_PREVIEW_MODEL) {
