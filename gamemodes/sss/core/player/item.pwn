@@ -18,34 +18,31 @@
 new PlayerText:item_TD[MAX_PLAYERS][2];
 
 hook OnPlayerConnect(playerid){
-	item_TD[playerid][0] = CreatePlayerTextDraw(playerid, 291.000000, 405.000000, "Preview_Model");
+	item_TD[playerid][0] = CreatePlayerTextDraw(playerid, 291.000000, 400.000000, "Preview_Model");
 	PlayerTextDrawFont(playerid, item_TD[playerid][0], 5);
 	PlayerTextDrawLetterSize(playerid, item_TD[playerid][0], 0.600000, 2.000000);
-	PlayerTextDrawTextSize(playerid, item_TD[playerid][0], 53.000000, 39.000000);
+	PlayerTextDrawTextSize(playerid, item_TD[playerid][0], 53.000000, 41.000000);
 	PlayerTextDrawSetOutline(playerid, item_TD[playerid][0], 0);
 	PlayerTextDrawSetShadow(playerid, item_TD[playerid][0], 0);
-	PlayerTextDrawAlignment(playerid, item_TD[playerid][0], 1);
+	PlayerTextDrawAlignment(playerid, item_TD[playerid][0], 0);
 	PlayerTextDrawColor(playerid, item_TD[playerid][0], -1);
 	PlayerTextDrawBackgroundColor(playerid, item_TD[playerid][0], 0);
 	PlayerTextDrawBoxColor(playerid, item_TD[playerid][0], 0);
 	PlayerTextDrawUseBox(playerid, item_TD[playerid][0], 0);
-	PlayerTextDrawSetProportional(playerid, item_TD[playerid][0], 1);
-	PlayerTextDrawSetSelectable(playerid, item_TD[playerid][0], 0);
-	PlayerTextDrawSetPreviewModel(playerid, item_TD[playerid][0], 1271);
-	PlayerTextDrawSetPreviewRot(playerid, item_TD[playerid][0], 0.000000, 0.000000, 0.000000, 1.000000);
-	PlayerTextDrawSetPreviewVehCol(playerid, item_TD[playerid][0], 1, 1);
+	PlayerTextDrawSetProportional(playerid, item_TD[playerid][0], 0);
+	PlayerTextDrawSetSelectable(playerid, item_TD[playerid][0], 1);
 
-	item_TD[playerid][1] = CreatePlayerTextDraw(playerid, 320.000000, 435.000000, "Large Box");
+	item_TD[playerid][1] = CreatePlayerTextDraw(playerid, 318.000000, 435.000000, "Large Box");
 	PlayerTextDrawFont(playerid, item_TD[playerid][1], 1);
 	PlayerTextDrawLetterSize(playerid, item_TD[playerid][1], 0.254165, 1.250000);
 	PlayerTextDrawTextSize(playerid, item_TD[playerid][1], 280.000000, 254.000000);
 	PlayerTextDrawSetOutline(playerid, item_TD[playerid][1], 1);
 	PlayerTextDrawSetShadow(playerid, item_TD[playerid][1], 1);
 	PlayerTextDrawAlignment(playerid, item_TD[playerid][1], 2);
-	PlayerTextDrawColor(playerid, item_TD[playerid][1], -65281);
+	PlayerTextDrawColor(playerid, item_TD[playerid][1], 0xFFFF00FF);
 	PlayerTextDrawBackgroundColor(playerid, item_TD[playerid][1], 255);
 	PlayerTextDrawBoxColor(playerid, item_TD[playerid][1], 0);
-	PlayerTextDrawUseBox(playerid, item_TD[playerid][1], 1);
+	PlayerTextDrawUseBox(playerid, item_TD[playerid][1], 0);
 	PlayerTextDrawSetProportional(playerid, item_TD[playerid][1], 1);
 	PlayerTextDrawSetSelectable(playerid, item_TD[playerid][1], 0);
 }
@@ -64,6 +61,9 @@ hook OnPlayerGetItem(playerid, Item:itemid){
 
 	GetItemTypeModel(itype, modelid);
 	PlayerTextDrawSetPreviewModel(playerid, item_TD[playerid][0], modelid);
+
+	PlayerTextDrawSetPreviewRot(playerid, item_TD[playerid][0], 0.0, 0.0, 0.0, 0.87);
+
 	PlayerTextDrawShow(playerid, item_TD[playerid][0]);
 
 	UpdatePlayerPreviewItem(playerid);
