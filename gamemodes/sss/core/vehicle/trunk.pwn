@@ -104,8 +104,8 @@ hook OnPlayerOpenContainer(playerid, Container:containerid)
 	{
 		if(!IsPlayerAtVehicleTrunk(playerid, vehicleid))
 		{
-			err("player has opened a trunk of vehicle %d without being near it.", vehicleid);
-			//return Y_HOOKS_BREAK_RETURN_1;
+			printf("player has opened a trunk of vehicle %d without being near it.", vehicleid);
+			return Y_HOOKS_BREAK_RETURN_1;
 		}
 	}
 	return Y_HOOKS_CONTINUE_RETURN_0;
