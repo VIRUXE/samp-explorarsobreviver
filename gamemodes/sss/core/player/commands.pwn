@@ -86,6 +86,38 @@ CMD:tooltips(playerid, params[])
 	return 1;
 }
 
+CMD:tools(playerid, params[])
+{
+	if(IsPlayerToolTipsOn(playerid))
+	{
+		ChatMsgLang(playerid, YELLOW, "TOOLTIPSOFF");
+		SetPlayerToolTips(playerid, false);
+	}
+	else
+	{
+		ChatMsgLang(playerid, YELLOW, "TOOLTIPSON");
+		SetPlayerToolTips(playerid, true);
+	}
+
+	return 1;
+}
+
+CMD:dicas(playerid, params[])
+{
+	if(IsPlayerToolTipsOn(playerid))
+	{
+		ChatMsgLang(playerid, YELLOW, "TOOLTIPSOFF");
+		SetPlayerToolTips(playerid, false);
+	}
+	else
+	{
+		ChatMsgLang(playerid, YELLOW, "TOOLTIPSON");
+		SetPlayerToolTips(playerid, true);
+	}
+
+	return 1;
+}
+
 /*CMD:die(playerid, params[])
 {
 	if(GetTickCountDifference(GetTickCount(), GetPlayerSpawnTick(playerid)) < 60000)
