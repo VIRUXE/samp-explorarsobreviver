@@ -62,24 +62,30 @@ atr_PosCheck(playerid, Float:x, Float:y, Float:z)
 				ReportPlayer(name, "Atravessou algum objeto", -1, "Anti-Raid", x, y, z, GetPlayerVirtualWorld(playerid), GetPlayerInterior(playerid), "");
 			}
 			atr_Check[playerid] ++;
+			StopHoldAction(playerid);
 			return 1;
 		}
 		atr_Check[playerid] = 0;
 		atr_SetX[playerid] = x;
 		atr_SetY[playerid] = y;
 		atr_SetZ[playerid] = z;
-	}
-	else if(CA_RayCastLine(atr_SetX[playerid] + 0.15, atr_SetY[playerid] + 0.15, atr_SetZ[playerid] + 0.3, x - 0.15, y - 0.15, z - 0.3, tmp, tmp, tmp))
-	{
-		atr_Check[playerid] = 1;
-		StopHoldAction(playerid);
 		return 1;
 	}
-	else {
-		atr_SetX[playerid] = x;
-		atr_SetY[playerid] = y;
-		atr_SetZ[playerid] = z;
+	else
+	{
+		new col = CA_RayCastLine(atr_SetX[playerid] + 0.15, atr_SetY[playerid] + 0.15, atr_SetZ[playerid] + 0.3, x - 0.15, y - 0.15, z - 0.3, tmp, tmp, tmp);
+
+		if(col != WATER_OBJECT && col)
+		{
+			atr_Check[playerid] = 1;
+			return 1;
+		}
 	}
+
+	atr_SetX[playerid] = x;
+	atr_SetY[playerid] = y;
+	atr_SetZ[playerid] = z;
+
 	return 1;
 }
 
