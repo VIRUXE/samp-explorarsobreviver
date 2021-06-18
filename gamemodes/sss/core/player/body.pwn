@@ -432,7 +432,7 @@ stock DestroyBody(bodyid)
 
 new torso_CntOptionID[MAX_PLAYERS];
 
-hook OnPlayerViewCntOpt(playerid, Container:containerid)
+hook OnPlayerOpenContainer(playerid, Container:containerid)
 {
 	if(GetItemType(GetContainerSafeboxItem(containerid)) == item_Torso)
 	{
