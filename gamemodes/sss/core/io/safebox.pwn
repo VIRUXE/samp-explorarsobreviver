@@ -41,7 +41,7 @@ hook OnGameModeInit()
 
 hook OnPlayerPickUpItem(playerid, Item:itemid)
 {
-	if(IsItemTypeSafebox(GetItemType(itemid)))
+	if(IsItemTypeSafebox(GetItemType(itemid)) && !IsPlayerInTutorial(playerid))
 	{
 		new
 			Float:x,
@@ -60,7 +60,7 @@ hook OnPlayerPickUpItem(playerid, Item:itemid)
 
 hook OnPlayerDroppedItem(playerid, Item:itemid)
 {
-	if(IsItemTypeSafebox(GetItemType(itemid)))
+	if(IsItemTypeSafebox(GetItemType(itemid)) && !IsPlayerInTutorial(playerid))
 	{
 		new
 			Float:x,
@@ -81,7 +81,7 @@ hook OnPlayerCloseContainer(playerid, Container:containerid)
 {
 	new Item:itemid = GetContainerSafeboxItem(containerid);
 
-	if(IsValidItem(itemid) && IsItemTypeSafebox(GetItemType(itemid)))
+	if(IsValidItem(itemid) && IsItemTypeSafebox(GetItemType(itemid)) && !IsPlayerInTutorial(playerid))
 	{
 		new
 			Float:x,
@@ -105,7 +105,7 @@ hook OnItemAddedToContainer(Container:containerid, Item:itemid, playerid)
 	{
 		new Item:safeboxitem = GetContainerSafeboxItem(containerid);
 
-		if(IsValidItem(safeboxitem) && IsItemTypeSafebox(GetItemType(itemid)))
+		if(IsValidItem(safeboxitem) && IsItemTypeSafebox(GetItemType(itemid)) && !IsPlayerInTutorial(playerid))
 			SafeboxSaveCheck(safeboxitem);
 	}
 
@@ -118,7 +118,7 @@ hook OnItemRemovedFromCnt(Container:containerid, slotid, playerid)
 	{
 		new Item:safeboxitem = GetContainerSafeboxItem(containerid);
 
-		if(IsValidItem(safeboxitem) && IsItemTypeSafebox(GetItemType(safeboxitem)))
+		if(IsValidItem(safeboxitem) && IsItemTypeSafebox(GetItemType(safeboxitem)) && !IsPlayerInTutorial(playerid))
 			SafeboxSaveCheck(safeboxitem);
 	}
 

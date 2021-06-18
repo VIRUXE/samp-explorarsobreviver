@@ -316,7 +316,7 @@ hook OnItemAddedToContainer(Container:containerid, Item:itemid, playerid)
 	if(gServerInitialising)
 		return Y_HOOKS_CONTINUE_RETURN_0;
 
-	if(GetContainerTent(containerid) != -1)
+	if(GetContainerTent(containerid) != -1 && !IsPlayerInTutorial(playerid))
 		SaveTent(GetContainerTent(containerid));
 
 	return Y_HOOKS_CONTINUE_RETURN_0;
@@ -327,7 +327,7 @@ hook OnItemRemovedFromCnt(Container:containerid, slotid, playerid)
 	if(gServerInitialising)
 		return Y_HOOKS_CONTINUE_RETURN_0;
 
-	if(GetContainerTent(containerid) != -1)
+	if(GetContainerTent(containerid) != -1 && !IsPlayerInTutorial(playerid))
 		SaveTent(GetContainerTent(containerid));
 
 	return Y_HOOKS_CONTINUE_RETURN_0;
@@ -335,7 +335,7 @@ hook OnItemRemovedFromCnt(Container:containerid, slotid, playerid)
 
 hook OnPlayerPickUpItem(playerid, Item:itemid)
 {
-	if(GetItemType(itemid) == item_TentPack)
+	if(GetItemType(itemid) == item_TentPack && !IsPlayerInTutorial(playerid))
 	{
 		new tentid;
 		GetItemExtraData(itemid, tentid);
