@@ -89,6 +89,8 @@ stock TweakItem(playerid, Item:itemid)
 	twk_Tweaker[itemid] = playerid;
 	GetItemPos(itemid, twk_Origin[playerid][0], twk_Origin[playerid][1], twk_Origin[playerid][2]);
 
+	HidePlayerKeyActionUI(playerid);
+
 	_twk_ShowUI(playerid);
 	_twk_ToggleMouse(playerid, false);
 	ShowHelpTip(playerid, ls(playerid, "TIPTWEAKITM"), 10000);
@@ -96,6 +98,9 @@ stock TweakItem(playerid, Item:itemid)
 	return 1;
 }
 
+stock Item:GetPlayerTweakItem(playerid){
+	return twk_Item[playerid];
+}
 
 /*==============================================================================
 
@@ -211,7 +216,9 @@ hook OnPlayerClickPlayerTD(playerid, PlayerText:playertextid){
 			twk_TimerClick[playerid] = repeat TweakClick(playerid, _:playertextid);
 		}
 		else {
-			twk_ClickTick[playerid] = GetTickCount();
+			if(PlayerText:playertextid != twk_Unlock[playerid] && PlayerText:playertextid != twk_Done[playerid])
+				twk_ClickTick[playerid] = GetTickCount();
+				
 			twk_Click[playerid] = _:playertextid;
 			stop twk_TimerClick[playerid];
 			twk_TimerClick[playerid] = defer TweakClick(playerid, _:playertextid);
@@ -356,7 +363,7 @@ _twk_AdjustItemPos(playerid, Float:distance, Float:direction, Float:rotation)
 	new Float:x, Float:y, Float:z;
     GetPlayerPos(playerid, x, y, z);
     SetPlayerPos(playerid, x, y, z);
-    SetPlayerFacingAngle(playerid, GetAngleToPoint(x, y, new_x, new_y) + 25);
+    SetPlayerFacingAngle(playerid, GetAngleToPoint(x, y, new_x, new_y) + 20);
 	SetCameraBehindPlayer(playerid);
 
 	CallLocalFunction("OnItemTweakUpdate", "ddffffff", playerid, _:twk_Item[playerid], new_x, new_y, new_z, rx, ry, rz);
@@ -366,7 +373,7 @@ _twk_AdjustItemPos(playerid, Float:distance, Float:direction, Float:rotation)
 
 _twk_BuildUI(playerid)
 {
-	twk_MoveF[playerid]				=CreatePlayerTextDraw(playerid, 580.000000, 320.000000, "~u~");
+	twk_MoveF[playerid]				=CreatePlayerTextDraw(playerid, 540.000000, 130.000000, "~u~");
 	PlayerTextDrawBackgroundColor	(playerid, twk_MoveF[playerid], 175);
 	PlayerTextDrawFont				(playerid, twk_MoveF[playerid], 1);
 	PlayerTextDrawLetterSize		(playerid, twk_MoveF[playerid], 0.500000, 2.000000);
@@ -376,10 +383,10 @@ _twk_BuildUI(playerid)
 	PlayerTextDrawSetShadow			(playerid, twk_MoveF[playerid], 1);
 	PlayerTextDrawUseBox			(playerid, twk_MoveF[playerid], 1);
 	PlayerTextDrawBoxColor			(playerid, twk_MoveF[playerid], 175);
-	PlayerTextDrawTextSize			(playerid, twk_MoveF[playerid], 594.000000, 20.000000);
+	PlayerTextDrawTextSize			(playerid, twk_MoveF[playerid], 554.000000, 20.000000);
 	PlayerTextDrawSetSelectable		(playerid, twk_MoveF[playerid], true);
 
-	twk_MoveB[playerid]				=CreatePlayerTextDraw(playerid, 580.000000, 360.000000, "~d~");
+	twk_MoveB[playerid]				=CreatePlayerTextDraw(playerid, 540.000000, 170.000000, "~d~");
 	PlayerTextDrawBackgroundColor	(playerid, twk_MoveB[playerid], 175);
 	PlayerTextDrawFont				(playerid, twk_MoveB[playerid], 1);
 	PlayerTextDrawLetterSize		(playerid, twk_MoveB[playerid], 0.500000, 2.000000);
@@ -389,10 +396,10 @@ _twk_BuildUI(playerid)
 	PlayerTextDrawSetShadow			(playerid, twk_MoveB[playerid], 1);
 	PlayerTextDrawUseBox			(playerid, twk_MoveB[playerid], 1);
 	PlayerTextDrawBoxColor			(playerid, twk_MoveB[playerid], 175);
-	PlayerTextDrawTextSize			(playerid, twk_MoveB[playerid], 594.000000, 20.000000);
+	PlayerTextDrawTextSize			(playerid, twk_MoveB[playerid], 554.000000, 20.000000);
 	PlayerTextDrawSetSelectable		(playerid, twk_MoveB[playerid], true);
 
-	twk_MoveL[playerid]				=CreatePlayerTextDraw(playerid, 560.000000, 340.000000, "~>~");
+	twk_MoveL[playerid]				=CreatePlayerTextDraw(playerid, 520.000000, 150.000000, "~>~");
 	PlayerTextDrawBackgroundColor	(playerid, twk_MoveL[playerid], 175);
 	PlayerTextDrawFont				(playerid, twk_MoveL[playerid], 1);
 	PlayerTextDrawLetterSize		(playerid, twk_MoveL[playerid], 0.500000, 2.000000);
@@ -402,10 +409,10 @@ _twk_BuildUI(playerid)
 	PlayerTextDrawSetShadow			(playerid, twk_MoveL[playerid], 1);
 	PlayerTextDrawUseBox			(playerid, twk_MoveL[playerid], 1);
 	PlayerTextDrawBoxColor			(playerid, twk_MoveL[playerid], 175);
-	PlayerTextDrawTextSize			(playerid, twk_MoveL[playerid], 574.000000, 20.000000);
+	PlayerTextDrawTextSize			(playerid, twk_MoveL[playerid], 534.000000, 20.000000);
 	PlayerTextDrawSetSelectable		(playerid, twk_MoveL[playerid], true);
 
-	twk_MoveR[playerid]				=CreatePlayerTextDraw(playerid, 600.000000, 340.000000, "~<~");
+	twk_MoveR[playerid]				=CreatePlayerTextDraw(playerid, 560.000000, 150.000000, "~<~");
 	PlayerTextDrawBackgroundColor	(playerid, twk_MoveR[playerid], 175);
 	PlayerTextDrawFont				(playerid, twk_MoveR[playerid], 1);
 	PlayerTextDrawLetterSize		(playerid, twk_MoveR[playerid], 0.500000, 2.000000);
@@ -415,10 +422,10 @@ _twk_BuildUI(playerid)
 	PlayerTextDrawSetShadow			(playerid, twk_MoveR[playerid], 1);
 	PlayerTextDrawUseBox			(playerid, twk_MoveR[playerid], 1);
 	PlayerTextDrawBoxColor			(playerid, twk_MoveR[playerid], 175);
-	PlayerTextDrawTextSize			(playerid, twk_MoveR[playerid], 614.000000, 20.000000);
+	PlayerTextDrawTextSize			(playerid, twk_MoveR[playerid], 574.000000, 20.000000);
 	PlayerTextDrawSetSelectable		(playerid, twk_MoveR[playerid], true);
-
-	twk_RotR[playerid]				=CreatePlayerTextDraw(playerid, 610.000000, 310.000000, "R");
+																						
+	twk_RotR[playerid]				=CreatePlayerTextDraw(playerid, 570.000000, 120.000000, "R");
 	PlayerTextDrawBackgroundColor	(playerid, twk_RotR[playerid], 175);
 	PlayerTextDrawFont				(playerid, twk_RotR[playerid], 2);
 	PlayerTextDrawLetterSize		(playerid, twk_RotR[playerid], 0.500000, 2.000000);
@@ -428,10 +435,10 @@ _twk_BuildUI(playerid)
 	PlayerTextDrawSetShadow			(playerid, twk_RotR[playerid], 1);
 	PlayerTextDrawUseBox			(playerid, twk_RotR[playerid], 1);
 	PlayerTextDrawBoxColor			(playerid, twk_RotR[playerid], 175);
-	PlayerTextDrawTextSize			(playerid, twk_RotR[playerid], 624.000000, 20.000000);
+	PlayerTextDrawTextSize			(playerid, twk_RotR[playerid], 584.000000, 20.000000);
 	PlayerTextDrawSetSelectable		(playerid, twk_RotR[playerid], true);
 
-	twk_RotL[playerid]				=CreatePlayerTextDraw(playerid, 550.000000, 310.000000, "L");
+	twk_RotL[playerid]				=CreatePlayerTextDraw(playerid, 510.000000, 120.000000, "L");
 	PlayerTextDrawBackgroundColor	(playerid, twk_RotL[playerid], 175);
 	PlayerTextDrawFont				(playerid, twk_RotL[playerid], 2);
 	PlayerTextDrawLetterSize		(playerid, twk_RotL[playerid], 0.500000, 2.000000);
@@ -441,10 +448,10 @@ _twk_BuildUI(playerid)
 	PlayerTextDrawSetShadow			(playerid, twk_RotL[playerid], 1);
 	PlayerTextDrawUseBox			(playerid, twk_RotL[playerid], 1);
 	PlayerTextDrawBoxColor			(playerid, twk_RotL[playerid], 175);
-	PlayerTextDrawTextSize			(playerid, twk_RotL[playerid], 564.000000, 20.000000);
+	PlayerTextDrawTextSize			(playerid, twk_RotL[playerid], 524.000000, 20.000000);
 	PlayerTextDrawSetSelectable		(playerid, twk_RotL[playerid], true);
 
-	twk_Unlock[playerid]			=CreatePlayerTextDraw(playerid, 587.000000, 390.000000, "Move");
+	twk_Unlock[playerid]			=CreatePlayerTextDraw(playerid, 547.000000, 200.000000, "Move");
 	PlayerTextDrawAlignment			(playerid, twk_Unlock[playerid], 2);
 	PlayerTextDrawBackgroundColor	(playerid, twk_Unlock[playerid], 175);
 	PlayerTextDrawFont				(playerid, twk_Unlock[playerid], 1);
@@ -458,7 +465,7 @@ _twk_BuildUI(playerid)
 	PlayerTextDrawTextSize			(playerid, twk_Unlock[playerid], 20.0, 80.0);
 	PlayerTextDrawSetSelectable		(playerid, twk_Unlock[playerid], true);
 
-	twk_Done[playerid]				=CreatePlayerTextDraw(playerid, 587.000000, 420.000000, "Done");
+	twk_Done[playerid]				=CreatePlayerTextDraw(playerid, 547.000000, 230.000000, "Done");
 	PlayerTextDrawAlignment			(playerid, twk_Done[playerid], 2);
 	PlayerTextDrawBackgroundColor	(playerid, twk_Done[playerid], 175);
 	PlayerTextDrawFont				(playerid, twk_Done[playerid], 1);
