@@ -25,7 +25,13 @@ ShowHelpTip(playerid, const text[], time = 0)
 	if(!ToolTips[playerid])
 		return 0;
 
-	PlayerTextDrawSetString(playerid, ToolTipText[playerid], text);
+	if(strlen(text) < 3)
+		return 0;
+		
+	new str[270];
+	format(str, sizeof(str),  "~r~!~w~ %s~n~~y~(/tools to disable)", text);
+
+	PlayerTextDrawSetString(playerid, ToolTipText[playerid], str);
 	PlayerTextDrawShow(playerid, ToolTipText[playerid]);
 
 	if(time > 0)
@@ -47,9 +53,9 @@ HideHelpTip(playerid)
 
 hook OnPlayerConnect(playerid)
 {
-	ToolTipText[playerid] = CreatePlayerTextDraw(playerid, 12.894577, 182.983322, "Tip: You can access the trunks of cars by pressing F at the back");
-	PlayerTextDrawLetterSize(playerid, ToolTipText[playerid], 0.279665, 1.952331);
-	PlayerTextDrawTextSize(playerid, ToolTipText[playerid], 182.651519, 35.466674);
+	ToolTipText[playerid] = CreatePlayerTextDraw(playerid, 3.0, 185.0, "Tip: You can access the trunks of cars by pressing F at the back");
+	PlayerTextDrawLetterSize(playerid, ToolTipText[playerid], 0.25, 1.05);
+	PlayerTextDrawTextSize(playerid, ToolTipText[playerid], 145.0, 35.0);
 	PlayerTextDrawAlignment(playerid, ToolTipText[playerid], 1);
 	PlayerTextDrawColor(playerid, ToolTipText[playerid], -1);
 	PlayerTextDrawUseBox(playerid, ToolTipText[playerid], true);
@@ -67,8 +73,7 @@ hook OnPlayerPickUpItem(playerid, Item:itemid)
 	{
 		new
 			itemname[MAX_ITEM_NAME],
-			itemtipkey[12],
-			str[288];
+			itemtipkey[12];
 
 		GetItemTypeUniqueName(GetItemType(itemid), itemname);
 
@@ -77,10 +82,8 @@ hook OnPlayerPickUpItem(playerid, Item:itemid)
 
 		format(itemtipkey, sizeof(itemtipkey), "%s_T", itemname);
 		itemtipkey[11] = EOS;
-		
-		format(str, sizeof(str), "~r~!~w~ %s", ls(playerid, itemtipkey));
 
-		ShowHelpTip(playerid, str, 20000);
+		ShowHelpTip(playerid, ls(playerid, itemtipkey), 20000);
 	}
 }
 
