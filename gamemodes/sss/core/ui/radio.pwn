@@ -16,14 +16,14 @@
 #include <YSI_Coding\y_hooks>
 
 
-#define MAX_RADIO_FREQ (108.0)
-#define MIN_RADIO_FREQ (87.5)
-
+#define MAX_RADIO_FREQ (208.0)
+#define MIN_RADIO_FREQ (27.5)
 
 static
 	rad_InventoryItem[MAX_PLAYERS],
 	rad_ViewingRadio[MAX_PLAYERS],
 	rad_OldMode[MAX_PLAYERS],
+	rad_ChangeTick[MAX_PLAYERS],
 	PlayerText:RadioUI_Main[MAX_PLAYERS],
 	PlayerText:RadioUI_Strip[MAX_PLAYERS],
 	PlayerText:RadioUI_KnobL[MAX_PLAYERS],
@@ -33,11 +33,10 @@ static
 	PlayerText:RadioUI_Power[MAX_PLAYERS],
 	PlayerText:RadioUI_Back[MAX_PLAYERS];
 
-
 ShowRadioUI(playerid)
 {
-	//ClosePlayerInventory(playerid, true);
-	
+	ClosePlayerInventory(playerid, true);
+
 	PlayerTextDrawShow(playerid, RadioUI_Main[playerid]);
 	PlayerTextDrawShow(playerid, RadioUI_Strip[playerid]);
 	PlayerTextDrawShow(playerid, RadioUI_KnobL[playerid]);
@@ -53,6 +52,58 @@ ShowRadioUI(playerid)
 	rad_ViewingRadio[playerid] = true;
 }
 
+hook OnScriptInit()
+{
+    ShowPlayerMarkers(PLAYER_MARKERS_MODE_GLOBAL);
+	LimitPlayerMarkerRadius(9999.0);
+}
+
+hook OnPlayerLoad(playerid, filename[])
+{
+	UpdateRadioMarker(playerid);
+}
+
+hook OnPlayerStreamIn(playerid, forplayerid)
+{
+	if(GetPlayerRadioFrequency(playerid) > MIN_RADIO_FREQ)
+	{
+		if(GetPlayerRadioFrequency(playerid) == GetPlayerRadioFrequency(forplayerid))
+		{
+			UpdateRadioMarker(playerid);
+		}
+	}
+}
+
+UpdateRadioMarker(playerid)
+{
+	if(GetPlayerRadioFrequency(playerid) > MIN_RADIO_FREQ)
+	{
+		//if(!IsPlayerMap(playerid)) return 0;
+
+		new count;
+		foreach(new i : Player)
+		{
+			if(i == playerid)
+				continue;
+			
+			if(GetPlayerRadioFrequency(playerid) == GetPlayerRadioFrequency(i))
+			{
+				SetPlayerMarkerForPlayer(playerid, i, CHAT_RADIO);
+				SetPlayerMarkerForPlayer(i, playerid, CHAT_RADIO);
+				count ++;
+			}
+			else
+			{
+				SetPlayerMarkerForPlayer(playerid, i, GetPlayerColor(i));
+				SetPlayerMarkerForPlayer(i, playerid, GetPlayerColor(playerid));
+			}
+		}
+
+		if(count) ChatMsgLang(playerid, CHAT_RADIO, "RADIOINFO", count, GetPlayerRadioFrequency(playerid));
+	}
+	return 1;
+}
+
 HideRadioUI(playerid)
 {
 	PlayerTextDrawHide(playerid, RadioUI_Main[playerid]);
@@ -64,13 +115,13 @@ HideRadioUI(playerid)
 	PlayerTextDrawHide(playerid, RadioUI_Power[playerid]);
 	PlayerTextDrawHide(playerid, RadioUI_Back[playerid]);
 
+	rad_ViewingRadio[playerid] = false;
+
 	if(!IsPlayerInAnyVehicle(playerid))
 		DisplayPlayerInventory(playerid);
 
 	else
 		CancelSelectTextDraw(playerid);
-
-	rad_ViewingRadio[playerid] = false;
 }
 
 UpdateRadioUI(playerid)
@@ -115,6 +166,7 @@ hook OnPlayerClickPlayerTD(playerid, PlayerText:playertextid)
 			SetPlayerRadioFrequency(playerid, GetPlayerRadioFrequency(playerid) - 0.5);
 
 		UpdateRadioUI(playerid);
+		UpdateRadioMarker(playerid);
 	}
 	if(playertextid == RadioUI_KnobR[playerid])
 	{
@@ -125,6 +177,7 @@ hook OnPlayerClickPlayerTD(playerid, PlayerText:playertextid)
 			SetPlayerRadioFrequency(playerid, GetPlayerRadioFrequency(playerid) + 0.5);
 
 		UpdateRadioUI(playerid);
+		UpdateRadioMarker(playerid);
 	}
 	if(playertextid == RadioUI_Mode[playerid])
 	{
@@ -135,10 +188,18 @@ hook OnPlayerClickPlayerTD(playerid, PlayerText:playertextid)
 			SetPlayerChatMode(playerid, CHAT_MODE_GLOBAL);
 
 		UpdateRadioUI(playerid);
+		UpdateRadioMarker(playerid);
 	}
 	if(playertextid == RadioUI_Freq[playerid])
 	{
-		ShowFrequencyDialog(playerid);
+		if(rad_ChangeTick[playerid] > gettime())
+		{
+			ShowActionText(playerid, "_~n~_~n~_~r~Await to change station again", 5000);
+		}
+		else
+		{
+			ShowFrequencyDialog(playerid);
+		}
 	}
 	if(playertextid == RadioUI_Power[playerid])
 	{
@@ -157,6 +218,7 @@ hook OnPlayerClickPlayerTD(playerid, PlayerText:playertextid)
 		}
 
 		UpdateRadioUI(playerid);
+		UpdateRadioMarker(playerid);
 	}
 	if(playertextid == RadioUI_Back[playerid])
 	{
@@ -181,6 +243,8 @@ ShowFrequencyDialog(playerid)
 					SetPlayerRadioFrequency(playerid, frequency);
 					log("%p updated frequency to %.2f", playerid, frequency);
 					UpdateRadioUI(playerid);
+					UpdateRadioMarker(playerid);
+					rad_ChangeTick[playerid] = gettime() + 30;
 				}
 				else
 				{
@@ -193,7 +257,8 @@ ShowFrequencyDialog(playerid)
 			}
 		}
 	}
-	Dialog_ShowCallback(playerid, using inline Response, DIALOG_STYLE_INPUT, "Frequency", "Enter a frequency between 87.5 and 108.0", "Accept", "Cancel");
+	Dialog_ShowCallback(playerid, using inline Response, DIALOG_STYLE_INPUT, "Frequency",
+		sprintf("Enter a frequency between %0.2f and %0.2f", MIN_RADIO_FREQ, MAX_RADIO_FREQ), "Accept", "Cancel");
 
 	return 1;
 }
@@ -212,6 +277,11 @@ hook OnPlayerClickTextDraw(playerid, Text:clickedid)
 
 hook OnPlayerOpenInventory(playerid)
 {
+	if(rad_ViewingRadio[playerid])
+	{
+		return Y_HOOKS_BREAK_RETURN_1;
+	}
+	
 	rad_InventoryItem[playerid] = AddInventoryListItem(playerid, "Radio");
 
 	return Y_HOOKS_CONTINUE_RETURN_0;
@@ -222,8 +292,8 @@ hook OnPlayerSelectExtraItem(playerid, item)
 	if(item == rad_InventoryItem[playerid])
 	{
 		ShowRadioUI(playerid);
+		
 	}
-
 	return Y_HOOKS_CONTINUE_RETURN_0;
 }
 
