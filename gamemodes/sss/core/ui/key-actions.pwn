@@ -43,8 +43,10 @@ hook OnPlayerConnect(playerid)
 
 stock ShowPlayerKeyActionUI(playerid)
 {
-	PlayerTextDrawSetString(playerid, KeyActions[playerid], KeyActionsText[playerid]);
-	PlayerTextDrawShow(playerid, KeyActions[playerid]);
+	if(!IsValidItem(GetPlayerTweakItem(playerid))) {
+		PlayerTextDrawSetString(playerid, KeyActions[playerid], KeyActionsText[playerid]);
+		PlayerTextDrawShow(playerid, KeyActions[playerid]);
+	}
 }
 
 stock HidePlayerKeyActionUI(playerid)
@@ -59,6 +61,7 @@ stock ClearPlayerKeyActionUI(playerid)
 
 stock AddToolTipText(playerid, const key[], const use[])
 {
+
 	new tmp[128];
 
 	if(IsPlayerMobile(playerid))
