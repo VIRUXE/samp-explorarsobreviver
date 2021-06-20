@@ -74,6 +74,7 @@ CreatePlayerTile(playerid, &PlayerText:title, &PlayerText:tile, &PlayerText:item
 	PlayerTextDrawColor				(playerid, tile, -1);
 	PlayerTextDrawTextSize			(playerid, tile, width, height);
 	PlayerTextDrawSetSelectable		(playerid, tile, true);
+	PlayerTextDrawSetPreviewModel	(playerid, tile, 19300);
 
 	item							=CreatePlayerTextDraw(playerid, x + width / 2.0, y + height, "_");
 	PlayerTextDrawAlignment			(playerid, item, 2);

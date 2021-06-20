@@ -128,6 +128,8 @@ _StartEating(playerid, Item:itemid, continuing = false)
 		return;
 	}
 
+	PlayerPlaySound(playerid, 32200, 0.0, 0.0, 0.0);
+	
 	ApplyAnimation(playerid, "FOOD", "EAT_Burger", 4.1, 0, 0, 0, 0, 0);
 	StartHoldAction(playerid, 3200);
 

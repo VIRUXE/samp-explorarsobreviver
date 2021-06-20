@@ -309,7 +309,9 @@ public OnPlayerTurnUpsideDown(playerid, Float:angle)
 	return 1;
 }
 
-IPacket:207(playerid, BitStream:bs)
+const ONFOOT_SYNC = 207; // 0.3.7
+
+IPacket:ONFOOT_SYNC(playerid, BitStream:bs) // incoming packet
 {
     new onFootData[PR_OnFootSync];
 	BS_IgnoreBits(bs, 8);

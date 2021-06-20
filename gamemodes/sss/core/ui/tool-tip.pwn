@@ -67,7 +67,7 @@ hook OnPlayerConnect(playerid)
 	PlayerTextDrawSetProportional(playerid, ToolTipText[playerid], 1);
 }
 
-hook OnPlayerPickUpItem(playerid, Item:itemid)
+hook OnPlayerPickedUpItem(playerid, Item:itemid)
 {
 	if(ToolTips[playerid])
 	{

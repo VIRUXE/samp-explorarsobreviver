@@ -27,7 +27,7 @@
 ==============================================================================*/
 
 #undef MAX_PLAYERS
-#define MAX_PLAYERS						(1000)
+#define MAX_PLAYERS						(32)
 
 // YSI
 #define _DEBUG							0
@@ -143,9 +143,7 @@ public OnGameModeInit()
 
 #include <PreviewModelDialog>
 #include <Pawn.RakNet>
-#include <PawnPlus>
-#include <advanced_kicks>
-#include <ColAndreas> 
+#include <colandreas> 
 #include <streamer>
 #include <nex-ac>
 #include <sqlitei>

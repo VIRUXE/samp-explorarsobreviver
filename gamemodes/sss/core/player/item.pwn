@@ -62,7 +62,7 @@ hook OnPlayerGetItem(playerid, Item:itemid){
 	GetItemTypeModel(itype, modelid);
 	PlayerTextDrawSetPreviewModel(playerid, item_TD[playerid][0], modelid);
 
-	PlayerTextDrawSetPreviewRot(playerid, item_TD[playerid][0], 0.0, 0.0, 0.0, 0.87);
+	PlayerTextDrawSetPreviewRot(playerid, item_TD[playerid][0], 0.0, 0.0, 0.0, 0.885);
 
 	PlayerTextDrawShow(playerid, item_TD[playerid][0]);
 

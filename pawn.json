@@ -23,8 +23,6 @@
 		"Southclaws/samp-ini",
 		"Southclaws/samp-whirlpool:v1.0.0",
 		"Zeex/samp-plugin-crashdetect:v4.20",
-		"IllidanS4/PawnPlus:v1.3.2",
-		"Mergevos/samp-advanced-kicks",
 		"oscar-broman/sqlitei",
 		"oscar-broman/md-sort",
 		"Southclaws/modio",
@@ -43,7 +41,8 @@
 		"Southclaws/samp-linegen",
 		"Southclaws/samp-zipline",
 		"Southclaws/samp-ladders",
-		"NexiusTailer/Nex-AC"
+		"NexiusTailer/Nex-AC",
+		"NexiusTailer/MapFix"
 	],
 	"build": {
 		"args": [
@@ -60,7 +59,7 @@
 	"runtime": {
 		"bind": "0.0.0.0",
 		"port": 7777,
-		"maxplayers": 10,
+		"maxplayers": 32,
 		"language": "Portugues",
 		"rcon_password": "166",
 		"hostname": "[PC/Mobile] Explorar e Sobreviver [Em Breve]",

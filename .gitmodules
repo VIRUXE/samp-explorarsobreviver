@@ -1,6 +1,3 @@
-[submodule "ExplorarSobreviver-Mapas"]
-	path = ExplorarSobreviver-Mapas
-	url = https://github.com/VIRUXEParty/ExplorarSobreviver-Mapas
 [submodule "scriptfiles/maps"]
 	path = scriptfiles/maps
 	url = https://github.com/VIRUXEParty/ExplorarSobreviver-Mapas
