@@ -92,7 +92,7 @@ SaveDefenceItem(Item:itemid, bool:active = true)
 public OnDefenceLoad(Item:itemid, active, geid[], data[], length)
 {
 	ActivateDefenceItem(itemid);
-	CreateDefenceColision(itemid);
+	//CreateDefenceColision(itemid);
 	return 1;
 }
 

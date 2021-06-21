@@ -1366,23 +1366,21 @@ public OnScriptInit()
 	DefineFoodItem(item_Steak,			4, 6.49,	1, 1, 1);
 	DefineFoodItem(item_Bread,			5, 2.34,	1, 0, 1);
 
-
 	// DEFENSIVE ITEM TYPE DEFINITIONS
-	DefineDefenceItem(item_Door,		0.0, 0.0, 90.0, false,	true);
-	DefineDefenceItem(item_MetPanel,	0.0, 0.0, 90.0, false,	true);
-	DefineDefenceItem(item_MetalGate,	90.0, 0.0, 0.0, true,	true);
-	DefineDefenceItem(item_CrateDoor,	0.0, 0.0, 90.0, false,	true);
-	DefineDefenceItem(item_CorPanel,	90.0, 0.0, 0.0, true,	true);
-	DefineDefenceItem(item_ShipDoor,	0.0, 0.0, 90.0, false,	true);
-	DefineDefenceItem(item_InsulDoor,	0.0, 0.0, 90.0, false,	false);
-	DefineDefenceItem(item_InsulPanel,	0.0, 90.0, 0.0, 	false,	false);
-	DefineDefenceItem(item_MilitaryGate,90.0, 0.0, 0.0, true,	true);
-	DefineDefenceItem(item_WoodPanel,	0.0, 0.0, 0.0, 	false,	false);
-	DefineDefenceItem(item_LargeFrame,	0.0, 0.0, 0.0, 	false,	false);
-	DefineDefenceItem(item_Cuntainer,	0.0, 90.0, 0.0, true,	false);
-	DefineDefenceItem(item_RedCrate,	0.0, 90.0, 0.0, false,	false);
-	DefineDefenceItem(item_MetalGate1,	90.0, 0.0, 0.0, true,	true);
-	
+	DefineDefenceItem(item_Door,		0.0, 0.0, 90.0,		0.0, 90.0, 90.0,	1.26817, false);
+	DefineDefenceItem(item_MetPanel,	90.0, 90.0, 0.0,	0.0, 90.0, 0.0,		0.02708, true);
+	DefineDefenceItem(item_MetalGate,	0.0, 0.0, 0.0,		270.0, 0.0, 0.0,	1.20759, true);
+	DefineDefenceItem(item_CrateDoor,	0.0, 90.0, 0.0,		90.0, 90.0, 0.0,	1.52665, true);
+	DefineDefenceItem(item_CorPanel,	0.0, 90.0, 0.0,		90.0, 90.0, 0.0,	1.21428, true);
+	DefineDefenceItem(item_ShipDoor,	90.0, 90.0, 0.0,	180.0, 90.0, 0.0,	1.39421, true);
+	DefineDefenceItem(item_InsulDoor,	0.0, 0.0, 90.0,		0.0, 90.0, 90.0,	1.72882, false);
+	DefineDefenceItem(item_InsulPanel,	0.0, 0.0, 90.0,		0.0, 90.0, 90.0,	1.71953, false);
+	DefineDefenceItem(item_MilitaryGate,90.0, 0.0, 0.0,		0.0, 0.0, 0.0,		0.48333, true);
+	DefineDefenceItem(item_WoodPanel,	90.0, 0.0, 23.5,	0.0, 0.0, 0.0,		1.0161, false);
+	DefineDefenceItem(item_LargeFrame,	0.0, 0.0, 0.0,		0.0, 0.0, 0.0,		1.4, 	false);
+	DefineDefenceItem(item_Cuntainer,	0.0, 90.0, 0.0,		0.0, 0.0, 0.0,		1.20759, false);
+	DefineDefenceItem(item_RedCrate,	0.0, 90.0, 0.0,		0.0, 0.0, 0.0,		1.20759, false);
+	DefineDefenceItem(item_MetalGate1,	90.0, 0.0, 0.0,		0.0, 0.0, 0.0,		1.20759, true);
 
 
 	// SAFEBOX ITEM TYPE DEFINITIONS

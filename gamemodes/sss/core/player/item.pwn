@@ -31,7 +31,7 @@ hook OnPlayerConnect(playerid){
 	PlayerTextDrawUseBox(playerid, item_TD[playerid][0], 0);
 	PlayerTextDrawSetProportional(playerid, item_TD[playerid][0], 0);
 	PlayerTextDrawSetSelectable(playerid, item_TD[playerid][0], 1);
-	PlayerTextDrawSetPreviewModel(playerid, item_TD[playerid][0], "19300");
+	PlayerTextDrawSetPreviewModel(playerid, item_TD[playerid][0], 19300);
 
 	item_TD[playerid][1] = CreatePlayerTextDraw(playerid, 318.000000, 435.000000, "Large Box");
 	PlayerTextDrawFont(playerid, item_TD[playerid][1], 1);
