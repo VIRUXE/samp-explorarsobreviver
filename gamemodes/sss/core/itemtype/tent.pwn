@@ -448,6 +448,8 @@ hook OnItemTweakUpdate(playerid, Item:itemid)
 		GetItemPos(itemid, x, y, z);
 		GetItemRot(itemid, rz, rz, rz);
 
+		z += 0.4;
+		rz += 90.0;
 		tentid = tnt_TweakID[playerid];
 
 		SetDynamicObjectPos(tnt_ObjData[tentid][tnt_objSideR1],

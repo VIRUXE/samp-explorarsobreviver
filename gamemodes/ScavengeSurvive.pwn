@@ -421,11 +421,6 @@ new stock
 #include "sss/core/world/tree.pwn"
 #include "sss/core/world/explosive.pwn"
 #include "sss/core/world/craft-construct.pwn"
-#include "sss/core/io/loot.pwn"
-#include "sss/core/io/item.pwn"
-#include "sss/core/io/defence.pwn"
-#include "sss/core/io/safebox.pwn"
-#include "sss/core/io/tree.pwn"
 
 /*
 	MODULE INITIALISATION CALLS
@@ -536,6 +531,15 @@ new stock
 #include "sss/core/itemtype/holster.pwn"
 #include "sss/core/itemtype/laserpoint.pwn"
 #include "sss/core/itemtype/map.pwn"
+#include "sss/core/itemtype/bed.pwn"
+
+// ITEM IO
+#include "sss/core/io/loot.pwn"
+#include "sss/core/io/item.pwn"
+#include "sss/core/io/defence.pwn"
+#include "sss/core/io/safebox.pwn"
+#include "sss/core/io/tree.pwn"
+#include "sss/core/io/craft.pwn"
 
 // ITEMS
 #include "sss/core/item/food.pwn"
@@ -551,7 +555,6 @@ new stock
 #include "sss/core/item/parachute.pwn"
 #include "sss/core/item/molotov.pwn"
 #include "sss/core/item/screwdriver.pwn"
-//#include "sss/core/item/torso.pwn"
 #include "sss/core/item/campfire.pwn"
 #include "sss/core/item/herpderp.pwn"
 #include "sss/core/item/stungun.pwn"

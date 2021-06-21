@@ -207,8 +207,11 @@ ExitTutorial(playerid)
 	PlayerCreateNewCharacter(playerid);
 	SetPlayerBrightness(playerid, 255);
 
-	for(new i = 0; i < MAX_TUTORIAL_ITEMS; i++)
-		DestroyItem(PlayerTutorial_Item[i][playerid]);
+	for(new i = 0; i < MAX_TUTORIAL_ITEMS; i++){
+		if(IsValidItem(PlayerTutorial_Item[i][playerid])){
+			DestroyItem(PlayerTutorial_Item[i][playerid]);
+		}
+	}
 		
 	DestroyWorldVehicle(PlayerTutorialVehicle[playerid], true);
 	PlayerTutorialVehicle[playerid] = INVALID_VEHICLE_ID;

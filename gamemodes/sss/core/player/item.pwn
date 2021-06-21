@@ -26,8 +26,8 @@ hook OnPlayerConnect(playerid){
 	PlayerTextDrawSetShadow(playerid, item_TD[playerid][0], 0);
 	PlayerTextDrawAlignment(playerid, item_TD[playerid][0], 0);
 	PlayerTextDrawColor(playerid, item_TD[playerid][0], -1);
-	PlayerTextDrawBackgroundColor(playerid, item_TD[playerid][0], 0);
-	PlayerTextDrawBoxColor(playerid, item_TD[playerid][0], 0);
+	PlayerTextDrawBackgroundColor(playerid, item_TD[playerid][0], 175);
+	PlayerTextDrawBoxColor(playerid, item_TD[playerid][0], 175);
 	PlayerTextDrawUseBox(playerid, item_TD[playerid][0], 0);
 	PlayerTextDrawSetProportional(playerid, item_TD[playerid][0], 0);
 	PlayerTextDrawSetSelectable(playerid, item_TD[playerid][0], 1);

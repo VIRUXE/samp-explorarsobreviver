@@ -300,7 +300,7 @@ hook OnHoldActionFinish(playerid)
 		PlayerGainSkillExperience(playerid, uniqueid);
 
 		if(cons_Data[cons_CraftsetConstructSet[cons_Constructing[playerid]]][cons_defence])
-			ConvertItemToDefenceItem(itemid, 0);
+			ConvertItemToDefenceItem(itemid, 1, playerid); // Vertical
 
 		if(cons_Data[cons_CraftsetConstructSet[cons_Constructing[playerid]]][cons_tweak])
 			TweakItem(playerid, itemid);

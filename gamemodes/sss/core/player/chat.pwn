@@ -363,6 +363,9 @@ CMD:r(playerid, params[])
 	return 7;
 }
 
+CMD:goff(playerid, params[])
+	return cmd_quiet(playerid, params);
+	
 CMD:quiet(playerid, params[])
 {
 	if(chat_Quiet[playerid])
