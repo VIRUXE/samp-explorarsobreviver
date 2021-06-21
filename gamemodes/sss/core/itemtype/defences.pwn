@@ -64,8 +64,18 @@ Item:		def_CurrentDefenceEdit[MAX_PLAYERS],
 Item:		def_CurrentDefenceOpen[MAX_PLAYERS],
 			def_LastPassEntry[MAX_PLAYERS],
 			def_Cooldown[MAX_PLAYERS],
-			def_PassFails[MAX_PLAYERS];
+			def_PassFails[MAX_PLAYERS],
+			def_Col[MAX_ITEM];
 
+stock CreateDefenceColision(Item:itemid)
+{
+	new Float:x, Float:y, Float:z, Float:rx, Float:ry, Float:rz, model;
+	GetItemPos(itemid, x, y, z);
+	GetItemRot(itemid, rx, ry, rz);
+	GetItemTypeModel(GetItemType(itemid), model);
+    def_Col[itemid] = CA_CreateObject(model, x, y, z, rx, ry, rz, true);
+	CA_SetObjectExtraID(def_Col[itemid], 0, _:itemid);
+}
 
 forward OnDefenceCreate(Item:itemid);
 forward OnDefenceDestroy(Item:itemid);
@@ -155,12 +165,12 @@ ActivateDefenceItem(Item:itemid)
 	if(itemdata[def_motor])
 	{
 		SetButtonText(buttonid, sprintf(""KEYTEXT_INTERACT" to open %s", itemtypename));
-		SetItemLabel(itemid, sprintf("%d/%d", GetItemHitPoints(itemid), GetItemTypeMaxHitPoints(itemtype)));
+		SetItemLabel(itemid, sprintf("%s\n%d/%d", itemtypename, GetItemHitPoints(itemid), GetItemTypeMaxHitPoints(itemtype)));
 	}
 	else
 	{
 		SetButtonText(buttonid, sprintf(""KEYTEXT_INTERACT" to modify %s", itemtypename));
-		SetItemLabel(itemid, sprintf("%d/%d", GetItemHitPoints(itemid), GetItemTypeMaxHitPoints(itemtype)));
+		SetItemLabel(itemid, sprintf("%s\n%d/%d", itemtypename, GetItemHitPoints(itemid), GetItemTypeMaxHitPoints(itemtype)));
 	}
 
 	return 0;
@@ -173,11 +183,13 @@ DeconstructDefence(Item:itemid)
 		Float:y,
 		Float:z,
 		ItemType:itemtype,
-		itemdata[e_DEFENCE_DATA];
+		itemdata[e_DEFENCE_DATA],
+		name[MAX_ITEM_NAME];
 
 	GetItemPos(itemid, x, y, z);
 	itemtype = GetItemType(itemid);
 	GetItemArrayData(itemid, itemdata);
+	GetItemTypeName(itemtype, name);
 
 	if(itemdata[def_motor])
 	{
@@ -192,8 +204,17 @@ DeconstructDefence(Item:itemid)
 
 	SetItemPos(itemid, x, y, z);
 	SetItemRot(itemid, 0.0, 0.0, 0.0, true);
+	SetItemLabel(itemid, name);
 
 	SetItemArrayDataAtCell(itemid, 0, 0);
+	SetItemArrayDataAtCell(itemid, 1, 0);
+	SetItemArrayDataAtCell(itemid, 2, 0);
+	SetItemArrayDataAtCell(itemid, 3, 0);
+	SetItemArrayDataAtCell(itemid, 4, 0);
+	SetItemArrayDataAtCell(itemid, 5, 0);
+
+	CA_DestroyObject(def_Col[itemid]);
+
 	CallLocalFunction("OnDefenceDestroy", "d", _:itemid);
 }
 
@@ -782,6 +803,16 @@ hook OnItemTweakFinish(playerid, Item:itemid)
 	{
 		DestroyDynamicObject(def_TweakArrow[playerid]);
 		def_TweakArrow[playerid] = INVALID_OBJECT_ID;
+
+		CA_DestroyObject(def_Col[itemid]);
+		new ItemType:itemtype, model, Float:x, Float:y, Float:z, Float:rx, Float:ry, Float:rz;
+		itemtype = GetItemType(Item:itemid);
+		GetItemTypeModel(itemtype, model);
+		GetItemPos(itemid, x, y, z);
+		GetItemRot(itemid, rx, ry, rz);
+		def_Col[itemid] = CA_CreateObject(model, x, y, z, rx, ry, rz, true);
+		CA_SetObjectExtraID(def_Col[itemid], 0, _:itemid);
+		CallLocalFunction("OnDefenceModified", "d", _:itemid);
 	}
 }
 
@@ -982,6 +1013,12 @@ timer MoveDefence[1500](itemid, playerid)
 		CallLocalFunction("OnDefenceMove", "d", itemid);
 	}
 
+	CA_DestroyObject(def_Col[Item:itemid]);
+	new model;
+	GetItemTypeModel(itemtype, model);
+	def_Col[Item:itemid] = CA_CreateObject(model, ix, iy, iz, rx, ry, rz, true);
+	CA_SetObjectExtraID(def_Col[Item:itemid], 0, _:itemid);
+
 	return;
 }
 
@@ -990,7 +1027,16 @@ hook OnItemHitPointsUpdate(Item:itemid, oldvalue, newvalue)
 	new ItemType:itemtype = GetItemType(itemid);
 
 	if(def_ItemTypeDefenceType[itemtype] != -1)
-		SetItemLabel(itemid, sprintf("%d/%d", GetItemHitPoints(itemid), GetItemTypeMaxHitPoints(itemtype)));
+	{
+		new itemtypename[MAX_ITEM_NAME];
+		GetItemTypeName(itemtype, itemtypename);
+		SetItemLabel(itemid,
+			sprintf("%s\n%d/%d", itemtypename, GetItemHitPoints(itemid), GetItemTypeMaxHitPoints(itemtype)),
+			RED, 20.0);
+
+		CallLocalFunction("OnDefenceModified", "d", itemid);
+	}
+		
 }
 
 hook OnItemDestroy(Item:itemid)
@@ -1013,7 +1059,7 @@ hook OnItemDestroy(Item:itemid)
 			GetItemPos(itemid, x, y, z);
 			GetItemRot(itemid, rx, ry, rz);
 			GetItemTypeModel(itemtype, model);
-
+			CA_DestroyObject(def_Col[itemid]);
 			log("[DESTRUCTION] Defence %d (%d) Object: (%d, %f, %f, %f, %f, %f, %f)", _:itemid, _:itemtype, model, x, y, z, rx, ry, rz);
 		}
 	}

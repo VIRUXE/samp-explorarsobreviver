@@ -34,7 +34,7 @@ PlayerText:	twk_RotL[MAX_PLAYERS],
 PlayerText:	twk_Unlock[MAX_PLAYERS],
 PlayerText:	twk_Done[MAX_PLAYERS];
 
-forward OnItemTweakUpdate(playerid, itemid, Float:x, Float:y, Float:z, Float:rx, Float:ry, Float:rz);
+forward OnItemTweakUpdate(playerid, itemid);
 forward OnItemTweakFinish(playerid, itemid);
 
 
@@ -366,7 +366,7 @@ _twk_AdjustItemPos(playerid, Float:distance, Float:direction, Float:rotation)
     SetPlayerFacingAngle(playerid, GetAngleToPoint(x, y, new_x, new_y) + 20);
 	SetCameraBehindPlayer(playerid);
 
-	CallLocalFunction("OnItemTweakUpdate", "ddffffff", playerid, _:twk_Item[playerid], new_x, new_y, new_z, rx, ry, rz);
+	CallLocalFunction("OnItemTweakUpdate", "dd", playerid, _:twk_Item[playerid]);
 
 	return 0;
 }

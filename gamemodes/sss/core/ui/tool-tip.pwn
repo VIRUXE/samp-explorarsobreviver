@@ -53,7 +53,7 @@ HideHelpTip(playerid)
 
 hook OnPlayerConnect(playerid)
 {
-	ToolTipText[playerid] = CreatePlayerTextDraw(playerid, 3.0, 185.0, "Tip: You can access the trunks of cars by pressing F at the back");
+	ToolTipText[playerid] = CreatePlayerTextDraw(playerid, 3.0, 190.0, "Tip: You can access the trunks of cars by pressing F at the back");
 	PlayerTextDrawLetterSize(playerid, ToolTipText[playerid], 0.25, 1.05);
 	PlayerTextDrawTextSize(playerid, ToolTipText[playerid], 145.0, 35.0);
 	PlayerTextDrawAlignment(playerid, ToolTipText[playerid], 1);

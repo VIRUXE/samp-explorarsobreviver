@@ -483,7 +483,7 @@ Login(playerid)
 	acc_LoggedIn[playerid] = true;
 	acc_LoginAttempts[playerid] = 0;
 
-	SetPlayerRadioFrequency(playerid, 107.0);
+	SetPlayerRadioFrequency(playerid, 2.0); // Local chat by default
 	SetPlayerBrightness(playerid, 255);
 
 	SpawnLoggedInPlayer(playerid);

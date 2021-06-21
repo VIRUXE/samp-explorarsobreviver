@@ -323,7 +323,7 @@ hook OnPlayerCloseInventory(playerid)
 	return Y_HOOKS_CONTINUE_RETURN_0;
 }
 
-hook OnPlayerOpenContainer(playerid, containerid)
+hook OnPlayerOpenContainer(playerid, Container:containerid)
 {
 	ShowPlayerGear(playerid);
 	UpdatePlayerGear(playerid);
@@ -331,7 +331,7 @@ hook OnPlayerOpenContainer(playerid, containerid)
 	return Y_HOOKS_CONTINUE_RETURN_0;
 }
 
-hook OnPlayerCloseContainer(playerid, containerid)
+hook OnPlayerCloseContainer(playerid, Container:containerid)
 {
 	HidePlayerGear(playerid);
 	HidePlayerHealthInfo(playerid);

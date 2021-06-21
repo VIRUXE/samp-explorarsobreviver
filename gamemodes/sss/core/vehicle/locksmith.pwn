@@ -317,7 +317,7 @@ hook OnPlayerConstructed(playerid, consset, Item:result)
 		if(IsValidItem(itemid))
 		{
 			SetItemArrayDataSize(result, 2);
-			new v1, v2, Error:e;
+			new v1, v2;
 
 			e = GetItemArrayDataAtCell(itemid, v1, 0);
 			if(!IsError(e))

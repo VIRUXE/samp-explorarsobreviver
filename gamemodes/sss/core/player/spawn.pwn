@@ -348,33 +348,31 @@ PlayerSpawnNewCharacter(playerid, gender)
 
 		GivePlayerBag(playerid, backpackitem);
 
-		for(new i; i < 4; i++)
-		{
-			if(!IsValidItemType(spawn_ResItems[i][e_itmobj_type]))
-				break;
+		new i = random(16);
 
-			tmpitem = CreateItem(spawn_ResItems[i][e_itmobj_type]);
+		if(!IsValidItemType(spawn_ResItems[i][e_itmobj_type]))
+			i = 0;
 
-			if(spawn_ResItems[i][e_itmobj_exdata] != 0)
-				SetItemExtraData(tmpitem, spawn_ResItems[i][e_itmobj_exdata]);
+		tmpitem = CreateItem(spawn_ResItems[i][e_itmobj_type]);
 
-			AddItemToInventory(playerid, tmpitem);
-		}
+		if(spawn_ResItems[i][e_itmobj_exdata] != 0)
+			SetItemExtraData(tmpitem, spawn_ResItems[i][e_itmobj_exdata]);
+
+		AddItemToInventory(playerid, tmpitem);
 
 		if(IsNewPlayer(playerid))
 		{
-			for(new i; i < 4; i++)
-			{
-				if(!IsValidItemType(spawn_NewItems[i][e_itmobj_type]))
-					break;
+			i = random(16);
 
-				tmpitem = CreateItem(spawn_NewItems[i][e_itmobj_type]);
+			if(!IsValidItemType(spawn_NewItems[i][e_itmobj_type]))
+				i = 0;
 
-				if(spawn_NewItems[i][e_itmobj_exdata] != 0)
-					SetItemExtraData(tmpitem, spawn_NewItems[i][e_itmobj_exdata]);
+			tmpitem = CreateItem(spawn_NewItems[i][e_itmobj_type]);
 
-				AddItemToInventory(playerid, tmpitem);
-			}
+			if(spawn_NewItems[i][e_itmobj_exdata] != 0)
+				SetItemExtraData(tmpitem, spawn_NewItems[i][e_itmobj_exdata]);
+
+			AddItemToInventory(playerid, tmpitem);
 		}
 	}
 
