@@ -49,11 +49,7 @@ atr_PosCheck(playerid, Float:x, Float:y, Float:z)
 
 	if(atr_Check[playerid])
 	{
-		if(GetPlayerCurrentInt(playerid) != -1)
-		{
-			GetPropertyExit( GetPlayerCurrentInt(playerid), atr_SetX[playerid], atr_SetY[playerid], atr_SetZ[playerid] );
-		}
-		else if(CA_RayCastLine(x, y, z, x, y, z + 600.0, tmp, tmp, tmp))
+		if(CA_RayCastLine(x, y, z, x, y, z + 600.0, tmp, tmp, tmp))
 		{
 			if(atr_Check[playerid] == 50 || atr_Check[playerid] == 100)
 			{
@@ -128,14 +124,6 @@ ORPC:12(playerid, BitStream:bs){
 	);
 
 	return 1;
-}
-
-public OnPlayerInteriorChange(playerid, newinteriorid, oldinteriorid)
-{
-	if(newinteriorid != 0)
-		GetPropertyExit( GetPlayerCurrentInt(playerid), atr_SetX[playerid], atr_SetY[playerid], atr_SetZ[playerid] );
-
-    return 1;
 }
 
 // GiveTakeDamage

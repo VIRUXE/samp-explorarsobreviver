@@ -22,16 +22,9 @@ hook OnPlayerConnect(playerid){
 	PlayerTextDrawFont(playerid, item_TD[playerid][0], 5);
 	PlayerTextDrawLetterSize(playerid, item_TD[playerid][0], 0.600000, 2.000000);
 	PlayerTextDrawTextSize(playerid, item_TD[playerid][0], 53.000000, 41.000000);
-	PlayerTextDrawSetOutline(playerid, item_TD[playerid][0], 0);
-	PlayerTextDrawSetShadow(playerid, item_TD[playerid][0], 0);
-	PlayerTextDrawAlignment(playerid, item_TD[playerid][0], 0);
-	PlayerTextDrawColor(playerid, item_TD[playerid][0], -1);
-	PlayerTextDrawBackgroundColor(playerid, item_TD[playerid][0], 175);
-	PlayerTextDrawBoxColor(playerid, item_TD[playerid][0], 175);
-	PlayerTextDrawUseBox(playerid, item_TD[playerid][0], 0);
-	PlayerTextDrawSetProportional(playerid, item_TD[playerid][0], 0);
-	PlayerTextDrawSetSelectable(playerid, item_TD[playerid][0], 1);
-	PlayerTextDrawSetPreviewModel(playerid, item_TD[playerid][0], 19300);
+	PlayerTextDrawColor(playerid, item_TD[playerid][0], 0xFFFFFFFF);
+	PlayerTextDrawBackgroundColor(playerid, item_TD[playerid][0], 0x88888800);
+	PlayerTextDrawSetPreviewRot(playerid, item_TD[playerid][0], -15.0, 0.0, 45.0);	
 
 	item_TD[playerid][1] = CreatePlayerTextDraw(playerid, 318.000000, 435.000000, "Large Box");
 	PlayerTextDrawFont(playerid, item_TD[playerid][1], 1);
@@ -42,10 +35,6 @@ hook OnPlayerConnect(playerid){
 	PlayerTextDrawAlignment(playerid, item_TD[playerid][1], 2);
 	PlayerTextDrawColor(playerid, item_TD[playerid][1], 0xFFFF00FF);
 	PlayerTextDrawBackgroundColor(playerid, item_TD[playerid][1], 255);
-	PlayerTextDrawBoxColor(playerid, item_TD[playerid][1], 0);
-	PlayerTextDrawUseBox(playerid, item_TD[playerid][1], 0);
-	PlayerTextDrawSetProportional(playerid, item_TD[playerid][1], 1);
-	PlayerTextDrawSetSelectable(playerid, item_TD[playerid][1], 0);
 }
 
 UpdatePlayerPreviewItem(playerid){
@@ -62,8 +51,6 @@ hook OnPlayerGetItem(playerid, Item:itemid){
 
 	GetItemTypeModel(itype, modelid);
 	PlayerTextDrawSetPreviewModel(playerid, item_TD[playerid][0], modelid);
-
-	PlayerTextDrawSetPreviewRot(playerid, item_TD[playerid][0], 0.0, 0.0, 0.0, 0.885);
 
 	PlayerTextDrawShow(playerid, item_TD[playerid][0]);
 

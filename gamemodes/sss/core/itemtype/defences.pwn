@@ -20,7 +20,6 @@
 #define INVALID_DEFENCE_ID		(-1)
 #define INVALID_DEFENCE_TYPE	(-1)
 
-
 enum
 {
 	DEFENCE_POSE_HORIZONTAL,
@@ -145,10 +144,14 @@ hook OnItemCreateInWorld(Item:itemid)
 	if(def_ItemTypeDefenceType[itemtype] != INVALID_DEFENCE_TYPE)
 	{
 		new itemdata[e_DEFENCE_DATA];
-
 		GetItemArrayData(itemid, itemdata);
+
+		itemdata[def_active] = false;
+
 		if(itemdata[def_hit] > 0)
 			SetItemHitPoints(itemid, itemdata[def_hit]);
+
+		SetItemArrayData(itemid, itemdata, e_DEFENCE_DATA);
 	}
 
 	return Y_HOOKS_CONTINUE_RETURN_0;

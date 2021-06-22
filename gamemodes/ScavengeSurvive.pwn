@@ -428,6 +428,14 @@ new stock
 */
 #include "sss/core/server/init.pwn"
 
+// ITEM IO
+#include "sss/core/io/loot.pwn"
+#include "sss/core/io/item.pwn"
+#include "sss/core/io/defence.pwn"
+#include "sss/core/io/safebox.pwn"
+#include "sss/core/io/tree.pwn"
+#include "sss/core/io/craft.pwn"
+
 /*
 	CHILD SYSTEMS
 	Modules that do not declare anything globally accessible besides interfaces.
@@ -532,14 +540,6 @@ new stock
 #include "sss/core/itemtype/laserpoint.pwn"
 #include "sss/core/itemtype/map.pwn"
 #include "sss/core/itemtype/bed.pwn"
-
-// ITEM IO
-#include "sss/core/io/loot.pwn"
-#include "sss/core/io/item.pwn"
-#include "sss/core/io/defence.pwn"
-#include "sss/core/io/safebox.pwn"
-#include "sss/core/io/tree.pwn"
-#include "sss/core/io/craft.pwn"
 
 // ITEMS
 #include "sss/core/item/food.pwn"
