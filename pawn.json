@@ -42,7 +42,8 @@
 		"Southclaws/samp-zipline",
 		"Southclaws/samp-ladders",
 		"NexiusTailer/Nex-AC",
-		"NexiusTailer/MapFix"
+		"NexiusTailer/MapFix",
+		"Crayder/Model-Sizes-Plus"
 	],
 	"build": {
 		"args": [

@@ -54,14 +54,12 @@
 #define MODIO_SCRIPT_EXIT_FIX			(1)
 #define MAX_MODIO_SESSION				(2048)
 
-// SS/button
-#define BTN_TELEPORT_FREEZE_TIME		(3000)
-
 // SS/inventory
 #define MAX_INVENTORY_SLOTS				(7)
 
 // SS/button
 #define BTN_MAX							Button:32768
+#define BTN_TELEPORT_FREEZE_TIME		(3000)
 
 // SS/item
 #define MAX_ITEM						Item:32768
@@ -69,6 +67,9 @@
 #define MAX_ITEM_NAME					(20)
 #define MAX_ITEM_TEXT					(64)
 #define MAX_CONTAINER_SLOTS				(100)
+
+// Optidraw
+#define OD_METHOD METHOD_BOX
 
 // pawn-errors
 // #define PRINT_BACKTRACES
@@ -145,6 +146,7 @@ public OnGameModeInit()
 #include <Pawn.RakNet>
 #include <colandreas> 
 #include <streamer>
+#include <optidraw>
 #include <nex-ac>
 #include <sqlitei>
 #include <formatex>
