@@ -112,7 +112,7 @@ hook OnPlayerConnect(playerid)
 
 ==============================================================================*/
 
-stock DefineDefenceItem(ItemType:itemtype, Float:v_rx, Float:v_ry, Float:v_rz, Float:h_rx, Float:h_ry, Float:h_rz, Float:zoffset, bool:movable)
+stock DefineDefenceItem(ItemType:itemtype, Float:v_rx, Float:v_ry, Float:v_rz, Float:h_rx, Float:h_ry, Float:h_rz, bool:movable)
 {
 	SetItemTypeMaxArrayData(itemtype, e_DEFENCE_DATA);
 
@@ -124,12 +124,14 @@ stock DefineDefenceItem(ItemType:itemtype, Float:v_rx, Float:v_ry, Float:v_rz, F
 	def_TypeData[def_TypeTotal][def_horizontalRotY] = h_ry;
 	def_TypeData[def_TypeTotal][def_horizontalRotZ] = h_rz;
 
+
+	// Automatic defence zoffset
 	new modelid, Float:minx, Float:miny, Float:minz, Float:maxx, Float:maxy, Float:maxz;
 	GetItemTypeModel(itemtype, modelid);
 	CA_GetModelBoundingBox(modelid, minx, miny, minz, maxx, maxy, maxz);
 	def_TypeData[def_TypeTotal][def_placeOffsetZ] = floatabs(minz);
-	#pragma unused zoffset
-	//def_TypeData[def_TypeTotal][def_placeOffsetZ] = zoffset;
+	//
+
 
 	def_TypeData[def_TypeTotal][def_movable] = movable;
 	def_ItemTypeDefenceType[itemtype] = def_TypeTotal;

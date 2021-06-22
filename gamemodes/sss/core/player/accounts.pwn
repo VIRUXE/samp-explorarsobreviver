@@ -301,7 +301,6 @@ Error:CreateAccount(playerid, const password[])
 	DisplayLoginPrompt(playerid);
 
 	// This can be removed in the future
-	new name[MAX_PLAYER_NAME];
 	GetPlayerName(playerid, name, sizeof(name));
 	for(new i; i < gTotalStaff; i++){
 		if(!strcmp(gStaffList[i], name)){
