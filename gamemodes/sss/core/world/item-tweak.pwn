@@ -373,7 +373,7 @@ _twk_AdjustItemPos(playerid, Float:distance, Float:direction, Float:rotation)
 
 _twk_BuildUI(playerid)
 {
-	twk_MoveF[playerid]				=CreatePlayerTextDraw(playerid, 540.000000, 130.000000, "~u~");
+	twk_MoveF[playerid]				=CreatePlayerTextDraw(playerid, 540.000000, 130.000000, "+");
 	PlayerTextDrawBackgroundColor	(playerid, twk_MoveF[playerid], 175);
 	PlayerTextDrawFont				(playerid, twk_MoveF[playerid], 1);
 	PlayerTextDrawLetterSize		(playerid, twk_MoveF[playerid], 0.500000, 2.000000);
@@ -386,7 +386,7 @@ _twk_BuildUI(playerid)
 	PlayerTextDrawTextSize			(playerid, twk_MoveF[playerid], 554.000000, 20.000000);
 	PlayerTextDrawSetSelectable		(playerid, twk_MoveF[playerid], true);
 
-	twk_MoveB[playerid]				=CreatePlayerTextDraw(playerid, 540.000000, 170.000000, "~d~");
+	twk_MoveB[playerid]				=CreatePlayerTextDraw(playerid, 540.000000, 170.000000, "-");
 	PlayerTextDrawBackgroundColor	(playerid, twk_MoveB[playerid], 175);
 	PlayerTextDrawFont				(playerid, twk_MoveB[playerid], 1);
 	PlayerTextDrawLetterSize		(playerid, twk_MoveB[playerid], 0.500000, 2.000000);
@@ -399,7 +399,7 @@ _twk_BuildUI(playerid)
 	PlayerTextDrawTextSize			(playerid, twk_MoveB[playerid], 554.000000, 20.000000);
 	PlayerTextDrawSetSelectable		(playerid, twk_MoveB[playerid], true);
 
-	twk_MoveL[playerid]				=CreatePlayerTextDraw(playerid, 520.000000, 150.000000, "~>~");
+	twk_MoveL[playerid]				=CreatePlayerTextDraw(playerid, 520.000000, 150.000000, "+");
 	PlayerTextDrawBackgroundColor	(playerid, twk_MoveL[playerid], 175);
 	PlayerTextDrawFont				(playerid, twk_MoveL[playerid], 1);
 	PlayerTextDrawLetterSize		(playerid, twk_MoveL[playerid], 0.500000, 2.000000);
@@ -412,7 +412,7 @@ _twk_BuildUI(playerid)
 	PlayerTextDrawTextSize			(playerid, twk_MoveL[playerid], 534.000000, 20.000000);
 	PlayerTextDrawSetSelectable		(playerid, twk_MoveL[playerid], true);
 
-	twk_MoveR[playerid]				=CreatePlayerTextDraw(playerid, 560.000000, 150.000000, "~<~");
+	twk_MoveR[playerid]				=CreatePlayerTextDraw(playerid, 560.000000, 150.000000, "-");
 	PlayerTextDrawBackgroundColor	(playerid, twk_MoveR[playerid], 175);
 	PlayerTextDrawFont				(playerid, twk_MoveR[playerid], 1);
 	PlayerTextDrawLetterSize		(playerid, twk_MoveR[playerid], 0.500000, 2.000000);
