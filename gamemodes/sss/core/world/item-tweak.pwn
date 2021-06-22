@@ -12,19 +12,15 @@
 
 ==============================================================================*/
 
-
-#define MAX_MOVEMENT_RANGE	(1.5)
-
 #include <YSI_Coding\y_hooks>
 
 
 static
+
 Item:		twk_Item[MAX_PLAYERS] = {INVALID_ITEM_ID, ...},
 			twk_Tweaker[MAX_ITEM] = {INVALID_PLAYER_ID, ...},
 Float:		twk_Origin[MAX_PLAYERS][3],
-			twk_Locked[MAX_PLAYERS];
-
-static
+			twk_Locked[MAX_PLAYERS],
 PlayerText:	twk_MoveF[MAX_PLAYERS],
 PlayerText:	twk_MoveB[MAX_PLAYERS],
 PlayerText:	twk_MoveL[MAX_PLAYERS],
@@ -32,7 +28,10 @@ PlayerText:	twk_MoveR[MAX_PLAYERS],
 PlayerText:	twk_RotR[MAX_PLAYERS],
 PlayerText:	twk_RotL[MAX_PLAYERS],
 PlayerText:	twk_Unlock[MAX_PLAYERS],
-PlayerText:	twk_Done[MAX_PLAYERS];
+PlayerText:	twk_Done[MAX_PLAYERS],
+ 			twk_Click[MAX_PLAYERS],
+	   		twk_ClickTick[MAX_PLAYERS],
+Timer: 		twk_TimerClick[MAX_PLAYERS];
 
 forward OnItemTweakUpdate(playerid, itemid);
 forward OnItemTweakFinish(playerid, itemid);
@@ -94,7 +93,7 @@ stock TweakItem(playerid, Item:itemid)
 	_twk_ShowUI(playerid);
 	_twk_ToggleMouse(playerid, false);
 	ShowHelpTip(playerid, ls(playerid, "TIPTWEAKITM"), 10000);
-
+	CallLocalFunction("OnItemTweakUpdate", "dd", playerid, _:twk_Item[playerid]);
 	return 1;
 }
 
@@ -194,11 +193,10 @@ _twk_ToggleMouse(playerid, bool:toggle)
 		CancelSelectTextDraw(playerid);
 		PlayerTextDrawSetString(playerid, twk_Unlock[playerid], ls(playerid, "ITEMTWKBTNE"));
 	}
-}
 
-static twk_Click[MAX_PLAYERS],
-	   twk_ClickTick[MAX_PLAYERS],
-Timer: twk_TimerClick[MAX_PLAYERS];
+	PlayerTextDrawColor(playerid, twk_Click[playerid], -1);
+	stop twk_TimerClick[playerid];
+}
 
 hook OnPlayerClickPlayerTD(playerid, PlayerText:playertextid){
 	if(IsValidItem(twk_Item[playerid])) {
@@ -265,7 +263,7 @@ hook OnPlayerClickTextDraw(playerid, Text:clickedid)
 	{
 	 	if(twk_Locked[playerid])
 		{
-		    _twk_ToggleMouse(playerid, true);
+		    _twk_ToggleMouse(playerid, false);
 		}
 	}
 }
@@ -339,32 +337,28 @@ _twk_AdjustItemPos(playerid, Float:distance, Float:direction, Float:rotation)
 		Float:new_z,
 		Float:rx,
 		Float:ry,
-		Float:rz;
+		Float:rz,
+		modelid,
+		Float:radius;
 
 	GetItemPos(twk_Item[playerid], new_x, new_y, new_z);
 	GetItemRot(twk_Item[playerid], rx, ry, rz);
+	GetItemTypeModel(GetItemType(twk_Item[playerid]), modelid);
+	CA_GetModelBoundingSphere(modelid, radius, radius, radius, radius);
 
 	new_x += distance * floatsin(-(rz + direction), degrees);
 	new_y += distance * floatcos(-(rz + direction), degrees);
 	rz += rotation;
 
-	if(Distance(new_x, new_y, new_z, twk_Origin[playerid][0], twk_Origin[playerid][1], twk_Origin[playerid][2]) >= MAX_MOVEMENT_RANGE)
+	if(Distance(new_x, new_y, new_z, twk_Origin[playerid][0], twk_Origin[playerid][1], twk_Origin[playerid][2]) > radius)
 	{
 		stop twk_TimerClick[playerid];
 		ShowActionText(playerid, ls(playerid, "ITEMTWKTFAR"), 6000);
 		return 4;
 	}
 
-	// ShowActionText(playerid, sprintf("Pos: %f, %f, %f~n~Rot: %f, %f, %f", new_x, new_y, new_z, rx, ry, rz));
-
 	SetItemPos(twk_Item[playerid], new_x, new_y, new_z);
 	SetItemRot(twk_Item[playerid], rx, ry, rz);
-
-	new Float:x, Float:y, Float:z;
-    GetPlayerPos(playerid, x, y, z);
-    SetPlayerPos(playerid, x, y, z);
-    SetPlayerFacingAngle(playerid, GetAngleToPoint(x, y, new_x, new_y) + 20);
-	//SetCameraBehindPlayer(playerid);
 
 	CallLocalFunction("OnItemTweakUpdate", "dd", playerid, _:twk_Item[playerid]);
 
@@ -389,7 +383,7 @@ _twk_BuildUI(playerid)
 	twk_MoveB[playerid]				=CreatePlayerTextDraw(playerid, 540.000000, 170.000000, "-");
 	PlayerTextDrawBackgroundColor	(playerid, twk_MoveB[playerid], 175);
 	PlayerTextDrawFont				(playerid, twk_MoveB[playerid], 1);
-	PlayerTextDrawLetterSize		(playerid, twk_MoveB[playerid], 0.500000, 2.000000);
+	PlayerTextDrawLetterSize		(playerid, twk_MoveB[playerid], 0.750000, 2.000000);
 	PlayerTextDrawColor				(playerid, twk_MoveB[playerid], -1);
 	PlayerTextDrawSetOutline		(playerid, twk_MoveB[playerid], 0);
 	PlayerTextDrawSetProportional	(playerid, twk_MoveB[playerid], 1);
@@ -399,7 +393,7 @@ _twk_BuildUI(playerid)
 	PlayerTextDrawTextSize			(playerid, twk_MoveB[playerid], 554.000000, 20.000000);
 	PlayerTextDrawSetSelectable		(playerid, twk_MoveB[playerid], true);
 
-	twk_MoveL[playerid]				=CreatePlayerTextDraw(playerid, 520.000000, 150.000000, "+");
+	twk_MoveL[playerid]				=CreatePlayerTextDraw(playerid, 520.000000, 150.000000, "<");
 	PlayerTextDrawBackgroundColor	(playerid, twk_MoveL[playerid], 175);
 	PlayerTextDrawFont				(playerid, twk_MoveL[playerid], 1);
 	PlayerTextDrawLetterSize		(playerid, twk_MoveL[playerid], 0.500000, 2.000000);
@@ -412,7 +406,7 @@ _twk_BuildUI(playerid)
 	PlayerTextDrawTextSize			(playerid, twk_MoveL[playerid], 534.000000, 20.000000);
 	PlayerTextDrawSetSelectable		(playerid, twk_MoveL[playerid], true);
 
-	twk_MoveR[playerid]				=CreatePlayerTextDraw(playerid, 560.000000, 150.000000, "-");
+	twk_MoveR[playerid]				=CreatePlayerTextDraw(playerid, 560.000000, 150.000000, ">");
 	PlayerTextDrawBackgroundColor	(playerid, twk_MoveR[playerid], 175);
 	PlayerTextDrawFont				(playerid, twk_MoveR[playerid], 1);
 	PlayerTextDrawLetterSize		(playerid, twk_MoveR[playerid], 0.500000, 2.000000);
@@ -455,7 +449,7 @@ _twk_BuildUI(playerid)
 	PlayerTextDrawAlignment			(playerid, twk_Unlock[playerid], 2);
 	PlayerTextDrawBackgroundColor	(playerid, twk_Unlock[playerid], 175);
 	PlayerTextDrawFont				(playerid, twk_Unlock[playerid], 1);
-	PlayerTextDrawLetterSize		(playerid, twk_Unlock[playerid], 0.500000, 2.000000);
+	PlayerTextDrawLetterSize		(playerid, twk_Unlock[playerid], 0.400000, 2.000000);
 	PlayerTextDrawColor				(playerid, twk_Unlock[playerid], -1);
 	PlayerTextDrawSetOutline		(playerid, twk_Unlock[playerid], 0);
 	PlayerTextDrawSetProportional	(playerid, twk_Unlock[playerid], 1);
