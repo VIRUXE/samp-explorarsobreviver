@@ -373,7 +373,22 @@ hook OnItemRemovedFromPlayer(playerid, Item:itemid)
 	if(IsItemTypeCarry(GetItemType(itemid)))
 		SetPlayerSpecialAction(playerid, SPECIAL_ACTION_NONE);
 	
+	if(inv_GearActive[playerid])
+		UpdatePlayerGear(playerid);
+
 	return Y_HOOKS_CONTINUE_RETURN_0;
+}
+
+hook OnPlayerUnHolsterItem(playerid, Item:itemid)
+{
+	if(inv_GearActive[playerid])
+		UpdatePlayerGear(playerid);
+}
+
+hook OnPlayerUnHolsteredItem(playerid, Item:itemid)
+{
+	if(inv_GearActive[playerid])
+		UpdatePlayerGear(playerid);
 }
 
 hook OnPlayerClickPlayerTD(playerid, PlayerText:playertextid)
