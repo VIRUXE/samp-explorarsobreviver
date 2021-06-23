@@ -32,11 +32,15 @@ vehicle_industrial,	1.0
 4.0,	RadioPole
 
 # defences
-1.0,	ShipDoor
+4.0,	Door
+4.0,	MetPanel
 3.0,	MetalGate
-3.0,	MetPanel
-4.0,	CorPanel
-4.0,	CrateDoor
+3.0,	CrateDoor
+3.0,	CorPanel
+2.0,	DarkWood
+2.0,	InsulDoor
+2.0,	InsulPanel
+0.1,    MilitaryGate
 2.0,	WoodPanel
 
 # misc

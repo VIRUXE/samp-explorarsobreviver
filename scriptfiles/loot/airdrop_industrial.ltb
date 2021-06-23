@@ -15,10 +15,14 @@ airdrop_industrial, 1.0
 25.0,	Motor
 
 # construction
-30.0,	MetPanel
+25.0,	Door
+35.0,	MetPanel
 30.0,	MetalGate
-40.0,	CrateDoor
+25.0,	CrateDoor
 20.0,	CorPanel
-10.0,	ShipDoor
+20.0,	DarkWood
+20.0,	InsulDoor
+20.0,	InsulPanel
+5.0,    MilitaryGate
 20.0,	WoodPanel
 11.0,	RadioPole

@@ -298,7 +298,7 @@ ItemType:		item_MetPanel		= INVALID_ITEM_TYPE,
 ItemType:		item_MetalGate		= INVALID_ITEM_TYPE,
 ItemType:		item_CrateDoor		= INVALID_ITEM_TYPE,
 ItemType:		item_CorPanel		= INVALID_ITEM_TYPE,
-ItemType:		item_ShipDoor		= INVALID_ITEM_TYPE,
+ItemType:		item_DarkWood		= INVALID_ITEM_TYPE,
 ItemType:		item_InsulDoor		= INVALID_ITEM_TYPE,
 ItemType:		item_InsulPanel		= INVALID_ITEM_TYPE,
 ItemType:		item_MilitaryGate	= INVALID_ITEM_TYPE,
@@ -780,16 +780,16 @@ public OnScriptInit()
 	item_Dice			= DefineItemType("Dice",				"Dice",				1851,	5,	0.0, 0.0, 0.0,			0.136,	0.031958, 0.131180, -0.214385, 69.012298, 16.103448, 10.308629, true, .maxhitpoints = 5);
 	item_Dynamite		= DefineItemType("Dynamite",			"Dynamite",			1654,	2,	0.0, 0.0, 0.0,			0.0,	0.048000,0.106999,0.065999,0.000000,-3.399999,143.300079,	 .maxhitpoints = 2);
 // 120
-	item_Door			= DefineItemType("Wood Door",			"Door",				1497,	8,	270.0, 0.0, 0.0,		0.0,	-0.073999,0.401213,0.939999,337.887634,172.861953,68.495330, true, .buttonz = ITEM_FLOOR_OFFSET / 2, .maxhitpoints = 4);
-	item_MetPanel		= DefineItemType("Metal Panel",			"MetPanel",			1965,	10,	0.0, 90.0, 0.0,			0.0,	0.070050, 0.008440, -0.180277, 338.515014, 349.801025, 33.250347, true, .buttonz = ITEM_FLOOR_OFFSET / 3, .maxhitpoints = 5);
-	item_MetalGate		= DefineItemType("Metal Gate",			"MetalGate",		19303,	10,	270.0, 0.0, 0.0,		0.0,	-0.128823,0.758761,-0.508013,-19.839876,-10.353648,105.119079, true, .buttonz = ITEM_FLOOR_OFFSET / 2, .maxhitpoints = 4);
-	item_CrateDoor		= DefineItemType("Crate Door",			"CrateDoor",		3062,	9,	90.0, 90.0, 0.0,		0.0,	0.150177, -0.097238, -0.299014,  -19.439863, -10.153647, 105.119079, true, .buttonz = ITEM_FLOOR_OFFSET / 3, .maxhitpoints = 5);
-	item_CorPanel		= DefineItemType("Corrugated Metal",	"CorPanel",			2904,	10,	90.0, 90.0, 0.0,		0.0,	-0.365094, 1.004213, -0.665850, 337.887634, 172.861953, 68.495330, true, .buttonz = ITEM_FLOOR_OFFSET / 2, .maxhitpoints = 6);
-	item_ShipDoor		= DefineItemType("Ship Door",			"ShipDoor",			2944,	10,	0.0, 90.0, 0.0,		0.0,	0.134831, -0.039784, -0.298796, 337.887634, 172.861953, 162.198867, true, .buttonz = ITEM_FLOOR_OFFSET / 2, .maxhitpoints = 9);
-	item_InsulDoor		= DefineItemType("Insulated Doorway",	"InsulDoor",		19398,	8,	0.0, 90.0, 0.0,			0.0,	-0.087714,1.606874,-0.771602,-111.012359,172.861953,-169.801147, true, .maxhitpoints = 7);
-	item_InsulPanel		= DefineItemType("Insulated Panel",		"InsulPanel",		19371,	10,	0.0, 90.0, 0.0,			0.0,	-0.339715,1.431000,-0.739000,337.887634,170.962066,162.198867, true, .buttonz = -0.1, .maxhitpoints = 7);
-	item_MilitaryGate	= DefineItemType("Military Gate",		"MilitaryGate",		2929,	12, 90.0, 0.0, 0.0,			0.0,	-0.564093,1.766212,-0.924849,337.887634,172.861953,68.495330, true, .buttonz = -0.1, .maxhitpoints = 15);
-	item_WoodPanel		= DefineItemType("Wood Ramp",			"WoodPanel",		5153,	11,	360.0, 23.537, 0.0,		0.0,	-0.342762, 0.908910, -0.453703, 296.326019, 46.126548, 226.118209, true, .buttonz = -0.1, .maxhitpoints = 7);
+	item_Door			= DefineItemType("Wood Door",			"Door",				1497,	8,	90.0, 0.0, 0.0,			0.0,	-0.073999,0.401213,0.939999,337.887634,172.861953,68.495330, true, .buttonz = ITEM_FLOOR_OFFSET,  .maxhitpoints = 4);
+	item_MetPanel		= DefineItemType("Metal Panel",			"MetPanel",			2911,	10,	90.0, 0.0, 0.0,			0.0,	0.334049,-0.414559,-1.151276,338.515014,349.801025,104.950340, true, .buttonz = ITEM_FLOOR_OFFSET / 2,  .maxhitpoints = 3);
+	item_MetalGate		= DefineItemType("Metal Gate",			"MetalGate",		19303,	10,	90.0, 0.0, 0.0,			0.0,	-0.128823,0.758761,-0.508013,-19.839876,-10.353648,105.119079, true, .buttonz = ITEM_FLOOR_OFFSET / 2,  .maxhitpoints = 4);
+	item_CrateDoor		= DefineItemType("Crate Door",			"CrateDoor",		3062,	9,	90.0, 0.0, 0.0,			0.0,	0.150177, -0.097238, -0.299014,  -19.439863, -10.153647, 105.119079, true, .buttonz = ITEM_FLOOR_OFFSET / 3,  .maxhitpoints = 5);
+	item_CorPanel		= DefineItemType("Corrugated Metal",	"CorPanel",			2904,	10,	90.0, 90.0, 0.0,		0.0,	-0.365094, 1.004213, -0.665850, 337.887634, 172.861953, 68.495330, true, .buttonz = ITEM_FLOOR_OFFSET / 2,  .maxhitpoints = 6);
+	item_DarkWood		= DefineItemType("Dark Wooden Door",	"DarkWood",			19439,	9,	90.0, 90.0, 0.0,		0.0,	-0.094171,0.688217,-0.472795,-22.612369,169.761932,-15.201074, true, .buttonz = ITEM_FLOOR_OFFSET / 4,  .maxhitpoints = 5);
+	item_InsulDoor		= DefineItemType("Insulated Doorway",	"InsulDoor",		19398,	8,	0.0, 90.0, 0.0,			0.0,	-0.087714,1.606874,-0.771602,-111.012359,172.861953,-169.801147, true, .buttonz = ITEM_FLOOR_OFFSET / 9,  .maxhitpoints = 7);
+	item_InsulPanel		= DefineItemType("Insulated Panel",		"InsulPanel",		19371,	10,	0.0, 90.0, 0.0,			0.0,	-0.339715,1.431000,-0.739000,337.887634,170.962066,162.198867, true, .buttonz = ITEM_FLOOR_OFFSET / 9,  .maxhitpoints = 7);
+	item_MilitaryGate	= DefineItemType("Military Gate",		"MilitaryGate",		2929,	12, 90.0, 0.0, 0.0,			0.0,	-0.564093,1.766212,-0.924849,337.887634,172.861953,68.495330, true, .buttonz = ITEM_FLOOR_OFFSET / 7,  .maxhitpoints = 15);
+	item_WoodPanel		= DefineItemType("Wood Ramp",			"WoodPanel",		5153,	11,	0.0, 23.537, 0.0,		0.0,	-0.342762, 0.908910, -0.453703, 296.326019, 46.126548, 226.118209,  true, .buttonz = ITEM_FLOOR_OFFSET / 2, .maxhitpoints = 7);
 // 130
 	item_Flare			= DefineItemType("Flare",				"Flare",			345,	2,									.maxhitpoints = 2);
 	item_TntPhoneBomb	= DefineItemType("Phone Remote TNT",	"TntPhoneBomb",		1576,	2,	0.0, 0.0, 0.0,			0.0,	0.269091, 0.166367, 0.000000, 90.000000, 0.000000, 0.000000, .maxhitpoints = 2);
@@ -980,8 +980,8 @@ public OnScriptInit()
 // 300
 	item_BandanaWhite	= DefineItemType("Bandana",				"BandanaWh",		18919,	1,	0.0, 0.0, 0.0,			0.0,	0.095999, 0.064999, 0.000000, -1.300025, -67.899948, -92.999908);
 	item_BandanaPattern	= DefineItemType("Bandana",				"BandanaPat",		18920,	1,	0.0, 0.0, 0.0,			0.0,	0.095999, 0.064999, 0.000000, -1.300025, -67.899948, -92.999908);
-	item_Cuntainer		= DefineItemType("Cuntainer",			"Container",		19321,	15,	0.0, 180.0, 0.0,		0.0,	0.0, 0.0, 0.0, 0.0, 0.0, 0.0, false, .buttonz = ITEM_FLOOR_OFFSET / 3, .maxhitpoints = 20);
-	item_RedCrate		= DefineItemType("Red Crate",			"RedCrate",			2669,	15,	0.0, 180.0, 0.0,		0.0,	0.0, 0.0, 0.0, 0.0, 0.0, 0.0, false, .buttonz = ITEM_FLOOR_OFFSET / 3, .maxhitpoints = 20);
+	item_Cuntainer		= DefineItemType("Cuntainer",			"Container",		19321,	15,	0.0, 0.0, 0.0,		0.0,	0.0, 0.0, 0.0, 0.0, 0.0, 0.0, false, .buttonz = ITEM_FLOOR_OFFSET / 4,   .maxhitpoints = 20);
+	item_RedCrate		= DefineItemType("Red Crate",			"RedCrate",			2669,	15,	0.0, 0.0, 0.0,		0.0,	0.0, 0.0, 0.0, 0.0, 0.0, 0.0, false, .buttonz = ITEM_FLOOR_OFFSET / 4,  .maxhitpoints = 20);
 	item_MetalGate1		= DefineItemType("Large Gate",			"MetalGate1",		19870,	15,	90.0, 0.0, 0.0,			0.0,	0.0, 0.0, 0.0, 0.0, 0.0, 0.0, false, .buttonz = ITEM_FLOOR_OFFSET / 2, .maxhitpoints = 15);
 	item_LaserPointB	= DefineItemType("Laser Pointer",		"LaserPointB",		19080,	1,	0.0, 0.0, 90.0,			0.0,	0.066244, 0.010838, -0.000024, 6.443027, 287.441467, 0.000000, .maxhitpoints = 1);
 	item_LaserPointY	= DefineItemType("Laser Pointer",		"LaserPointY",		19084,	1,	0.0, 0.0, 90.0,			0.0,	0.066244, 0.010838, -0.000024, 6.443027, 287.441467, 0.000000, .maxhitpoints = 1);
@@ -1052,7 +1052,6 @@ public OnScriptInit()
 	SetItemTypeScrapValue(item_MetalGate, 		4);
 	SetItemTypeScrapValue(item_CrateDoor, 		4);
 	SetItemTypeScrapValue(item_CorPanel,		9);
-	SetItemTypeScrapValue(item_ShipDoor, 		12);
 	SetItemTypeScrapValue(item_MilitaryGate, 	4);
 	SetItemTypeScrapValue(item_Keypad,			1);
 	SetItemTypeScrapValue(item_Ammo9mm,			1);
@@ -1368,21 +1367,22 @@ public OnScriptInit()
 	DefineFoodItem(item_Steak,			4, 6.49,	1, 1, 1);
 	DefineFoodItem(item_Bread,			5, 2.34,	1, 0, 1);
 
-	// DEFENSIVE ITEM TYPE DEFINITIONS
-	DefineDefenceItem(item_Door,		0.0, 0.0, 0.0,		270.0, 0.0, 0.0, 	true);
-	DefineDefenceItem(item_MetPanel,	90.0, 90.0, 0.0,	0.0, 90.0, 0.0, 	true);
-	DefineDefenceItem(item_MetalGate,	0.0, 0.0, 0.0,		270.0, 0.0, 0.0, 	true);
-	DefineDefenceItem(item_CrateDoor,	0.0, 90.0, 0.0,		90.0, 90.0, 0.0, 	true);
-	DefineDefenceItem(item_CorPanel,	0.0, 90.0, 0.0,		90.0, 90.0, 0.0, 	true);
-	DefineDefenceItem(item_ShipDoor,	0.0, 0.0, 0.0,		0.0, 90.0, 0.0, 	true);
-	DefineDefenceItem(item_InsulDoor,	0.0, 0.0, 0.0,		0.0, 90.0, 0.0, 	false);
-	DefineDefenceItem(item_InsulPanel,	0.0, 0.0, 0.0,		0.0, 90.0, 0.0, 	true);
-	DefineDefenceItem(item_MilitaryGate,90.0, 0.0, 0.0,		0.0, 0.0, 0.0, 		true);
-	DefineDefenceItem(item_WoodPanel,	90.0, 0.0, 23.5,	0.0, 0.0, 0.0, 		false);
-	DefineDefenceItem(item_LargeFrame,	0.0, 0.0, 0.0,		0.0, 0.0, 0.0, 		false);
-	DefineDefenceItem(item_Cuntainer,	0.0, 180.0, 0.0,	0.0, 0.0, 0.0, 		false);
-	DefineDefenceItem(item_RedCrate,	0.0, 180.0, 0.0,	0.0, 0.0, 0.0, 		false);
-	DefineDefenceItem(item_MetalGate1,	0.0, 0.0, 0.0,		90.0, 0.0, 0.0, 	true);
+
+	// DEFENSIVE ITEM TYPE DEFINITIONS (VerticalRot,		HorizontalRot,	    zoffset,	movable);
+	DefineDefenceItem(item_Door,		0.0, 0.0, 0.0,		90.0, 0.0, 0.0,		0.031968, 	true);
+	DefineDefenceItem(item_MetPanel,	0.0, 0.0, 0.0,		90.0, 0.0, 0.0,     0.009655, 	true);
+	DefineDefenceItem(item_MetalGate,	0.0, 0.0, 0.0,		90.0, 0.0, 0.0,		1.242187, 	true);
+	DefineDefenceItem(item_CrateDoor,	0.0, 0.0, 0.0,		90.0, 0.0, 0.0,		1.397231, 	true);
+	DefineDefenceItem(item_CorPanel,	0.0, 90.0, 0.0,		90.0, 90.0, 0.0,	1.306163, 	true);
+	DefineDefenceItem(item_DarkWood,	0.0, 0.0, 90.0,		0.0, 0.0, 	0.0,	1.720000, 	false);
+	DefineDefenceItem(item_InsulDoor,	90.0, 90.0, 0.0,	180.0, 90.0, 0.0,	1.700000, 	false);
+	DefineDefenceItem(item_InsulPanel,	90.0, 90.0, 0.0,	180.0, 90.0, 0.0,	1.700000, 	true);
+	DefineDefenceItem(item_MilitaryGate,0.0, 0.0, 0.0,		90.0, 0.0, 0.0,		1.792033, 	true);
+	DefineDefenceItem(item_WoodPanel,	90.0, 0.0, 23.53,	0.0, 23.53, -23.53, 1.023437, 	true);
+	DefineDefenceItem(item_LargeFrame,	0.0, 0.0, 0.0,		0.0, 0.0, 0.0,		1.500000, 	false);
+	DefineDefenceItem(item_Cuntainer,	0.0, 0.0, 0.0,		0.0, 0.0, 0.0,		1.453499, 	false);
+	DefineDefenceItem(item_RedCrate,	0.0, 0.0, 0.0,		0.0, 0.0, 0.0,		1.210272, 	false);
+	DefineDefenceItem(item_MetalGate1,	0.0, 0.0, 0.0,		90.0, 0.0, 0.0,		1.765625, 	true);
 
 
 	// SAFEBOX ITEM TYPE DEFINITIONS
