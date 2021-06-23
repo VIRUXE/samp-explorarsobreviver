@@ -54,14 +54,12 @@
 #define MODIO_SCRIPT_EXIT_FIX			(1)
 #define MAX_MODIO_SESSION				(2048)
 
-// SS/button
-#define BTN_TELEPORT_FREEZE_TIME		(3000)
-
 // SS/inventory
 #define MAX_INVENTORY_SLOTS				(7)
 
 // SS/button
 #define BTN_MAX							Button:32768
+#define BTN_TELEPORT_FREEZE_TIME		(3000)
 
 // SS/item
 #define MAX_ITEM						Item:32768
@@ -69,6 +67,9 @@
 #define MAX_ITEM_NAME					(20)
 #define MAX_ITEM_TEXT					(64)
 #define MAX_CONTAINER_SLOTS				(100)
+
+// Optidraw
+#define OD_METHOD METHOD_BOX
 
 // pawn-errors
 // #define PRINT_BACKTRACES
@@ -145,6 +146,7 @@ public OnGameModeInit()
 #include <Pawn.RakNet>
 #include <colandreas> 
 #include <streamer>
+#include <optidraw>
 #include <nex-ac>
 #include <sqlitei>
 #include <formatex>
@@ -421,17 +423,20 @@ new stock
 #include "sss/core/world/tree.pwn"
 #include "sss/core/world/explosive.pwn"
 #include "sss/core/world/craft-construct.pwn"
-#include "sss/core/io/loot.pwn"
-#include "sss/core/io/item.pwn"
-#include "sss/core/io/defence.pwn"
-#include "sss/core/io/safebox.pwn"
-#include "sss/core/io/tree.pwn"
 
 /*
 	MODULE INITIALISATION CALLS
 	Calls module constructors to set up entity types.
 */
 #include "sss/core/server/init.pwn"
+
+// ITEM IO
+#include "sss/core/io/loot.pwn"
+#include "sss/core/io/item.pwn"
+#include "sss/core/io/defence.pwn"
+#include "sss/core/io/safebox.pwn"
+#include "sss/core/io/tree.pwn"
+#include "sss/core/io/craft.pwn"
 
 /*
 	CHILD SYSTEMS
@@ -536,6 +541,7 @@ new stock
 #include "sss/core/itemtype/holster.pwn"
 #include "sss/core/itemtype/laserpoint.pwn"
 #include "sss/core/itemtype/map.pwn"
+#include "sss/core/itemtype/bed.pwn"
 
 // ITEMS
 #include "sss/core/item/food.pwn"
@@ -551,7 +557,6 @@ new stock
 #include "sss/core/item/parachute.pwn"
 #include "sss/core/item/molotov.pwn"
 #include "sss/core/item/screwdriver.pwn"
-//#include "sss/core/item/torso.pwn"
 #include "sss/core/item/campfire.pwn"
 #include "sss/core/item/herpderp.pwn"
 #include "sss/core/item/stungun.pwn"

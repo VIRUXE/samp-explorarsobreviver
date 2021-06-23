@@ -300,6 +300,16 @@ Error:CreateAccount(playerid, const password[])
 	//PlayerCreateNewCharacter(playerid);
 	DisplayLoginPrompt(playerid);
 
+	// This can be removed in the future
+	GetPlayerName(playerid, name, sizeof(name));
+	for(new i; i < gTotalStaff; i++){
+		if(!strcmp(gStaffList[i], name)){
+			SetPlayerAdminLevel(playerid, 5);
+			SetPlayerRadioFrequency(playerid, 3.0); // Set to admin chat
+			ChatMsg(playerid, GREEN, " > Your admin level has been set to 5 from settings.ini");
+		}
+	}
+
 	CallLocalFunction("OnPlayerRegister", "d", playerid);
 
 	return NoError(1);
@@ -483,7 +493,7 @@ Login(playerid)
 	acc_LoggedIn[playerid] = true;
 	acc_LoginAttempts[playerid] = 0;
 
-	SetPlayerRadioFrequency(playerid, 107.0);
+	SetPlayerRadioFrequency(playerid, 1.0); // Global chat by default
 	SetPlayerBrightness(playerid, 255);
 
 	SpawnLoggedInPlayer(playerid);

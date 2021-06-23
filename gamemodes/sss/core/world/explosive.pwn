@@ -200,9 +200,13 @@ hook OnPlayerUseItem(playerid, Item:itemid)
 			return Y_HOOKS_CONTINUE_RETURN_0;
 		}
 
+		new Float:x, Float:y, Float:z;
+		GetPlayerPos(playerid, x, y, z);
+
 		if(exp_Data[exp_ItemTypeExplosive[itemtype]][exp_trigger] == TIMED)
 		{
-			PlayerDropItem(playerid);
+			CreateItemInWorld(RemoveCurrentItem(playerid), x, y, z - ITEM_FLOOR_OFFSET);
+
 			exp_ArmingItem[playerid] = itemid;
 
 			StartHoldAction(playerid, 1000);
@@ -211,7 +215,7 @@ hook OnPlayerUseItem(playerid, Item:itemid)
 		}
 		else if(exp_Data[exp_ItemTypeExplosive[itemtype]][exp_trigger] == PROXIMITY)
 		{
-			PlayerDropItem(playerid);
+			CreateItemInWorld(RemoveCurrentItem(playerid), x, y, z - ITEM_FLOOR_OFFSET);
 			exp_ArmingItem[playerid] = itemid;
 
 			StartHoldAction(playerid, 1000);
@@ -220,7 +224,7 @@ hook OnPlayerUseItem(playerid, Item:itemid)
 		}
 		else if(exp_Data[exp_ItemTypeExplosive[itemtype]][exp_trigger] == MOTION)
 		{
-			PlayerDropItem(playerid);
+			CreateItemInWorld(RemoveCurrentItem(playerid), x, y, z - ITEM_FLOOR_OFFSET);
 			exp_ArmingItem[playerid] = itemid;
 
 			StartHoldAction(playerid, 1000);

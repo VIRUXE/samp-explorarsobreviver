@@ -14,7 +14,7 @@
 
 
 #define DIRECTORY_LANGUAGES			"languages/"
-#define MAX_LANGUAGE				(12)
+#define MAX_LANGUAGE				(3)
 #define MAX_LANGUAGE_ENTRIES		(1024)
 #define MAX_LANGUAGE_KEY_LEN		(12)
 #define MAX_LANGUAGE_ENTRY_LENGTH	(768)

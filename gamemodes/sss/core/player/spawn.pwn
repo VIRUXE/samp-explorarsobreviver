@@ -69,8 +69,7 @@ hook OnGameModeInit()
 	spawn_BagType = GetItemTypeFromUniqueName(bagtype, true);
 
 	if(!IsValidItemType(spawn_BagType))
-		err("spawn/bagtype item name '%s' results in invalid item type %d", bagtype, _:spawn_BagType);
-
+		printf("spawn/bagtype item name '%s' results in invalid item type %d", bagtype, _:spawn_BagType);
 
 	GetSettingFloat("spawn/new-blood", 90.0, spawn_NewBlood);
 	GetSettingFloat("spawn/new-food", 80.0, spawn_NewFood);
@@ -347,35 +346,33 @@ PlayerSpawnNewCharacter(playerid, gender)
 		backpackitem = CreateItem(spawn_BagType);
 
 		GivePlayerBag(playerid, backpackitem);
+	}
 
-		for(new i; i < 4; i++)
-		{
-			if(!IsValidItemType(spawn_ResItems[i][e_itmobj_type]))
-				break;
+	new i = random(16);
 
-			tmpitem = CreateItem(spawn_ResItems[i][e_itmobj_type]);
+	if(!IsValidItemType(spawn_ResItems[i][e_itmobj_type]))
+		i = 0;
 
-			if(spawn_ResItems[i][e_itmobj_exdata] != 0)
-				SetItemExtraData(tmpitem, spawn_ResItems[i][e_itmobj_exdata]);
+	tmpitem = CreateItem(spawn_ResItems[i][e_itmobj_type]);
 
-			AddItemToInventory(playerid, tmpitem);
-		}
+	if(spawn_ResItems[i][e_itmobj_exdata] != 0)
+		SetItemExtraData(tmpitem, spawn_ResItems[i][e_itmobj_exdata]);
 
-		if(IsNewPlayer(playerid))
-		{
-			for(new i; i < 4; i++)
-			{
-				if(!IsValidItemType(spawn_NewItems[i][e_itmobj_type]))
-					break;
+	AddItemToInventory(playerid, tmpitem);
 
-				tmpitem = CreateItem(spawn_NewItems[i][e_itmobj_type]);
+	if(IsNewPlayer(playerid))
+	{
+		i = random(16);
 
-				if(spawn_NewItems[i][e_itmobj_exdata] != 0)
-					SetItemExtraData(tmpitem, spawn_NewItems[i][e_itmobj_exdata]);
+		if(!IsValidItemType(spawn_NewItems[i][e_itmobj_type]))
+			i = 0;
 
-				AddItemToInventory(playerid, tmpitem);
-			}
-		}
+		tmpitem = CreateItem(spawn_NewItems[i][e_itmobj_type]);
+
+		if(spawn_NewItems[i][e_itmobj_exdata] != 0)
+			SetItemExtraData(tmpitem, spawn_NewItems[i][e_itmobj_exdata]);
+
+		AddItemToInventory(playerid, tmpitem);
 	}
 
 	SetPlayerBrightness(playerid, 255);

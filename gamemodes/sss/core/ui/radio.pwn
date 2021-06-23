@@ -35,7 +35,7 @@ static
 
 ShowRadioUI(playerid)
 {
-	ClosePlayerInventory(playerid, true);
+	//ClosePlayerInventory(playerid, true);
 
 	PlayerTextDrawShow(playerid, RadioUI_Main[playerid]);
 	PlayerTextDrawShow(playerid, RadioUI_Strip[playerid]);
@@ -274,6 +274,14 @@ hook OnPlayerClickTextDraw(playerid, Text:clickedid)
 	}
 }
 
+hook OnPlayerOpenContainer(playerid, Container:containerid)
+{
+	if(rad_ViewingRadio[playerid])
+	{
+		return Y_HOOKS_BREAK_RETURN_1;
+	}
+	return Y_HOOKS_CONTINUE_RETURN_0;
+}
 
 hook OnPlayerOpenInventory(playerid)
 {
@@ -296,7 +304,6 @@ hook OnPlayerSelectExtraItem(playerid, item)
 	}
 	return Y_HOOKS_CONTINUE_RETURN_0;
 }
-
 
 hook OnPlayerConnect(playerid)
 {

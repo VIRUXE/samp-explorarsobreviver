@@ -42,7 +42,8 @@ static
 			tnt_Data[MAX_TENT][E_TENT_DATA],
 			tnt_ObjData[MAX_TENT][E_TENT_OBJECT_DATA],
 			tnt_ContainerTent[MAX_CONTAINER] = {-1, ...},
-Item:		tnt_CurrentTentItem[MAX_PLAYERS];
+Item:		tnt_CurrentTentItem[MAX_PLAYERS],
+			tnt_TweakID[MAX_PLAYERS];
 
 new
    Iterator:tnt_Index<MAX_TENT>;
@@ -438,14 +439,73 @@ StopRemovingTent(playerid)
 	return;
 }
 
+hook OnItemTweakUpdate(playerid, Item:itemid)
+{
+	if(tnt_CurrentTentItem[playerid] != INVALID_ITEM_ID)
+	{
+		new Float:x, Float:y, Float:z, Float:rz, tentid;
+		
+		GetItemPos(itemid, x, y, z);
+		GetItemRot(itemid, rz, rz, rz);
+
+		z += 0.4;
+		rz += 90.0;
+		tentid = tnt_TweakID[playerid];
+
+		SetDynamicObjectPos(tnt_ObjData[tentid][tnt_objSideR1],
+			x + (0.49 * floatsin(-rz + 270.0, degrees)),
+			y + (0.49 * floatcos(-rz + 270.0, degrees)), z);
+
+		SetDynamicObjectRot(tnt_ObjData[tentid][tnt_objSideR1], 0.0, 45.0, rz);
+
+		SetDynamicObjectPos(tnt_ObjData[tentid][tnt_objSideR2],
+			x + (0.48 * floatsin(-rz + 270.0, degrees)),
+			y + (0.48 * floatcos(-rz + 270.0, degrees)), z);
+
+		SetDynamicObjectRot(tnt_ObjData[tentid][tnt_objSideR2], 0.0, 45.0, rz);
+
+		SetDynamicObjectPos(tnt_ObjData[tentid][tnt_objSideL1],
+			x + (0.49 * floatsin(-rz + 90.0, degrees)),
+			y + (0.49 * floatcos(-rz + 90.0, degrees)), z);
+
+		SetDynamicObjectRot(tnt_ObjData[tentid][tnt_objSideL1], 0.0, -45.0, rz);
+
+		SetDynamicObjectPos(tnt_ObjData[tentid][tnt_objSideL2],
+			x + (0.48 * floatsin(-rz + 90.0, degrees)),
+			y + (0.48 * floatcos(-rz + 90.0, degrees)), z);
+
+		SetDynamicObjectRot(tnt_ObjData[tentid][tnt_objSideL2], 0.0, -45.0, rz);
+
+		SetDynamicObjectPos(tnt_ObjData[tentid][tnt_objPoleF],
+			x + (1.3 * floatsin(-rz, degrees)),
+			y + (1.3 * floatcos(-rz, degrees)), z + 0.48);
+
+		SetDynamicObjectRot(tnt_ObjData[tentid][tnt_objPoleF], 0.0, 0.0, rz);
+
+		SetDynamicObjectPos(tnt_ObjData[tentid][tnt_objPoleB],
+			x - (1.3 * floatsin(-rz, degrees)),
+			y - (1.3 * floatcos(-rz, degrees)), z + 0.48);
+
+		SetDynamicObjectRot(tnt_ObjData[tentid][tnt_objPoleB], 0.0, 0.0, rz);
+	}
+}
+
+hook OnItemTweakFinish(playerid, Item:itemid)
+{
+	if(tnt_CurrentTentItem[playerid] != INVALID_ITEM_ID)
+	{
+		StopBuildingTent(playerid);
+	}
+}
+
 hook OnHoldActionFinish(playerid)
 {
 	if(tnt_CurrentTentItem[playerid] != INVALID_ITEM_ID)
 	{
 		if(GetItemType(GetPlayerItem(playerid)) == item_Hammer)
 		{
-			CreateTentFromItem(tnt_CurrentTentItem[playerid]);
-			StopBuildingTent(playerid);
+			tnt_TweakID[playerid] = CreateTentFromItem(tnt_CurrentTentItem[playerid]);
+			TweakItem(playerid, tnt_CurrentTentItem[playerid]);
 		}
 
 		if(GetItemType(GetPlayerItem(playerid)) == item_Crowbar)
@@ -456,6 +516,7 @@ hook OnHoldActionFinish(playerid)
 				Float:z,
 				tentid,
 				count;
+
 			GetItemExtraData(tnt_CurrentTentItem[playerid], tentid);
 
 			if(!IsValidTent(tentid))

@@ -108,10 +108,13 @@ stock SetCraftSetConstructible(buildtime, ItemType:tool, CraftSet:craftset, Item
 hook OnPlayerUseItem(playerid, Item:itemid)
 {
 	new
-		Item:list[BTN_MAX_INRANGE] = {INVALID_ITEM_ID, ...},
-		size;
+		Item:list[MAX_CONSTRUCT_SET_ITEMS] = {INVALID_ITEM_ID, ...},
+		size,
+		Float:x, Float:y, Float:z;
 
-	size = GetPlayerNearbyItems(playerid, list);
+	GetPlayerPos(playerid, x, y, z);
+
+	size = GetItemsInRange(x, y, z, 1.7, list);
 
 	if(size > 1)
 	{
@@ -300,7 +303,7 @@ hook OnHoldActionFinish(playerid)
 		PlayerGainSkillExperience(playerid, uniqueid);
 
 		if(cons_Data[cons_CraftsetConstructSet[cons_Constructing[playerid]]][cons_defence])
-			ConvertItemToDefenceItem(itemid);
+			ConvertItemToDefenceItem(itemid, 1, playerid); // Vertical
 
 		if(cons_Data[cons_CraftsetConstructSet[cons_Constructing[playerid]]][cons_tweak])
 			TweakItem(playerid, itemid);

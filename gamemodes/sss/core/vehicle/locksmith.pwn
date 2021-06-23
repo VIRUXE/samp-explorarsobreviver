@@ -34,6 +34,7 @@ public OnPlayerInteractVehicle(playerid, vehicleid, Float:angle)
 			vehicletype;
 
 		itemid = GetPlayerItem(playerid);
+
 		itemtype = GetItemType(itemid);
 		vehicletype = GetVehicleType(vehicleid);
 		
@@ -57,8 +58,11 @@ public OnPlayerInteractVehicle(playerid, vehicleid, Float:angle)
 
 		if(itemtype == item_WheelLock)
 		{
-			new key;
-			GetItemArrayDataAtCell(itemid, key, 0);
+			new key, Error:e;
+			e = GetItemArrayDataAtCell(itemid, key, 0);
+			if(IsError(e))
+				return Y_HOOKS_BREAK_RETURN_1;
+
 			if(key == 0)
 			{
 				ShowActionText(playerid, ls(playerid, "LOCKCHNOKEY", true), 3000);
@@ -79,9 +83,13 @@ public OnPlayerInteractVehicle(playerid, vehicleid, Float:angle)
 		{
 			new
 				keyid,
-				vehiclekey = GetVehicleKey(vehicleid);
+				vehiclekey = GetVehicleKey(vehicleid),
+				Error:e;
 
-			GetItemArrayDataAtCell(itemid, keyid, 0);
+			e = GetItemArrayDataAtCell(itemid, keyid, 0);
+
+			if(IsError(e))
+				return Y_HOOKS_BREAK_RETURN_1;
 
 			if(keyid == 0)
 			{
@@ -224,30 +232,40 @@ hook OnItemNameRender(Item:itemid, ItemType:itemtype)
 {
 	if(itemtype == item_Key)
 	{
-		new value;
-		GetItemArrayDataAtCell(itemid, value, 0);
-		if(value != 0)
-		{
-			new
-				vehicletype,
-				vehicletypename[MAX_VEHICLE_TYPE_NAME];
+		new value, Error:e;
+		e = GetItemArrayDataAtCell(itemid, value, 0);
 
-			GetItemArrayDataAtCell(itemid, vehicletype, 1);
-			GetVehicleTypeName(vehicletype, vehicletypename);
-			SetItemNameExtra(itemid, vehicletypename);
+		if(!IsError(e))
+		{
+			if(value != 0)
+			{
+				new
+					vehicletype,
+					vehicletypename[MAX_VEHICLE_TYPE_NAME];
+
+				e = GetItemArrayDataAtCell(itemid, vehicletype, 1);
+				if(!IsError(e))
+				{
+					GetVehicleTypeName(vehicletype, vehicletypename);
+					SetItemNameExtra(itemid, vehicletypename);
+				}
+			}
 		}
 	}
 	else if(itemtype == item_WheelLock)
 	{
-		new value;
-		GetItemArrayDataAtCell(itemid, value, 0);
-		if(value == 0)
+		new value, Error:e;
+		e = GetItemArrayDataAtCell(itemid, value, 0);
+		if(!IsError(e))
 		{
-			SetItemNameExtra(itemid, "Uncut");
-		}
-		else
-		{
-			SetItemNameExtra(itemid, "Cut");
+			if(value == 0)
+			{
+				SetItemNameExtra(itemid, "Uncut");
+			}
+			else
+			{
+				SetItemNameExtra(itemid, "Cut");
+			}
 		}
 	}
 }
@@ -276,19 +294,23 @@ hook OnPlayerConstructed(playerid, consset, Item:result)
 			count,
 			Item:tmp,
 			data,
-			Item:itemid = INVALID_ITEM_ID;
+			Item:itemid = INVALID_ITEM_ID,
+			Error:e;
 
 		GetPlayerConstructionItems(playerid, items, count);
 
 		for(new i; i < count; i++)
 		{
 			tmp = items[i][craft_selectedItemID];
-			GetItemArrayDataAtCell(tmp, data, 0);
+			e = GetItemArrayDataAtCell(tmp, data, 0);
 
-			if(GetItemType(tmp) == item_Key && data > 0)
+			if(!IsError(e))
 			{
-				itemid = tmp;
-				break;
+				if(GetItemType(tmp) == item_Key && data > 0)
+				{
+					itemid = tmp;
+					break;
+				}
 			}
 		}
 
@@ -296,10 +318,14 @@ hook OnPlayerConstructed(playerid, consset, Item:result)
 		{
 			SetItemArrayDataSize(result, 2);
 			new v1, v2;
-			GetItemArrayDataAtCell(itemid, v1, 0);
-			GetItemArrayDataAtCell(itemid, v2, 1);
-			SetItemArrayDataAtCell(result, v1, 0);
-			SetItemArrayDataAtCell(result, v2, 1);
+
+			e = GetItemArrayDataAtCell(itemid, v1, 0);
+			if(!IsError(e))
+				SetItemArrayDataAtCell(result, v1, 0);
+
+			e = GetItemArrayDataAtCell(itemid, v2, 1);
+			if(IsError(e))
+				SetItemArrayDataAtCell(result, v2, 1);
 		}
 		else
 		{

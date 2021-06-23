@@ -135,6 +135,9 @@ hook OnItemDestroy(Item:itemid)
 
 SafeboxSaveCheck(Item:itemid)
 {
+	if(GetItemType(itemid) == item_Workbench)
+	    return 0;
+
 	new
 		ret = SaveSafeboxItem(itemid),
 		uname[MAX_ITEM_NAME];
