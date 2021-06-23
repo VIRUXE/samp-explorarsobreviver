@@ -29,7 +29,7 @@ PlayerText:	twk_RotR[MAX_PLAYERS],
 PlayerText:	twk_RotL[MAX_PLAYERS],
 PlayerText:	twk_Unlock[MAX_PLAYERS],
 PlayerText:	twk_Done[MAX_PLAYERS],
- 			twk_Click[MAX_PLAYERS],
+PlayerText: twk_Click[MAX_PLAYERS],
 	   		twk_ClickTick[MAX_PLAYERS],
 Timer: 		twk_TimerClick[MAX_PLAYERS];
 
@@ -217,7 +217,7 @@ hook OnPlayerClickPlayerTD(playerid, PlayerText:playertextid){
 			if(PlayerText:playertextid != twk_Unlock[playerid] && PlayerText:playertextid != twk_Done[playerid])
 				twk_ClickTick[playerid] = GetTickCount();
 				
-			twk_Click[playerid] = _:playertextid;
+			twk_Click[playerid] = playertextid;
 			stop twk_TimerClick[playerid];
 			twk_TimerClick[playerid] = defer TweakClick(playerid, _:playertextid);
 		}
