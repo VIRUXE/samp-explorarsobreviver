@@ -1006,8 +1006,8 @@ timer MoveDefence[1000](itemid, playerid)
 	SetItemPos(Item:itemid, ix, iy, iz);
 	SetItemRot(Item:itemid, rx, ry, rz);
 
-	CA_DestroyObject(def_Col[itemid]);
-	CreateDefenceColision(itemid);
+	CA_DestroyObject(def_Col[Item:itemid]);
+	CreateDefenceColision(Item:itemid);
 
 	CallLocalFunction("OnDefenceMove", "d", itemid);
 
