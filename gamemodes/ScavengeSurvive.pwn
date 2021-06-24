@@ -285,7 +285,8 @@ native WP_Hash(buffer[], len, const str[]);
 
 // Icons (Same id for iconid and markertype)
 #define SUPPLY_CRATE_ICON			(38)		
-#define WEAPON_CACHE_ICON			(18)	
+#define WEAPON_CACHE_ICON			(18)
+#define PLAYER_BED_ICON				(35)
 
 
 // Key text
@@ -545,8 +546,8 @@ new stock
 #include "sss/core/itemtype/masks.pwn"
 #include "sss/core/itemtype/holster.pwn"
 #include "sss/core/itemtype/laserpoint.pwn"
-#include "sss/core/itemtype/map.pwn"
 #include "sss/core/itemtype/bed.pwn"
+#include "sss/core/itemtype/map.pwn"
 
 // ITEMS
 #include "sss/core/item/food.pwn"

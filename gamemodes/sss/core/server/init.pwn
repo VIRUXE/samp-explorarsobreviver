@@ -1001,7 +1001,7 @@ public OnScriptInit()
 	item_CapBack2		= DefineItemType("Boné",				"CapBack2",			18940,	1,	180.0, 0.0, 0.0,		0.0,	0.062216, 0.055396, 0.001138, 90.000000, 0.000000, 180.000000, .maxhitpoints = 1);
 // 320
 	item_CapBack1		= DefineItemType("Boné",				"CapBack1",			18939,	1,	180.0, 0.0, 0.0,		0.0,	0.062216, 0.055396, 0.001138, 90.000000, 0.000000, 180.000000, .maxhitpoints = 1);
-	item_Map			= DefineItemType("Map",					"Map",	  			19167,	1,	0.0, 0.0, 0.0,			0.2,	0.062216, 0.055396, 0.001138, 90.000000, 0.000000, 180.000000, .maxhitpoints = 1);
+	item_Map			= DefineItemType("Map",					"Map",	  			19167,	1,	0.0, 0.0, 0.0,			0.05,	0.062216, 0.055396, 0.001138, 90.000000, 0.000000, 180.000000, .maxhitpoints = 1);
 	item_Bed			= DefineItemType("Bed",					"Bed",				1800,	12, 0.0, 0.0, 0.0, 0.0,    0.0, 0.0, 0.0,     0.0, 0.0, 0.0, .maxhitpoints = 10);
     
 

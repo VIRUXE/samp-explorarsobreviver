@@ -189,7 +189,8 @@ FUELCANFULL=Fuel can is full
 FUELNOTPETR=Fuel can does not contain petrol
 DISARMEDBOM=Disarmed explosive
 TREECUTINFO=Hold {KEYTEXT_INTERACT} with a %s to harvest %s
-
+BEDDESTRO= > Sua cama foi destruida.
+SLEPHOUR=~R~Voce so pode dormir a noite.
 TUTORPROMPT=Play tutorial
 TUTOREXITCM=To exit the tutorial, type /exit.
 TUTORIEXIT=You left the tutorial, to return you will have to die.

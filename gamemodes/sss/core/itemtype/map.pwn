@@ -15,7 +15,7 @@
 
 #include <YSI_Coding\y_hooks>
 
-new MiniMapOverlay;
+static MiniMapOverlay;
 
 hook OnScriptInit()
 	MiniMapOverlay = GangZoneCreate(-6000, -6000, 6000, 6000);
@@ -24,24 +24,25 @@ hook OnPlayerSpawn(playerid) {
 	GangZoneShowForPlayer(playerid, MiniMapOverlay, 0x000000FF);
 }
 
-hook OnPlayerGetItem(playerid, Item:itemid){
-	if(GetItemType(itemid) == item_Map){
-		GangZoneHideForPlayer(playerid, MiniMapOverlay);
-	}
-}
-
 UpdatePlayerMap(playerid){
 	if(IsPlayerMap(playerid)){
 		GangZoneHideForPlayer(playerid, MiniMapOverlay);
-		new Float:x, Float:y, Float:z;
-		GetLastSupplyPos(x, y, z);
-		SetPlayerMapIcon(playerid, SUPPLY_CRATE_ICON, x, y, z, SUPPLY_CRATE_ICON, 0, MAPICON_GLOBAL);
-		GetLastWeaponCachePos(x, y, z);
-		SetPlayerMapIcon(playerid, WEAPON_CACHE_ICON, x, y, z, WEAPON_CACHE_ICON, 0, MAPICON_GLOBAL);
+		static Float:x, Float:y, Float:z;
+
+		if(GetLastSupplyPos(x, y, z))
+			SetPlayerMapIcon(playerid, SUPPLY_CRATE_ICON, x, y, z, SUPPLY_CRATE_ICON, 0, MAPICON_GLOBAL);
+
+		if(GetLastWeaponCachePos(x, y, z))
+			SetPlayerMapIcon(playerid, WEAPON_CACHE_ICON, x, y, z, WEAPON_CACHE_ICON, 0, MAPICON_GLOBAL);
+
+		if(GetPlayerBedPos(playerid, x, y, z))
+			SetPlayerMapIcon(playerid, PLAYER_BED_ICON, x, y, z, PLAYER_BED_ICON, 0, MAPICON_GLOBAL);
+			
 	} else {
 		GangZoneShowForPlayer(playerid, MiniMapOverlay, 0x000000FF);
 		RemovePlayerMapIcon(playerid, SUPPLY_CRATE_ICON);
 		RemovePlayerMapIcon(playerid, WEAPON_CACHE_ICON);
+		RemovePlayerMapIcon(playerid, PLAYER_BED_ICON);
 	}
 }
 
@@ -60,6 +61,8 @@ hook OnPlayerCloseInventory(playerid)
 hook OnItemRemovedFromPlayer(playerid, Item:itemid)
 	UpdatePlayerMap(playerid);
 
+hook OnPlayerGetItem(playerid, Item:itemid)
+	UpdatePlayerMap(playerid);
 
 stock bool:IsPlayerMap(playerid) {
 	new Item:itemid = GetPlayerItem(playerid);

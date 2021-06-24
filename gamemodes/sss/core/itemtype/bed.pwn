@@ -15,40 +15,110 @@
 
 #include <YSI_Coding\y_hooks>
 
-#define TIME_SLEEP 	(30)
+static 
+Item:	Bed_Item[MAX_PLAYERS] = {Item:INVALID_ITEM_ID, ...},
+Float:	Bed_Pos[MAX_PLAYERS][3];
 
-static Item:Bed_Item[MAX_PLAYERS] = {Item:INVALID_ITEM_ID, ...};
+hook OnPlayerConnect(playerid)
+	Bed_Pos[playerid][0] = Bed_Pos[playerid][1] = Bed_Pos[playerid][2] = 0.0;
 
-BedCheck(playerid, Item:itemid){
+hook OnPlayerSave(playerid, filename[])
+	modio_push(filename, _T<B,E,D,P>, 3, _:Bed_Pos[playerid]);
+
+hook OnPlayerLoad(playerid, filename[])
+	modio_read(filename, _T<B,E,D,P>, 3, _:Bed_Pos[playerid]);
+
+hook OnPlayerSpawnNewChar(playerid){
+	if(Bed_Pos[playerid][0] != 0.0){
+		new 
+			Item:item[BTN_MAX_INRANGE],
+			size;
+	
+		size = GetItemsInRange(Bed_Pos[playerid][0], Bed_Pos[playerid][1], Bed_Pos[playerid][2], 1.0, item);
+
+		if(size > 0) {
+			for(new i; i < size; i++)
+			{
+				if(!IsValidItem(item[i]))
+					continue;
+
+				if(GetItemType(item[i]) != item_Bed)
+					continue;
+
+				BedCheck(playerid, item[i], true);
+				return 1;
+			}
+		}
+
+		ChatMsgLang(playerid, RED, "BEDDESTRO");
+		Bed_Pos[playerid][0] = Bed_Pos[playerid][1] = Bed_Pos[playerid][2] = 0.0;
+	}
+	return 1;
+}
+
+BedCheck(playerid, Item:itemid, bool:spawn = false){
 	if(!IsPlayerSpawned(playerid))
 	    return 0;
 
 	if(Bed_Item[playerid] != INVALID_ITEM_ID)
 		return 0;
 
-	new 
-		Float:x, Float:y, Float:z,
-		Float:rz, Float:tmp;
+	if(!spawn){
+		new hour, minute;
+		gettime(hour, minute);
+		
+		if(hour < 18 && hour > 6) {
+			ShowActionText(playerid, ls(playerid, "SLEPHOUR"), 6000);
+			return 0;
+		}
+	}
 
- 	GetItemPos(itemid, x, y, z);
+	foreach(new i : Player)
+		if(Bed_Item[i] == itemid)
+			return 0;
+			
+	new Float:rz, Float:tmp;
+
+	GetItemPos(itemid, Bed_Pos[playerid][0], Bed_Pos[playerid][1], Bed_Pos[playerid][2]);
     GetItemRot(itemid, rz, rz, rz);
 
 	SetPlayerFacingAngle(playerid, rz + 90.0);
 
 	// Any collision between player and bed. Cancel action
-	if(CA_RayCastLine(x, y, z,
-		x + 2.45 * floatsin(-rz + 7.0, degrees), y + 2.30 * floatcos(-rz, degrees), z + 1.0, tmp, tmp, tmp))
-		return 0;
+	if(CA_RayCastLine(Bed_Pos[playerid][0], Bed_Pos[playerid][1], Bed_Pos[playerid][2],
+		Bed_Pos[playerid][0] + 2.45 * floatsin(-rz + 7.0, degrees),
+		Bed_Pos[playerid][1] + 2.30 * floatcos(-rz, degrees), Bed_Pos[playerid][2] + 1.0, tmp, tmp, tmp)) 
+			return 0;
 
-	SetPlayerPos(playerid, x + 2.45 * floatsin(-rz + 7.0, degrees), y + 2.30 * floatcos(-rz, degrees), z + 1.0);
+	SetPlayerPos(playerid,
+		Bed_Pos[playerid][0] + 2.45 * floatsin(-rz + 7.0, degrees),
+		Bed_Pos[playerid][1] + 2.30 * floatcos(-rz, degrees),
+		Bed_Pos[playerid][2] + 1.0);
+
+	ApplyAnimation(playerid,"CRACK","crckdeth2", 4.1, 0, 1, 1, 1, 0, 1);
+
     Bed_Item[playerid] = itemid;
-    StartHoldAction(playerid, TIME_SLEEP * 1000);
+	SetPlayerBrightness(playerid, 255);
+	
+    StartHoldAction(playerid, spawn ? (5 * 1000) : (30 * 1000) );
 	return 1;
 }
 
 hook OnHoldActionUpdate(playerid, progress){
 	if(IsValidItem(Bed_Item[playerid])) {
-		ApplyAnimation(playerid,"CRACK","crckdeth2", 10.1, 0, 1, 1, 1, 0, 1);
+		if(GetPlayerAnimationIndex(playerid) != 386){
+			new Float:rz;
+
+			GetItemRot(Bed_Item[playerid], rz, rz, rz);
+
+			SetPlayerPos(playerid,
+				Bed_Pos[playerid][0] + 2.45 * floatsin(-rz + 7.0, degrees),
+				Bed_Pos[playerid][1] + 2.30 * floatcos(-rz, degrees),
+				Bed_Pos[playerid][2] + 1.0);
+
+			ApplyAnimation(playerid,"CRACK","crckdeth2", 4.1, 0, 1, 1, 1, 0, 1);
+		}
+		SetPlayerBrightness(playerid, 200 - (progress / (300)) );
 		return Y_HOOKS_BREAK_RETURN_1;
 	}
 
@@ -57,14 +127,18 @@ hook OnHoldActionUpdate(playerid, progress){
 
 hook OnHoldActionFinish(playerid){
 	if(IsValidItem(Bed_Item[playerid])) {
-		ClearAnimations(playerid);
-		new Float:x, Float:y, Float:z;
-		GetItemPos(Bed_Item[playerid], x, y, z);
-		SetPlayerPos(playerid, x, y, z + 0.9);
+		GetItemPos(Bed_Item[playerid], Bed_Pos[playerid][0], Bed_Pos[playerid][1], Bed_Pos[playerid][2]);
+
+		SetPlayerPos(playerid, Bed_Pos[playerid][0], Bed_Pos[playerid][1], Bed_Pos[playerid][2] + 0.9);
+
 		Bed_Item[playerid] = INVALID_ITEM_ID;
 
-		// TODO: Implement more functions
 		SetPlayerHP(playerid, 100.0);
+		SetPlayerFP(playerid, GetPlayerFP(playerid) + 30);
+
+		UpdatePlayerMap(playerid);
+
+		ClearAnimations(playerid);
 
 		return Y_HOOKS_BREAK_RETURN_1;
 	}
@@ -95,6 +169,21 @@ hook OnPlayerUseItemWithItem(playerid, Item:itemid, Item:withitemid)
 		return Y_HOOKS_BREAK_RETURN_1;
 	}
 	return Y_HOOKS_CONTINUE_RETURN_0;
+}
+
+stock GetPlayerBedPos(playerid, &Float:x, &Float:y, &Float:z)
+{
+	if(!IsPlayerConnected(playerid))
+		return 0;
+
+	if(Bed_Pos[playerid][0] == 0.0)
+		return 0;
+
+	x = Bed_Pos[playerid][0];
+	y = Bed_Pos[playerid][1];
+	z = Bed_Pos[playerid][2];
+
+	return 1;
 }
 
 stock IsPlayerSleeping(playerid)
