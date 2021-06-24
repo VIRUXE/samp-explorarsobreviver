@@ -873,7 +873,7 @@ public OnScriptInit()
 	item_WoodLog		= DefineItemType("Wood Log",			"WoodLog",			19793,	1,	0.0, 0.0, 0.0,			0.000,	0.034999, 0.018998, -0.150000,  -74.199989, -110.000022, -54.900020, .maxhitpoints = 1);
 	item_Sledgehammer	= DefineItemType("Sledgehammer",		"Sledgehammer",		19631,	7,	0.0, 90.0, 0.0,			0.000,	0.075000, -0.004000, 0.269000,  -84.600021, -70.899993, 0.000000, .maxhitpoints = 7);
 	item_RawFish		= DefineItemType("Fish",				"RawFish",			19630,	9,	0.0, 0.0, 0.0,			0.000,	0.047000, 0.021999, 0.083000,  -84.299980, -75.299972, 103.100028, .maxhitpoints = 9);
-	item_Spanner		= DefineItemType("Wrench",				"Spanner",			19627,	1,	0.0, 0.0, 0.0,			0.000,	0.073000, 0.022000, 0.035000,  -84.299980, -75.299972, 103.100028, .maxhitpoints = 1);
+	item_Spanner		= DefineItemType("Spanner",				"Spanner",			19627,	1,	0.0, 0.0, 0.0,			0.000,	0.073000, 0.022000, 0.035000,  -84.299980, -75.299972, 103.100028, .maxhitpoints = 1);
 	item_Suitcase		= DefineItemType("Suitcase",			"Suitcase",			19624,	4,	0.0, 0.0, 0.0,			0.371,	0.086000, 0.022000, 0.022000,  -84.299980, -75.299972, 103.100028, .longpickup = true, .maxhitpoints = 4);
 	item_OilCan			= DefineItemType("Oilcan",				"OilCan",			19621,	2,	0.0, 0.0, 0.0,			0.060,	0.075999, 0.022000, 0.011000,  7.800007, -11.899963, 81.800025, .maxhitpoints = 2);
 	item_RadioBox		= DefineItemType("Small Amp",			"RadioBox",			19612,	8,	0.0, 0.0, 0.0,			-0.020,	-0.090000, 0.132999, -0.202000,  63.499916, 108.599983, 95.499877, .maxhitpoints = 8);
@@ -1002,7 +1002,7 @@ public OnScriptInit()
 // 320
 	item_CapBack1		= DefineItemType("Boné",				"CapBack1",			18939,	1,	180.0, 0.0, 0.0,		0.0,	0.062216, 0.055396, 0.001138, 90.000000, 0.000000, 180.000000, .maxhitpoints = 1);
 	item_Map			= DefineItemType("Map",					"Map",	  			19167,	1,	0.0, 0.0, 0.0,			0.2,	0.062216, 0.055396, 0.001138, 90.000000, 0.000000, 180.000000, .maxhitpoints = 1);
-	item_Bed			= DefineItemType("Bed",					"Bed",			1800,	12, 0.0, 0.0, 0.0, 0.0,    0.0, 0.0, 0.0,     0.0, 0.0, 0.0, .longpickup = true, .maxhitpoints = 10);
+	item_Bed			= DefineItemType("Bed",					"Bed",				1800,	12, 0.0, 0.0, 0.0, 0.0,    0.0, 0.0, 0.0,     0.0, 0.0, 0.0, .maxhitpoints = 10);
     
 
 	// SETTING ITEM TYPE SCRAP VALUE
