@@ -24,8 +24,8 @@
 		"Southclaws/samp-ini",
 		"Southclaws/samp-whirlpool:v1.0.0",
 		"Zeex/samp-plugin-crashdetect:v4.20",
-		"oscar-broman/sqlitei",
 		"oscar-broman/md-sort",
+		"nicolasmenegoni/sqlitei",
 		"Southclaws/modio",
 		"ScavengeSurvive/personal-space",
 		"ScavengeSurvive/button",
@@ -34,8 +34,6 @@
 		"ScavengeSurvive/inventory",
 		"ScavengeSurvive/container",
 		"ScavengeSurvive/item-array-data",
-		"ScavengeSurvive/container-dialog",
-		"ScavengeSurvive/inventory-dialog",
 		"ScavengeSurvive/craft",
 		"Southclaws/pawn-fsutil:1.3.0",
 		"Southclaws/samp-weapon-data",
@@ -43,7 +41,12 @@
 		"Southclaws/samp-zipline",
 		"Southclaws/samp-ladders",
 		"NexiusTailer/Nex-AC",
-		"NexiusTailer/MapFix"
+		"NexiusTailer/MapFix",
+		"Brunoo16/samp-attachments-fix",
+		"samp-anti-cheat/OnPlayerTurnUpsideDown",
+		"samp-anti-cheat/no-reload",
+		"samp-anti-cheat/rapid-fire",
+		"YashasSamaga/BA-AntiAimbot"
 	],
 	"build": {
 		"args": [
@@ -59,10 +62,11 @@
 	},
 	"runtime": {
 		"bind": "0.0.0.0",
-		"port": 6666,
-		"maxplayers": 32,
-		"language": "Portugues",
+		"port": 7777,
+		"maxplayers": 500,
+		"language": "Portugues/English",
 		"rcon_password": "166",
+		"password":	"x9",
 		"hostname": "[PC/Mobile] Explorar e Sobreviver [Em Breve]",
 		"extra": {
 			"long_call_time": "0",

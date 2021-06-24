@@ -96,7 +96,6 @@ IRawPacket:ID_CUSTOM_SYNC(playerid, BitStream:bs)
         PlayerMobileInfo[playerid][isMobile] = true; // system for newer version
 		PlayerMobileInfo[playerid][isHaveAutoaim] = bool:autoaim;
 	}
-	else printf("Mobile: Send RPCID: %d", rpcid); // Test
 	return 1;
 }
 

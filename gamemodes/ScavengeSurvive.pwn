@@ -27,7 +27,7 @@
 ==============================================================================*/
 
 #undef MAX_PLAYERS
-#define MAX_PLAYERS						(32)
+#define MAX_PLAYERS						(500)
 
 // YSI
 #define _DEBUG							0
@@ -159,6 +159,7 @@ public OnGameModeInit()
 #include <ini>
 #include <modio>
 #include <personal-space>
+#include <new-action-text>
 #include <button>
 #include <door>
 #include <item>
@@ -166,8 +167,8 @@ public OnGameModeInit()
 #include <container>
 #include <item-array-data>
 #include <item-serializer>
-#include <inventory-dialog>
-#include <container-dialog>
+#include <new-inventory-dialog>
+#include <new-container-dialog>
 #include <craft>
 #include <debug-labels>
 #include <weapon-data>
@@ -175,8 +176,10 @@ public OnGameModeInit()
 #include <zipline>
 #include <ladders>
 #include <attachment-fix>
-#include <optud>
 #include <BustAim>
+#include <no-reload>
+#include <rapid-fire>
+#include <optud>
 #include <discord-connector>
 #include <mapfix>
 
@@ -534,7 +537,6 @@ new stock
 #include "sss/core/world/item-tweak.pwn"
 
 // ITEM TYPE CATEGORIES
-#include "sss/core/itemtype/tent.pwn"
 #include "sss/core/itemtype/defences.pwn"
 #include "sss/core/itemtype/furniture.pwn"
 #include "sss/core/itemtype/liquid-container.pwn"
@@ -545,9 +547,6 @@ new stock
 #include "sss/core/itemtype/medical.pwn"
 #include "sss/core/itemtype/masks.pwn"
 #include "sss/core/itemtype/holster.pwn"
-#include "sss/core/itemtype/laserpoint.pwn"
-#include "sss/core/itemtype/bed.pwn"
-#include "sss/core/itemtype/map.pwn"
 
 // ITEMS
 #include "sss/core/item/food.pwn"
@@ -582,6 +581,10 @@ new stock
 #include "sss/core/item/refine-machine.pwn"
 #include "sss/core/item/water-purifier.pwn"
 #include "sss/core/item/plot-pole.pwn"
+#include "sss/core/item/tent.pwn"
+#include "sss/core/item/laserpoint.pwn"
+#include "sss/core/item/bed.pwn"
+#include "sss/core/item/map.pwn"
 #include "sss/core/item/trash.pwn"
 
 // HATS

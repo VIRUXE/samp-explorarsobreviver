@@ -286,13 +286,56 @@ public OnCheatWarning(playerid, const ip_address[], type, code, code2, count)
 	}
 	return 1;
 }
+
+/*==============================================================================
+
+	Anti-rapid-fire
+
+==============================================================================*/
+
+forward OnAntiCheatFireRate(playerid, weaponid, interval);
+public OnAntiCheatFireRate(playerid, weaponid, interval)
+{
+	new
+		name[MAX_PLAYER_NAME],
+		Float:px,
+		Float:py,
+		Float:pz;
+
+	GetPlayerName(playerid, name, MAX_PLAYER_NAME);
+	GetPlayerPos(playerid, px, py, pz);
+
+	ReportPlayer(name, "Rapid Fire", -1, "FireRate", px, py, pz, GetPlayerVirtualWorld(playerid), GetPlayerInterior(playerid), "");
+}
+
+/*==============================================================================
+
+	Anti-NoReload
+
+==============================================================================*/
+
+public OnAntiCheatNoReload(playerid, roundsfired)
+{
+	new
+		name[MAX_PLAYER_NAME],
+		Float:px,
+		Float:py,
+		Float:pz;
+
+	GetPlayerName(playerid, name, MAX_PLAYER_NAME);
+	GetPlayerPos(playerid, px, py, pz);
+
+	ReportPlayer(name, "NoReload", -1, "NoReload", px, py, pz, GetPlayerVirtualWorld(playerid), GetPlayerInterior(playerid), "");
+}
+
+
 /*==============================================================================
 
 	Anti-Parkour
 
 ==============================================================================*/
 
-public OnPlayerTurnUpsideDown(playerid, Float:angle)
+public OnAntiCheatTurnUpsideDown(playerid, Float:angle)
 {
 	new
 		name[MAX_PLAYER_NAME],
@@ -304,9 +347,6 @@ public OnPlayerTurnUpsideDown(playerid, Float:angle)
 	GetPlayerPos(playerid, px, py, pz);
 
 	ReportPlayer(name, "Parkour Mod", -1, "Parkour", px, py, pz, GetPlayerVirtualWorld(playerid), GetPlayerInterior(playerid), "");
-	//TimeoutPlayer(playerid, "Parkour Mod");
-
-	return 1;
 }
 
 const ONFOOT_SYNC = 207; // 0.3.7
