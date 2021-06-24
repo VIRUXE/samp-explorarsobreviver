@@ -65,7 +65,7 @@ public OnPlayerConnect(playerid)
 	Logger_Log("player connected", Logger_P(playerid));
 
 	SetPlayerColor(playerid, 0xB8B8B800);
-	EnablePlayerCameraTarget(playerid, 1);
+	TogglePlayerClock(playerid, 1);
 	
 	if(IsPlayerNPC(playerid))
 		return 1;
