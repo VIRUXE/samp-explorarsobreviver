@@ -146,14 +146,13 @@ public OnPlayerInteractVehicle(playerid, vehicleid, Float:angle)
 
 		if(itemtype == item_LockBreaker)
 		{
-			CancelPlayerMovement(playerid);
-			
 			if(GetVehicleKey(vehicleid) == 0)
 			{
 				ShowActionText(playerid, ls(playerid, "LOCKVNOLOCK", true), 3000);
 				return Y_HOOKS_BREAK_RETURN_1;
 			}
 
+			CancelPlayerMovement(playerid);
 			StartBreakingVehicleLock(playerid, vehicleid, 0);
 		}
 	}
