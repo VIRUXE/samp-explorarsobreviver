@@ -120,6 +120,7 @@ hook OnHoldActionFinish(playerid)
 	{
 		if(cro_OpenType[playerid] == 0)
 		{
+			SetVehicleKey(cro_TargetVehicle[playerid], 0);
 			SetVehicleExternalLock(cro_TargetVehicle[playerid], E_LOCK_STATE_OPEN);
 		}
 		if(cro_OpenType[playerid] == 1)
