@@ -89,6 +89,8 @@ hook OnPlayerInteractVehicle(playerid, vehicleid, Float:angle)
 			DisplayContainerInventory(playerid, GetVehicleContainer(vehicleid));
 			trunk_CurrentVehicle[playerid] = vehicleid;
 
+			HideActionText(playerid);
+
 			return Y_HOOKS_BREAK_RETURN_1;
 		}
 	}
