@@ -758,7 +758,6 @@ public OnVehicleDamageStatusUpdate(vehicleid, playerid)
 	return 1;
 }
 
-/*
 hook OnUnoccupiedVehicleUpd(vehicleid, playerid, passenger_seat, Float:new_x, Float:new_y, Float:new_z, Float:vel_x, Float:vel_y, Float:vel_z)
 {
 	if(IsValidVehicle(GetTrailerVehicleID(vehicleid)))
@@ -787,32 +786,32 @@ hook OnUnoccupiedVehicleUpd(vehicleid, playerid, passenger_seat, Float:new_x, Fl
 
 		new
 			Float:xythresh = 0.25,
-			Float:zthresh = 1.0;
+			Float:zthresh = 1.5;
 
 		switch(GetVehicleTypeCategory(GetVehicleType(vehicleid)))
 		{
 			case VEHICLE_CATEGORY_TRUCK:
 			{
 				xythresh = 0.03;
-				zthresh = 1.5;
+				zthresh = 2.0;
 			}
 
 			case VEHICLE_CATEGORY_MOTORBIKE, VEHICLE_CATEGORY_PUSHBIKE:
 			{
 				xythresh = 0.5;
-				zthresh = 0.5;
+				zthresh = 1.0;
 			}
 
 			case VEHICLE_CATEGORY_BOAT:
 			{
 				xythresh = 2.5;
-				zthresh = 3.6;
+				zthresh = 4.1;
 			}
 
 			case VEHICLE_CATEGORY_HELICOPTER, VEHICLE_CATEGORY_PLANE:
 			{
 				xythresh = 0.01;
-				zthresh = 0.5;
+				zthresh = 1.0;
 			}
 		}
 
@@ -833,7 +832,7 @@ hook OnUnoccupiedVehicleUpd(vehicleid, playerid, passenger_seat, Float:new_x, Fl
 	}
 
 	return Y_HOOKS_CONTINUE_RETURN_1;
-}*/
+}
 
 IsVehicleValidOutOfBounds(vehicleid)
 {
