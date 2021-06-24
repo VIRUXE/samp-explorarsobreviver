@@ -681,39 +681,11 @@ SavePlayerData(playerid)
 	new
 		Float:x,
 		Float:y,
-		Float:z,
-		Float:r;
+		Float:z;
 
 	GetPlayerPos(playerid, x, y, z);
-	GetPlayerFacingAngle(playerid, r);
-
-	if(IsAtConnectionPos(x, y, z))
-	{
-		dbg("accounts", 1, "[SavePlayerData] ERROR: At connection pos");
-		return 0;
-	}
 
 	SaveBlockAreaCheck(x, y, z);
-
-	if(IsPlayerInAnyVehicle(playerid))
-		x += 1.5;
-
-	dbg("accounts", 2, "[SavePlayerData] Player is alive");
-	if(IsAtDefaultPos(x, y, z))
-	{
-		dbg("accounts", 2, "[SavePlayerData] ERROR: Player at default position");
-		return 0;
-	}
-
-	if(GetPlayerState(playerid) == PLAYER_STATE_SPECTATING)
-	{
-		dbg("accounts", 2, "[SavePlayerData] Player is spectating");
-		if(!gServerRestarting)
-		{
-			dbg("accounts", 2, "[SavePlayerData] Server is not restarting, aborting save");
-			return 0;
-		}
-	}
 
 	stmt_bind_value(stmt_AccountUpdate, 0, DB::TYPE_INTEGER, 1);
 	stmt_bind_value(stmt_AccountUpdate, 1, DB::TYPE_INTEGER, GetPlayerVIP(playerid));
