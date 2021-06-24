@@ -77,11 +77,12 @@ hook OnPlayerDisconnect(playerid, reason){
 ==============================================================================*/
 
 hook OnButtonPress(playerid, Button:id) {
-	new Item:itemid = GetItemFromButtonID(id);
-	if(IsValidItem(itemid) && IsItemTypeLongPickup(GetItemType(itemid)) && IsPlayerMobile(playerid)){
-		PlayerPickUpItem(playerid, itemid);
+	if(IsPlayerMobile(playerid)) {
+		new Item:itemid = GetItemFromButtonID(id);
+		if(IsValidItem(itemid) && IsItemTypeLongPickup(GetItemType(itemid))){
+			PlayerPickUpItem(playerid, itemid);
+		}
 	}
-	return Y_HOOKS_BREAK_RETURN_1;
 }
 
 /*==============================================================================

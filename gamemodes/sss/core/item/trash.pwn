@@ -144,7 +144,6 @@ hook OnButtonPress(playerid, Button:buttonid)
 			}
 		}
 	}
-	return Y_HOOKS_BREAK_RETURN_1;
 }
 
 hook OnHoldActionUpdate(playerid, progress)
