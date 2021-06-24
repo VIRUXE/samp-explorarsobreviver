@@ -283,6 +283,11 @@ native WP_Hash(buffer[], len, const str[]);
 #define GENDER_FEMALE				(1)
 
 
+// Icons (Same id for iconid and markertype)
+#define SUPPLY_CRATE_ICON			(38)		
+#define WEAPON_CACHE_ICON			(18)	
+
+
 // Key text
 #define KEYTEXT_INTERACT			"~k~~VEHICLE_ENTER_EXIT~"
 #define KEYTEXT_RELOAD				"~k~~PED_ANSWER_PHONE~"

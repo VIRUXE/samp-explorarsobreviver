@@ -113,6 +113,7 @@ GetPlayersNearDropLocation(id)
 
 	foreach(new i : Player)
 	{
+		UpdatePlayerMap(i);
 		if(IsPlayerInRangeOfPoint(i, 500.0, wepc_DropLocationData[id][wepc_posX], wepc_DropLocationData[id][wepc_posY], wepc_DropLocationData[id][wepc_posZ]))
 			count++;
 	}
@@ -153,6 +154,17 @@ hook OnButtonPress(playerid, Button:id)
 		DisplayContainerInventory(playerid, Container:webc_Containerid);
 }
 
+stock GetLastWeaponCachePos(&Float:x, &Float:y, &Float:z)
+{
+	if(wepc_CurrentPosX == 0.0)
+		return 0;
+
+	x = wepc_CurrentPosX;
+	y = wepc_CurrentPosY;
+	z = wepc_CurrentPosZ;
+
+	return 1;
+}
 
 timer WeaponsCacheSignal[WEPCACHE_SIGNAL_INTERVAL](count, Float:x, Float:y, Float:z)
 {

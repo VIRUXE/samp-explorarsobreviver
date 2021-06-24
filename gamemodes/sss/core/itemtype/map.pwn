@@ -17,18 +17,8 @@
 
 new MiniMapOverlay;
 
-hook OnScriptInit(){
+hook OnScriptInit()
 	MiniMapOverlay = GangZoneCreate(-6000, -6000, 6000, 6000);
-}
-
-hook OnPlayerLoad(playerid, filename[])
-{
-	if(IsPlayerMap(playerid)){
-		GangZoneHideForPlayer(playerid, MiniMapOverlay);
-	} else {
-		GangZoneShowForPlayer(playerid, MiniMapOverlay, 0x000000FF);
-	}
-}
 
 hook OnPlayerSpawn(playerid) {
 	GangZoneShowForPlayer(playerid, MiniMapOverlay, 0x000000FF);
@@ -39,38 +29,37 @@ hook OnPlayerGetItem(playerid, Item:itemid){
 		GangZoneHideForPlayer(playerid, MiniMapOverlay);
 	}
 }
-hook OnPlayerAddToInventory(playerid, Item:itemid, success) {
+
+UpdatePlayerMap(playerid){
 	if(IsPlayerMap(playerid)){
 		GangZoneHideForPlayer(playerid, MiniMapOverlay);
+		new Float:x, Float:y, Float:z;
+		GetLastSupplyPos(x, y, z);
+		SetPlayerMapIcon(playerid, SUPPLY_CRATE_ICON, x, y, z, SUPPLY_CRATE_ICON, 0, MAPICON_GLOBAL);
+		GetLastWeaponCachePos(x, y, z);
+		SetPlayerMapIcon(playerid, WEAPON_CACHE_ICON, x, y, z, WEAPON_CACHE_ICON, 0, MAPICON_GLOBAL);
 	} else {
 		GangZoneShowForPlayer(playerid, MiniMapOverlay, 0x000000FF);
+		RemovePlayerMapIcon(playerid, SUPPLY_CRATE_ICON);
+		RemovePlayerMapIcon(playerid, WEAPON_CACHE_ICON);
 	}
 }
 
-hook OnPlayerCloseContainer(playerid, containerid){
-	if(IsPlayerMap(playerid)){
-		GangZoneHideForPlayer(playerid, MiniMapOverlay);
-	} else {
-		GangZoneShowForPlayer(playerid, MiniMapOverlay, 0x000000FF);
-	}
-}
+hook OnPlayerLoad(playerid, filename[])
+	UpdatePlayerMap(playerid);
+
+hook OnPlayerAddToInventory(playerid, Item:itemid, success)
+	UpdatePlayerMap(playerid);
+
+hook OnPlayerCloseContainer(playerid, containerid)
+	UpdatePlayerMap(playerid);
 
 hook OnPlayerCloseInventory(playerid)
-{
-	if(IsPlayerMap(playerid)){
-		GangZoneHideForPlayer(playerid, MiniMapOverlay);
-	} else {
-		GangZoneShowForPlayer(playerid, MiniMapOverlay, 0x000000FF);
-	}
-}
+	UpdatePlayerMap(playerid);
 
-hook OnItemRemovedFromPlayer(playerid, Item:itemid){
-	if(IsPlayerMap(playerid)){
-		GangZoneHideForPlayer(playerid, MiniMapOverlay);
-	} else {
-		GangZoneShowForPlayer(playerid, MiniMapOverlay, 0x000000FF);
-	}
-}
+hook OnItemRemovedFromPlayer(playerid, Item:itemid)
+	UpdatePlayerMap(playerid);
+
 
 stock bool:IsPlayerMap(playerid) {
 	new Item:itemid = GetPlayerItem(playerid);

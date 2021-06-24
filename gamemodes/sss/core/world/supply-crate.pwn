@@ -301,7 +301,9 @@ SupplyCrateLand()
 			a = GetAngleToPoint(sup_DropX, sup_DropY, x, y);
 
 			SetPlayerPos(i, sup_DropX + (3.0 * floatsin(a, degrees)), sup_DropY + (3.0 * floatcos(a, degrees)), sup_DropZ + 1.0);
-		}		
+		}
+
+		UpdatePlayerMap(i);
 	}
 
 	if(sup_Containerid != INVALID_CONTAINER_ID)
@@ -381,6 +383,17 @@ ACMD:scinfo[4](playerid, params[])
 
 // Interface
 
+stock GetLastSupplyPos(&Float:x, &Float:y, &Float:z)
+{
+	if(sup_DropX == 0.0)
+		return 0;
+
+	x = sup_DropX;
+	y = sup_DropY;
+	z = sup_DropZ;
+
+	return 1;
+}
 
 stock GetSupplyDropLocationName(location, name[MAX_SUPPLY_DROP_LOCATION_NAME])
 {
