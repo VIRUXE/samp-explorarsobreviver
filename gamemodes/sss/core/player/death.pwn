@@ -176,9 +176,12 @@ DropItems(playerid, Float:x, Float:y, Float:z)
 		Item:itemid;
 
 	new Float:cx, Float:cy, Float:cz;
-	CA_RayCastLine(x, y, z, x, y, z - 600.0, cx, cy, cz);
 
-	itemid = CreateItem(ItemType:item_Torso,  cx, cy, cz + 0.2, .world = GetPlayerVirtualWorld(playerid), .interior = GetPlayerInterior(playerid));
+	if(CA_RayCastLine(x, y, z, x, y, z - 600.0, cx, cy, cz) != WATER_OBJECT)
+		itemid = CreateItem(ItemType:item_Torso,  cx, cy, cz + 0.2,
+		.world = GetPlayerVirtualWorld(playerid), .interior = GetPlayerInterior(playerid));
+	else
+		return;
 
 	// Head
 	//CreateDynamicObject(2908, cx, cy, cz + 0.2, 0.0, 0.0, 0.0);

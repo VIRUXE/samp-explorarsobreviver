@@ -323,9 +323,11 @@ LoadPlayerChar(playerid)
 	Character
 */
 
-	if(Float:player_data[PLY_CELL_HEALTH] <= 0.0)
-		player_data[PLY_CELL_HEALTH] = _:1.0;
-
+	if(Float:player_data[PLY_CELL_HEALTH] <= 1.0) {
+		player_data[PLY_CELL_HEALTH] = _:0.0;
+		SetPlayerHealth(playerid, 0.0);
+	}
+	
 	SetPlayerHP(playerid, Float:player_data[PLY_CELL_HEALTH]);
 	SetPlayerAP(playerid, Float:player_data[PLY_CELL_ARMOUR]);
 	SetPlayerFP(playerid, Float:player_data[PLY_CELL_FOOD]);

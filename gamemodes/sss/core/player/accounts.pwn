@@ -698,49 +698,35 @@ SavePlayerData(playerid)
 	if(IsPlayerInAnyVehicle(playerid))
 		x += 1.5;
 
-	if(IsPlayerAlive(playerid))
+	dbg("accounts", 2, "[SavePlayerData] Player is alive");
+	if(IsAtDefaultPos(x, y, z))
 	{
-		dbg("accounts", 2, "[SavePlayerData] Player is alive");
-		if(IsAtDefaultPos(x, y, z))
+		dbg("accounts", 2, "[SavePlayerData] ERROR: Player at default position");
+		return 0;
+	}
+
+	if(GetPlayerState(playerid) == PLAYER_STATE_SPECTATING)
+	{
+		dbg("accounts", 2, "[SavePlayerData] Player is spectating");
+		if(!gServerRestarting)
 		{
-			dbg("accounts", 2, "[SavePlayerData] ERROR: Player at default position");
+			dbg("accounts", 2, "[SavePlayerData] Server is not restarting, aborting save");
 			return 0;
 		}
-
-		if(GetPlayerState(playerid) == PLAYER_STATE_SPECTATING)
-		{
-			dbg("accounts", 2, "[SavePlayerData] Player is spectating");
-			if(!gServerRestarting)
-			{
-				dbg("accounts", 2, "[SavePlayerData] Server is not restarting, aborting save");
-				return 0;
-			}
-		}
-
-		stmt_bind_value(stmt_AccountUpdate, 0, DB::TYPE_INTEGER, 1);
-		stmt_bind_value(stmt_AccountUpdate, 1, DB::TYPE_INTEGER, GetPlayerVIP(playerid));
-		stmt_bind_value(stmt_AccountUpdate, 2, DB::TYPE_PLAYER_NAME, playerid);
-
-		if(!stmt_execute(stmt_AccountUpdate))
-		{
-			err("Statement 'stmt_AccountUpdate' failed to execute.");
-		}
-
-		dbg("accounts", 2, "[SavePlayerData] Saving character data");
-		SavePlayerChar(playerid);
 	}
-	else
+
+	stmt_bind_value(stmt_AccountUpdate, 0, DB::TYPE_INTEGER, 1);
+	stmt_bind_value(stmt_AccountUpdate, 1, DB::TYPE_INTEGER, GetPlayerVIP(playerid));
+	stmt_bind_value(stmt_AccountUpdate, 2, DB::TYPE_PLAYER_NAME, playerid);
+
+	if(!stmt_execute(stmt_AccountUpdate))
 	{
-		dbg("accounts", 2, "[SavePlayerData] Player is dead");
-		stmt_bind_value(stmt_AccountUpdate, 0, DB::TYPE_INTEGER, 0);
-		stmt_bind_value(stmt_AccountUpdate, 1, DB::TYPE_INTEGER, GetPlayerVIP(playerid));
-		stmt_bind_value(stmt_AccountUpdate, 2, DB::TYPE_PLAYER_NAME, playerid);
-
-		if(!stmt_execute(stmt_AccountUpdate))
-		{
-			err("Statement 'stmt_AccountUpdate' failed to execute.");
-		}
+		err("Statement 'stmt_AccountUpdate' failed to execute.");
 	}
+
+	dbg("accounts", 2, "[SavePlayerData] Saving character data");
+	
+	SavePlayerChar(playerid);
 
 	return 1;
 }

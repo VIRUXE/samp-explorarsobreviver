@@ -16,7 +16,7 @@
 #include <YSI_Coding\y_hooks>
 
 
-#define DEFAULT_POS_X				(0.0)
+#define DEFAULT_POS_X				(3000.0)
 #define DEFAULT_POS_Y				(0.0)
 #define DEFAULT_POS_Z				(3.0)
 
