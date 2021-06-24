@@ -92,8 +92,10 @@ hook OnButtonPress(playerid, Button:id) {
 ==============================================================================*/
 
 hook OnPlayerDroppedItem(playerid, Item:itemid){
-	new Float:x, Float:y, Float:z;
-	GetItemPos(itemid, x, y, z);
-	CA_RayCastLine(x, y, z, x, y, z - 3.0, z, z, z);
-	SetItemPos(itemid, x, y, z);
+	if(IsItemTypeDefence(GetItemType(itemid))){
+		new Float:x, Float:y, Float:z;
+		GetItemPos(itemid, x, y, z);
+		CA_RayCastLine(x, y, z, x, y, z - 3.0, z, z, z);
+		SetItemPos(itemid, x, y, z);
+	}
 }
