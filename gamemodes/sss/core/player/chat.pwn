@@ -80,7 +80,14 @@ hook OnPlayerText(playerid, text[])
 		PlayerSendChat(playerid, text, 0.0);
 
 	if(chat_Mode[playerid] == CHAT_MODE_GLOBAL)
+	{
+		if(GetTickCountDifference(GetTickCount(), chat_LastMessageTick[playerid]) < 5000)
+		{
+			ChatMsgLang(playerid, RED, "GLOBALFLOOD");
+			return 0;
+		}
 		PlayerSendChat(playerid, text, 1.0);
+	}
 
 	if(chat_Mode[playerid] == CHAT_MODE_ADMIN)
 		PlayerSendChat(playerid, text, 3.0);

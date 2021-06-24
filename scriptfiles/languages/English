@@ -109,6 +109,7 @@ VEHMODEHELP= >  Usage: /vsave [on / off] - Save vehicles when exited or entered.
 MUTEDPERMAN= >  You are muted permanently.
 MUTEDTIMERM= >  You are muted. Time remaining: %s
 MUTEDFLOODM= >  Muted from global chat for {C_ORANGE}30 {C_RED}seconds for chat flooding
+GLOBALFLOOD= > Please wait to use global chat again.
 RADIOINFO= > There are %d sync survivors on radio %0.2f.
 RADIOGLOBAL= >  You turn your radio on to the global frequency.
 RADIOLOCAL= >  You turned your radio off, chat is not broadcasted.
