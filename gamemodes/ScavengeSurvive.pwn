@@ -408,8 +408,8 @@ new stock
 #include "sss/core/server/info-message.pwn"
 #include "sss/core/server/language.pwn"
 #include "sss/core/player/language.pwn"
-
 #include "sss/core/admin/anti-raid-hack.pwn"
+#include "sss/core/admin/anti-object-wall.pwn"
 #include "sss/core/admin/discord.pwn"
 //#include "sss/core/admin/telegram.pwn"
 
@@ -442,10 +442,10 @@ new stock
 // ITEM IO
 #include "sss/core/io/loot.pwn"
 #include "sss/core/io/item.pwn"
+#include "sss/core/io/craft.pwn"
 #include "sss/core/io/defence.pwn"
 #include "sss/core/io/safebox.pwn"
 #include "sss/core/io/tree.pwn"
-#include "sss/core/io/craft.pwn"
 
 /*
 	CHILD SYSTEMS
