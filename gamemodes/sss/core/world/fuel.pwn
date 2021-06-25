@@ -315,6 +315,9 @@ hook OnPlayerDrink(playerid, Item:itemid)
 	if(IsPlayerAtAnyVehicleBonnet(playerid))
 		return Y_HOOKS_BREAK_RETURN_1;
 
+	if(GetLiquidItemLiquidType(itemid) == liquid_Petrol)
+		return Y_HOOKS_BREAK_RETURN_1;
+		
 	return Y_HOOKS_CONTINUE_RETURN_0;
 }
 
