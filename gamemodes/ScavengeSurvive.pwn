@@ -579,6 +579,7 @@ new stock
 #include "sss/core/item/bed.pwn"
 #include "sss/core/item/map.pwn"
 #include "sss/core/item/trash.pwn"
+#include "sss/core/item/barrel.pwn"
 
 // HATS
 #include "sss/core/apparel/hats/HelmArmy.pwn"
