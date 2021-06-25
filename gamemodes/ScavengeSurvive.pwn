@@ -123,13 +123,13 @@ public OnGameModeInit()
 
 /*==============================================================================
 
-	Libraries and respective links to their release pages
+	Libraries
 
 ==============================================================================*/
 
 #include <crashdetect>
 #include <sscanf2>
-
+#include <mathutil>
 #include <YSI_Core\y_utils>
 #include <YSI_Coding\y_va>
 #include <YSI_Coding\y_timers>
@@ -137,17 +137,13 @@ public OnGameModeInit()
 #include <YSI_Coding\y_iterate>
 #include <YSI_Storage\y_ini>
 #include <YSI_Visual\y_dialog>
-
-#undef IsNaN // Temporary fix
-
-#include "sss\core\server\hooks.pwn"// Internal library for hooking functions before they are used in external libraries.
-
 #include <PreviewModelDialog>
 #include <Pawn.RakNet>
 #include <colandreas> 
 #include <streamer>
 #include <optidraw>
 #include <nex-ac>
+#include <whirlpool>
 #include <sqlitei>
 #include <formatex>
 #include <strlib>
@@ -182,9 +178,6 @@ public OnGameModeInit()
 #include <optud>
 #include <discord-connector>
 #include <mapfix>
-
-native WP_Hash(buffer[], len, const str[]);
-
 
 /*==============================================================================
 
