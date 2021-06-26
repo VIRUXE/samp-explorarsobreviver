@@ -218,3 +218,14 @@ hook OnHoldActionUpdate(playerid, progress){
 
 	return Y_HOOKS_CONTINUE_RETURN_0;
 }
+
+hook OnPlayerDroppedItem(playerid, Item:itemid){
+	if(GetItemType(itemid) == item_Wheel) {
+		new Float:x, Float:y, Float:z, Float:r;
+		GetItemPos(itemid, x, y, z);
+		GetPlayerFacingAngle(playerid, r);
+
+		x += 0.413054 * floatsin(-r, degrees), y += 0.413054 * floatcos(-r, degrees);
+		SetItemPos(itemid, x, y, z);
+	}
+}
