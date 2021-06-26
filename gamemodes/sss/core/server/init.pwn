@@ -987,7 +987,7 @@ public OnScriptInit()
 	item_LaserPointY	= DefineItemType("Laser Pointer",		"LaserPointY",		19084,	1,	0.0, 0.0, 90.0,			0.0,	0.066244, 0.010838, -0.000024, 6.443027, 287.441467, 0.000000, .maxhitpoints = 1);
 	item_LaserPointP	= DefineItemType("Laser Pointer",		"LaserPointP",		19081,	1,	0.0, 0.0, 90.0,			0.0,	0.066244, 0.010838, -0.000024, 6.443027, 287.441467, 0.000000, .maxhitpoints = 1);
 	item_LaserPointG	= DefineItemType("Laser Pointer",		"LaserPointG",		19083,	1,	0.0, 0.0, 90.0,			0.0,	0.066244, 0.010838, -0.000024, 6.443027, 287.441467, 0.000000, .maxhitpoints = 1);
-	item_Barrel			= DefineItemType("Barrel",				"Barrel",			3632,	11,	0.0, 0.0, 0.0,			0.436,	0.121982,0.446166,-0.302850,-109.444541,-7.581885,354.313049, true, .maxhitpoints = 1);
+	item_Barrel			= DefineItemType("Barrel",				"Barrel",			3632,	11,	0.0, 0.0, 0.0,			0.436,	0.087982,0.433165,-0.365849,-113.044448,-3.981883,-90.387023, true, .maxhitpoints = 1);
 // 310
 	item_CluBellHat1 	= DefineItemType("Máscara",				"CluckinBellHat1",	19137,	1,	180.0, 0.0, 0.0,		0.0,	0.062216, 0.055396, 0.001138, 90.000000, 0.000000, 180.000000, .maxhitpoints = 1);
     item_Balaclava		= DefineItemType("Máscara",				"Balaclava",		19801,	1,	180.0, 0.0, 0.0,		0.0,	0.062216, 0.055396, 0.001138, 90.000000, 0.000000, 180.000000, .maxhitpoints = 1);
@@ -1620,6 +1620,7 @@ public OnScriptInit()
 	DefineLiquidContainerItem(item_OilCan,			16.0,	true,	liquid_Oil, 100);
 	DefineLiquidContainerItem(item_Ketchup,			0.5,	true);
 	DefineLiquidContainerItem(item_Mustard,			0.5,	true);
+	DefineLiquidContainerItem(item_Barrel,			100.0,	false);
 
 
 	// TREE SPECIES DEFINITIONS
