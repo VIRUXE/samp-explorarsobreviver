@@ -583,6 +583,94 @@ timer StillInVeh[1000](playerid, vehicleid, ls)
 	SetVehicleExternalLock(vehicleid, E_LOCK_STATE:ls);
 }
 
+/*==============================================================================
+
+	Vehicle Teleport
+
+==============================================================================*/
+
+static
+		vt_MovedFar[MAX_VEHICLES],
+		vt_MovedFarTick[MAX_VEHICLES],
+		vt_MovedFarPlayer[MAX_VEHICLES];
+
+public OnUnoccupiedVehicleUpdate(vehicleid, playerid, passenger_seat, Float:new_x, Float:new_y, Float:new_z, Float:vel_x, Float:vel_y, Float:vel_z)
+{
+	if(GetTickCountDifference(GetTickCount(), vt_MovedFarTick[vehicleid]) < 5000)
+		return 1;
+
+	if(GetTickCountDifference(GetTickCount(), GetPlayerSpawnTick(playerid)) < 15000)
+		return 1;
+
+	if(GetTickCountDifference(GetTickCount(), GetPlayerVehicleExitTick(playerid)) < 10000)
+		return 1;
+
+	if(GetTickCountDifference(GetTickCount(), GetVehicleLastUseTick(vehicleid)) < 5000)
+		return 1;
+
+	if(IsVehicleOccupied(vehicleid))
+		return 1;
+
+    if(GetPlayerAdminLevel(playerid) > 0)
+		return 1;
+
+	new
+		Float:x,
+		Float:y,
+		Float:z,
+		Float:distance;
+
+	GetVehiclePos(vehicleid, x, y, z);
+
+	distance = Distance(x, y, z, new_x, new_y, new_z);
+
+	if(IsNaN(distance))
+	{
+		RespawnVehicle(vehicleid);
+		return 1;
+	}
+
+	if(20.0 < distance < 500.0)
+	{
+		new Float:distancetoplayer = 10000.0;
+
+		vt_MovedFarPlayer[vehicleid] = GetClosestPlayerFromPoint(x, y, z, distancetoplayer);
+
+		if(distancetoplayer < 10.0)
+		{
+			vt_MovedFar[vehicleid] = true;
+			vt_MovedFarTick[vehicleid] = GetTickCount();
+
+			foreach(new i : veh_Index)
+			{
+				if(GetVehicleTrailer(i) == vehicleid)
+					return 1;
+			}
+
+			new
+				name[MAX_PLAYER_NAME],
+				vehicletype,
+				vehiclename[MAX_VEHICLE_TYPE_NAME],
+				reason[128],
+				info[128];
+
+			GetPlayerName(vt_MovedFarPlayer[vehicleid], name, MAX_PLAYER_NAME);
+			vehicletype = GetVehicleType(vehicleid);
+			GetVehicleTypeName(vehicletype, vehiclename);
+
+			format(reason, sizeof(reason), "Teleported to %s %.0fm", vehiclename, distance);
+
+			format(info, sizeof(info), "%f, %f, %f", new_x, new_y, new_z);
+			ReportPlayer(name, reason, -1, REPORT_TYPE_CARTELE, x, y, z, GetPlayerVirtualWorld(vt_MovedFarPlayer[vehicleid]), GetPlayerInterior(vt_MovedFarPlayer[vehicleid]), info);
+			TimeoutPlayer(vt_MovedFarPlayer[vehicleid], reason);
+
+			// RespawnVehicle(vehicleid);
+			return 0;
+		}
+	}
+
+	return 1;
+}
 
 /*==============================================================================
 	Infinite Ammo and Shooting Animations
