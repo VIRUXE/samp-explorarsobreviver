@@ -109,7 +109,7 @@ hook OnItemCreateInWorld(Item:itemid)
 
 			if(size > 0)
 			{
-				SetItemArrayDataAtCell(itemid, _:frandom(liq_Data[liqcont][liq_capacity]), LIQUID_ITEM_ARRAY_CELL_AMOUNT, true);
+				SetItemArrayDataAtCell(itemid, _:frandom(liq_Data[liqcont][liq_capacity]), _:LIQUID_ITEM_ARRAY_CELL_AMOUNT, true);
 				SetItemArrayDataAtCell(itemid, liqlist[random(size)], LIQUID_ITEM_ARRAY_CELL_TYPE, true);
 			}
 		}
@@ -228,13 +228,13 @@ _DrinkItem(playerid, Item:itemid)
 		if(IsError(e))
 			return Handled();
 
-		e = GetItemArrayDataAtCell(itemid, _:liquidamount, LIQUID_ITEM_ARRAY_CELL_AMOUNT);
+		e = GetItemArrayDataAtCell(itemid, _:liquidamount, _:LIQUID_ITEM_ARRAY_CELL_AMOUNT);
 
 		if(IsError(e))
 			return Handled();
 
 		SetPlayerFP(playerid, GetPlayerFP(playerid) + GetLiquidFoodValue(liquidtype));
-		SetItemArrayDataAtCell(itemid, _:(liquidamount - 0.2), LIQUID_ITEM_ARRAY_CELL_AMOUNT, true);
+		SetItemArrayDataAtCell(itemid, _:(liquidamount - 0.2), _:LIQUID_ITEM_ARRAY_CELL_AMOUNT, true);
 
 		_StartDrinking(playerid, itemid, true);
 	}
@@ -339,7 +339,7 @@ stock Float:GetLiquidItemLiquidAmount(Item:itemid)
 		return 0.0;
 
 	new Float:amount, Error:e;
-	e = GetItemArrayDataAtCell(itemid, _:amount, LIQUID_ITEM_ARRAY_CELL_AMOUNT);
+	e = GetItemArrayDataAtCell(itemid, _:amount, _:LIQUID_ITEM_ARRAY_CELL_AMOUNT);
 
 	if(IsError(e))
 		return 0.0;
@@ -358,10 +358,10 @@ stock Error:SetLiquidItemLiquidAmount(Item:itemid, Float:amount)
 
 	if(amount > liq_Data[liq_ItemTypeLiquidContainer[itemtype]][liq_capacity])
 	{
-		return SetItemArrayDataAtCell(itemid, _:liq_Data[liq_ItemTypeLiquidContainer[itemtype]][liq_capacity], LIQUID_ITEM_ARRAY_CELL_AMOUNT, true);
+		return SetItemArrayDataAtCell(itemid, _:liq_Data[liq_ItemTypeLiquidContainer[itemtype]][liq_capacity], _:LIQUID_ITEM_ARRAY_CELL_AMOUNT, true);
 	}
 
-	return SetItemArrayDataAtCell(itemid, _:amount, LIQUID_ITEM_ARRAY_CELL_AMOUNT, true);
+	return SetItemArrayDataAtCell(itemid, _:amount, _:LIQUID_ITEM_ARRAY_CELL_AMOUNT, true);
 }
 
 stock GetLiquidItemLiquidType(Item:itemid)
@@ -372,8 +372,11 @@ stock GetLiquidItemLiquidType(Item:itemid)
 	if(liq_ItemTypeLiquidContainer[GetItemType(itemid)] == -1)
 		return -1;
 
-	new type;
-	GetItemArrayDataAtCell(itemid, type, LIQUID_ITEM_ARRAY_CELL_TYPE);
+	new type, Error:e;
+	e = GetItemArrayDataAtCell(itemid, type, LIQUID_ITEM_ARRAY_CELL_TYPE);
+	if(IsError(e))
+		return -1;
+
 	return type;
 }
 
