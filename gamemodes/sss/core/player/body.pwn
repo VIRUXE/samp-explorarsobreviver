@@ -530,9 +530,6 @@ IRPC:GIVEDAM(playerid, BitStream:bs){
 		}
 	}
 
-	if(wPlayerID == playerid || !IsPlayerConnected(wPlayerID))
-		return 0;
-
 	return 1;
 }
 
@@ -571,76 +568,6 @@ CMD:mc(playerid, params[])
 	}
 	return 1;
 }
-/*
-public OnDynamicActorStreamIn(STREAMER_TAG_ACTOR:actorid, forplayerid)
-{
-	new BitStream:bsha = BS_New();
-    BS_WriteValue(bsha,
-        PR_INT16, actorid)
-    );
-    PR_SendRPC(bsha, forplayerid, 172); // Hide Actor
-	BS_Delete(bsha);
-
-	new BitStream:bs = BS_New();
-    BS_WriteValue(bs,
-        PR_INT16, 1000 + actorid,
-        PR_UINT32, 0,
-        PR_UINT8, 0,
-        PR_UINT8, 6,
-        PR_STRING, sprintf("c_%d", actorid)
-    );
-    PR_SendRPC(bs, forplayerid, 137); // ServerJoin
-	BS_Delete(bs);
-
-	new Float:x, Float:y, Float:z, Float:a;
-	GetDynamicActorPos(actorid, x, y, z);
-	GetDynamicActorFacingAngle(actorid, a);
-	new BitStream:bsw = BS_New();
-    BS_WriteValue(bsw,
-        PR_UINT16, 1000 + actorid,
-        PR_UINT8, 33, 
-        PR_UINT32, body_skin[actorid],
-        PR_FLOAT, x,
-        PR_FLOAT, y,
-        PR_FLOAT, z,
-        PR_FLOAT, a,
-        PR_UINT32, 0,
-        PR_UINT8, 0
-    );
-    PR_SendRPC(bsw, forplayerid, 32); // WorldAdd
-    BS_Delete(bsw);
-
-   	for(new i = 0; i < MAX_PLAYER_ATTACHED_OBJECTS; i++)
-	{
-		if(IsPlayerAttachedObjectSlotUsed(playerid, i))
-		{
-			new BitStream:bs_att = BS_New();
-			BS_WriteValue(
-				bs_att,
-				PR_UINT16, playerid,
-				PR_UINT32, i,
-				PR_BOOL, 1,
-				PR_UINT32, attchEnum[playerid][i][ModelID],
-				PR_UINT32, attchEnum[playerid][i][Bone],
-				PR_FLOAT, attchEnum[playerid][i][ox],
-				PR_FLOAT, attchEnum[playerid][i][oy],
-				PR_FLOAT, attchEnum[playerid][i][oz],
-				PR_FLOAT, attchEnum[playerid][i][rx],
-				PR_FLOAT, attchEnum[playerid][i][ry],
-				PR_FLOAT, attchEnum[playerid][i][rz],
-				PR_FLOAT, attchEnum[playerid][i][sx],
-				PR_FLOAT, attchEnum[playerid][i][sy],
-				PR_FLOAT, attchEnum[playerid][i][sz],
-				PR_UINT32, attchEnum[playerid][i][color1],
-				PR_UINT32, attchEnum[playerid][i][color2]
-			);
-			BS_RPC(bs_att, forplayerid, 113);
-			BS_Delete(bs_att);
-		}
-	}
-	return 1;
-}
-*/
 
 public OnPlayerGiveDamageDynamicActor(playerid, actorid, Float:amount, weaponid, bodypart)
 {
