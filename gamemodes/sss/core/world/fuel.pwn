@@ -54,7 +54,7 @@ stock CreateFuelOutlet(Float:x, Float:y, Float:z, Float:areasize, Float:capacity
 		return -1;
 	}
 
-	fuel_Data[fuel_Total][fuel_buttonId]	= CreateButton(x, y, z + 0.5, "Fill petrol can", .label = true, .labeltext = "0.0", .areasize = areasize);
+	fuel_Data[fuel_Total][fuel_buttonId]	= CreateButton(x, y, z + 1.5, "Fill petrol can", .label = true, .labeltext = "0.0", .areasize = areasize, .streamdist = areasize + 1.0, .testlos = false);
 
 	fuel_Data[fuel_Total][fuel_state]		= 1;
 	fuel_Data[fuel_Total][fuel_capacity]	= capacity;
@@ -95,16 +95,6 @@ hook OnPlayerUseItemWithBtn(playerid, Button:buttonid, Item:itemid)
 	return Y_HOOKS_CONTINUE_RETURN_0;
 }
 
-hook OnPlayerRelBtnWithItem(playerid, Button:buttonid, Item:itemid)
-{
-	if(fuel_CurrentFuelOutlet[playerid] != INVALID_FUEL_OUTLET_ID)
-	{
-		StopRefuellingFuelCan(playerid);
-	}
-
-	return Y_HOOKS_CONTINUE_RETURN_0;
-}
-
 hook OnPlayerInteractVehicle(playerid, vehicleid, Float:angle)
 {
 	if(angle < 25.0 || angle > 335.0)
@@ -137,6 +127,11 @@ StartRefuellingFuelCan(playerid, outletid)
 	if(fuel_Data[outletid][fuel_amount] <= 0.0)
 	{
 		ShowActionText(playerid, ls(playerid, "EMPTY", true), 3000, 80);
+		return 0;
+	}
+
+	if(fuel_CurrentFuelOutlet[playerid] != INVALID_FUEL_OUTLET_ID) {
+		StopRefuellingFuelCan(playerid);
 		return 0;
 	}
 
@@ -201,6 +196,18 @@ StopRefuellingVehicle(playerid)
 	fuel_CurrentlyRefuelling[playerid] = INVALID_VEHICLE_ID;
 
 	return 1;
+}
+
+hook OnHoldActionFinish(playerid) 
+{
+	if(IsValidVehicle(fuel_CurrentlyRefuelling[playerid]))
+	{
+		StopRefuellingVehicle(playerid);
+	}
+	else if(fuel_CurrentFuelOutlet[playerid] != INVALID_FUEL_OUTLET_ID)
+	{
+		StopRefuellingFuelCan(playerid);
+	}
 }
 
 hook OnHoldActionUpdate(playerid, progress)
@@ -278,7 +285,14 @@ hook OnHoldActionUpdate(playerid, progress)
 		amount = GetLiquidItemLiquidAmount(itemid);
 		capacity = GetLiquidContainerTypeCapacity(liqcont);
 
-		if(amount >= capacity || fuel_Data[fuel_CurrentFuelOutlet[playerid]][fuel_amount] <= 0.0)
+		if(fuel_Data[fuel_CurrentFuelOutlet[playerid]][fuel_amount] <= 0.0) {
+			defer ReFuelOutlet(fuel_CurrentFuelOutlet[playerid]);
+			fuel_Data[fuel_CurrentFuelOutlet[playerid]][fuel_amount] = 0.0;
+			StopRefuellingFuelCan(playerid);
+			return Y_HOOKS_CONTINUE_RETURN_0;
+		}
+
+		if(amount >= capacity)
 		{
 			StopRefuellingFuelCan(playerid);
 			return Y_HOOKS_CONTINUE_RETURN_0;
@@ -296,7 +310,11 @@ hook OnHoldActionUpdate(playerid, progress)
 		transfer = (amount + 1.2 > capacity) ? capacity - amount : 1.2;
 		SetLiquidItemLiquidAmount(itemid, amount + transfer);
 		SetLiquidItemLiquidType(itemid, liquid_Petrol);
+
 		fuel_Data[fuel_CurrentFuelOutlet[playerid]][fuel_amount] -= transfer;
+
+		if(fuel_Data[fuel_CurrentFuelOutlet[playerid]][fuel_amount] < 0.0)
+			fuel_Data[fuel_CurrentFuelOutlet[playerid]][fuel_amount] = 0.0;
 
 		UpdateFuelText(fuel_CurrentFuelOutlet[playerid]);
 	}
@@ -317,11 +335,18 @@ hook OnPlayerDrink(playerid, Item:itemid)
 
 	if(GetLiquidItemLiquidType(itemid) == liquid_Petrol)
 		return Y_HOOKS_BREAK_RETURN_1;
-		
+
+	if(GetLiquidItemLiquidType(itemid) == liquid_Oil)
+		return Y_HOOKS_BREAK_RETURN_1;
+
 	return Y_HOOKS_CONTINUE_RETURN_0;
 }
 
 UpdateFuelText(outletid)
 {
 	return SetButtonLabel(fuel_Data[outletid][fuel_buttonId], sprintf("%.1f/%.1f", fuel_Data[outletid][fuel_amount], fuel_Data[outletid][fuel_capacity]));
+}
+
+timer ReFuelOutlet[gServerMaxUptime * 1000](id) {
+	fuel_Data[id][fuel_amount] = frandom(40.0);
 }
