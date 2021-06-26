@@ -14,6 +14,7 @@ world_industrial, 1.0
 40.0,	GasCan
 30.0,	Wheel
 1.0,	Chainsaw
+10.0,   Barrel
 
 # crafting
 1.0,	ScrapMetal
