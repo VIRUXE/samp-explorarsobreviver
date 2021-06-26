@@ -259,9 +259,6 @@ Item:LoadItem(const filename[], const uuid[], const callback[])
 		big_data[1] = 0;
 		length = 0;
 	}
-
-	if(!strlen(big_data)) // New by Kolor4dO
-		return INVALID_ITEM_ID; //
 	
 	CallLocalFunction(callback, "ddsad", _:itemid, info[SAVED_ITEM_ACTIVE], uuid, big_data, length);
 
