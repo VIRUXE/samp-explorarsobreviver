@@ -67,7 +67,7 @@ BedCheck(playerid, Item:itemid, bool:spawn = false){
 		new hour, minute;
 		gettime(hour, minute);
 		
-		if(hour < 18 && hour > 6) {
+		if(hour < 20 && hour > 8) {
 			ShowActionText(playerid, ls(playerid, "SLEPHOUR"), 6000);
 			return 0;
 		}
@@ -77,6 +77,8 @@ BedCheck(playerid, Item:itemid, bool:spawn = false){
 		if(Bed_Item[i] == itemid)
 			return 0;
 			
+	UnfreezePlayer(playerid);
+	
 	new Float:rz, Float:tmp;
 
 	GetItemPos(itemid, Bed_Pos[playerid][0], Bed_Pos[playerid][1], Bed_Pos[playerid][2]);
@@ -106,7 +108,8 @@ BedCheck(playerid, Item:itemid, bool:spawn = false){
 
 hook OnHoldActionUpdate(playerid, progress){
 	if(IsValidItem(Bed_Item[playerid])) {
-		if(GetPlayerAnimationIndex(playerid) != 386){
+		if(GetPlayerAnimationIndex(playerid) != 386 && GetPlayerAnimationIndex(playerid) != 0 &&
+			GetPlayerAnimationIndex(playerid) != 1183){
 			new Float:rz;
 
 			GetItemRot(Bed_Item[playerid], rz, rz, rz);
