@@ -290,7 +290,7 @@ hook OnPlayerOpenInventory(playerid)
 		return Y_HOOKS_BREAK_RETURN_1;
 	}
 	
-	rad_InventoryItem[playerid] = AddInventoryListItem(playerid, "Radio");
+	rad_InventoryItem[playerid] = AddInventoryListItem(playerid, "Radio >");
 
 	return Y_HOOKS_CONTINUE_RETURN_0;
 }
@@ -300,14 +300,13 @@ hook OnPlayerSelectExtraItem(playerid, item)
 	if(item == rad_InventoryItem[playerid])
 	{
 		ShowRadioUI(playerid);
-		
 	}
 	return Y_HOOKS_CONTINUE_RETURN_0;
 }
 
 hook OnPlayerConnect(playerid)
 {
-	RadioUI_Main[playerid]					= CreatePlayerTextDraw(playerid, 320.000000, 200.000000, "RADIO~n~ ~n~ ~n~ ~n~ ~n~ ");
+	RadioUI_Main[playerid]			= CreatePlayerTextDraw(playerid, 320.000000, 200.000000, "RADIO~n~ ~n~ ~n~ ~n~ ~n~ ");
 	PlayerTextDrawAlignment			(playerid, RadioUI_Main[playerid], 2);
 	PlayerTextDrawBackgroundColor	(playerid, RadioUI_Main[playerid], 255);
 	PlayerTextDrawFont				(playerid, RadioUI_Main[playerid], 1);

@@ -244,7 +244,7 @@ static Prev_CreateTextDraws() {
 	for (new a = 0; a < MAX_DIALOG_PREVIEW_ROWS; a++) {
 		for (new b = 0; b < MAX_DIALOG_PREVIEW_COLUMNS; b++) {
 		    textdrawid = ((a * MAX_DIALOG_PREVIEW_COLUMNS) + b);
-
+	
 		    // listitem border button to select item
 			Prev@ModelTD[textdrawid][0] = TextDrawCreate((148.0000 + (b * DIALOG_PREVIEW_HORIZONTAL_GAP)), (197.0000 + (a * DIALOG_PREVIEW_VERTICAL_GAP)), "LD_SPAC:WHITE");
 			TextDrawFont(Prev@ModelTD[textdrawid][0], 4);
@@ -261,6 +261,20 @@ static Prev_CreateTextDraws() {
 			Prev@ModelTD[textdrawid][1] = TextDrawCreate((149.0000 + (b * DIALOG_PREVIEW_HORIZONTAL_GAP)), (198.0000 + (a * DIALOG_PREVIEW_VERTICAL_GAP)), "MODEL");
 			TextDrawFont(Prev@ModelTD[textdrawid][1], 5);
 			TextDrawLetterSize(Prev@ModelTD[textdrawid][1], 0.5000, 1.0000);
+			TextDrawTextSize(Prev@ModelTD[textdrawid][1], 53.5000, 60.5000);
+			TextDrawSetOutline(Prev@ModelTD[textdrawid][1], 0);
+			TextDrawSetShadow(Prev@ModelTD[textdrawid][1], 0);
+			TextDrawAlignment(Prev@ModelTD[textdrawid][1], 1);
+			TextDrawColor(Prev@ModelTD[textdrawid][1], -1);
+			TextDrawBackgroundColor(Prev@ModelTD[textdrawid][1], 0x464646FF);
+			TextDrawBoxColor(Prev@ModelTD[textdrawid][1], 255);
+			TextDrawUseBox(Prev@ModelTD[textdrawid][1], 0);
+			TextDrawSetProportional(Prev@ModelTD[textdrawid][1], 1);
+			//TextDrawSetSelectable(Prev@ModelTD[textdrawid][1], 1);
+			TextDrawSetPreviewRot(Prev@ModelTD[textdrawid][1], -10.000000, 0.000000, -20.000000, 1.000000);
+			
+			/*TextDrawFont(Prev@ModelTD[textdrawid][1], 5);
+			TextDrawLetterSize(Prev@ModelTD[textdrawid][1], 0.5000, 1.0000);
 			TextDrawColor(Prev@ModelTD[textdrawid][1], -1);
 			TextDrawSetShadow(Prev@ModelTD[textdrawid][1], 0);
 			TextDrawSetOutline(Prev@ModelTD[textdrawid][1], 0);
@@ -270,7 +284,7 @@ static Prev_CreateTextDraws() {
 			TextDrawSetPreviewModel(Prev@ModelTD[textdrawid][1], 132);
 			TextDrawSetPreviewRot(Prev@ModelTD[textdrawid][1], 0.0000, 0.0000, 0.0000, 0.9500);
 
-			//TextDrawSetSelectable(Prev@ModelTD[textdrawid][1], 1);
+			//TextDrawSetSelectable(Prev@ModelTD[textdrawid][1], 1);*/
 		}
 	}
 }
@@ -629,13 +643,10 @@ static Prev_HidePlayerDialog(playerid) {
 }
 
 static Prev_FetchListitemData(const listitem[], &modelid, text[], &Float:rx, &Float:ry, &Float:rz, &Float:zoom, &color1, &color2, text_size = sizeof(text)) {
-	rx = -45.0;
-	ry = 0.0;
-	rz = -45.0;
-
-	if(modelid == 19300) zoom = 3.0;
-	else zoom = 0.85;
-	
+	rx = -10.000000;
+	ry = 0.000000;
+	rz = -20.000000;
+	zoom = 1.000000;
 	color1 = -1;
 	color2 = -1;
 

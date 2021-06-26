@@ -149,7 +149,7 @@ stock DisplayPlayerInventory(playerid) {
 		GetItemTypeModel(itemtype, model);
 		GetItemTypeSize(itemtype, itemsize);
 
-		format(list, sizeof(list), "%s%d\t%s\n", list, model, tmp);
+		format(list, sizeof(list), "%s%d\t(%d)%s\n", list, model, itemsize, tmp);
 
 		inv_ItemListTotal[playerid]++;
 	}
@@ -158,7 +158,7 @@ stock DisplayPlayerInventory(playerid) {
 	ret_outer = GetInventoryFreeSlots(playerid, slots);
 
 	if(slots > 0) {
-		format(list, sizeof(list), "%s19300\t~g~+%d Free Slots\n", list, slots);
+		format(list, sizeof(list), "%s19300\t+%d Free Slots\n", list, slots);
 		inv_ItemListTotal[playerid]++;
 	}
 
@@ -220,7 +220,7 @@ stock AddInventoryListItem(playerid, const itemname[]) {
 		Logger_S("itemname", itemname));
 
 	
-	strcat(inv_ExtraItemList[playerid], "19300\t~y~");
+	strcat(inv_ExtraItemList[playerid], "19300\t");
 	strcat(inv_ExtraItemList[playerid], itemname);
 	strcat(inv_ExtraItemList[playerid], "\n");
 
@@ -236,7 +236,7 @@ stock AddInventoryOption(playerid, const option[]) {
 		Logger_I("playerid", playerid),
 		Logger_S("option", option));
 
-	strcat(inv_OptionsList[playerid], "19300\t~y~");
+	strcat(inv_OptionsList[playerid], "19300\t");
 	strcat(inv_OptionsList[playerid], option);
 	strcat(inv_OptionsList[playerid], "\n");
 
@@ -319,7 +319,7 @@ _inv_displaySlotOptions(playerid, slotid) {
 	}
 
 	GetItemName(itemid, name);
-	inv_OptionsList[playerid] = "19300\t~y~Equip\n19300\t~y~Use\n19300\t~y~Drop\n";
+	inv_OptionsList[playerid] = "19300\tEquip\n19300\tUse\n19300\tDrop\n";
 	inv_OptionsCount[playerid] = 0;
 
 	CallLocalFunction("OnPlayerViewInventoryOpt", "d", playerid);
