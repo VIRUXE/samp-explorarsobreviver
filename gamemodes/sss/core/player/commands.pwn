@@ -1,27 +1,13 @@
-/*==============================================================================
-
-
-	Southclaws' Scavenge and Survive
-
-		Copyright (C) 2020 Barnaby "Southclaws" Keene
-
-		This Source Code Form is subject to the terms of the Mozilla Public
-		License, v. 2.0. If a copy of the MPL was not distributed with this
-		file, You can obtain one at http://mozilla.org/MPL/2.0/.
-
-
-==============================================================================*/
-
-CMD:help(playerid, params[])
+CMD:ajuda(playerid, params[])
 {
-	Dialog_Show(playerid, DIALOG_STYLE_MSGBOX, "General Information", ls(playerid, "GENCOMDHELP"), "Close", "");
+	Dialog_Show(playerid, DIALOG_STYLE_MSGBOX, "Ajuda Geral", ls(playerid, "GENCOMDHELP"), "OK", "");
 
 	return 1;
 }
 
-CMD:rules(playerid, params[])
+CMD:regras(playerid, params[])
 {
-	ChatMsg(playerid, YELLOW, " >  Rules List (total: %d)", gTotalRules);
+	ChatMsg(playerid, YELLOW, " >  Regras (total: %d)", gTotalRules);
 
 	for(new i; i < gTotalRules; i++)
 		ChatMsg(playerid, BLUE, sprintf(" >  "C_ORANGE"%s", gRuleList[i]));
@@ -31,7 +17,7 @@ CMD:rules(playerid, params[])
 
 CMD:admins(playerid, params[])
 {
-	ChatMsg(playerid, YELLOW, " >  Staff List (total: %d)", gTotalStaff);
+	ChatMsg(playerid, YELLOW, " >  Equipe de Admin (total: %d)", gTotalStaff);
 
 	for(new i; i < gTotalStaff; i++)
 		ChatMsg(playerid, BLUE, sprintf(" >  "C_ORANGE"%s", gStaffList[i]));
@@ -39,81 +25,35 @@ CMD:admins(playerid, params[])
 	return 1;
 }
 
-CMD:credits(playerid, params[])
+CMD:creditos(playerid, params[])
 {
 	ChatMsg(playerid, YELLOW, " >  Scavenge and Survive is developed by Southclaws (www.southcla.ws) and the following contributors:");
 	ChatMsg(playerid, BLUE, " >  Y_Less - Tons of useful code, libraries and conversations");
 	ChatMsg(playerid, BLUE, " >  Viruxe - Lots of anti-cheat work");
 	ChatMsg(playerid, BLUE, " >  Kadaradam - Fishing, Trees and lots of bug fixes");
-	ChatMsg(playerid, BLUE, " >  Eidorian - French translation");
 	ChatMsg(playerid, BLUE, " >  Hiddos - Better water detection code");
-	ChatMsg(playerid, BLUE, " >  YOLO - Bosnian/Croatian/Serbian Translation");
-	ChatMsg(playerid, BLUE, " >  JJ - Czech Translation");
-	ChatMsg(playerid, BLUE, " >  KingSergio - Russian Translation");
-	ChatMsg(playerid, BLUE, " >  Blacky - Romanian Translation");
-	ChatMsg(playerid, BLUE, " >  Reza - Indonesian Translation");
-	ChatMsg(playerid, BLUE, " >  PrettyDiamond - Spanish Translation");
 
 	return 1;
 }
 
-CMD:motd(playerid, params[])
+CMD:mdd(playerid, params[])
 {
-	ChatMsg(playerid, YELLOW, " >  MoTD: "C_BLUE"%s", gMessageOfTheDay);
+	ChatMsg(playerid, YELLOW, " >  Mensagem do Dia: "C_BLUE"%s", gMessageOfTheDay);
 	return 1;
 }
 
-CMD:chatinfo(playerid, params[])
+CMD:chat(playerid, params[])
 {
-	Dialog_Show(playerid, DIALOG_STYLE_MSGBOX, "Information about "C_BLUE"Chat", ls(playerid, "GENCOMDCHAT"), "Close", "");
-
-	return 1;
-}
-
-CMD:tooltips(playerid, params[])
-{
-	if(IsPlayerToolTipsOn(playerid))
-	{
-		ChatMsgLang(playerid, YELLOW, "TOOLTIPSOFF");
-		SetPlayerToolTips(playerid, false);
-	}
-	else
-	{
-		ChatMsgLang(playerid, YELLOW, "TOOLTIPSON");
-		SetPlayerToolTips(playerid, true);
-	}
-
-	return 1;
-}
-
-CMD:tools(playerid, params[])
-{
-	if(IsPlayerToolTipsOn(playerid))
-	{
-		ChatMsgLang(playerid, YELLOW, "TOOLTIPSOFF");
-		SetPlayerToolTips(playerid, false);
-	}
-	else
-	{
-		ChatMsgLang(playerid, YELLOW, "TOOLTIPSON");
-		SetPlayerToolTips(playerid, true);
-	}
+	Dialog_Show(playerid, DIALOG_STYLE_MSGBOX, "Informação acerca do "C_BLUE"Sistema de ChatChat", ls(playerid, "GENCOMDCHAT"), "OK", "");
 
 	return 1;
 }
 
 CMD:dicas(playerid, params[])
 {
-	if(IsPlayerToolTipsOn(playerid))
-	{
-		ChatMsgLang(playerid, YELLOW, "TOOLTIPSOFF");
-		SetPlayerToolTips(playerid, false);
-	}
-	else
-	{
-		ChatMsgLang(playerid, YELLOW, "TOOLTIPSON");
-		SetPlayerToolTips(playerid, true);
-	}
+	if(IsPlayerToolTipsOn(playerid)) ChatMsgLang(playerid, YELLOW, "TOOLTIPSOFF"); else ChatMsgLang(playerid, YELLOW, "TOOLTIPSON");
+
+	SetPlayerToolTips(playerid, !IsPlayerToolTipsOn(playerid));
 
 	return 1;
 }
@@ -147,7 +87,7 @@ CMD:som(playerid, params[])
 	return 1;
 }
 
-CMD:changepass(playerid,params[])
+CMD:mudarsenha(playerid,params[])
 {
 	new
 		oldpass[32],
@@ -186,28 +126,21 @@ CMD:changepass(playerid,params[])
 				ChatMsgLang(playerid, YELLOW, "PASSCHANGED", newpass);
 			}
 			else
-			{
 				ChatMsgLang(playerid, RED, "PASSCHERROR");
-			}
 		}
 		else
-		{
 			ChatMsgLang(playerid, RED, "PASSCHNOMAT");
-		}
 	}
 	return 1;
 }
 
 CMD:pos(playerid, params[])
 {
-	new
-		Float:x,
-		Float:y,
-		Float:z;
+	new Float:x, Float:y, Float:z;
 
 	GetPlayerPos(playerid, x, y, z);
 
-	ChatMsg(playerid, YELLOW, " >  Position: "C_BLUE"%.2f, %.2f, %.2f", x, y, z);
+	ChatMsg(playerid, YELLOW, " >  Posição: "C_BLUE"%.2f, %.2f, %.2f", x, y, z);
 
 	return 1;
 }
