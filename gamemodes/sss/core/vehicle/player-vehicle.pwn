@@ -1,20 +1,4 @@
-/*==============================================================================
-
-
-	Southclaws' Scavenge and Survive
-
-		Copyright (C) 2020 Barnaby "Southclaws" Keene
-
-		This Source Code Form is subject to the terms of the Mozilla Public
-		License, v. 2.0. If a copy of the MPL was not distributed with this
-		file, You can obtain one at http://mozilla.org/MPL/2.0/.
-
-
-==============================================================================*/
-
-
 #include <YSI_Coding\y_hooks>
-
 
 // Directory for storing player-saved vehicles
 #define DIRECTORY_VEHICLE			DIRECTORY_MAIN"vehicle/"
@@ -222,9 +206,7 @@ LoadPlayerVehicle(const filepath[])
 		if(!IsPointInMapBounds(Float:data[VEH_CELL_POSX], Float:data[VEH_CELL_POSY], Float:data[VEH_CELL_POSZ]))
 		{
 			if(category == VEHICLE_CATEGORY_HELICOPTER || category == VEHICLE_CATEGORY_PLANE)
-			{
 				data[VEH_CELL_POSZ] = _:(Float:data[VEH_CELL_POSZ] + 10.0);
-			}
 			else
 			{
 				err("Removing vehicle file: %s (%s) because it's out of the map bounds.", filename, vehiclename);
@@ -399,7 +381,6 @@ LoadPlayerVehicle(const filepath[])
 		if(!DeserialiseItems(itm_arr_Serialized, length, false))
 		{
 			itemcount = GetStoredItemCount();
-
 			containerid = GetVehicleContainer(vehicleid);
 
 			dbg("player-vehicle", 1, "[LoadPlayerVehicle] modio read length:%d items:%d", length, itemcount);
@@ -586,6 +567,7 @@ _SaveVehicle(vehicleid)
 		size,
 		Item:items[64],
 		itemcount;
+
 	GetContainerSize(containerid, size);
 
 	for(new i; i < size; i++)
@@ -652,18 +634,17 @@ hook OnPlayerStateChange(playerid, newstate, oldstate)
 	{
 		if(pveh_SaveAnyVehicle[playerid])
 			_PlayerUpdateVehicle(playerid, GetPlayerVehicleID(playerid));
-
 		else
 			_SaveIfOwnedBy(GetPlayerVehicleID(playerid), playerid);
 
 	}
+
 	if(oldstate == PLAYER_STATE_DRIVER)
 	{
 		if(GetTickCountDifference(GetTickCount(), GetPlayerVehicleEnterTick(playerid)) > 1000)
 		{
 			if(pveh_SaveAnyVehicle[playerid])
 				_PlayerUpdateVehicle(playerid, GetPlayerLastVehicle(playerid));
-
 			else
 				_SaveIfOwnedBy(GetPlayerLastVehicle(playerid), playerid);
 		}
@@ -732,9 +713,7 @@ _SetVehicleOwner(vehicleid, name[MAX_PLAYER_NAME], playerid = INVALID_PLAYER_ID)
 		pveh_OwnerPlayer[vehicleid] = playerid;
 	}
 	else
-	{
 		pveh_OwnerPlayer[vehicleid] = INVALID_PLAYER_ID;
-	}
 
 	pveh_Owner[vehicleid][0] = EOS;
 	strcat(pveh_Owner[vehicleid], name, MAX_PLAYER_NAME);
@@ -787,15 +766,12 @@ _UpdatePlayerVehicle(playerid, vehicleid)
 	else
 	{
 		if(pveh_PlayerVehicle[playerid] == vehicleid)
-		{
 			_SaveVehicle(vehicleid);
-		}
 		else
 		{
 			if(pveh_PlayerVehicle[playerid] != INVALID_VEHICLE_ID)
-			{
 				_RemoveVehicleOwner(pveh_PlayerVehicle[playerid]);
-			}
+
 			_RemoveVehicleOwner(vehicleid);
 			_SetVehicleOwner(vehicleid, name, playerid);
 			_SaveVehicle(vehicleid);
@@ -853,36 +829,25 @@ stock GetVehicleOwner(vehicleid, name[MAX_PLAYER_NAME])
 	return 1;
 }
 
-stock SetVehicleOwner(vehicleid, name[MAX_PLAYER_NAME], playerid = INVALID_PLAYER_ID)
+stock SetVehicleOwner(vehicleid, name[MAX_PLAYER_NAME], playerid = INVALID_PLAYER_ID) return _SetVehicleOwner(vehicleid, name, playerid);
+
+CMD:sveiculo(playerid, params[])
 {
-	return _SetVehicleOwner(vehicleid, name, playerid);
-}
-
-CMD:vsave(playerid, params[])
-{
-	if(!isnull(params) && !strcmp(params, "on"))
-	{
-		pveh_SaveAnyVehicle[playerid] = 1;
-		ChatMsgLang(playerid, YELLOW, "VEHMODEALLV");
-		return 1;
-	}
-
-	if(!isnull(params) && !strcmp(params, "off"))
-	{
-		pveh_SaveAnyVehicle[playerid] = 0;
-		ChatMsgLang(playerid, YELLOW, "VEHMODEOWNV");
-		return 1;
-	}
-
-	ChatMsgLang(playerid, YELLOW, "VEHMODEHELP");
+	pveh_SaveAnyVehicle[playerid] = !pveh_SaveAnyVehicle[playerid];
+		
+	ChatMsgLang(playerid, YELLOW, pveh_SaveAnyVehicle[playerid] == 1 ? "VEHMODEALLV" : "VEHMODEOWNV");
 
 	return 1;
 }
+CMD:salvarv(playerid, params[]) return cmd_sveiculo(playerid, params);
+CMD:vsave(playerid, params[]) return cmd_sveiculo(playerid, params);
 
-CMD:veh(playerid, params[])
+CMD:veiculo(playerid, params[])
 {
 	new ownedvehiclename[MAX_VEHICLE_TYPE_NAME];
+
 	GetVehicleTypeName(GetVehicleType(pveh_PlayerVehicle[playerid]), ownedvehiclename);
-	ChatMsg(playerid, YELLOW, " >  Vehicle: %s", ownedvehiclename);
+	ChatMsg(playerid, YELLOW, " >  Veículo Salvo: %s", !isnull(ownedvehiclename) ? ownedvehiclename : "Nenhum");
 	return 1;
 }
+CMD:veh(playerid, params[]) return cmd_veiculo(playerid, params);

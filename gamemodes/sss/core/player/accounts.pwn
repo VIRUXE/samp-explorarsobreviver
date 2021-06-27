@@ -1,20 +1,4 @@
-/*==============================================================================
-
-
-	Southclaws' Scavenge and Survive
-
-		Copyright (C) 2020 Barnaby "Southclaws" Keene
-
-		This Source Code Form is subject to the terms of the Mozilla Public
-		License, v. 2.0. If a copy of the MPL was not distributed with this
-		file, You can obtain one at http://mozilla.org/MPL/2.0/.
-
-
-==============================================================================*/
-
-
 #include <YSI_Coding\y_hooks>
-
 
 #define ACCOUNTS_TABLE_PLAYER		"Player"
 #define FIELD_PLAYER_NAME			"name"		// 00
@@ -285,12 +269,12 @@ Error:CreateAccount(playerid, const password[])
 		return Error(1, "failed to execute statement stmt_AccountCreate");
 	}
 
-	SetPlayerAimShoutText(playerid, "Drop your weapon!");
+	SetPlayerAimShoutText(playerid, "Largue sua Arma!");
 
 	CheckAdminLevel(playerid);
 
 	if(GetPlayerAdminLevel(playerid) > 0)
-		ChatMsg(playerid, BLUE, " >  Your admin level: %d", GetPlayerAdminLevel(playerid));
+		ChatMsg(playerid, BLUE, " >  Nível de Admin: %d", GetPlayerAdminLevel(playerid));
 
 	acc_IsNewPlayer[playerid] = true;
 	acc_HasAccount[playerid] = true;
@@ -303,7 +287,8 @@ Error:CreateAccount(playerid, const password[])
 	// This can be removed in the future
 	GetPlayerName(playerid, name, sizeof(name));
 	for(new i; i < gTotalStaff; i++){
-		if(!strcmp(gStaffList[i], name)){
+		if(!strcmp(gStaffList[i], name))
+		{
 			SetPlayerAdminLevel(playerid, 5);
 			SetPlayerRadioFrequency(playerid, 3.0); // Set to admin chat
 			ChatMsg(playerid, GREEN, " > Your admin level has been set to 5 from settings.ini");
@@ -356,13 +341,13 @@ DisplayRegisterPrompt(playerid)
 		}
 		else
 		{
-			ChatMsgAll(GREY, " >  %p left the server without registering.", playerid);
+			ChatMsgAll(GREY, " >  %p saiu sem se registrar.", playerid);
 			Kick(playerid);
 		}
 
 		return 1;
 	}
-	Dialog_ShowCallback(playerid, using inline Response, DIALOG_STYLE_PASSWORD, ls(playerid, "ACCREGITITL"), str, "Accept", "Leave");
+	Dialog_ShowCallback(playerid, using inline Response, DIALOG_STYLE_PASSWORD, ls(playerid, "ACCREGITITL"), str, "Registrar", "Sair");
 
 	return 1;
 }
@@ -373,7 +358,6 @@ DisplayLoginPrompt(playerid, badpass = 0)
 
 	if(badpass)
 		format(str, 150, ls(playerid, "ACCLOGWROPW"), acc_LoginAttempts[playerid]);
-
 	else
 		format(str, 150, ls(playerid, "ACCLOGIBODY"), playerid);
 
@@ -390,12 +374,10 @@ DisplayLoginPrompt(playerid, badpass = 0)
 				acc_LoginAttempts[playerid]++;
 
 				if(acc_LoginAttempts[playerid] < 5)
-				{
 					DisplayLoginPrompt(playerid, 1);
-				}
 				else
 				{
-					ChatMsgAll(GREY, " >  %p left the server without logging in.", playerid);
+					ChatMsgAll(GREY, " >  %p saiu sem fazer login.", playerid);
 					Kick(playerid);
 				}
 
@@ -410,33 +392,29 @@ DisplayLoginPrompt(playerid, badpass = 0)
 			GetPlayerPassHash(playerid, storedhash);
 
 			if(!strcmp(inputhash, storedhash))
-			{
 				Login(playerid);
-			}
 			else
 			{
 				acc_LoginAttempts[playerid]++;
 
 				if(acc_LoginAttempts[playerid] < 5)
-				{
 					DisplayLoginPrompt(playerid, 1);
-				}
 				else
 				{
-					ChatMsgAll(GREY, " >  %p left the server without logging in.", playerid);
+					ChatMsgAll(GREY, " >  %p saiu sem fazer login.", playerid);
 					Kick(playerid);
 				}
 			}
 		}
 		else
 		{
-			ChatMsgAll(GREY, " >  %p left the server without logging in.", playerid);
+			ChatMsgAll(GREY, " >  %p saiu sem fazer login.", playerid);
 			Kick(playerid);
 		}
 
 		return 1;
 	}
-	Dialog_ShowCallback(playerid, using inline Response, DIALOG_STYLE_PASSWORD, ls(playerid, "ACCLOGITITL"), str, "Accept", "Leave");
+	Dialog_ShowCallback(playerid, using inline Response, DIALOG_STYLE_PASSWORD, ls(playerid, "ACCLOGITITL"), str, "Entrar", "Sair");
 
 	return 1;
 }
@@ -481,13 +459,13 @@ Login(playerid)
 			reports = GetUnreadReports(),
 			issues = GetBugReports();
 
-		ChatMsg(playerid, BLUE, " >  Your admin level: %d", GetPlayerAdminLevel(playerid));
+		ChatMsg(playerid, BLUE, " >  Nível de Admin: %d", GetPlayerAdminLevel(playerid));
 
 		if(reports > 0)
-			ChatMsg(playerid, YELLOW, " >  %d unread reports, type "C_BLUE"/reports "C_YELLOW"to view.", reports);
+			ChatMsg(playerid, YELLOW, " >  %d relatórios por ler. Digite "C_BLUE"/relatorios", reports);
 
 		if(issues > 0)
-			ChatMsg(playerid, YELLOW, " >  %d issues, type "C_BLUE"/issues "C_YELLOW"to view.", issues);
+			ChatMsg(playerid, YELLOW, " >  %d Bugs reportados. Digite "C_BLUE"/bugs", issues);
 	}
 
 	acc_LoggedIn[playerid] = true;
@@ -558,7 +536,8 @@ Logout(playerid, docombatlogcheck = 1)
 				Logger_Log("player combat-logged",
 					Logger_P(playerid));
 
-				ChatMsgAll(YELLOW, " >  %p combat logged!", playerid);
+				ChatMsgAll(YELLOW, " >  %p Deslogou em Combate esse Viado!", playerid);
+
 				// TODO: make this correct, lastweapon is an item ID but
 				// OnPlayerDeath takes a GTA weapon ID.
 				CallLocalFunction("OnPlayerDeath", "ddd", playerid, lastattacker, lastweapon);
@@ -638,9 +617,7 @@ Logout(playerid, docombatlogcheck = 1)
 			GetVehicleHealth(vehicleid, health);
 
 			if(IsVehicleUpsideDown(vehicleid) || health < 300.0)
-			{
 				DestroyVehicle(vehicleid);
-			}
 			else
 			{
 				if(GetPlayerState(playerid) == PLAYER_STATE_DRIVER)
@@ -678,10 +655,7 @@ SavePlayerData(playerid)
 		return 0;
 	}
 
-	new
-		Float:x,
-		Float:y,
-		Float:z;
+	new	Float:x, Float:y, Float:z;
 
 	GetPlayerPos(playerid, x, y, z);
 
@@ -692,9 +666,7 @@ SavePlayerData(playerid)
 	stmt_bind_value(stmt_AccountUpdate, 2, DB::TYPE_PLAYER_NAME, playerid);
 
 	if(!stmt_execute(stmt_AccountUpdate))
-	{
 		err("Statement 'stmt_AccountUpdate' failed to execute.");
-	}
 
 	dbg("accounts", 2, "[SavePlayerData] Saving character data");
 	
