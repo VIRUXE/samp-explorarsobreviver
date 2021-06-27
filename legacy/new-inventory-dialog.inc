@@ -36,7 +36,7 @@ forward GetPlayerSelectedInventorySlot(playerid);
 
 // AddInventoryListItem adds a list item to the inventory dialog for additional
 // actions. This should only ever be used in `OnPlayerOpenInventory`.
-forward AddInventoryListItem(playerid, const itemname[]);
+forward AddInventoryListItem(playerid, const itemname[], modelid = 19300);
 
 // AddInventoryOption adds an inventory option to an item option menu. This
 // should only ever be used in `OnPlayerViewInventoryOpt`.
@@ -210,7 +210,7 @@ stock GetPlayerSelectedInventorySlot(playerid) {
 	return inv_SelectedSlot[playerid];
 }
 
-stock AddInventoryListItem(playerid, const itemname[]) {
+stock AddInventoryListItem(playerid, const itemname[], modelid = 19300) {
 	if(strlen(inv_ExtraItemList[playerid]) + strlen(itemname) > sizeof(inv_ExtraItemList[])) {
 		return 0;
 	}
@@ -219,8 +219,8 @@ stock AddInventoryListItem(playerid, const itemname[]) {
 		Logger_I("playerid", playerid),
 		Logger_S("itemname", itemname));
 
-	
-	strcat(inv_ExtraItemList[playerid], "19300\t~y~");
+	format(inv_ExtraItemList[playerid], 128, "%s%d", inv_ExtraItemList[playerid], modelid);
+	strcat(inv_ExtraItemList[playerid], "\t");
 	strcat(inv_ExtraItemList[playerid], itemname);
 	strcat(inv_ExtraItemList[playerid], "\n");
 

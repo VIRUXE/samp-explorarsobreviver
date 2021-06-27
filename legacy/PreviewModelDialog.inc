@@ -40,29 +40,26 @@
 #define LISTITEM_TEXTDRAW<%0> Prev@ModelTD[%0][0]
 
 // variables
-static Text:Prev@FrameTD[6];
-static Text:Prev@LeftButtonTD[2];
-static Text:Prev@RightButtonTD[2];
-static Text:Prev@CenterButtonTD[2];
-static Text:Prev@ModelTD[MAX_DIALOG_PREVIEW_ROWS * MAX_DIALOG_PREVIEW_COLUMNS][2];
-
-static PlayerText:Prev@HeaderPTD[MAX_PLAYERS];
-static PlayerText:Prev@LeftButtonPTD[MAX_PLAYERS];
-static PlayerText:Prev@RightButtonPTD[MAX_PLAYERS];
-static PlayerText:Prev@CenterButtonPTD[MAX_PLAYERS];
-static PlayerText:Prev@PageNumberPTD[MAX_PLAYERS];
-static PlayerText:Prev@ScrollBarPTD[MAX_PLAYERS];
-static PlayerText:Prev@ModelTextPTD[MAX_PLAYERS][MAX_DIALOG_PREVIEW_ROWS * MAX_DIALOG_PREVIEW_COLUMNS];
-
-static bool:Prev@CancelSelection[MAX_PLAYERS];
-
-static Prev@PlayerDialogID[MAX_PLAYERS];
-static Prev@PlayerDialogListitem[MAX_PLAYERS];
-static Prev@PlayerDialogNumListitems[MAX_PLAYERS];
-static Prev@PlayerDialogPage[MAX_PLAYERS];
-static Prev@PlayerDialogTickCount[MAX_PLAYERS];
-
-static Pointer:Prev@PlayerListitemPointer[MAX_PLAYERS];
+static 
+	Text:Prev@FrameTD[6],
+	Text:Prev@LeftButtonTD[2],
+	Text:Prev@RightButtonTD[2],
+	Text:Prev@CenterButtonTD[2],
+	Text:Prev@ModelTD[MAX_DIALOG_PREVIEW_ROWS * MAX_DIALOG_PREVIEW_COLUMNS][2],
+	PlayerText:Prev@HeaderPTD[MAX_PLAYERS],
+	PlayerText:Prev@LeftButtonPTD[MAX_PLAYERS],
+	PlayerText:Prev@RightButtonPTD[MAX_PLAYERS],
+	PlayerText:Prev@CenterButtonPTD[MAX_PLAYERS],
+	PlayerText:Prev@PageNumberPTD[MAX_PLAYERS],
+	PlayerText:Prev@ScrollBarPTD[MAX_PLAYERS],
+	PlayerText:Prev@ModelTextPTD[MAX_PLAYERS][MAX_DIALOG_PREVIEW_ROWS * MAX_DIALOG_PREVIEW_COLUMNS],
+	bool:Prev@CancelSelection[MAX_PLAYERS],
+	Prev@PlayerDialogID[MAX_PLAYERS],
+	Prev@PlayerDialogListitem[MAX_PLAYERS],
+	Prev@PlayerDialogNumListitems[MAX_PLAYERS],
+	Prev@PlayerDialogPage[MAX_PLAYERS],
+	Prev@PlayerDialogTickCount[MAX_PLAYERS],
+	Pointer:Prev@PlayerListitemPointer[MAX_PLAYERS];
 
 // internal functions
 static Prev_GetNumPages(playerid) {
@@ -261,6 +258,7 @@ static Prev_CreateTextDraws() {
 			Prev@ModelTD[textdrawid][1] = TextDrawCreate((149.0000 + (b * DIALOG_PREVIEW_HORIZONTAL_GAP)), (198.0000 + (a * DIALOG_PREVIEW_VERTICAL_GAP)), "MODEL");
 			TextDrawFont(Prev@ModelTD[textdrawid][1], 5);
 			TextDrawLetterSize(Prev@ModelTD[textdrawid][1], 0.5000, 1.0000);
+<<<<<<< Updated upstream
 			TextDrawColor(Prev@ModelTD[textdrawid][1], -1);
 			TextDrawSetShadow(Prev@ModelTD[textdrawid][1], 0);
 			TextDrawSetOutline(Prev@ModelTD[textdrawid][1], 0);
@@ -271,6 +269,18 @@ static Prev_CreateTextDraws() {
 			TextDrawSetPreviewRot(Prev@ModelTD[textdrawid][1], 0.0000, 0.0000, 0.0000, 0.9500);
 
 			//TextDrawSetSelectable(Prev@ModelTD[textdrawid][1], 1);
+=======
+			TextDrawTextSize(Prev@ModelTD[textdrawid][1], 53.5000, 60.5000);
+			TextDrawSetOutline(Prev@ModelTD[textdrawid][1], 0);
+			TextDrawSetShadow(Prev@ModelTD[textdrawid][1], 0);
+			TextDrawAlignment(Prev@ModelTD[textdrawid][1], 1);
+			TextDrawColor(Prev@ModelTD[textdrawid][1], -1);
+			TextDrawBackgroundColor(Prev@ModelTD[textdrawid][1], 0x464646FF);
+			TextDrawBoxColor(Prev@ModelTD[textdrawid][1], 255);
+			TextDrawUseBox(Prev@ModelTD[textdrawid][1], 0);
+			TextDrawSetProportional(Prev@ModelTD[textdrawid][1], 1);
+			TextDrawSetPreviewRot(Prev@ModelTD[textdrawid][1], -10.000000, 0.000000, -20.000000, 1.000000);
+>>>>>>> Stashed changes
 		}
 	}
 }
@@ -418,7 +428,7 @@ static Prev_CreatePlayerTextDraws(playerid, header[], button1[], button2[], butt
 			PlayerTextDrawColor(playerid, Prev@ModelTextPTD[playerid][textdrawid], -1);
 			PlayerTextDrawSetShadow(playerid, Prev@ModelTextPTD[playerid][textdrawid], 0);
 			PlayerTextDrawSetOutline(playerid, Prev@ModelTextPTD[playerid][textdrawid], 1);
-			PlayerTextDrawBackgroundColor(playerid, Prev@ModelTextPTD[playerid][textdrawid], 255);
+			PlayerTextDrawBackgroundColor(playerid, Prev@ModelTextPTD[playerid][textdrawid], 0);
 			PlayerTextDrawSetProportional(playerid, Prev@ModelTextPTD[playerid][textdrawid], 1);
 			PlayerTextDrawUseBox(playerid, Prev@ModelTextPTD[playerid][textdrawid], 1);
 			PlayerTextDrawBoxColor(playerid, Prev@ModelTextPTD[playerid][textdrawid], 0);
@@ -557,7 +567,7 @@ static Prev_UpdateListitems(playerid, page, selected, totalItems) {
 		}
 	}
 
-	new string[16];
+	new string[13];
  	format(string, sizeof string, "Page: %i/%i", (page + 1), Prev_GetNumPages(playerid));
 	PlayerTextDrawSetString(playerid, Prev@PageNumberPTD[playerid], string);
 }
