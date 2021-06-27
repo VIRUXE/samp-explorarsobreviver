@@ -148,9 +148,7 @@ SpawnLoggedInPlayer(playerid)
 			return 1;
 		}
 		else
-		{
 			err("PlayerSpawnExistingCharacter returned %d", ret);
-		}
 	}
 	
 	PlayerCreateNewCharacter(playerid);
@@ -197,17 +195,11 @@ PlayerSpawnExistingCharacter(playerid)
 	PrepareForSpawn(playerid);
 
 	if(GetPlayerStance(playerid) == 1)
-	{
 		ApplyAnimation(playerid, "SUNBATHE", "PARKSIT_M_OUT", 4.0, 0, 0, 0, 0, 0);
-	}
 	else if(GetPlayerStance(playerid) == 2)
-	{
 		ApplyAnimation(playerid, "SUNBATHE", "PARKSIT_M_OUT", 4.0, 0, 0, 0, 0, 0);
-	}
 	else if(GetPlayerStance(playerid) == 3)
-	{
 		ApplyAnimation(playerid, "ROB_BANK", "SHP_HandsUp_Scr", 4.0, 0, 1, 1, 1, 0);
-	}
 
 	Logger_Log("player spawned existing character",
 		Logger_P(playerid),
@@ -250,23 +242,19 @@ PlayerCreateNewCharacter(playerid)
 hook OnPlayerClickPlayerTD(playerid, PlayerText:playertextid)
 {
 	if(playertextid == ClassButtonMale[playerid])
-	{
 		PlayerSpawnNewCharacter(playerid, GENDER_MALE);
-	}
-	if(playertextid == ClassButtonFemale[playerid])
-	{
+	else if(playertextid == ClassButtonFemale[playerid])
 		PlayerSpawnNewCharacter(playerid, GENDER_FEMALE);
-	}
 }
+
+
 
 hook OnPlayerClickTextDraw(playerid, Text:clickedid)
 {
 	if(clickedid == Text:65535)
 	{
 	 	if(!IsPlayerSpawned(playerid) && IsPlayerLoggedIn(playerid) && !IsPlayerDead(playerid))
-		{
 			SelectTextDraw(playerid, 0xFFFFFF88);
-		}
 	}
 }
 
@@ -285,13 +273,7 @@ PlayerSpawnNewCharacter(playerid, gender)
 
 	SetAccountTotalSpawns(name, GetPlayerTotalSpawns(playerid));
 
-	new
-		Item:backpackitem,
-		Item:tmpitem,
-		Float:x,
-		Float:y,
-		Float:z,
-		Float:r;
+	new Item:backpackitem, Item:tmpitem, Float:x, Float:y, Float:z, Float:r;
 
 	GenerateSpawnPoint(playerid, x, y, z, r);
 	Streamer_UpdateEx(playerid, x, y, z, 0, 0);
@@ -427,9 +409,6 @@ stock SetPlayerSpawnedState(playerid, bool:st)
 	return 1;
 }
 
-// spawn_PosX
-// spawn_PosY
-// spawn_PosZ
 stock GetPlayerSpawnPos(playerid, &Float:x, &Float:y, &Float:z)
 {
 	if(!IsPlayerConnected(playerid))
