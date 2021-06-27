@@ -134,20 +134,18 @@ stock DisplayContainerInventory(playerid, Container:containerid) {
 		GetItemTypeModel(itemtype, model);
 		GetItemTypeSize(GetItemType(itemid), itemsize);
 
-		format(cnt_InventoryString[playerid], sizeof(cnt_InventoryString[]), "%s%d\t(%d)%s\n",
-			cnt_InventoryString[playerid], model, itemsize, tmp);
-
+		format(cnt_InventoryString[playerid], sizeof(cnt_InventoryString[]), "%s%d\t%s\n", cnt_InventoryString[playerid], model, tmp);
 		cnt_ItemListTotal[playerid]++;
 	}
 
 	GetContainerFreeSlots(containerid, freeSlots);
 
 	if(freeSlots > 0) {
-		format(cnt_InventoryString[playerid], sizeof(cnt_InventoryString[]), "%s19300\t+%d Free Slots\n", cnt_InventoryString[playerid], freeSlots);
+		format(cnt_InventoryString[playerid], sizeof(cnt_InventoryString[]), "%s19300\t~g~+%d Free Slots\n", cnt_InventoryString[playerid], freeSlots);
 		cnt_ItemListTotal[playerid]++;
 	}
 
-	strcat(cnt_InventoryString[playerid], "19300\tOpen Inventory");
+	strcat(cnt_InventoryString[playerid], "19300\t~y~Open Inventory");
 
 	cnt_CurrentContainer[playerid] = containerid;
 
@@ -217,7 +215,7 @@ stock AddContainerOption(playerid, const option[]) {
 		return -1;
 	}
 
-	strcat(cnt_OptionsList[playerid], "19300\t");
+	strcat(cnt_OptionsList[playerid], "19300\t~y~");
 	strcat(cnt_OptionsList[playerid], option);
 	strcat(cnt_OptionsList[playerid], "\n");
 
@@ -243,7 +241,7 @@ _container_displayOptions(playerid, slotid) {
 
 	GetItemName(itemid_outer, tmp);
 
-	cnt_OptionsList[playerid] = "19300\tEquip\n19300\tMove to inventory\n";
+	cnt_OptionsList[playerid] = "19300\t~y~Equip\n19300\t~y~Move to inventory\n";
 	cnt_OptionsCount[playerid] = 0;
 
 	CallLocalFunction("OnPlayerViewContainerOpt", "dd", playerid, _:cnt_CurrentContainer[playerid]);

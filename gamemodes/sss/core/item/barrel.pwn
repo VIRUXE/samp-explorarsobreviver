@@ -60,14 +60,12 @@ hook OnPlayerUseItemWithItem(playerid, Item:itemid, Item:withitemid){
 				CancelPlayerMovement(playerid);
 
 				if(GetLiquidItemLiquidType(itemid) != GetLiquidItemLiquidType(withitemid)){
-					if(GetLiquidItemLiquidAmount(withitemid) <= 0.0) {
+					if(GetLiquidItemLiquidAmount(withitemid) == 0.0) {
 						SetLiquidItemLiquidType(withitemid, GetLiquidItemLiquidType(itemid));
-					} else if(GetLiquidItemLiquidAmount(itemid) <= 0.0) {
-						SetLiquidItemLiquidType(itemid, GetLiquidItemLiquidType(withitemid));
-					}
+					} 
 				}
 
-				if(GetLiquidItemLiquidAmount(itemid) <= 0.0) {
+				if(GetLiquidItemLiquidAmount(itemid) == 0.0) {
 					CurrenteBarrelOut[playerid] = withitemid;
 				} else {
 					CurrenteBarrelOut[playerid] = INVALID_ITEM_ID;
@@ -87,6 +85,15 @@ hook OnPlayerUseItemWithItem(playerid, Item:itemid, Item:withitemid){
 hook OnHoldActionUpdate(playerid, progress){
 	if(IsValidItem(CurrenteBarrel[playerid])) {
 		new Item:itemid = GetPlayerItem(playerid);
+		if(!IsValidLiquidType(GetLiquidItemLiquidType(itemid))){
+			StopBarrelInteract(playerid);
+			return Y_HOOKS_CONTINUE_RETURN_0;
+		}
+
+		if(GetLiquidItemLiquidType(itemid) != GetLiquidItemLiquidType(CurrenteBarrel[playerid])){
+			StopBarrelInteract(playerid);
+			return Y_HOOKS_CONTINUE_RETURN_0;
+		}
 
 		new 
 			Float:x, Float:y, Float:z, Float:ix, Float:iy;
@@ -113,20 +120,15 @@ hook OnHoldActionUpdate(playerid, progress){
 		ShowPlayerProgressBar(playerid, ActionBar);
 
 		if(IsValidItem(CurrenteBarrelOut[playerid])) {
-			if(amount <= 0.0 ){
-				//SetLiquidItemLiquidType(CurrenteBarrel[playerid], -1);
-				StopBarrelInteract(playerid);
-			} else if(canfuel >= GetLiquidContainerTypeCapacity(GetItemTypeLiquidContainerType(GetItemType(itemid)))){
+			if(amount <= transfer || canfuel >= GetLiquidContainerTypeCapacity(GetItemTypeLiquidContainerType(GetItemType(itemid)))){
 				StopBarrelInteract(playerid);
 			} else {
 				SetLiquidItemLiquidAmount(itemid, canfuel + transfer);
 				SetLiquidItemLiquidAmount(CurrenteBarrel[playerid], amount - transfer);
 			}
 		} else {
-			if(amount >= capacity){
+			if(amount >= capacity || canfuel <= transfer){
 				StopBarrelInteract(playerid);
-			} else if(canfuel <= 0.0) {
-				SetLiquidItemLiquidType(itemid, -1);
 			} else {
 				SetLiquidItemLiquidAmount(GetPlayerItem(playerid), canfuel - transfer);
 				SetLiquidItemLiquidAmount(CurrenteBarrel[playerid], amount + transfer);

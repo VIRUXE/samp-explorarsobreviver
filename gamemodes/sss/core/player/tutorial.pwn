@@ -1,27 +1,3 @@
-/*==============================================================================
-
-
-	Southclaw's Scavenge and Survive
-
-		Copyright (C) 2016 Barnaby "Southclaw" Keene
-
-		This program is free software: you can redistribute it and/or modify it
-		under the terms of the GNU General Public License as published by the
-		Free Software Foundation, either version 3 of the License, or (at your
-		option) any later version.
-
-		This program is distributed in the hope that it will be useful, but
-		WITHOUT ANY WARRANTY; without even the implied warranty of
-		MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
-		See the GNU General Public License for more details.
-
-		You should have received a copy of the GNU General Public License along
-		with this program.  If not, see <http://www.gnu.org/licenses/>.
-
-
-==============================================================================*/
-
-
 #include <YSI_Coding\y_hooks>
 
 #define MAX_TUTORIAL_ITEMS      (22)
@@ -91,7 +67,6 @@ hook OnPlayerClickPlayerTD(playerid, PlayerText:playertextid)
 			case 13: SetPlayerClothesID(playerid, skin_IndiF);
 		}
 
-
 		SetPlayerClothes(playerid, GetPlayerClothesID(playerid));
 		SetPlayerGender(playerid, GetClothesGender(GetPlayerClothesID(playerid)));
 		
@@ -115,7 +90,6 @@ hook OnPlayerClickPlayerTD(playerid, PlayerText:playertextid)
 		PlayerInTutorial[playerid] = true;
 
 		//	Vehicle
-		
 		PlayerTutorialVehicle[playerid] = CreateWorldVehicle(veht_Bobcat, 949.1641,2060.3074,10.8203, 272.1444, random(100), random(100), .world = playerid + 1);
 		SetVehicleHealth(PlayerTutorialVehicle[playerid], 321.9);
 		SetVehicleFuel(PlayerTutorialVehicle[playerid], frandom(1.0));
@@ -127,7 +101,6 @@ hook OnPlayerClickPlayerTD(playerid, PlayerText:playertextid)
 			encode_tires(1, 1, 1, 0) );
 
 		//	Items
-		
 		//PlayerTutorial_Item[0][playerid] = CreateItem(item_CorPanel, 975.1069,2071.6677,9.8603, .rz = frandom(360.0), .world = playerid + 1);
 		//PlayerTutorial_Item[1][playerid] = CreateItem(item_MetalGate, 973.7677,2075.0117,9.8603, .rz = frandom(360.0), .world = playerid + 1);
 		//PlayerTutorial_Item[2][playerid] = CreateItem(item_Door, 973.7151,2067.4258,9.8603, .rz = frandom(360.0), .world = playerid + 1);
@@ -157,7 +130,6 @@ hook OnPlayerClickPlayerTD(playerid, PlayerText:playertextid)
         SetLiquidItemLiquidAmount(PlayerTutorial_Item[21][playerid], 15);
 
 	    // Message
-	    
         for(new i = 0; i < 20; i++)
         	SendClientMessage(playerid, GREEN, "");
 
@@ -193,9 +165,7 @@ ExitTutorial(playerid)
 		return 0;
 		
 	for(new i = MAX_INVENTORY_SLOTS - 1; i >= 0; i--)
-	{
 		RemoveItemFromInventory(playerid, i);
-	}
 	
 	RemovePlayerBag(playerid);
 	RemovePlayerHolsterItem(playerid);
@@ -207,10 +177,10 @@ ExitTutorial(playerid)
 	PlayerCreateNewCharacter(playerid);
 	SetPlayerBrightness(playerid, 255);
 
-	for(new i = 0; i < MAX_TUTORIAL_ITEMS; i++){
-		if(IsValidItem(PlayerTutorial_Item[i][playerid])){
+	for(new i = 0; i < MAX_TUTORIAL_ITEMS; i++)
+	{
+		if(IsValidItem(PlayerTutorial_Item[i][playerid]))
 			DestroyItem(PlayerTutorial_Item[i][playerid]);
-		}
 	}
 		
 	DestroyWorldVehicle(PlayerTutorialVehicle[playerid], true);
@@ -249,15 +219,18 @@ hook OnPlayerOpenInventory(playerid)
 	return Y_HOOKS_CONTINUE_RETURN_0;
 }
 
-
 hook OnPlayerOpenContainer(playerid, Container:containerid)
 {
 	if(PlayerInTutorial[playerid])
 	{
-		if(IsValidItem(GetPlayerBagItem(playerid))){
+		if(IsValidItem(GetPlayerBagItem(playerid)))
+		{
 			new Container:bagcontainer, Error:e;
+			
 			e = GetItemArrayDataAtCell(GetPlayerBagItem(playerid), _:bagcontainer, 1);
-			if(!IsError(e)) {
+			
+			if(!IsError(e)) 
+			{
 				if(containerid == bagcontainer)
 				{
 					for(new i = 0; i < 20; i++)
@@ -277,8 +250,10 @@ hook OnPlayerViewCntOpt(playerid, Container:containerid)
 	if(PlayerInTutorial[playerid])
 	{
 		new Item:itemid, slot;
+
 		GetPlayerContainerSlot(playerid, slot);
 		GetContainerSlotItem(containerid, slot, itemid);
+
 		if(GetItemType(itemid) == item_Wrench)
 		{
   			for(new i = 0; i < 20; i++)
@@ -336,9 +311,12 @@ hook OnItemAddedToContainer(Container:containerid, Item:itemid, playerid)
 	{
 		if(PlayerInTutorial[playerid])
 		{
-			if(IsValidItem(GetPlayerBagItem(playerid))){
+			if(IsValidItem(GetPlayerBagItem(playerid)))
+			{
 				new Container:bagcontainer, Error:e;
+
 				e = GetItemArrayDataAtCell(GetPlayerBagItem(playerid), _:bagcontainer, 1);
+				
 				if(!IsError(e)) {
 					if(containerid == bagcontainer)
 					{
@@ -348,7 +326,9 @@ hook OnItemAddedToContainer(Container:containerid, Item:itemid, playerid)
 						ChatMsg(playerid, WHITE, ""C_GREEN"> "C_WHITE" %s", ls(playerid, "TUTORADDBAG"));
 					}
 				}
-			} else {
+			}
+			else
+			{
 				for(new i = 0; i < 20; i++)
 					SendClientMessage(playerid, GREEN, "");
 
@@ -395,29 +375,12 @@ hook OnItemTweakFinish(playerid, Item:itemid)
 	}
 }
 
-CMD:exit(playerid, params[])
-{
-	ExitTutorial(playerid);
-	return 1;
-}
-
 CMD:sair(playerid, params[])
 {
 	ExitTutorial(playerid);
 	return 1;
 }
-
-CMD:salir(playerid, params[])
-{
-	ExitTutorial(playerid);
-	return 1;
-}
-
-CMD:partir(playerid, params[])
-{
-	ExitTutorial(playerid);
-	return 1;
-}
+CMD:exit(playerid, params[]) return cmd_sair(playerid, params);
 
 stock IsPlayerInTutorial(playerid)
 {

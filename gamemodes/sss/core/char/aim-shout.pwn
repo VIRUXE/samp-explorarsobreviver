@@ -1,20 +1,4 @@
-/*==============================================================================
-
-
-	Southclaws' Scavenge and Survive
-
-		Copyright (C) 2020 Barnaby "Southclaws" Keene
-
-		This Source Code Form is subject to the terms of the Mozilla Public
-		License, v. 2.0. If a copy of the MPL was not distributed with this
-		file, You can obtain one at http://mozilla.org/MPL/2.0/.
-
-
-==============================================================================*/
-
-
 #include <YSI_Coding\y_hooks>
-
 
 static
 	aimshout_Text[MAX_PLAYERS][128],
@@ -89,7 +73,7 @@ hook OnPlayerLoad(playerid, filename[])
 	modio_read(filename, _T<S,H,O,U>, 128, aimshout_Text[playerid]);
 }
 
-CMD:aimshout(playerid, params[])
+CMD:grito(playerid, params[])
 {
 	new string[128];
 
@@ -104,3 +88,4 @@ CMD:aimshout(playerid, params[])
 
 	return 1;
 }
+CMD:aimshout(playerid, params[]) return cmd_grito(playerid, params);

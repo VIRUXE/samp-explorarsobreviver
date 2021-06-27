@@ -63,7 +63,6 @@ MACHNOTFUEL=There is not enough fuel. Machine requires %.1f per item.
 MACHCOOKTIM=Cook time: %s
 MACHITEMTYP=This machine only accepts %s
 REFUELLING=Refuelling...
-BARRELHEAVY=The barrel is too heavy. ~n~Use a Petrol Can (Empty) to remove some liquid.
 TENTREMOVE=Removing tent...
 NEEDWORKBE=You need a workbench to combine those
 NEARBYKEYP=This door is electronically locked controlled by a nearby keypad.

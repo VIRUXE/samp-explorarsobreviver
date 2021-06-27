@@ -1,18 +1,3 @@
-/*==============================================================================
-
-
-	Southclaws' Scavenge and Survive
-
-		Copyright (C) 2020 Barnaby "Southclaws" Keene
-
-		This Source Code Form is subject to the terms of the Mozilla Public
-		License, v. 2.0. If a copy of the MPL was not distributed with this
-		file, You can obtain one at http://mozilla.org/MPL/2.0/.
-
-
-==============================================================================*/
-
-
 static
 	lang_PlayerLanguage[MAX_PLAYERS];
 
@@ -43,9 +28,7 @@ ShowLanguageMenu(playerid)
 	langcount = GetLanguageList(languages);
 
 	for(new i; i < langcount; i++)
-	{
 		format(langlist, sizeof(langlist), "%s%s\n", langlist, languages[i]);
-	}
 
 	inline Response(pid, dialogid, response, listitem, string:inputtext[])
 	{
@@ -82,3 +65,4 @@ CMD:language(playerid, params[])
 	ShowLanguageMenu(playerid);
 	return 1;
 }
+CMD:lang(playerid, params[]) return cmd_language(playerid, params);

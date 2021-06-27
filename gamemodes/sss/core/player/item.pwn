@@ -18,34 +18,15 @@
 static PlayerText:item_TD[MAX_PLAYERS] = {PlayerText:INVALID_TEXT_DRAW, ...};
 
 hook OnPlayerConnect(playerid){
-	/*
-	If you have any respect for me or my work that I do completely free:
-	DO NOT REMOVE THIS MESSAGE.
-	It's just one line of text that appears when a player joins.
-	Feel free to add your own message UNDER this one with information regarding
-	your own modifications you've made to the code but DO NOT REMOVE THIS!
-
-	Thank you :)
-	*/
-	item_TD[playerid] = CreatePlayerTextDraw(playerid, 318.000000, 435.000000, "Scavenge and Survive ~b~(Copyright (C) 2016 Barnaby \"Southclaws\" Keene)");
+	item_TD[playerid] = CreatePlayerTextDraw(playerid, 318.000000, 435.000000, "Large Box");
 	PlayerTextDrawFont(playerid, item_TD[playerid], 1);
 	PlayerTextDrawLetterSize(playerid, item_TD[playerid], 0.254165, 1.250000);
 	PlayerTextDrawTextSize(playerid, item_TD[playerid], 280.000000, 254.000000);
 	PlayerTextDrawSetOutline(playerid, item_TD[playerid], 1);
 	PlayerTextDrawSetShadow(playerid, item_TD[playerid], 1);
 	PlayerTextDrawAlignment(playerid, item_TD[playerid], 2);
-	PlayerTextDrawBackgroundColor(playerid, item_TD[playerid], 255);
-	PlayerTextDrawColor(playerid, item_TD[playerid], ORANGE);
-	PlayerTextDrawShow(playerid, item_TD[playerid]);
 	PlayerTextDrawColor(playerid, item_TD[playerid], 0xFFFF00FF);
-
-	defer HideCredit(playerid);
-}
-
-timer HideCredit[5000](playerid){
-	if(!IsValidItem(GetPlayerItem(playerid))){
-		PlayerTextDrawHide(playerid, item_TD[playerid]);
-	}
+	PlayerTextDrawBackgroundColor(playerid, item_TD[playerid], 255);
 }
 
 UpdatePlayerPreviewItem(playerid){
@@ -115,6 +96,6 @@ hook OnPlayerDroppedItem(playerid, Item:itemid){
 		new Float:x, Float:y, Float:z;
 		GetItemPos(itemid, x, y, z);
 		CA_RayCastLine(x, y, z, x, y, z - 3.0, z, z, z);
-		SetItemPos(itemid, x, y, z + 0.05);
+		SetItemPos(itemid, x, y, z);
 	}
 }

@@ -1,18 +1,3 @@
-/*==============================================================================
-
-
-	Southclaws' Scavenge and Survive
-
-		Copyright (C) 2020 Barnaby "Southclaws" Keene
-
-		This Source Code Form is subject to the terms of the Mozilla Public
-		License, v. 2.0. If a copy of the MPL was not distributed with this
-		file, You can obtain one at http://mozilla.org/MPL/2.0/.
-
-
-==============================================================================*/
-
-
 static
 		send_TargetName				[MAX_PLAYERS][MAX_PLAYER_NAME],
 		send_TargetType				[MAX_PLAYERS],
@@ -44,6 +29,7 @@ CMD:report(playerid, params[])
 
 	return 1;
 }
+CMD:reportar(playerid, params[]) return cmd_report(playerid, params);
 
 ShowReportMenu(playerid)
 {	
@@ -124,7 +110,7 @@ ShowReportMenu(playerid)
 			}
 		}
 	}
-	Dialog_ShowCallback(playerid, using inline Response, DIALOG_STYLE_LIST, "Report a player", "Specific player ID (who is online now)\nSpecific Player Name (Who isn't online now)\nPlayer that last killed me\nPlayer closest to me", "Send", "Cancel");
+	Dialog_ShowCallback(playerid, using inline Response, DIALOG_STYLE_LIST, "Reportar um Jogador", "ID de Jogador (que esteja Online de momento)\nNick do Jogador (que esteja Online de momento)\nJogador que me Matou por último\nJogador mias Próximo de mim", "Enviar", "Cancelar");
 
 	return 1;
 }
@@ -156,11 +142,9 @@ ShowReportOnlinePlayer(playerid)
 			ShowReportReasonInput(playerid);
 		}
 		else
-		{
 			ShowReportMenu(playerid);
-		}
 	}
-	Dialog_ShowCallback(playerid, using inline Response, DIALOG_STYLE_LIST, "Report Online Player", list, "Report", "Back");
+	Dialog_ShowCallback(playerid, using inline Response, DIALOG_STYLE_LIST, "Reportar Jogador Online", list, "Reportar", "Trás");
 
 	return 1;
 }
@@ -185,11 +169,9 @@ ShowReportOfflinePlayer(playerid)
 			ShowReportReasonInput(playerid);
 		}
 		else
-		{
 			ShowReportMenu(playerid);
-		}
 	}
-	Dialog_ShowCallback(playerid, using inline Response, DIALOG_STYLE_INPUT, "Report Offline Player", "Enter name to report below", "Report", "Back");
+	Dialog_ShowCallback(playerid, using inline Response, DIALOG_STYLE_INPUT, "Reportar Jogador Offline", "Introduza o Nome do Jogador", "Reportar", "Trás");
 
 	return 1;
 }
@@ -214,11 +196,9 @@ ShowReportReasonInput(playerid)
 			ReportPlayer(send_TargetName[playerid], inputtext, playerid, reporttype, send_TargetPos[playerid][0], send_TargetPos[playerid][1], send_TargetPos[playerid][2], send_TargetWorld[playerid], send_TargetInterior[playerid], "");
 		}
 		else
-		{
 			ShowReportMenu(playerid);
-		}
 	}
-	Dialog_ShowCallback(playerid, using inline Response, DIALOG_STYLE_INPUT, "Enter report reason", "Enter the reason for your report below.", "Report", "Back");
+	Dialog_ShowCallback(playerid, using inline Response, DIALOG_STYLE_INPUT, "Razão do Relatório", "Introduza a razão para o Relatório.", "Reportar", "Trás");
 }
 
 
@@ -236,7 +216,7 @@ ACMD:reports[1](playerid, params[])
 	ret = ShowListOfReports(playerid);
 
 	if(ret == 0)
-		ChatMsg(playerid, YELLOW, " >  There are no reports to show.");
+		ChatMsg(playerid, YELLOW, " >  Não existem relatórios para mostrar.");
 
 	return 1;
 }
@@ -244,7 +224,7 @@ ACMD:reports[1](playerid, params[])
 ACMD:deletereports[2](playerid, params[])
 {
 	DeleteReadReports();
-	ChatMsg(playerid, YELLOW, " >  All read reports deleted.");
+	ChatMsg(playerid, YELLOW, " >  Todos os relatórios foram eliminados.");
 
 	return 1;
 }
@@ -288,7 +268,7 @@ ShowListOfReports(playerid)
 		}
 	}
 
-	Dialog_ShowCallback(playerid, using inline Response, DIALOG_STYLE_LIST, "Reports", string, "Open", "Close");
+	Dialog_ShowCallback(playerid, using inline Response, DIALOG_STYLE_LIST, "Relatórios", string, "Abrir", "Sair");
 
 	return 1;
 }
@@ -331,16 +311,12 @@ ShowReport(playerid, reportlistitem)
 		#pragma unused pid, dialogid, listitem, inputtext
 
 		if(response)
-		{
 			ShowReportOptions(playerid);
-		}
 		else
-		{
 			ShowListOfReports(playerid);
-		}
 	}
 
-	Dialog_ShowCallback(playerid, using inline Response, DIALOG_STYLE_MSGBOX, report_CurrentReportList[playerid][reportlistitem][report_name], message, "Options", "Back");
+	Dialog_ShowCallback(playerid, using inline Response, DIALOG_STYLE_MSGBOX, report_CurrentReportList[playerid][reportlistitem][report_name], message, "Opções", "Trás");
 
 	return 1;
 }
@@ -349,31 +325,31 @@ ShowReportOptions(playerid)
 {
 	new options[128];
 
-	options = "Ban\nDelete\nDelete all reports of this player\nMark Unread\n";
+	options = "Banir\nEliminar\nEliminar todos os relatórios deste Jogador\nMarcar como não lido\n";
 
 	if(IsPlayerOnAdminDuty(playerid))
 	{
-		strcat(options, "Go to position of report\n");
+		strcat(options, "Ir para a posição do relatório\n");
 
 		if(!strcmp(report_CurrentType[playerid], "TELE"))
 		{
-			strcat(options, "Go to teleport destination\n");
+			strcat(options, "Ir para a posição do Teleport\n");
 		}
 
 		if(!strcmp(report_CurrentType[playerid], "CAM"))
 		{
-			strcat(options, "Go to camera location\n");
-			strcat(options, "View camera\n");
+			strcat(options, "Ir para a posição da Cãmara\n");
+			strcat(options, "Ver Cãmara\n");
 		}
 
 		if(!strcmp(report_CurrentType[playerid], "VTP"))
 		{
-			strcat(options, "Go to vehicle pos\n");
+			strcat(options, "Ir para a posição do Veículo\n");
 		}
 	}
 	else
 	{
-		strcat(options, "(Go on duty to see more options)");	
+		strcat(options, "(Entre em Modo de Admin para ver mais opções)");	
 	}
 
 	inline Response(pid, dialogid, response, listitem, string:inputtext[])
@@ -385,25 +361,20 @@ ShowReportOptions(playerid)
 			switch(listitem)
 			{
 				case 0:
-				{
 					ShowReportBanPrompt(playerid);
-				}
 				case 1:
 				{
 					DeleteReport(report_CurrentReportList[playerid][report_CurrentItem[playerid]][report_rowid]);
-
 					ShowListOfReports(playerid);
 				}
 				case 2:
 				{
 					DeleteReportsOfPlayer(report_CurrentReportList[playerid][report_CurrentItem[playerid]][report_name]);
-
 					ShowListOfReports(playerid);
 				}
 				case 3:
 				{
 					SetReportRead(report_CurrentReportList[playerid][report_CurrentItem[playerid]][report_rowid], 0);
-
 					ShowListOfReports(playerid);
 				}
 				case 4:
@@ -421,10 +392,7 @@ ShowReportOptions(playerid)
 					{
 						if(IsPlayerOnAdminDuty(playerid))
 						{
-							new
-								Float:x,
-								Float:y,
-								Float:z;
+							new Float:x, Float:y, Float:z;
 
 							sscanf(report_CurrentInfo[playerid], "p<,>fff", x, y, z);
 							SetPlayerPos(playerid, x, y, z);
@@ -437,10 +405,7 @@ ShowReportOptions(playerid)
 					{
 						if(IsPlayerOnAdminDuty(playerid))
 						{
-							new
-								Float:x,
-								Float:y,
-								Float:z;
+							new Float:x, Float:y, Float:z;
 
 							sscanf(report_CurrentInfo[playerid], "p<,>fff{fff}", x, y, z);
 							SetPlayerPos(playerid, x, y, z);
@@ -453,10 +418,7 @@ ShowReportOptions(playerid)
 					{
 						if(IsPlayerOnAdminDuty(playerid))
 						{
-							new
-								Float:x,
-								Float:y,
-								Float:z;
+							new Float:x, Float:y, Float:z;
 
 							sscanf(report_CurrentInfo[playerid], "p<,>fff", x, y, z);
 							SetPlayerPos(playerid, x, y, z);
@@ -471,13 +433,7 @@ ShowReportOptions(playerid)
 					{
 						if(IsPlayerOnAdminDuty(playerid))
 						{
-							new
-								Float:x,
-								Float:y,
-								Float:z,
-								Float:vx,
-								Float:vy,
-								Float:vz;
+							new Float:x, Float:y, Float:z, Float:vx, Float:vy, Float:vz;
 
 							sscanf(report_CurrentInfo[playerid], "p<,>ffffff", x, y, z, vx, vy, vz);
 
@@ -487,25 +443,23 @@ ShowReportOptions(playerid)
 							SetPlayerCameraPos(playerid, x, y, z);
 							SetPlayerCameraLookAt(playerid, x + vx, y + vy, z + vz);
 
-							ChatMsg(playerid, YELLOW, " >  Type /recam to reset your camera");
+							ChatMsg(playerid, YELLOW, " >  Digite /recam para resetar sua camera");
 						}
 					}
 				}
 			}
 		}
 		else
-		{
 			ShowReport(playerid, report_CurrentItem[playerid]);
-		}
 	}
-	Dialog_ShowCallback(playerid, using inline Response, DIALOG_STYLE_LIST, report_CurrentReportList[playerid][report_CurrentItem[playerid]][report_name], options, "Select", "Back");
+	Dialog_ShowCallback(playerid, using inline Response, DIALOG_STYLE_LIST, report_CurrentReportList[playerid][report_CurrentItem[playerid]][report_name], options, "Selecionar", "Trás");
 }
 
 ShowReportBanPrompt(playerid)
 {
 	if(GetPlayerAdminLevel(playerid) < 2)
 	{
-		ChatMsg(playerid, RED, "You do not have permission to ban players.");
+		ChatMsg(playerid, RED, "Não tem permissão para banir Jogadores.");
 		ShowReportOptions(playerid);
 
 		return 0;
@@ -517,13 +471,7 @@ ShowReportBanPrompt(playerid)
 
 		if(response)
 		{
-			new duration;
-
-			if(!strcmp(inputtext, "forever", true))
-				duration = 0;
-
-			else
-				duration = GetDurationFromString(inputtext);
+			new duration = !strcmp(inputtext, "sempre", true) ? 0 : GetDurationFromString(inputtext);
 
 			if(duration == -1)
 			{
@@ -535,12 +483,10 @@ ShowReportBanPrompt(playerid)
 			ShowListOfReports(playerid);
 		}
 		else
-		{
 			ShowReportOptions(playerid);
-		}
 	}
 
-	Dialog_ShowCallback(playerid, using inline Response, DIALOG_STYLE_INPUT, "Please enter ban duration", "Enter the ban duration below. You can type a number then one of either: 'days', 'weeks' or 'months'. Type 'forever' for perma-ban.", "Continue", "Cancel");
+	Dialog_ShowCallback(playerid, using inline Response, DIALOG_STYLE_INPUT, "Introduza o tempo de Banimento", "Introduza o tempo de banimento abaixo. Pode digitar um número, seguido de uma das seguintes opções: 'days', 'weeks' or 'months'. Digite 'sempre' para um ban permamente.", "Continuar", "Cancelar");
 
 	return 1;
 }

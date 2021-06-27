@@ -1,20 +1,4 @@
-/*==============================================================================
-
-
-	Southclaws' Scavenge and Survive
-
-		Copyright (C) 2020 Barnaby "Southclaws" Keene
-
-		This Source Code Form is subject to the terms of the Mozilla Public
-		License, v. 2.0. If a copy of the MPL was not distributed with this
-		file, You can obtain one at http://mozilla.org/MPL/2.0/.
-
-
-==============================================================================*/
-
-
 #include <YSI_Coding\y_hooks>
-
 
 #define MAX_ISSUE_LENGTH			(128)
 #define MAX_ISSUES_PER_PAGE			(32)
@@ -77,7 +61,7 @@ CMD:bug(playerid, params[])
 			ChatMsgLang(playerid, YELLOW, "BUGREPORTSU");
 		}
 	}
-	Dialog_ShowCallback(playerid, using inline Response, DIALOG_STYLE_INPUT, "Bug report", ls(playerid, "BUGREPORTDI"), "Submit", "Cancel");
+	Dialog_ShowCallback(playerid, using inline Response, DIALOG_STYLE_INPUT, "Relatório de Bug", ls(playerid, "BUGREPORTDI"), "Submeter", "Cancelar");
 
 	return 1;
 }
@@ -89,9 +73,7 @@ ReportBug(playerid, bug[])
 	stmt_bind_value(stmt_BugInsert, 2, DB::TYPE_INTEGER, gettime());
 
 	if(stmt_execute(stmt_BugInsert))
-	{
-		ChatMsgAdmins(1, YELLOW, " >  %P"C_YELLOW" reported bug %s", playerid, bug);
-	}
+		ChatMsgAdmins(1, YELLOW, " >  %P"C_YELLOW" reportou bug %s", playerid, bug);
 }
 
 
@@ -102,14 +84,14 @@ ReportBug(playerid, bug[])
 ==============================================================================*/
 
 
-CMD:issues(playerid, params[])
+CMD:bugs(playerid, params[])
 {
 	new ret;
 
 	ret = ShowListOfBugs(playerid);
 
 	if(ret == 0)
-		ChatMsg(playerid, YELLOW, " >  There are no bug reports to show.");
+		ChatMsg(playerid, YELLOW, " >  Não existem relatórios de Bug.");
 
 	return 1;
 }
@@ -161,7 +143,7 @@ ShowListOfBugs(playerid)
 				ChatMsg(playerid, RED, " >  An error occurred while trying to execute statement 'stmt_BugInfo'.");
 		}
 	}
-	Dialog_ShowCallback(playerid, using inline Response, DIALOG_STYLE_LIST, "Issues", list, "Open", "Close");
+	Dialog_ShowCallback(playerid, using inline Response, DIALOG_STYLE_LIST, "Bugs", list, "Abrir", "Fechar");
 
 	return 1;
 }
@@ -207,10 +189,9 @@ ShowBugReportInfo(playerid, rowid)
 	}
 
 	if(GetPlayerAdminLevel(playerid) > 1)
-		Dialog_ShowCallback(playerid, using inline Response, DIALOG_STYLE_MSGBOX, "Issues", message, "Delete", "Back");
-
+		Dialog_ShowCallback(playerid, using inline Response, DIALOG_STYLE_MSGBOX, "Bugs", message, "Eliminar", "Para Trás");
 	else
-		Dialog_ShowCallback(playerid, using inline Response, DIALOG_STYLE_MSGBOX, "Issues", message, "Back", "");
+		Dialog_ShowCallback(playerid, using inline Response, DIALOG_STYLE_MSGBOX, "Bugs", message, "Para Trás", "");
 
 	return 1;
 }
