@@ -38,7 +38,7 @@ ORPC:44(playerid, BitStream:bs){
 		ModelID == 3014 || ModelID == 2969 || ModelID == 1271) {
 		stop pCheckViewObj[playerid][objectid];
 
-		if(!IsPlayerViewingObject(playerid, X, Y, Z, ModelID)) {
+		if(!IsPlayerViewingObject(playerid, X, Y, Z)) {
 	    	pCheckViewObj[playerid][objectid] = repeat CheckViewObj(playerid, objectid,\
 		    	ModelID, X, Y, Z, RX, RY, RZ, d, NoCamera, attobj, attve);
 			
@@ -51,7 +51,7 @@ ORPC:44(playerid, BitStream:bs){
 
 timer CheckViewObj[200](playerid, objectid, ModelID, \
 Float:X, Float:Y, Float:Z, Float:RX, Float:RY, Float:RZ, Float:d, NoCamera, attobj, attve){
-	if(IsPlayerViewingObject(playerid, X, Y, Z, ModelID)){
+	if(IsPlayerViewingObject(playerid, X, Y, Z)){
 		stop pCheckViewObj[playerid][objectid];
     	ShowObjectForPlayer(objectid, playerid, ModelID, X, Y, Z, RX, RY, RZ, d, NoCamera, attobj, attve);
 	}
@@ -64,7 +64,7 @@ ORPC:47(playerid, BitStream:bs){
 	return 1;
 }
 
-IsPlayerViewingObject(playerid, Float:X, Float:Y, Float:Z, modelid){
+IsPlayerViewingObject(playerid, Float:X, Float:Y, Float:Z){
 	new
 	    Float:px,
 	    Float:py,
@@ -76,7 +76,7 @@ IsPlayerViewingObject(playerid, Float:X, Float:Y, Float:Z, modelid){
 
 	rayid = CA_RayCastLine(X, Y, Z, px, py, pz, tmp, tmp, tmp);
 
-	return (rayid == modelid);
+	return (rayid != WATER_OBJECT || rayid != 0);
 }
 
 ShowObjectForPlayer(objectid, toplayerid, ModelID, \
