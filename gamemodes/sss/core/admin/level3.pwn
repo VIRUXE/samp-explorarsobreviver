@@ -1,25 +1,11 @@
-/*==============================================================================
-
-
-	Southclaws' Scavenge and Survive
-
-		Copyright (C) 2020 Barnaby "Southclaws" Keene
-
-		This Source Code Form is subject to the terms of the Mozilla Public
-		License, v. 2.0. If a copy of the MPL was not distributed with this
-		file, You can obtain one at http://mozilla.org/MPL/2.0/.
-
-
-==============================================================================*/
-
-
 #include <YSI_Coding\y_hooks>
 
 
 hook OnGameModeInit()
 {
 	RegisterAdminCommand(STAFF_LEVEL_ADMINISTRATOR, "/whitelist - add/remove name or turn whitelist on/off\n");
-	RegisterAdminCommand(STAFF_LEVEL_ADMINISTRATOR, "/spec /free - spectate and freecam\n");
+	RegisterAdminCommand(STAFF_LEVEL_ADMINISTRATOR, "/spec - Spectar um Jogador\n");
+	RegisterAdminCommand(STAFF_LEVEL_ADMINISTRATOR, "/free - Viajar com a Câmera\n");
 	RegisterAdminCommand(STAFF_LEVEL_ADMINISTRATOR, "/ip - get a player's IP\n");
 	RegisterAdminCommand(STAFF_LEVEL_ADMINISTRATOR, "/vehicle - vehicle control (duty only)\n");
 	RegisterAdminCommand(STAFF_LEVEL_ADMINISTRATOR, "/move - nudge yourself\n");
@@ -47,7 +33,7 @@ ACMD:whitelist[3](playerid, params[])
 
 	if(sscanf(params, "s[7]S()[24]", command, name))
 	{
-		ChatMsg(playerid, YELLOW, " >  Usage: /whitelist [add/remove/on/off/auto/list] - the whitelist is currently %s (auto: %s)", IsWhitelistActive() ? ("on") : ("off"), IsWhitelistAuto() ? ("on") : ("off"));
+		ChatMsg(playerid, YELLOW, " >  Utilização: /whitelist [add/remove/on/off/auto/list] - the whitelist is currently %s (auto: %s)", IsWhitelistActive() ? ("on") : ("off"), IsWhitelistAuto() ? ("on") : ("off"));
 		return 1;
 	}
 
@@ -55,7 +41,7 @@ ACMD:whitelist[3](playerid, params[])
 	{
 		if(isnull(name))
 		{
-			ChatMsg(playerid, YELLOW, " >  Usage /whitelist add [name]");
+			ChatMsg(playerid, YELLOW, " >  Utilização /whitelist add [name]");
 			return 1;
 		}
 
@@ -74,7 +60,7 @@ ACMD:whitelist[3](playerid, params[])
 	{
 		if(isnull(name))
 		{
-			ChatMsg(playerid, YELLOW, " >  Usage /whitelist remove [name]");
+			ChatMsg(playerid, YELLOW, " >  Utilização /whitelist remove [name]");
 			return 1;
 		}
 
@@ -117,13 +103,7 @@ ACMD:whitelist[3](playerid, params[])
 		}
 	}
 	else if(!strcmp(command, "?", true))
-	{
-		if(IsNameInWhitelist(name))
-			ChatMsg(playerid, YELLOW, " >  That name "C_BLUE"is "C_YELLOW"in the whitelist.");
-
-		else
-			ChatMsg(playerid, YELLOW, " >  That name "C_ORANGE"is not "C_YELLOW"in the whitelist");
-	}
+		ChatMsg(playerid, YELLOW, IsNameInWhitelist(name) ? " >  That name "C_BLUE"is "C_YELLOW"in the whitelist." : " >  That name "C_ORANGE"is not "C_YELLOW"in the whitelist");
 	else if(!strcmp(command, "list", true))
 	{
 		new list[(MAX_PLAYER_NAME + 1) * MAX_PLAYERS];
@@ -154,9 +134,7 @@ ACMD:spec[2](playerid, params[])
 		return 6;
 
 	if(isnull(params))
-	{
 		ExitSpectateMode(playerid);
-	}
 	else
 	{
 		new targetid = strval(params);
@@ -171,7 +149,7 @@ ACMD:spec[2](playerid, params[])
 
 				if(!IsPlayerReported(name))
 				{
-					ChatMsg(playerid, YELLOW, " >  You can only spectate reported players.");
+					ChatMsg(playerid, YELLOW, " >  Apenas pode spectar Jogadores Reportados.");
 					return 1;
 				}
 			}
@@ -190,7 +168,6 @@ ACMD:free[2](playerid)
 
 	if(GetPlayerSpectateType(playerid) == SPECTATE_TYPE_FREE)
 		ExitFreeMode(playerid);
-
 	else
 		EnterFreeMode(playerid);
 
@@ -221,7 +198,6 @@ ACMD:ip[3](playerid, params[])
 		{
 			if(targetid > 99)
 				ChatMsg(playerid, YELLOW, " >  Numeric value '%d' isn't a player ID that is currently online, treating it as a name.", targetid);
-
 			else
 				return 4;
 		}
@@ -265,7 +241,7 @@ ACMD:vehicle[3](playerid, params[])
 
 	if(sscanf(params, "s[10]D(-1)", command, vehicleid))
 	{
-		ChatMsg(playerid, YELLOW, " >  Usage: /vehicle [get/goto/enter/owner/delete/respawn/reset/lock/unlock/removekey] [id]");
+		ChatMsg(playerid, YELLOW, " >  Utilização: /vehicle [get/goto/enter/owner/delete/respawn/reset/lock/unlock/removekey] [id]");
 		return 1;
 	}
 
@@ -385,7 +361,7 @@ ACMD:vehicle[3](playerid, params[])
 		return 1;
 	}
 
-	ChatMsg(playerid, YELLOW, " >  Usage: /vehicle [get/enter/owner/delete/respawn/reset/lock/unlock] [id]");
+	ChatMsg(playerid, YELLOW, " >  Utilização: /vehicle [get/enter/owner/delete/respawn/reset/lock/unlock] [id]");
 
 	return 1;
 }
@@ -393,7 +369,7 @@ ACMD:vehicle[3](playerid, params[])
 
 /*==============================================================================
 
-	Spawn a new item into the game world
+	Teleportes para pontos de interesse
 
 ==============================================================================*/
 
@@ -682,7 +658,7 @@ ACMD:move[3](playerid, params[])
 		return 1;
 	}
 
-	ChatMsg(playerid, YELLOW, " >  Usage: /move [f/b/u/d] [optional:distance]");
+	ChatMsg(playerid, YELLOW, " >  Utilização: /move [f/b/u/d] [optional:distance]");
 
 	return 1;
 }
@@ -704,7 +680,7 @@ ACMD:additem[3](playerid, params[])
 
 	if(sscanf(params, "s[32]S()[32]S()[64]", query, specifiers, data))
 	{
-		ChatMsg(playerid, YELLOW, " >  Usage: /additem [itemid/itemname] [extradata format specifiers] [extradata array, comma separated]");
+		ChatMsg(playerid, YELLOW, " >  Utilização: /additem [itemid/itemname] [extradata format specifiers] [extradata array, comma separated]");
 		ChatMsg(playerid, YELLOW, " >  Example: `/additem gascan df 1, 4.5` create a petrol can with an integer and a float in extradata.");
 		return 1;
 	}
@@ -787,9 +763,7 @@ ACMD:additem[3](playerid, params[])
 		z - ITEM_FLOOR_OFFSET, .rz = r);
 
 	if(exdatalen > 0)
-	{
 		SetItemArrayData(itemid, exdata, typemaxsize);
-	}
 
 	if(GetPlayerAdminLevel(playerid) < STAFF_LEVEL_LEAD)
 	{
@@ -825,15 +799,11 @@ ACMD:addvehicle[3](playerid, params[])
 		Float:r,
 		vehicleid;
 
-	if(isnumeric(params))
-		type = strval(params);
-
-	else
-		type = GetVehicleTypeFromName(params, true, true);
+	type = isnumeric(params) ? strval(params) : GetVehicleTypeFromName(params, true, true);
 
 	if(!IsValidVehicleType(type))
 	{
-		ChatMsg(playerid, YELLOW, " >  Invalid vehicle type.");
+		ChatMsg(playerid, YELLOW, " >  Tipo de Veículo Inválido.");
 		return 1;
 	}
 
@@ -852,7 +822,7 @@ ACMD:addvehicle[3](playerid, params[])
 
 			log("[ADDVEHICLE] %p added vehicle %d reason: %s", pid, type, inputtext);
 		}
-		Dialog_ShowCallback(playerid, using inline Response, DIALOG_STYLE_INPUT, "Justification", "Type a reason for adding this vehicle:", "Enter", "");
+		Dialog_ShowCallback(playerid, using inline Response, DIALOG_STYLE_INPUT, "Justificação", "Introduz a razão para ter adicionado esse veículo:", "OK", "");
 	}
 
 	return 1;
@@ -870,7 +840,7 @@ ACMD:resetpassword[3](playerid, params[])
 {
 	if(isnull(params))
 	{
-		ChatMsg(playerid, YELLOW, " >  Usage: /resetpassword [account user-name]");
+		ChatMsg(playerid, YELLOW, " >  Utilização: /resetpassword [account user-name]");
 		return 1;
 	}
 
@@ -880,7 +850,6 @@ ACMD:resetpassword[3](playerid, params[])
 
 	if(SetAccountPassword(params, buffer))
 		ChatMsg(playerid, YELLOW, " >  Password for '%s' reset.", params);
-
 	else
 		ChatMsg(playerid, RED, " >  An error occurred.");
 
@@ -896,7 +865,7 @@ ACMD:setactive[3](playerid, params[])
 
 	if(sscanf(params, "s[24]d", name, active))
 	{
-		ChatMsg(playerid, YELLOW, " >  Usage: /setactive [name] [1/0]");
+		ChatMsg(playerid, YELLOW, " >  Utilização: /setactive [name] [1/0]");
 		return 1;
 	}
 
@@ -931,7 +900,7 @@ ACMD:delete[3](playerid, params[])
 
 	if(sscanf(params, "s[16]F(1.5)", type, range))
 	{
-		ChatMsg(playerid, YELLOW, " >  Usage: /delete [items/tents/defences/signs] [optional:range(1.5)]");
+		ChatMsg(playerid, YELLOW, " >  Utilização: /delete [items/tents/defences/signs] [optional:range(1.5)]");
 		return 1;
 	}
 
@@ -994,7 +963,7 @@ ACMD:delete[3](playerid, params[])
 		return 1;
 	}
 
-	ChatMsg(playerid, YELLOW, " >  Usage: /delete [items/tents/defences/signs] [optional:range(1.5)]");
+	ChatMsg(playerid, YELLOW, " >  Utilização: /delete [items/tents/defences/signs] [opcional: raio(1.5)]");
 
 	return 1;
 }
