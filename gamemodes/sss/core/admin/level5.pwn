@@ -194,19 +194,17 @@ ACMD:setitemhp[5](playerid, params[])
 ACMD:vw[5](playerid, params[])
 {
 	if(isnull(params))
-		ChatMsg(playerid, YELLOW, "Current VW: %d", GetPlayerVirtualWorld(playerid));
-
+		ChatMsg(playerid, YELLOW, "Virtual World Actual: %d", GetPlayerVirtualWorld(playerid));
 	else
 		SetPlayerVirtualWorld(playerid, strval(params));
 
 	return 1;
 }
 
-ACMD:iw[5](playerid, params[])
+ACMD:int[5](playerid, params[])
 {
 	if(isnull(params))
-		ChatMsg(playerid, YELLOW, "Current INT: %d", GetPlayerInterior(playerid));
-
+		ChatMsg(playerid, YELLOW, "Interior Actual: %d", GetPlayerInterior(playerid));
 	else
 		SetPlayerInterior(playerid, strval(params));
 
@@ -219,7 +217,7 @@ ACMD:health[5](playerid, params[])
 
 	if(sscanf(params, "f", value))
 	{
-		ChatMsg(playerid, YELLOW, "Current health %f", GetPlayerHP(playerid));
+		ChatMsg(playerid, YELLOW, "Vida %f", GetPlayerHP(playerid));
 		return 1;
 	}
 
@@ -286,10 +284,7 @@ ACMD:removewounds[5](playerid, params[])
 
 ACMD:wc[5](playerid, params[])
 {
-	new
-		Float:x,
-		Float:y,
-		Float:z;
+	new Float:x, Float:y, Float:z;
 
 	GetPlayerPos(playerid, x, y, z);
 
@@ -343,6 +338,7 @@ ACMD:editatt[5](playerid, params[])
 	EditAttachedObject(playerid, 0);
 	return 1;
 }
+
 public OnPlayerEditAttachedObject( playerid, response, index, modelid, boneid,
                                    Float:fOffsetX, Float:fOffsetY, Float:fOffsetZ,
                                    Float:fRotX, Float:fRotY, Float:fRotZ,
