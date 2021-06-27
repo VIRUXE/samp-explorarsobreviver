@@ -123,9 +123,9 @@ stock DisplayPlayerInventory(playerid) {
 
 	new
 		title[18],
-		list[(MAX_INVENTORY_SLOTS * (MAX_ITEM_NAME + MAX_ITEM_TEXT + 16))],
+		list[(MAX_INVENTORY_SLOTS * (MAX_ITEM_NAME + MAX_ITEM_TEXT + 11))],
 		Item:itemid,
-		tmp[5 + MAX_ITEM_NAME + MAX_ITEM_TEXT + 1],
+		tmp[MAX_ITEM_NAME + MAX_ITEM_TEXT],
 		size;
 
 	inv_ItemListTotal[playerid] = 0;
@@ -135,7 +135,7 @@ stock DisplayPlayerInventory(playerid) {
 		return 2;
 	}
 
-	new itemsize, model, ItemType:itemtype;
+	new model, ItemType:itemtype;
 	for(new i; i < size; i++) {
 		ret_outer = GetInventorySlotItem(playerid, i, itemid);
 
@@ -147,7 +147,6 @@ stock DisplayPlayerInventory(playerid) {
 
 		GetItemName(itemid, tmp);
 		GetItemTypeModel(itemtype, model);
-		GetItemTypeSize(itemtype, itemsize);
 
 		format(list, sizeof(list), "%s%d\t%s\n", list, model, tmp);
 
@@ -157,8 +156,8 @@ stock DisplayPlayerInventory(playerid) {
 	new slots;
 	ret_outer = GetInventoryFreeSlots(playerid, slots);
 
-	if(slots > 0) {
-		format(list, sizeof(list), "%s19300\t~g~+%d Free Slots\n", list, slots);
+	for(new i; i < slots; i++) {
+		strcat(list, "19300\t<Empty>\n");
 		inv_ItemListTotal[playerid]++;
 	}
 
@@ -236,7 +235,6 @@ stock AddInventoryOption(playerid, const option[]) {
 		Logger_I("playerid", playerid),
 		Logger_S("option", option));
 
-	strcat(inv_OptionsList[playerid], "19300\t~y~");
 	strcat(inv_OptionsList[playerid], option);
 	strcat(inv_OptionsList[playerid], "\n");
 
@@ -309,9 +307,10 @@ hook OnPlayerConnect(playerid) {
 
 _inv_displaySlotOptions(playerid, slotid) {
 	new
-		name[MAX_ITEM_NAME + MAX_ITEM_TEXT],
+		name[MAX_ITEM_NAME + MAX_ITEM_TEXT + 6],
 		Item:itemid,
-		ret_outer;
+		ret_outer,
+		itemsize;
 	
 	ret_outer = GetInventorySlotItem(playerid, slotid, itemid);
 	if(ret_outer) {
@@ -319,58 +318,22 @@ _inv_displaySlotOptions(playerid, slotid) {
 	}
 
 	GetItemName(itemid, name);
-	inv_OptionsList[playerid] = "19300\t~y~Equip\n19300\t~y~Use\n19300\t~y~Drop\n";
+	GetItemTypeSize(GetItemType(itemid), itemsize);
+	format(name, sizeof(name), "[%d]%s", itemsize, name);
+	
+	inv_OptionsList[playerid] = "Equip\nUse\nDrop\n";
 	inv_OptionsCount[playerid] = 0;
 
 	CallLocalFunction("OnPlayerViewInventoryOpt", "d", playerid);
 
-	ShowPlayerDialog(playerid, 34, DIALOG_STYLE_PREVIEW_MODEL, name, inv_OptionsList[playerid], "Options", "Close");
+	inline Response(pid, dialogid, response, listitem, string:inputtext[]) {
+		#pragma unused pid, dialogid
 
-	return 0;
-}
-
-hook OnDialogModelResponse(playerid, dialogid, response, listitem)
-{
-	if(dialogid == 33)
-	{
-		Logger_Dbg("inventory-dialog", "player responded to inventory dialog",
-			Logger_I("playerid", playerid),
-			Logger_I("response", response),
-			Logger_I("listitem", listitem));
-
-		if(!response) {
-			ClosePlayerInventory(playerid, true);
-			return 1;
-		}
-
-		if(listitem >= inv_ItemListTotal[playerid]) {
-			if(!CallLocalFunction("OnPlayerSelectExtraItem", "dd", playerid, listitem - inv_ItemListTotal[playerid])) {
-				Logger_Dbg("inventory-dialog", "opening inventory via extra item response");
-				DisplayPlayerInventory(playerid);
-			} else {
-				Logger_Dbg("inventory-dialog", "closing inventory via extra item response");
-				ClosePlayerInventory(playerid);
-			}
-			return 1;
-		}
-
-		new
-			Item:itemid2,
-			ret;
-		ret = GetInventorySlotItem(playerid, listitem, itemid2);
-		if(ret || !IsValidItem(itemid2)) {
-			DisplayPlayerInventory(playerid);
-		} else {
-			inv_SelectedSlot[playerid] = listitem;
-			_inv_displaySlotOptions(playerid, listitem);
-		}
-	}
-	if(dialogid == 34)
-	{
 		Logger_Dbg("inventory-dialog", "player responded to inventory item options",
 			Logger_I("playerid", playerid),
 			Logger_I("response", response),
-			Logger_I("listitem", listitem));
+			Logger_I("listitem", listitem),
+			Logger_S("inputtext", inputtext));
 
 		if(!response) {
 			DisplayPlayerInventory(playerid);
@@ -453,6 +416,49 @@ hook OnDialogModelResponse(playerid, dialogid, response, listitem)
 					ClosePlayerInventory(playerid);
 				}
 			}
+		}
+
+		return 1;
+	}
+	Dialog_ShowCallback(playerid, using inline Response, DIALOG_STYLE_LIST, name, inv_OptionsList[playerid], "Options", "Close");
+
+	return 0;
+}
+
+hook OnDialogModelResponse(playerid, dialogid, response, listitem)
+{
+	if(dialogid == 33)
+	{
+		Logger_Dbg("inventory-dialog", "player responded to inventory dialog",
+			Logger_I("playerid", playerid),
+			Logger_I("response", response),
+			Logger_I("listitem", listitem));
+
+		if(!response) {
+			ClosePlayerInventory(playerid, true);
+			return 1;
+		}
+
+		if(listitem >= inv_ItemListTotal[playerid]) {
+			if(!CallLocalFunction("OnPlayerSelectExtraItem", "dd", playerid, listitem - inv_ItemListTotal[playerid])) {
+				Logger_Dbg("inventory-dialog", "opening inventory via extra item response");
+				DisplayPlayerInventory(playerid);
+			} else {
+				Logger_Dbg("inventory-dialog", "closing inventory via extra item response");
+				ClosePlayerInventory(playerid);
+			}
+			return 1;
+		}
+
+		new
+			Item:itemid2,
+			ret;
+		ret = GetInventorySlotItem(playerid, listitem, itemid2);
+		if(ret || !IsValidItem(itemid2)) {
+			DisplayPlayerInventory(playerid);
+		} else {
+			inv_SelectedSlot[playerid] = listitem;
+			_inv_displaySlotOptions(playerid, listitem);
 		}
 	}
 	return 1;
