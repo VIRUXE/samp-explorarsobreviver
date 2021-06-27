@@ -258,18 +258,6 @@ static Prev_CreateTextDraws() {
 			Prev@ModelTD[textdrawid][1] = TextDrawCreate((149.0000 + (b * DIALOG_PREVIEW_HORIZONTAL_GAP)), (198.0000 + (a * DIALOG_PREVIEW_VERTICAL_GAP)), "MODEL");
 			TextDrawFont(Prev@ModelTD[textdrawid][1], 5);
 			TextDrawLetterSize(Prev@ModelTD[textdrawid][1], 0.5000, 1.0000);
-<<<<<<< Updated upstream
-			TextDrawColor(Prev@ModelTD[textdrawid][1], -1);
-			TextDrawSetShadow(Prev@ModelTD[textdrawid][1], 0);
-			TextDrawSetOutline(Prev@ModelTD[textdrawid][1], 0);
-			TextDrawBackgroundColor(Prev@ModelTD[textdrawid][1], 842150655);
-			TextDrawSetProportional(Prev@ModelTD[textdrawid][1], 1);
-			TextDrawTextSize(Prev@ModelTD[textdrawid][1], 53.5000, 60.5000);
-			TextDrawSetPreviewModel(Prev@ModelTD[textdrawid][1], 132);
-			TextDrawSetPreviewRot(Prev@ModelTD[textdrawid][1], 0.0000, 0.0000, 0.0000, 0.9500);
-
-			//TextDrawSetSelectable(Prev@ModelTD[textdrawid][1], 1);
-=======
 			TextDrawTextSize(Prev@ModelTD[textdrawid][1], 53.5000, 60.5000);
 			TextDrawSetOutline(Prev@ModelTD[textdrawid][1], 0);
 			TextDrawSetShadow(Prev@ModelTD[textdrawid][1], 0);
@@ -280,7 +268,6 @@ static Prev_CreateTextDraws() {
 			TextDrawUseBox(Prev@ModelTD[textdrawid][1], 0);
 			TextDrawSetProportional(Prev@ModelTD[textdrawid][1], 1);
 			TextDrawSetPreviewRot(Prev@ModelTD[textdrawid][1], -10.000000, 0.000000, -20.000000, 1.000000);
->>>>>>> Stashed changes
 		}
 	}
 }
