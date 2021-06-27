@@ -218,8 +218,7 @@ stock AddInventoryListItem(playerid, const itemname[], modelid = 19300) {
 		Logger_I("playerid", playerid),
 		Logger_S("itemname", itemname));
 
-	format(inv_ExtraItemList[playerid], 128, "%s%d", inv_ExtraItemList[playerid], modelid);
-	strcat(inv_ExtraItemList[playerid], "\t");
+	format(inv_ExtraItemList[playerid], 128, "%s%d\t", inv_ExtraItemList[playerid], modelid);
 	strcat(inv_ExtraItemList[playerid], itemname);
 	strcat(inv_ExtraItemList[playerid], "\n");
 

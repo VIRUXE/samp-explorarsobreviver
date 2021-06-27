@@ -146,7 +146,7 @@ stock DisplayContainerInventory(playerid, Container:containerid) {
 		cnt_ItemListTotal[playerid]++;
 	}
 
-	format(cnt_InventoryString[playerid], sizeof(cnt_InventoryString[]), "%s%d\tInventory >",
+	format(cnt_InventoryString[playerid], sizeof(cnt_InventoryString[]), "%s%d\tInventory >\n",
 		cnt_InventoryString[playerid], GetPlayerSkin(playerid));
 
 	cnt_CurrentContainer[playerid] = containerid;

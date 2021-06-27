@@ -34,10 +34,18 @@ hook OnPlayerConnect(playerid){
 	PlayerTextDrawSetOutline(playerid, item_TD[playerid], 1);
 	PlayerTextDrawSetShadow(playerid, item_TD[playerid], 1);
 	PlayerTextDrawAlignment(playerid, item_TD[playerid], 2);
-	PlayerTextDrawColor(playerid, item_TD[playerid], 0xFFFF00FF);
 	PlayerTextDrawBackgroundColor(playerid, item_TD[playerid], 255);
+	PlayerTextDrawColor(playerid, item_TD[playerid], ORANGE);
+	PlayerTextDrawShow(playerid, item_TD[playerid]);
+	defer HideCredit(playerid);
+	PlayerTextDrawColor(playerid, item_TD[playerid], 0xFFFF00FF);
 }
 
+timer HideCredit[5000](playerid){
+	if(!IsValidItem(GetPlayerItem(playerid))){
+		PlayerTextDrawHide(playerid, item_TD[playerid]);
+	}
+}
 UpdatePlayerPreviewItem(playerid){
 	new iname[MAX_ITEM_NAME + MAX_ITEM_TEXT];
 	GetItemName(GetPlayerItem(playerid), iname);
@@ -105,6 +113,6 @@ hook OnPlayerDroppedItem(playerid, Item:itemid){
 		new Float:x, Float:y, Float:z;
 		GetItemPos(itemid, x, y, z);
 		CA_RayCastLine(x, y, z, x, y, z - 3.0, z, z, z);
-		SetItemPos(itemid, x, y, z);
+		SetItemPos(itemid, x, y, z + 0.15);
 	}
 }

@@ -127,7 +127,6 @@ ShowPlayerHealthInfo(playerid)
 	new
 		string[64],
 		tmp,
-		bodypartwounds[7],
 		drugslist[MAX_DRUG_TYPE],
 		drugs,
 		drugname[MAX_DRUG_NAME],
@@ -136,44 +135,25 @@ ShowPlayerHealthInfo(playerid)
 		infected1 = GetPlayerInfectionIntensity(playerid, 0),
 		infected2 = GetPlayerInfectionIntensity(playerid, 1);
 
-	GetPlayerWoundsPerBodypart(playerid, bodypartwounds);
 	drugs = GetPlayerDrugsList(playerid, drugslist);
 	GetPlayerBleedRate(playerid, bleedrate);
 
 	inv_HealthInfoActive[playerid] = true;
 
-	HideBodyPreviewUI(playerid);
-	ShowBodyPreviewUI(playerid);
-
-	SetBodyPreviewLabel(playerid, 0, tmp++, 35.0, sprintf("Head: %d", bodypartwounds[6]),
-		bodypartwounds[6] ? RGBAToHex(max(bodypartwounds[6] * 50, 255), 0, 0, 255) : 0xFFFFFFFF);
-
-	SetBodyPreviewLabel(playerid, 0, tmp++, 25.0, sprintf("Torso: %d", bodypartwounds[0]),
-		bodypartwounds[0] ? RGBAToHex(max(bodypartwounds[0] * 50, 255), 0, 0, 255) : 0xFFFFFFFF);
-
-	SetBodyPreviewLabel(playerid, 0, tmp++, 30.0, sprintf("Arm R: %d", bodypartwounds[3]),
-		bodypartwounds[3] ? RGBAToHex(max(bodypartwounds[3] * 50, 255), 0, 0, 255) : 0xFFFFFFFF);
-
-	SetBodyPreviewLabel(playerid, 0, tmp++, 20.0, sprintf("Arm L: %d", bodypartwounds[2]),
-		bodypartwounds[2] ? RGBAToHex(max(bodypartwounds[2] * 50, 255), 0, 0, 255) : 0xFFFFFFFF);
-
-	SetBodyPreviewLabel(playerid, 0, tmp++, 20.0, sprintf("Groin: %d", bodypartwounds[1]),
-		bodypartwounds[1] ? RGBAToHex(max(bodypartwounds[1] * 50, 255), 0, 0, 255) : 0xFFFFFFFF);
-
-	SetBodyPreviewLabel(playerid, 0, tmp++, 20.0, sprintf("Leg R: %d", bodypartwounds[5]),
-		bodypartwounds[5] ? RGBAToHex(max(bodypartwounds[5] * 50, 255), 0, 0, 255) : 0xFFFFFFFF);
-
-	SetBodyPreviewLabel(playerid, 0, tmp++, 20.0, sprintf("Leg L: %d", bodypartwounds[4]),
-		bodypartwounds[4] ? RGBAToHex(max(bodypartwounds[4] * 50, 255), 0, 0, 255) : 0xFFFFFFFF);
-
-	tmp = 0;
+	SetBodyPreviewLabel(playerid, 0, tmp++, 35.0, sprintf("Wounds: %d", GetPlayerWounds(playerid)),
+		GetPlayerWounds(playerid) ? RGBAToHex(max(GetPlayerWounds(playerid) * 50, 255), 0, 0, 255) : 0xFFFFFFFF);
 
 	if(bleedrate > 0.0)
-		SetBodyPreviewLabel(playerid, 1, tmp++, 35.0, sprintf("Bleeding %0.1f%", bleedrate), RGBAToHex(truncateforbyte(floatround(bleedrate * 3200.0)), truncateforbyte(255 - floatround(bleedrate * 3200.0)), 0, 255));
+		SetBodyPreviewLabel(playerid, 0, tmp++, 35.0, sprintf("Bleeding %0.1f%", bleedrate), RGBAToHex(truncateforbyte(floatround(bleedrate * 3200.0)), truncateforbyte(255 - floatround(bleedrate * 3200.0)), 0, 255));
 
 	if(hunger < 90.0)
-		SetBodyPreviewLabel(playerid, 1, tmp++, 20.0, sprintf("Energy %0.1f%", hunger), RGBAToHex(truncateforbyte(floatround((66.6 - hunger) * 4.8)), truncateforbyte(255 - floatround((66.6 - hunger) * 4.8)), 0, 255));
+		SetBodyPreviewLabel(playerid, 0, tmp++, 20.0, sprintf("Energy %0.1f%", hunger), RGBAToHex(truncateforbyte(floatround((66.6 - hunger) * 4.8)), truncateforbyte(255 - floatround((66.6 - hunger) * 4.8)), 0, 255));
 
+	format(string, sizeof(string), "%.1f%% Unconsciousness chance", (GetPlayerKnockoutChance(playerid, 5.7) + GetPlayerKnockoutChance(playerid, 22.6)) / 2);
+	SetBodyPreviewLabel(playerid, 0, tmp++, 20.0, string, 0xFFFF00FF);
+	
+	tmp = 0;
+	
 	if(infected1)
 		SetBodyPreviewLabel(playerid, 1, tmp++, 20.0, "Food/Liquid Infect", 0xFF0000FF);
 
@@ -185,9 +165,6 @@ ShowPlayerHealthInfo(playerid)
 		GetDrugName(drugslist[i], drugname);
 		SetBodyPreviewLabel(playerid, 1, tmp++, 20.0, drugname, 0xFFFF00FF);
 	}
-
-	format(string, sizeof(string), "%.1f%% Unconsciousness chance", (GetPlayerKnockoutChance(playerid, 5.7) + GetPlayerKnockoutChance(playerid, 22.6)) / 2);
-	SetBodyPreviewFooterText(playerid, string);
 }
 
 HidePlayerHealthInfo(playerid)

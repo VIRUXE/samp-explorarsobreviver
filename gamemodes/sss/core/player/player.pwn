@@ -95,18 +95,12 @@ public OnPlayerConnect(playerid)
 	SetSpawnInfo(playerid, 0, 0, DEFAULT_POS_X, DEFAULT_POS_Y, DEFAULT_POS_Z, 0.0, 0, 0, 0, 0, 0, 0);
 	SpawnPlayer(playerid);
 
-	/*
-	If you have any respect for me or my work that I do completely free:
-	DO NOT REMOVE THIS MESSAGE.
-	It's just one line of text that appears when a player joins.
-	Feel free to add your own message UNDER this one with information regarding
-	your own modifications you've made to the code but DO NOT REMOVE THIS!
+	foreach(new i : Player)
+		if(i != playerid)
+			ChatMsg(i, WHITE, " >  %P (%d)"C_WHITE" has joined.", playerid, playerid);
 
-	Thank you :)
-	*/
-	ChatMsg(playerid, ORANGE, "Scavenge and Survive "C_BLUE"(Copyright (C) 2016 Barnaby \"Southclaws\" Keene)");
-	ChatMsgAll(WHITE, " >  %P (%d)"C_WHITE" has joined", playerid, playerid);
-	ChatMsg(playerid, YELLOW, " >  MoTD: "C_BLUE"%s", gMessageOfTheDay);
+	if(!isnull(gMessageOfTheDay))
+		ChatMsg(playerid, YELLOW, " >  MoTD: "C_BLUE"%s", gMessageOfTheDay);
 
 	ply_Data[playerid][ply_ShowHUD] = true;
 
