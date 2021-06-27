@@ -290,6 +290,10 @@ _UpdateKeyActions(playerid)
 
 	// Single items
 
+	if(itemtype == item_Note)
+	{
+		AddToolTipText(playerid, KEYTEXT_INTERACT, "To Read");
+	}
 	if(itemtype == item_Sign)
 	{
 		AddToolTipText(playerid, KEYTEXT_INTERACT, "Place sign");
