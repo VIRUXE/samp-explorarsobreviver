@@ -19,7 +19,11 @@ hook OnPlayerSpawnNewChar(playerid)
 	SetPlayerScore(playerid, 0);
 }
 
-ptask UpdatePlayerScore[60000](playerid){
-	SetPlayerScore(playerid, GetPlayerScore(playerid) + 1);
+ptask UpdatePlayerScore[60000](playerid)
+{
+	if(!IsPlayerOnAdminDuty(playerid))
+	{
+		SetPlayerScore(playerid, GetPlayerScore(playerid) + 1);
+	}
 }
 

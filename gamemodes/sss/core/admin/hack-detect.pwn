@@ -263,10 +263,10 @@ public OnCheatDetected(playerid, const ip_address[], type, code)
 			}
 		}
 
-		if(IsPlayerDataLoaded(playerid))
+		if(IsPlayerDataLoaded(playerid) && code < 13)
 		{
-			//ChatMsg(playerid, RED, "Você foi kickado por suspeita de %s.", NexCheatName[code]);
-			//AntiCheatKickWithDesync(playerid, code);
+			ChatMsg(playerid, RED, "Você foi kickado por suspeita de %s.", NexCheatName[code]);
+			AntiCheatKickWithDesync(playerid, code);
 		}
 	}
 	return 1;
@@ -280,9 +280,8 @@ public OnCheatWarning(playerid, const ip_address[], type, code, code2, count)
 		if(IsPlayerInTutorial(playerid) || IsPlayerOnAdminDuty(playerid))
 			return 1;
 			
-		ChatMsgAdmins(6, RED,
-			"[NEX Anti-Cheat] AVISO: %P(id:%d) "C_RED"foi detectado sutilmente com %s",
-				playerid, playerid, NexCheatName[code]);
+		ChatMsgAdmins(5, RED, "[Nex-Ac] Warning: %P(id:%d) Name: %s(%d) Code2: %d Count: %d",
+			playerid, playerid, NexCheatName[code], code2, count);
 	}
 	return 1;
 }
