@@ -1,18 +1,3 @@
-/*==============================================================================
-
-
-	Southclaws' Scavenge and Survive
-
-		Copyright (C) 2020 Barnaby "Southclaws" Keene
-
-		This Source Code Form is subject to the terms of the Mozilla Public
-		License, v. 2.0. If a copy of the MPL was not distributed with this
-		file, You can obtain one at http://mozilla.org/MPL/2.0/.
-
-
-==============================================================================*/
-
-
 #include <YSI_Coding\y_hooks>
 
 
@@ -84,13 +69,10 @@ timer UnfreezePlayer_check[4000](playerid)
 	GetPlayerCameraFrontVector(playerid, z, z, z);
 
 	if(-0.994 >= z >= -0.997 || 0.9958 >= z >= 0.9946)
-	{
-		ChatMsgAdmins(2, YELLOW, " >  Possible mod user: "C_ORANGE"%p (%d)", playerid, playerid);
-	}
+		ChatMsgAdmins(2, YELLOW, " >  Utilizando s0beit: "C_ORANGE"%p (%d)", playerid, playerid);
 
 	return;
 }
-
 
 stock IsPlayerFrozen(playerid)
 {
