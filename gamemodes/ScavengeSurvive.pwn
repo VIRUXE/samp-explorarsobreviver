@@ -32,11 +32,12 @@
 // YSI
 #define _DEBUG							0
 #define CGEN_MEMORY						(71000)//(69420)
-
 #define YSI_NO_VERSION_CHECK
 #define YSI_NO_OPTIMISATION_MESSAGE
 #define YSI_NO_MODE_CACHE
 #define YSI_NO_HEAP_MALLOC
+#define YSI_NO_CACHE_MESSAGE
+
 
 // SQLitei
 #define DB_DEBUG						false 
@@ -73,12 +74,12 @@
 
 // pawn-errors
 // #define PRINT_BACKTRACES
-
 #pragma warning disable 208 // TODO: Fix reparse issues and remove!
 #pragma dynamic 64000
 
 #pragma warning disable 214 // Temporary fix remove const warning
 #pragma warning disable 239 // Temporary fix remove const warning
+
 
 /*==============================================================================
 
@@ -126,7 +127,6 @@ public OnGameModeInit()
 	Libraries
 
 ==============================================================================*/
-
 #include <crashdetect>
 #include <sscanf2>
 #include <mathutil>
@@ -178,7 +178,6 @@ public OnGameModeInit()
 #include <optud>
 #include <discord-connector>
 #include <mapfix>
-
 /*==============================================================================
 
 	Definitions
