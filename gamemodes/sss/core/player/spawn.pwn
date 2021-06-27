@@ -259,6 +259,17 @@ hook OnPlayerClickPlayerTD(playerid, PlayerText:playertextid)
 	}
 }
 
+hook OnPlayerClickTextDraw(playerid, Text:clickedid)
+{
+	if(clickedid == Text:65535)
+	{
+	 	if(!IsPlayerSpawned(playerid) && IsPlayerLoggedIn(playerid) && !IsPlayerDead(playerid))
+		{
+			SelectTextDraw(playerid, 0xFFFFFF88);
+		}
+	}
+}
+
 PlayerSpawnNewCharacter(playerid, gender)
 {
 	if(IsPlayerSpawned(playerid))
