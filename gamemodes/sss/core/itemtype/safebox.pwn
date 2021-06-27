@@ -280,6 +280,12 @@ stock IsItemTypeExtraDataDependent(ItemType:itemtype)
 	if(box_ItemTypeBoxType[itemtype] != -1)
 		return 1;
 
+	if(itemtype == item_Workbench)
+		return 1;
+
+	if(itemtype == item_Bed)
+		return 1;
+
 	if(itemtype == item_Torso)
 		return 1;
 
