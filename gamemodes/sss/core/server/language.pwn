@@ -1,18 +1,3 @@
-/*==============================================================================
-
-
-	Southclaws' Scavenge and Survive
-
-		Copyright (C) 2020 Barnaby "Southclaws" Keene
-
-		This Source Code Form is subject to the terms of the Mozilla Public
-		License, v. 2.0. If a copy of the MPL was not distributed with this
-		file, You can obtain one at http://mozilla.org/MPL/2.0/.
-
-
-==============================================================================*/
-
-
 #define DIRECTORY_LANGUAGES			"languages/"
 #define MAX_LANGUAGE				(3)
 #define MAX_LANGUAGE_ENTRIES		(1024)
@@ -107,9 +92,9 @@ stock LoadAllLanguages()
 
 	direc = OpenDir(DIRECTORY_SCRIPTFILES DIRECTORY_LANGUAGES);
 
-	// Force load Portugues first since that's the default language.
-	default_entries = LoadLanguage(DIRECTORY_LANGUAGES"Portugues", "Portugues");
-	Logger_Log("default language Portugues loaded", Logger_I("entries", default_entries));
+	// Forçar o carregamento de Português do Brasil
+	default_entries = LoadLanguage(DIRECTORY_LANGUAGES"PT-BR", "PT-BR");
+	Logger_Log("Linguagem predefinida (Português do Brasil) foi carregada.", Logger_I("entries", default_entries));
 
 	if(direc == Directory:-1)
 	{
@@ -119,7 +104,7 @@ stock LoadAllLanguages()
 
 	if(default_entries == 0)
 	{
-		err("No default entries loaded! Please add the 'Portugues' langfile to '%s'.", DIRECTORY_SCRIPTFILES DIRECTORY_LANGUAGES);
+		err("No default entries loaded! Please add the 'PT-BR' langfile to '%s'.", DIRECTORY_SCRIPTFILES DIRECTORY_LANGUAGES);
 		for(;;) {}
 	}
 
@@ -127,7 +112,7 @@ stock LoadAllLanguages()
 	{
 		if(type == E_REGULAR)
 		{
-			if(!strcmp(entry, "Portugues"))
+			if(!strcmp(entry, "PT-BR"))
 				continue;
 
 			PathBase(entry, filename);
@@ -140,12 +125,11 @@ stock LoadAllLanguages()
 					Logger_I("entries", entries),
 					Logger_I("missing", default_entries - entries)
 				);
+
 				languages++;
 			}
 			else
-			{
 				printf("No entries loaded from language file '%s'", entry);
-			}
 		}
 	}
 
@@ -246,9 +230,7 @@ stock LoadLanguage(const filename[], const langname[])
 	fclose(f);
 
 	if(lang_TotalEntries[lang_Total] == 0)
-	{
 		return 0;
-	}
 
 	strcat(lang_Name[lang_Total], langname, MAX_LANGUAGE_NAME);
 
@@ -273,9 +255,7 @@ stock LoadLanguage(const filename[], const langname[])
 		}
 
 		if(letter_idx >= 26)
-		{
 			printf("letter_idx > 26 (%d) at i = %d entry: '%s'", letter_idx, i, lang_Entries[lang_Total][i][lang_key]);
-		}
 
 		lang_AlphabetMap[lang_Total][letter_idx] = i;
 		letter_idx++;
@@ -340,9 +320,7 @@ _doReplace(const input[], output[])
 				}
 			}
 			else
-			{
 				output[output_idx++] = input[i];
-			}
 		}
 	}
 }
@@ -508,39 +486,10 @@ stock ConvertEncoding(string[])
 	{
 		// Check if this character is in our reduced range.
 		if(0 <= (ch = string[i]) < 256)
-		{
 			string[i] = real[ch];
-		}
 	}
 }
 
-/*
-	Not sure where this code came from... random pastebin link!
-
-stock ConvertEncoding(string[])
-{
-	for(new i = 0, len = strlen(string); i != len; ++i)
-	{
-		switch(string[i])
-		{
-			case 0xC0 .. 0xC3: string[i] -= 0x40;
-			case 0xC7 .. 0xC9: string[i] -= 0x42;
-			case 0xD2 .. 0xD5: string[i] -= 0x44;
-			case 0xD9 .. 0xDC: string[i] -= 0x47;
-			case 0xE0 .. 0xE3: string[i] -= 0x49;
-			case 0xE7 .. 0xEF: string[i] -= 0x4B;
-			case 0xF2 .. 0xF5: string[i] -= 0x4D;
-			case 0xF9 .. 0xFC: string[i] -= 0x50;
-			case 0xC4, 0xE4: string[i] = 0x83;
-			case 0xC6, 0xE6: string[i] = 0x84;
-			case 0xD6, 0xF6: string[i] = 0x91;
-			case 0xD1, 0xF1: string[i] = 0xEC;
-			case 0xDF: string[i] = 0x96;
-			case 0xBF: string[i] = 0xAF;
-		}
-	}
-}
-*/
 stock GetLanguageList(list[][])
 {
 	for(new i; i < lang_Total; i++)
@@ -570,5 +519,6 @@ stock GetLanguageID(name[])
 		if(!strcmp(name, lang_Name[i]))
 			return i;
 	}
+	
 	return -1;
 }
