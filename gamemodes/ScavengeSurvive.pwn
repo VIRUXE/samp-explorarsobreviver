@@ -737,7 +737,7 @@ OnGameModeInit_Setup()
 	GetSettingInt("server/global-debug-level", 0, gGlobalDebugLevel);
 	debug_set_level("global", gGlobalDebugLevel);
 
-	RestartCount				=TextDrawCreate(410.000000, 10.000000, "Server Restart In:~n~00:00");
+	RestartCount				=TextDrawCreate(410.000000, 10.000000, "Reinicio em:~n~00:00");
 	TextDrawAlignment			(RestartCount, 2);
 	TextDrawBackgroundColor		(RestartCount, 255);
 	TextDrawFont				(RestartCount, 1);
@@ -799,7 +799,7 @@ RestartGamemode()
 	ChatMsgAll(BLUE, " ");
 	ChatMsgAll(BLUE, " ");
 	ChatMsgAll(BLUE, "-------------------------------------------------------------------------------------------------------------------------");
-	ChatMsgAll(YELLOW, " >  The Server Is Restarting, Please Wait...");
+	ChatMsgAll(YELLOW, " >  O Servidor está sendo Reíniciado. Por favor aguarde...");
 	ChatMsgAll(BLUE, "-------------------------------------------------------------------------------------------------------------------------");
 }
 
@@ -808,27 +808,24 @@ task RestartUpdate[1000]()
 	if(gServerMaxUptime > 0)
 	{
 		if(gServerUptime >= gServerMaxUptime)
-		{
 			RestartGamemode();
-		}
 
 		if(gServerUptime >= gServerMaxUptime - 3600)
 		{
 			new str[36];
-			format(str, 36, "Server Restarting In:~n~%02d:%02d", (gServerMaxUptime - gServerUptime) / 60, (gServerMaxUptime - gServerUptime) % 60);
+			format(str, 36, "Reinicio em:~n~%02d:%02d", (gServerMaxUptime - gServerUptime) / 60, (gServerMaxUptime - gServerUptime) % 60);
 			TextDrawSetString(RestartCount, str);
 
 			foreach(new i : Player)
 			{
 				if(IsPlayerHudOn(i))
 					TextDrawShowForPlayer(i, RestartCount);
-
 				else
 					TextDrawHideForPlayer(i, RestartCount);
 			}
 		}
 
-		//gServerUptime++;
+		gServerUptime++;
 	}
 
 	HTTP(0, HTTP_GET, "localhost:7788/update", "", "OnUpdateCheck");
