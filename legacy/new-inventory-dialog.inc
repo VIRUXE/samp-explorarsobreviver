@@ -157,7 +157,7 @@ stock DisplayPlayerInventory(playerid)
 
 	for(new i; i < slots; i++)
 	{
-		strcat(list, "19300\t<Empty>\n");
+		strcat(list, "19300\t<Vazio>\n");
 		inv_ItemListTotal[playerid]++;
 	}
 
@@ -170,9 +170,9 @@ stock DisplayPlayerInventory(playerid)
 	if(!isnull(inv_ExtraItemList[playerid]))
 		strcat(list, inv_ExtraItemList[playerid]);
 
-	format(title, sizeof(title), "Inventário (%d/%d)", size - slots, size);
+	format(title, sizeof(title), "Inventario (%d/%d)", size - slots, size);
 
-	ShowPlayerDialog(playerid, 33, DIALOG_STYLE_PREVIEW_MODEL, title, list, "Opções", "Sair");
+	ShowPlayerDialog(playerid, 33, DIALOG_STYLE_PREVIEW_MODEL, title, list, "Opcoes", "Sair");
 
 	inv_ViewingInventory[playerid] = true;
 

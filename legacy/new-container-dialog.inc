@@ -144,7 +144,7 @@ stock DisplayContainerInventory(playerid, Container:containerid) {
 		if(cnt_ItemListTotal[playerid] == (MAX_DIALOG_PREVIEW_COLUMNS * MAX_DIALOG_PREVIEW_ROWS) - 1)
 			break;
 
-		strcat(cnt_InventoryString[playerid], "19300\t<Empty>\n");
+		strcat(cnt_InventoryString[playerid], "19300\t<Vazio>\n");
 		cnt_ItemListTotal[playerid]++;
 	}
 

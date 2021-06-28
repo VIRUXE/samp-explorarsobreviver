@@ -1,18 +1,3 @@
-/*==============================================================================
-
-
-	Southclaws' Scavenge and Survive
-
-		Copyright (C) 2020 Barnaby "Southclaws" Keene
-
-		This Source Code Form is subject to the terms of the Mozilla Public
-		License, v. 2.0. If a copy of the MPL was not distributed with this
-		file, You can obtain one at http://mozilla.org/MPL/2.0/.
-
-
-==============================================================================*/
-
-
 #include <YSI_Coding\y_hooks>
 
 
@@ -45,12 +30,12 @@ hook OnPlayerConnect(playerid)
 	CreatePlayerTile(playerid, GearSlot_Tors[0], GearSlot_Tors[1], GearSlot_Tors[2], 517.0, 383.0, 53.0, 55.0);
 	CreatePlayerTile(playerid, GearSlot_Back[0], GearSlot_Back[1], GearSlot_Back[2], 580.0, 383.0, 53.0, 55.0);
 
-	PlayerTextDrawSetString(playerid, GearSlot_Head[0], "Head");
-	PlayerTextDrawSetString(playerid, GearSlot_Face[0], "Face");
-	PlayerTextDrawSetString(playerid, GearSlot_Hand[0], "Hand");
-	PlayerTextDrawSetString(playerid, GearSlot_Hols[0], "Holster");
-	PlayerTextDrawSetString(playerid, GearSlot_Tors[0], "Torso");
-	PlayerTextDrawSetString(playerid, GearSlot_Back[0], "Back");
+	PlayerTextDrawSetString(playerid, GearSlot_Head[0], "Cabeca");
+	PlayerTextDrawSetString(playerid, GearSlot_Face[0], "Rosto");
+	PlayerTextDrawSetString(playerid, GearSlot_Hand[0], "Mao");
+	PlayerTextDrawSetString(playerid, GearSlot_Hols[0], "Coldre");
+	PlayerTextDrawSetString(playerid, GearSlot_Tors[0], "Tronco");
+	PlayerTextDrawSetString(playerid, GearSlot_Back[0], "Costas");
 }
 
 CreatePlayerTile(playerid, &PlayerText:title, &PlayerText:tile, &PlayerText:item, Float:x, Float:y, Float:width, Float:height)
@@ -140,25 +125,25 @@ ShowPlayerHealthInfo(playerid)
 
 	inv_HealthInfoActive[playerid] = true;
 
-	SetBodyPreviewLabel(playerid, 0, tmp++, 35.0, sprintf("Wounds: %d", GetPlayerWounds(playerid)),
+	SetBodyPreviewLabel(playerid, 0, tmp++, 35.0, sprintf("Feridas: %d", GetPlayerWounds(playerid)),
 		GetPlayerWounds(playerid) ? RGBAToHex(max(GetPlayerWounds(playerid) * 50, 255), 0, 0, 255) : 0xFFFFFFFF);
 
 	if(bleedrate > 0.0)
-		SetBodyPreviewLabel(playerid, 0, tmp++, 35.0, sprintf("Bleeding %0.1f%", bleedrate), RGBAToHex(truncateforbyte(floatround(bleedrate * 3200.0)), truncateforbyte(255 - floatround(bleedrate * 3200.0)), 0, 255));
+		SetBodyPreviewLabel(playerid, 0, tmp++, 35.0, sprintf("Sangramento: %0.1f%", bleedrate), RGBAToHex(truncateforbyte(floatround(bleedrate * 3200.0)), truncateforbyte(255 - floatround(bleedrate * 3200.0)), 0, 255));
 
 	if(hunger < 90.0)
-		SetBodyPreviewLabel(playerid, 0, tmp++, 20.0, sprintf("Energy %0.1f%", hunger), RGBAToHex(truncateforbyte(floatround((66.6 - hunger) * 4.8)), truncateforbyte(255 - floatround((66.6 - hunger) * 4.8)), 0, 255));
+		SetBodyPreviewLabel(playerid, 0, tmp++, 20.0, sprintf("Energia: %0.1f%", hunger), RGBAToHex(truncateforbyte(floatround((66.6 - hunger) * 4.8)), truncateforbyte(255 - floatround((66.6 - hunger) * 4.8)), 0, 255));
 
-	format(string, sizeof(string), "%.1f%% Unconsciousness chance", (GetPlayerKnockoutChance(playerid, 5.7) + GetPlayerKnockoutChance(playerid, 22.6)) / 2);
+	format(string, sizeof(string), "Chance de Ficar Inconsciente: %.1f%%", (GetPlayerKnockoutChance(playerid, 5.7) + GetPlayerKnockoutChance(playerid, 22.6)) / 2);
 	SetBodyPreviewLabel(playerid, 0, tmp++, 20.0, string, 0xFFFF00FF);
 	
 	tmp = 0;
 	
 	if(infected1)
-		SetBodyPreviewLabel(playerid, 1, tmp++, 20.0, "Food/Liquid Infect", 0xFF0000FF);
+		SetBodyPreviewLabel(playerid, 1, tmp++, 20.0, "Infecao por Comida/Liquido", 0xFF0000FF);
 
 	if(infected2)
-		SetBodyPreviewLabel(playerid, 1, tmp++, 20.0, "Wound Infect", 0xFF0000FF);
+		SetBodyPreviewLabel(playerid, 1, tmp++, 20.0, "Infecao de Ferida", 0xFF0000FF);
 
 	for(new i; i < drugs; i++)
 	{
@@ -193,7 +178,7 @@ UpdatePlayerGear(playerid, show = 1)
 	}
 	else
 	{
-		PlayerTextDrawSetString(playerid, GearSlot_Head[UI_ELEMENT_ITEM], "<Empty>");
+		PlayerTextDrawSetString(playerid, GearSlot_Head[UI_ELEMENT_ITEM], "<Vazio>");
 		PlayerTextDrawSetPreviewModel(playerid, GearSlot_Head[UI_ELEMENT_TILE], 19300);
 	}
 
@@ -209,7 +194,7 @@ UpdatePlayerGear(playerid, show = 1)
 	}
 	else
 	{
-		PlayerTextDrawSetString(playerid, GearSlot_Face[UI_ELEMENT_ITEM], "<Empty>");
+		PlayerTextDrawSetString(playerid, GearSlot_Face[UI_ELEMENT_ITEM], "<Vazio>");
 		PlayerTextDrawSetPreviewModel(playerid, GearSlot_Face[UI_ELEMENT_TILE], 19300);
 	}
 
@@ -228,7 +213,7 @@ UpdatePlayerGear(playerid, show = 1)
 	}
 	else
 	{
-		PlayerTextDrawSetString(playerid, GearSlot_Hand[UI_ELEMENT_ITEM], "<Empty>");
+		PlayerTextDrawSetString(playerid, GearSlot_Hand[UI_ELEMENT_ITEM], "<Vazio>");
 		PlayerTextDrawSetPreviewModel(playerid, GearSlot_Hand[UI_ELEMENT_TILE], 19300);
 	}
 
@@ -247,19 +232,19 @@ UpdatePlayerGear(playerid, show = 1)
 	}
 	else
 	{
-		PlayerTextDrawSetString(playerid, GearSlot_Hols[UI_ELEMENT_ITEM], "<Empty>");
+		PlayerTextDrawSetString(playerid, GearSlot_Hols[UI_ELEMENT_ITEM], "<Vazio>");
 		PlayerTextDrawSetPreviewModel(playerid, GearSlot_Hols[UI_ELEMENT_TILE], 19300);
 	}
 
 	if(GetPlayerAP(playerid) > 0.0)
 	{
-		PlayerTextDrawSetString(playerid, GearSlot_Tors[UI_ELEMENT_ITEM], sprintf("Armour (%.0f)", GetPlayerAP(playerid)));
+		PlayerTextDrawSetString(playerid, GearSlot_Tors[UI_ELEMENT_ITEM], sprintf("Armadura (%.0f)", GetPlayerAP(playerid)));
 		PlayerTextDrawSetPreviewModel(playerid, GearSlot_Tors[UI_ELEMENT_TILE], 19515);
 		PlayerTextDrawSetPreviewRot(playerid, GearSlot_Tors[UI_ELEMENT_TILE], 0.0, 0.0, 0.0, 1.0);
 	}
 	else
 	{
-		PlayerTextDrawSetString(playerid, GearSlot_Tors[UI_ELEMENT_ITEM], "<Empty>");
+		PlayerTextDrawSetString(playerid, GearSlot_Tors[UI_ELEMENT_ITEM], "<Vazio>");
 		PlayerTextDrawSetPreviewModel(playerid, GearSlot_Tors[UI_ELEMENT_TILE], 19300);
 	}
 
@@ -275,7 +260,7 @@ UpdatePlayerGear(playerid, show = 1)
 	}
 	else
 	{
-		PlayerTextDrawSetString(playerid, GearSlot_Back[UI_ELEMENT_ITEM], "<Empty>");
+		PlayerTextDrawSetString(playerid, GearSlot_Back[UI_ELEMENT_ITEM], "<Vazio>");
 		PlayerTextDrawSetPreviewModel(playerid, GearSlot_Back[UI_ELEMENT_TILE], 19300);
 	}
 
@@ -320,9 +305,7 @@ hook OnItemRemoveFromCnt(Container:containerid, slotid, playerid)
 	if(IsPlayerConnected(playerid))
 	{
 		if(containerid == GetBagItemContainerID(GetPlayerBagItem(playerid)))
-		{
 			UpdatePlayerGear(playerid);
-		}
 	}
 
 	return Y_HOOKS_CONTINUE_RETURN_0;
@@ -422,9 +405,7 @@ _inv_HandleGearSlotClick_Head(playerid)
 			new required = AddItemToContainer(containerid, itemid, playerid);
 
 			if(required > 0)
-			{
 				ShowActionText(playerid, sprintf(ls(playerid, "CNTEXTRASLO", true), required), 3000, 150);
-			}
 			else if(required == 0)
 			{
 				RemovePlayerHatItem(playerid);
@@ -445,18 +426,14 @@ _inv_HandleGearSlotClick_Head(playerid)
 				ShowActionText(playerid, ls(playerid, "INVREMOVHAT", true), 3000, 150);
 			}
 			else
-			{
 				ShowActionText(playerid, ls(playerid, "INVHOLDINGI", true), 3000);
-			}
 		}
 		else
 		{
 			new required = AddItemToInventory(playerid, itemid);
 
 			if(required > 0)
-			{
 				ShowActionText(playerid, sprintf(ls(playerid, "INVEXTRASLO", true), required), 3000, 150);
-			}
 			else if(required == 0)
 			{
 				RemovePlayerHatItem(playerid);
@@ -493,18 +470,14 @@ _inv_HandleGearSlotClick_Face(playerid)
 				ShowActionText(playerid, ls(playerid, "INVREMOVMAS", true), 3000, 150);
 			}
 			else
-			{
 				ShowActionText(playerid, ls(playerid, "INVHOLDINGI", true), 3000);
-			}
 		}
 		else
 		{
 			new required = AddItemToContainer(containerid, itemid, playerid);
 
 			if(required > 0)
-			{
 				ShowActionText(playerid, sprintf(ls(playerid, "CNTEXTRASLO", true), required), 3000, 150);
-			}
 			else if(required == 0)
 			{
 				RemovePlayerMaskItem(playerid);
@@ -525,18 +498,14 @@ _inv_HandleGearSlotClick_Face(playerid)
 				ShowActionText(playerid, ls(playerid, "INVREMOVMAS", true), 3000, 150);
 			}
 			else
-			{
 				ShowActionText(playerid, ls(playerid, "INVHOLDINGI", true), 3000);
-			}
 		}
 		else
 		{
 			new required = AddItemToInventory(playerid, itemid);
 
 			if(required > 0)
-			{
 				ShowActionText(playerid, sprintf(ls(playerid, "INVEXTRASLO", true), required), 3000, 150);
-			}
 			else if(required == 0)
 			{
 				RemovePlayerMaskItem(playerid);
@@ -625,13 +594,9 @@ _inv_HandleGearSlotClick_Hols(playerid)
 		new required = AddItemToContainer(containerid, itemid, playerid);
 
 		if(required > 0)
-		{
 			ShowActionText(playerid, sprintf(ls(playerid, "CNTEXTRASLO", true), required), 3000, 150);
-		}
 		else if(required == 0)
-		{
 			RemovePlayerHolsterItem(playerid);
-		}
 
 		DisplayContainerInventory(playerid, containerid);
 	}
@@ -640,13 +605,9 @@ _inv_HandleGearSlotClick_Hols(playerid)
 		new required = AddItemToInventory(playerid, itemid);
 
 		if(required > 0)
-		{
 			ShowActionText(playerid, sprintf(ls(playerid, "INVEXTRASLO", true), required), 3000, 150);
-		}
 		else if(required == 0)
-		{
 			RemovePlayerHolsterItem(playerid);
-		}
 		
 		DisplayPlayerInventory(playerid);
 	}
@@ -683,9 +644,7 @@ _inv_HandleGearSlotClick_Tors(playerid)
 				GiveWorldItemToPlayer(playerid, itemid);
 			}
 			else
-			{
 				ShowActionText(playerid, ls(playerid, "INVHOLDINGI", true), 3000);
-			}
 		}
 		else if(required == 0)
 		{
@@ -713,9 +672,7 @@ _inv_HandleGearSlotClick_Tors(playerid)
 				GiveWorldItemToPlayer(playerid, itemid);
 			}
 			else
-			{
 				ShowActionText(playerid, ls(playerid, "INVHOLDINGI", true), 3000);
-			}
 		}
 		else if(required == 0)
 		{
@@ -747,13 +704,9 @@ _inv_HandleGearSlotClick_Back(playerid)
 		ClosePlayerContainer(playerid);
 
 		if(IsValidContainer(inv_TempContainerID[playerid]))
-		{
 			DisplayContainerInventory(playerid, inv_TempContainerID[playerid]);
-		}
 		else
-		{
 			DisplayPlayerInventory(playerid);
-		}
 
 		inv_TempContainerID[playerid] = INVALID_CONTAINER_ID;
 	}
@@ -781,7 +734,7 @@ hook OnPlayerViewCntOpt(playerid, Container:containerid)
 				str[9 + MAX_CONTAINER_NAME];
 
 			GetContainerName(inv_TempContainerID[playerid], name);
-			format(str, sizeof(str), "Move to %s", name);
+			format(str, sizeof(str), "Mover para %s", name);
 
 			inv_InventoryOptionID[playerid] = AddContainerOption(playerid, str);
 		}
@@ -814,13 +767,9 @@ hook OnPlayerSelectCntOpt(playerid, Container:containerid, option)
 				new required = AddItemToContainer(inv_TempContainerID[playerid], itemid, playerid);
 
 				if(required > 0)
-				{
 					ShowActionText(playerid, sprintf(ls(playerid, "CNTEXTRASLO", true), required), 3000, 150);
-				}
 				else
-				{
 					DisplayContainerInventory(playerid, containerid);
-				}
 			}
 		}
 	}
@@ -831,8 +780,6 @@ hook OnPlayerSelectCntOpt(playerid, Container:containerid, option)
 hook OnPlayerTakeDamage(playerid, issuerid, Float:amount, weaponid, bodypart)
 {
 	if(IsPlayerSpawned(playerid))
-	{
 		if(inv_HealthInfoActive[playerid])
 			ShowPlayerHealthInfo(playerid);
-	}
 }
