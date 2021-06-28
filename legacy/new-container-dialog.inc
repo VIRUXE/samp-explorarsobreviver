@@ -433,6 +433,13 @@ hook OnPlayerSelectInvOpt(playerid, option) {
 	return Y_HOOKS_CONTINUE_RETURN_0;
 }
 
+hook OnPlayerCloseInventory(playerid) {
+	if(IsValidContainer(cnt_CurrentContainer[playerid])) {
+		ClosePlayerContainer(playerid, true);
+	}
+	return Y_HOOKS_CONTINUE_RETURN_0;
+}
+
 hook OnPlayerOpenInventory(playerid) {
 	if(IsValidContainer(cnt_CurrentContainer[playerid])) {
 		new str[8 + MAX_CONTAINER_NAME];
