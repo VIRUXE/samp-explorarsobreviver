@@ -148,7 +148,7 @@ stock DisplayContainerInventory(playerid, Container:containerid) {
 		cnt_ItemListTotal[playerid]++;
 	}
 
-	format(cnt_InventoryString[playerid], sizeof(cnt_InventoryString[]), "%s%d\tInventário >\n",
+	format(cnt_InventoryString[playerid], sizeof(cnt_InventoryString[]), "%s%d\tInventario >\n",
 		cnt_InventoryString[playerid], GetPlayerSkin(playerid));
 
 	cnt_CurrentContainer[playerid] = containerid;
@@ -166,7 +166,7 @@ stock DisplayContainerInventory(playerid, Container:containerid) {
 			Logger_I("length", strlen(cnt_InventoryString[playerid])));
 	}
 
-	ShowPlayerDialog(playerid, 35, DIALOG_STYLE_PREVIEW_MODEL, title, cnt_InventoryString[playerid], "Opções", "Sair");
+	ShowPlayerDialog(playerid, 35, DIALOG_STYLE_PREVIEW_MODEL, title, cnt_InventoryString[playerid], "Opcoes", "Sair");
 
 	return 0;
 }
@@ -250,7 +250,7 @@ _container_displayOptions(playerid, slotid)
 	GetItemTypeSize(GetItemType(itemid_outer), itemsize);
 	format(tmp, sizeof(tmp), "[%d]%s", itemsize, tmp);
 	
-	cnt_OptionsList[playerid] = "Equipar\nMover para o Inventário\n";
+	cnt_OptionsList[playerid] = "Equipar\nMover para o Inventario\n";
 	cnt_OptionsCount[playerid] = 0;
 
 	CallLocalFunction("OnPlayerViewContainerOpt", "dd", playerid, _:cnt_CurrentContainer[playerid]);
@@ -283,7 +283,7 @@ _container_displayOptions(playerid, slotid)
 					GiveWorldItemToPlayer(playerid, itemid);
 					DisplayContainerInventory(playerid, cnt_CurrentContainer[playerid]);
 				} else {
-					ShowActionText(playerid, "Já está segurando algo", 3000, 200);
+					ShowActionText(playerid, "Ja esta segurando algo", 3000, 200);
 					DisplayContainerInventory(playerid, cnt_CurrentContainer[playerid]);
 				}
 			}
@@ -315,7 +315,7 @@ _container_displayOptions(playerid, slotid)
 
 				if(required > 0) {
 					new str[32];
-					format(str, sizeof(str), "Necessita de mais %d espaços", required);
+					format(str, sizeof(str), "Necessita de mais %d espacos", required);
 					ShowActionText(playerid, str, 3000, 150);
 				} else if(required == 0) {
 					new slot;
@@ -341,7 +341,7 @@ _container_displayOptions(playerid, slotid)
 
 		return 1;
 	}
-	Dialog_ShowCallback(playerid, using inline Response, DIALOG_STYLE_LIST, tmp, cnt_OptionsList[playerid], "Aceitar", "Trás");
+	Dialog_ShowCallback(playerid, using inline Response, DIALOG_STYLE_LIST, tmp, cnt_OptionsList[playerid], "Aceitar", "Tras");
 
 	return 0;
 }

@@ -44,7 +44,7 @@ hook OnPlayerUseItemWithItem(playerid, Item:itemid, Item:withitemid)
 				ShowActionText(playerid, ls(playerid, "POTADDSEEDS", true), 5000);
 				new Button:buttonid;
 				GetItemButtonID(itemid, buttonid);
-				SetButtonText(buttonid, "Pressione F para apanhar~n~Pressione "KEYTEXT_INTERACT" com uma Garrafa com Água, para adicionar água na planta");
+				SetButtonText(buttonid, "Pressione F para apanhar~n~Pressione "KEYTEXT_INTERACT" com uma Garrafa com Água, para adicionar agua na planta");
 			}
 		}
 

@@ -86,14 +86,14 @@ hook OnGameModeInit()
 	CreateObject(19273, 117.87466, 1932.37390, 19.57730, 0.00000, 0.00000, 270.00000);
 
 	// Main Gate
-	buttonid[0] = CreateButton(117.8747, 1932.3739, 19.5773, "Pressione ativar o Portão");
+	buttonid[0] = CreateButton(117.8747, 1932.3739, 19.5773, "Pressione ativar o Portao");
 	door_Main = CreateDoor(19313, buttonid,
 		134.91060, 1941.52124, 21.77760, 0.00000, 0.00000, 0.00000,
 		120.9106, 1941.52124, 21.77760, 0.00000, 0.00000, 0.00000,
 		.maxButtons = 1, .moveSound = 6000, .stopSound = 6002, .closeDelay = -1);
 
 	// Airstrip Gate
-	buttonid[0] = CreateButton(280.7763, 1828.0514, 2.3915, "Pressione ativar o Portão");
+	buttonid[0] = CreateButton(280.7763, 1828.0514, 2.3915, "Pressione ativar o Portao");
 	door_Airstrip = CreateDoor(19313, buttonid,
 		285.98541, 1822.31140, 20.09470, 0.00000, 0.00000, 270.00000,
 		285.98541, 1834.31140, 20.09470, 0.00000, 0.00000, 270.00000,
@@ -542,9 +542,9 @@ ShowCodeList1(playerid)
 	new str[268];
 
 	format(str, 268,
-		""C_ORANGE"Códigos para o Sistema de Segurança. SECTOR 01:\n\n\
+		""C_ORANGE"Codigos para o Sistema de Seguranca. SECTOR 01:\n\n\
 		\t"C_WHITE"Torre de Controlo:"C_YELLOW"\t%d\n\
-		\t"C_WHITE"Portão Principal:"C_YELLOW"\t\t%d\n\
+		\t"C_WHITE"Portao Principal:"C_YELLOW"\t\t%d\n\
 		\t"C_WHITE"Airstrip Gate:"C_YELLOW"\t\t%d\n\
 		\t"C_WHITE"Porta de Impacto:"C_YELLOW"\t\t%d\n\
 		\t"C_WHITE"Porta Interna 1:"C_YELLOW"\t\t%d\n\
@@ -564,7 +564,7 @@ ShowCodeList2(playerid)
 	new str[268];
 
 	format(str, 268,
-		""C_ORANGE"Códigos para o Sistema de Segurança. SECTOR 02:\n\n\
+		""C_ORANGE"Codigos para o Sistema de Seguranca. SECTOR 02:\n\n\
 		\t"C_WHITE"Gerador:"C_YELLOW"\t\t%d\n\
 		\t"C_WHITE"Passagem 1:"C_YELLOW"\t\t%d\n\
 		\t"C_WHITE"Passagem 2:"C_YELLOW"\t\t%d\n\
