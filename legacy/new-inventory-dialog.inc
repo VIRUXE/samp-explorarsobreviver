@@ -113,10 +113,10 @@ static
 // API
 // -
 
-stock DisplayPlayerInventory(playerid) {
-	if(!IsPlayerConnected(playerid)) {
+stock DisplayPlayerInventory(playerid)
+{
+	if(!IsPlayerConnected(playerid))
 		return 1;
-	}
 
 	Logger_Dbg("inventory-dialog", "showing inventory for player",
 		Logger_I("playerid", playerid));
@@ -131,17 +131,16 @@ stock DisplayPlayerInventory(playerid) {
 	inv_ItemListTotal[playerid] = 0;
 
 	new ret_outer = GetPlayerInventorySize(playerid, size);
-	if(ret_outer) {
+	if(ret_outer)
 		return 2;
-	}
 
 	new model, ItemType:itemtype;
-	for(new i; i < size; i++) {
+	for(new i; i < size; i++)
+	{
 		ret_outer = GetInventorySlotItem(playerid, i, itemid);
 
-		if(!IsValidItem(itemid) || ret_outer) {
+		if(!IsValidItem(itemid) || ret_outer)
 			break;
-		}
 
 		itemtype = GetItemType(itemid);
 
@@ -156,7 +155,8 @@ stock DisplayPlayerInventory(playerid) {
 	new slots;
 	ret_outer = GetInventoryFreeSlots(playerid, slots);
 
-	for(new i; i < slots; i++) {
+	for(new i; i < slots; i++)
+	{
 		strcat(list, "19300\t<Empty>\n");
 		inv_ItemListTotal[playerid]++;
 	}
@@ -164,33 +164,33 @@ stock DisplayPlayerInventory(playerid) {
 	inv_ExtraItemList[playerid][0] = EOS;
 	inv_ExtraItemCount[playerid] = 0;
 
-	if(CallLocalFunction("OnPlayerOpenInventory", "d", playerid)) {
+	if(CallLocalFunction("OnPlayerOpenInventory", "d", playerid))
 		return 3;
-	}
 
-	if(!isnull(inv_ExtraItemList[playerid])) {
+	if(!isnull(inv_ExtraItemList[playerid]))
 		strcat(list, inv_ExtraItemList[playerid]);
-	}
 
-	format(title, sizeof(title), "Inventory (%d/%d)", size - slots, size);
+	format(title, sizeof(title), "Inventário (%d/%d)", size - slots, size);
 
-	ShowPlayerDialog(playerid, 33, DIALOG_STYLE_PREVIEW_MODEL, title, list, "Options", "Close");
+	ShowPlayerDialog(playerid, 33, DIALOG_STYLE_PREVIEW_MODEL, title, list, "Opções", "Sair");
 
 	inv_ViewingInventory[playerid] = true;
 
 	return 0;
 }
 
-stock ClosePlayerInventory(playerid, call = false) {
-	if(!inv_ViewingInventory[playerid]) {
+stock ClosePlayerInventory(playerid, call = false)
+{
+	if(!inv_ViewingInventory[playerid])
 		return 1;
-	}
 
 	Logger_Dbg("inventory-dialog", "hiding inventory for player",
 		Logger_I("playerid", playerid));
 
-	if(call) {
-		if(CallLocalFunction("OnPlayerCloseInventory", "d", playerid)) {
+	if(call)
+	{
+		if(CallLocalFunction("OnPlayerCloseInventory", "d", playerid)) 
+		{
 			DisplayPlayerInventory(playerid);
 			return 2;
 		}
@@ -201,18 +201,18 @@ stock ClosePlayerInventory(playerid, call = false) {
 	return 0;
 }
 
-stock GetPlayerSelectedInventorySlot(playerid) {
-	if(!IsPlayerConnected(playerid)) {
+stock GetPlayerSelectedInventorySlot(playerid)
+{
+	if(!IsPlayerConnected(playerid))
 		return -1;
-	}
 
 	return inv_SelectedSlot[playerid];
 }
 
-stock AddInventoryListItem(playerid, const itemname[], modelid = 19300) {
-	if(strlen(inv_ExtraItemList[playerid]) + strlen(itemname) > sizeof(inv_ExtraItemList[])) {
+stock AddInventoryListItem(playerid, const itemname[], modelid = 19300)
+{
+	if(strlen(inv_ExtraItemList[playerid]) + strlen(itemname) > sizeof(inv_ExtraItemList[]))
 		return 0;
-	}
 
 	Logger_Dbg("inventory-dialog", "adding inventory list item",
 		Logger_I("playerid", playerid),
@@ -230,10 +230,10 @@ stock AddInventoryListItem(playerid, const itemname[], modelid = 19300) {
 	return inv_ExtraItemCount[playerid]++;
 }
 
-stock AddInventoryOption(playerid, const option[]) {
-	if(strlen(inv_OptionsList[playerid]) + strlen(option) > sizeof(inv_OptionsList[])) {
+stock AddInventoryOption(playerid, const option[])
+{
+	if(strlen(inv_OptionsList[playerid]) + strlen(option) > sizeof(inv_OptionsList[]))
 		return 0;
-	}
 
 	Logger_Dbg("inventory-dialog", "adding inventory item option",
 		Logger_I("playerid", playerid),
@@ -245,46 +245,46 @@ stock AddInventoryOption(playerid, const option[]) {
 	return inv_OptionsCount[playerid]++;
 }
 
-stock GetInventoryListItems(playerid, list[], len = sizeof list) {
-	if(!IsPlayerConnected(playerid)) {
+stock GetInventoryListItems(playerid, list[], len = sizeof list)
+{
+	if(!IsPlayerConnected(playerid))
 		return 1;
-	}
 
 	memcpy(list, inv_ExtraItemList[playerid], 0, 4 * inv_ExtraItemCount[playerid], len);
 
 	return 0;
 }
 
-stock GetInventoryOptions(playerid, list[], len = sizeof list) {
-	if(!IsPlayerConnected(playerid)) {
+stock GetInventoryOptions(playerid, list[], len = sizeof list)
+{
+	if(!IsPlayerConnected(playerid))
 		return 1;
-	}
 
 	memcpy(list, inv_OptionsList[playerid], 0, 4 * inv_OptionsCount[playerid], len);
 
 	return 0;
 }
 
-stock GetInventoryListItemCount(playerid) {
-	if(!IsPlayerConnected(playerid)) {
+stock GetInventoryListItemCount(playerid)
+{
+	if(!IsPlayerConnected(playerid))
 		return 0;
-	}
 
 	return inv_ExtraItemCount[playerid];
 }
 
-stock GetInventoryOptionCount(playerid) {
-	if(!IsPlayerConnected(playerid)) {
+stock GetInventoryOptionCount(playerid)
+{
+	if(!IsPlayerConnected(playerid))
 		return 0;
-	}
 
 	return inv_OptionsCount[playerid];
 }
 
-stock bool:IsPlayerViewingInventory(playerid) {
-	if(!IsPlayerConnected(playerid)) {
+stock bool:IsPlayerViewingInventory(playerid)
+{
+	if(!IsPlayerConnected(playerid))
 		return false;
-	}
 
 	return !!inv_ViewingInventory[playerid];
 }
@@ -295,42 +295,40 @@ stock bool:IsPlayerViewingInventory(playerid) {
 // -
 
 
-hook OnScriptInit() {
-	for(new i; i < MAX_PLAYERS; i++) {
-		for(new j; j < MAX_INVENTORY_SLOTS; j++) {
+hook OnScriptInit()
+{
+	for(new i; i < MAX_PLAYERS; i++)
+		for(new j; j < MAX_INVENTORY_SLOTS; j++)
 			inv_SelectedSlot[i] = -1;
-		}
-	}
 }
 
-hook OnPlayerConnect(playerid) {
-	for(new j; j < MAX_INVENTORY_SLOTS; j++) {
+hook OnPlayerConnect(playerid)
+{
+	for(new j; j < MAX_INVENTORY_SLOTS; j++)
 		inv_SelectedSlot[playerid] = -1;
-	}
 }
 
-_inv_displaySlotOptions(playerid, slotid) {
+_inv_displaySlotOptions(playerid, slotid)
+{
 	new
 		name[MAX_ITEM_NAME + MAX_ITEM_TEXT + 6],
 		Item:itemid,
-		ret_outer,
 		itemsize;
 	
-	ret_outer = GetInventorySlotItem(playerid, slotid, itemid);
-	if(ret_outer) {
+	if(GetInventorySlotItem(playerid, slotid, itemid))
 		return 1;
-	}
 
 	GetItemName(itemid, name);
 	GetItemTypeSize(GetItemType(itemid), itemsize);
 	format(name, sizeof(name), "[%d]%s", itemsize, name);
 	
-	inv_OptionsList[playerid] = "Equip\nUse\nDrop\n";
+	inv_OptionsList[playerid] = "Equipar\nUtilizar\nJogar Fora\n";
 	inv_OptionsCount[playerid] = 0;
 
 	CallLocalFunction("OnPlayerViewInventoryOpt", "d", playerid);
 
-	inline Response(pid, dialogid, response, listitem, string:inputtext[]) {
+	inline Response(pid, dialogid, response, listitem, string:inputtext[])
+	{
 		#pragma unused pid, dialogid
 
 		Logger_Dbg("inventory-dialog", "player responded to inventory item options",
@@ -339,20 +337,25 @@ _inv_displaySlotOptions(playerid, slotid) {
 			Logger_I("listitem", listitem),
 			Logger_S("inputtext", inputtext));
 
-		if(!response) {
+		if(!response)
+		{
 			DisplayPlayerInventory(playerid);
 			return 1;
 		}
 
-		switch(listitem) {
-			case 0: {
-				if(GetPlayerItem(playerid) == INVALID_ITEM_ID) {
+		switch(listitem)
+		{
+			case 0: 
+			{
+				if(GetPlayerItem(playerid) == INVALID_ITEM_ID)
+				{
 					new
 						Item:itemid2,
 						ret;
 					
 					ret = GetInventorySlotItem(playerid, inv_SelectedSlot[playerid], itemid2);
-					if(ret) {
+					if(ret)
+					{
 						Logger_Err("failed to get inventory slot item", Logger_I("playerid", playerid), Logger_I("slotid", inv_SelectedSlot[playerid]), Logger_I("ret", ret));
 						return 1;
 					}
@@ -360,19 +363,23 @@ _inv_displaySlotOptions(playerid, slotid) {
 					RemoveItemFromInventory(playerid, inv_SelectedSlot[playerid]);
 					GiveWorldItemToPlayer(playerid, itemid2, 1);
 					DisplayPlayerInventory(playerid);
-				} else {
-					ShowActionText(playerid, "You are already holding something", 3000, 200);
+				} 
+				else 
+				{
+					ShowActionText(playerid, "Ja esta segurando algo", 3000, 200);
 					DisplayPlayerInventory(playerid);
 				}
 			}
 			case 1: {
-				if(GetPlayerItem(playerid) == INVALID_ITEM_ID) {
+				if(GetPlayerItem(playerid) == INVALID_ITEM_ID)
+				{
 					new
 						Item:itemid2,
 						ret;
 					
 					ret = GetInventorySlotItem(playerid, inv_SelectedSlot[playerid], itemid2);
-					if(ret) {
+					if(ret)
+					{
 						Logger_Err("failed to get inventory slot item", Logger_I("playerid", playerid), Logger_I("slotid", inv_SelectedSlot[playerid]), Logger_I("ret", ret));
 						return 1;
 					}
@@ -384,18 +391,20 @@ _inv_displaySlotOptions(playerid, slotid) {
 
 					ClosePlayerInventory(playerid, true);
 				} else {
-					ShowActionText(playerid, "You are already holding something", 3000, 200);
+					ShowActionText(playerid, "Já está segurando algo", 3000, 200);
 					DisplayPlayerInventory(playerid);
 				}
 			}
 			case 2: {
-				if(GetPlayerItem(playerid) == INVALID_ITEM_ID) {
+				if(GetPlayerItem(playerid) == INVALID_ITEM_ID)
+				{
 					new
 						Item:itemid2,
 						ret;
 					
 					ret = GetInventorySlotItem(playerid, inv_SelectedSlot[playerid], itemid2);
-					if(ret) {
+					if(ret)
+					{
 						Logger_Err("failed to get inventory slot item", Logger_I("playerid", playerid), Logger_I("slotid", inv_SelectedSlot[playerid]), Logger_I("ret", ret));
 						return 1;
 					}
@@ -406,16 +415,21 @@ _inv_displaySlotOptions(playerid, slotid) {
 					PlayerDropItem(playerid);
 
 					ClosePlayerInventory(playerid, true);
-				} else {
-					ShowActionText(playerid, "You are already holding something", 3000, 200);
+				}
+				else
+				{
+					ShowActionText(playerid, "Já está segurando algo", 3000, 200);
 					DisplayPlayerInventory(playerid);
 				}
 			}
 			default: {
-				if(!CallLocalFunction("OnPlayerSelectInventoryOpt", "dd", playerid, listitem - 3)) {
+				if(!CallLocalFunction("OnPlayerSelectInventoryOpt", "dd", playerid, listitem - 3))
+				{
 					Logger_Dbg("inventory-dialog", "opening inventory via extra item response");
 					DisplayPlayerInventory(playerid);
-				} else {
+				}
+				else
+				{
 					Logger_Dbg("inventory-dialog", "closing inventory via option response");
 					ClosePlayerInventory(playerid);
 				}
@@ -424,7 +438,7 @@ _inv_displaySlotOptions(playerid, slotid) {
 
 		return 1;
 	}
-	Dialog_ShowCallback(playerid, using inline Response, DIALOG_STYLE_LIST, name, inv_OptionsList[playerid], "Options", "Close");
+	Dialog_ShowCallback(playerid, using inline Response, DIALOG_STYLE_LIST, name, inv_OptionsList[playerid], "Opções", "Sair");
 
 	return 0;
 }
@@ -438,13 +452,16 @@ hook OnDialogModelResponse(playerid, dialogid, response, listitem)
 			Logger_I("response", response),
 			Logger_I("listitem", listitem));
 
-		if(!response) {
+		if(!response)
+		{
 			ClosePlayerInventory(playerid, true);
 			return 1;
 		}
 
-		if(listitem >= inv_ItemListTotal[playerid]) {
-			if(!CallLocalFunction("OnPlayerSelectExtraItem", "dd", playerid, listitem - inv_ItemListTotal[playerid])) {
+		if(listitem >= inv_ItemListTotal[playerid])
+		{
+			if(!CallLocalFunction("OnPlayerSelectExtraItem", "dd", playerid, listitem - inv_ItemListTotal[playerid]))
+			{
 				Logger_Dbg("inventory-dialog", "opening inventory via extra item response");
 				DisplayPlayerInventory(playerid);
 			} else {
@@ -457,10 +474,12 @@ hook OnDialogModelResponse(playerid, dialogid, response, listitem)
 		new
 			Item:itemid2,
 			ret;
+
 		ret = GetInventorySlotItem(playerid, listitem, itemid2);
-		if(ret || !IsValidItem(itemid2)) {
+		if(ret || !IsValidItem(itemid2))
 			DisplayPlayerInventory(playerid);
-		} else {
+		else
+		{
 			inv_SelectedSlot[playerid] = listitem;
 			_inv_displaySlotOptions(playerid, listitem);
 		}
@@ -468,33 +487,33 @@ hook OnDialogModelResponse(playerid, dialogid, response, listitem)
 	return 1;
 }
 
-hook OnPlayerKeyStateChange(playerid, newkeys, oldkeys) {
-	if(!IsPlayerInAnyVehicle(playerid)) {
+hook OnPlayerKeyStateChange(playerid, newkeys, oldkeys)
+{
+	if(!IsPlayerInAnyVehicle(playerid))
+	{
 		Logger_Dbg("inventory-dialog", "OnPlayerKeyStateChange",
 			Logger_I("playerid", playerid),
 			Logger_I("newkeys", newkeys),
 			Logger_I("oldkeys", oldkeys));
 
-		if(newkeys & KEY_CTRL_BACK) {
+		if(newkeys & KEY_CTRL_BACK)
 			DisplayPlayerInventory(playerid);
-		} else if(newkeys & KEY_YES) {
+		else if(newkeys & KEY_YES)
 			_inv_putAway(playerid);
-		}
 	}
 
 	return 1;
 }
 
-_inv_putAway(playerid) {
-	if(GetTickCountDifference(GetTickCount(), inv_PutAwayTick[playerid]) < 1000) {
+_inv_putAway(playerid)
+{
+	if(GetTickCountDifference(GetTickCount(), inv_PutAwayTick[playerid]) < 1000)
 		return;
-	}
 
 	new Item:itemid = GetPlayerItem(playerid);
 
-	if(!IsValidItem(itemid)) {
+	if(!IsValidItem(itemid))
 		return;
-	}
 
 	new
 		itemsize,
@@ -503,20 +522,21 @@ _inv_putAway(playerid) {
 	GetItemTypeSize(GetItemType(itemid), itemsize);
 	
 	new ret = GetInventoryFreeSlots(playerid, freeslots);
-	if(ret) {
+	if(ret)
+	{
 		Logger_Err("failed to get inventory free slots",
 			Logger_I("return", ret));
 		return;
 	}
 
-	if(itemsize > freeslots) {
+	if(itemsize > freeslots)
+	{
 		CallLocalFunction("OnPlayerAddToInventory", "ddd", playerid, _:itemid, 0);
 		return;
 	}
 
-	if(CallLocalFunction("OnPlayerAddToInventory", "ddd", playerid, _:itemid, 1)) {
+	if(CallLocalFunction("OnPlayerAddToInventory", "ddd", playerid, _:itemid, 1))
 		return;
-	}
 
 	inv_PutAwayTick[playerid] = GetTickCount();
 
@@ -527,7 +547,8 @@ _inv_putAway(playerid) {
 	return;
 }
 
-timer PlayerPutItemInInventory[300](playerid, itemid) {
+timer PlayerPutItemInInventory[300](playerid, itemid)
+{
 	AddItemToInventory(playerid, Item:itemid);
 	CallLocalFunction("OnPlayerAddedToInventory", "dd", playerid, itemid);
 }
