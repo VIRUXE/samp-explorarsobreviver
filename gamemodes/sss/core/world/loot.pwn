@@ -196,7 +196,7 @@ stock CreateStaticLootSpawn(Float:x, Float:y, Float:z, lootindex, Float:weight, 
 	return loot_SpawnTotal++;
 }
 
-timer RespawnItem[gServerMaxUptime * 1000](itemid, Float:x, Float:y, Float:z, lootindex, Float:weight, size, worldid, interiorid)
+timer RespawnItem[5400000](itemid, Float:x, Float:y, Float:z, lootindex, Float:weight, size, worldid, interiorid)
 {
 	if(!IsValidItem(Item:itemid))
 	{
@@ -246,7 +246,7 @@ hook OnPlayerDroppedItem(playerid, Item:itemid)
 	return Y_HOOKS_CONTINUE_RETURN_0;
 }
 
-timer DestroyUntilItem[gServerMaxUptime * 1000](itemid, Float:x, Float:y, Float:z)
+timer DestroyUntilItem[5400000](itemid, Float:x, Float:y, Float:z)
 {
 	if(!IsValidItem(Item:itemid))
 		return;
