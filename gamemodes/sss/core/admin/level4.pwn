@@ -1,18 +1,3 @@
-/*==============================================================================
-
-
-	Southclaws' Scavenge and Survive
-
-		Copyright (C) 2020 Barnaby "Southclaws" Keene
-
-		This Source Code Form is subject to the terms of the Mozilla Public
-		License, v. 2.0. If a copy of the MPL was not distributed with this
-		file, You can obtain one at http://mozilla.org/MPL/2.0/.
-
-
-==============================================================================*/
-
-
 #include <YSI_Coding\y_hooks>
 
 
@@ -48,7 +33,6 @@ CMD:adminlvl(playerid, params[])
 
 	if(!SetPlayerAdminLevel(playerid, level))
 		return ChatMsg(playerid, RED, " >  Admin level must be equal to or between 0 and 4");
-
 
 	ChatMsg(playerid, YELLOW, " >  Admin Level Secretly Set To: %d", level);
 
@@ -161,8 +145,6 @@ ACMD:setpinglimit[3](playerid, params[])
 
 ==============================================================================*/
 
-
-
 ACMD:weather[4](playerid, params[])
 {
 	gBigString[playerid][0] = EOS;
@@ -179,9 +161,7 @@ ACMD:weather[4](playerid, params[])
 		if(response)
 		{
 			foreach(new j : Player)
-			{
 				SetPlayerWeather(j, listitem);
-			}
 
 			SetGlobalWeather(listitem);
 			ChatMsgAdmins(GetPlayerAdminLevel(playerid), YELLOW, " >  Weather set to "C_BLUE"%s(%d)"C_YELLOW" by %p", WeatherData[listitem], listitem, playerid);

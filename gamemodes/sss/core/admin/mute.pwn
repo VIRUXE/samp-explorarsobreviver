@@ -1,20 +1,4 @@
-/*==============================================================================
-
-
-	Southclaws' Scavenge and Survive
-
-		Copyright (C) 2020 Barnaby "Southclaws" Keene
-
-		This Source Code Form is subject to the terms of the Mozilla Public
-		License, v. 2.0. If a copy of the MPL was not distributed with this
-		file, You can obtain one at http://mozilla.org/MPL/2.0/.
-
-
-==============================================================================*/
-
-
 #include <YSI_Coding\y_hooks>
-
 
 static
 		mute_Muted[MAX_PLAYERS],
@@ -67,9 +51,7 @@ hook OnPlayerDisconnected(playerid)
 		return 1;
 
 	if(mute_Muted[playerid])
-	{
 		TogglePlayerMute(playerid, false);
-	}
 
 	return 1;
 }
@@ -112,8 +94,8 @@ stock GetPlayerMuteRemainder(playerid)
 	return mute_Duration[playerid] - (gettime() - mute_StartTime[playerid]);
 }
 
-CMD:testmute(playerid, params[])
+/* CMD:testmute(playerid, params[])
 {
 	TogglePlayerMute(playerid, true, strval(params));
 	return 1;
-}
+} */
