@@ -398,9 +398,9 @@ _UpdateKeyActions(playerid)
 		{
 			AddToolTipText(playerid, KEYTEXT_INTERACT, "Arm Explosive");
 		}
-		else if(GetItemTypeLiquidContainerType(itemtype) != -1 && GetLiquidItemLiquidAmount(itemid) != 0.0)
+		else if(GetItemTypeLiquidContainerType(itemtype) != -1)
 		{
-			if(GetLiquidItemLiquidType(itemid) != liquid_Petrol) 
+			if(GetLiquidItemLiquidType(itemid) != liquid_Petrol && GetLiquidItemLiquidAmount(itemid) > 0.0) 
 			{
 				AddToolTipText(playerid, KEYTEXT_INTERACT, "Drink");
 			}
