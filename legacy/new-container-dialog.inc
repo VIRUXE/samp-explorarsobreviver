@@ -241,7 +241,7 @@ hook OnPlayerConnect(playerid)
 _container_displayOptions(playerid, slotid) 
 {
 	new
-		tmp[MAX_ITEM_NAME + MAX_ITEM_TEXT],
+		tmp[MAX_ITEM_NAME + MAX_ITEM_TEXT + 4],
 		Item:itemid_outer,
 		itemsize;
 	
@@ -412,7 +412,7 @@ hook OnPlayerSelectInvOpt(playerid, option) {
 			GetInventorySlotItem(playerid, slot, itemid);
 
 			if(IsContainerFull(cnt_CurrentContainer[playerid])) {
-				ShowActionText(playerid, "Contentor Cheio", 3000, 200);
+				ShowActionText(playerid, "Container Cheio", 3000, 200);
 			}
 
 			if(!IsValidItem(itemid)) {
