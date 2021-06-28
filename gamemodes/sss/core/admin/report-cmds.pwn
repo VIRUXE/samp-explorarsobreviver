@@ -144,7 +144,7 @@ ShowReportOnlinePlayer(playerid)
 		else
 			ShowReportMenu(playerid);
 	}
-	Dialog_ShowCallback(playerid, using inline Response, DIALOG_STYLE_LIST, "Reportar Jogador Online", list, "Reportar", "Trás");
+	Dialog_ShowCallback(playerid, using inline Response, DIALOG_STYLE_LIST, "Reportar Jogador Online", list, "Reportar", "Voltar");
 
 	return 1;
 }
@@ -171,7 +171,7 @@ ShowReportOfflinePlayer(playerid)
 		else
 			ShowReportMenu(playerid);
 	}
-	Dialog_ShowCallback(playerid, using inline Response, DIALOG_STYLE_INPUT, "Reportar Jogador Offline", "Introduza o Nome do Jogador", "Reportar", "Trás");
+	Dialog_ShowCallback(playerid, using inline Response, DIALOG_STYLE_INPUT, "Reportar Jogador Offline", "Introduza o Nome do Jogador", "Reportar", "Voltar");
 
 	return 1;
 }
@@ -198,7 +198,7 @@ ShowReportReasonInput(playerid)
 		else
 			ShowReportMenu(playerid);
 	}
-	Dialog_ShowCallback(playerid, using inline Response, DIALOG_STYLE_INPUT, "Razão do Relatório", "Introduza a razão para o Relatório.", "Reportar", "Trás");
+	Dialog_ShowCallback(playerid, using inline Response, DIALOG_STYLE_INPUT, "Razão do Relatório", "Introduza a razão para o Relatório.", "Reportar", "Voltar");
 }
 
 
@@ -316,7 +316,7 @@ ShowReport(playerid, reportlistitem)
 			ShowListOfReports(playerid);
 	}
 
-	Dialog_ShowCallback(playerid, using inline Response, DIALOG_STYLE_MSGBOX, report_CurrentReportList[playerid][reportlistitem][report_name], message, "Opções", "Trás");
+	Dialog_ShowCallback(playerid, using inline Response, DIALOG_STYLE_MSGBOX, report_CurrentReportList[playerid][reportlistitem][report_name], message, "Opções", "Voltar");
 
 	return 1;
 }
@@ -452,7 +452,7 @@ ShowReportOptions(playerid)
 		else
 			ShowReport(playerid, report_CurrentItem[playerid]);
 	}
-	Dialog_ShowCallback(playerid, using inline Response, DIALOG_STYLE_LIST, report_CurrentReportList[playerid][report_CurrentItem[playerid]][report_name], options, "Selecionar", "Trás");
+	Dialog_ShowCallback(playerid, using inline Response, DIALOG_STYLE_LIST, report_CurrentReportList[playerid][report_CurrentItem[playerid]][report_name], options, "Selecionar", "Voltar");
 }
 
 ShowReportBanPrompt(playerid)

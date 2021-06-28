@@ -341,7 +341,7 @@ _container_displayOptions(playerid, slotid)
 
 		return 1;
 	}
-	Dialog_ShowCallback(playerid, using inline Response, DIALOG_STYLE_LIST, tmp, cnt_OptionsList[playerid], "Aceitar", "Tras");
+	Dialog_ShowCallback(playerid, using inline Response, DIALOG_STYLE_LIST, tmp, cnt_OptionsList[playerid], "Aceitar", "Voltar");
 
 	return 0;
 }

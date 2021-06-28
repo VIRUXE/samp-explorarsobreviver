@@ -542,9 +542,9 @@ ShowCodeList1(playerid)
 	new str[268];
 
 	format(str, 268,
-		""C_ORANGE"Codigos para o Sistema de Seguranca. SECTOR 01:\n\n\
+		""C_ORANGE"Códigos para o Sistema de Segurança. SECTOR 01:\n\n\
 		\t"C_WHITE"Torre de Controlo:"C_YELLOW"\t%d\n\
-		\t"C_WHITE"Portao Principal:"C_YELLOW"\t\t%d\n\
+		\t"C_WHITE"Portão Principal:"C_YELLOW"\t\t%d\n\
 		\t"C_WHITE"Airstrip Gate:"C_YELLOW"\t\t%d\n\
 		\t"C_WHITE"Porta de Impacto:"C_YELLOW"\t\t%d\n\
 		\t"C_WHITE"Porta Interna 1:"C_YELLOW"\t\t%d\n\
@@ -564,7 +564,7 @@ ShowCodeList2(playerid)
 	new str[268];
 
 	format(str, 268,
-		""C_ORANGE"Codigos para o Sistema de Seguranca. SECTOR 02:\n\n\
+		""C_ORANGE"Códigos para o Sistema de Segurança. SECTOR 02:\n\n\
 		\t"C_WHITE"Gerador:"C_YELLOW"\t\t%d\n\
 		\t"C_WHITE"Passagem 1:"C_YELLOW"\t\t%d\n\
 		\t"C_WHITE"Passagem 2:"C_YELLOW"\t\t%d\n\

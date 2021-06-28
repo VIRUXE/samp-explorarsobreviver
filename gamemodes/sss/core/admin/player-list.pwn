@@ -84,7 +84,7 @@ _ShowPlayerListItem(playerid, item)
 		else
 			_ShowCurrentList(playerid);
 	}
-	Dialog_ShowCallback(playerid, using inline Response, DIALOG_STYLE_MSGBOX, pls_List[playerid][item], GetPlayerInfo(pls_List[playerid][item]), "Options", "Trás");
+	Dialog_ShowCallback(playerid, using inline Response, DIALOG_STYLE_MSGBOX, pls_List[playerid][item], GetPlayerInfo(pls_List[playerid][item]), "Enter", "Voltar");
 }
 
 GetPlayerInfo(name[])
@@ -223,7 +223,7 @@ _ShowPlayerListItemOptions(playerid, item)
 			}
 		}
 	}
-	Dialog_ShowCallback(playerid, using inline Response, DIALOG_STYLE_LIST, "Options", options, "Selecionar", "Trás");
+	Dialog_ShowCallback(playerid, using inline Response, DIALOG_STYLE_LIST, "Options", options, "Selecionar", "Voltar");
 
 	return 1;
 }

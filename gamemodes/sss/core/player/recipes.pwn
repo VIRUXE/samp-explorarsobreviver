@@ -167,7 +167,7 @@ Dialog_ShowIngredients(playerid, CraftSet:craftset)
 			Dialog_ShowCraftTypes(playerid);
 		}
 	}
-	Dialog_ShowCallback(playerid, using inline Response, DIALOG_STYLE_MSGBOX, itemname, gBigString[playerid], "Sair", "Trás");
+	Dialog_ShowCallback(playerid, using inline Response, DIALOG_STYLE_MSGBOX, itemname, gBigString[playerid], "Sair", "Voltar");
 
 	return 1;
 }
@@ -202,5 +202,5 @@ Dialog_ShowCraftHelp(playerid)
 		if(response)
 			Dialog_ShowCraftTypes(playerid);
 	}
-	Dialog_ShowCallback(playerid, using inline Response, DIALOG_STYLE_MSGBOX, "Ajuda com Craft", gBigString[playerid], "Trás", "Sair");
+	Dialog_ShowCallback(playerid, using inline Response, DIALOG_STYLE_MSGBOX, "Ajuda com Craft", gBigString[playerid], "Voltar", "Sair");
 }
