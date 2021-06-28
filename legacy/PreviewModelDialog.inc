@@ -621,13 +621,13 @@ static Prev_HidePlayerDialog(playerid) {
 static Prev_FetchListitemData(const listitem[], &modelid, text[], &Float:rx, &Float:ry, &Float:rz, &Float:zoom, &color1, &color2, text_size = sizeof(text)) {
 	
 	// Default rot of preview modelid
-	rx = -20.000000;
+	rx = -25.000000;
 	ry = 0.100000;
-	rz = -30.000000;
-	zoom = (0.940000 + frandom(0.060000));
+	rz = -35.000000;
+	zoom = 0.905567;
 	color1 = -1;
 	color2 = -1;
-
+	
 	new pos, next, count;
 	new valuestr[16];
 	new modelstr[32 + (sizeof(valuestr) * 7)];
