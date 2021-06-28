@@ -157,6 +157,7 @@ hook OnPlayerScriptUpdate(playerid)
 	return Y_HOOKS_CONTINUE_RETURN_0;
 }
 
+/*
 static AlreadyJumping[MAX_PLAYERS];
 
 hook OnPlayerKeyStateChange(playerid, newkeys, oldkeys)
@@ -209,6 +210,7 @@ timer JumpBoost[0](playerid)
 
 	SetPlayerVelocity(playerid, x * boost, y * boost, z * boost);
 }
+*/
 
 hook OnPlayerSave(playerid, filename[])
 {
