@@ -822,7 +822,7 @@ ACMD:addvehicle[3](playerid, params[])
 
 			log("[ADDVEHICLE] %p added vehicle %d reason: %s", pid, type, inputtext);
 		}
-		Dialog_ShowCallback(playerid, using inline Response, DIALOG_STYLE_INPUT, "Justificação", "Introduz a razão para ter adicionado esse veículo:", "OK", "");
+		Dialog_ShowCallback(playerid, using inline Response, DIALOG_STYLE_INPUT, "Justificação", "Introduz a Motivo para ter adicionado esse veículo:", "OK", "");
 	}
 
 	return 1;

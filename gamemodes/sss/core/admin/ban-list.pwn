@@ -88,7 +88,7 @@ ShowBanInfo(playerid, const name[MAX_PLAYER_NAME])
 	format(str, 256, "\
 		"C_YELLOW"Data:\n\t\t"C_BLUE"%s - %s\n\n\n\
 		"C_YELLOW"Por:\n\t\t"C_BLUE"%s\n\n\n\
-		"C_YELLOW"Razão:\n\t\t"C_BLUE"%s",
+		"C_YELLOW"Motivo:\n\t\t"C_BLUE"%s",
 		TimestampToDateTime(timestamp),
 		duration ? TimestampToDateTime(timestamp + duration) : "Nunca",
 		bannedby,
@@ -133,7 +133,7 @@ ShowBanOptions(playerid)
 		else
 			ShowBanInfo(playerid, banlist_CurrentName[playerid]);
 	}
-	Dialog_ShowCallback(playerid, using inline Response, DIALOG_STYLE_LIST, banlist_CurrentName[playerid], "Editar razão\nEditar duração\nSet unban\nUnban\n", "Select", "Sair");
+	Dialog_ShowCallback(playerid, using inline Response, DIALOG_STYLE_LIST, banlist_CurrentName[playerid], "Editar Motivo\nEditar duração\nSet unban\nUnban\n", "Select", "Sair");
 
 	return 1;
 }

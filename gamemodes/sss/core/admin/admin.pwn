@@ -240,7 +240,7 @@ TimeoutPlayer(playerid, const reason[])
 
 	log("[PART] %p (timeout: %s)", playerid, reason);
 
-	ChatMsgAdmins(1, GREY, " >  %P"C_GREY" caiu. Razão: "C_BLUE"%s", playerid, reason);
+	ChatMsgAdmins(1, GREY, " >  %P"C_GREY" caiu. Motivo: "C_BLUE"%s", playerid, reason);
 
 	return 1;
 }
@@ -252,7 +252,7 @@ KickPlayer(playerid, const reason[], bool:tellplayer = true)
 
 	log("[PART] %p (kick: %s)", playerid, reason);
 
-	ChatMsgAdmins(1, GREY, " >  %P"C_GREY" foi Kickado. Razão: "C_BLUE"%s", playerid, reason);
+	ChatMsgAdmins(1, GREY, " >  %P"C_GREY" foi Kickado. Motivo: "C_BLUE"%s", playerid, reason);
 
 	if(tellplayer)
 		ChatMsgLang(playerid, GREY, "KICKMESSAGE", reason);

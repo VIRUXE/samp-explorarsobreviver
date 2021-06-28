@@ -198,7 +198,7 @@ ShowReportReasonInput(playerid)
 		else
 			ShowReportMenu(playerid);
 	}
-	Dialog_ShowCallback(playerid, using inline Response, DIALOG_STYLE_INPUT, "Razão do Relatório", "Introduza a razão para o Relatório.", "Reportar", "Voltar");
+	Dialog_ShowCallback(playerid, using inline Response, DIALOG_STYLE_INPUT, "Motivo do Relatório", "Introduza a Motivo para o Relatório.", "Reportar", "Voltar");
 }
 
 

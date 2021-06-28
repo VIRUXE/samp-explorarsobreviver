@@ -198,7 +198,7 @@ BanCheck(playerid)
 
 			format(string, 256, "\
 				"C_YELLOW"Data:\n\t\t"C_BLUE"%s\n\n\
-				"C_YELLOW"Razão:\n\t\t"C_BLUE"%s\n\n\
+				"C_YELLOW"Motivo:\n\t\t"C_BLUE"%s\n\n\
 				"C_YELLOW"Desban:\n\t\t"C_BLUE"%s",
 				TimestampToDateTime(timestamp),
 				reason,

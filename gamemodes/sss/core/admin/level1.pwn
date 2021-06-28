@@ -46,7 +46,7 @@ ACMD:mute[1](playerid, params[])
 	sscanf(params, "dds[128]", targetid, delay, reason);
 
 	if(!targetid)
-		return ChatMsg(playerid,YELLOW," >  Utilização: /mute [id] ([segundos (utilize -1 se desejar que fique permanente)] [razão])");
+		return ChatMsg(playerid,YELLOW," >  Utilização: /mute [id] ([segundos (utilize -1 se desejar que fique permanente)] [Motivo])");
 
 	if(!IsPlayerConnected(targetid))
 		return ChatMsg(playerid,RED, " >  ID Inválido");
@@ -93,7 +93,7 @@ ACMD:avisar[1](playerid, params[])
 		reason[128];
 
 	if(sscanf(params, "ds[128]", targetid, reason))
-		return ChatMsg(playerid, YELLOW, " >  Utilização: /avisar [id] [razão]");
+		return ChatMsg(playerid, YELLOW, " >  Utilização: /avisar [id] [Motivo]");
 
 	if(!IsPlayerConnected(targetid))
 		return ChatMsg(playerid,RED, " >  ID Inválido");
@@ -129,7 +129,7 @@ ACMD:kick[1](playerid, params[])
 	}
 
 	if(sscanf(params, "ds[64]", targetid, reason))
-		return ChatMsg(playerid, YELLOW, " >  Utilização: /kick [id] [razão]");
+		return ChatMsg(playerid, YELLOW, " >  Utilização: /kick [id] [Motivo]");
 
 	if(GetPlayerAdminLevel(targetid) >= GetPlayerAdminLevel(playerid) && playerid != targetid)
 		return 3;
@@ -138,7 +138,7 @@ ACMD:kick[1](playerid, params[])
 		return 4;
 
 	if(GetPlayerAdminLevel(playerid) != GetPlayerAdminLevel(highestadmin))
-		return ChatMsg(highestadmin, YELLOW, " >  %p requisição para Kickar: (%d)%p Razão: %s", playerid, targetid, targetid, reason);
+		return ChatMsg(highestadmin, YELLOW, " >  %p requisição para Kickar: (%d)%p Motivo: %s", playerid, targetid, targetid, reason);
 
 	if(playerid == targetid)
 		ChatMsgAll(PINK, " >  %P"C_PINK" viado burro kickou ele próprio", playerid);
