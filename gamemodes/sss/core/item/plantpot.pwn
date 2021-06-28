@@ -44,7 +44,7 @@ hook OnPlayerUseItemWithItem(playerid, Item:itemid, Item:withitemid)
 				ShowActionText(playerid, ls(playerid, "POTADDSEEDS", true), 5000);
 				new Button:buttonid;
 				GetItemButtonID(itemid, buttonid);
-				SetButtonText(buttonid, "Aperta F para apanhar~n~Aperta "KEYTEXT_INTERACT" com uma Garrafa com Água, para adicionar água na planta");
+				SetButtonText(buttonid, "Pressione F para apanhar~n~Pressione "KEYTEXT_INTERACT" com uma Garrafa com Água, para adicionar água na planta");
 			}
 		}
 
@@ -69,7 +69,7 @@ hook OnPlayerUseItemWithItem(playerid, Item:itemid, Item:withitemid)
 				ShowActionText(playerid, ls(playerid, "POTADDWATER", true), 5000);
 				new Button:buttonid;
 				GetItemButtonID(itemid, buttonid);
-				SetButtonText(buttonid, "Aperta F para apanhar~n~Aperta "KEYTEXT_INTERACT" com uma Faca para obter a planta");
+				SetButtonText(buttonid, "Pressione F para apanhar~n~Pressione "KEYTEXT_INTERACT" com uma Faca para obter a planta");
 			}
 		}
 
@@ -144,7 +144,7 @@ _pot_Load(Item:itemid)
 	{
 		new Button:buttonid;
 		GetItemButtonID(itemid, buttonid);
-		SetButtonText(buttonid, "Aperta F para apanhar~n~Aperta "KEYTEXT_INTERACT" com Sementes, para plantar no Vaso");
+		SetButtonText(buttonid, "Pressione F para apanhar~n~Pressione "KEYTEXT_INTERACT" com Sementes, para plantar no Vaso");
 		return;
 	}
 
@@ -171,7 +171,7 @@ _pot_Load(Item:itemid)
 		potdata[E_PLANT_POT_GROWTH] = 0;
 		new Button:buttonid;
 		GetItemButtonID(itemid, buttonid);
-		SetButtonText(buttonid, "Aperta F para apanhar~n~Aperta "KEYTEXT_INTERACT" com Sementes, para plantar no Vaso");
+		SetButtonText(buttonid, "Pressione F para apanhar~n~Pressione "KEYTEXT_INTERACT" com Sementes, para plantar no Vaso");
 	}
 
 	SetItemArrayData(itemid, potdata, e_plant_pot_data);

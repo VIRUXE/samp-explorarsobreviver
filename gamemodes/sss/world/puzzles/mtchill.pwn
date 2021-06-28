@@ -19,7 +19,7 @@ hook OnGameModeInit()
 {
 	new Button:buttons[1];
 
-	ch_gate = CreateButton(-2307.81, -1650.67, 484.36, "Aperta F para Ativar", 0);
+	ch_gate = CreateButton(-2307.81, -1650.67, 484.36, "Pressione F para Ativar", 0);
 
 	buttons[0] = ch_gate;
 
@@ -29,7 +29,7 @@ hook OnGameModeInit()
 		.maxButtons = 1, .moveSpeed = 1.0, .closeDelay = -1);
 
 
-	ch_doorBtn = CreateButton(-2311.4900, -1647.7000, 484.3600, "Aperta F para Utilizar", 0, 0);
+	ch_doorBtn = CreateButton(-2311.4900, -1647.7000, 484.3600, "Pressione F para Utilizar", 0, 0);
 
 	buttons[0] = ch_doorBtn;
 

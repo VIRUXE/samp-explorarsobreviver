@@ -77,8 +77,8 @@ hook OnGameModeInit()
 	lock_ControlTower = 1;
 	lock_StorageWatch = 1;
 
-	btn_ControlTower = CreateButton(211.6015, 1812.2878, 21.8594, "Aperta "KEYTEXT_INTERACT" para Interagir");
-	btn_StorageWatch = CreateButton(246.4888, 1861.1544, 14.0840, "Aperta "KEYTEXT_INTERACT" para Interagir");
+	btn_ControlTower = CreateButton(211.6015, 1812.2878, 21.8594, "Pressione "KEYTEXT_INTERACT" para Interagir");
+	btn_StorageWatch = CreateButton(246.4888, 1861.1544, 14.0840, "Pressione "KEYTEXT_INTERACT" para Interagir");
 
 	// Main Gate Block
 	CreateObject(971, 96.88655, 1923.33936, 17.58039, 0.00000, 0.00000, 90.00000);
@@ -86,22 +86,22 @@ hook OnGameModeInit()
 	CreateObject(19273, 117.87466, 1932.37390, 19.57730, 0.00000, 0.00000, 270.00000);
 
 	// Main Gate
-	buttonid[0] = CreateButton(117.8747, 1932.3739, 19.5773, "Aperta ativar o Portão");
+	buttonid[0] = CreateButton(117.8747, 1932.3739, 19.5773, "Pressione ativar o Portão");
 	door_Main = CreateDoor(19313, buttonid,
 		134.91060, 1941.52124, 21.77760, 0.00000, 0.00000, 0.00000,
 		120.9106, 1941.52124, 21.77760, 0.00000, 0.00000, 0.00000,
 		.maxButtons = 1, .moveSound = 6000, .stopSound = 6002, .closeDelay = -1);
 
 	// Airstrip Gate
-	buttonid[0] = CreateButton(280.7763, 1828.0514, 2.3915, "Aperta ativar o Portão");
+	buttonid[0] = CreateButton(280.7763, 1828.0514, 2.3915, "Pressione ativar o Portão");
 	door_Airstrip = CreateDoor(19313, buttonid,
 		285.98541, 1822.31140, 20.09470, 0.00000, 0.00000, 270.00000,
 		285.98541, 1834.31140, 20.09470, 0.00000, 0.00000, 270.00000,
 		.maxButtons = 1, .moveSound = 6000, .stopSound = 6002, .closeDelay = -1);
 
 	// Main Blast Doors
-	buttonid[0] = CreateButton(210.3842, 1876.6578, 13.1406, "Aperta para ativar a Porta");
-	buttonid[1] = CreateButton(209.5598, 1874.3828, 13.1469, "Aperta para ativar a Porta");
+	buttonid[0] = CreateButton(210.3842, 1876.6578, 13.1406, "Pressione para ativar a Porta");
+	buttonid[1] = CreateButton(209.5598, 1874.3828, 13.1469, "Pressione para ativar a Porta");
 	door_BlastDoor1 = CreateDoor(2927, buttonid,
 		215.9915, 1875.2880, 13.9389, 0.0, 0.0, 0.0,
 		219.8936, 1875.2880, 13.9389, 0.0, 0.0, 0.0,
@@ -112,48 +112,48 @@ hook OnGameModeInit()
 		.moveSound = 6000, .stopSound = 6002, .moveSpeed = 0.4, .closeDelay = -1);
 
 	// First door - to storage room
-	buttonid[0] = CreateButton(237.4928, 1871.3110, 11.4609, "Aperta para ativar a Porta");
-	buttonid[1] = CreateButton(239.3345, 1870.4381, 11.4609, "Aperta para ativar a Porta");
+	buttonid[0] = CreateButton(237.4928, 1871.3110, 11.4609, "Pressione para ativar a Porta");
+	buttonid[1] = CreateButton(239.3345, 1870.4381, 11.4609, "Pressione para ativar a Porta");
 	door_Storage = CreateDoor(5422, buttonid,
 		238.4573, 1872.2921, 12.4737, 0.0, 0.0, 0.0,
 		238.4573, 1872.2921, 14.6002, 0.0, 0.0, 0.0,
 		.moveSound = 6000, .stopSound = 6002, .closeDelay = -1);
 
 	// Storage room to generator room
-	buttonid[0] = CreateButton(247.3196, 1842.8588, 8.7614, "Aperta para ativar a Porta");
-	buttonid[1] = CreateButton(247.3196, 1840.5961, 8.7578, "Aperta para ativar a Porta");
+	buttonid[0] = CreateButton(247.3196, 1842.8588, 8.7614, "Pressione para ativar a Porta");
+	buttonid[1] = CreateButton(247.3196, 1840.5961, 8.7578, "Pressione para ativar a Porta");
 	door_Generator = CreateDoor(5422, buttonid,
 		248.275406, 1842.032104, 9.7770, 0.0, 0.0, 90.0,
 		248.270325, 1842.033691, 11.9806, 0.0, 0.0, 90.0,
 		.moveSound = 6000, .stopSound = 6002, .closeDelay = -1);
 
 	// Big doors in storage room leading to passage
-	buttonid[0] = CreateButton(255.3204, 1842.7847, 8.7578, "Aperta para ativar a Porta");
-	buttonid[1] = CreateButton(257.0612, 1843.4278, 8.7578, "Aperta para ativar a Porta");
+	buttonid[0] = CreateButton(255.3204, 1842.7847, 8.7578, "Pressione para ativar a Porta");
+	buttonid[1] = CreateButton(257.0612, 1843.4278, 8.7578, "Pressione para ativar a Porta");
 	door_PassageTop = CreateDoor(9093, buttonid,
 		256.3291, 1845.7827, 9.5281, 0.0, 0.0, 0.0,
 		256.3291, 1845.7827, 12.1, 0.0, 0.0, 0.0,
 		.moveSound = 6000, .stopSound = 6002, .closeDelay = -1);
 
 	// Big doors in generator room leading to passage
-	buttonid[0] = CreateButton(255.5610, 1832.4649, 4.7109, "Aperta para ativar a Porta");
-	buttonid[1] = CreateButton(257.0517, 1833.1218, 4.7109, "Aperta para ativar a Porta");
+	buttonid[0] = CreateButton(255.5610, 1832.4649, 4.7109, "Pressione para ativar a Porta");
+	buttonid[1] = CreateButton(257.0517, 1833.1218, 4.7109, "Pressione para ativar a Porta");
 	door_PassageBottom = CreateDoor(9093, buttonid,
 		256.3094, 1835.3549, 5.4820, 0.0, 0.0, 0.0,
 		256.3094, 1835.3549, 8.0035, 0.0, 0.0, 0.0,
 		.moveSound = 6000, .stopSound = 6002, .closeDelay = -1);
 
 	// Generator room leading to walkway
-	buttonid[0] = CreateButton(249.3303, 1805.2384, 7.4796, "Aperta para ativar a Porta");
-	buttonid[1] = CreateButton(249.0138, 1806.8889, 7.5546, "Aperta para ativar a Porta");
+	buttonid[0] = CreateButton(249.3303, 1805.2384, 7.4796, "Pressione para ativar a Porta");
+	buttonid[1] = CreateButton(249.0138, 1806.8889, 7.5546, "Pressione para ativar a Porta");
 	door_Catwalk = CreateDoor(5422, buttonid,
 		248.3001, 1805.8772, 8.5633, 0.0, 0.0, 90.0,
 		248.3001, 1805.8772, 10.8075, 0.0, 0.0, 90.0,
 		.moveSound = 6000, .stopSound = 6002, .closeDelay = -1);
 
 	// Headquaters room
-	buttonid[0] = CreateButton(234.1869, 1821.3165, 7.4141, "Aperta para ativar a Porta");
-	buttonid[1] = CreateButton(228.3555, 1820.2427, 7.4141, "Aperta para ativar a Porta");
+	buttonid[0] = CreateButton(234.1869, 1821.3165, 7.4141, "Pressione para ativar a Porta");
+	buttonid[1] = CreateButton(228.3555, 1820.2427, 7.4141, "Pressione para ativar a Porta");
 	door_Headquarters1 = CreateDoor(1508, buttonid,
 		233.793884, 1825.885498, 7.097370, 0.0, 0.0, 0.0,
 		233.793884, 1827.063477, 7.097370, 0.0, 0.0, 0.0,
@@ -164,16 +164,16 @@ hook OnGameModeInit()
 		.moveSound = 6000, .stopSound = 6002, .closeDelay = -1);
 
 	// Labs to Shaft
-	buttonid[0] = CreateButton(269.4969, 1873.1721, 8.6094, "Aperta para ativar a Porta");
-	buttonid[1] = CreateButton(270.6281, 1875.8774, 8.4375, "Aperta para ativar a Porta");
+	buttonid[0] = CreateButton(269.4969, 1873.1721, 8.6094, "Pressione para ativar a Porta");
+	buttonid[1] = CreateButton(270.6281, 1875.8774, 8.4375, "Pressione para ativar a Porta");
 	door_Shaft = CreateDoor(5422, buttonid,
 		268.0739, 1875.3544, 9.6097, 0.0, 0.0, 90.0,
 		268.0739, 1875.3544, 11.6097, 0.0, 0.0, 90.0,
 		.moveSound = 6000, .stopSound = 6002, .closeDelay = -1);
 
 
-	buttonid[0] = CreateButton(279.1897, 1833.1392, 18.0874, "Aperta para entrar", .label = 1);
-	buttonid[1] = CreateButton(279.2243, 1832.3821, 2.7813, "Aperta para entrar", .label = 1);
+	buttonid[0] = CreateButton(279.1897, 1833.1392, 18.0874, "Pressione para entrar", .label = 1);
+	buttonid[1] = CreateButton(279.2243, 1832.3821, 2.7813, "Pressione para entrar", .label = 1);
 	// TODO: Rewrite this function!
 	// LinkTP(buttonid[0], buttonid[1]);
 
@@ -334,7 +334,7 @@ hook OnGameModeInit()
 	CreateDynamicObject(3095, 268.37225, 1884.12219, 15.74065,   0.00000, 0.00000, 0.00000);
 }
 
-hook OnButtonAperta(playerid, Button:buttonid)
+hook OnButtonPress(playerid, Button:buttonid)
 {
 	if(buttonid == btn_ControlTower)
 	{

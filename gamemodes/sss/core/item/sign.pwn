@@ -22,7 +22,7 @@ hook OnItemCreateInWorld(Item:itemid)
 
 		GetItemButtonID(itemid, buttonid);
 
-		SetButtonText(buttonid, "Aperta "KEYTEXT_INTERACT" para editar~n~Aguenta "KEYTEXT_INTERACT" para apanhar");
+		SetButtonText(buttonid, "Pressione "KEYTEXT_INTERACT" para editar~n~Aguenta "KEYTEXT_INTERACT" para apanhar");
 	}
 }
 
