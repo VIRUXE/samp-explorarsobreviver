@@ -30,14 +30,14 @@ hook OnGameModeInit()
 
 	// Ranch
 
-	RanchPcButton = CreateButton(-691.1692, 942.1066, 13.6328, "Pressiona "KEYTEXT_INTERACT" para utilizar");
+	RanchPcButton = CreateButton(-691.1692, 942.1066, 13.6328, "Pressione "KEYTEXT_INTERACT" para utilizar");
 	RanchHdd = CreateItem(item_HardDrive, -693.1787, 942.0, 15.93, 90.0, 0.0, 37.5);
 
 
 	// Quarry
 
-	QuarryDoor = CreateButton(495.451873, 780.096191, -21.747426, "Pressiona "KEYTEXT_INTERACT" para entrar"); // quarry
-	CaveDoor = CreateButton(-2702.358398, 3801.477050, 52.652801, "Pressiona "KEYTEXT_INTERACT" para entrar", RANCH_STUFF_VIRTUALW); // cave 1
+	QuarryDoor = CreateButton(495.451873, 780.096191, -21.747426, "Pressione "KEYTEXT_INTERACT" para entrar"); // quarry
+	CaveDoor = CreateButton(-2702.358398, 3801.477050, 52.652801, "Pressione "KEYTEXT_INTERACT" para entrar", RANCH_STUFF_VIRTUALW); // cave 1
 
 
 	// Shack
@@ -50,35 +50,35 @@ hook OnGameModeInit()
 
 	CaveLift = CreateDynamicObject(7246, -2759.4704, 3756.8691, 6.9, 270, 180, 340.9154, RANCH_STUFF_VIRTUALW);
 
-	buttonid[0] = CreateButton(-2796.933349, 3682.779785, 02.515481, "Pressiona "KEYTEXT_INTERACT" para entrar", RANCH_STUFF_VIRTUALW); // cave 1
-	buttonid[1] = CreateButton(-1445.01, 3673.77, 4.08, "Pressiona "KEYTEXT_INTERACT" para entrar", RANCH_STUFF_VIRTUALW); // cave 2
+	buttonid[0] = CreateButton(-2796.933349, 3682.779785, 02.515481, "Pressione "KEYTEXT_INTERACT" para entrar", RANCH_STUFF_VIRTUALW); // cave 1
+	buttonid[1] = CreateButton(-1445.01, 3673.77, 4.08, "Pressione "KEYTEXT_INTERACT" para entrar", RANCH_STUFF_VIRTUALW); // cave 2
 	// LinkTP(buttonid[0], buttonid[1]);
 
 	// Cave 2
-	buttonid[0] = CreateButton(-1618.94, 3648.38, 6.90, "Pressiona "KEYTEXT_INTERACT" para entrar", RANCH_STUFF_VIRTUALW); // cave 2
-	buttonid[1] = CreateButton(-785.9272, 3727.1111, 0.5293, "Pressiona "KEYTEXT_INTERACT" para entrar", RANCH_STUFF_VIRTUALW); // cave 3
+	buttonid[0] = CreateButton(-1618.94, 3648.38, 6.90, "Pressione "KEYTEXT_INTERACT" para entrar", RANCH_STUFF_VIRTUALW); // cave 2
+	buttonid[1] = CreateButton(-785.9272, 3727.1111, 0.5293, "Pressione "KEYTEXT_INTERACT" para entrar", RANCH_STUFF_VIRTUALW); // cave 3
 	// LinkTP(buttonid[0], buttonid[1]);
 
 
 	// Subway/Metro
 
-	buttonid[0] = CreateButton(-1007.395263, 5782.741210, 42.951477, "Pressiona "KEYTEXT_INTERACT" para descer a escada", RANCH_STUFF_VIRTUALW);
-	buttonid[1] = CreateButton(2526.719482, -1648.620605, 14.471982, "Pressiona "KEYTEXT_INTERACT" para subir a escada");
+	buttonid[0] = CreateButton(-1007.395263, 5782.741210, 42.951477, "Pressione "KEYTEXT_INTERACT" para descer a escada", RANCH_STUFF_VIRTUALW);
+	buttonid[1] = CreateButton(2526.719482, -1648.620605, 14.471982, "Pressione "KEYTEXT_INTERACT" para subir a escada");
 	// LinkTP(buttonid[0], buttonid[1]);
 
-	buttonid[0] = CreateButton(250.599380, -154.643936, -50.768798, "Pressiona "KEYTEXT_INTERACT" para entrar", RANCH_STUFF_VIRTUALW);
-	buttonid[1] = CreateButton(247.878799, -154.444061, 02.399550, "Pressiona "KEYTEXT_INTERACT" para entrar");
+	buttonid[0] = CreateButton(250.599380, -154.643936, -50.768798, "Pressione "KEYTEXT_INTERACT" para entrar", RANCH_STUFF_VIRTUALW);
+	buttonid[1] = CreateButton(247.878799, -154.444061, 02.399550, "Pressione "KEYTEXT_INTERACT" para entrar");
 	// LinkTP(buttonid[0], buttonid[1]);
 
-	buttonid[0] = CreateButton(-2276.608642, 5324.488281, 41.677970, "Pressiona "KEYTEXT_INTERACT" para entrar", RANCH_STUFF_VIRTUALW);
-	buttonid[1] = CreateButton(-734.773986, 3861.994628, 12.482711, "Pressiona "KEYTEXT_INTERACT" para entrar", RANCH_STUFF_VIRTUALW); // cave
+	buttonid[0] = CreateButton(-2276.608642, 5324.488281, 41.677970, "Pressione "KEYTEXT_INTERACT" para entrar", RANCH_STUFF_VIRTUALW);
+	buttonid[1] = CreateButton(-734.773986, 3861.994628, 12.482711, "Pressione "KEYTEXT_INTERACT" para entrar", RANCH_STUFF_VIRTUALW); // cave
 	// LinkTP(buttonid[0], buttonid[1]);
 
 
 	// Fort Claw underground
 
-	buttonid[0]=CreateButton(246.698684, -178.849655, -50.199367, "Pressiona "KEYTEXT_INTERACT" para entrar", RANCH_STUFF_VIRTUALW); // underground
-	buttonid[1]=CreateButton(-952.559326, 5137.799804, 46.183383, "Pressiona "KEYTEXT_INTERACT" para entrar", RANCH_STUFF_VIRTUALW); // metro station
+	buttonid[0]=CreateButton(246.698684, -178.849655, -50.199367, "Pressione "KEYTEXT_INTERACT" para entrar", RANCH_STUFF_VIRTUALW); // underground
+	buttonid[1]=CreateButton(-952.559326, 5137.799804, 46.183383, "Pressione "KEYTEXT_INTERACT" para entrar", RANCH_STUFF_VIRTUALW); // metro station
 	// LinkTP(buttonid[0], buttonid[1]);
 
 	CreateButton(-972.153869, 4303.185058, 48.666248, "~r~Locked", RANCH_STUFF_VIRTUALW);
@@ -86,15 +86,15 @@ hook OnGameModeInit()
 
 	// Lift Sequence
 
-	CaveLiftButtonT=CreateButton(-2764.0332, 3757.0466, 46.8343, "Pressiona "KEYTEXT_INTERACT" para utilizar o elevador", RANCH_STUFF_VIRTUALW);
-	CaveLiftButtonB=CreateButton(-2764.3410, 3755.5153, 8.2390, "Pressiona "KEYTEXT_INTERACT" para utilizar o elevador", RANCH_STUFF_VIRTUALW);
+	CaveLiftButtonT=CreateButton(-2764.0332, 3757.0466, 46.8343, "Pressione "KEYTEXT_INTERACT" para utilizar o elevador", RANCH_STUFF_VIRTUALW);
+	CaveLiftButtonB=CreateButton(-2764.3410, 3755.5153, 8.2390, "Pressione "KEYTEXT_INTERACT" para utilizar o elevador", RANCH_STUFF_VIRTUALW);
 	LiftPos=0;
 
 
 	// Fort Claw Door
 
-	buttonid[0] = CreateButton(264.316284, -171.135223, -50.206447, "Pressiona "KEYTEXT_INTERACT" para ativar", RANCH_STUFF_VIRTUALW);
-	buttonid[1] = CreateButton(265.862182, -170.113632, -50.204307, "Pressiona "KEYTEXT_INTERACT" para ativar", RANCH_STUFF_VIRTUALW);
+	buttonid[0] = CreateButton(264.316284, -171.135223, -50.206447, "Pressione "KEYTEXT_INTERACT" para ativar", RANCH_STUFF_VIRTUALW);
+	buttonid[1] = CreateButton(265.862182, -170.113632, -50.204307, "Pressione "KEYTEXT_INTERACT" para ativar", RANCH_STUFF_VIRTUALW);
 	CreateDoor(5779, buttonid,
 		265.0330, -168.9362, -49.9792, 0.0, 0.0, 0.0,
 		265.0322, -168.9355, -46.8575, 0.0, 0.0, 0.0, .worldid = RANCH_STUFF_VIRTUALW);
