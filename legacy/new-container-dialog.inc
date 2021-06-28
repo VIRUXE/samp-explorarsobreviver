@@ -142,6 +142,9 @@ stock DisplayContainerInventory(playerid, Container:containerid) {
 	GetContainerFreeSlots(containerid, freeSlots);
 
 	for(new i; i < freeSlots; i++) {
+		if(cnt_ItemListTotal[playerid] == (MAX_DIALOG_PREVIEW_COLUMNS * MAX_DIALOG_PREVIEW_ROWS) - 1)
+			break;
+
 		strcat(cnt_InventoryString[playerid], "19300\t<Empty>\n");
 		cnt_ItemListTotal[playerid]++;
 	}
@@ -421,17 +424,13 @@ hook OnPlayerSelectInvOpt(playerid, option) {
 				}
 			}
 
-			defer _container_showInv(playerid);
+			DisplayPlayerInventory(playerid);
 
 			return Y_HOOKS_CONTINUE_RETURN_0;
 		}
 	}
 
 	return Y_HOOKS_CONTINUE_RETURN_0;
-}
-
-timer _container_showInv[0](playerid) {
-	DisplayPlayerInventory(playerid);
 }
 
 hook OnPlayerOpenInventory(playerid) {
