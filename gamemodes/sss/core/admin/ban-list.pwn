@@ -1,18 +1,3 @@
-/*==============================================================================
-
-
-	Southclaws' Scavenge and Survive
-
-		Copyright (C) 2020 Barnaby "Southclaws" Keene
-
-		This Source Code Form is subject to the terms of the Mozilla Public
-		License, v. 2.0. If a copy of the MPL was not distributed with this
-		file, You can obtain one at http://mozilla.org/MPL/2.0/.
-
-
-==============================================================================*/
-
-
 #include <YSI_Coding\y_hooks>
 
 
@@ -60,7 +45,7 @@ ShowListOfBans(playerid, index = 0)
 		idx++;
 	}
 
-	format(title, sizeof(title), "Bans (%d-%d of %d)", index, index + listitems, totalbans);
+	format(title, sizeof(title), "Bans (%d-%d de %d)", index, index + listitems, totalbans);
 
 	banlist_ViewingList[playerid] = true;
 	banlist_CurrentIndex[playerid] = index;
@@ -82,7 +67,7 @@ ShowListOfBans(playerid, index = 0)
 		HidePlayerPageButtons(playerid);
 		CancelSelectTextDraw(playerid);
 	}
-	Dialog_ShowCallback(playerid, using inline Response, DIALOG_STYLE_LIST, title, string, "Open", "Close");
+	Dialog_ShowCallback(playerid, using inline Response, DIALOG_STYLE_LIST, title, string, "Abrir", "Sair");
 
 	return 1;
 }
@@ -101,11 +86,11 @@ ShowBanInfo(playerid, const name[MAX_PLAYER_NAME])
 	new str[256];
 
 	format(str, 256, "\
-		"C_YELLOW"Date:\n\t\t"C_BLUE"%s - %s\n\n\n\
-		"C_YELLOW"By:\n\t\t"C_BLUE"%s\n\n\n\
-		"C_YELLOW"Reason:\n\t\t"C_BLUE"%s",
+		"C_YELLOW"Data:\n\t\t"C_BLUE"%s - %s\n\n\n\
+		"C_YELLOW"Por:\n\t\t"C_BLUE"%s\n\n\n\
+		"C_YELLOW"Razão:\n\t\t"C_BLUE"%s",
 		TimestampToDateTime(timestamp),
-		duration ? TimestampToDateTime(timestamp + duration) : "Never",
+		duration ? TimestampToDateTime(timestamp + duration) : "Nunca",
 		bannedby,
 		reason);
 
@@ -116,15 +101,11 @@ ShowBanInfo(playerid, const name[MAX_PLAYER_NAME])
 		#pragma unused pid, dialogid, listitem, inputtext
 
 		if(response)
-		{
 			ShowBanOptions(playerid);
-		}
 		else
-		{
 			ShowListOfBans(playerid);
-		}
 	}
-	Dialog_ShowCallback(playerid, using inline Response, DIALOG_STYLE_MSGBOX, name, str, "Options", "Back");
+	Dialog_ShowCallback(playerid, using inline Response, DIALOG_STYLE_MSGBOX, name, str, "Opções", "Sair");
 
 	return 1;
 }
@@ -141,23 +122,18 @@ ShowBanOptions(playerid)
 			{
 				case 0: // Edit reason
 					ShowBanReasonEdit(playerid);
-
 				case 1: // Edit duration
 					ShowBanDurationEdit(playerid);
-
 				case 2: // Edit set unban
 					ShowBanDateEdit(playerid);
-
 				case 3: // Unban
 					ShowUnbanPrompt(playerid);
 			}
 		}
 		else
-		{
 			ShowBanInfo(playerid, banlist_CurrentName[playerid]);
-		}
 	}
-	Dialog_ShowCallback(playerid, using inline Response, DIALOG_STYLE_LIST, banlist_CurrentName[playerid], "Edit reason\nEdit duration\nSet unban\nUnban\n", "Select", "Back");
+	Dialog_ShowCallback(playerid, using inline Response, DIALOG_STYLE_LIST, banlist_CurrentName[playerid], "Editar razão\nEditar duração\nSet unban\nUnban\n", "Select", "Sair");
 
 	return 1;
 }
@@ -169,13 +145,11 @@ ShowBanReasonEdit(playerid)
 		#pragma unused pid, dialogid, listitem, inputtext
 
 		if(response)
-		{
 			SetBanReason(banlist_CurrentName[playerid], inputtext);
-		}
 
 		ShowBanOptions(playerid);
 	}
-	Dialog_ShowCallback(playerid, using inline Response, DIALOG_STYLE_INPUT, "Edit ban reason", "Enter the new ban reason below.", "Enter", "Cancel");
+	Dialog_ShowCallback(playerid, using inline Response, DIALOG_STYLE_INPUT, "Edit ban reason", "Enter the new ban reason below.", "OK", "Cancelar");
 
 	return 1;
 }
@@ -188,13 +162,7 @@ ShowBanDurationEdit(playerid)
 
 		if(response)
 		{
-			new duration;
-
-			if(!strcmp(inputtext, "forever", true))
-				duration = 0;
-
-			else
-				duration = GetDurationFromString(inputtext);
+			new duration = !strcmp(inputtext, "forever", true) ? 0 : GetDurationFromString(inputtext);
 
 			if(duration == -1)
 			{
@@ -222,9 +190,7 @@ ShowBanDateEdit(playerid)
 		#pragma unused pid, dialogid, listitem, inputtext
 
 		if(response)
-		{
-			ChatMsg(playerid, YELLOW, " >  Not implemented.");
-		}
+			ChatMsg(playerid, YELLOW, " >  Por acabar.");
 
 		ShowBanOptions(playerid);
 	}
@@ -240,13 +206,11 @@ ShowUnbanPrompt(playerid)
 		#pragma unused pid, dialogid, listitem, inputtext
 
 		if(response)
-		{
 			UnBanPlayer(banlist_CurrentName[playerid]);
-		}
 
 		ShowBanOptions(playerid);
 	}
-	Dialog_ShowCallback(playerid, using inline Response, DIALOG_STYLE_MSGBOX, "Unban", "Please confirm unban.", "Enter", "Cancel");
+	Dialog_ShowCallback(playerid, using inline Response, DIALOG_STYLE_MSGBOX, "Desbanir", "Tem a certeza que quer Desbanir?", "Sim", "Não");
 
 	return 1;
 }
@@ -257,7 +221,6 @@ hook OnPlayerDialogPage(playerid, direction)
 	{
 		if(direction == 0)
 			banlist_CurrentIndex[playerid] -= MAX_BANS_PER_PAGE;
-
 		else
 			banlist_CurrentIndex[playerid] += MAX_BANS_PER_PAGE;
 

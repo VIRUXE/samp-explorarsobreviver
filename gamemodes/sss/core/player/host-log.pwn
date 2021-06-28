@@ -1,18 +1,3 @@
-/*==============================================================================
-
-
-	Southclaws' Scavenge and Survive
-
-		Copyright (C) 2020 Barnaby "Southclaws" Keene
-
-		This Source Code Form is subject to the terms of the Mozilla Public
-		License, v. 2.0. If a copy of the MPL was not distributed with this
-		file, You can obtain one at http://mozilla.org/MPL/2.0/.
-
-
-==============================================================================*/
-
-
 #include <YSI_Coding\y_hooks>
 
 
@@ -170,7 +155,7 @@ ACMD:hhname[4](playerid, params[])
 			TimestampToDateTime(list[i][host_date], "%x"));
 	}
 
-	ShowPlayerDialog(playerid, 0, DIALOG_STYLE_LIST, params, gBigString[playerid], "Close", "");
+	ShowPlayerDialog(playerid, 0, DIALOG_STYLE_LIST, params, gBigString[playerid], "Sair", "");
 
 	return 1;	
 }
@@ -240,7 +225,7 @@ public OnReverseDNS(ip[], host[], extra)
 				TimestampToDateTime(list[i][host_date], "%x"));
 		}
 
-		ShowPlayerDialog(extra, 0, DIALOG_STYLE_LIST, host, gBigString[extra], "Close", "");
+		ShowPlayerDialog(extra, 0, DIALOG_STYLE_LIST, host, gBigString[extra], "Sair", "");
 	}
 
 	return 1;

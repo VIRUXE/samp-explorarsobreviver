@@ -53,11 +53,9 @@ _ShowCurrentList(playerid)
 		#pragma unused pid, dialogid, inputtext
 
 		if(response)
-		{
 			_ShowPlayerListItem(playerid, listitem);
-		}
 	}
-	Dialog_ShowCallback(playerid, using inline Response, DIALOG_STYLE_LIST, "Player list", pls_String[playerid], "Select", "Close");
+	Dialog_ShowCallback(playerid, using inline Response, DIALOG_STYLE_LIST, "Player list", pls_String[playerid], "Selecionar", "Sair");
 }
 
 stock HidePlayerList(playerid)
@@ -82,17 +80,11 @@ _ShowPlayerListItem(playerid, item)
 		#pragma unused pid, dialogid, listitem, inputtext
 
 		if(response)
-		{
-			// Show some options.
 			_ShowPlayerListItemOptions(playerid, item);
-		}
 		else
-		{
-			// Send them back to the original list using the global list.
 			_ShowCurrentList(playerid);
-		}
 	}
-	Dialog_ShowCallback(playerid, using inline Response, DIALOG_STYLE_MSGBOX, pls_List[playerid][item], GetPlayerInfo(pls_List[playerid][item]), "Options", "Back");
+	Dialog_ShowCallback(playerid, using inline Response, DIALOG_STYLE_MSGBOX, pls_List[playerid][item], GetPlayerInfo(pls_List[playerid][item]), "Options", "Trás");
 }
 
 GetPlayerInfo(name[])
@@ -171,13 +163,9 @@ _ShowPlayerListItemOptions(playerid, item)
 		switch(listitem)
 		{
 			case 0:// Go to spawn
-			{
 				ChatMsg(playerid, YELLOW, " >  Not implemented.");
-			}
 			case 1:// Set spawn
-			{
 				ChatMsg(playerid, YELLOW, " >  Not implemented.");
-			}
 			case 2:// List accounts used by this IP
 			{
 				new ip;
@@ -191,13 +179,9 @@ _ShowPlayerListItemOptions(playerid, item)
 				ShowAccountGpciHistoryFromGpci(playerid, hash);
 			}
 			case 4:// List IPs used by this name
-			{
 				ShowAccountIPHistoryFromName(playerid, pls_List[playerid][item]);
-			}
 			case 5:// List GPCIs used by this name
-			{
 				ShowAccountGpciHistoryFromName(playerid, pls_List[playerid][item]);
-			}
 			case 6:// Ban
 			{
 				BanAndEnterInfo(playerid, pls_List[playerid][item]);
@@ -239,7 +223,7 @@ _ShowPlayerListItemOptions(playerid, item)
 			}
 		}
 	}
-	Dialog_ShowCallback(playerid, using inline Response, DIALOG_STYLE_LIST, "Options", options, "Select", "Back");
+	Dialog_ShowCallback(playerid, using inline Response, DIALOG_STYLE_LIST, "Options", options, "Selecionar", "Trás");
 
 	return 1;
 }
@@ -289,7 +273,7 @@ ACMD:players[4](playerid, params[])
 
 ACMD:profile[2](playerid, params[])
 {
-	Dialog_Show(playerid, DIALOG_STYLE_MSGBOX, params, GetPlayerInfo(params), "Close");
+	Dialog_Show(playerid, DIALOG_STYLE_MSGBOX, params, GetPlayerInfo(params), "Sair");
 	SetAccountAliveState(params, 0);
 	return 1;
 }

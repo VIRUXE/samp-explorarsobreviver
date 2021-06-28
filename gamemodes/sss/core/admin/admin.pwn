@@ -1,18 +1,3 @@
-/*==============================================================================
-
-
-	Southclaws' Scavenge and Survive
-
-		Copyright (C) 2020 Barnaby "Southclaws" Keene
-
-		This Source Code Form is subject to the terms of the Mozilla Public
-		License, v. 2.0. If a copy of the MPL was not distributed with this
-		file, You can obtain one at http://mozilla.org/MPL/2.0/.
-
-
-==============================================================================*/
-
-
 #include <YSI_Coding\y_hooks>
 
 
@@ -45,12 +30,12 @@ static
 				admin_Total,
 				admin_Names[MAX_ADMIN_LEVELS][15] =
 				{
-					"Player",			// 0 (Unused)
-					"Game Master",		// 1
-					"Moderator",		// 2
-					"Administrator",	// 3
-					"Lord of Admins",	// 4
-					"Developer",		// 5
+					"Jogador",			// 0 (Unused)
+					"Ajudante",			// 1
+					"Moderador",		// 2
+					"Administrador",	// 3
+					"Gerente",			// 4
+					"Programador",		// 5
 					""					// 6
 				},
 				admin_Colours[MAX_ADMIN_LEVELS] =
@@ -137,9 +122,7 @@ LoadAdminData()
 				admin_Total++;
 			}
 			else
-			{
 				RemoveAdminFromDatabase(name);
-			}
 		}
 	}
 
@@ -257,7 +240,7 @@ TimeoutPlayer(playerid, const reason[])
 
 	log("[PART] %p (timeout: %s)", playerid, reason);
 
-	ChatMsgAdmins(1, GREY, " >  %P"C_GREY" timed out, reason: "C_BLUE"%s", playerid, reason);
+	ChatMsgAdmins(1, GREY, " >  %P"C_GREY" caiu. Razão: "C_BLUE"%s", playerid, reason);
 
 	return 1;
 }
@@ -269,7 +252,7 @@ KickPlayer(playerid, const reason[], bool:tellplayer = true)
 
 	log("[PART] %p (kick: %s)", playerid, reason);
 
-	ChatMsgAdmins(1, GREY, " >  %P"C_GREY" kicked, reason: "C_BLUE"%s", playerid, reason);
+	ChatMsgAdmins(1, GREY, " >  %P"C_GREY" foi Kickado. Razão: "C_BLUE"%s", playerid, reason);
 
 	if(tellplayer)
 		ChatMsgLang(playerid, GREY, "KICKMESSAGE", reason);
@@ -362,11 +345,7 @@ TogglePlayerAdminDuty(playerid, toggle)
 
 		admin_OnDuty[playerid] = true;
 
-		if(GetPlayerGender(playerid) == GENDER_MALE)
-			SetPlayerSkin(playerid, 217);
-
-		else
-			SetPlayerSkin(playerid, 211);
+		SetPlayerSkin(playerid, GetPlayerGender(playerid) == GENDER_MALE ? 217 : 211);
 	}
 	else
 	{
@@ -499,30 +478,30 @@ ACMD:acmds[1](playerid, params[])
 {
 	gBigString[playerid][0] = EOS;
 
-	strcat(gBigString[playerid], "/a [message] - Staff chat channel");
+	strcat(gBigString[playerid], "/a [mensagem] - Chat de Administração");
 
 	if(admin_Level[playerid] >= 4)
 	{
-		strcat(gBigString[playerid], "\n\n"C_YELLOW"Lead (level 4)"C_BLUE"\n");
+		strcat(gBigString[playerid], "\n\n"C_YELLOW"Gerente (Nível 4)"C_BLUE"\n");
 		strcat(gBigString[playerid], admin_Commands[3]);
 	}
 	if(admin_Level[playerid] >= 3)
 	{
-		strcat(gBigString[playerid], "\n\n"C_YELLOW"Administrator (level 3)"C_BLUE"\n");
+		strcat(gBigString[playerid], "\n\n"C_YELLOW"Administrador (Nível 3)"C_BLUE"\n");
 		strcat(gBigString[playerid], admin_Commands[2]);
 	}
 	if(admin_Level[playerid] >= 2)
 	{
-		strcat(gBigString[playerid], "\n\n"C_YELLOW"Moderator (level 2)"C_BLUE"\n");
+		strcat(gBigString[playerid], "\n\n"C_YELLOW"Moderador (Nível 2)"C_BLUE"\n");
 		strcat(gBigString[playerid], admin_Commands[1]);
 	}
 	if(admin_Level[playerid] >= 1)
 	{
-		strcat(gBigString[playerid], "\n\n"C_YELLOW"Game Master (level 1)"C_BLUE"\n");
+		strcat(gBigString[playerid], "\n\n"C_YELLOW"Ajudante (Nível 1)"C_BLUE"\n");
 		strcat(gBigString[playerid], admin_Commands[0]);
 	}
 	
-	Dialog_Show(playerid, DIALOG_STYLE_MSGBOX, "Admin Commands List", gBigString[playerid], "Close", "");
+	Dialog_Show(playerid, DIALOG_STYLE_MSGBOX, "Comandos de Administração", gBigString[playerid], "Sair", "");
 
 	return 1;
 }
@@ -535,7 +514,7 @@ ACMD:adminlist[3](playerid, params[])
 
 	gBigString[playerid][0] = EOS;
 
-	format(title, 20, "Staff (%d)", admin_Total);
+	format(title, 20, "Equipe Admin (%d)", admin_Total);
 
 	for(new i; i < admin_Total; i++)
 	{
@@ -554,7 +533,7 @@ ACMD:adminlist[3](playerid, params[])
 		strcat(gBigString[playerid], line);
 	}
 
-	Dialog_Show(playerid, DIALOG_STYLE_LIST, title, gBigString[playerid], "Close", "");
+	Dialog_Show(playerid, DIALOG_STYLE_LIST, title, gBigString[playerid], "Sair", "");
 
 	return 1;
 }

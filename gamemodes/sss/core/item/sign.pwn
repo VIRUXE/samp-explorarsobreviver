@@ -1,18 +1,3 @@
-/*==============================================================================
-
-
-	Southclaws' Scavenge and Survive
-
-		Copyright (C) 2020 Barnaby "Southclaws" Keene
-
-		This Source Code Form is subject to the terms of the Mozilla Public
-		License, v. 2.0. If a copy of the MPL was not distributed with this
-		file, You can obtain one at http://mozilla.org/MPL/2.0/.
-
-
-==============================================================================*/
-
-
 #include <YSI_Coding\y_hooks>
 
 
@@ -37,7 +22,7 @@ hook OnItemCreateInWorld(Item:itemid)
 
 		GetItemButtonID(itemid, buttonid);
 
-		SetButtonText(buttonid, "Press "KEYTEXT_INTERACT" to edit~n~Hold "KEYTEXT_INTERACT" to pick up");
+		SetButtonText(buttonid, "Aperta "KEYTEXT_INTERACT" para editar~n~Aguenta "KEYTEXT_INTERACT" para apanhar");
 	}
 }
 
@@ -80,7 +65,7 @@ hook OnPlayerUseItem(playerid, Item:itemid)
 						SetItemArrayData(CurrentSignItem[playerid], inputtext, strlen(inputtext));
 				}
 			}
-			Dialog_ShowCallback(playerid, using inline Response, DIALOG_STYLE_INPUT, "Sign", "Enter the text to display below\nTyping '\\' will start a new line.", "Accept", "Close");
+			Dialog_ShowCallback(playerid, using inline Response, DIALOG_STYLE_INPUT, "Sinal", "Introduz uma mensagem abaixo, para mostrar no sinal\nDigitando '\\' começará uma nova linha.", "Aceitar", "Sair");
 		}
 	}
 

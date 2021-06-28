@@ -1,18 +1,3 @@
-/*==============================================================================
-
-
-	Southclaws' Scavenge and Survive
-
-		Copyright (C) 2020 Barnaby "Southclaws" Keene
-
-		This Source Code Form is subject to the terms of the Mozilla Public
-		License, v. 2.0. If a copy of the MPL was not distributed with this
-		file, You can obtain one at http://mozilla.org/MPL/2.0/.
-
-
-==============================================================================*/
-
-
 #include <YSI_Coding\y_hooks>
 
 
@@ -83,8 +68,7 @@ BanPlayer(playerid, const reason[], byid, duration)
 	new name[MAX_PLAYER_NAME];
 
 	if(byid == -1)
-		name = "Server";
-
+		name = "Sistema";
 	else
 		GetPlayerName(byid, name, MAX_PLAYER_NAME);
 
@@ -115,8 +99,7 @@ BanPlayerByName(const name[], const reason[], byid, duration)
 		byname[MAX_PLAYER_NAME];
 
 	if(byid == -1)
-		byname = "Server";
-
+		byname = "Sistema";
 	else
 		GetPlayerName(byid, byname, MAX_PLAYER_NAME);
 
@@ -129,9 +112,7 @@ BanPlayerByName(const name[], const reason[], byid, duration)
 	}
 
 	if(id == INVALID_PLAYER_ID)
-	{
 		GetAccountIP(name, ip);
-	}
 	else
 	{
 		ip = GetPlayerIpAsInt(id);
@@ -171,9 +152,7 @@ UnBanPlayer(const name[])
 	stmt_bind_value(stmt_BanUnban, 0, DB::TYPE_STRING, name, MAX_PLAYER_NAME);
 
 	if(stmt_execute(stmt_BanUnban))
-	{
 		return 1;
-	}
 
 	return 0;
 }
@@ -218,14 +197,14 @@ BanCheck(playerid)
 			new string[256];
 
 			format(string, 256, "\
-				"C_YELLOW"Date:\n\t\t"C_BLUE"%s\n\n\
-				"C_YELLOW"Reason:\n\t\t"C_BLUE"%s\n\n\
-				"C_YELLOW"Unban:\n\t\t"C_BLUE"%s",
+				"C_YELLOW"Data:\n\t\t"C_BLUE"%s\n\n\
+				"C_YELLOW"Razão:\n\t\t"C_BLUE"%s\n\n\
+				"C_YELLOW"Desban:\n\t\t"C_BLUE"%s",
 				TimestampToDateTime(timestamp),
 				reason,
 				duration ? (TimestampToDateTime(timestamp + duration)) : "Never");
 
-			Dialog_Show(playerid, DIALOG_STYLE_MSGBOX, "Banned", string, "Close", "");
+			Dialog_Show(playerid, DIALOG_STYLE_MSGBOX, "Banido", string, "Sair", "");
 
 			stmt_bind_value(stmt_BanSetIpv4, 0, DB::TYPE_INTEGER, GetPlayerIpAsInt(playerid));
 			stmt_bind_value(stmt_BanSetIpv4, 1, DB::TYPE_PLAYER_NAME, playerid);

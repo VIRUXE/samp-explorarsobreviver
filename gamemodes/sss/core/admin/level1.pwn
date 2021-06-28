@@ -195,13 +195,13 @@ ACMD:country[1](playerid, params[])
 
 		GetPlayerCountryDataAsString(targetid, data);
 
-		Dialog_Show(playerid, DIALOG_STYLE_MSGBOX, "IP Data", data, "Close", "");
+		Dialog_Show(playerid, DIALOG_STYLE_MSGBOX, "IP Data", data, "Sair", "");
 	}
 	else
 	{
 		if(!AccountExists(params))
 		{
-			ChatMsg(playerid, YELLOW, " >  The account '%s' does not exist.", params);
+			ChatMsg(playerid, YELLOW, " >  A conta '%s' não existe.", params);
 			return 1;
 		}
 
@@ -230,7 +230,7 @@ ACMD:allcountry[1](playerid, params[])
 	foreach(new i : Player)
 	{
 		if(GetPlayerAdminLevel(i) > GetPlayerAdminLevel(playerid))
-			country = "Unknown";
+			country = "Desconhecido";
 		else
 			GetPlayerCachedCountryName(i, country);
 
@@ -292,7 +292,7 @@ ACMD:aliases[1](playerid, params[])
 
 	if(!AccountExists(name))
 	{
-		ChatMsg(playerid, YELLOW, " >  The account '%s' does not exist.", name);
+		ChatMsg(playerid, YELLOW, " >  A conta '%s' não existe.", name);
 		return 1;
 	}
 

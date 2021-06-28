@@ -1,20 +1,3 @@
-/*==============================================================================
-
-
-	Southclaws' Scavenge and Survive
-
-		Copyright (C) 2020 Barnaby "Southclaws" Keene
-
-		This Source Code Form is subject to the terms of the Mozilla Public
-		License, v. 2.0. If a copy of the MPL was not distributed with this
-		file, You can obtain one at http://mozilla.org/MPL/2.0/.
-
-		This file was originally written by Adam Kadar:
-		<https://github.com/kadaradam>
-
-
-==============================================================================*/
-
 #define CRAFT_DIALOG 	(90)
 
 CMD:recipes(playerid, params[])
@@ -50,7 +33,7 @@ Dialog_ShowCraftTypes(playerid)
 			}
 		}
 	}
-	Dialog_ShowCallback(playerid, using inline Response, DIALOG_STYLE_LIST, "Recipes", "Combination Recipes\nConstruction Recipes\nWorkbench Recipes\n"C_GREEN"Help", "Select", "Close");
+	Dialog_ShowCallback(playerid, using inline Response, DIALOG_STYLE_LIST, "Receitas", "Receitas de Combinação\nReceitas de Construção\nReceitas de Mesa de Trabalho\n"C_GREEN"Ajuda", "Selecionar", "Sair");
 }
 
 new CraftSet:PlayerListCraft[MAX_PLAYERS][MAX_CONSTRUCT_SET];
@@ -105,25 +88,21 @@ Dialog_ShowCraftList(playerid, type)
 			GetItemTypeModel(resulttype, model);
 		}
 		else
-		{
 			itemname = "INVALID CRAFT SET";
-		}
 
 		PlayerListCraft[playerid][items++] = i;
 		format(LCraft, sizeof(LCraft), "%s%d\t%s\n", LCraft, model, itemname);
 	}
 
-	ShowPlayerDialog(playerid, CRAFT_DIALOG, DIALOG_STYLE_PREVIEW_MODEL, "Craftsets", LCraft, ">", "~R~X");
+	ShowPlayerDialog(playerid, CRAFT_DIALOG, DIALOG_STYLE_PREVIEW_MODEL, "Receitas", LCraft, ">", "~R~X");
 }
 
 hook OnDialogModelResponse(playerid, dialogid, response, listitem){
 	if(dialogid == CRAFT_DIALOG){
-		if(response) {
+		if(response)
 			Dialog_ShowIngredients(playerid, CraftSet:PlayerListCraft[playerid][listitem]);
-		}
-		else {
+		else
 			Dialog_ShowCraftTypes(playerid);
-		}	
 	}
 }
 
@@ -156,13 +135,13 @@ Dialog_ShowIngredients(playerid, CraftSet:craftset)
 	{
 		GetItemTypeName(GetConstructionSetTool(consset), toolname);
 		format(gBigString[playerid], sizeof(gBigString[]), "\
-			"C_WHITE"Tool: 			"C_YELLOW"%s\n\
-			"C_WHITE"Ingredients:	"C_YELLOW"\n%s", toolname, gBigString[playerid]);
+			"C_WHITE"Ferramenta: 			"C_YELLOW"%s\n\
+			"C_WHITE"Ingredientes:	"C_YELLOW"\n%s", toolname, gBigString[playerid]);
 	}
 	else
 	{
 		format(gBigString[playerid], sizeof(gBigString[]), "\
-			"C_WHITE"Ingredients:	"C_YELLOW"\n%s", gBigString[playerid]);
+			"C_WHITE"Ingredientes:	"C_YELLOW"\n%s", gBigString[playerid]);
 	}
 
 	GetItemTypeName(resulttype, itemname);
@@ -188,7 +167,7 @@ Dialog_ShowIngredients(playerid, CraftSet:craftset)
 			Dialog_ShowCraftTypes(playerid);
 		}
 	}
-	Dialog_ShowCallback(playerid, using inline Response, DIALOG_STYLE_MSGBOX, itemname, gBigString[playerid], "Close", "Back");
+	Dialog_ShowCallback(playerid, using inline Response, DIALOG_STYLE_MSGBOX, itemname, gBigString[playerid], "Sair", "Trás");
 
 	return 1;
 }
@@ -221,9 +200,7 @@ Dialog_ShowCraftHelp(playerid)
 	{
 		#pragma unused pid, dialogid, listitem, inputtext
 		if(response)
-		{
 			Dialog_ShowCraftTypes(playerid);
-		}
 	}
-	Dialog_ShowCallback(playerid, using inline Response, DIALOG_STYLE_MSGBOX, "Crafting Help", gBigString[playerid], "Back", "Cancel");
+	Dialog_ShowCallback(playerid, using inline Response, DIALOG_STYLE_MSGBOX, "Ajuda com Craft", gBigString[playerid], "Trás", "Sair");
 }

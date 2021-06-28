@@ -351,7 +351,7 @@ hook OnPlayerLoadAccount(playerid)
 		{
 			if(GetDynamicActorVirtualWorld(i) == 33)
 			{
-				ChatMsg(playerid, RED, " > You were killed while you were away. :(");
+				ChatMsg(playerid, RED, " > Você foi morto enquanto esteve ausente. :(");
 				SetAccountAliveState(name, 0);
 			}
 			break;
@@ -379,9 +379,7 @@ CreateBody(const name[], Float:x, Float:y, Float:z, Float:a, w, i, s)
 	new id = Iter_Free(body_Count);
 
 	if(id == ITER_NONE)
-	{
 		return -1;
-	}
 
 	id = CreateDynamicActor(s, x, y, z + 0.15, a, false, 100.0, w, i); // 0.15 = for fix in-vehicle bug!!
 
@@ -435,9 +433,7 @@ new torso_CntOptionID[MAX_PLAYERS];
 hook OnPlayerOpenContainer(playerid, Container:containerid)
 {
 	if(GetItemType(GetContainerSafeboxItem(containerid)) == item_Torso)
-	{
-		torso_CntOptionID[playerid] = AddContainerOption(playerid, "Bury body");
-	}
+		torso_CntOptionID[playerid] = AddContainerOption(playerid, "Enterrar Corpo");
 
 	return Y_HOOKS_CONTINUE_RETURN_0;
 }
@@ -523,7 +519,7 @@ IRPC:GIVEDAM(playerid, BitStream:bs){
 				if(!CA_RayCastLine(x, y, z, cx, cy, cz,  cx, cy, cz))
 				{
 					ShowActionText(playerid,
-						sprintf("~w~Use ~g~/mc %d~n~~w~para matar o corpo de ~w~~h~%s", i, body_PlayerName[i]),
+						sprintf("~w~Digite ~g~/mc %d~n~~w~para matar o corpo de ~w~~h~%s", i, body_PlayerName[i]),
 						3000);
 				}
 			}
@@ -541,7 +537,7 @@ CMD:mc(playerid, params[])
 
 		if(sscanf(params, "d", STREAMER_TAG_ACTOR:actorid))
 		{
-			ChatMsg(playerid, RED, "[Mobile] > Use /mv [id do corpo]");
+			ChatMsg(playerid, RED, "[Mobile] > Digite /mv [id do corpo]");
 			return 1;
 		}
 
@@ -559,10 +555,9 @@ CMD:mc(playerid, params[])
 		if(Distance(cx, cy, cz, x, y, z) < 5.0)
 		{
 			if(!CA_RayCastLine(x, y, z, cx, cy, cz,  cx, cy, cz))
-			{
 				CallLocalFunction("OnPlayerGiveDamageDynamicActor", "ddfdd", playerid, actorid, 100.0, 0, 1);
-			}
-			else ChatMsg(playerid, RED, "[Mobile] > Você não pode matar por que há algum objeto entre você e o corpo.");
+			else 
+				ChatMsg(playerid, RED, "[Mobile] > Você não pode matar por que há algum objeto entre você e o corpo.");
 		}
 		else ChatMsg(playerid, RED, "[Mobile] > Você está muito longe do corpo.");
 	}
@@ -580,7 +575,7 @@ public OnPlayerGiveDamageDynamicActor(playerid, actorid, Float:amount, weaponid,
 	GetDynamicActorHealth(actorid, health);
 
 	if(IsPlayerRaidBlock(playerid)){
-		Dialog_Show(playerid, DIALOG_STYLE_MSGBOX, "Anti-Raid Protection", ls(playerid, "ANTRAIDP"), "Close", "");
+		Dialog_Show(playerid, DIALOG_STYLE_MSGBOX, "Anti-Raid Protection", ls(playerid, "ANTRAIDP"), "Sair", "");
 		return 1;
 	}
 	
@@ -613,7 +608,7 @@ public OnPlayerGiveDamageDynamicActor(playerid, actorid, Float:amount, weaponid,
 		GetItemArrayDataAtCell(itemid, _:containerid, 0);
 
 		new name[MAX_PLAYER_NAME + 8];
-		format(name, sizeof(name), "Body of %s", body_PlayerName[actorid]);
+		format(name, sizeof(name), "Corpo de %s", body_PlayerName[actorid]);
 		SetContainerName(containerid, name);
 		SetItemLabel(itemid, name);
 

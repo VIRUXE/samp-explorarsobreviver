@@ -1,18 +1,3 @@
-/*==============================================================================
-
-
-	Southclaws' Scavenge and Survive
-
-		Copyright (C) 2020 Barnaby "Southclaws" Keene
-
-		This Source Code Form is subject to the terms of the Mozilla Public
-		License, v. 2.0. If a copy of the MPL was not distributed with this
-		file, You can obtain one at http://mozilla.org/MPL/2.0/.
-
-
-==============================================================================*/
-
-
 #include <YSI_Coding\y_hooks>
 
 
@@ -99,7 +84,7 @@ hook OnPlayerScriptUpdate(playerid)
 
 				if(floatround(TravelStats[playerid][STAT_DIST_SPRINTING] / 10) % 50 == 0 && GetTickCountDifference(tick, ExpGainCooldown[playerid]) > 10000)
 				{
-					PlayerGainSkillExperience(playerid, "Endurance");
+					PlayerGainSkillExperience(playerid, "Resistência");
 					ExpGainCooldown[playerid] = tick;
 				}
 			}
@@ -110,7 +95,7 @@ hook OnPlayerScriptUpdate(playerid)
 
 				if(floatround(TravelStats[playerid][STAT_DIST_RUNNING] / 10) % 50 == 0 && GetTickCountDifference(tick, ExpGainCooldown[playerid]) > 10000)
 				{
-					PlayerGainSkillExperience(playerid, "Endurance");
+					PlayerGainSkillExperience(playerid, "Resistência");
 					ExpGainCooldown[playerid] = tick;
 				}
 			}
@@ -127,7 +112,7 @@ hook OnPlayerScriptUpdate(playerid)
 
 			if(floatround(TravelStats[playerid][STAT_DIST_SWIMMING] / 10) % 20 == 0 && GetTickCountDifference(tick, ExpGainCooldown[playerid]) > 10000)
 			{
-				PlayerGainSkillExperience(playerid, "Endurance");
+				PlayerGainSkillExperience(playerid, "Resistência");
 				ExpGainCooldown[playerid] = tick;
 			}
 		}
@@ -138,7 +123,7 @@ hook OnPlayerScriptUpdate(playerid)
 
 			if(floatround(TravelStats[playerid][STAT_DIST_UNDERWATER] / 10) % 20 == 0 && GetTickCountDifference(tick, ExpGainCooldown[playerid]) > 10000)
 			{
-				PlayerGainSkillExperience(playerid, "Endurance");
+				PlayerGainSkillExperience(playerid, "Resistência");
 				ExpGainCooldown[playerid] = tick;
 			}
 		}
@@ -150,9 +135,7 @@ hook OnPlayerScriptUpdate(playerid)
 	}
 
 	if(IsPlayerKnockedOut(playerid))
-	{
 		TravelStats[playerid][STAT_TIME_KNOCKED_OUT] += tick_diff;
-	}
 
 	return Y_HOOKS_CONTINUE_RETURN_0;
 }
@@ -186,7 +169,7 @@ hook OnPlayerKeyStateChange(playerid, newkeys, oldkeys)
 				TravelStats[playerid][STAT_JUMPS] += 1;
 
 				if((TravelStats[playerid][STAT_JUMPS] / 10) % 10 == 0)
-					PlayerGainSkillExperience(playerid, "Endurance");
+					PlayerGainSkillExperience(playerid, "Resistência");
 			}
 		}
 		else
@@ -206,7 +189,7 @@ timer JumpBoost[0](playerid)
 
 	GetPlayerVelocity(playerid, x, y, z);
 
-	boost = 1.0 + (1.3 * GetPlayerSkillValue(playerid, "Endurance"));
+	boost = 1.0 + (1.3 * GetPlayerSkillValue(playerid, "Resistência"));
 
 	SetPlayerVelocity(playerid, x * boost, y * boost, z * boost);
 }
@@ -263,7 +246,7 @@ CMD:mstats(playerid, params[])
 		TravelStats[playerid][STAT_TIME_KNOCKED_OUT],
 		TravelStats[playerid][STAT_JUMPS]);
 
-	ShowPlayerDialog(playerid, 0, DIALOG_STYLE_MSGBOX, "Movement statistics", str, "Close", "");
+	ShowPlayerDialog(playerid, 0, DIALOG_STYLE_MSGBOX, "Movement statistics", str, "Sair", "");
 
 	return 1;
 }

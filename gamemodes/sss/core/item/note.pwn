@@ -1,18 +1,3 @@
-/*==============================================================================
-
-
-	Southclaws' Scavenge and Survive
-
-		Copyright (C) 2020 Barnaby "Southclaws" Keene
-
-		This Source Code Form is subject to the terms of the Mozilla Public
-		License, v. 2.0. If a copy of the MPL was not distributed with this
-		file, You can obtain one at http://mozilla.org/MPL/2.0/.
-
-
-==============================================================================*/
-
-
 #include <YSI_Coding\y_hooks>
 
 
@@ -43,11 +28,9 @@ _ShowNoteDialog(playerid, Item:itemid)
 			#pragma unused pid, dialogid, listitem
 
 			if(response)
-			{
 				SetItemArrayData(itemid, inputtext, strlen(inputtext));
-			}
 		}
-		Dialog_ShowCallback(playerid, using inline Response, DIALOG_STYLE_INPUT, "Note", "Write a message onto the note:", "Done", "Cancel");
+		Dialog_ShowCallback(playerid, using inline Response, DIALOG_STYLE_INPUT, "Nota", "Escreve uma mensagem na Nota:", "OK", "Cancelar");
 	}
 	else
 	{
@@ -56,11 +39,9 @@ _ShowNoteDialog(playerid, Item:itemid)
 			#pragma unused pid, dialogid, listitem, inputtext
 
 			if(!response)
-			{
 				DestroyItem(itemid);
-			}
 		}
-		Dialog_ShowCallback(playerid, using inline Response, DIALOG_STYLE_MSGBOX, "Note", string, "Close", "Tear");
+		Dialog_ShowCallback(playerid, using inline Response, DIALOG_STYLE_MSGBOX, "Nota", string, "Sair", "Rasgar");
 	}
 
 	return 1;
@@ -78,9 +59,7 @@ hook OnItemNameRender(Item:itemid, ItemType:itemtype)
 		len = strlen(string);
 
 		if(len == 0)
-		{
-			SetItemNameExtra(itemid, "Blank");
-		}
+			SetItemNameExtra(itemid, "Em Branco");
 		else if(len > 8)
 		{
 			strins(string, "(...)", 8);

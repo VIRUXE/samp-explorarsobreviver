@@ -1,18 +1,3 @@
-/*==============================================================================
-
-
-	Southclaws' Scavenge and Survive
-
-		Copyright (C) 2020 Barnaby "Southclaws" Keene
-
-		This Source Code Form is subject to the terms of the Mozilla Public
-		License, v. 2.0. If a copy of the MPL was not distributed with this
-		file, You can obtain one at http://mozilla.org/MPL/2.0/.
-
-
-==============================================================================*/
-
-
 #include <YSI_Coding\y_hooks>
 
 
@@ -98,9 +83,7 @@ stock ApplyDrug(playerid, drugtype, customduration = -1)
 		return 0;
 
 	if(drug_PlayerDrugData[playerid][drugtype][drug_active])
-	{
 		drug_PlayerDrugData[playerid][drugtype][drug_totalDuration] += customduration == -1 ? drug_TypeData[drugtype][drug_duration] : customduration;
-	}
 	else
 	{
 		drug_PlayerDrugData[playerid][drugtype][drug_active] = true;
@@ -251,9 +234,7 @@ stock SetPlayerDrugsFromArray(playerid, input[], length)
 	}
 
 	for(new i = 1; i < input[0] * 2; i += 2)
-	{
 		ApplyDrug(playerid, input[i], input[i + 1]);
-	}
 
 	return 1;
 }
@@ -305,7 +286,7 @@ CMD:druginfo(playerid, params[])
 		}
 	}
 
-	Dialog_Show(playerid, DIALOG_STYLE_MSGBOX, "Drug Debug (Debrdug!?)", gBigString[playerid], "Close", "");
+	Dialog_Show(playerid, DIALOG_STYLE_MSGBOX, "Drug Debug (Debrdug!?)", gBigString[playerid], "Sair", "");
 
 	return 1;
 }

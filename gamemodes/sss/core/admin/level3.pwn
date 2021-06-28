@@ -114,7 +114,7 @@ ACMD:whitelist[3](playerid, params[])
 			format(list, sizeof(list), "%s%C%s\n", list, IsPlayerInWhitelist(i) ? (GREEN) : (RED), name);
 		}
 
-		Dialog_Show(playerid, DIALOG_STYLE_MSGBOX, "Whitelisted players", list, "Close");
+		Dialog_Show(playerid, DIALOG_STYLE_MSGBOX, "Whitelisted players", list, "Sair");
 	}
 
 	return 1;

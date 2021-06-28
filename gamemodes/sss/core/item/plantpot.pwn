@@ -1,18 +1,3 @@
-/*==============================================================================
-
-
-	Southclaws' Scavenge and Survive
-
-		Copyright (C) 2020 Barnaby "Southclaws" Keene
-
-		This Source Code Form is subject to the terms of the Mozilla Public
-		License, v. 2.0. If a copy of the MPL was not distributed with this
-		file, You can obtain one at http://mozilla.org/MPL/2.0/.
-
-
-==============================================================================*/
-
-
 #include <YSI_Coding\y_hooks>
 
 
@@ -59,7 +44,7 @@ hook OnPlayerUseItemWithItem(playerid, Item:itemid, Item:withitemid)
 				ShowActionText(playerid, ls(playerid, "POTADDSEEDS", true), 5000);
 				new Button:buttonid;
 				GetItemButtonID(itemid, buttonid);
-				SetButtonText(buttonid, "Press F to pick up~n~Press "KEYTEXT_INTERACT" with water bottle to add water");
+				SetButtonText(buttonid, "Aperta F para apanhar~n~Aperta "KEYTEXT_INTERACT" com uma Garrafa com Água, para adicionar água na planta");
 			}
 		}
 
@@ -70,13 +55,9 @@ hook OnPlayerUseItemWithItem(playerid, Item:itemid, Item:withitemid)
 				type = GetLiquidItemLiquidType(itemid);
 
 			if(amount <= 0.0)
-			{
 				ShowActionText(playerid, ls(playerid, "POTBOTEMPTY", true), 5000);
-			}
 			else if(type != liquid_Water)
-			{
 				ShowActionText(playerid, ls(playerid, "POTBOTNOWAT", true), 5000);
-			}
 			else
 			{
 				new Float:transfer = (amount < 0.1) ? amount : 0.1, water;
@@ -88,7 +69,7 @@ hook OnPlayerUseItemWithItem(playerid, Item:itemid, Item:withitemid)
 				ShowActionText(playerid, ls(playerid, "POTADDWATER", true), 5000);
 				new Button:buttonid;
 				GetItemButtonID(itemid, buttonid);
-				SetButtonText(buttonid, "Press F to pick up~n~Press "KEYTEXT_INTERACT" with knife to harvest");
+				SetButtonText(buttonid, "Aperta F para apanhar~n~Aperta "KEYTEXT_INTERACT" com uma Faca para obter a planta");
 			}
 		}
 
@@ -163,7 +144,7 @@ _pot_Load(Item:itemid)
 	{
 		new Button:buttonid;
 		GetItemButtonID(itemid, buttonid);
-		SetButtonText(buttonid, "Press F to pick up~n~Press "KEYTEXT_INTERACT" with seeds to plant");
+		SetButtonText(buttonid, "Aperta F para apanhar~n~Aperta "KEYTEXT_INTERACT" com Sementes, para plantar no Vaso");
 		return;
 	}
 
@@ -190,7 +171,7 @@ _pot_Load(Item:itemid)
 		potdata[E_PLANT_POT_GROWTH] = 0;
 		new Button:buttonid;
 		GetItemButtonID(itemid, buttonid);
-		SetButtonText(buttonid, "Press F to pick up~n~Press "KEYTEXT_INTERACT" with seeds to plant");
+		SetButtonText(buttonid, "Aperta F para apanhar~n~Aperta "KEYTEXT_INTERACT" com Sementes, para plantar no Vaso");
 	}
 
 	SetItemArrayData(itemid, potdata, e_plant_pot_data);
@@ -245,9 +226,7 @@ _pot_UpdateModel(Item:itemid, bool:toggle = true)
 			GetItemArrayDataAtCell(itemid, id, E_PLANT_POT_OBJECT_ID);
 
 			if(id != INVALID_OBJECT_ID)
-			{
 				DestroyDynamicObject(id);
-			}
 
 			z += (0.1966 / GetSeedTypeGrowthTime(seedtype)) * growth;
 
@@ -260,9 +239,7 @@ _pot_UpdateModel(Item:itemid, bool:toggle = true)
 			GetItemArrayDataAtCell(itemid, id, E_PLANT_POT_OBJECT_ID);
 
 			if(id != INVALID_OBJECT_ID)
-			{
 				DestroyDynamicObject(id);
-			}
 
 			z += GetSeedTypePlantOffset(seedtype);
 
@@ -340,7 +317,7 @@ hook OnPlayerUseItem(playerid, Item:itemid)
 			#pragma unused pid, dialogid, response, listitem, inputtext
 			ClearAnimations(playerid, 1);
 		}
-		Dialog_ShowCallback(playerid, using inline Response, DIALOG_STYLE_MSGBOX, "Plant Pot", string, "Close");
+		Dialog_ShowCallback(playerid, using inline Response, DIALOG_STYLE_MSGBOX, "Vaso", string, "Sair");
 
 		return Y_HOOKS_BREAK_RETURN_1;
 	}

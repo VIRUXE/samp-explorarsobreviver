@@ -1,22 +1,4 @@
-/*==============================================================================
-
-
-	Southclaws' Scavenge and Survive
-
-		Copyright (C) 2020 Barnaby "Southclaws" Keene
-
-		This Source Code Form is subject to the terms of the Mozilla Public
-		License, v. 2.0. If a copy of the MPL was not distributed with this
-		file, You can obtain one at http://mozilla.org/MPL/2.0/.
-
-
-==============================================================================*/
-
-
 #include <YSI_Coding\y_hooks>
-
-
-// Entities
 
 
 new
@@ -29,10 +11,6 @@ new
 	ch_keypad,
 	ch_keypadprt;
 
-
-// Variables
-
-
 new
 	bool:ch_doorstate = false;
 
@@ -41,8 +19,7 @@ hook OnGameModeInit()
 {
 	new Button:buttons[1];
 
-
-	ch_gate = CreateButton(-2307.81, -1650.67, 484.36, "Press F to activate", 0);
+	ch_gate = CreateButton(-2307.81, -1650.67, 484.36, "Aperta F para Ativar", 0);
 
 	buttons[0] = ch_gate;
 
@@ -52,7 +29,7 @@ hook OnGameModeInit()
 		.maxButtons = 1, .moveSpeed = 1.0, .closeDelay = -1);
 
 
-	ch_doorBtn = CreateButton(-2311.4900, -1647.7000, 484.3600, "Press F to use", 0, 0);
+	ch_doorBtn = CreateButton(-2311.4900, -1647.7000, 484.3600, "Aperta F para Utilizar", 0, 0);
 
 	buttons[0] = ch_doorBtn;
 
@@ -254,7 +231,7 @@ hook OnPlayerActivateDoor(playerid, doorid, newstate)
 
 		if(ch_doorstate == false && !IsValidItem(GetPlayerItem(playerid)))
 		{
-			Dialog_Show(playerid, DIALOG_STYLE_MSGBOX, "Door", "The keypad seems broken", "Close", "");
+			Dialog_Show(playerid, DIALOG_STYLE_MSGBOX, "Porta", "Este Teclado aparenta estar quebrado", "Sair", "");
 			return Y_HOOKS_BREAK_RETURN_1;
 		}
 	}

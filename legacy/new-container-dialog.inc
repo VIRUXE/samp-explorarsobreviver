@@ -124,9 +124,8 @@ stock DisplayContainerInventory(playerid, Container:containerid) {
 	for(new i; i < containerSize; i++) {
 		GetContainerSlotItem(containerid, i, itemid);
 
-		if(!IsValidItem(itemid)) {
+		if(!IsValidItem(itemid))
 			break;
-		}
 
 		itemtype = GetItemType(itemid);
 
@@ -149,7 +148,7 @@ stock DisplayContainerInventory(playerid, Container:containerid) {
 		cnt_ItemListTotal[playerid]++;
 	}
 
-	format(cnt_InventoryString[playerid], sizeof(cnt_InventoryString[]), "%s%d\tInventory >\n",
+	format(cnt_InventoryString[playerid], sizeof(cnt_InventoryString[]), "%s%d\Inventário >\n",
 		cnt_InventoryString[playerid], GetPlayerSkin(playerid));
 
 	cnt_CurrentContainer[playerid] = containerid;
@@ -167,7 +166,7 @@ stock DisplayContainerInventory(playerid, Container:containerid) {
 			Logger_I("length", strlen(cnt_InventoryString[playerid])));
 	}
 
-	ShowPlayerDialog(playerid, 35, DIALOG_STYLE_PREVIEW_MODEL, title, cnt_InventoryString[playerid], "Options", "Close");
+	ShowPlayerDialog(playerid, 35, DIALOG_STYLE_PREVIEW_MODEL, title, cnt_InventoryString[playerid], "Opções", "Sair");
 
 	return 0;
 }
@@ -197,7 +196,8 @@ stock ClosePlayerContainer(playerid, call = false) {
 	return 0;
 }
 
-stock GetPlayerCurrentContainer(playerid, &Container:containerid) {
+stock GetPlayerCurrentContainer(playerid, &Container:containerid) 
+{
 	if(!IsPlayerConnected(playerid)) {
 		return 1;
 	}
@@ -206,7 +206,8 @@ stock GetPlayerCurrentContainer(playerid, &Container:containerid) {
 	return 0;
 }
 
-stock GetPlayerContainerSlot(playerid, &slot) {
+stock GetPlayerContainerSlot(playerid, &slot) 
+{
 	if(!IsPlayerConnected(playerid)) {
 		return 1;
 	}
@@ -215,10 +216,10 @@ stock GetPlayerContainerSlot(playerid, &slot) {
 	return 0;
 }
 
-stock AddContainerOption(playerid, const option[]) {
-	if(strlen(cnt_OptionsList[playerid]) + strlen(option) > sizeof(cnt_OptionsList[])) {
+stock AddContainerOption(playerid, const option[]) 
+{
+	if(strlen(cnt_OptionsList[playerid]) + strlen(option) > sizeof(cnt_OptionsList[]))
 		return -1;
-	}
 
 	strcat(cnt_OptionsList[playerid], option);
 	strcat(cnt_OptionsList[playerid], "\n");
@@ -232,12 +233,13 @@ stock AddContainerOption(playerid, const option[]) {
 // -
 
 
-hook OnPlayerConnect(playerid) {
+hook OnPlayerConnect(playerid) 
+{
 	cnt_CurrentContainer[playerid] = INVALID_CONTAINER_ID;
 }
 
-
-_container_displayOptions(playerid, slotid) {
+_container_displayOptions(playerid, slotid) 
+{
 	new
 		tmp[MAX_ITEM_NAME + MAX_ITEM_TEXT],
 		Item:itemid_outer,
@@ -248,14 +250,15 @@ _container_displayOptions(playerid, slotid) {
 	GetItemTypeSize(GetItemType(itemid_outer), itemsize);
 	format(tmp, sizeof(tmp), "[%d]%s", itemsize, tmp);
 	
-	cnt_OptionsList[playerid] = "Equip\nMove to inventory\n";
+	cnt_OptionsList[playerid] = "Equipar\nMover para o Inventário\n";
 	cnt_OptionsCount[playerid] = 0;
 
 	CallLocalFunction("OnPlayerViewContainerOpt", "dd", playerid, _:cnt_CurrentContainer[playerid]);
 
 	inline Response(pid, dialogid, response, listitem, string:inputtext[]) {
 		#pragma unused pid, dialogid, inputtext
-		if(!response) {
+		if(!response) 
+		{
 			DisplayContainerInventory(playerid, cnt_CurrentContainer[playerid]);
 			return 1;
 		}
@@ -272,7 +275,7 @@ _container_displayOptions(playerid, slotid) {
 						Logger_Err("current container invalid in dialog call",
 							Logger_I("containerid", _:cnt_CurrentContainer[playerid]),
 							Logger_I("playerid", playerid));
-						ShowActionText(playerid, "An error occurred", 3000, 200);
+						ShowActionText(playerid, "Ocorreu um Erro", 3000, 200);
 						return 1;
 					}
 
@@ -280,7 +283,7 @@ _container_displayOptions(playerid, slotid) {
 					GiveWorldItemToPlayer(playerid, itemid);
 					DisplayContainerInventory(playerid, cnt_CurrentContainer[playerid]);
 				} else {
-					ShowActionText(playerid, "You are already holding something", 3000, 200);
+					ShowActionText(playerid, "Já está segurando algo", 3000, 200);
 					DisplayContainerInventory(playerid, cnt_CurrentContainer[playerid]);
 				}
 			}
@@ -295,7 +298,7 @@ _container_displayOptions(playerid, slotid) {
 					Logger_Err("current container invalid in dialog call",
 						Logger_I("containerid", _:cnt_CurrentContainer[playerid]),
 						Logger_I("playerid", playerid));
-					ShowActionText(playerid, "An error occurred", 3000, 200);
+					ShowActionText(playerid, "Ocorreu um erro", 3000, 200);
 					return 1;
 				}
 
@@ -312,7 +315,7 @@ _container_displayOptions(playerid, slotid) {
 
 				if(required > 0) {
 					new str[32];
-					format(str, sizeof(str), "Extra %d slots required", required);
+					format(str, sizeof(str), "Necessita de mais %d espaços", required);
 					ShowActionText(playerid, str, 3000, 150);
 				} else if(required == 0) {
 					new slot;
@@ -326,9 +329,10 @@ _container_displayOptions(playerid, slotid) {
 			}
 
 			default: {
-				if(!CallLocalFunction("OnPlayerSelectContainerOpt", "ddd", playerid, _:cnt_CurrentContainer[playerid], listitem - 2)) {
+				if(!CallLocalFunction("OnPlayerSelectContainerOpt", "ddd", playerid, _:cnt_CurrentContainer[playerid], listitem - 2))
 					DisplayContainerInventory(playerid, cnt_CurrentContainer[playerid]);
-				} else {
+				else 
+				{
 					Logger_Dbg("container-dialog", "closing container via option response");
 					ClosePlayerInventory(playerid);
 				}
@@ -337,7 +341,7 @@ _container_displayOptions(playerid, slotid) {
 
 		return 1;
 	}
-	Dialog_ShowCallback(playerid, using inline Response, DIALOG_STYLE_LIST, tmp, cnt_OptionsList[playerid], "Accept", "Back");
+	Dialog_ShowCallback(playerid, using inline Response, DIALOG_STYLE_LIST, tmp, cnt_OptionsList[playerid], "Aceitar", "Trás");
 
 	return 0;
 }
@@ -351,9 +355,8 @@ hook OnDialogModelResponse(playerid, dialogid, response, listitem)
 			Logger_I("containerid", _:cnt_CurrentContainer[playerid]));
 
 		if(response) {
-			if(!IsValidContainer(cnt_CurrentContainer[playerid])) {
+			if(!IsValidContainer(cnt_CurrentContainer[playerid]))
 				return 0;
-			}
 
 			// Logger_Dbg("container-dialog", "listitem %d total %d itemcount %d freeslots %d", listitem, cnt_ItemListTotal[playerid], GetContainerItemCount(cnt_CurrentContainer[playerid]), GetContainerFreeSlots(cnt_CurrentContainer[playerid]));
 
@@ -374,9 +377,8 @@ hook OnDialogModelResponse(playerid, dialogid, response, listitem)
 					_container_displayOptions(playerid, listitem);
 				}
 			}
-		} else {
+		} else
 			ClosePlayerContainer(playerid, true);
-		}
 	}
 	return 1;
 }
@@ -389,7 +391,7 @@ hook OnPlayerViewInvOpt(playerid) {
 
 		GetContainerName(cnt_CurrentContainer[playerid], containerName);
 
-		str = "Move to ";
+		str = "Mover para ";
 		strcat(str, containerName);
 		cnt_InventoryOptionID[playerid] = AddInventoryOption(playerid, str);
 	}
@@ -398,8 +400,10 @@ hook OnPlayerViewInvOpt(playerid) {
 }
 
 hook OnPlayerSelectInvOpt(playerid, option) {
-	if(cnt_CurrentContainer[playerid] != INVALID_CONTAINER_ID) {
-		if(option == cnt_InventoryOptionID[playerid]) {
+	if(cnt_CurrentContainer[playerid] != INVALID_CONTAINER_ID) 
+	{
+		if(option == cnt_InventoryOptionID[playerid]) 
+		{
 			new
 				slot,
 				Item:itemid;
@@ -408,7 +412,7 @@ hook OnPlayerSelectInvOpt(playerid, option) {
 			GetInventorySlotItem(playerid, slot, itemid);
 
 			if(IsContainerFull(cnt_CurrentContainer[playerid])) {
-				ShowActionText(playerid, "Container full", 3000, 200);
+				ShowActionText(playerid, "Contentor Cheio", 3000, 200);
 			}
 
 			if(!IsValidItem(itemid)) {
@@ -419,9 +423,8 @@ hook OnPlayerSelectInvOpt(playerid, option) {
 			new required = AddItemToContainer(cnt_CurrentContainer[playerid], itemid, playerid);
 
 			if(required == 0) {
-				if(CallLocalFunction("OnMoveItemToContainer", "ddd", playerid, _:itemid, _:cnt_CurrentContainer[playerid])) {
+				if(CallLocalFunction("OnMoveItemToContainer", "ddd", playerid, _:itemid, _:cnt_CurrentContainer[playerid]))
 					return Y_HOOKS_CONTINUE_RETURN_0;
-				}
 			}
 
 			DisplayPlayerInventory(playerid);
@@ -434,9 +437,9 @@ hook OnPlayerSelectInvOpt(playerid, option) {
 }
 
 hook OnPlayerCloseInventory(playerid) {
-	if(IsValidContainer(cnt_CurrentContainer[playerid])) {
+	if(IsValidContainer(cnt_CurrentContainer[playerid]))
 		ClosePlayerContainer(playerid, true);
-	}
+
 	return Y_HOOKS_CONTINUE_RETURN_0;
 }
 

@@ -1,18 +1,3 @@
-/*==============================================================================
-
-
-	Southclaws' Scavenge and Survive
-
-		Copyright (C) 2020 Barnaby "Southclaws" Keene
-
-		This Source Code Form is subject to the terms of the Mozilla Public
-		License, v. 2.0. If a copy of the MPL was not distributed with this
-		file, You can obtain one at http://mozilla.org/MPL/2.0/.
-
-
-==============================================================================*/
-
-
 #include <YSI_Coding\y_hooks>
 
 
@@ -68,9 +53,7 @@ hook OnPlayerStreamIn(playerid, forplayerid)
 	if(GetPlayerRadioFrequency(playerid) > MIN_RADIO_FREQ)
 	{
 		if(GetPlayerRadioFrequency(playerid) == GetPlayerRadioFrequency(forplayerid))
-		{
 			UpdateRadioMarker(playerid);
-		}
 	}
 }
 
@@ -119,7 +102,6 @@ HideRadioUI(playerid)
 
 	if(!IsPlayerInAnyVehicle(playerid))
 		DisplayPlayerInventory(playerid);
-
 	else
 		CancelSelectTextDraw(playerid);
 }
@@ -134,12 +116,7 @@ UpdateRadioUI(playerid)
 	if(GetPlayerChatMode(playerid) == CHAT_MODE_LOCAL)
 	{
 		PlayerTextDrawSetString(playerid, RadioUI_Power[playerid], "off");
-
-		if(rad_OldMode[playerid] == CHAT_MODE_GLOBAL)
-			PlayerTextDrawSetString(playerid, RadioUI_Mode[playerid], "global");
-
-		else
-			PlayerTextDrawSetString(playerid, RadioUI_Mode[playerid], "freq");
+		PlayerTextDrawSetString(playerid, RadioUI_Mode[playerid], rad_OldMode[playerid] == CHAT_MODE_GLOBAL ? "global" : "freq");
 	}
 
 	if(GetPlayerChatMode(playerid) == CHAT_MODE_GLOBAL)
@@ -159,11 +136,7 @@ hook OnPlayerClickPlayerTD(playerid, PlayerText:playertextid)
 {
 	if(playertextid == RadioUI_KnobL[playerid])
 	{
-		if(GetPlayerRadioFrequency(playerid) - 0.5 <= MIN_RADIO_FREQ)
-			SetPlayerRadioFrequency(playerid, MIN_RADIO_FREQ);
-
-		else
-			SetPlayerRadioFrequency(playerid, GetPlayerRadioFrequency(playerid) - 0.5);
+		SetPlayerRadioFrequency(playerid, GetPlayerRadioFrequency(playerid) - 0.5 <= MIN_RADIO_FREQ ? MIN_RADIO_FREQ : GetPlayerRadioFrequency(playerid) - 0.5);
 
 		UpdateRadioUI(playerid);
 		UpdateRadioMarker(playerid);
@@ -172,7 +145,6 @@ hook OnPlayerClickPlayerTD(playerid, PlayerText:playertextid)
 	{
 		if(GetPlayerRadioFrequency(playerid) + 0.5 >= MAX_RADIO_FREQ)
 			SetPlayerRadioFrequency(playerid, MAX_RADIO_FREQ);
-
 		else
 			SetPlayerRadioFrequency(playerid, GetPlayerRadioFrequency(playerid) + 0.5);
 
@@ -193,24 +165,14 @@ hook OnPlayerClickPlayerTD(playerid, PlayerText:playertextid)
 	if(playertextid == RadioUI_Freq[playerid])
 	{
 		if(rad_ChangeTick[playerid] > gettime())
-		{
-			ShowActionText(playerid, "_~n~_~n~_~r~Await to change station again", 5000);
-		}
+			ShowActionText(playerid, "_~n~_~n~_~r~Aguarda para trocar de Frequência novamente", 5000);
 		else
-		{
 			ShowFrequencyDialog(playerid);
-		}
 	}
 	if(playertextid == RadioUI_Power[playerid])
 	{
 		if(GetPlayerChatMode(playerid) == CHAT_MODE_LOCAL)
-		{
-			if(rad_OldMode[playerid] == CHAT_MODE_GLOBAL)
-				SetPlayerChatMode(playerid, CHAT_MODE_GLOBAL);
-
-			else
-				SetPlayerChatMode(playerid, CHAT_MODE_RADIO);
-		}
+			SetPlayerChatMode(playerid, rad_OldMode[playerid] == CHAT_MODE_GLOBAL ? CHAT_MODE_GLOBAL : CHAT_MODE_RADIO);
 		else
 		{
 			rad_OldMode[playerid] = GetPlayerChatMode(playerid);
@@ -221,9 +183,7 @@ hook OnPlayerClickPlayerTD(playerid, PlayerText:playertextid)
 		UpdateRadioMarker(playerid);
 	}
 	if(playertextid == RadioUI_Back[playerid])
-	{
 		HideRadioUI(playerid);
-	}
 
 	return 1;
 }
@@ -247,18 +207,14 @@ ShowFrequencyDialog(playerid)
 					rad_ChangeTick[playerid] = gettime() + 30;
 				}
 				else
-				{
 					ShowFrequencyDialog(playerid);
-				}
 			}
 			else
-			{
 				ShowFrequencyDialog(playerid);
-			}
 		}
 	}
-	Dialog_ShowCallback(playerid, using inline Response, DIALOG_STYLE_INPUT, "Frequency",
-		sprintf("Enter a frequency between %0.2f and %0.2f", MIN_RADIO_FREQ, MAX_RADIO_FREQ), "Accept", "Cancel");
+	Dialog_ShowCallback(playerid, using inline Response, DIALOG_STYLE_INPUT, "Frequência",
+		sprintf("Introduza uma Frequência entre %0.2f e %0.2f", MIN_RADIO_FREQ, MAX_RADIO_FREQ), "Aceitar", "Cancelar");
 
 	return 1;
 }
@@ -266,29 +222,22 @@ ShowFrequencyDialog(playerid)
 hook OnPlayerClickTextDraw(playerid, Text:clickedid)
 {
 	if(clickedid == Text:65535)
-	{
 		if(rad_ViewingRadio[playerid])
-		{
 			SelectTextDraw(playerid, 0xFFFFFF88);
-		}
-	}
 }
 
 hook OnPlayerOpenContainer(playerid, Container:containerid)
 {
 	if(rad_ViewingRadio[playerid])
-	{
 		return Y_HOOKS_BREAK_RETURN_1;
-	}
+
 	return Y_HOOKS_CONTINUE_RETURN_0;
 }
 
 hook OnPlayerOpenInventory(playerid)
 {
 	if(rad_ViewingRadio[playerid])
-	{
 		return Y_HOOKS_BREAK_RETURN_1;
-	}
 	
 	rad_InventoryItem[playerid] = AddInventoryListItem(playerid, "Radio", 19942);
 
@@ -298,10 +247,8 @@ hook OnPlayerOpenInventory(playerid)
 hook OnPlayerSelectExtraItem(playerid, item)
 {
 	if(item == rad_InventoryItem[playerid])
-	{
 		ShowRadioUI(playerid);
 		
-	}
 	return Y_HOOKS_CONTINUE_RETURN_0;
 }
 
@@ -367,7 +314,7 @@ hook OnPlayerConnect(playerid)
 	PlayerTextDrawTextSize			(playerid, RadioUI_Mode[playerid], 20.000000, 30.000000);
 	PlayerTextDrawSetSelectable		(playerid, RadioUI_Mode[playerid], true);
 
-	RadioUI_Freq[playerid]					= CreatePlayerTextDraw(playerid, 320.000000, 251.000000, "Frequency: 00.00");
+	RadioUI_Freq[playerid]					= CreatePlayerTextDraw(playerid, 320.000000, 251.000000, "Frequencia: 00.00");
 	PlayerTextDrawAlignment			(playerid, RadioUI_Freq[playerid], 2);
 	PlayerTextDrawBackgroundColor	(playerid, RadioUI_Freq[playerid], 255);
 	PlayerTextDrawFont				(playerid, RadioUI_Freq[playerid], 1);
@@ -395,7 +342,7 @@ hook OnPlayerConnect(playerid)
 	PlayerTextDrawTextSize			(playerid, RadioUI_Power[playerid], 20.000000, 30.000000);
 	PlayerTextDrawSetSelectable		(playerid, RadioUI_Power[playerid], true);
 
-	RadioUI_Back[playerid]					= CreatePlayerTextDraw(playerid, 320.000000, 274.000000, "Close");
+	RadioUI_Back[playerid]					= CreatePlayerTextDraw(playerid, 320.000000, 274.000000, "Sair");
 	PlayerTextDrawAlignment			(playerid, RadioUI_Back[playerid], 2);
 	PlayerTextDrawBackgroundColor	(playerid, RadioUI_Back[playerid], 255);
 	PlayerTextDrawFont				(playerid, RadioUI_Back[playerid], 1);
