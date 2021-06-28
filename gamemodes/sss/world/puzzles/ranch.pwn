@@ -1,18 +1,3 @@
-/*==============================================================================
-
-
-	Southclaws' Scavenge and Survive
-
-		Copyright (C) 2020 Barnaby "Southclaws" Keene
-
-		This Source Code Form is subject to the terms of the Mozilla Public
-		License, v. 2.0. If a copy of the MPL was not distributed with this
-		file, You can obtain one at http://mozilla.org/MPL/2.0/.
-
-
-==============================================================================*/
-
-
 #include <YSI_Coding\y_hooks>
 
 
@@ -45,14 +30,14 @@ hook OnGameModeInit()
 
 	// Ranch
 
-	RanchPcButton = CreateButton(-691.1692, 942.1066, 13.6328, "Press "KEYTEXT_INTERACT" to use");
+	RanchPcButton = CreateButton(-691.1692, 942.1066, 13.6328, "Pressiona "KEYTEXT_INTERACT" para utilizar");
 	RanchHdd = CreateItem(item_HardDrive, -693.1787, 942.0, 15.93, 90.0, 0.0, 37.5);
 
 
 	// Quarry
 
-	QuarryDoor = CreateButton(495.451873, 780.096191, -21.747426, "Press "KEYTEXT_INTERACT" to enter"); // quarry
-	CaveDoor = CreateButton(-2702.358398, 3801.477050, 52.652801, "Press "KEYTEXT_INTERACT" to enter", RANCH_STUFF_VIRTUALW); // cave 1
+	QuarryDoor = CreateButton(495.451873, 780.096191, -21.747426, "Pressiona "KEYTEXT_INTERACT" para entrar"); // quarry
+	CaveDoor = CreateButton(-2702.358398, 3801.477050, 52.652801, "Pressiona "KEYTEXT_INTERACT" para entrar", RANCH_STUFF_VIRTUALW); // cave 1
 
 
 	// Shack
@@ -65,35 +50,35 @@ hook OnGameModeInit()
 
 	CaveLift = CreateDynamicObject(7246, -2759.4704, 3756.8691, 6.9, 270, 180, 340.9154, RANCH_STUFF_VIRTUALW);
 
-	buttonid[0] = CreateButton(-2796.933349, 3682.779785, 02.515481, "Press "KEYTEXT_INTERACT" to enter", RANCH_STUFF_VIRTUALW); // cave 1
-	buttonid[1] = CreateButton(-1445.01, 3673.77, 4.08, "Press "KEYTEXT_INTERACT" to enter", RANCH_STUFF_VIRTUALW); // cave 2
+	buttonid[0] = CreateButton(-2796.933349, 3682.779785, 02.515481, "Pressiona "KEYTEXT_INTERACT" para entrar", RANCH_STUFF_VIRTUALW); // cave 1
+	buttonid[1] = CreateButton(-1445.01, 3673.77, 4.08, "Pressiona "KEYTEXT_INTERACT" para entrar", RANCH_STUFF_VIRTUALW); // cave 2
 	// LinkTP(buttonid[0], buttonid[1]);
 
 	// Cave 2
-	buttonid[0] = CreateButton(-1618.94, 3648.38, 6.90, "Press "KEYTEXT_INTERACT" to enter", RANCH_STUFF_VIRTUALW); // cave 2
-	buttonid[1] = CreateButton(-785.9272, 3727.1111, 0.5293, "Press "KEYTEXT_INTERACT" to enter", RANCH_STUFF_VIRTUALW); // cave 3
+	buttonid[0] = CreateButton(-1618.94, 3648.38, 6.90, "Pressiona "KEYTEXT_INTERACT" para entrar", RANCH_STUFF_VIRTUALW); // cave 2
+	buttonid[1] = CreateButton(-785.9272, 3727.1111, 0.5293, "Pressiona "KEYTEXT_INTERACT" para entrar", RANCH_STUFF_VIRTUALW); // cave 3
 	// LinkTP(buttonid[0], buttonid[1]);
 
 
 	// Subway/Metro
 
-	buttonid[0] = CreateButton(-1007.395263, 5782.741210, 42.951477, "Press "KEYTEXT_INTERACT" to climb up the ladder", RANCH_STUFF_VIRTUALW);
-	buttonid[1] = CreateButton(2526.719482, -1648.620605, 14.471982, "Press "KEYTEXT_INTERACT" to climb down the ladder");
+	buttonid[0] = CreateButton(-1007.395263, 5782.741210, 42.951477, "Pressiona "KEYTEXT_INTERACT" para descer a escada", RANCH_STUFF_VIRTUALW);
+	buttonid[1] = CreateButton(2526.719482, -1648.620605, 14.471982, "Pressiona "KEYTEXT_INTERACT" para subir a escada");
 	// LinkTP(buttonid[0], buttonid[1]);
 
-	buttonid[0] = CreateButton(250.599380, -154.643936, -50.768798, "Press "KEYTEXT_INTERACT" to enter", RANCH_STUFF_VIRTUALW);
-	buttonid[1] = CreateButton(247.878799, -154.444061, 02.399550, "Press "KEYTEXT_INTERACT" to enter");
+	buttonid[0] = CreateButton(250.599380, -154.643936, -50.768798, "Pressiona "KEYTEXT_INTERACT" para entrar", RANCH_STUFF_VIRTUALW);
+	buttonid[1] = CreateButton(247.878799, -154.444061, 02.399550, "Pressiona "KEYTEXT_INTERACT" para entrar");
 	// LinkTP(buttonid[0], buttonid[1]);
 
-	buttonid[0] = CreateButton(-2276.608642, 5324.488281, 41.677970, "Press "KEYTEXT_INTERACT" to enter", RANCH_STUFF_VIRTUALW);
-	buttonid[1] = CreateButton(-734.773986, 3861.994628, 12.482711, "Press "KEYTEXT_INTERACT" to enter", RANCH_STUFF_VIRTUALW); // cave
+	buttonid[0] = CreateButton(-2276.608642, 5324.488281, 41.677970, "Pressiona "KEYTEXT_INTERACT" para entrar", RANCH_STUFF_VIRTUALW);
+	buttonid[1] = CreateButton(-734.773986, 3861.994628, 12.482711, "Pressiona "KEYTEXT_INTERACT" para entrar", RANCH_STUFF_VIRTUALW); // cave
 	// LinkTP(buttonid[0], buttonid[1]);
 
 
 	// Fort Claw underground
 
-	buttonid[0]=CreateButton(246.698684, -178.849655, -50.199367, "Press "KEYTEXT_INTERACT" to enter", RANCH_STUFF_VIRTUALW); // underground
-	buttonid[1]=CreateButton(-952.559326, 5137.799804, 46.183383, "Press "KEYTEXT_INTERACT" to enter", RANCH_STUFF_VIRTUALW); // metro station
+	buttonid[0]=CreateButton(246.698684, -178.849655, -50.199367, "Pressiona "KEYTEXT_INTERACT" para entrar", RANCH_STUFF_VIRTUALW); // underground
+	buttonid[1]=CreateButton(-952.559326, 5137.799804, 46.183383, "Pressiona "KEYTEXT_INTERACT" para entrar", RANCH_STUFF_VIRTUALW); // metro station
 	// LinkTP(buttonid[0], buttonid[1]);
 
 	CreateButton(-972.153869, 4303.185058, 48.666248, "~r~Locked", RANCH_STUFF_VIRTUALW);
@@ -101,15 +86,15 @@ hook OnGameModeInit()
 
 	// Lift Sequence
 
-	CaveLiftButtonT=CreateButton(-2764.0332, 3757.0466, 46.8343, "Press "KEYTEXT_INTERACT" to use the lift", RANCH_STUFF_VIRTUALW);
-	CaveLiftButtonB=CreateButton(-2764.3410, 3755.5153, 8.2390, "Press "KEYTEXT_INTERACT" to use the lift", RANCH_STUFF_VIRTUALW);
+	CaveLiftButtonT=CreateButton(-2764.0332, 3757.0466, 46.8343, "Pressiona "KEYTEXT_INTERACT" para utilizar o elevador", RANCH_STUFF_VIRTUALW);
+	CaveLiftButtonB=CreateButton(-2764.3410, 3755.5153, 8.2390, "Pressiona "KEYTEXT_INTERACT" para utilizar o elevador", RANCH_STUFF_VIRTUALW);
 	LiftPos=0;
 
 
 	// Fort Claw Door
 
-	buttonid[0] = CreateButton(264.316284, -171.135223, -50.206447, "Press "KEYTEXT_INTERACT" to activate", RANCH_STUFF_VIRTUALW);
-	buttonid[1] = CreateButton(265.862182, -170.113632, -50.204307, "Press "KEYTEXT_INTERACT" to activate", RANCH_STUFF_VIRTUALW);
+	buttonid[0] = CreateButton(264.316284, -171.135223, -50.206447, "Pressiona "KEYTEXT_INTERACT" para ativar", RANCH_STUFF_VIRTUALW);
+	buttonid[1] = CreateButton(265.862182, -170.113632, -50.204307, "Pressiona "KEYTEXT_INTERACT" para ativar", RANCH_STUFF_VIRTUALW);
 	CreateDoor(5779, buttonid,
 		265.0330, -168.9362, -49.9792, 0.0, 0.0, 0.0,
 		265.0322, -168.9355, -46.8575, 0.0, 0.0, 0.0, .worldid = RANCH_STUFF_VIRTUALW);
@@ -117,9 +102,13 @@ hook OnGameModeInit()
 
 hook OnButtonPress(playerid, Button:buttonid)
 {
-	if(buttonid==RanchPcButton)
+	if(buttonid == RanchPcButton)
 	{
-	    if(RanchPcState == 0)Dialog_Show(playerid, DIALOG_STYLE_MSGBOX, "Computer", "You try to turn on the computer but the hard disk is missing.\nYou wonder where it could be and think it's mighty suspicious.\nThere is nothing useful nearby.", "Close", "");
+	    if(RanchPcState == 0)
+			Dialog_Show(playerid, DIALOG_STYLE_MSGBOX, "Computador", 
+				"Você tenta ligar o Computador, mas o mesmo não tem disco rígido.\n\
+				Você pensa onde é que o ele poderá estar e acha isso super suspeito.\nThere is nothing useful nearby.",
+				"Close", "");
 	    if(RanchPcState == 1)
 	    {
 			if(RanchPcPlayerViewing[playerid])
@@ -135,15 +124,12 @@ hook OnButtonPress(playerid, Button:buttonid)
 			    RanchPcPlayerViewing[playerid] = true;
 			}
 	    }
-
 	}
 
 	if(buttonid == QuarryDoor)
 	{
 	    if(QuarryDoorState == 0)
-	    {
-	    	Dialog_Show(playerid, DIALOG_STYLE_MSGBOX, "Door", "You pull on the door but it won't budge, the lock seems sturdy.\nThere's no way you can get through here without a key.\nPerhaps you should search the shed?", "Close", "");
-	    }
+	    	Dialog_Show(playerid, DIALOG_STYLE_MSGBOX, "Porta", "Você puxa a porta mas ela não mexe. Ela é bem firme.\nNão tem mesmo forma de entrar, sem ter uma Chave.\nTalvez você deva procurar nos arrumos?", "Sair", "");
 	    else
 	    {
 			SetPlayerVirtualWorld(playerid, RANCH_STUFF_VIRTUALW);
@@ -157,7 +143,7 @@ hook OnButtonPress(playerid, Button:buttonid)
 		SetPlayerPos(playerid, 495.451873, 780.096191, -21.747426);
 		FreezePlayer(playerid, 1000);
 	}
-	if(buttonid==CaveLiftButtonT)
+	if(buttonid == CaveLiftButtonT)
 	{
 		if(LiftPos)
 		{
@@ -170,7 +156,7 @@ hook OnButtonPress(playerid, Button:buttonid)
 		    LiftPos=1;
 		}
 	}
-	if(buttonid==CaveLiftButtonB)
+	if(buttonid == CaveLiftButtonB)
 	{
 		if(LiftPos)
 		{
@@ -191,13 +177,13 @@ hook OnPlayerUseItemWithBtn(playerid, Button:buttonid, Item:itemid)
 {
 	if(buttonid == RanchPcButton && itemid == RanchHdd)
 	{
-	    Dialog_Show(playerid, DIALOG_STYLE_MSGBOX, "Computer", "You begin reattaching the hard drive to the computer.", "Close", "");
+	    Dialog_Show(playerid, DIALOG_STYLE_MSGBOX, "Computador", "Você começa a instalar o Disco Rídigo no Computador.", "Sair", "");
 		ApplyAnimation(playerid, "BOMBER", "BOM_PLANT_IN", 5.0, 0, 0, 0, 1, 450);
 		defer AttachRanchHdd(playerid);
 	}
 	if(QuarryDoorState == 0 && buttonid == QuarryDoor && itemid == QuarryDoorKey)
 	{
-	    Dialog_Show(playerid, DIALOG_STYLE_MSGBOX, "Door", "You have unlocked the mystery door!", "Close", "");
+	    Dialog_Show(playerid, DIALOG_STYLE_MSGBOX, "Porta", "Você destrancou a porta mistério!!", "Sair", "");
 	    QuarryDoorState = 1;
 	}
 
@@ -207,7 +193,7 @@ hook OnPlayerUseItemWithBtn(playerid, Button:buttonid, Item:itemid)
 timer AttachRanchHdd[2500](playerid)
 {
 	DestroyItem(RanchHdd);
-	Dialog_Show(playerid, DIALOG_STYLE_MSGBOX, "Computer", "You successfully install the hard drive without electricuting yourself, well done!", "Close", "");
+	Dialog_Show(playerid, DIALOG_STYLE_MSGBOX, "Computador", "Você instalou com sucesso o Disco Rídigo no Computador, sem se eletrocutar, beleza!", "Sair", "");
     ApplyAnimation(playerid, "BOMBER", "BOM_PLANT_2IDLE", 4.0, 0, 0, 0, 0, 0);
     RanchPcState = 1;
 
@@ -216,14 +202,13 @@ timer AttachRanchHdd[2500](playerid)
 		"system:\n\
 		  >login terminal\\root\\user\\steve\n\
 		  >open diary\\entry\\recent\n\
-		   I have left the ranch, they are after me\n\
-		   whoever finds this, I decided to go to a friends\n\
-		   place on chilliad, he was dead when I got there\n\
-		   I've hidden the key there, they won't find it\n\
-		   I dont know how long it will be before they find me",
+		   Sai da fazenda. Eles estao-me procurando\n\
+		   Para quem encontrar esse texto, eu decidi ir para a casa de amigo\n\
+		   no Monte Chilliad. Ele já estava morto quando lá cheguei\n\
+		   Escondi a chave lá. Eles nunca a encontrarão\n\
+		   Não sei quanto tempo demorara para eles me encontrarem",
 		OBJECT_MATERIAL_SIZE_512x512, "Courier New", 16, 1, -1, 0, 0);
 }
-
 
 _Ranch_LoadObjects()
 {
