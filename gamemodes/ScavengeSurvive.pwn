@@ -485,7 +485,6 @@ new stock
 #include "sss/core/player/chat.pwn"
 #include "sss/core/player/cmd-process.pwn"
 #include "sss/core/player/commands.pwn"
-#include "sss/core/player/afk-check.pwn"
 #include "sss/core/player/alt-tab-check.pwn"
 #include "sss/core/player/disallow-actions.pwn"
 #include "sss/core/player/whitelist.pwn"
