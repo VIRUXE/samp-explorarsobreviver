@@ -34,6 +34,19 @@ public OnPlayerTakeDamage(playerid, issuerid, Float:amount, weaponid, bodypart)
 	if(!IsPlayerSpawned(issuerid))
 		return 0;
 
+	if(bodypart == BODY_PART_HEAD)
+	{
+		if(IsValidItem(GetPlayerHatItem(playerid))){
+			new ItemType:type = GetItemType(GetPlayerHatItem(playerid));
+
+			if(type == item_HelmArmy || type == item_ArmyHelmet2 || type == item_PoliceHelm || type == item_SwatHelmet){
+				ShowActionText(playerid, ls(playerid, "HELMPROTECT"), 5000);
+				ShowActionText(issuerid, ls(issuerid, "HELMISSUER"), 5000);
+				PlayerPlaySound(playerid, 1135, 0.0, 0.0, 0.0);
+				return 0;
+			}
+		}
+
 	switch(weaponid)
 	{
 		case 31:
