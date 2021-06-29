@@ -333,6 +333,6 @@ UpdateFuelText(outletid)
 	return SetButtonLabel(fuel_Data[outletid][fuel_buttonId], sprintf("%.1f/%.1f", fuel_Data[outletid][fuel_amount], fuel_Data[outletid][fuel_capacity]));
 }
 
-timer ReFuelOutlet[gServerMaxUptime * 1000](id) {
-	fuel_Data[id][fuel_amount] = frandom(40.0);
+timer ReFuelOutlet[5400000](id) {
+	fuel_Data[id][fuel_amount] = frandom(80.0);
 }
