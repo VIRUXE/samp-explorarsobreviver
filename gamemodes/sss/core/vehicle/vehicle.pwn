@@ -744,6 +744,34 @@ public OnVehicleDamageStatusUpdate(vehicleid, playerid)
 	return 1;
 }
 
+static pLastVehUpd[MAX_PLAYERS][MAX_VEHICLES];
+
+public OnUnoccupiedVehicleUpdate(vehicleid, playerid, passenger_seat, Float:new_x, Float:new_y, Float:new_z, Float:vel_x, Float:vel_y, Float:vel_z)
+{
+	if(GetPlayerAnimationIndex(playerid) == 1084)
+		return 1;
+
+	if(GetPlayerDistanceFromPoint(playerid, new_x, new_y, new_z) < 10.0 ){
+		new Float:x, Float:y, Float:z;
+		GetVehiclePos(vehicleid, x, y, z);
+		if(Distance2D(x, y, new_x, new_y) > 0.1){
+			if(new_z <= z) z = new_z;
+			new Float:r;
+			GetVehicleZAngle(vehicleid, r);
+			SetVehiclePos(vehicleid, x, y, z);
+			SetVehicleZAngle(vehicleid, r);
+
+			pLastVehUpd[playerid][vehicleid] ++;
+			if(pLastVehUpd[playerid][vehicleid] >= 10) {
+				ApplyAnimation(playerid, "PED", "DAM_stomach_frmFT", 4.1, 0, 1, 1, 0, 0, 1);
+				pLastVehUpd[playerid][vehicleid] = 0;
+			}
+		}
+	}
+
+    return 1;
+}
+
 IsVehicleValidOutOfBounds(vehicleid)
 {
 	if(IsPosInWater(veh_Data[vehicleid][veh_spawnX], veh_Data[vehicleid][veh_spawnY], veh_Data[vehicleid][veh_spawnZ] - 5.0))
