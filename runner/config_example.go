@@ -15,5 +15,5 @@ type Config struct {
 	DiscordToken         string        `envconfig:"DISCORD_TOKEN"      default:""`
 	DiscordChannelInfo   string        `envconfig:"DISCORD_CHANNEL_INFO"    default:""`
 	DiscordChannelErrors string        `envconfig:"DISCORD_CHANNEL_ERRORS"    default:""`
-	RconPassword         string        `envconfig:"RCON_PASSWORD"      default:"155"`
+	RconPassword         string        `envconfig:"RCON_PASSWORD"      default:"scavenge"`
 }
