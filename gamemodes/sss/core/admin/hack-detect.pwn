@@ -595,6 +595,12 @@ static
 
 public OnUnoccupiedVehicleUpdate(vehicleid, playerid, passenger_seat, Float:new_x, Float:new_y, Float:new_z, Float:vel_x, Float:vel_y, Float:vel_z)
 {
+	if(!IsValidVehicle(GetTrailerVehicleID(vehicleid))){
+		new Float:old_x, Float:old_y, Float:old_z;
+		GetVehiclePos(vehicleid, old_x, old_y, old_z);
+		SetVehiclePos(vehicleid, old_x, old_y, old_z);
+	}
+
 	if(GetTickCountDifference(GetTickCount(), vt_MovedFarTick[vehicleid]) < 5000)
 		return 1;
 
