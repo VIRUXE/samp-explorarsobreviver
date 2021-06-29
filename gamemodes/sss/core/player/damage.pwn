@@ -46,6 +46,7 @@ public OnPlayerTakeDamage(playerid, issuerid, Float:amount, weaponid, bodypart)
 				return 0;
 			}
 		}
+	}
 
 	switch(weaponid)
 	{
