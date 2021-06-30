@@ -83,10 +83,10 @@ public OnPlayerConnect(playerid)
 
 	foreach(new i : Player)
 		if(i != playerid)
-			ChatMsg(i, WHITE, " >  %P (%d)"C_WHITE" entrou no servidor.", playerid, playerid);
+			ChatMsg(i, WHITE, " »  %P (%d)"C_WHITE" entrou no servidor.", playerid, playerid);
 
 	if(!isnull(gMessageOfTheDay))
-		ChatMsg(playerid, YELLOW, " >  MdD: "C_BLUE"%s", gMessageOfTheDay);
+		ChatMsg(playerid, YELLOW, " »  MdD: "C_BLUE"%s", gMessageOfTheDay);
 
 	ply_Data[playerid][ply_ShowHUD] = true;
 
@@ -104,12 +104,12 @@ public OnPlayerDisconnect(playerid, reason)
 	{
 		case 0:
 		{
-			ChatMsgAll(GREY, " >  %p perdeu a ligação.", playerid);
+			ChatMsgAll(GREY, " »  %p perdeu a ligação.", playerid);
 			Logger_Log("player lost connection", Logger_P(playerid));
 		}
 		case 1:
 		{
-			ChatMsgAll(GREY, " >  %p saiu do servidor.", playerid);
+			ChatMsgAll(GREY, " »  %p saiu do servidor.", playerid);
 			Logger_Log("player quit", Logger_P(playerid));
 		}
 	}
@@ -126,7 +126,7 @@ timer LoadAccountDelay[5000](playerid)
 
 	if(gServerInitialising || GetTickCountDifference(GetTickCount(), gServerInitialiseTick) < 5000)
 	{
-		ChatMsg(playerid, YELLOW, " >  Aguardando 5s enquanto o servidor inicía...");
+		ChatMsg(playerid, YELLOW, " »  Aguardando 5s enquanto o servidor inicía...");
 		defer LoadAccountDelay(playerid);
 		return;
 	}
