@@ -341,7 +341,7 @@ hook OnPlayerLogin(playerid)
 	{
 		if(GetAdminsOnline(2) > 0) // turn off if whitelist is on and are admins online
 		{
-			ChatMsg(playerid, YELLOW, " >  Auto-whitelist: Deactivated the whitelist.");
+			ChatMsg(playerid, YELLOW, " »  Auto-whitelist: Deactivated the whitelist.");
 			ToggleWhitelist(false);
 			log("[AUTOWHITELIST] Whitelist turned off by %p joining", playerid);
 		}

@@ -83,10 +83,10 @@ public OnPlayerConnect(playerid)
 
 	foreach(new i : Player)
 		if(i != playerid)
-			ChatMsg(i, WHITE, " >  %P (%d)"C_WHITE" has joined.", playerid, playerid);
+			ChatMsg(i, WHITE, " »  %P (%d)"C_WHITE" has joined.", playerid, playerid);
 
 	if(!isnull(gMessageOfTheDay))
-		ChatMsg(playerid, YELLOW, " >  MoTD: "C_BLUE"%s", gMessageOfTheDay);
+		ChatMsg(playerid, YELLOW, " »  MoTD: "C_BLUE"%s", gMessageOfTheDay);
 
 	ply_Data[playerid][ply_ShowHUD] = true;
 
@@ -104,12 +104,12 @@ public OnPlayerDisconnect(playerid, reason)
 	{
 		case 0:
 		{
-			ChatMsgAll(GREY, " >  %p lost connection.", playerid);
+			ChatMsgAll(GREY, " »  %p lost connection.", playerid);
 			Logger_Log("player lost connection", Logger_P(playerid));
 		}
 		case 1:
 		{
-			ChatMsgAll(GREY, " >  %p left the server.", playerid);
+			ChatMsgAll(GREY, " »  %p left the server.", playerid);
 			Logger_Log("player quit", Logger_P(playerid));
 		}
 	}
@@ -126,7 +126,7 @@ timer LoadAccountDelay[5000](playerid)
 
 	if(gServerInitialising || GetTickCountDifference(GetTickCount(), gServerInitialiseTick) < 5000)
 	{
-		ChatMsg(playerid, YELLOW, " >  Deferring account load for 5s while the server loads...");
+		ChatMsg(playerid, YELLOW, " »  Deferring account load for 5s while the server loads...");
 		defer LoadAccountDelay(playerid);
 		return;
 	}
@@ -250,7 +250,7 @@ ptask PlayerUpdateFast[100](playerid)
 
 	if(NetStats_MessagesRecvPerSecond(playerid) > 200)
 	{
-		ChatMsgAdmins(3, YELLOW, " >  %p sending %d messages per second.", playerid, NetStats_MessagesRecvPerSecond(playerid));
+		ChatMsgAdmins(3, YELLOW, " »  %p sending %d messages per second.", playerid, NetStats_MessagesRecvPerSecond(playerid));
 		return;
 	}
 

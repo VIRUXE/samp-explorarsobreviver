@@ -73,7 +73,7 @@ ReportBug(playerid, bug[])
 	stmt_bind_value(stmt_BugInsert, 2, DB::TYPE_INTEGER, gettime());
 
 	if(stmt_execute(stmt_BugInsert))
-		ChatMsgAdmins(1, YELLOW, " >  %P"C_YELLOW" reportou bug %s", playerid, bug);
+		ChatMsgAdmins(1, YELLOW, " »  %P"C_YELLOW" reportou bug %s", playerid, bug);
 }
 
 
@@ -91,7 +91,7 @@ CMD:bugs(playerid, params[])
 	ret = ShowListOfBugs(playerid);
 
 	if(ret == 0)
-		ChatMsg(playerid, YELLOW, " >  Não existem relatórios de Bug.");
+		ChatMsg(playerid, YELLOW, " »  Não existem relatórios de Bug.");
 
 	return 1;
 }
@@ -140,7 +140,7 @@ ShowListOfBugs(playerid)
 		if(response)
 		{
 			if(!ShowBugReportInfo(playerid, issue_RowIndex[listitem]))
-				ChatMsg(playerid, RED, " >  An error occurred while trying to execute statement 'stmt_BugInfo'.");
+				ChatMsg(playerid, RED, " »  An error occurred while trying to execute statement 'stmt_BugInfo'.");
 		}
 	}
 	Dialog_ShowCallback(playerid, using inline Response, DIALOG_STYLE_LIST, "Bugs", list, "Abrir", "Fechar");

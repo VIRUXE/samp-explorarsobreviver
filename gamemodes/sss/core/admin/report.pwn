@@ -128,12 +128,12 @@ ReportPlayer(const name[], const reason[], reporter, const type[], Float:posx, F
 
 	if(reporter == -1)
 	{
-		ChatMsgAdmins(1, YELLOW, " >  Server reported %s, reason: %s", name, reason);
+		ChatMsgAdmins(1, YELLOW, " »  Server reported %s, reason: %s", name, reason);
 		reportername = "Server";
 	}
 	else
 	{
-		ChatMsgAdmins(1, YELLOW, " >  %p reported %s, reason: %s", reporter, name, reason);
+		ChatMsgAdmins(1, YELLOW, " »  %p reported %s, reason: %s", reporter, name, reason);
 		GetPlayerName(reporter, reportername, MAX_PLAYER_NAME);
 	}
 

@@ -104,17 +104,17 @@ FinaliseBan(playerid)
 {
 	if(isnull(ban_CurrentName[playerid]))
 	{
-		ChatMsg(playerid, RED, " >  An error occurred: 'ban_CurrentName' is null.");
+		ChatMsg(playerid, RED, " »  An error occurred: 'ban_CurrentName' is null.");
 		return 0;
 	}
 
 	if(!UpdateBanInfo(ban_CurrentName[playerid], ban_CurrentReason[playerid], ban_CurrentDuration[playerid]))
 	{
-		ChatMsg(playerid, RED, " >  An error occurred: 'UpdateBanInfo' returned 0.");
+		ChatMsg(playerid, RED, " »  An error occurred: 'UpdateBanInfo' returned 0.");
 		return 0;
 	}
 
-	ChatMsg(playerid, YELLOW, " >  Banned "C_BLUE"%s", ban_CurrentName[playerid]);
+	ChatMsg(playerid, YELLOW, " »  Banned "C_BLUE"%s", ban_CurrentName[playerid]);
 
 	log("[BAN] %p banned %s reason: %s", playerid, ban_CurrentName[playerid], ban_CurrentReason[playerid]);
 

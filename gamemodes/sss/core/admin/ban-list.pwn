@@ -166,7 +166,7 @@ ShowBanDurationEdit(playerid)
 
 			if(duration == -1)
 			{
-				ChatMsg(playerid, YELLOW, " >  Invalid input. Please use <number> <days/weeks/months>.");
+				ChatMsg(playerid, YELLOW, " »  Invalid input. Please use <number> <days/weeks/months>.");
 				ShowBanDurationEdit(playerid);
 			}
 			else
@@ -190,7 +190,7 @@ ShowBanDateEdit(playerid)
 		#pragma unused pid, dialogid, listitem, inputtext
 
 		if(response)
-			ChatMsg(playerid, YELLOW, " >  Por acabar.");
+			ChatMsg(playerid, YELLOW, " »  Por acabar.");
 
 		ShowBanOptions(playerid);
 	}

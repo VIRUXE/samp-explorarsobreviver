@@ -85,7 +85,7 @@ public OnRconLoginAttempt(ip[], password[], success)
 			GetPlayerIp(i, ipstring, sizeof(ipstring));
 
 			if(!strcmp(ip, ipstring, true))
-				ChatMsgAdmins(1, YELLOW, " >  Failed login by %p password: %s", i, password);
+				ChatMsgAdmins(1, YELLOW, " »  Failed login by %p password: %s", i, password);
 		}
 	}
 	return 1;

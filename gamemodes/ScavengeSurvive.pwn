@@ -811,7 +811,7 @@ RestartGamemode()
 	ChatMsgAll(BLUE, " ");
 	ChatMsgAll(BLUE, " ");
 	ChatMsgAll(BLUE, "-------------------------------------------------------------------------------------------------------------------------");
-	ChatMsgAll(YELLOW, " >  O Servidor está sendo Reíniciado. Por favor aguarde...");
+	ChatMsgAll(YELLOW, " »  O Servidor está sendo Reíniciado. Por favor aguarde...");
 	ChatMsgAll(BLUE, "-------------------------------------------------------------------------------------------------------------------------");
 }
 
