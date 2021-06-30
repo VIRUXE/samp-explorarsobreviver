@@ -47,7 +47,6 @@ stock ClearPlayerKeyActionUI(playerid)
 
 stock AddToolTipText(playerid, const key[], const use[])
 {
-
 	new tmp[128];
 
 	if(IsPlayerMobile(playerid))
@@ -220,10 +219,10 @@ _UpdateKeyActions(playerid)
 	if(GetPlayerState(playerid) == PLAYER_STATE_DRIVER)
 	{
 		ClearPlayerKeyActionUI(playerid);
-		AddToolTipText(playerid, KEYTEXT_ENGINE, "Toggle engine");
-		AddToolTipText(playerid, KEYTEXT_LIGHTS, "Toggle lights");
-		AddToolTipText(playerid, KEYTEXT_DOORS, "Toggle locks");
-		AddToolTipText(playerid, KEYTEXT_RADIO, "Open radio");
+		AddToolTipText(playerid, KEYTEXT_ENGINE, "Motor");
+		AddToolTipText(playerid, KEYTEXT_LIGHTS, "Luzes");
+		AddToolTipText(playerid, KEYTEXT_DOORS, "Fechadura");
+		AddToolTipText(playerid, KEYTEXT_RADIO, "Mostrar Radio");
 		ShowPlayerKeyActionUI(playerid);
 
 		return;
@@ -239,10 +238,10 @@ _UpdateKeyActions(playerid)
 	if(invehiclearea != INVALID_VEHICLE_ID)
 	{
 		if(IsPlayerAtVehicleTrunk(playerid, invehiclearea))
-			AddToolTipText(playerid, KEYTEXT_INTERACT, "Open Trunk");
+			AddToolTipText(playerid, KEYTEXT_INTERACT, "Abrir Porta-mala");
 
 		if(IsPlayerAtVehicleBonnet(playerid, invehiclearea))
-			AddToolTipText(playerid, KEYTEXT_INTERACT, "Repair with tool");
+			AddToolTipText(playerid, KEYTEXT_INTERACT, "Reparar com Ferramenta");
 	}
 
 	foreach(new i : Player)
@@ -258,7 +257,7 @@ _UpdateKeyActions(playerid)
 	{
 		if(IsPlayerCuffed(inplayerarea))
 		{
-			AddToolTipText(playerid, KEYTEXT_INTERACT, "Remove handcuffs");
+			AddToolTipText(playerid, KEYTEXT_INTERACT, "Remover Algemas");
 			ShowPlayerKeyActionUI(playerid);
 		}
 
@@ -277,7 +276,7 @@ _UpdateKeyActions(playerid)
 	// Single items
 
 	if(itemtype == item_Note)
-		AddToolTipText(playerid, KEYTEXT_INTERACT, "To Read");
+		AddToolTipText(playerid, KEYTEXT_INTERACT, "Por Ler");
 	if(itemtype == item_Sign)
 		AddToolTipText(playerid, KEYTEXT_INTERACT, "Colocar Sinal");
 	else if(itemtype == item_Armour)
@@ -305,77 +304,63 @@ _UpdateKeyActions(playerid)
 	}
 	else if(itemtype == item_Clothes)
 	{
-		AddToolTipText(playerid, KEYTEXT_INTERACT, "Wear clothes");
+		AddToolTipText(playerid, KEYTEXT_INTERACT, "Vestir Roupa");
 	}
 	else if(itemtype == item_Headlight)
 	{
 		if(invehiclearea != INVALID_VEHICLE_ID)
 		{
 			if(IsPlayerAtVehicleBonnet(playerid, invehiclearea))
-				AddToolTipText(playerid, KEYTEXT_INTERACT, "Install Headlight");
+				AddToolTipText(playerid, KEYTEXT_INTERACT, "Trocar Farol");
 		}
 	}
 	else if(itemtype == item_Pills)
 	{
-		AddToolTipText(playerid, KEYTEXT_INTERACT, "Take Pills");
+		AddToolTipText(playerid, KEYTEXT_INTERACT, "Tomar Comprimido");
 	}
 	else if(itemtype == item_AutoInjec)
 	{
 		if(inplayerarea == -1)
-			AddToolTipText(playerid, KEYTEXT_INTERACT, "Inject self");
-
+			AddToolTipText(playerid, KEYTEXT_INTERACT, "Injetar em Si");
 		else
-			AddToolTipText(playerid, KEYTEXT_INTERACT, "Inject other player");
+			AddToolTipText(playerid, KEYTEXT_INTERACT, "Injetar no Jogador");
 	}
 	else if(itemtype == item_HerpDerp)
-	{
 		AddToolTipText(playerid, KEYTEXT_INTERACT, "Herp-a-derp");
-	}
 	else if(itemtype == item_Medkit || itemtype == item_Bandage || itemtype == item_DoctorBag)
 	{
 		if(inplayerarea != -1)
-			AddToolTipText(playerid, KEYTEXT_INTERACT, "Heal player");
-		
+			AddToolTipText(playerid, KEYTEXT_INTERACT, "Curar Jogador");
 		else
-			AddToolTipText(playerid, KEYTEXT_INTERACT, "Heal yourself");
+			AddToolTipText(playerid, KEYTEXT_INTERACT, "Curar a Si Proprio");
 	}
 	else if(itemtype == item_Wrench || itemtype == item_Screwdriver || itemtype == item_Hammer)
 	{
 		if(invehiclearea != INVALID_VEHICLE_ID)
 		{
 			if(IsPlayerAtVehicleBonnet(playerid, invehiclearea))
-				AddToolTipText(playerid, KEYTEXT_INTERACT, "Repair vehicle engine");
+				AddToolTipText(playerid, KEYTEXT_INTERACT, "Reparar Motor");
 		}
 	}
 	else
 	{
 		if(IsItemTypeFood(itemtype))
-		{
-			AddToolTipText(playerid, KEYTEXT_INTERACT, "Eat");
-		}
+			AddToolTipText(playerid, KEYTEXT_INTERACT, "Comer");
 		else if(IsItemTypeBag(itemtype))
 		{
-			AddToolTipText(playerid, KEYTEXT_INTERACT, "Open satchel");
-			AddToolTipText(playerid, KEYTEXT_PUT_AWAY, "Wear");
+			AddToolTipText(playerid, KEYTEXT_INTERACT, "Abrir Mochila");
+			AddToolTipText(playerid, KEYTEXT_PUT_AWAY, "Vestir");
 		}
 		else if(GetHatFromItem(itemtype) != -1)
-		{
-			AddToolTipText(playerid, KEYTEXT_INTERACT, "Wear Hat");
-		}
+			AddToolTipText(playerid, KEYTEXT_INTERACT, "Usar Chapeu");
 		else if(GetMaskFromItem(itemtype) != -1)
-		{
-			AddToolTipText(playerid, KEYTEXT_INTERACT, "Wear Hat");
-		}
+			AddToolTipText(playerid, KEYTEXT_INTERACT, "Usar Chapeu");
 		else if(GetItemTypeExplosiveType(itemtype) != -1)
-		{
-			AddToolTipText(playerid, KEYTEXT_INTERACT, "Arm Explosive");
-		}
+			AddToolTipText(playerid, KEYTEXT_INTERACT, "Armar Explosivo");
 		else if(GetItemTypeLiquidContainerType(itemtype) != -1)
 		{
 			if(GetLiquidItemLiquidType(itemid) != liquid_Petrol && GetLiquidItemLiquidAmount(itemid) > 0.0) 
-			{
-				AddToolTipText(playerid, KEYTEXT_INTERACT, "Drink");
-			}
+				AddToolTipText(playerid, KEYTEXT_INTERACT, "Beber");
 		}
 	}
 
@@ -392,25 +377,19 @@ _UpdateKeyActions(playerid)
 			}
 		}
 
-		AddToolTipText(playerid, KEYTEXT_PUT_AWAY, "Holster weapon");
-		AddToolTipText(playerid, KEYTEXT_RELOAD, "Reload");
-		AddToolTipText(playerid, KEYTEXT_DROP_ITEM, "(Hold) Unload");
+		AddToolTipText(playerid, KEYTEXT_PUT_AWAY, "Guardar no Coldre");
+		AddToolTipText(playerid, KEYTEXT_RELOAD, "Recarregar");
+		AddToolTipText(playerid, KEYTEXT_DROP_ITEM, "(Aperta) Descarregar");
 	}
 	else
-	{
-		AddToolTipText(playerid, KEYTEXT_PUT_AWAY, "Put away");
-	}
+		AddToolTipText(playerid, KEYTEXT_PUT_AWAY, "Jogar Fora");
 
 	if(inplayerarea == -1)
-	{
-		AddToolTipText(playerid, KEYTEXT_DROP_ITEM, "Drop item");
-	}
+		AddToolTipText(playerid, KEYTEXT_DROP_ITEM, "Jogar Fora");
 	else
-	{
-		AddToolTipText(playerid, KEYTEXT_DROP_ITEM, "Give item");
-	}
+		AddToolTipText(playerid, KEYTEXT_DROP_ITEM, "Dar");
 
-	AddToolTipText(playerid, KEYTEXT_INVENTORY, "Open inventory");
+	AddToolTipText(playerid, KEYTEXT_INVENTORY, "Abrir Inventario");
 	ShowPlayerKeyActionUI(playerid);
 
 	return;

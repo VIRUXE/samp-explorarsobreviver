@@ -83,10 +83,10 @@ public OnPlayerConnect(playerid)
 
 	foreach(new i : Player)
 		if(i != playerid)
-			ChatMsg(i, WHITE, " »  %P (%d)"C_WHITE" has joined.", playerid, playerid);
+			ChatMsg(i, WHITE, " »  %P (%d)"C_WHITE" entrou no servidor.", playerid, playerid);
 
 	if(!isnull(gMessageOfTheDay))
-		ChatMsg(playerid, YELLOW, " »  MoTD: "C_BLUE"%s", gMessageOfTheDay);
+		ChatMsg(playerid, YELLOW, " »  MdD: "C_BLUE"%s", gMessageOfTheDay);
 
 	ply_Data[playerid][ply_ShowHUD] = true;
 
@@ -104,12 +104,12 @@ public OnPlayerDisconnect(playerid, reason)
 	{
 		case 0:
 		{
-			ChatMsgAll(GREY, " »  %p lost connection.", playerid);
+			ChatMsgAll(GREY, " »  %p perdeu a ligação.", playerid);
 			Logger_Log("player lost connection", Logger_P(playerid));
 		}
 		case 1:
 		{
-			ChatMsgAll(GREY, " »  %p left the server.", playerid);
+			ChatMsgAll(GREY, " »  %p saiu do servidor.", playerid);
 			Logger_Log("player quit", Logger_P(playerid));
 		}
 	}
@@ -126,7 +126,7 @@ timer LoadAccountDelay[5000](playerid)
 
 	if(gServerInitialising || GetTickCountDifference(GetTickCount(), gServerInitialiseTick) < 5000)
 	{
-		ChatMsg(playerid, YELLOW, " »  Deferring account load for 5s while the server loads...");
+		ChatMsg(playerid, YELLOW, " »  Aguardando 5s enquanto o servidor inicía...");
 		defer LoadAccountDelay(playerid);
 		return;
 	}
@@ -149,7 +149,7 @@ timer LoadAccountDelay[5000](playerid)
 		Logger_Err("failed to load account",
 			Logger_P(playerid),
 			Logger_S("cause", cause));
-		KickPlayer(playerid, "Account load failed");
+		KickPlayer(playerid, "Problema ao carregar a sua conta...");
 		Handled();
 		return;
 	}
@@ -185,7 +185,7 @@ timer LoadAccountDelay[5000](playerid)
 		Logger_Log("LoadAccount: account inactive",
 			Logger_P(playerid)
 		);
-		KickPlayer(playerid, "Account inactive");
+		KickPlayer(playerid, "Conta inativa!");
 	}
 
 	return;
@@ -200,7 +200,7 @@ ResetVariables(playerid)
 {
 	ply_Data[playerid][ply_Password][0]			= EOS;
 	ply_Data[playerid][ply_IP]					= 0;
-	ply_Data[playerid][ply_VIP]			= 0;
+	ply_Data[playerid][ply_VIP]					= 0;
 
 	ply_Data[playerid][ply_Alive]				= false;
 	ply_Data[playerid][ply_HitPoints]			= 100.0;
@@ -235,7 +235,7 @@ ptask PlayerUpdateFast[100](playerid)
 
 			if(ply_Data[playerid][ply_PingLimitStrikes] == 30)
 			{
-				KickPlayer(playerid, sprintf("Having a ping of: %d limit: %d.", GetPlayerPing(playerid), pinglimit));
+				KickPlayer(playerid, sprintf("Ping muito alto! (%d/%d)", GetPlayerPing(playerid), pinglimit));
 
 				ply_Data[playerid][ply_PingLimitStrikes] = 0;
 
@@ -258,9 +258,7 @@ ptask PlayerUpdateFast[100](playerid)
 		return;
 
 	if(IsPlayerInAnyVehicle(playerid))
-	{
 		PlayerVehicleUpdate(playerid);
-	}
 	else
 	{
 		if(!gVehicleSurfing)
@@ -313,9 +311,7 @@ public OnPlayerClickTextDraw(playerid, Text:clickedid)
 	if(clickedid == Text:65535)
 	{
 		if(IsPlayerDead(playerid))
-		{
 			SelectTextDraw(playerid, 0xFFFFFF88);
-		}
 	}
 
 	return 1;
@@ -383,9 +379,7 @@ public OnPlayerUpdate(playerid)
 		SetPlayerArmour(playerid, ply_Data[playerid][ply_ArmourPoints]);
 	}
 	else
-	{
 		SetPlayerHealth(playerid, 100.0);		
-	}
 
 	return 1;
 }
@@ -428,9 +422,7 @@ hook OnPlayerEnterVehicle(playerid, vehicleid, ispassenger)
 			if(IsPlayerInVehicle(i, vehicleid))
 			{
 				if(GetPlayerState(i) == PLAYER_STATE_DRIVER)
-				{
 					driverid = i;
-				}
 			}
 		}
 
