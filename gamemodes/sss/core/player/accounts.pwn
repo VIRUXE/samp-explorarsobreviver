@@ -274,7 +274,7 @@ Error:CreateAccount(playerid, const password[])
 	CheckAdminLevel(playerid);
 
 	if(GetPlayerAdminLevel(playerid) > 0)
-		ChatMsg(playerid, BLUE, " »  Nível de Admin: %d", GetPlayerAdminLevel(playerid));
+		ChatMsg(playerid, BLUE, " » Nível de Admin: %d", GetPlayerAdminLevel(playerid));
 
 	acc_IsNewPlayer[playerid] = true;
 	acc_HasAccount[playerid] = true;
@@ -341,7 +341,7 @@ DisplayRegisterPrompt(playerid)
 		}
 		else
 		{
-			ChatMsgAll(GREY, " »  %p saiu sem se registrar.", playerid);
+			ChatMsgAll(GREY, " » %p saiu sem se registrar.", playerid);
 			Kick(playerid);
 		}
 
@@ -377,7 +377,7 @@ DisplayLoginPrompt(playerid, badpass = 0)
 					DisplayLoginPrompt(playerid, 1);
 				else
 				{
-					ChatMsgAll(GREY, " »  %p saiu sem fazer login.", playerid);
+					ChatMsgAll(GREY, " » %p saiu sem fazer login.", playerid);
 					Kick(playerid);
 				}
 
@@ -401,14 +401,14 @@ DisplayLoginPrompt(playerid, badpass = 0)
 					DisplayLoginPrompt(playerid, 1);
 				else
 				{
-					ChatMsgAll(GREY, " »  %p saiu sem fazer login.", playerid);
+					ChatMsgAll(GREY, " » %p saiu sem fazer login.", playerid);
 					Kick(playerid);
 				}
 			}
 		}
 		else
 		{
-			ChatMsgAll(GREY, " »  %p saiu sem fazer login.", playerid);
+			ChatMsgAll(GREY, " » %p saiu sem fazer login.", playerid);
 			Kick(playerid);
 		}
 
@@ -459,13 +459,13 @@ Login(playerid)
 			reports = GetUnreadReports(),
 			issues = GetBugReports();
 
-		ChatMsg(playerid, BLUE, " »  Nível de Admin: %d", GetPlayerAdminLevel(playerid));
+		ChatMsg(playerid, BLUE, " » Nível de Admin: %d", GetPlayerAdminLevel(playerid));
 
 		if(reports > 0)
-			ChatMsg(playerid, YELLOW, " »  %d relatórios por ler. Digite "C_BLUE"/relatorios", reports);
+			ChatMsg(playerid, YELLOW, " » %d relatórios por ler. Digite "C_BLUE"/relatorios", reports);
 
 		if(issues > 0)
-			ChatMsg(playerid, YELLOW, " »  %d Bugs reportados. Digite "C_BLUE"/bugs", issues);
+			ChatMsg(playerid, YELLOW, " » %d Bugs reportados. Digite "C_BLUE"/bugs", issues);
 	}
 
 	acc_LoggedIn[playerid] = true;
@@ -536,7 +536,7 @@ Logout(playerid, docombatlogcheck = 1)
 				Logger_Log("player combat-logged",
 					Logger_P(playerid));
 
-				ChatMsgAll(YELLOW, " »  %p Deslogou em Combate esse Viado!", playerid);
+				ChatMsgAll(YELLOW, " » %p Deslogou em Combate esse Viado!", playerid);
 
 				// TODO: make this correct, lastweapon is an item ID but
 				// OnPlayerDeath takes a GTA weapon ID.

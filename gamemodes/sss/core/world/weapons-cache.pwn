@@ -189,7 +189,7 @@ timer WeaponsCacheSignal[WEPCACHE_SIGNAL_INTERVAL](count, Float:x, Float:y, Floa
 		angleto = absoluteangle(360 - GetAngleToPoint(ref_x, ref_y, x, y));
 		distanceto = Distance2D(ref_x, ref_y, x, y);
 
-		ChatMsgAll(YELLOW, " »  [EBS]: WEAPONS CACHE SIGNAL: BEARING: %.1fDEG DISTANCE: %.1fM'", angleto, distanceto);
+		ChatMsgAll(YELLOW, " » [EBS]: WEAPONS CACHE SIGNAL: BEARING: %.1fDEG DISTANCE: %.1fM'", angleto, distanceto);
 	}
 	else
 	{

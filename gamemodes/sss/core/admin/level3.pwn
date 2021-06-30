@@ -33,7 +33,7 @@ ACMD:whitelist[3](playerid, params[])
 
 	if(sscanf(params, "s[7]S()[24]", command, name))
 	{
-		ChatMsg(playerid, YELLOW, " »  Utilização: /whitelist [add/remove/on/off/auto/list] - the whitelist is currently %s (auto: %s)", IsWhitelistActive() ? ("on") : ("off"), IsWhitelistAuto() ? ("on") : ("off"));
+		ChatMsg(playerid, YELLOW, " » Utilização: /whitelist [add/remove/on/off/auto/list] - the whitelist is currently %s (auto: %s)", IsWhitelistActive() ? ("on") : ("off"), IsWhitelistAuto() ? ("on") : ("off"));
 		return 1;
 	}
 
@@ -41,69 +41,69 @@ ACMD:whitelist[3](playerid, params[])
 	{
 		if(isnull(name))
 		{
-			ChatMsg(playerid, YELLOW, " »  Utilização /whitelist add [name]");
+			ChatMsg(playerid, YELLOW, " » Utilização /whitelist add [name]");
 			return 1;
 		}
 
 		new result = AddNameToWhitelist(name);
 
 		if(result == 1)
-			ChatMsg(playerid, YELLOW, " »  Added "C_BLUE"%s "C_YELLOW"to whitelist.", name);
+			ChatMsg(playerid, YELLOW, " » Added "C_BLUE"%s "C_YELLOW"to whitelist.", name);
 
 		if(result == 0)
-			ChatMsg(playerid, YELLOW, " »  That name "C_ORANGE"is already "C_YELLOW"in the whitelist.");
+			ChatMsg(playerid, YELLOW, " » That name "C_ORANGE"is already "C_YELLOW"in the whitelist.");
 
 		if(result == -1)
-			ChatMsg(playerid, RED, " »  An error occurred.");
+			ChatMsg(playerid, RED, " » An error occurred.");
 	}
 	else if(!strcmp(command, "remove", true))
 	{
 		if(isnull(name))
 		{
-			ChatMsg(playerid, YELLOW, " »  Utilização /whitelist remove [name]");
+			ChatMsg(playerid, YELLOW, " » Utilização /whitelist remove [name]");
 			return 1;
 		}
 
 		new result = RemoveNameFromWhitelist(name);
 
 		if(result == 1)
-			ChatMsg(playerid, YELLOW, " »  Removed "C_BLUE"%s "C_YELLOW"from whitelist.", name);
+			ChatMsg(playerid, YELLOW, " » Removed "C_BLUE"%s "C_YELLOW"from whitelist.", name);
 
 		if(result == 0)
-			ChatMsg(playerid, YELLOW, " »  That name "C_ORANGE"is not "C_YELLOW"in the whitelist.");
+			ChatMsg(playerid, YELLOW, " » That name "C_ORANGE"is not "C_YELLOW"in the whitelist.");
 
 		if(result == -1)
-			ChatMsg(playerid, RED, " »  An error occurred.");
+			ChatMsg(playerid, RED, " » An error occurred.");
 	}
 	else if(!strcmp(command, "on", true))
 	{
-		ChatMsgAdmins(1, YELLOW, " »  Whitelist activated, only whitelisted players may join.");
+		ChatMsgAdmins(1, YELLOW, " » Whitelist activated, only whitelisted players may join.");
 		ToggleWhitelist(true);
 	}
 	else if(!strcmp(command, "off", true))
 	{
-		ChatMsgAdmins(1, YELLOW, " »  Whitelist deactivated, anyone may join the server.");
+		ChatMsgAdmins(1, YELLOW, " » Whitelist deactivated, anyone may join the server.");
 		ToggleWhitelist(false);
 	}
 	else if(!strcmp(command, "auto", true))
 	{
 		if(!IsWhitelistAuto())
 		{
-			ChatMsgAdmins(1, YELLOW, " »  Whitelist automatic toggle activated.");
+			ChatMsgAdmins(1, YELLOW, " » Whitelist automatic toggle activated.");
 			ToggleAutoWhitelist(true);
 
 			// UpdateSetting("whitelist-auto-toggle", 0);
 		}
 		else
 		{
-			ChatMsgAdmins(1, YELLOW, " »  Whitelist automatic toggle deactivated.");
+			ChatMsgAdmins(1, YELLOW, " » Whitelist automatic toggle deactivated.");
 			ToggleAutoWhitelist(false);
 
 			// UpdateSetting("whitelist-auto-toggle", 0);
 		}
 	}
 	else if(!strcmp(command, "?", true))
-		ChatMsg(playerid, YELLOW, IsNameInWhitelist(name) ? " »  That name "C_BLUE"is "C_YELLOW"in the whitelist." : " »  That name "C_ORANGE"is not "C_YELLOW"in the whitelist");
+		ChatMsg(playerid, YELLOW, IsNameInWhitelist(name) ? " » That name "C_BLUE"is "C_YELLOW"in the whitelist." : " » That name "C_ORANGE"is not "C_YELLOW"in the whitelist");
 	else if(!strcmp(command, "list", true))
 	{
 		new list[(MAX_PLAYER_NAME + 1) * MAX_PLAYERS];
@@ -149,7 +149,7 @@ ACMD:spec[2](playerid, params[])
 
 				if(!IsPlayerReported(name))
 				{
-					ChatMsg(playerid, YELLOW, " »  Apenas pode spectar Jogadores Reportados.");
+					ChatMsg(playerid, YELLOW, " » Apenas pode spectar Jogadores Reportados.");
 					return 1;
 				}
 			}
@@ -197,18 +197,18 @@ ACMD:ip[3](playerid, params[])
 		if(!IsPlayerConnected(targetid))
 		{
 			if(targetid > 99)
-				ChatMsg(playerid, YELLOW, " »  Numeric value '%d' isn't a player ID that is currently online, treating it as a name.", targetid);
+				ChatMsg(playerid, YELLOW, " » Numeric value '%d' isn't a player ID that is currently online, treating it as a name.", targetid);
 			else
 				return 4;
 		}
 
-		ChatMsg(playerid, YELLOW, " »  IP for %P"C_YELLOW": %s", targetid, IpIntToStr(GetPlayerIpAsInt(targetid)));
+		ChatMsg(playerid, YELLOW, " » IP for %P"C_YELLOW": %s", targetid, IpIntToStr(GetPlayerIpAsInt(targetid)));
 	}
 	else
 	{
 		if(!AccountExists(params))
 		{
-			ChatMsg(playerid, YELLOW, " »  The account '%s' does not exist.", params);
+			ChatMsg(playerid, YELLOW, " » The account '%s' does not exist.", params);
 			return 1;
 		}
 
@@ -216,7 +216,7 @@ ACMD:ip[3](playerid, params[])
 
 		GetAccountIP(params, ip);
 
-		ChatMsg(playerid, YELLOW, " »  IP for "C_BLUE"%s"C_YELLOW": %s", params, IpIntToStr(ip));
+		ChatMsg(playerid, YELLOW, " » IP for "C_BLUE"%s"C_YELLOW": %s", params, IpIntToStr(ip));
 	}
 
 	return 1;
@@ -241,7 +241,7 @@ ACMD:vehicle[3](playerid, params[])
 
 	if(sscanf(params, "s[10]D(-1)", command, vehicleid))
 	{
-		ChatMsg(playerid, YELLOW, " »  Utilização: /vehicle [get/goto/enter/owner/delete/respawn/reset/lock/unlock/removekey] [id]");
+		ChatMsg(playerid, YELLOW, " » Utilização: /vehicle [get/goto/enter/owner/delete/respawn/reset/lock/unlock/removekey] [id]");
 		return 1;
 	}
 
@@ -293,7 +293,7 @@ ACMD:vehicle[3](playerid, params[])
 
 		GetVehicleOwner(vehicleid, owner);
 
-		ChatMsg(playerid, YELLOW, " »  Vehicle owner: '%s'", owner);
+		ChatMsg(playerid, YELLOW, " » Vehicle owner: '%s'", owner);
 
 		return 1;
 	}
@@ -302,7 +302,7 @@ ACMD:vehicle[3](playerid, params[])
 	{
 		DestroyWorldVehicle(vehicleid);
 
-		ChatMsg(playerid, YELLOW, " »  Vehicle %d deleted", vehicleid);
+		ChatMsg(playerid, YELLOW, " » Vehicle %d deleted", vehicleid);
 
 		return 1;
 	}
@@ -311,7 +311,7 @@ ACMD:vehicle[3](playerid, params[])
 	{
 		RespawnVehicle(vehicleid);
 
-		ChatMsg(playerid, YELLOW, " »  Vehicle %d respawned", vehicleid);
+		ChatMsg(playerid, YELLOW, " » Vehicle %d respawned", vehicleid);
 
 		return 1;
 	}
@@ -320,7 +320,7 @@ ACMD:vehicle[3](playerid, params[])
 	{
 		ResetVehicle(vehicleid);
 
-		ChatMsg(playerid, YELLOW, " »  Vehicle %d reset", vehicleid);
+		ChatMsg(playerid, YELLOW, " » Vehicle %d reset", vehicleid);
 
 		return 1;
 	}
@@ -329,7 +329,7 @@ ACMD:vehicle[3](playerid, params[])
 	{
 		SetVehicleExternalLock(vehicleid, E_LOCK_STATE_EXTERNAL);
 
-		ChatMsg(playerid, YELLOW, " »  Vehicle %d locked", vehicleid);
+		ChatMsg(playerid, YELLOW, " » Vehicle %d locked", vehicleid);
 
 		return 1;
 	}
@@ -338,7 +338,7 @@ ACMD:vehicle[3](playerid, params[])
 	{
 		SetVehicleExternalLock(vehicleid, E_LOCK_STATE_OPEN);
 
-		ChatMsg(playerid, YELLOW, " »  Vehicle %d unlocked", vehicleid);
+		ChatMsg(playerid, YELLOW, " » Vehicle %d unlocked", vehicleid);
 
 		return 1;
 	}
@@ -347,7 +347,7 @@ ACMD:vehicle[3](playerid, params[])
 	{
 		SetVehicleKey(vehicleid, 0);
 
-		ChatMsg(playerid, YELLOW, " »  Vehicle %d unlocked", vehicleid);
+		ChatMsg(playerid, YELLOW, " » Vehicle %d unlocked", vehicleid);
 
 		return 1;
 	}
@@ -356,12 +356,12 @@ ACMD:vehicle[3](playerid, params[])
 	{
 		SetVehicleHealth(vehicleid, 0.0);
 
-		ChatMsg(playerid, YELLOW, " »  Vehicle %d set on fire", vehicleid);
+		ChatMsg(playerid, YELLOW, " » Vehicle %d set on fire", vehicleid);
 
 		return 1;
 	}
 
-	ChatMsg(playerid, YELLOW, " »  Utilização: /vehicle [get/enter/owner/delete/respawn/reset/lock/unlock] [id]");
+	ChatMsg(playerid, YELLOW, " » Utilização: /vehicle [get/enter/owner/delete/respawn/reset/lock/unlock] [id]");
 
 	return 1;
 }
@@ -658,7 +658,7 @@ ACMD:move[3](playerid, params[])
 		return 1;
 	}
 
-	ChatMsg(playerid, YELLOW, " »  Utilização: /move [f/b/u/d] [optional:distance]");
+	ChatMsg(playerid, YELLOW, " » Utilização: /move [f/b/u/d] [optional:distance]");
 
 	return 1;
 }
@@ -680,8 +680,8 @@ ACMD:additem[3](playerid, params[])
 
 	if(sscanf(params, "s[32]S()[32]S()[64]", query, specifiers, data))
 	{
-		ChatMsg(playerid, YELLOW, " »  Utilização: /additem [itemid/itemname] [extradata format specifiers] [extradata array, comma separated]");
-		ChatMsg(playerid, YELLOW, " »  Example: `/additem gascan df 1, 4.5` create a petrol can with an integer and a float in extradata.");
+		ChatMsg(playerid, YELLOW, " » Utilização: /additem [itemid/itemname] [extradata format specifiers] [extradata array, comma separated]");
+		ChatMsg(playerid, YELLOW, " » Example: `/additem gascan df 1, 4.5` create a petrol can with an integer and a float in extradata.");
 		return 1;
 	}
 
@@ -716,13 +716,13 @@ ACMD:additem[3](playerid, params[])
 		}
 		if(type == INVALID_ITEM_TYPE)
 		{
-			ChatMsg(playerid, RED, " »  Invalid item type from string: '%s'", query);
+			ChatMsg(playerid, RED, " » Invalid item type from string: '%s'", query);
 			return 1;
 		}
 	}
 	if(type == INVALID_ITEM_TYPE)
 	{
-		ChatMsg(playerid, RED, " »  Invalid item type from integer: '%d'", _:type);
+		ChatMsg(playerid, RED, " » Invalid item type from integer: '%d'", _:type);
 		return 1;
 	}
 
@@ -738,7 +738,7 @@ ACMD:additem[3](playerid, params[])
 		// parse the extra data using the generated sscanf format string
 		if(strlen(data) && sscanf(data, sscanf_format, exdata))
 		{
-			ChatMsg(playerid, YELLOW, " »  Format of exdata did not match specifier: '%s'", sscanf_format);
+			ChatMsg(playerid, YELLOW, " » Format of exdata did not match specifier: '%s'", sscanf_format);
 			return 1;
 		}
 	}
@@ -803,7 +803,7 @@ ACMD:addvehicle[3](playerid, params[])
 
 	if(!IsValidVehicleType(type))
 	{
-		ChatMsg(playerid, YELLOW, " »  Tipo de Veículo Inválido.");
+		ChatMsg(playerid, YELLOW, " » Tipo de Veículo Inválido.");
 		return 1;
 	}
 
@@ -840,7 +840,7 @@ ACMD:resetpassword[3](playerid, params[])
 {
 	if(isnull(params))
 	{
-		ChatMsg(playerid, YELLOW, " »  Utilização: /resetpassword [account user-name]");
+		ChatMsg(playerid, YELLOW, " » Utilização: /resetpassword [account user-name]");
 		return 1;
 	}
 
@@ -849,9 +849,9 @@ ACMD:resetpassword[3](playerid, params[])
 	WP_Hash(buffer, MAX_PASSWORD_LEN, "password");
 
 	if(SetAccountPassword(params, buffer))
-		ChatMsg(playerid, YELLOW, " »  Password for '%s' reset.", params);
+		ChatMsg(playerid, YELLOW, " » Password for '%s' reset.", params);
 	else
-		ChatMsg(playerid, RED, " »  An error occurred.");
+		ChatMsg(playerid, RED, " » An error occurred.");
 
 	return 1;
 }
@@ -865,19 +865,19 @@ ACMD:setactive[3](playerid, params[])
 
 	if(sscanf(params, "s[24]d", name, active))
 	{
-		ChatMsg(playerid, YELLOW, " »  Utilização: /setactive [name] [1/0]");
+		ChatMsg(playerid, YELLOW, " » Utilização: /setactive [name] [1/0]");
 		return 1;
 	}
 
 	if(!AccountExists(name))
 	{
-		ChatMsg(playerid, RED, " »  That account doesn't exist.");
+		ChatMsg(playerid, RED, " » That account doesn't exist.");
 		return 1;
 	}
 
 	SetAccountActiveState(name, active);
 
-	ChatMsg(playerid, YELLOW, " »  %s "C_BLUE"'%s' "C_YELLOW"account.", active ? ("Activated") : ("Deactivated"), name);
+	ChatMsg(playerid, YELLOW, " » %s "C_BLUE"'%s' "C_YELLOW"account.", active ? ("Activated") : ("Deactivated"), name);
 
 	return 1;
 }
@@ -900,13 +900,13 @@ ACMD:delete[3](playerid, params[])
 
 	if(sscanf(params, "s[16]F(1.5)", type, range))
 	{
-		ChatMsg(playerid, YELLOW, " »  Utilização: /delete [items/tents/defences/signs] [optional:range(1.5)]");
+		ChatMsg(playerid, YELLOW, " » Utilização: /delete [items/tents/defences/signs] [optional:range(1.5)]");
 		return 1;
 	}
 
 	if(range > 100.0)
 	{
-		ChatMsg(playerid, YELLOW, " »  Range limit: 100 metres");
+		ChatMsg(playerid, YELLOW, " » Range limit: 100 metres");
 		return 1;
 	}
 
@@ -963,7 +963,7 @@ ACMD:delete[3](playerid, params[])
 		return 1;
 	}
 
-	ChatMsg(playerid, YELLOW, " »  Utilização: /delete [items/tents/defences/signs] [opcional: raio(1.5)]");
+	ChatMsg(playerid, YELLOW, " » Utilização: /delete [items/tents/defences/signs] [opcional: raio(1.5)]");
 
 	return 1;
 }

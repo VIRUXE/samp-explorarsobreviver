@@ -24,7 +24,7 @@ ACMD:adm[2](playerid, params[])
 {
 	if(GetPlayerState(playerid) == PLAYER_STATE_SPECTATING)
 	{
-		ChatMsg(playerid, YELLOW, " »  Não pode entrar em Modo de Admin enquanto está em Spectate.");
+		ChatMsg(playerid, YELLOW, " » Não pode entrar em Modo de Admin enquanto está em Spectate.");
 		return 1;
 	}
 
@@ -50,7 +50,7 @@ ACMD:goto[2](playerid, params[])
 
 	if(sscanf(params, "u", targetid))
 	{
-		ChatMsg(playerid, YELLOW, " »  Utilização: /goto [id]");
+		ChatMsg(playerid, YELLOW, " » Utilização: /goto [id]");
 		return 1;
 	}
 
@@ -59,7 +59,7 @@ ACMD:goto[2](playerid, params[])
 
 	TeleportPlayerToPlayer(playerid, targetid);
 
-	ChatMsg(playerid, YELLOW, " »  Você teleportou para %P", targetid);
+	ChatMsg(playerid, YELLOW, " » Você teleportou para %P", targetid);
 	ChatMsgLang(targetid, YELLOW, "TELEPORTEDT", playerid);
 
 	return 1;
@@ -74,7 +74,7 @@ ACMD:get[2](playerid, params[])
 
 	if(sscanf(params, "u", targetid))
 	{
-		ChatMsg(playerid, YELLOW, " »  Utilização: /get [id]");
+		ChatMsg(playerid, YELLOW, " » Utilização: /get [id]");
 		return 1;
 	}
 
@@ -83,7 +83,7 @@ ACMD:get[2](playerid, params[])
 
 	TeleportPlayerToPlayer(targetid, playerid);
 
-	ChatMsg(playerid, YELLOW, " »  Você teleportou %P para si", targetid);
+	ChatMsg(playerid, YELLOW, " » Você teleportou %P para si", targetid);
 	ChatMsgLang(targetid, YELLOW, "TELEPORTEDY", playerid);
 
 	return 1;
@@ -104,7 +104,7 @@ ACMD:gotopos[2](playerid, params[])
 	if(sscanf(params, "fff", x, y, z) && sscanf(params, "p<,>fff", x, y, z))
 		return ChatMsg(playerid, YELLOW, "Utilização: /gotopos x, y, z (Com ou sem virgulas)");
 
-	ChatMsg(playerid, YELLOW, " »  Teleportado para %f, %f, %f", x, y, z);
+	ChatMsg(playerid, YELLOW, " » Teleportado para %f, %f, %f", x, y, z);
 	SetPlayerPos(playerid, x, y, z);
 
 	return 1;
@@ -123,7 +123,7 @@ ACMD:freeze[2](playerid, params[])
 	new targetid, delay;
 
 	if(sscanf(params, "dD(0)", targetid, delay))
-		return ChatMsg(playerid, YELLOW, " »  Utilização: /cong [id] (seconds)");
+		return ChatMsg(playerid, YELLOW, " » Utilização: /cong [id] (seconds)");
 
 	if(GetPlayerAdminLevel(targetid) >= GetPlayerAdminLevel(playerid) && playerid != targetid)
 		return 3;
@@ -137,12 +137,12 @@ ACMD:freeze[2](playerid, params[])
 			
 		if(delay > 0)
 		{
-			ChatMsg(playerid, YELLOW, " »  Congelou %P por %d segundos", targetid, delay);
+			ChatMsg(playerid, YELLOW, " » Congelou %P por %d segundos", targetid, delay);
 			ChatMsgLang(targetid, YELLOW, "FREEZETIMER", delay);
 		}
 		else
 		{
-			ChatMsg(playerid, YELLOW, " »  Congelou %P", targetid);
+			ChatMsg(playerid, YELLOW, " » Congelou %P", targetid);
 			ChatMsgLang(targetid, YELLOW, "FREEZEFROZE");
 		}
 	}
@@ -150,7 +150,7 @@ ACMD:freeze[2](playerid, params[])
 	{
 		UnfreezePlayer(targetid);
 
-		ChatMsg(playerid, YELLOW, " »  Descongelou %P", targetid);
+		ChatMsg(playerid, YELLOW, " » Descongelou %P", targetid);
 		ChatMsgLang(targetid, YELLOW, "FREEZEUNFRE");
 	}
 
@@ -171,7 +171,7 @@ ACMD:ban[2](playerid, params[])
 
 	if(sscanf(params, "s[24]", name))
 	{
-		ChatMsg(playerid, YELLOW, " »  Utilização: /ban [id/nick]");
+		ChatMsg(playerid, YELLOW, " » Utilização: /ban [id/nick]");
 		return 1;
 	}
 
@@ -183,12 +183,12 @@ ACMD:ban[2](playerid, params[])
 			GetPlayerName(targetid, name, MAX_PLAYER_NAME);
 
 		else
-			ChatMsg(playerid, YELLOW, " »  Numeric value '%d' isn't a player ID that is currently online, treating it as a name.", targetid);
+			ChatMsg(playerid, YELLOW, " » Numeric value '%d' isn't a player ID that is currently online, treating it as a name.", targetid);
 	}
 
 	if(!AccountExists(name))
 	{
-		ChatMsg(playerid, YELLOW, " »  The account '%s' does not exist.", name);
+		ChatMsg(playerid, YELLOW, " » The account '%s' does not exist.", name);
 		return 1;
 	}
 
@@ -197,7 +197,7 @@ ACMD:ban[2](playerid, params[])
 
 	BanAndEnterInfo(playerid, name);
 
-	ChatMsg(playerid, YELLOW, " »  Preparing ban for %s", name);
+	ChatMsg(playerid, YELLOW, " » Preparing ban for %s", name);
 
 	return 1;
 }
@@ -207,13 +207,13 @@ ACMD:unban[2](playerid, params[])
 	new name[MAX_PLAYER_NAME];
 
 	if(sscanf(params, "s[24]", name))
-		return ChatMsg(playerid, YELLOW, " »  Utilização: /unban [player name]");
+		return ChatMsg(playerid, YELLOW, " » Utilização: /unban [player name]");
 
 	if(UnBanPlayer(name))
-		ChatMsg(playerid, YELLOW, " »  Unbanned "C_BLUE"%s"C_YELLOW".", name);
+		ChatMsg(playerid, YELLOW, " » Unbanned "C_BLUE"%s"C_YELLOW".", name);
 
 	else
-		ChatMsg(playerid, YELLOW, " »  Player '%s' is not banned.");
+		ChatMsg(playerid, YELLOW, " » Player '%s' is not banned.");
 
 	return 1;
 }
@@ -231,10 +231,10 @@ ACMD:bans[2](playerid, params[])
 	new ret = ShowListOfBans(playerid, 0);
 
 	if(ret == 0)
-		ChatMsg(playerid, YELLOW, " »  Não existem bans.");
+		ChatMsg(playerid, YELLOW, " » Não existem bans.");
 
 	if(ret == -1)
-		ChatMsg(playerid, YELLOW, " »  An error occurred while executing 'stmt_BanGetList'.");
+		ChatMsg(playerid, YELLOW, " » An error occurred while executing 'stmt_BanGetList'.");
 
 	return 1;
 }
@@ -243,7 +243,7 @@ ACMD:banido[2](playerid, params[])
 {
 	if(!(3 < strlen(params) < MAX_PLAYER_NAME))
 	{
-		ChatMsg(playerid, RED, " »  Nome de Jogador Inválido '%s'.", params);
+		ChatMsg(playerid, RED, " » Nome de Jogador Inválido '%s'.", params);
 		return 1;
 	}
 
@@ -254,7 +254,7 @@ ACMD:banido[2](playerid, params[])
 	if(IsPlayerBanned(name))
 		ShowBanInfo(playerid, name);
 	else
-		ChatMsg(playerid, YELLOW, " »  Jogador '%s' "C_BLUE"não está "C_YELLOW"banido.", name);
+		ChatMsg(playerid, YELLOW, " » Jogador '%s' "C_BLUE"não está "C_YELLOW"banido.", name);
 
 	return 1;
 }
@@ -271,11 +271,11 @@ ACMD:defmdd[2](playerid, params[])
 {
 	if(sscanf(params, "s[128]", gMessageOfTheDay))
 	{
-		ChatMsg(playerid, YELLOW, " »  Utilização: /defmdd [mensagem]");
+		ChatMsg(playerid, YELLOW, " » Utilização: /defmdd [mensagem]");
 		return 1;
 	}
 
-	ChatMsgAll(YELLOW, " »  Mensagem do Dia é Agora: "C_BLUE"%s", gMessageOfTheDay);
+	ChatMsgAll(YELLOW, " » Mensagem do Dia é Agora: "C_BLUE"%s", gMessageOfTheDay);
 
 	return 1;
 }

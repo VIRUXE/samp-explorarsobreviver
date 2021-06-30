@@ -206,7 +206,7 @@ CheckForExtraAccounts(playerid)
 
 			if(IsPlayerBanned(list[i]) && !donewarning)
 			{
-				ChatMsgAdmins(1, RED, " »  Warning: One or more of those aliases is banned!");
+				ChatMsgAdmins(1, RED, " » Warning: One or more of those aliases is banned!");
 				donewarning = true;
 			}
 		}
@@ -218,7 +218,7 @@ CheckForExtraAccounts(playerid)
 		return 0;
 	}
 
-	ChatMsgAdmins(adminlevel, YELLOW, " »  Aliases: "C_BLUE"(%d)"C_ORANGE" %s", count, string);
+	ChatMsgAdmins(adminlevel, YELLOW, " » Aliases: "C_BLUE"(%d)"C_ORANGE" %s", count, string);
 
 	return 1;
 }

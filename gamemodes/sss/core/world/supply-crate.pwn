@@ -219,7 +219,7 @@ timer SupplyDropTimer[SUPPLY_DROP_TICK_INTERVAL]()
 	else
 		name = "Unknown";
 
-	ChatMsgAll(YELLOW, " »  [EBS]: SUPPLY DROP: "C_BLUE"\"%s\""C_YELLOW" INCOMING AT: "C_ORANGE"\"%s\"", name, sup_DropLocationData[id][supl_name]);
+	ChatMsgAll(YELLOW, " » [EBS]: SUPPLY DROP: "C_BLUE"\"%s\""C_YELLOW" INCOMING AT: "C_ORANGE"\"%s\"", name, sup_DropLocationData[id][supl_name]);
 
 	// Remove the location from the index so it isn't chosen again.
 	Iter_Remove(sup_Index, id);
@@ -337,10 +337,10 @@ ACMD:sc[4](playerid, params[])
 
 	if(isnull(params) || !(0 <= type < sup_TypeTotal))
 	{
-		ChatMsg(playerid, YELLOW, " »  Usage: /sc [type] - types:");
+		ChatMsg(playerid, YELLOW, " » Usage: /sc [type] - types:");
 
 		for(new i; i < sup_TypeTotal; i++)
-			ChatMsg(playerid, YELLOW, " »  %d: %s", i, sup_TypeData[i][supt_name]);
+			ChatMsg(playerid, YELLOW, " » %d: %s", i, sup_TypeData[i][supt_name]);
 
 		return 1;
 	}
@@ -359,10 +359,10 @@ ACMD:sc[4](playerid, params[])
 
 ACMD:scinfo[4](playerid, params[])
 {
-	ChatMsg(playerid, YELLOW, " »  Current type: %d", sup_CurrentType);
+	ChatMsg(playerid, YELLOW, " » Current type: %d", sup_CurrentType);
 
 	for(new i; i < sup_TypeTotal; i++)
-		ChatMsg(playerid, YELLOW, " »  %d: Tick diff: %d Curr tick: %d Last drop: %d Interval+Offset: %d", i, GetTickCountDifference(GetTickCount(), sup_TypeData[i][supt_lastDrop]), GetTickCount(), sup_TypeData[i][supt_lastDrop], sup_TypeData[i][supt_interval] + sup_TypeData[i][supt_offset]);
+		ChatMsg(playerid, YELLOW, " » %d: Tick diff: %d Curr tick: %d Last drop: %d Interval+Offset: %d", i, GetTickCountDifference(GetTickCount(), sup_TypeData[i][supt_lastDrop]), GetTickCount(), sup_TypeData[i][supt_lastDrop], sup_TypeData[i][supt_interval] + sup_TypeData[i][supt_offset]);
 
 	return 1;
 }

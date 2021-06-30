@@ -216,7 +216,7 @@ ACMD:reports[1](playerid, params[])
 	ret = ShowListOfReports(playerid);
 
 	if(ret == 0)
-		ChatMsg(playerid, YELLOW, " »  Não existem relatórios para mostrar.");
+		ChatMsg(playerid, YELLOW, " » Não existem relatórios para mostrar.");
 
 	return 1;
 }
@@ -224,7 +224,7 @@ ACMD:reports[1](playerid, params[])
 ACMD:deletereports[2](playerid, params[])
 {
 	DeleteReadReports();
-	ChatMsg(playerid, YELLOW, " »  Todos os relatórios foram eliminados.");
+	ChatMsg(playerid, YELLOW, " » Todos os relatórios foram eliminados.");
 
 	return 1;
 }
@@ -443,7 +443,7 @@ ShowReportOptions(playerid)
 							SetPlayerCameraPos(playerid, x, y, z);
 							SetPlayerCameraLookAt(playerid, x + vx, y + vy, z + vz);
 
-							ChatMsg(playerid, YELLOW, " »  Digite /recam para resetar sua camera");
+							ChatMsg(playerid, YELLOW, " » Digite /recam para resetar sua camera");
 						}
 					}
 				}

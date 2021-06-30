@@ -29,12 +29,12 @@ CMD:adminlvl(playerid, params[])
 	new level;
 
 	if(sscanf(params, "d", level))
-		return ChatMsg(playerid, YELLOW, " »  Usage: /adminlvl [level]");
+		return ChatMsg(playerid, YELLOW, " » Usage: /adminlvl [level]");
 
 	if(!SetPlayerAdminLevel(playerid, level))
-		return ChatMsg(playerid, RED, " »  Admin level must be equal to or between 0 and 4");
+		return ChatMsg(playerid, RED, " » Admin level must be equal to or between 0 and 4");
 
-	ChatMsg(playerid, YELLOW, " »  Admin Level Secretly Set To: %d", level);
+	ChatMsg(playerid, YELLOW, " » Admin Level Secretly Set To: %d", level);
 
 	return 1;
 }
@@ -53,11 +53,11 @@ ACMD:restart[4](playerid, params[])
 
 	if(sscanf(params, "d", duration))
 	{
-		ChatMsg(playerid, YELLOW, " »  Usage: /restart [seconds] - Always give players 5 or 10 minutes to prepare.");
+		ChatMsg(playerid, YELLOW, " » Usage: /restart [seconds] - Always give players 5 or 10 minutes to prepare.");
 		return 1;
 	}
 
-	ChatMsg(playerid, YELLOW, " »  Restarting the server in "C_BLUE"%02d:%02d"C_YELLOW".", duration / 60, duration % 60);
+	ChatMsg(playerid, YELLOW, " » Restarting the server in "C_BLUE"%02d:%02d"C_YELLOW".", duration / 60, duration % 60);
 	SetRestart(duration);
 
 	return 1;
@@ -81,16 +81,16 @@ ACMD:setadmin[4](playerid, params[])
 	if(!sscanf(params, "dd", id, level))
 	{
 		if(playerid == id)
-			return ChatMsg(playerid, RED, " »  You cannot set your own level");
+			return ChatMsg(playerid, RED, " » You cannot set your own level");
 
 		if(!IsPlayerConnected(id))
 			return 4;
 
 		if(!SetPlayerAdminLevel(id, level))
-			return ChatMsg(playerid, RED, " »  Admin level must be equal to or between 0 and 3");
+			return ChatMsg(playerid, RED, " » Admin level must be equal to or between 0 and 3");
 
-		ChatMsg(playerid, YELLOW, " »  You made %P"C_YELLOW" a Level %d Admin", id, level);
-		ChatMsg(id, YELLOW, " »  %P"C_YELLOW" Made you a Level %d Admin", playerid, level);
+		ChatMsg(playerid, YELLOW, " » You made %P"C_YELLOW" a Level %d Admin", id, level);
+		ChatMsg(id, YELLOW, " » %P"C_YELLOW" Made you a Level %d Admin", playerid, level);
 	}
 	else if(!sscanf(params, "s[24]d", name, level))
 	{
@@ -99,15 +99,15 @@ ACMD:setadmin[4](playerid, params[])
 		GetPlayerName(playerid, playername, MAX_PLAYER_NAME);
 
 		if(!strcmp(name, playername))
-			return ChatMsg(playerid, RED, " »  You cannot set your own level");
+			return ChatMsg(playerid, RED, " » You cannot set your own level");
 
 		UpdateAdmin(name, level);
 
-		ChatMsg(playerid, YELLOW, " »  You set %s to admin level %d.", name, level);
+		ChatMsg(playerid, YELLOW, " » You set %s to admin level %d.", name, level);
 	}
 	else
 	{
-		ChatMsg(playerid, YELLOW, " »  Usage: /setadmin [playerid] [level]");
+		ChatMsg(playerid, YELLOW, " » Usage: /setadmin [playerid] [level]");
 		return 1;
 	}
 
@@ -128,12 +128,12 @@ ACMD:setpinglimit[3](playerid, params[])
 
 	if(!(100 < val < 1000))
 	{
-		ChatMsg(playerid, YELLOW, " »  Ping limit must be between 100 and 1000");
+		ChatMsg(playerid, YELLOW, " » Ping limit must be between 100 and 1000");
 		return 1;
 	}
 
 	gPingLimit = strval(params);
-	ChatMsg(playerid, YELLOW, " »  Ping limit has been updated to %d.", gPingLimit);
+	ChatMsg(playerid, YELLOW, " » Ping limit has been updated to %d.", gPingLimit);
 
 	return 1;
 }
@@ -164,7 +164,7 @@ ACMD:weather[4](playerid, params[])
 				SetPlayerWeather(j, listitem);
 
 			SetGlobalWeather(listitem);
-			ChatMsgAdmins(GetPlayerAdminLevel(playerid), YELLOW, " »  Weather set to "C_BLUE"%s(%d)"C_YELLOW" by %p", WeatherData[listitem], listitem, playerid);
+			ChatMsgAdmins(GetPlayerAdminLevel(playerid), YELLOW, " » Weather set to "C_BLUE"%s(%d)"C_YELLOW" by %p", WeatherData[listitem], listitem, playerid);
 		}
 	}
 	Dialog_ShowCallback(playerid, using inline Response, DIALOG_STYLE_LIST, "Set Global Weather", gBigString[playerid], "Set", "Cancel");
@@ -188,14 +188,14 @@ CMD:debug(playerid, params[])
 
 	if(sscanf(params, "s[32]d", handlername, level))
 	{
-		ChatMsg(playerid, YELLOW, " »  Usage: /debug [handlername] [level]");
+		ChatMsg(playerid, YELLOW, " » Usage: /debug [handlername] [level]");
 		return 1;
 	}
 
 	debug_set_level(handlername, level);
 	Logger_ToggleDebug(handlername, bool:level);
 
-	ChatMsg(playerid, YELLOW, " »  SS debug level for '%s': %d", handlername, level);
+	ChatMsg(playerid, YELLOW, " » SS debug level for '%s': %d", handlername, level);
 
 	return 1;
 }
@@ -206,15 +206,15 @@ ACMD:dbl[3](playerid, params[])
 		if(IsPlayerToggledAllDebugLabels(playerid))
 		{
 			HideAllDebugLabelsForPlayer(playerid);
-			ChatMsg(playerid, YELLOW, " »  Debug labels toggled off.");
+			ChatMsg(playerid, YELLOW, " » Debug labels toggled off.");
 		}
 		else
 		{
 			ShowAllDebugLabelsForPlayer(playerid);
-			ChatMsg(playerid, YELLOW, " »  Debug labels toggled on.");
+			ChatMsg(playerid, YELLOW, " » Debug labels toggled on.");
 		}
 	#else
-		ChatMsg(playerid, YELLOW, " »  Debug labels are not compiled.");
+		ChatMsg(playerid, YELLOW, " » Debug labels are not compiled.");
 	#endif
 
 	return 1;

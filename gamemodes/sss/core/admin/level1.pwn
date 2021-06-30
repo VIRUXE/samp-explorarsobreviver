@@ -32,10 +32,10 @@ ACMD:mute[1](playerid, params[])
 	sscanf(params, "dds[128]", targetid, delay, reason);
 
 	if(!targetid)
-		return ChatMsg(playerid,YELLOW," »  Utilização: /mute [id] ([segundos (utilize -1 se desejar que fique permanente)] [Motivo])");
+		return ChatMsg(playerid,YELLOW," » Utilização: /mute [id] ([segundos (utilize -1 se desejar que fique permanente)] [Motivo])");
 
 	if(!IsPlayerConnected(targetid))
-		return ChatMsg(playerid,RED, " »  ID Inválido");
+		return ChatMsg(playerid,RED, " » ID Inválido");
 
 	if(GetPlayerAdminLevel(targetid) >= GetPlayerAdminLevel(playerid))
 		return 3;
@@ -45,20 +45,20 @@ ACMD:mute[1](playerid, params[])
 		if(delay > 0)
 		{
 			TogglePlayerMute(targetid, true, delay);
-			ChatMsg(playerid, YELLOW, " »  Silenciou o Jogador %P "C_WHITE"por %d segundos.", targetid, delay);
+			ChatMsg(playerid, YELLOW, " » Silenciou o Jogador %P "C_WHITE"por %d segundos.", targetid, delay);
 			ChatMsgLang(targetid, YELLOW, "MUTEDANTIME", delay, reason);
 		}
 		else
 		{
 			TogglePlayerMute(targetid, true);
-			ChatMsg(playerid, YELLOW, " »  Silenciou o Jogador %P", targetid);
+			ChatMsg(playerid, YELLOW, " » Silenciou o Jogador %P", targetid);
 			ChatMsgLang(targetid, YELLOW, "MUTEDREASON", reason);
 		}
 	}
 	else
 	{
 		TogglePlayerMute(targetid, false);
-		ChatMsg(playerid, YELLOW, " »  Tirou %P do Silencio", targetid);
+		ChatMsg(playerid, YELLOW, " » Tirou %P do Silencio", targetid);
 		ChatMsgLang(targetid, YELLOW, "MUTEDUNMUTE");
 	}
 
@@ -79,15 +79,15 @@ ACMD:avisar[1](playerid, params[])
 		reason[128];
 
 	if(sscanf(params, "ds[128]", targetid, reason))
-		return ChatMsg(playerid, YELLOW, " »  Utilização: /avisar [id] [Motivo]");
+		return ChatMsg(playerid, YELLOW, " » Utilização: /avisar [id] [Motivo]");
 
 	if(!IsPlayerConnected(targetid))
-		return ChatMsg(playerid,RED, " »  ID Inválido");
+		return ChatMsg(playerid,RED, " » ID Inválido");
 
 	if(GetPlayerAdminLevel(targetid) >= GetPlayerAdminLevel(playerid) && playerid != targetid)
 		return 3;
 
-	ChatMsg(playerid, ORANGE, " »  %P"C_YELLOW" foi avisado por: %s", targetid, reason);
+	ChatMsg(playerid, ORANGE, " » %P"C_YELLOW" foi avisado por: %s", targetid, reason);
 	ChatMsgLang(targetid, ORANGE, "WARNEDMESSG", reason);
 
 	return 1;
@@ -115,7 +115,7 @@ ACMD:kick[1](playerid, params[])
 	}
 
 	if(sscanf(params, "ds[64]", targetid, reason))
-		return ChatMsg(playerid, YELLOW, " »  Utilização: /kick [id] [Motivo]");
+		return ChatMsg(playerid, YELLOW, " » Utilização: /kick [id] [Motivo]");
 
 	if(GetPlayerAdminLevel(targetid) >= GetPlayerAdminLevel(playerid) && playerid != targetid)
 		return 3;
@@ -124,10 +124,10 @@ ACMD:kick[1](playerid, params[])
 		return 4;
 
 	if(GetPlayerAdminLevel(playerid) != GetPlayerAdminLevel(highestadmin))
-		return ChatMsg(highestadmin, YELLOW, " »  %p requisição para Kickar: (%d)%p Motivo: %s", playerid, targetid, targetid, reason);
+		return ChatMsg(highestadmin, YELLOW, " » %p requisição para Kickar: (%d)%p Motivo: %s", playerid, targetid, targetid, reason);
 
 	if(playerid == targetid)
-		ChatMsgAll(PINK, " »  %P"C_PINK" viado burro kickou ele próprio", playerid);
+		ChatMsgAll(PINK, " » %P"C_PINK" viado burro kickou ele próprio", playerid);
 
 	KickPlayer(targetid, reason);
 
@@ -145,9 +145,9 @@ ACMD:kick[1](playerid, params[])
 ACMD:anuncio[1](playerid, params[])
 {
 	if(!(0 < strlen(params) < 128))
-		ChatMsg(playerid,YELLOW," »  Utilização: /anuncio [mensagem]");
+		ChatMsg(playerid,YELLOW," » Utilização: /anuncio [mensagem]");
 
-	new str[130] = {" »  "C_BLUE""};
+	new str[130] = {" » "C_BLUE""};
 
 	strcat(str, TagScan(params));
 
@@ -172,7 +172,7 @@ ACMD:country[1](playerid, params[])
 		if(!IsPlayerConnected(targetid))
 		{
 			if(targetid > 99)
-				ChatMsg(playerid, YELLOW, " »  Numeric value '%d' isn't a player ID that is currently online, treating it as a name.", targetid);
+				ChatMsg(playerid, YELLOW, " » Numeric value '%d' isn't a player ID that is currently online, treating it as a name.", targetid);
 			else
 				return 4;
 		}
@@ -187,7 +187,7 @@ ACMD:country[1](playerid, params[])
 	{
 		if(!AccountExists(params))
 		{
-			ChatMsg(playerid, YELLOW, " »  A conta '%s' não existe.", params);
+			ChatMsg(playerid, YELLOW, " » A conta '%s' não existe.", params);
 			return 1;
 		}
 
@@ -201,7 +201,7 @@ ACMD:country[1](playerid, params[])
 		// ipstr = IpIntToStr(ipint);
 		// GetIPCountry(ipstr, country);
 
-		ChatMsg(playerid, YELLOW, " »  "C_BLUE"%s"C_YELLOW"'s GeoIP location: "C_BLUE"%s", params, country);
+		ChatMsg(playerid, YELLOW, " » "C_BLUE"%s"C_YELLOW"'s GeoIP location: "C_BLUE"%s", params, country);
 	}
 
 	return 1;
@@ -260,7 +260,7 @@ ACMD:aliases[1](playerid, params[])
 
 	if(sscanf(params, "s[24]C(a)", name, type))
 	{
-		ChatMsg(playerid, YELLOW, " »  Utilização: /aliases [playerid/name] [i/p/h/a]");
+		ChatMsg(playerid, YELLOW, " » Utilização: /aliases [playerid/name] [i/p/h/a]");
 		return 1;
 	}
 
@@ -271,14 +271,14 @@ ACMD:aliases[1](playerid, params[])
 		if(IsPlayerConnected(targetid))
 			GetPlayerName(targetid, name, MAX_PLAYER_NAME);
 		else if(targetid > 99)
-			ChatMsg(playerid, YELLOW, " »  Numeric value '%d' isn't a player ID that is currently online, treating it as a name.", targetid);
+			ChatMsg(playerid, YELLOW, " » Numeric value '%d' isn't a player ID that is currently online, treating it as a name.", targetid);
 		else
 			return 4;
 	}
 
 	if(!AccountExists(name))
 	{
-		ChatMsg(playerid, YELLOW, " »  A conta '%s' não existe.", name);
+		ChatMsg(playerid, YELLOW, " » A conta '%s' não existe.", name);
 		return 1;
 	}
 
@@ -290,7 +290,7 @@ ACMD:aliases[1](playerid, params[])
 
 		if(strcmp(name, playername))
 		{
-			ChatMsg(playerid, YELLOW, " »  No aliases found for %s", name);
+			ChatMsg(playerid, YELLOW, " » No aliases found for %s", name);
 			return 1;
 		}
 	}
@@ -311,19 +311,19 @@ ACMD:aliases[1](playerid, params[])
 		ret = GetAccountAliasesByHash(name, list, count, 32, adminlevel);
 	else
 	{
-		ChatMsg(playerid, YELLOW, " »  Lookup type must be one of: 'i'(ip) 'p'(password) 'h'(hash) 'a'(all)");
+		ChatMsg(playerid, YELLOW, " » Lookup type must be one of: 'i'(ip) 'p'(password) 'h'(hash) 'a'(all)");
 		return 1;
 	}
 
 	if(ret == 0)
 	{
-		ChatMsg(playerid, RED, " »  An error occurred.");
+		ChatMsg(playerid, RED, " » An error occurred.");
 		return 1;
 	}
 
 	if(count == 0 || adminlevel > GetPlayerAdminLevel(playerid))
 	{
-		ChatMsg(playerid, YELLOW, " »  No aliases found for %s", name);
+		ChatMsg(playerid, YELLOW, " » No aliases found for %s", name);
 		return 1;
 	}
 
@@ -341,7 +341,7 @@ ACMD:history[1](playerid, params[])
 
 	if(sscanf(params, "s[24]C(a)C()", name, type, lookup))
 	{
-		ChatMsg(playerid, YELLOW, " »  Utilização: /history [playerid/name] [i/h] [n]");
+		ChatMsg(playerid, YELLOW, " » Utilização: /history [playerid/name] [i/h] [n]");
 		return 1;
 	}
 
@@ -352,14 +352,14 @@ ACMD:history[1](playerid, params[])
 		if(IsPlayerConnected(targetid))
 			GetPlayerName(targetid, name, MAX_PLAYER_NAME);
 		else if(targetid > 99)
-			ChatMsg(playerid, YELLOW, " »  Numeric value '%d' isn't a player ID that is currently online, treating it as a name.", targetid);
+			ChatMsg(playerid, YELLOW, " » Numeric value '%d' isn't a player ID that is currently online, treating it as a name.", targetid);
 		else
 			return 4;
 	}
 
 	if(!AccountExists(name))
 	{
-		ChatMsg(playerid, YELLOW, " »  The account '%s' does not exist.", name);
+		ChatMsg(playerid, YELLOW, " » The account '%s' does not exist.", name);
 		return 1;
 	}
 
@@ -371,7 +371,7 @@ ACMD:history[1](playerid, params[])
 
 		if(strcmp(name, playername))
 		{
-			ChatMsg(playerid, YELLOW, " »  No aliases found for %s", name);
+			ChatMsg(playerid, YELLOW, " » No aliases found for %s", name);
 			return 1;
 		}
 	}
@@ -400,7 +400,7 @@ ACMD:history[1](playerid, params[])
 	}
 	else
 	{
-		ChatMsg(playerid, YELLOW, " »  Lookup type must be one of: 'i'(ip) 'h'(hash), optional parameter 'n' lists the history for that player only.");
+		ChatMsg(playerid, YELLOW, " » Lookup type must be one of: 'i'(ip) 'h'(hash), optional parameter 'n' lists the history for that player only.");
 		return 1;
 	}
 

@@ -62,7 +62,7 @@ ACMD:field[2](playerid, params[])
 {
 	if(isnull(params))
 	{
-		ChatMsg(playerid, YELLOW, " »  Utilização: /field list/add/remove/log");
+		ChatMsg(playerid, YELLOW, " » Utilização: /field list/add/remove/log");
 		return 1;
 	}
 
@@ -71,7 +71,7 @@ ACMD:field[2](playerid, params[])
 		new ret = ShowDetfieldList(playerid);
 
 		if(ret == 0)
-			ChatMsg(playerid, YELLOW, " »  There are no detection fields to list.");
+			ChatMsg(playerid, YELLOW, " » There are no detection fields to list.");
 	}
 
 	if(!strcmp(params, "log", true, 3))
@@ -82,7 +82,7 @@ ACMD:field[2](playerid, params[])
 
 		if(sscanf(params, "{s[4]}s[24]", name))
 		{
-			ChatMsg(playerid, YELLOW, " »  Utilização: /field log [name]");
+			ChatMsg(playerid, YELLOW, " » Utilização: /field log [name]");
 			return 1;
 		}
 
@@ -90,13 +90,13 @@ ACMD:field[2](playerid, params[])
 
 		if(!IsValidDetectionField(id))
 		{
-			ChatMsg(playerid, YELLOW, " »  Invalid detection field name");
+			ChatMsg(playerid, YELLOW, " » Invalid detection field name");
 			return 1;
 		}
 
 		new ret = ShowDetfieldLog(playerid, id);
 
-		ChatMsg(playerid, YELLOW, ret == 1 ? " »  Displaying log entries for detection field '%s'." : " »  There are no log entries in '%s'.", name);
+		ChatMsg(playerid, YELLOW, ret == 1 ? " » Displaying log entries for detection field '%s'." : " » There are no log entries in '%s'.", name);
 	}
 
 	if(!strcmp(params, "adicionar", true, 3))
@@ -105,7 +105,7 @@ ACMD:field[2](playerid, params[])
 
 		if(sscanf(params, "{s[4]}s[24]", name))
 		{
-			ChatMsg(playerid, YELLOW, " »  Utilização: /field add [name]");
+			ChatMsg(playerid, YELLOW, " » Utilização: /field add [name]");
 			return 1;
 		}
 
@@ -130,7 +130,7 @@ ACMD:field[2](playerid, params[])
 
 		if(sscanf(params, "{s[7]}s[24]", name))
 		{
-			ChatMsg(playerid, YELLOW, " »  Utilização: /field remove [name]");
+			ChatMsg(playerid, YELLOW, " » Utilização: /field remove [name]");
 			return 1;
 		}
 
@@ -138,7 +138,7 @@ ACMD:field[2](playerid, params[])
 
 		if(!IsValidDetectionField(id))
 		{
-			ChatMsg(playerid, YELLOW, " »  Invalid detection field name");
+			ChatMsg(playerid, YELLOW, " » Invalid detection field name");
 			return 1;
 		}
 
@@ -153,7 +153,7 @@ ACMD:field[2](playerid, params[])
 
 		if(sscanf(params, "{s[7]}s[24]", name))
 		{
-			ChatMsg(playerid, YELLOW, " »  Utilização: /field remove [name]");
+			ChatMsg(playerid, YELLOW, " » Utilização: /field remove [name]");
 			return 1;
 		}
 
@@ -161,7 +161,7 @@ ACMD:field[2](playerid, params[])
 
 		if(!IsValidDetectionField(id))
 		{
-			ChatMsg(playerid, YELLOW, " »  Invalid detection field name");
+			ChatMsg(playerid, YELLOW, " » Invalid detection field name");
 			return 1;
 		}
 
@@ -175,14 +175,14 @@ ACMD:field[2](playerid, params[])
 
 		if(sscanf(params, "{s[8]}s[24]", name))
 		{
-			ChatMsg(playerid, YELLOW, " »  Utilização: /field name [name]");
+			ChatMsg(playerid, YELLOW, " » Utilização: /field name [name]");
 			return 1;
 		}
 
 		new count = ShowDetfieldNameFields(playerid, name);
 
 		if(count == 0)
-			ChatMsg(playerid, YELLOW, " »  No field records found for '"C_BLUE"%s"C_YELLOW"'.", name);
+			ChatMsg(playerid, YELLOW, " » No field records found for '"C_BLUE"%s"C_YELLOW"'.", name);
 	}
 
 	return 1;
@@ -270,7 +270,7 @@ ShowDetfieldListOptions(playerid, detfieldid)
 				{
 					if(!ShowDetfieldLog(playerid, detfieldid))
 					{
-						ChatMsg(playerid, YELLOW, " »  There are no log entries in '%s'.", name);
+						ChatMsg(playerid, YELLOW, " » There are no log entries in '%s'.", name);
 						ShowDetfieldListOptions(playerid, detfieldid);
 					}
 				}
@@ -287,7 +287,7 @@ ShowDetfieldListOptions(playerid, detfieldid)
 						SetPlayerPos(playerid, x, y, z);
 					}
 					else
-						ChatMsg(playerid, RED, " »  You must be on admin duty to do that.");
+						ChatMsg(playerid, RED, " » You must be on admin duty to do that.");
 				}
 				case 2:
 				{
@@ -324,7 +324,7 @@ ShowDetfieldExceptions(playerid, detfieldid)
 
 	if(GetDetectionFieldExceptionCount(detfieldid) == 0)
 	{
-		ChatMsg(playerid, YELLOW, " »  No exceptions for '%s'.", name);
+		ChatMsg(playerid, YELLOW, " » No exceptions for '%s'.", name);
 		ShowDetfieldListOptions(playerid, detfieldid);
 		return 0;
 	}
@@ -414,25 +414,25 @@ ShowDetfieldAddException(playerid, detfieldid, exceptionid)
 
 			if(ret == 0)
 			{
-				ChatMsg(playerid, RED, " »  Invalid detection field (error code 0)");
+				ChatMsg(playerid, RED, " » Invalid detection field (error code 0)");
 				ShowDetfieldAddException(playerid, detfieldid, exceptionid);
 			}
 
 			if(ret == -1)
 			{
-				ChatMsg(playerid, RED, " »  Exception list is full (error code -1)");
+				ChatMsg(playerid, RED, " » Exception list is full (error code -1)");
 				ShowDetfieldExceptionOptions(playerid, detfieldid, exceptionid);
 			}
 
 			if(ret == -2)
 			{
-				ChatMsg(playerid, RED, " »  Invalid username (error code -2)");
+				ChatMsg(playerid, RED, " » Invalid username (error code -2)");
 				ShowDetfieldAddException(playerid, detfieldid, exceptionid);
 			}
 
 			if(ret == -3)
 			{
-				ChatMsg(playerid, RED, " »  Username already in list (error code -3)");
+				ChatMsg(playerid, RED, " » Username already in list (error code -3)");
 				ShowDetfieldAddException(playerid, detfieldid, exceptionid);
 			}
 		}
@@ -500,10 +500,10 @@ ShowDetfieldRenamePrompt(playerid, detfieldid)
 			ret = SetDetectionFieldName(detfieldid, tmp);
 
 			if(ret == -1)
-				ChatMsg(playerid, RED, " »  A field with that name already exists.");
+				ChatMsg(playerid, RED, " » A field with that name already exists.");
 
 			if(ret == -2)
-				ChatMsg(playerid, RED, " »  Invalid detection field name. Must start with an alphabetic character and can contain only alphanumeric characters.");
+				ChatMsg(playerid, RED, " » Invalid detection field name. Must start with an alphabetic character and can contain only alphanumeric characters.");
 		}
 
 		ShowDetfieldListOptions(playerid, detfieldid);
@@ -626,7 +626,7 @@ ShowDetfieldLogOptions(playerid, detfieldid, logentry)
 							dfm_LogBuffer[playerid][logentry][DETLOG_BUFFER_POS_Z]);
 					}
 					else
-						ChatMsg(playerid, RED, " »  You must be on admin duty to do that.");
+						ChatMsg(playerid, RED, " » You must be on admin duty to do that.");
 				}
 				case 1:
 				{
@@ -743,10 +743,10 @@ AddNewDetectionFieldPoint(playerid)
 		new ret = AddDetectionField(dfm_Name[playerid], dfm_Points[playerid], dfm_MinZ[playerid], dfm_MaxZ[playerid], dfm_Exceptions[playerid]);
 
 		if(ret < 0)
-			ChatMsg(playerid, RED, " »  An error occurred (code: %d)", ret);
+			ChatMsg(playerid, RED, " » An error occurred (code: %d)", ret);
 		else
 		{
-			ChatMsg(playerid, YELLOW, " »  Point %d set to %f, %f. Field '%s' created.",
+			ChatMsg(playerid, YELLOW, " » Point %d set to %f, %f. Field '%s' created.",
 				dfm_CurrentPoint[playerid] + 1,
 				dfm_Points[playerid][dfm_CurrentPoint[playerid] * 2],
 				dfm_Points[playerid][(dfm_CurrentPoint[playerid] * 2) + 1],
@@ -754,7 +754,7 @@ AddNewDetectionFieldPoint(playerid)
 		}
 	}
 	else
-		ChatMsg(playerid, YELLOW, " »  Point %d set to %f, %f. Move to the next point and press "C_BLUE"~k~~PED_LOCK_TARGET~", dfm_CurrentPoint[playerid] + 1, dfm_Points[playerid][dfm_CurrentPoint[playerid] * 2], dfm_Points[playerid][(dfm_CurrentPoint[playerid] * 2) + 1]);
+		ChatMsg(playerid, YELLOW, " » Point %d set to %f, %f. Move to the next point and press "C_BLUE"~k~~PED_LOCK_TARGET~", dfm_CurrentPoint[playerid] + 1, dfm_Points[playerid][dfm_CurrentPoint[playerid] * 2], dfm_Points[playerid][(dfm_CurrentPoint[playerid] * 2) + 1]);
 
 	dfm_CurrentPoint[playerid]++;
 }

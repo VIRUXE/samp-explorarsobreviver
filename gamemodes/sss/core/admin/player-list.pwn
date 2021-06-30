@@ -149,9 +149,9 @@ _ShowPlayerListItemOptions(playerid, item)
 		switch(listitem)
 		{
 			case 0:// Go to spawn
-				ChatMsg(playerid, YELLOW, " »  Not implemented.");
+				ChatMsg(playerid, YELLOW, " » Not implemented.");
 			case 1:// Set spawn
-				ChatMsg(playerid, YELLOW, " »  Not implemented.");
+				ChatMsg(playerid, YELLOW, " » Not implemented.");
 			case 2:// List accounts used by this IP
 			{
 				new ip;
@@ -182,12 +182,12 @@ _ShowPlayerListItemOptions(playerid, item)
 				if(alivestate)
 				{
 					SetAccountAliveState(pls_List[playerid][item], 0);
-					ChatMsg(playerid, YELLOW, " »  Player alive state set to dead.");
+					ChatMsg(playerid, YELLOW, " » Player alive state set to dead.");
 				}
 				else
 				{
 					SetAccountAliveState(pls_List[playerid][item], 1);
-					ChatMsg(playerid, YELLOW, " »  Player alive state set to alive.");
+					ChatMsg(playerid, YELLOW, " » Player alive state set to alive.");
 				}
 			}
 			case 8: // Toggle active
@@ -199,12 +199,12 @@ _ShowPlayerListItemOptions(playerid, item)
 				if(activestate)
 				{
 					SetAccountActiveState(pls_List[playerid][item], 0);
-					ChatMsg(playerid, YELLOW, " »  Player active state set to inactive.");
+					ChatMsg(playerid, YELLOW, " » Player active state set to inactive.");
 				}
 				else
 				{
 					SetAccountActiveState(pls_List[playerid][item], 1);
-					ChatMsg(playerid, YELLOW, " »  Player active state set to active.");
+					ChatMsg(playerid, YELLOW, " » Player active state set to active.");
 				}
 			}
 		}

@@ -115,7 +115,7 @@ ACMD:autosavetoggle[4](playerid, params[])
 		defer AutoSave();
 	}
 
-	ChatMsg(playerid, YELLOW, " »  Autosave toggle: %d", autosave_Toggle);
+	ChatMsg(playerid, YELLOW, " » Autosave toggle: %d", autosave_Toggle);
 
 	return 1;
 }

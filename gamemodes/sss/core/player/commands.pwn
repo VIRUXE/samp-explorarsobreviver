@@ -7,38 +7,38 @@ CMD:ajuda(playerid, params[])
 
 CMD:regras(playerid, params[])
 {
-	ChatMsg(playerid, YELLOW, " »  Regras (total: %d)", gTotalRules);
+	ChatMsg(playerid, YELLOW, " » Regras (total: %d)", gTotalRules);
 
 	for(new i; i < gTotalRules; i++)
-		ChatMsg(playerid, BLUE, sprintf(" »  "C_ORANGE"%s", gRuleList[i]));
+		ChatMsg(playerid, BLUE, sprintf(" » "C_ORANGE"%s", gRuleList[i]));
 	
 	return 1;
 }
 
 CMD:admins(playerid, params[])
 {
-	ChatMsg(playerid, YELLOW, " »  Equipe de Admin (total: %d)", gTotalStaff);
+	ChatMsg(playerid, YELLOW, " » Equipe de Admin (total: %d)", gTotalStaff);
 
 	for(new i; i < gTotalStaff; i++)
-		ChatMsg(playerid, BLUE, sprintf(" »  "C_ORANGE"%s", gStaffList[i]));
+		ChatMsg(playerid, BLUE, sprintf(" » "C_ORANGE"%s", gStaffList[i]));
 	
 	return 1;
 }
 
 CMD:creditos(playerid, params[])
 {
-	ChatMsg(playerid, YELLOW, " »  Scavenge and Survive is developed by Southclaws (www.southcla.ws) and the following contributors:");
-	ChatMsg(playerid, BLUE, " »  Y_Less - Tons of useful code, libraries and conversations");
-	ChatMsg(playerid, BLUE, " »  Viruxe - Lots of anti-cheat work");
-	ChatMsg(playerid, BLUE, " »  Kadaradam - Fishing, Trees and lots of bug fixes");
-	ChatMsg(playerid, BLUE, " »  Hiddos - Better water detection code");
+	ChatMsg(playerid, YELLOW, " » Scavenge and Survive is developed by Southclaws (www.southcla.ws) and the following contributors:");
+	ChatMsg(playerid, BLUE, " » Y_Less - Tons of useful code, libraries and conversations");
+	ChatMsg(playerid, BLUE, " » Viruxe - Lots of anti-cheat work");
+	ChatMsg(playerid, BLUE, " » Kadaradam - Fishing, Trees and lots of bug fixes");
+	ChatMsg(playerid, BLUE, " » Hiddos - Better water detection code");
 
 	return 1;
 }
 
 CMD:mdd(playerid, params[])
 {
-	ChatMsg(playerid, YELLOW, " »  Mensagem do Dia: "C_BLUE"%s", gMessageOfTheDay);
+	ChatMsg(playerid, YELLOW, " » Mensagem do Dia: "C_BLUE"%s", gMessageOfTheDay);
 	return 1;
 }
 
@@ -140,7 +140,7 @@ CMD:pos(playerid, params[])
 
 	GetPlayerPos(playerid, x, y, z);
 
-	ChatMsg(playerid, YELLOW, " »  Posição: "C_BLUE"%.2f, %.2f, %.2f", x, y, z);
+	ChatMsg(playerid, YELLOW, " » Posição: "C_BLUE"%.2f, %.2f, %.2f", x, y, z);
 
 	return 1;
 }
