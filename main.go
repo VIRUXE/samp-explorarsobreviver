@@ -12,7 +12,7 @@ import (
 	"gopkg.in/natefinch/lumberjack.v2"
 )
 
-const logFileNameFormat = `logs/server-2006-01-02.log`
+const logFileNameFormat = `logs/server-02-01-2006.log`
 const devLogTimeFormat = `15:04:05.000`
 
 func main() {
