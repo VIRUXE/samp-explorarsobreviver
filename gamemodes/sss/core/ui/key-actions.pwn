@@ -262,10 +262,10 @@ _UpdateKeyActions(playerid)
 			ShowPlayerKeyActionUI(playerid);
 		}
 
-		AddToolTipText(playerid, KEYTEXT_INVENTORY, "Open inventory");
+		AddToolTipText(playerid, KEYTEXT_INVENTORY, "Abrir Inventario");
 
 		if(IsValidItem(GetPlayerBagItem(playerid)))
-			AddToolTipText(playerid, KEYTEXT_DROP_ITEM, "Remove bag");
+			AddToolTipText(playerid, KEYTEXT_DROP_ITEM, "Remover Mochila");
 
 		ShowPlayerKeyActionUI(playerid);
 
@@ -277,34 +277,22 @@ _UpdateKeyActions(playerid)
 	// Single items
 
 	if(itemtype == item_Note)
-	{
 		AddToolTipText(playerid, KEYTEXT_INTERACT, "To Read");
-	}
 	if(itemtype == item_Sign)
-	{
-		AddToolTipText(playerid, KEYTEXT_INTERACT, "Place sign");
-	}
+		AddToolTipText(playerid, KEYTEXT_INTERACT, "Colocar Sinal");
 	else if(itemtype == item_Armour)
-	{
-		AddToolTipText(playerid, KEYTEXT_INTERACT, "Wear armour");
-	}
+		AddToolTipText(playerid, KEYTEXT_INTERACT, "Vestir Armadura");
 	else if(itemtype == item_Crowbar)
-	{
-		AddToolTipText(playerid, KEYTEXT_INTERACT, "Deconstruct");
-	}
+		AddToolTipText(playerid, KEYTEXT_INTERACT, "Desmontar");
 	else if(itemtype == item_Shield)
-	{
-		AddToolTipText(playerid, KEYTEXT_INTERACT, "Place shield");
-	}
+		AddToolTipText(playerid, KEYTEXT_INTERACT, "Colocar Barreira");
 	else if(itemtype == item_HandCuffs)
 	{
 		if(inplayerarea != -1)
-			AddToolTipText(playerid, KEYTEXT_INTERACT, "HandCuff player");
+		AddToolTipText(playerid, KEYTEXT_INTERACT, "Algemar Jogador");
 	}
 	else if(itemtype == item_Wheel)
-	{
-		AddToolTipText(playerid, KEYTEXT_INTERACT, "Repair vehicle wheel");
-	}
+		AddToolTipText(playerid, KEYTEXT_INTERACT, "Reparar Roda");
 	else if(itemtype == item_GasCan)
 	{
 		if(invehiclearea != INVALID_VEHICLE_ID)
@@ -313,9 +301,7 @@ _UpdateKeyActions(playerid)
 				AddToolTipText(playerid, KEYTEXT_INTERACT, "Refuel vehicle");
 		}
 		else
-		{
 			AddToolTipText(playerid, KEYTEXT_INTERACT, "Fill at pump");
-		}
 	}
 	else if(itemtype == item_Clothes)
 	{
