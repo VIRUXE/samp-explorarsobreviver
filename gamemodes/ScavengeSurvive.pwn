@@ -72,14 +72,31 @@
 // Optidraw
 #define OD_METHOD METHOD_BOX
 
+// Nex Anti-cheat
+#define AC_USE_AMMUNATIONS  			(false)
+#define AC_USE_PICKUP_WEAPONS  			(false)
+#define AC_USE_RESTAURANTS  			(false)
+#define AC_USE_VENDING_MACHINES  		(false)
+#define AC_USE_TUNING_GARAGES  			(true)
+#define AC_USE_PAYNSPRAY  				(true)
+#define AC_USE_CASINOS  				(false)
+#define AC_USE_NPC  					(false)
+#define AC_USE_QUERY  					(true)
+#define AC_DEFAULT_COLOR  				(-1)
+#define AC_MAX_CLASSES  				(1)
+#define AC_MAX_SKINS  					(312)
+#define AC_MAX_CONNECTS_FROM_IP  		(5)
+#define AC_MAX_RCON_LOGIN_ATTEMPT  		(2)
+#define AC_MAX_MSGS_REC_DIFF  			(800)
+#define AC_MAX_PING              		(800)
+#define AC_MIN_TIME_RECONNECT  			(12)
+
 // pawn-errors
-// #define PRINT_BACKTRACES
 #pragma warning disable 208 // TODO: Fix reparse issues and remove!
 #pragma dynamic 64000
-
 #pragma warning disable 214 // Temporary fix remove const warning
 #pragma warning disable 239 // Temporary fix remove const warning
-
+// #define PRINT_BACKTRACES
 
 /*==============================================================================
 
