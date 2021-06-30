@@ -1,8 +1,8 @@
 #include <YSI_Coding\y_hooks>
 
 
-#define MAX_DRUG_TYPE	(12)
-#define MAX_DRUG_NAME	(32)
+#define MAX_DRUG_TYPE	(7)
+#define MAX_DRUG_NAME	(12)
 
 
 enum E_DRUG_TYPE_DATA

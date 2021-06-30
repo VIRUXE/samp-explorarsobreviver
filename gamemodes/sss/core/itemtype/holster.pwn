@@ -365,7 +365,7 @@ hook OnPlayerOpenInventory(playerid)
 	if(GetTickCountDifference(GetTickCount(), hols_LastHolster[playerid]) < 1000)
 	{
 		HidePlayerGear(playerid);
-		HidePlayerHealthInfo(playerid);
+		HideBodyPreviewUI(playerid);
 		ClosePlayerInventory(playerid, true);
 		CancelSelectTextDraw(playerid);
 		return Y_HOOKS_BREAK_RETURN_1;
@@ -378,7 +378,7 @@ hook OnPlayerOpenContainer(playerid, Container:containerid)
 	if(GetTickCountDifference(GetTickCount(), hols_LastHolster[playerid]) < 1000)
 	{
 		HidePlayerGear(playerid);
-		HidePlayerHealthInfo(playerid);
+		HideBodyPreviewUI(playerid);
 		ClosePlayerContainer(playerid, true);
 		CancelSelectTextDraw(playerid);
 		return Y_HOOKS_BREAK_RETURN_1;

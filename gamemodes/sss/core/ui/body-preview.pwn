@@ -2,7 +2,7 @@
 #include <YSI_Coding\y_hooks>
 
 
-#define MAX_BODY_LABEL (16)
+#define MAX_BODY_LABEL (15)
 
 
 enum E_BODY_LABEL_DATA
@@ -14,7 +14,7 @@ Float:		bl_posY
 
 
 static
-Float:		bod_UIPositionX	[MAX_PLAYERS] = {80.0, ...},
+Float:		bod_UIPositionX	[MAX_PLAYERS] = {85.0, ...},
 Float:		bod_UIPositionY	[MAX_PLAYERS] = {190.0, ...},
 Float:		bod_UIFontSizeX	[MAX_PLAYERS] = {0.25, ...},
 Float:		bod_UIFontSizeY	[MAX_PLAYERS] = {1.05, ...},
@@ -58,88 +58,44 @@ stock HideBodyPreviewUI(playerid)
 	bod_LabelIndex1[playerid] = 0;
 }
 
-stock SetBodyPreviewLabel(playerid, side, index, Float:spacing, const string[], textcolour)
+stock SetBodyPreviewLabel(playerid, index, const string[], textcolour)
 {
 	new Float:ypos;
 
-	// left
-	if(!side)
+	if(bod_LabelData0[playerid][index][bl_valid])
 	{
-		if(bod_LabelData0[playerid][index][bl_valid])
-		{
-			PlayerTextDrawSetString(playerid, bod_LabelData0[playerid][index][bl_textdraw], string);
-			PlayerTextDrawColor(playerid, bod_LabelData0[playerid][index][bl_textdraw], textcolour);
-			PlayerTextDrawShow(playerid, bod_LabelData0[playerid][index][bl_textdraw]);
-		}
-		else
-		{
-			bod_LabelData0[playerid][index][bl_valid] = true;
-
-			if(index > bod_LabelIndex0[playerid])
-				bod_LabelIndex0[playerid] = index;
-
-			if(index == 0)
-				ypos = bod_UIPositionY[playerid] + spacing;
-
-			else
-				ypos = bod_LabelData0[playerid][index - 1][bl_posY] + spacing;
-
-			bod_LabelData0[playerid][index][bl_posY] = ypos;
-
-			bod_LabelData0[playerid][index][bl_textdraw]=CreatePlayerTextDraw(playerid, bod_UIPositionX[playerid] - 76.0, ypos, string);
-			PlayerTextDrawAlignment			(playerid, bod_LabelData0[playerid][index][bl_textdraw], 1);
-			PlayerTextDrawBackgroundColor	(playerid, bod_LabelData0[playerid][index][bl_textdraw], 175);
-			PlayerTextDrawFont				(playerid, bod_LabelData0[playerid][index][bl_textdraw], 1);
-			PlayerTextDrawLetterSize		(playerid, bod_LabelData0[playerid][index][bl_textdraw], bod_UIFontSizeX[playerid], bod_UIFontSizeY[playerid]);
-			PlayerTextDrawColor				(playerid, bod_LabelData0[playerid][index][bl_textdraw], textcolour);
-			PlayerTextDrawSetOutline		(playerid, bod_LabelData0[playerid][index][bl_textdraw], 1);
-			PlayerTextDrawSetProportional	(playerid, bod_LabelData0[playerid][index][bl_textdraw], 1);
-			PlayerTextDrawSetShadow			(playerid, bod_LabelData0[playerid][index][bl_textdraw], 0);
-			PlayerTextDrawTextSize			(playerid, bod_LabelData0[playerid][index][bl_textdraw], bod_UIPositionX[playerid], 10.0);
-			PlayerTextDrawSetSelectable		(playerid, bod_LabelData0[playerid][index][bl_textdraw], true);
-
-			PlayerTextDrawShow(playerid, bod_LabelData0[playerid][index][bl_textdraw]);
-		}
+		PlayerTextDrawSetString(playerid, bod_LabelData0[playerid][index][bl_textdraw], string);
+		PlayerTextDrawColor(playerid, bod_LabelData0[playerid][index][bl_textdraw], textcolour);
+		PlayerTextDrawShow(playerid, bod_LabelData0[playerid][index][bl_textdraw]);
 	}
-	// Right
 	else
 	{
-		if(bod_LabelData1[playerid][index][bl_valid])
-		{
-			PlayerTextDrawSetString(playerid, bod_LabelData1[playerid][index][bl_textdraw], string);
-			PlayerTextDrawColor(playerid, bod_LabelData1[playerid][index][bl_textdraw], textcolour);
-			PlayerTextDrawShow(playerid, bod_LabelData1[playerid][index][bl_textdraw]);
-		}
+		bod_LabelData0[playerid][index][bl_valid] = true;
+
+		if(index > bod_LabelIndex0[playerid])
+			bod_LabelIndex0[playerid] = index;
+
+		if(index == 0)
+			ypos = bod_UIPositionY[playerid] + 20.0;
+
 		else
-		{
-			bod_LabelData1[playerid][index][bl_valid] = true;
+			ypos = bod_LabelData0[playerid][index - 1][bl_posY] + 20.0;
 
-			if(index > bod_LabelIndex1[playerid])
-				bod_LabelIndex1[playerid] = index;
+		bod_LabelData0[playerid][index][bl_posY] = ypos;
 
-			if(index == 0)
-				ypos = bod_UIPositionY[playerid] + spacing;
+		bod_LabelData0[playerid][index][bl_textdraw]=CreatePlayerTextDraw(playerid, bod_UIPositionX[playerid] - 80.0, ypos, string);
+		PlayerTextDrawAlignment			(playerid, bod_LabelData0[playerid][index][bl_textdraw], 1);
+		PlayerTextDrawBackgroundColor	(playerid, bod_LabelData0[playerid][index][bl_textdraw], 175);
+		PlayerTextDrawFont				(playerid, bod_LabelData0[playerid][index][bl_textdraw], 1);
+		PlayerTextDrawLetterSize		(playerid, bod_LabelData0[playerid][index][bl_textdraw], bod_UIFontSizeX[playerid], bod_UIFontSizeY[playerid]);
+		PlayerTextDrawColor				(playerid, bod_LabelData0[playerid][index][bl_textdraw], textcolour);
+		PlayerTextDrawSetOutline		(playerid, bod_LabelData0[playerid][index][bl_textdraw], 1);
+		PlayerTextDrawSetProportional	(playerid, bod_LabelData0[playerid][index][bl_textdraw], 1);
+		PlayerTextDrawSetShadow			(playerid, bod_LabelData0[playerid][index][bl_textdraw], 0);
+		PlayerTextDrawTextSize			(playerid, bod_LabelData0[playerid][index][bl_textdraw], bod_UIPositionX[playerid], 10.0);
+		PlayerTextDrawSetSelectable		(playerid, bod_LabelData0[playerid][index][bl_textdraw], true);
 
-			else
-				ypos = bod_LabelData1[playerid][index - 1][bl_posY] + spacing;
-
-			bod_LabelData1[playerid][index][bl_posY] = ypos;
-
-			bod_LabelData1[playerid][index][bl_textdraw]=CreatePlayerTextDraw(playerid, bod_UIPositionX[playerid] + 45.0, ypos, string);
-			PlayerTextDrawAlignment			(playerid, bod_LabelData1[playerid][index][bl_textdraw], 3);
-			PlayerTextDrawBackgroundColor	(playerid, bod_LabelData1[playerid][index][bl_textdraw], 175);
-			PlayerTextDrawFont				(playerid, bod_LabelData1[playerid][index][bl_textdraw], 1);
-			PlayerTextDrawLetterSize		(playerid, bod_LabelData1[playerid][index][bl_textdraw], bod_UIFontSizeX[playerid], bod_UIFontSizeY[playerid]);
-			PlayerTextDrawColor				(playerid, bod_LabelData1[playerid][index][bl_textdraw], textcolour);
-			PlayerTextDrawSetOutline		(playerid, bod_LabelData1[playerid][index][bl_textdraw], 1);
-			PlayerTextDrawSetProportional	(playerid, bod_LabelData1[playerid][index][bl_textdraw], 1);
-			PlayerTextDrawSetShadow			(playerid, bod_LabelData1[playerid][index][bl_textdraw], 0);
-			PlayerTextDrawTextSize			(playerid, bod_LabelData1[playerid][index][bl_textdraw], bod_UIPositionX[playerid], 10.0);
-			PlayerTextDrawSetSelectable		(playerid, bod_LabelData1[playerid][index][bl_textdraw], true);
-
-			PlayerTextDrawShow(playerid, bod_LabelData1[playerid][index][bl_textdraw]);
-		}
+		PlayerTextDrawShow(playerid, bod_LabelData0[playerid][index][bl_textdraw]);
 	}
-
 	return index;
 }

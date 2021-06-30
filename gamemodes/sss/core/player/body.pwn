@@ -445,7 +445,7 @@ hook OnPlayerSelectCntOpt(playerid, Container:containerid, option)
 		if(option == torso_CntOptionID[playerid])
 		{
 			HidePlayerGear(playerid);
-			HidePlayerHealthInfo(playerid);
+			HideBodyPreviewUI(playerid);
 			ClosePlayerContainer(playerid, true);
 			CancelSelectTextDraw(playerid);
 			DestroyItem(GetContainerSafeboxItem(containerid));

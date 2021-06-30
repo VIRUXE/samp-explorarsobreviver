@@ -8,7 +8,6 @@
 
 static
 	inv_GearActive[MAX_PLAYERS],
-	inv_HealthInfoActive[MAX_PLAYERS],
 	PlayerText:GearSlot_Head[3],
 	PlayerText:GearSlot_Face[3],
 	PlayerText:GearSlot_Hand[3],
@@ -48,14 +47,12 @@ CreatePlayerTile(playerid, &PlayerText:title, &PlayerText:tile, &PlayerText:item
 	PlayerTextDrawColor				(playerid, title, -1);
 	PlayerTextDrawSetOutline		(playerid, title, 1);
 	PlayerTextDrawSetProportional	(playerid, title, 1);
-	PlayerTextDrawBoxColor			(playerid, title, 255);
 	PlayerTextDrawTextSize			(playerid, title, height, width - 4);
 	PlayerTextDrawUseBox			(playerid, title, true);
 
 	tile							=CreatePlayerTextDraw(playerid, x, y, "_");
 	PlayerTextDrawFont				(playerid, tile, TEXT_DRAW_FONT_MODEL_PREVIEW);
-	PlayerTextDrawBackgroundColor	(playerid, tile, 175);
-	PlayerTextDrawBoxColor			(playerid, tile, 175);
+	PlayerTextDrawBackgroundColor	(playerid, tile, 0xFFFFFF08);
 	PlayerTextDrawColor				(playerid, tile, -1);
 	PlayerTextDrawTextSize			(playerid, tile, width, height);
 	PlayerTextDrawSetSelectable		(playerid, tile, true);
@@ -123,40 +120,31 @@ ShowPlayerHealthInfo(playerid)
 	drugs = GetPlayerDrugsList(playerid, drugslist);
 	GetPlayerBleedRate(playerid, bleedrate);
 
-	inv_HealthInfoActive[playerid] = true;
-
-	SetBodyPreviewLabel(playerid, 0, tmp++, 35.0, sprintf("Feridas: %d", GetPlayerWounds(playerid)),
+	SetBodyPreviewLabel(playerid, tmp++, sprintf("Feridas: %d", GetPlayerWounds(playerid)),
 		GetPlayerWounds(playerid) ? RGBAToHex(max(GetPlayerWounds(playerid) * 50, 255), 0, 0, 255) : 0xFFFFFFFF);
 
 	if(bleedrate > 0.0)
-		SetBodyPreviewLabel(playerid, 0, tmp++, 35.0, sprintf("Sangramento: %0.1f%", bleedrate), RGBAToHex(truncateforbyte(floatround(bleedrate * 3200.0)), truncateforbyte(255 - floatround(bleedrate * 3200.0)), 0, 255));
+		SetBodyPreviewLabel(playerid, tmp++, sprintf("Sangramento: %0.1f%", bleedrate), RGBAToHex(truncateforbyte(floatround(bleedrate * 3200.0)), truncateforbyte(255 - floatround(bleedrate * 3200.0)), 0, 255));
 
 	if(hunger < 90.0)
-		SetBodyPreviewLabel(playerid, 0, tmp++, 20.0, sprintf("Energia: %0.1f%", hunger), RGBAToHex(truncateforbyte(floatround((66.6 - hunger) * 4.8)), truncateforbyte(255 - floatround((66.6 - hunger) * 4.8)), 0, 255));
+		SetBodyPreviewLabel(playerid, tmp++, sprintf("Energia: %0.1f%", hunger), RGBAToHex(truncateforbyte(floatround((66.6 - hunger) * 4.8)), truncateforbyte(255 - floatround((66.6 - hunger) * 4.8)), 0, 255));
 
-	format(string, sizeof(string), "Chance de Ficar Inconsciente: %.1f%%", (GetPlayerKnockoutChance(playerid, 5.7) + GetPlayerKnockoutChance(playerid, 22.6)) / 2);
-	SetBodyPreviewLabel(playerid, 0, tmp++, 20.0, string, 0xFFFF00FF);
-	
-	tmp = 0;
-	
 	if(infected1)
-		SetBodyPreviewLabel(playerid, 1, tmp++, 20.0, "Infecao por Comida/Liquido", 0xFF0000FF);
+		SetBodyPreviewLabel(playerid, tmp++, "Infecao alimentar", 0xFF0000FF);
 
 	if(infected2)
-		SetBodyPreviewLabel(playerid, 1, tmp++, 20.0, "Infecao de Ferida", 0xFF0000FF);
+		SetBodyPreviewLabel(playerid, tmp++, "Infecao de Ferida", 0xFF0000FF);
 
 	for(new i; i < drugs; i++)
 	{
 		GetDrugName(drugslist[i], drugname);
-		SetBodyPreviewLabel(playerid, 1, tmp++, 20.0, drugname, 0xFFFF00FF);
+		SetBodyPreviewLabel(playerid, tmp++, drugname, RED);
 	}
+
+	format(string, sizeof(string), "Chance de desmaiar: %.1f%%", (GetPlayerKnockoutChance(playerid, 5.7) + GetPlayerKnockoutChance(playerid, 22.6)) / 2);
+	SetBodyPreviewLabel(playerid, tmp++, string, 0xFFFFFFFF);
 }
 
-HidePlayerHealthInfo(playerid)
-{
-	inv_HealthInfoActive[playerid] = false;
-	HideBodyPreviewUI(playerid);
-}
 
 UpdatePlayerGear(playerid, show = 1)
 {
@@ -281,7 +269,7 @@ hook OnPlayerOpenInventory(playerid)
 hook OnPlayerCloseInventory(playerid)
 {
 	HidePlayerGear(playerid);
-	HidePlayerHealthInfo(playerid);
+	HideBodyPreviewUI(playerid);
 	return Y_HOOKS_CONTINUE_RETURN_0;
 }
 
@@ -296,7 +284,7 @@ hook OnPlayerOpenContainer(playerid, Container:containerid)
 hook OnPlayerCloseContainer(playerid, Container:containerid)
 {
 	HidePlayerGear(playerid);
-	HidePlayerHealthInfo(playerid);
+	HideBodyPreviewUI(playerid);
 	return Y_HOOKS_CONTINUE_RETURN_0;
 }
 
@@ -775,11 +763,4 @@ hook OnPlayerSelectCntOpt(playerid, Container:containerid, option)
 	}
 
 	return Y_HOOKS_CONTINUE_RETURN_0;
-}
-
-hook OnPlayerTakeDamage(playerid, issuerid, Float:amount, weaponid, bodypart)
-{
-	if(IsPlayerSpawned(playerid))
-		if(inv_HealthInfoActive[playerid])
-			ShowPlayerHealthInfo(playerid);
 }
