@@ -104,7 +104,7 @@ public OnPlayerDisconnect(playerid, reason)
 	{
 		case 0:
 		{
-			ChatMsgAll(GREY, " »  %p perdeu a ligação.", playerid);
+			ChatMsgAll(GREY, " »  %p perdeu a conexão.", playerid);
 			Logger_Log("player lost connection", Logger_P(playerid));
 		}
 		case 1:
