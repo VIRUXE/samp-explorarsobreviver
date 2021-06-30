@@ -48,11 +48,12 @@ CreatePlayerTile(playerid, &PlayerText:title, &PlayerText:tile, &PlayerText:item
 	PlayerTextDrawSetOutline		(playerid, title, 1);
 	PlayerTextDrawSetProportional	(playerid, title, 1);
 	PlayerTextDrawTextSize			(playerid, title, height, width - 4);
+	PlayerTextDrawBoxColor			(playerid, title, 150);
 	PlayerTextDrawUseBox			(playerid, title, true);
 
 	tile							=CreatePlayerTextDraw(playerid, x, y, "_");
 	PlayerTextDrawFont				(playerid, tile, TEXT_DRAW_FONT_MODEL_PREVIEW);
-	PlayerTextDrawBackgroundColor	(playerid, tile, 0xFFFFFF08);
+	PlayerTextDrawBackgroundColor	(playerid, tile, 100);
 	PlayerTextDrawColor				(playerid, tile, -1);
 	PlayerTextDrawTextSize			(playerid, tile, width, height);
 	PlayerTextDrawSetSelectable		(playerid, tile, true);
