@@ -255,7 +255,7 @@ static Prev_DestroyTextDraws() {
 	}
 }
 
-static Prev_CreatePlayerTextDraws(playerid, header[], button1[], button2[], button3[], totalItems) {
+static Prev_CreatePlayerTextDraws(playerid, const header[], const button1[], const button2[], const button3[], totalItems) {
     /*
 	* HEADER
 	*/
