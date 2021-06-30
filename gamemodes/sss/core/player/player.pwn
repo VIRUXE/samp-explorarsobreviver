@@ -250,7 +250,7 @@ ptask PlayerUpdateFast[100](playerid)
 
 	if(NetStats_MessagesRecvPerSecond(playerid) > 200)
 	{
-		ChatMsgAdmins(3, YELLOW, " >  %p sending %d messages per second.", playerid, NetStats_MessagesRecvPerSecond(playerid));
+		ChatMsgAdmins(3, YELLOW, " »  %p sending %d messages per second.", playerid, NetStats_MessagesRecvPerSecond(playerid));
 		return;
 	}
 

@@ -9,10 +9,10 @@
 ACMD:gamename[5](playerid,params[])
 {
 	if(!(0 < strlen(params) < 64))
-		return ChatMsg(playerid,YELLOW," >  Usage: /gamename [name]");
+		return ChatMsg(playerid,YELLOW," »  Usage: /gamename [name]");
 
 	SetGameModeText(params);
-	ChatMsg(playerid, YELLOW, " >  GameMode name set to "C_BLUE"%s", params);
+	ChatMsg(playerid, YELLOW, " »  GameMode name set to "C_BLUE"%s", params);
 
 	return 1;
 }
@@ -20,13 +20,13 @@ ACMD:gamename[5](playerid,params[])
 ACMD:hostname[5](playerid,params[])
 {
 	if(!(0 < strlen(params) < 64))
-		return ChatMsg(playerid,YELLOW," >  Usage: /hostname [name]");
+		return ChatMsg(playerid,YELLOW," »  Usage: /hostname [name]");
 
 	new str[74];
 	format(str, sizeof(str), "hostname %s", params);
 	SendRconCommand(str);
 
-	ChatMsg(playerid, YELLOW, " >  Hostname set to "C_BLUE"%s", params);
+	ChatMsg(playerid, YELLOW, " »  Hostname set to "C_BLUE"%s", params);
 
 	return 1;
 }
@@ -34,7 +34,7 @@ ACMD:hostname[5](playerid,params[])
 ACMD:mapname[5](playerid,params[])
 {
 	if(!(0 < strlen(params) < 64))
-		return ChatMsg(playerid,YELLOW," >  Usage: /mapname [name]");
+		return ChatMsg(playerid,YELLOW," »  Usage: /mapname [name]");
 
 	new str[74];
 	format(str, sizeof(str), "mapname %s", params);
@@ -52,12 +52,12 @@ ACMD:gmx[5](playerid, params[])
 ACMD:loadfs[5](playerid, params[])
 {
 	if(!(0 < strlen(params) < 64))
-		return ChatMsg(playerid, YELLOW, " >  Usage: /loadfs [FS name]");
+		return ChatMsg(playerid, YELLOW, " »  Usage: /loadfs [FS name]");
 
 	new str[64];
 	format(str, sizeof(str), "loadfs %s", params);
 	SendRconCommand(str);
-	ChatMsg(playerid, YELLOW, " >  Loading Filterscript: "C_BLUE"'%s'", params);
+	ChatMsg(playerid, YELLOW, " »  Loading Filterscript: "C_BLUE"'%s'", params);
 
 	return 1;
 }
@@ -65,12 +65,12 @@ ACMD:loadfs[5](playerid, params[])
 ACMD:reloadfs[5](playerid, params[])
 {
 	if(!(0 < strlen(params) < 64))
-		return ChatMsg(playerid, YELLOW, " >  Usage: /loadfs [FS name]");
+		return ChatMsg(playerid, YELLOW, " »  Usage: /loadfs [FS name]");
 
 	new str[64];
 	format(str, sizeof(str), "reloadfs %s", params);
 	SendRconCommand(str);
-	ChatMsg(playerid, YELLOW, " >  Reloading Filterscript: "C_BLUE"'%s'", params);
+	ChatMsg(playerid, YELLOW, " »  Reloading Filterscript: "C_BLUE"'%s'", params);
 
 	return 1;
 }
@@ -78,12 +78,12 @@ ACMD:reloadfs[5](playerid, params[])
 ACMD:unloadfs[5](playerid, params[])
 {
 	if(!(0 < strlen(params) < 64))
-		return ChatMsg(playerid, YELLOW, " >  Usage: /loadfs [FS name]");
+		return ChatMsg(playerid, YELLOW, " »  Usage: /loadfs [FS name]");
 
 	new str[64];
 	format(str, sizeof(str), "unloadfs %s", params);
 	SendRconCommand(str);
-	ChatMsg(playerid, YELLOW, " >  Unloading Filterscript: "C_BLUE"'%s'", params);
+	ChatMsg(playerid, YELLOW, " »  Unloading Filterscript: "C_BLUE"'%s'", params);
 
 	return 1;
 }
@@ -99,7 +99,7 @@ ACMD:unloadfs[5](playerid, params[])
 ACMD:nametags[5](playerid, params[])
 {
 	ToggleNameTagsForPlayer(playerid, !GetPlayerNameTagsToggle(playerid));
-	ChatMsg(playerid, YELLOW, " >  Nametags toggled %s", (GetPlayerNameTagsToggle(playerid)) ? ("on") : ("off"));
+	ChatMsg(playerid, YELLOW, " »  Nametags toggled %s", (GetPlayerNameTagsToggle(playerid)) ? ("on") : ("off"));
 
 	return 1;
 }
@@ -127,7 +127,7 @@ ACMD:addloot[5](playerid, params[])
 
 	if(sscanf(params, "s[32]d", lootindexname, size))
 	{
-		ChatMsg(playerid, YELLOW, " >  Usage: /addloot [indexname] [size]");
+		ChatMsg(playerid, YELLOW, " »  Usage: /addloot [indexname] [size]");
 		return 1;
 	}
 
@@ -135,7 +135,7 @@ ACMD:addloot[5](playerid, params[])
 
 	if(lootindex == -1)
 	{
-		ChatMsg(playerid, RED, " >  Loot index name invalid!");
+		ChatMsg(playerid, RED, " »  Loot index name invalid!");
 		return 1;
 	}
 
@@ -160,7 +160,7 @@ ACMD:setitemhp[5](playerid, params[])
 
 	if(sscanf(params, "dd", _:itemid, hitpoints))
 	{
-		ChatMsg(playerid, YELLOW, " >  Usage: /setitemhp [itemid] [hitpoints]");
+		ChatMsg(playerid, YELLOW, " »  Usage: /setitemhp [itemid] [hitpoints]");
 		return 1;
 	}
 

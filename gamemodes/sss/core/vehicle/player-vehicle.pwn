@@ -847,7 +847,7 @@ CMD:veiculo(playerid, params[])
 	new ownedvehiclename[MAX_VEHICLE_TYPE_NAME];
 
 	GetVehicleTypeName(GetVehicleType(pveh_PlayerVehicle[playerid]), ownedvehiclename);
-	ChatMsg(playerid, YELLOW, " >  Veículo Salvo: %s", !isnull(ownedvehiclename) ? ownedvehiclename : "Nenhum");
+	ChatMsg(playerid, YELLOW, " »  Veículo Salvo: %s", !isnull(ownedvehiclename) ? ownedvehiclename : "Nenhum");
 	return 1;
 }
 CMD:veh(playerid, params[]) return cmd_veiculo(playerid, params);

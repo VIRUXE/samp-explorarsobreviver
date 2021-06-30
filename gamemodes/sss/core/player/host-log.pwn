@@ -103,7 +103,7 @@ ACMD:hhh[4](playerid, params[])
 {
 	if(SendingRequest[playerid])
 	{
-		Msg(playerid, YELLOW, " >  Still waiting on active request.");
+		Msg(playerid, YELLOW, " »  Still waiting on active request.");
 		return 1;
 	}
 
@@ -111,7 +111,7 @@ ACMD:hhh[4](playerid, params[])
 
 	GetAccountIP(params, ip);
 
-	MsgF(playerid, YELLOW, " >  Running DNS resolve for '%s'", IpIntToStr(ip));
+	MsgF(playerid, YELLOW, " »  Running DNS resolve for '%s'", IpIntToStr(ip));
 
 	rdns(IpIntToStr(ip), playerid);
 
@@ -124,7 +124,7 @@ ACMD:hhname[4](playerid, params[])
 {
 	if(SendingRequest[playerid])
 	{
-		Msg(playerid, YELLOW, " >  Still waiting on active request.");
+		Msg(playerid, YELLOW, " »  Still waiting on active request.");
 		return 1;
 	}
 
@@ -134,13 +134,13 @@ ACMD:hhname[4](playerid, params[])
 
 	if(!GetAccountHostHistoryFromName(params, list, count))
 	{
-		Msg(playerid, YELLOW, " >  Failed");
+		Msg(playerid, YELLOW, " »  Failed");
 		return 1;
 	}
 
 	if(count == 0)
 	{
-		Msg(playerid, YELLOW, " >  No results");
+		Msg(playerid, YELLOW, " »  No results");
 		return 1;
 	}
 
@@ -204,13 +204,13 @@ public OnReverseDNS(ip[], host[], extra)
 
 		if(!GetAccountHostHistoryFromHost(host, list, count))
 		{
-			Msg(extra, YELLOW, " >  Failed");
+			Msg(extra, YELLOW, " »  Failed");
 			return 1;
 		}
 
 		if(count == 0)
 		{
-			Msg(extra, YELLOW, " >  No results");
+			Msg(extra, YELLOW, " »  No results");
 			return 1;
 		}
 

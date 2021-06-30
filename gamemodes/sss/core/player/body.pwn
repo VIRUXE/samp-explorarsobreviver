@@ -351,7 +351,7 @@ hook OnPlayerLoadAccount(playerid)
 		{
 			if(GetDynamicActorVirtualWorld(i) == 33)
 			{
-				ChatMsg(playerid, RED, " > Você foi morto enquanto esteve ausente. :(");
+				ChatMsg(playerid, RED, " » Você foi morto enquanto esteve ausente. :(");
 				SetAccountAliveState(name, 0);
 			}
 			break;
