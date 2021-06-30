@@ -133,8 +133,8 @@ hook OnPlayerClickPlayerTD(playerid, PlayerText:playertextid)
         for(new i = 0; i < 20; i++)
         	SendClientMessage(playerid, GREEN, "");
 
-		ChatMsg(playerid, WHITE, ""C_GREEN"> "C_WHITE" %s", ls(playerid, "TUTORINTROD"));
-		ChatMsg(playerid, WHITE, ""C_GREEN"> "C_WHITE" %s", ls(playerid, "TUTOREXITCM"));
+		ChatMsg(playerid, WHITE, ""C_GREEN" » "C_WHITE" %s", ls(playerid, "TUTORINTROD"));
+		ChatMsg(playerid, WHITE, ""C_GREEN" » "C_WHITE" %s", ls(playerid, "TUTOREXITCM"));
 	}
 }
 
@@ -189,7 +189,7 @@ ExitTutorial(playerid)
 	for(new i = 0; i < 20; i++)
 		SendClientMessage(playerid, GREEN, "");
 
-	ChatMsg(playerid, WHITE, ""C_GREEN"> "C_WHITE" %s", ls(playerid, "TUTORIEXIT"));
+	ChatMsg(playerid, WHITE, ""C_GREEN" » "C_WHITE" %s", ls(playerid, "TUTORIEXIT"));
 	return 1;
 }
 
@@ -200,7 +200,7 @@ hook OnPlayerWearBag(playerid, Item:itemid)
   		for(new i = 0; i < 20; i++)
 			SendClientMessage(playerid, GREEN, "");
 		
-		ChatMsg(playerid, WHITE, ""C_GREEN"> "C_WHITE" %s", ls(playerid, "TUTORACCBAG"));
+		ChatMsg(playerid, WHITE, ""C_GREEN" » "C_WHITE" %s", ls(playerid, "TUTORACCBAG"));
 	}
 
 	return 0;
@@ -213,7 +213,7 @@ hook OnPlayerOpenInventory(playerid)
   		for(new i = 0; i < 20; i++)
 			SendClientMessage(playerid, GREEN, "");
 			
-		ChatMsg(playerid, WHITE, ""C_GREEN"> "C_WHITE" %s", ls(playerid, "TUTORINTINV"));
+		ChatMsg(playerid, WHITE, ""C_GREEN" » "C_WHITE" %s", ls(playerid, "TUTORINTINV"));
 	}
 
 	return Y_HOOKS_CONTINUE_RETURN_0;
@@ -236,7 +236,7 @@ hook OnPlayerOpenContainer(playerid, Container:containerid)
 					for(new i = 0; i < 20; i++)
 						SendClientMessage(playerid, GREEN, "");
 					
-					ChatMsg(playerid, WHITE, ""C_GREEN"> "C_WHITE" %s", ls(playerid, "TUTORINTBAG"));
+					ChatMsg(playerid, WHITE, ""C_GREEN" » "C_WHITE" %s", ls(playerid, "TUTORINTBAG"));
 				}
 			}
 		}
@@ -259,7 +259,7 @@ hook OnPlayerViewCntOpt(playerid, Container:containerid)
   			for(new i = 0; i < 20; i++)
 				SendClientMessage(playerid, GREEN, "");
 
-			ChatMsg(playerid, WHITE, ""C_GREEN"> "C_WHITE" %s", ls(playerid, "TUTORITMOPT"));
+			ChatMsg(playerid, WHITE, ""C_GREEN" » "C_WHITE" %s", ls(playerid, "TUTORITMOPT"));
 		}
 	}
 
@@ -273,7 +273,7 @@ hook OnPlayerDroppedItem(playerid, Item:itemid)
 		for(new i = 0; i < 20; i++)
 			SendClientMessage(playerid, GREEN, "");
 
-		ChatMsg(playerid, WHITE, ""C_GREEN"> "C_WHITE" %s", ls(playerid, "TUTORDROITM"));
+		ChatMsg(playerid, WHITE, ""C_GREEN" » "C_WHITE" %s", ls(playerid, "TUTORDROITM"));
 	}
 
 	return Y_HOOKS_CONTINUE_RETURN_0;
@@ -286,7 +286,7 @@ hook OnItemAddedToInventory(playerid, Item:itemid, slot)
 		for(new i = 0; i < 20; i++)
 			SendClientMessage(playerid, GREEN, "");
 
-		ChatMsg(playerid, WHITE, ""C_GREEN"> "C_WHITE" %s", ls(playerid, "TUTORINVADD"));
+		ChatMsg(playerid, WHITE, ""C_GREEN" » "C_WHITE" %s", ls(playerid, "TUTORINVADD"));
 	}
 
 	return Y_HOOKS_CONTINUE_RETURN_0;
@@ -299,7 +299,7 @@ hook OnPlayerViewInvOpt(playerid)
 		for(new i = 0; i < 20; i++)
 			SendClientMessage(playerid, GREEN, "");
 
-		ChatMsg(playerid, WHITE, ""C_GREEN"> "C_WHITE" %s", ls(playerid, "TUTORITMOPT"));
+		ChatMsg(playerid, WHITE, ""C_GREEN" » "C_WHITE" %s", ls(playerid, "TUTORITMOPT"));
 	}
 
 	return Y_HOOKS_CONTINUE_RETURN_0;
@@ -323,7 +323,7 @@ hook OnItemAddedToContainer(Container:containerid, Item:itemid, playerid)
 						for(new i = 0; i < 20; i++)
 							SendClientMessage(playerid, GREEN, "");
 
-						ChatMsg(playerid, WHITE, ""C_GREEN"> "C_WHITE" %s", ls(playerid, "TUTORADDBAG"));
+						ChatMsg(playerid, WHITE, ""C_GREEN" » "C_WHITE" %s", ls(playerid, "TUTORADDBAG"));
 					}
 				}
 			}
@@ -332,7 +332,7 @@ hook OnItemAddedToContainer(Container:containerid, Item:itemid, playerid)
 				for(new i = 0; i < 20; i++)
 					SendClientMessage(playerid, GREEN, "");
 
-				ChatMsg(playerid, WHITE, ""C_GREEN"> "C_WHITE" %s", ls(playerid, "TUTORADDCNT"));
+				ChatMsg(playerid, WHITE, ""C_GREEN" » "C_WHITE" %s", ls(playerid, "TUTORADDCNT"));
 			}
 		}
 	}
@@ -347,7 +347,7 @@ hook OnPlayerHolsteredItem(playerid, Item:itemid)
 		for(new i = 0; i < 20; i++)
 			SendClientMessage(playerid, GREEN, "");
 
-		ChatMsg(playerid, WHITE, ""C_GREEN"> "C_WHITE" %s", ls(playerid, "TUTORITMHOL"));
+		ChatMsg(playerid, WHITE, ""C_GREEN" » "C_WHITE" %s", ls(playerid, "TUTORITMHOL"));
 	}
 
 	return Y_HOOKS_CONTINUE_RETURN_0;
@@ -360,7 +360,7 @@ hook OnPlayerUseItemWithItem(playerid, Item:itemid, Item:withitemid)
 		for(new i = 0; i < 20; i++)
 			SendClientMessage(playerid, GREEN, "");
 
-		ChatMsg(playerid, WHITE, ""C_GREEN"> "C_WHITE" %s", ls(playerid, "TUTORITMUSE"));
+		ChatMsg(playerid, WHITE, ""C_GREEN" » "C_WHITE" %s", ls(playerid, "TUTORITMUSE"));
 	}
 }
 
@@ -371,7 +371,7 @@ hook OnItemTweakFinish(playerid, Item:itemid)
 		for(new i = 0; i < 20; i++)
 			SendClientMessage(playerid, GREEN, "");
 
-		ChatMsg(playerid, WHITE, ""C_GREEN"> "C_WHITE" %s", ls(playerid, "TUTORIDEF"));
+		ChatMsg(playerid, WHITE, ""C_GREEN" » "C_WHITE" %s", ls(playerid, "TUTORIDEF"));
 	}
 }
 
