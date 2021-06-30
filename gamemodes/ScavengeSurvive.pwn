@@ -491,7 +491,6 @@ new stock
 #include "sss/core/player/country.pwn"
 #include "sss/core/player/recipes.pwn"
 #include "sss/core/player/score.pwn"
-#include "sss/core/player/item.pwn"
 
 // CHARACTER SCRIPTS
 #include "sss/core/char/movement.pwn"
@@ -591,6 +590,7 @@ new stock
 #include "sss/core/item/map.pwn"
 #include "sss/core/item/trash.pwn"
 #include "sss/core/item/barrel.pwn"
+#include "sss/core/item/player.pwn"
 
 // HATS
 #include "sss/core/apparel/hats/HelmArmy.pwn"
