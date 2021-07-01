@@ -321,7 +321,7 @@ hook OnGameModeInit(){
 	new tmp;
 	tmp = DefineHatItem(item_HelmArmy);
 	
-    for(new i = 0; i < MAX_SKINS; i++){
+    for(new i = 0; i < 312; i++){
 		SetHatOffsetsForSkin(tmp, i,
 			HelmArmySkinData[i][0], HelmArmySkinData[i][1], HelmArmySkinData[i][2],
 			HelmArmySkinData[i][3], HelmArmySkinData[i][4], HelmArmySkinData[i][5],
