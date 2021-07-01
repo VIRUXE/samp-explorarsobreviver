@@ -93,7 +93,7 @@ stock LoadAllLanguages()
 	direc = OpenDir(DIRECTORY_SCRIPTFILES DIRECTORY_LANGUAGES);
 
 	// Forçar o carregamento de Português do Brasil
-	default_entries = LoadLanguage(DIRECTORY_LANGUAGES"PT-BR", "PT-BR");
+	default_entries = LoadLanguage(DIRECTORY_LANGUAGES"Portugues (100%)", "Portugues (100%)");
 	Logger_Log("Linguagem predefinida (Português do Brasil) foi carregada.", Logger_I("entries", default_entries));
 
 	if(direc == Directory:-1)
@@ -104,7 +104,7 @@ stock LoadAllLanguages()
 
 	if(default_entries == 0)
 	{
-		err("No default entries loaded! Please add the 'PT-BR' langfile to '%s'.", DIRECTORY_SCRIPTFILES DIRECTORY_LANGUAGES);
+		err("No default entries loaded! Please add the 'Portugues (100%)' langfile to '%s'.", DIRECTORY_SCRIPTFILES DIRECTORY_LANGUAGES);
 		for(;;) {}
 	}
 
@@ -112,7 +112,7 @@ stock LoadAllLanguages()
 	{
 		if(type == E_REGULAR)
 		{
-			if(!strcmp(entry, "PT-BR"))
+			if(!strcmp(entry, "Portugues (100%)"))
 				continue;
 
 			PathBase(entry, filename);

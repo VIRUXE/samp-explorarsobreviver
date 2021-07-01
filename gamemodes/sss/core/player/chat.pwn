@@ -31,6 +31,35 @@ hook OnPlayerConnect(playerid)
 
 hook OnPlayerText(playerid, text[])
 {
+	if(chat_Mode[playerid] == CHAT_MODE_LOCAL)
+		PlayerSendChat(playerid, text, 0.0);
+
+	if(chat_Mode[playerid] == CHAT_MODE_GLOBAL)
+		PlayerSendChat(playerid, text, 1.0);
+
+	if(chat_Mode[playerid] == CHAT_MODE_ADMIN)
+		PlayerSendChat(playerid, text, 3.0);
+
+	if(chat_Mode[playerid] == CHAT_MODE_RADIO)
+		PlayerSendChat(playerid, text, chat_Freq[playerid]);
+
+	return 0;
+}
+
+PlayerSendChat(playerid, chat[], Float:frequency)
+{
+	if(!IsPlayerLoggedIn(playerid))
+		return 0;
+
+	if(GetTickCountDifference(GetTickCount(), GetPlayerServerJoinTick(playerid)) < 1000)
+		return 0;
+
+	if(CallLocalFunction("OnPlayerSendChat", "dsf", playerid, chat, frequency))
+		return 0;
+
+	if(isnull(chat))
+		return 0;
+
 	if(IsPlayerMuted(playerid))
 	{
 		if(GetPlayerMuteRemainder(playerid) == -1)
@@ -60,43 +89,13 @@ hook OnPlayerText(playerid, text[])
 		}
 	}
 
-	chat_LastMessageTick[playerid] = GetTickCount();
-
-	if(chat_Mode[playerid] == CHAT_MODE_LOCAL)
-		PlayerSendChat(playerid, text, 0.0);
-
-	if(chat_Mode[playerid] == CHAT_MODE_GLOBAL)
+	if(GetTickCountDifference(GetTickCount(), chat_LastMessageTick[playerid]) < 4500 && frequency == 1.0)
 	{
-		if(GetTickCountDifference(GetTickCount(), chat_LastMessageTick[playerid]) < 5000)
-		{
-			ChatMsgLang(playerid, RED, "GLOBALFLOOD");
-			return 0;
-		}
-		PlayerSendChat(playerid, text, 1.0);
+		ChatMsgLang(playerid, RED, "GLOBALFLOOD");
+		return 0;
 	}
 
-	if(chat_Mode[playerid] == CHAT_MODE_ADMIN)
-		PlayerSendChat(playerid, text, 3.0);
-
-	if(chat_Mode[playerid] == CHAT_MODE_RADIO)
-		PlayerSendChat(playerid, text, chat_Freq[playerid]);
-
-	return 0;
-}
-
-PlayerSendChat(playerid, chat[], Float:frequency)
-{
-	if(!IsPlayerLoggedIn(playerid))
-		return 0;
-
-	if(GetTickCountDifference(GetTickCount(), GetPlayerServerJoinTick(playerid)) < 1000)
-		return 0;
-
-	if(CallLocalFunction("OnPlayerSendChat", "dsf", playerid, chat, frequency))
-		return 0;
-
-	if(isnull(chat))
-		return 0;
+	chat_LastMessageTick[playerid] = GetTickCount();
 
 	new
 		line1[256],

@@ -148,13 +148,15 @@ _OnDeath(playerid, killerid)
 		}
 	}
 
-
-	//CreateDynamic3DTextLabel(deathreasonstring, -1, death_PosX[playerid], death_PosY[playerid], death_PosZ[playerid] - 0.1, 2.0);
-
-	//CreateGravestone(playerid, deathreasonstring, death_PosX[playerid], death_PosY[playerid], death_PosZ[playerid] - ITEM_FLOOR_OFFSET, death_RotZ[playerid]);
+	//TODO: Translate the reason and activate
+	//defer DestroyReason(:_CreateDynamic3DTextLabel(sprintf("Alguem morreu aqui, motivo:\n%s", deathreasonstring),
+		//-1, death_PosX[playerid], death_PosY[playerid], death_PosZ[playerid] - 0.1, 2.0));
 
 	return 1;
 }
+
+//timer DestroyReason[10 * 60000](label)
+	//DestroyDynamic3DTextLabel(STREAMER_TAG_3D_TEXT_LABEL:label);
 
 DropItems(playerid, Float:x, Float:y, Float:z)
 {

@@ -2,7 +2,7 @@
 #include <YSI_Coding\y_hooks>
 
 
-#define MAX_LIQUID_CONTAINER		(16)
+#define MAX_LIQUID_CONTAINER		(17)
 #define INVALID_LIQUID_CONTAINER	(-1)
 
 

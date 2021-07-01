@@ -124,8 +124,8 @@ ShowPlayerHealthInfo(playerid)
 	SetBodyPreviewLabel(playerid, tmp++, sprintf("Feridas: %d", GetPlayerWounds(playerid)),
 		GetPlayerWounds(playerid) ? RGBAToHex(max(GetPlayerWounds(playerid) * 50, 255), 0, 0, 255) : 0xFFFFFFFF);
 
-	if(bleedrate > 0.0)
-		SetBodyPreviewLabel(playerid, tmp++, sprintf("Sangramento: %0.1f%", bleedrate), RGBAToHex(truncateforbyte(floatround(bleedrate * 3200.0)), truncateforbyte(255 - floatround(bleedrate * 3200.0)), 0, 255));
+	if(bleedrate > 0)
+		SetBodyPreviewLabel(playerid, tmp++, sprintf("Sangramento: %0.1f%", bleedrate * 3200.0), RGBAToHex(truncateforbyte(floatround(bleedrate * 3200.0)), truncateforbyte(255 - floatround(bleedrate * 3200.0)), 0, 255));
 
 	if(hunger < 90.0)
 		SetBodyPreviewLabel(playerid, tmp++, sprintf("Energia: %0.1f%", hunger), RGBAToHex(truncateforbyte(floatround((66.6 - hunger) * 4.8)), truncateforbyte(255 - floatround((66.6 - hunger) * 4.8)), 0, 255));

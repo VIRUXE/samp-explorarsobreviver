@@ -113,6 +113,7 @@ hook OnItemCreateInWorld(Item:itemid)
 		new itemdata[e_DEFENCE_DATA];
 
 		GetItemArrayData(itemid, itemdata);
+
 		itemdata[def_active] = false;
 
 		if(itemdata[def_hit] > 0)
@@ -160,11 +161,16 @@ ActivateDefenceItem(Item:itemid)
 	new
 		itemtypename[MAX_ITEM_NAME],
 		itemdata[e_DEFENCE_DATA],
-		Button:buttonid;
+		Button:buttonid,
+		STREAMER_TAG_OBJECT:objectid;
 
 	GetItemTypeName(def_TypeData[defencetype][def_itemtype], itemtypename);
 	GetItemArrayData(itemid, itemdata);
 	GetItemButtonID(itemid, buttonid);
+	GetItemObjectID(itemid, objectid);
+
+	Streamer_SetFloatData(STREAMER_TYPE_OBJECT, objectid, E_STREAMER_STREAM_DISTANCE, 400.0);
+	Streamer_SetFloatData(STREAMER_TYPE_OBJECT, objectid, E_STREAMER_DRAW_DISTANCE, 400.0);
 
 	itemdata[def_active] = true;
 
@@ -710,14 +716,12 @@ ConvertItemToDefenceItem(Item:itemid, pose, playerid)
 		Float:rx,
 		Float:ry,
 		Float:rz,
-		Float:a,
-		objectid;
+		Float:a;
 
 	GetPlayerPos(playerid, x, y, z);
 	GetItemPos(itemid, z, z, z);
 	GetItemRot(itemid, rx, ry, rz);
 	GetPlayerFacingAngle(playerid, a);
-	GetItemObjectID(itemid, objectid);
 
 	if(pose == DEFENCE_POSE_HORIZONTAL)
 	{

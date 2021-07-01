@@ -262,6 +262,13 @@ LoadVehiclesFromFile(file[])
 			if(!IsValidVehicleType(type))
 				continue;
 
+
+			if(GetVehicleTypeCategory(type) == VEHICLE_CATEGORY_BOAT){
+				new Float:tmp;
+				if(CA_RayCastLine(posX, posY, posZ, posX, posY, posZ - 100.0, tmp, tmp, tmp) != WATER_OBJECT)
+					continue;
+			}
+
 			vehicleid = CreateLootVehicle(type, posX, posY, posZ, rotZ);
 
 			if(vehicleid == MAX_VEHICLES - 1)
