@@ -14,10 +14,10 @@ Float:		bl_posY
 
 
 static
-Float:		bod_UIPositionX	[MAX_PLAYERS] = {85.0, ...},
+Float:		bod_UIPositionX	[MAX_PLAYERS] = {100.0, ...},
 Float:		bod_UIPositionY	[MAX_PLAYERS] = {190.0, ...},
 Float:		bod_UIFontSizeX	[MAX_PLAYERS] = {0.25, ...},
-Float:		bod_UIFontSizeY	[MAX_PLAYERS] = {1.05, ...},
+Float:		bod_UIFontSizeY	[MAX_PLAYERS] = {0.93, ...},
 			bod_LabelData0	[MAX_PLAYERS][MAX_BODY_LABEL][E_BODY_LABEL_DATA],
 			bod_LabelData1	[MAX_PLAYERS][MAX_BODY_LABEL][E_BODY_LABEL_DATA],
 			bod_LabelIndex0	[MAX_PLAYERS],
@@ -76,14 +76,14 @@ stock SetBodyPreviewLabel(playerid, index, const string[], textcolour)
 			bod_LabelIndex0[playerid] = index;
 
 		if(index == 0)
-			ypos = bod_UIPositionY[playerid] + 20.0;
+			ypos = bod_UIPositionY[playerid] + 15.0;
 
 		else
-			ypos = bod_LabelData0[playerid][index - 1][bl_posY] + 20.0;
+			ypos = bod_LabelData0[playerid][index - 1][bl_posY] + 15.0;
 
 		bod_LabelData0[playerid][index][bl_posY] = ypos;
 
-		bod_LabelData0[playerid][index][bl_textdraw]=CreatePlayerTextDraw(playerid, bod_UIPositionX[playerid] - 80.0, ypos, string);
+		bod_LabelData0[playerid][index][bl_textdraw]=CreatePlayerTextDraw(playerid, bod_UIPositionX[playerid] - 95.0, ypos, string);
 		PlayerTextDrawAlignment			(playerid, bod_LabelData0[playerid][index][bl_textdraw], 1);
 		PlayerTextDrawBackgroundColor	(playerid, bod_LabelData0[playerid][index][bl_textdraw], 175);
 		PlayerTextDrawFont				(playerid, bod_LabelData0[playerid][index][bl_textdraw], 1);
