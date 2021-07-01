@@ -85,7 +85,8 @@ _HandleCustomMelee(playerid, ItemType:itemtype)
 		Float:ix,
 		Float:iy,
 		Float:iz,
-		Float:angle;
+		Float:angle,
+		Float:tmp;
 
 	GetPlayerPos(playerid, px, py, pz);
 
@@ -98,7 +99,7 @@ _HandleCustomMelee(playerid, ItemType:itemtype)
 
 		if(Distance(px, py, pz, ix, iy, iz) < 2.0)
 		{
-			if(CA_RayCastLine(px, py, pz, ix, iy, iz, iz, iz, iz))
+			if(CA_RayCastLine(px, py, pz, ix, iy, iz, tmp, tmp, tmp))
 				continue;
 
 			GetPlayerFacingAngle(playerid, pa);
