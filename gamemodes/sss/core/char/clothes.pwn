@@ -2,7 +2,7 @@
 #include <YSI_Coding\y_hooks>
 
 
-#define MAX_SKINS		(55)
+#define MAX_CLOTHES		(55)
 #define MAX_SKIN_NAME	(32)
 
 
@@ -19,7 +19,7 @@ Float:		skin_lootSpawnChance,
 
 static
 			skin_Total,
-			skin_Data[MAX_SKINS][E_SKIN_DATA],
+			skin_Data[MAX_CLOTHES][E_SKIN_DATA],
 			skin_CurrentSkin[MAX_PLAYERS],
 Item:		skin_CurrentlyUsing[MAX_PLAYERS];
 
@@ -52,7 +52,7 @@ hook OnItemCreate(Item:itemid)
 	if(GetItemType(itemid) == item_Clothes)
 	{
 		new
-			list[MAX_SKINS],
+			list[MAX_CLOTHES],
 			idx,
 			skinid;
 
