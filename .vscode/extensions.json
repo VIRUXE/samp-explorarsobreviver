@@ -1,5 +1,6 @@
 {
     "recommendations": [
-        "emilast.logfilehighlighter"
+        "emilast.logfilehighlighter",
+        "southclaws.vscode-pawn"
     ]
 }
