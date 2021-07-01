@@ -20,7 +20,7 @@ forward OnPlayerKnockOut(playerid);
 
 hook OnPlayerConnect(playerid)
 {
-	KnockoutBar = CreatePlayerProgressBar(playerid, 291.0, 315.0, 57.50, 5.19, RED, 100.0);
+	KnockoutBar = CreatePlayerProgressBar(playerid, 291.0, 390.0, 57.50, 5.19, RED, 100.0);
 	knockout_KnockedOut[playerid] = false;
 	knockout_InVehicleID[playerid] = INVALID_VEHICLE_ID;
 	knockout_InVehicleSeat[playerid] = -1;
@@ -106,7 +106,7 @@ stock WakeUpPlayer(playerid)
 	TogglePlayerVehicleEntry(playerid, true);
 	HidePlayerProgressBar(playerid, KnockoutBar);
 	HideActionText(playerid);
-	ApplyAnimation(playerid, "PED", "GETUP_FRONT", 4.0, 0, 1, 1, 0, 0);
+	ApplyAnimation(playerid, "PED", "GETUP_FRONT", 4.1, 0, 1, 1, 1, 0, 1);
 
 	knockout_Tick[playerid] = GetTickCount();
 	knockout_KnockedOut[playerid] = false;
@@ -137,7 +137,7 @@ timer KnockOutUpdate[100](playerid)
 
 			new animidx = GetPlayerAnimationIndex(playerid);
 
-			if(animidx != 1207 && animidx != 1018 && animidx != 1001)
+			if(animidx != 1207 && animidx != 1018 && animidx != 1001 && animidx != 1156)
 				_PlayKnockOutAnimation(playerid);
 		}
 
@@ -151,7 +151,7 @@ timer KnockOutUpdate[100](playerid)
 
 		new animidx = GetPlayerAnimationIndex(playerid);
 
-		if(animidx != 1207 && animidx != 1018 && animidx != 1001)
+		if(animidx != 1207 && animidx != 1018 && animidx != 1001 && animidx != 1156)
 			_PlayKnockOutAnimation(playerid);
 	}
 
@@ -168,6 +168,8 @@ timer KnockOutUpdate[100](playerid)
 
 _PlayKnockOutAnimation(playerid)
 {
+	SetPlayerVelocity(playerid, 0.0, 0.0, 0.0);
+	
 	if(!IsPlayerInAnyVehicle(playerid))
 	{
 		ApplyAnimation(playerid, "PED", "KO_SHOT_STOM", 4.0, 0, 1, 1, 1, 0, 1);
