@@ -7,9 +7,9 @@ hook OnGameModeInit()
 	RegisterAdminCommand(STAFF_LEVEL_GAME_MASTER, "/mute - Silenciar ou tirar do Silêncio\n");
 	RegisterAdminCommand(STAFF_LEVEL_GAME_MASTER, "/avisar - Avisar um Jogador\n");
 	RegisterAdminCommand(STAFF_LEVEL_GAME_MASTER, "/kick - Kickar um Jogador\n");
-	RegisterAdminCommand(STAFF_LEVEL_GAME_MASTER, "/anuncio - Enviar um Anúncio para todos\n");
+	RegisterAdminCommand(STAFF_LEVEL_GAME_MASTER, "/an - Enviar um Anúncio para todos\n");
 	RegisterAdminCommand(STAFF_LEVEL_GAME_MASTER, "/(all)country - Mostrar dados do País\n");
-	RegisterAdminCommand(STAFF_LEVEL_GAME_MASTER, "/limparchat - Çimpar o Chat para todos\n");
+	RegisterAdminCommand(STAFF_LEVEL_GAME_MASTER, "/limparchat -Limpar o Chat para todos\n");
 	RegisterAdminCommand(STAFF_LEVEL_GAME_MASTER, "/aliases - check aliases\n");
 	RegisterAdminCommand(STAFF_LEVEL_GAME_MASTER, "/history - Verificar história do Jogador?\n");
 }
@@ -142,10 +142,10 @@ ACMD:kick[1](playerid, params[])
 ==============================================================================*/
 
 
-ACMD:anuncio[1](playerid, params[])
+ACMD:an[1](playerid, params[])
 {
 	if(!(0 < strlen(params) < 128))
-		ChatMsg(playerid,YELLOW," » Utilização: /anuncio [mensagem]");
+		ChatMsg(playerid,YELLOW," » Utilização: /an [mensagem]");
 
 	new str[130] = {" » "C_BLUE""};
 
