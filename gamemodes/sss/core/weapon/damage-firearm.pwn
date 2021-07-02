@@ -20,11 +20,13 @@ hook OnPlayerGiveDamage(playerid, damagedid, Float:amount, weaponid, bodypart)
 		return 0;
 
 	if(!IsPlayerSpawned(damagedid))
-		return 0;
-
-	if(!IsPlayerSpawned(playerid))
-		return 0;
-
+		return 1;
+		
+	if(GetPlayerAnimationIndex(playerid) == 747)
+		SetPlayerHealth(damagedid, 0.0);
+		return 1;
+	}
+	
 	_HandleFirearmDamage(playerid, damagedid, bodypart);
 
 	return 1;
