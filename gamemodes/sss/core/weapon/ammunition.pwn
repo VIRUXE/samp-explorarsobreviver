@@ -82,7 +82,6 @@ stock DefineItemTypeAmmo(ItemType:itemtype, const name[], calibre, Float:bleedra
 
 ==============================================================================*/
 
-
 hook OnItemNameRender(Item:itemid, ItemType:itemtype)
 {
 	new ammotype = ammo_ItemTypeAmmoType[itemtype];
@@ -90,19 +89,9 @@ hook OnItemNameRender(Item:itemid, ItemType:itemtype)
 	if(ammotype == -1)
 		return 0;
 
-	new
-		amount,
-		str[MAX_ITEM_TEXT];
-
+	new amount;
 	GetItemExtraData(itemid, amount);
-
-	format(str, sizeof(str), "%d, %s, %s",
-		amount,
-		clbr_Data[ammo_Data[ammotype][ammo_calibre]][clbr_name],
-		ammo_Data[ammotype][ammo_name]);
-
-	SetItemNameExtra(itemid, str);
-
+	SetItemNameExtra(itemid, sprintf("%d, %s, %s", amount, clbr_Data[ammo_Data[ammotype][ammo_calibre]][clbr_name], ammo_Data[ammotype][ammo_name]) );
 	return 1;
 }
 
