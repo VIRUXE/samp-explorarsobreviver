@@ -137,7 +137,7 @@ timer KnockOutUpdate[100](playerid)
 
 			new animidx = GetPlayerAnimationIndex(playerid);
 
-			if(animidx != 1207 && animidx != 1018 && animidx != 1001 && animidx != 1156)
+			if(animidx != 1207 && animidx != 1018 && animidx != 1001)
 				_PlayKnockOutAnimation(playerid);
 		}
 
@@ -151,7 +151,7 @@ timer KnockOutUpdate[100](playerid)
 
 		new animidx = GetPlayerAnimationIndex(playerid);
 
-		if(animidx != 1207 && animidx != 1018 && animidx != 1001 && animidx != 1156)
+		if(animidx != 1207 && animidx != 1018 && animidx != 1001)
 			_PlayKnockOutAnimation(playerid);
 	}
 
@@ -252,7 +252,7 @@ _vehicleCheck(playerid)
 
 	new animidx = GetPlayerAnimationIndex(playerid);
 
-	if(animidx != 1207 && animidx != 1018 && animidx != 1001)
+	if(animidx != 1207 && animidx != 1018)
 		_PlayKnockOutAnimation(playerid);
 }
 
