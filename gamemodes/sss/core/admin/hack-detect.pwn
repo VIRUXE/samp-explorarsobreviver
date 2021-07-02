@@ -471,18 +471,13 @@ ptask UpdatePlayerPSU[500](playerid)
 			}
 			else if(!psu_View[i][playerid])
 			{
-				new Float:x, Float:y, Float:z, Float:r;
-				GetPlayerPos(playerid, x, y, z);
-				GetPlayerFacingAngle(playerid, r);
-				x -= 150.0 * floatsin(-r, degrees), y -= 150.0 * floatcos(-r, degrees);
-
 			    BS_WriteValue(bs,
 					PR_UINT16, i,
 			        PR_UINT8, GetPlayerTeam(i),
 			        PR_UINT32, GetPlayerSkin(i),
-			        PR_FLOAT, x,
-			        PR_FLOAT, y,
-			        PR_FLOAT, z,
+			        PR_FLOAT, 0.0,
+			        PR_FLOAT, 0.0,
+			        PR_FLOAT, 0.0,
 			        PR_FLOAT, 0.0,
 			        PR_UINT32, GetPlayerColor(i),
 			        PR_UINT8, GetPlayerFightingStyle(i));
