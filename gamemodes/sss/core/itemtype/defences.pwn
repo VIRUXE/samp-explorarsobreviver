@@ -1034,9 +1034,12 @@ hook OnItemDestroy(Item:itemid)
 
 	if(def_ItemTypeDefenceType[itemtype] != -1)
 	{
-		if(GetItemHitPoints(itemid) <= 0)
+		new active;
+		GetItemArrayDataAtCell(itemid, active, def_active);
+		if(active)
 		{
 			CA_DestroyObject(def_Col[itemid]);
+			CallLocalFunction("OnDefenceDestroy", "d", _:itemid);
 		}
 	}
 }
