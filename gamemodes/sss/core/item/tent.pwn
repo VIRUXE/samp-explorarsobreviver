@@ -490,6 +490,8 @@ hook OnHoldActionFinish(playerid)
 	{
 		if(GetItemType(GetPlayerItem(playerid)) == item_Hammer)
 		{
+			ClearAnimations(playerid);
+			HideActionText(playerid);
 			tnt_TweakID[playerid] = CreateTentFromItem(tnt_CurrentTentItem[playerid]);
 			TweakItem(playerid, tnt_CurrentTentItem[playerid]);
 		}
