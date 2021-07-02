@@ -10,7 +10,7 @@
 #define MAX_REMOVED_OBJECTS		(1000)
 #define MAX_MATERIAL_SIZE		(14)
 #define MAX_MATERIAL_LEN		(8)
-#define SESSION_NAME_LEN		(40)
+#define SESSION_NAME_LEN		(51)
 
 enum
 {
