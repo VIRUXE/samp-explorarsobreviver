@@ -114,3 +114,15 @@ hook OnPlayerUseItemWithItem(playerid, Item:itemid, Item:withitemid)
 	ShowActionText(playerid, ls(playerid, "INVHOLDINGI"), 3000);
 	return Y_HOOKS_CONTINUE_RETURN_0;
 }
+
+/*==============================================================================
+
+	Temporary disable give item
+	
+==============================================================================*/
+
+hook OnPlayerGiveItem(playerid, targetid, Item:itemid)
+{
+	return Y_HOOKS_BREAK_RETURN_1;
+	//return Y_HOOKS_CONTINUE_RETURN_0;
+}
