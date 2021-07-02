@@ -305,7 +305,7 @@ hook OnPlayerUseItem(playerid, Item:itemid)
 
 		ApplyAnimation(playerid, "BOMBER", "BOM_PLANT_IN", 4.0, 0, 0, 0, 1, 0);
 
-		format(string, sizeof(string), "Active:%d\nSeed type:%d\nWater:%d\nGrowth:%d/%d\n",
+		format(string, sizeof(string), "Active: %s\nTipo de Semente: %s\nÁgua: %d\nCrescimento: %d/%d\n",
 			potdata[E_PLANT_POT_ACTIVE],
 			potdata[E_PLANT_POT_SEED_TYPE],
 			potdata[E_PLANT_POT_WATER],
@@ -317,7 +317,7 @@ hook OnPlayerUseItem(playerid, Item:itemid)
 			#pragma unused pid, dialogid, response, listitem, inputtext
 			ClearAnimations(playerid, 1);
 		}
-		Dialog_ShowCallback(playerid, using inline Response, DIALOG_STYLE_MSGBOX, "Vaso", string, "Sair");
+		Dialog_ShowCallback(playerid, using inline Response, DIALOG_STYLE_MSGBOX, "Estado do Vaso", string, "Sair");
 
 		return Y_HOOKS_BREAK_RETURN_1;
 	}

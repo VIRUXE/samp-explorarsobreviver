@@ -3,7 +3,7 @@
 hook OnGameModeInit(){
 	// 19331
 	new tmp;
-	tmp = DefineHatItem(item_fire_hat2);
+	tmp = DefineHatItem(item_FireHat2);
 
 	SetHatOffsetsForSkin(tmp, 60, 0.134999, -0.068999, 0.000999, -6.799998, 1.699999, -17.000009, 1.000000, 1.000000, 1.000000);
 	SetHatOffsetsForSkin(tmp, 170, 0.134999, -0.068999, 0.000999, -6.799998, 1.699999, -17.000009, 1.000000, 1.000000, 1.000000);

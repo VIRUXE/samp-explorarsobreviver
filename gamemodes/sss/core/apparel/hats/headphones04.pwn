@@ -3,7 +3,7 @@
 hook OnGameModeInit(){
 	// 19424
 	new tmp;
-	tmp = DefineHatItem(item_headphones04);
+	tmp = DefineHatItem(item_HeadPhones04);
 
 	SetHatOffsetsForSkin(tmp, 60, 0.049999, -0.020000, -0.007000, -88.800056, -4.200001, -90.199981, 1.112000, 0.896999, 0.931999);
 	SetHatOffsetsForSkin(tmp, 170, 0.049999, -0.020000, -0.007000, -88.800056, -4.200001, -90.199981, 1.112000, 0.896999, 0.931999);
