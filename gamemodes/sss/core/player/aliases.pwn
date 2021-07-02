@@ -221,7 +221,7 @@ CheckForExtraAccounts(playerid)
 		return 0;
 	}
 
-	ChatMsgAdmins(adminlevel, YELLOW, " » Aliases: "C_BLUE"(%d)"C_ORANGE" %s", count, string);
+	ChatMsgAdmins(1, YELLOW, " » Aliases: "C_BLUE"(%d)"C_ORANGE" %s", count, string);
 
 	return 1;
 }
