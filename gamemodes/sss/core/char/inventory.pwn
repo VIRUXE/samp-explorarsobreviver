@@ -141,7 +141,7 @@ ShowPlayerHealthInfo(playerid)
 		SetBodyPreviewLabel(playerid, tmp++, drugname, RED);
 	}
 
-	SetBodyPreviewLabel(playerid, tmp++, sprintf("Chance de Desmaio: %.1f%%", (GetPlayerKnockoutChance(playerid, 5.7) + GetPlayerKnockoutChance(playerid, 22.6)) / 2)), 0xFFFFFFFF);
+	SetBodyPreviewLabel(playerid, tmp++, sprintf("Chance de Desmaio: %.1f%%", (GetPlayerKnockoutChance(playerid, 5.7) + GetPlayerKnockoutChance(playerid, 22.6) / 2) ), 0xFFFFFFFF);
 }
 
 UpdatePlayerGear(playerid, show = 1)
