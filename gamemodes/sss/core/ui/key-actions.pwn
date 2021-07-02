@@ -357,11 +357,8 @@ _UpdateKeyActions(playerid)
 			AddToolTipText(playerid, KEYTEXT_INTERACT, "Usar Chapeu");
 		else if(GetItemTypeExplosiveType(itemtype) != -1)
 			AddToolTipText(playerid, KEYTEXT_INTERACT, "Armar Explosivo");
-		else if(GetItemTypeLiquidContainerType(itemtype) != -1)
-		{
-			if(GetLiquidItemLiquidType(itemid) != liquid_Petrol) 
-				AddToolTipText(playerid, KEYTEXT_INTERACT, "Beber");
-		}
+		else if(GetItemTypeLiquidContainerType(itemtype) != -1 && itemtype != item_GasCan)
+			AddToolTipText(playerid, KEYTEXT_INTERACT, "Beber");
 	}
 
 	if(GetItemTypeWeapon(itemtype) != -1)
