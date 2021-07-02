@@ -625,6 +625,7 @@ public OnScriptInit()
 	SetNameTagDrawDistance(gNameTagDistance);
 	ManualVehicleEngineAndLights();
 
+
 // ITEM TYPE DEFINITIONS
 	item_Accelerometer	= DefineItemType("Acelarometro",				"Accelerometer",	327,	1,	0.0, 0.0, 0.0,			0.0,	0.008151, 0.012682, -0.050635, 0.000000, 0.000000, 0.000000, .maxhitpoints = 1);
 	item_AdvancedKeypad	= DefineItemType("Teclado Avancado",		"AdvancedKeypad",	19273,	2,	270.0, 0.0, 0.0,		0.0,	0.198234, 0.101531, 0.095477, 0.000000, 343.020019, 0.000000, .maxhitpoints = 2);
@@ -1318,7 +1319,7 @@ public OnScriptInit()
 	DefineDefenceItem(item_Cuntainer,	0.0, 0.0, 0.0,		0.0, 0.0, 0.0,		1.453499, 	false);
 	DefineDefenceItem(item_DarkWood,	0.0, 0.0, 90.0,		0.0, 0.0, 	0.0,	1.720000, 	false);
 	DefineDefenceItem(item_Door,		0.0, 0.0, 0.0,		90.0, 0.0, 0.0,		0.031968, 	true);
-	DefineDefenceItem(item_InsulDoor,	90.0, 90.0, 0.0,	180.0, 90.0, 0.0,	1.700000, 	false);
+	DefineDefenceItem(item_InsulDoor,	0.0, 0.0, 90.0,		180.0, 90.0, 0.0,	1.700000, 	false);
 	DefineDefenceItem(item_InsulPanel,	90.0, 90.0, 0.0,	180.0, 90.0, 0.0,	1.700000, 	true);
 	DefineDefenceItem(item_LargeFrame,	0.0, 0.0, 0.0,		0.0, 0.0, 0.0,		1.500000, 	false);
 	DefineDefenceItem(item_MetalGate,	0.0, 0.0, 0.0,		90.0, 0.0, 0.0,		1.242187, 	true);
