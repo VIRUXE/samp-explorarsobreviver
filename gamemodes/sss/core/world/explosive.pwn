@@ -448,6 +448,10 @@ hook OnPlayerSelectCntOpt(playerid, Container:containerid, option)
 
 	GetPlayerContainerSlot(playerid, slot);
 	GetContainerSlotItem(containerid, slot, itemid);
+
+	if(!IsValidItem(itemid))
+		return Y_HOOKS_CONTINUE_RETURN_0;
+		
 	itemtype = GetItemType(itemid);
 
 	if(exp_ItemTypeExplosive[itemtype] != INVALID_EXPLOSIVE_TYPE)
