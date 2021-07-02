@@ -38,7 +38,7 @@ static
 
 static
 Float:		sup_DropLocationData[MAX_SUPPLY_DROP_LOCATIONS][E_SUPPLY_DROP_LOCATION_DATA],
-   Iterator:sup_Index<MAX_SUPPLY_DROP_LOCATIONS>,
+Iterator:	sup_Index<MAX_SUPPLY_DROP_LOCATIONS>,
 			sup_TotalLocations,
 Timer:		sup_UpdateTimer,
 			sup_CurrentType = -1,
@@ -306,6 +306,8 @@ SupplyCrateLand()
 	GetContainerFreeSlots(Container:sup_Containerid, freeslots);
 	dbg("supply-crate", 2, "[SupplyCrateLand] Spawned %d items in supply crate container %d", 32 - freeslots, _:sup_Containerid);
 
+	DestroyDynamicObject(sup_ObjCrate1);
+	DestroyDynamicObject(sup_ObjCrate2);
 	DestroyDynamicObject(sup_ObjPara);
 	sup_CurrentType = -1;
 	sup_ObjCrate1 = INVALID_OBJECT_ID;
