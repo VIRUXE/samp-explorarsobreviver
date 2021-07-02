@@ -106,15 +106,6 @@ func Run(cfg Config) error {
 }
 
 func shouldEnsure(dir string) bool {
-	if isDirEmpty(dir) {
-		zap.L().Info("Current directory is empty, cloning new copy of Scavenge and Survive")
-		if err := Ensure(); err != nil {
-			panic(errors.Wrap(err, "failed to ensure"))
-		}
-		zap.L().Info("doing first-time ensure and build: current dir is empty")
-		return true
-	}
-
 	if _, err := os.Stat(filepath.Join(dir, "dependencies")); os.IsNotExist(err) {
 		zap.L().Info("doing first-time ensure and build: dependencies missing")
 		return true
