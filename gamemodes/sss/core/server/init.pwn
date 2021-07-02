@@ -960,7 +960,7 @@ public OnScriptInit()
 	item_Desk			= DefineItemType("Desk",				"Desk",				2180,	14,	0.0, 0.0, 0.0,			-0.0320, .maxhitpoints = 14, .longpickup = true);
 	item_GarageDoor		= DefineItemType("",					"GarageDoor",		19908,	14, 0.0, 90.0, 0.0,			0.0, .maxhitpoints = 10);
 	item_GunCase		= DefineItemType("Gun Case",			"GunCase",			2046,	12,	0.0, 0.0, 0.0,			0.5, .maxhitpoints = 12, .longpickup = true);
-	item_LargeFrame		= DefineItemType("",					"LargeFrame",		19157,	20,	0.0, 0.0, 0.0,			-0.03, .maxhitpoints = 12);
+	item_LargeFrame		= DefineItemType("Large Frame",			"LargeFrame",		19157,	20,	0.0, 0.0, 0.0,			-0.03, .maxhitpoints = 12);
 	item_SmallTable		= DefineItemType("Small Table",			"SmallTable",		2346,	10,	0.0, 0.0, 0.0,			-0.03, .maxhitpoints = 10, .longpickup = true);
 	item_Table			= DefineItemType("Table",				"Table",			2115,	14,	0.0, 0.0, 0.0,			-0.0280, .maxhitpoints = 14, .longpickup = true);
 // 300
