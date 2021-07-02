@@ -22,7 +22,7 @@ CreateLootVehicle(type, Float:x, Float:y, Float:z, Float:r)
 			colour2 = 128 + random(128);
 		}
 	}
-
+	
 	vehicleid = CreateWorldVehicle(type, x, y, z, r, colour1, colour2);
 	SetVehicleEngine(vehicleid, 0);
 
@@ -124,6 +124,8 @@ GenerateVehicleData(vehicleid)
 
 			if(locked)
 				SetVehicleExternalLock(vehicleid, E_LOCK_STATE_DEFAULT);
+			else
+				SetVehicleTrunkLock(vehicleid, 0);
 		}
 	}
 
