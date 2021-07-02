@@ -194,8 +194,8 @@ _DisplaySafeboxDialog(playerid, Item:itemid, animation)
 	new Container:containerid;
 	GetItemArrayDataAtCell(itemid, _:containerid, 0);
 
-	if(box_ContainerSafebox[containerid] != itemid)
-		return 0;
+	//if(box_ContainerSafebox[containerid] != itemid)
+		//return 0;
 		
 	DisplayContainerInventory(playerid, containerid);
 	box_CurrentBoxItem[playerid] = itemid;
