@@ -200,9 +200,12 @@ _DrinkItem(playerid, Item:itemid)
 		return 0;
 	}
 
-	new ed;
-	GetItemExtraData(itemid, ed);
-	if(ed > 0)
+	new
+		data[2];
+
+	GetItemArrayData(itemid, data);
+
+	if(Float:data[0] > 0.001)
 	{
 		new
 			liquidtype,
