@@ -527,7 +527,7 @@ hook OnPlayerAddToInventory(playerid, Item:itemid, success)
 			itemsize,
 			freeslots;
 
-		if(IsValidItem(bag_PlayerBagID[playerid]) && !IsPlayerViewingInventory(playerid))
+		if(IsValidItem(bag_PlayerBagID[playerid]))
 		{
 			new Container:containerid, Error:e;
 			e = GetItemArrayDataAtCell(bag_PlayerBagID[playerid], _:containerid, 1);
