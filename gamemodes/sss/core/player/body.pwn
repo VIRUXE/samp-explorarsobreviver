@@ -381,7 +381,7 @@ CreateBody(const name[], Float:x, Float:y, Float:z, Float:a, w, i, s)
 	if(id == ITER_NONE)
 		return -1;
 
-	id = CreateDynamicActor(s, x, y, z + 0.15, a, false, 100.0, w, i); // 0.15 = for fix in-vehicle bug!!
+	id = CreateDynamicActor(s, x, y, z + 0.15, a, false, 100.0, w, i); 
 
 	if(!IsValidDynamicActor(id))
 		return 0;
@@ -393,7 +393,9 @@ CreateBody(const name[], Float:x, Float:y, Float:z, Float:a, w, i, s)
 	if(IsValidDynamic3DTextLabel(body_NameTag[id]))
 		DestroyDynamic3DTextLabel(body_NameTag[id]);
 
-	body_NameTag[id] = CreateDynamic3DTextLabel(sprintf("%s{FFFFFF}(Corpo)", body_PlayerName[id]), 0xB8B8B8FF, x, y, z + 1.0, gNameTagDistance, INVALID_PLAYER_ID, INVALID_VEHICLE_ID, 1, w, i);
+	body_NameTag[id] = CreateDynamic3DTextLabel(sprintf("%s{FFFFFF}(Corpo)", body_PlayerName[id]), 0xB8B8B8FF, x, y, z, gNameTagDistance, INVALID_PLAYER_ID, INVALID_VEHICLE_ID, 1, w, i);
+
+	ApplyDynamicActorAnimation(id, "SUNBATHE", "PARKSIT_M_IN", 4.1, 0, 0, 0, 1, 0);
 
 	Iter_Add(body_Count, id);
 
@@ -810,6 +812,7 @@ public OnPlayerGiveDamageDynamicActor(playerid, actorid, Float:amount, weaponid,
 	//ChatMsg(playerid, -1, "Actorid: %d, Amount: %0.2f, Weaponid: %d, bodypart: %d", actorid, Float:amount, weaponid, bodypart);
 	return 1;
 }
+
 
 /*
 forward OnPlayerGiveDamageDynamicActor(playerid, STREAMER_TAG_ACTOR:actorid, Float:amount, weaponid, bodypart);
