@@ -249,16 +249,16 @@ hook OnItemNameRender(Item:itemid, ItemType:itemtype)
 	else if(itemtype == item_WheelLock)
 	{
 		new value, Error:e;
-		e = GetItemArrayDataAtCell(itemid, value, 0);
+		e = GetItemArrayDataAtCell(itemid, value, 1);
 		if(!IsError(e))
 		{
 			if(value == 0)
 			{
-				SetItemNameExtra(itemid, "Uncut");
+				SetItemNameExtra(itemid, "Destravado");
 			}
 			else
 			{
-				SetItemNameExtra(itemid, "Cut");
+				SetItemNameExtra(itemid, "Travado");
 			}
 		}
 	}
