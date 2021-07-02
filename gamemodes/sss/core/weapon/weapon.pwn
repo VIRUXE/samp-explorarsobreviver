@@ -707,7 +707,7 @@ timer _UnloadWeapon[300](playerid, _itemid)
 	new Item:itemid = Item:_itemid;
 
 	dbg("weapon-core", 1, "[_UnloadWeapon] unloading item %d magammo %d reserve %d", _:itemid, GetItemWeaponItemMagAmmo(itemid), GetItemWeaponItemReserve(itemid));
-	if(GetPlayerItem(playerid) != itemid)
+	if(GetPlayerItem(playerid) != itemid || !IsValidItem(itemid))
 	{
 		itmw_DropItemID[playerid] = INVALID_ITEM_ID;
 		return;
@@ -728,6 +728,10 @@ timer _UnloadWeapon[300](playerid, _itemid)
 		Item:ammoitemid;
 
 	ammoitemtype = GetItemWeaponItemAmmoItem(itemid);
+
+	if(!IsValidItemType(ammoitemtype))
+		return;
+		
 	GetPlayerPos(playerid, x, y, z);
 	GetPlayerFacingAngle(playerid, r);
 
