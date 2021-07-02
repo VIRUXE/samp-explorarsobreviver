@@ -45,6 +45,9 @@ public OnGameModeInit()
 	// Note: DO NOT CHANGE THIS STRING!
 	print("[OnGameModeInit] FIRST_INIT");
 	
+	DisableInteriorEnterExits();
+	ShowNameTags(1);
+	EnableStuntBonusForAll(false);
 	OnGameModeInit_Setup();
 
 	#if defined main_OnGameModeInit
@@ -285,7 +288,6 @@ new
 		// server
 bool:	gAutoLoginWithIP,
 bool:	gPauseMap,
-bool:	gInteriorEntry,
 bool:	gPlayerAnimations,
 bool:	gVehicleSurfing,
 Float:	gNameTagDistance,
