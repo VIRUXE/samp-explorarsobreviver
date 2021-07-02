@@ -476,7 +476,7 @@ hook OnPlayerSelectCntOpt(playerid, Container:containerid, option)
 const GIVEDAM = 115;
 
 IRPC:GIVEDAM(playerid, BitStream:bs){
-	new bool:bGiveOrTake, wPlayerID, Float:damage_amount, dWeaponID, dBodypart;
+	/*new bool:bGiveOrTake, wPlayerID, Float:damage_amount, dWeaponID, dBodypart;
 	BS_ReadValue(bs,
 		PR_BOOL, bGiveOrTake,
 		PR_UINT16, wPlayerID,
@@ -485,11 +485,11 @@ IRPC:GIVEDAM(playerid, BitStream:bs){
 		PR_UINT32, dBodypart
 	);
 
-	/*ChatMsg(playerid, -1,
+	ChatMsg(playerid, -1,
 		"bGiveOrTake:%d, wPlayerID:%d, damage_amount:%0.2f, dWeaponID:%d, dBodypart:%d",
-			bGiveOrTake, wPlayerID, damage_amount, dWeaponID, dBodypart);*/
+			bGiveOrTake, wPlayerID, damage_amount, dWeaponID, dBodypart);
 	
-	/*if(wPlayerID > 999) // Is Body
+	if(wPlayerID > 999) // Is Body
 	{
 		SetPlayerHealth(wPlayerID, -damage_amount);
 		CallLocalFunction("OnPlayerGiveDamageDynamicActor", "ddfdd",
