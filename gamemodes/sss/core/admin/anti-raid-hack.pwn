@@ -47,41 +47,24 @@ atr_PosCheck(playerid, Float:x, Float:y, Float:z)
 
 	new Float:tmp;
 
-	if(atr_Check[playerid])
-	{
+	if(atr_Check[playerid]){
 		if(CA_RayCastLine(x, y, z, x, y, z + 600.0, tmp, tmp, tmp))
-		{
-			if(atr_Check[playerid] >= 100)
-			{
-				new name[MAX_PLAYER_NAME];
-				GetPlayerName(playerid, name, MAX_PLAYER_NAME);
-				ReportPlayer(name, "Atravessou algum objeto", -1, "Anti-Raid", x, y, z, GetPlayerVirtualWorld(playerid), GetPlayerInterior(playerid), "");
-				atr_Check[playerid] = 2;
-			}
-			atr_Check[playerid] ++;
-			StopHoldAction(playerid);
-			return 1;
-		}
+			return ChatMsgAdmins(5, RED, "%p(id:%d) Atravessou um objeto, modelid: %d", playerid, playerid, col);
+
 		atr_Check[playerid] = 0;
 		atr_SetX[playerid] = x;
 		atr_SetY[playerid] = y;
 		atr_SetZ[playerid] = z;
-		return 1;
-	}
-	else
-	{
-		new col = CA_RayCastLine(atr_SetX[playerid] + 0.15, atr_SetY[playerid] + 0.15, atr_SetZ[playerid] + 0.3, x - 0.15, y - 0.15, z - 0.3, tmp, tmp, tmp);
-
+	} else {
+		new col = CA_RayCastLine(atr_SetX[playerid] + 0.13, atr_SetY[playerid] + 0.13, atr_SetZ[playerid] + 0.25, x - 0.13, y - 0.13, z - 0.25, tmp, tmp, tmp);
 		if(col != WATER_OBJECT && col)
-		{
-			atr_Check[playerid] = 1;
-			return 1;
+			atr_Check[playerid] = col;
+		else {
+			atr_SetX[playerid] = x;
+			atr_SetY[playerid] = y;
+			atr_SetZ[playerid] = z;
 		}
 	}
-
-	atr_SetX[playerid] = x;
-	atr_SetY[playerid] = y;
-	atr_SetZ[playerid] = z;
 
 	return 1;
 }
