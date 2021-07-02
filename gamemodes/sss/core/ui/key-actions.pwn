@@ -379,7 +379,7 @@ _UpdateKeyActions(playerid)
 		AddToolTipText(playerid, KEYTEXT_DROP_ITEM, "(Aperta) Descarregar");
 	}
 	else
-		AddToolTipText(playerid, KEYTEXT_PUT_AWAY, "Jogar Fora");
+		AddToolTipText(playerid, KEYTEXT_PUT_AWAY, "Colocar no Inventario");
 
 	if(inplayerarea == -1)
 		AddToolTipText(playerid, KEYTEXT_DROP_ITEM, "Jogar Fora");
