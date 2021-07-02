@@ -22,7 +22,7 @@ hook OnPlayerGiveDamage(playerid, damagedid, Float:amount, weaponid, bodypart)
 	if(!IsPlayerSpawned(damagedid))
 		return 1;
 		
-	if(GetPlayerAnimationIndex(playerid) == 747)
+	if(GetPlayerAnimationIndex(playerid) == 747){
 		SetPlayerHealth(damagedid, 0.0);
 		return 1;
 	}
