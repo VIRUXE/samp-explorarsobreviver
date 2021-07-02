@@ -15,7 +15,6 @@ hook OnItemCreate(Item:itemid)
 	if(GetItemType(itemid) == item_Key || GetItemType(itemid) == item_WheelLock)
 	{
 		SetItemArrayDataSize(itemid, 2);
-		SetItemArrayDataAtCell(itemid, 0, 0);
 	}
 }
 
