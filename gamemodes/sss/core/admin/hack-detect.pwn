@@ -75,7 +75,7 @@ timer CheckPlayerRun[1000](playerid)
 	
 
 	return 1;
-}*/
+}
 
 timer CheckPlayersStream[100](playerid, streamid)
 {
@@ -137,7 +137,7 @@ CMD:lock2(playerid, params[])
 	ReportPlayer(name, "WallHack", -1, "WallHack", Pos[0], Pos[1], Pos[2], GetPlayerVirtualWorld(playerid), GetPlayerInterior(playerid), sprintf("%.1f, %.1f, %.1f", Pos[0], Pos[1], Pos[2]) );
 	
 	return 0;
-}
+}*/
 
 /*==============================================================================
 
