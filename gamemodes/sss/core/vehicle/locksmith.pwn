@@ -12,7 +12,7 @@ hook OnPlayerConnect(playerid)
 
 hook OnItemCreate(Item:itemid)
 {
-	if(GetItemType(itemid) == item_Key || GetItemType(itemid) == item_WheelLock)
+	if(GetItemType(itemid) == item_Key)
 	{
 		SetItemArrayDataSize(itemid, 2);
 	}
@@ -243,22 +243,6 @@ hook OnItemNameRender(Item:itemid, ItemType:itemtype)
 					GetVehicleTypeName(vehicletype, vehicletypename);
 					SetItemNameExtra(itemid, vehicletypename);
 				}
-			}
-		}
-	}
-	else if(itemtype == item_WheelLock)
-	{
-		new value, Error:e;
-		e = GetItemArrayDataAtCell(itemid, value, 1);
-		if(!IsError(e))
-		{
-			if(value == 0)
-			{
-				SetItemNameExtra(itemid, "Destravado");
-			}
-			else
-			{
-				SetItemNameExtra(itemid, "Travado");
 			}
 		}
 	}
