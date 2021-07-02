@@ -12,13 +12,9 @@ hook OnPlayerConnect(playerid)
 
 hook OnItemCreate(Item:itemid)
 {
-	if(GetItemType(itemid) == item_Key)
+	if(GetItemType(itemid) == item_Key || GetItemType(itemid) == item_WheelLock)
 	{
-		SetItemArrayDataSize(itemid, 2);
-	}
-
-	if(GetItemType(itemid) == item_WheelLock)
-	{
+		SetItemArrayDataAtCell(itemid, 0, 0);
 		SetItemArrayDataSize(itemid, 2);
 	}
 }
