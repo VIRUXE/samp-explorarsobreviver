@@ -110,14 +110,17 @@ hook OnItemCreateInWorld(Item:itemid)
 
 	if(def_ItemTypeDefenceType[itemtype] != INVALID_DEFENCE_TYPE)
 	{
-		new itemdata[e_DEFENCE_DATA];
+		new itemdata[e_DEFENCE_DATA], Button:buttonid;
 
 		GetItemArrayData(itemid, itemdata);
+		GetItemButtonID(itemid, buttonid);
 
 		itemdata[def_active] = false;
 
 		if(itemdata[def_hit] > 0)
 			SetItemHitPoints(itemid, itemdata[def_hit]);
+
+		SetButtonSize(buttonid, 1.5); // Default = 1.0;
 
 		SetItemArrayData(itemid, itemdata, e_DEFENCE_DATA);
 	}
