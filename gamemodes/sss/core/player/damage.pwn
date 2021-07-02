@@ -11,8 +11,14 @@ public OnPlayerTakeDamage(playerid, issuerid, Float:amount, weaponid, bodypart)
 	if(IsPlayerOnAdminDuty(playerid))
 		return 0;
 
+	if(!IsPlayerSpawned(playerid))
+		return 1;
+
 	if(IsPlayerOnAdminDuty(issuerid))
 		return 0;
+
+	if(!IsPlayerSpawned(issuerid))
+		return 1;
 
 	if(bodypart == BODY_PART_HEAD)
 	{
@@ -27,7 +33,7 @@ public OnPlayerTakeDamage(playerid, issuerid, Float:amount, weaponid, bodypart)
 			}
 		}
 	}
-
+	
 	switch(weaponid)
 	{
 		case 31:
