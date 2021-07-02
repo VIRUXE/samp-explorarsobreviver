@@ -49,7 +49,7 @@ atr_PosCheck(playerid, Float:x, Float:y, Float:z)
 
 	if(atr_Check[playerid]){
 		if(CA_RayCastLine(x, y, z, x, y, z + 600.0, tmp, tmp, tmp))
-			return ChatMsgAdmins(5, RED, "%p(id:%d) Atravessou um objeto, modelid: %d", playerid, playerid, col);
+			return ChatMsgAdmins(5, RED, "%p(id:%d) Atravessou um objeto, modelid: %d", playerid, playerid, atr_Check[playerid]);
 
 		atr_Check[playerid] = 0;
 		atr_SetX[playerid] = x;
