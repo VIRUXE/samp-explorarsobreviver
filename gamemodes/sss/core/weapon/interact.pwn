@@ -227,6 +227,9 @@ _PickUpAmmoTransferCheck(playerid, Item:helditemid, Item:ammoitemid)
 // Transfer ammo from weapon to held weapon
 timer _TransferWeaponToWeapon[400](playerid, srcitem, tgtitem)
 {
+	if(!IsValidItem(Item:srcitem) || GetPlayerItem(playerid) != Item:tgtitem)
+		return;
+
 	new
 		magammo,
 		reserveammo,
@@ -247,12 +250,16 @@ timer _TransferWeaponToWeapon[400](playerid, srcitem, tgtitem)
 	}
 
 	ApplyAnimation(playerid, "BOMBER", "BOM_PLANT_2IDLE", 4.0, 0, 0, 0, 0, 0, 1);
+	return;
 }
 
 // Transfer ammo from ammo item to held weapon
 // Damn y_timers and it's length restrictions!
 timer _TransferTinToWeapon[400](playerid, srcitem, tgtitem)
 {
+	if(!IsValidItem(Item:srcitem) || GetPlayerItem(playerid) != Item:tgtitem)
+		return;
+
 	new
 		ammo,
 		remainder;
@@ -273,11 +280,15 @@ timer _TransferTinToWeapon[400](playerid, srcitem, tgtitem)
 	}
 
 	ApplyAnimation(playerid, "BOMBER", "BOM_PLANT_2IDLE", 4.0, 0, 0, 0, 0, 0, 1);
+	return;
 }
 
 // Transfer ammo from weapon to held ammo item
 timer _TransferWeaponToTin[400](playerid, srcitem, tgtitem)
 {
+	if(!IsValidItem(Item:srcitem) || GetPlayerItem(playerid) != Item:tgtitem)
+		return;
+
 	new
 		existing,
 		amount = GetItemWeaponItemMagAmmo(Item:srcitem) + GetItemWeaponItemReserve(Item:srcitem);
@@ -291,11 +302,15 @@ timer _TransferWeaponToTin[400](playerid, srcitem, tgtitem)
 	ShowActionText(playerid, sprintf(ls(playerid, "AMTRANSWTOT", true), amount), 3000);
 
 	ApplyAnimation(playerid, "BOMBER", "BOM_PLANT_2IDLE", 4.0, 0, 0, 0, 0, 0, 1);
+	return;
 }
 
 // Transfer ammo from ammo item to held ammo item
 timer _TransferTinToTin[400](playerid, srcitem, tgtitem)
 {
+	if(!IsValidItem(Item:srcitem) || GetPlayerItem(playerid) != Item:tgtitem)
+		return;
+
 	new
 		existing,
 		amount;
@@ -309,6 +324,7 @@ timer _TransferTinToTin[400](playerid, srcitem, tgtitem)
 	ShowActionText(playerid, sprintf(ls(playerid, "AMTRANSTTOT", true), amount), 3000);
 
 	ApplyAnimation(playerid, "BOMBER", "BOM_PLANT_2IDLE", 4.0, 0, 0, 0, 0, 0, 1);
+	return;
 }
 
 
