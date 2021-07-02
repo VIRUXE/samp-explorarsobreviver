@@ -359,7 +359,7 @@ _UpdateKeyActions(playerid)
 			AddToolTipText(playerid, KEYTEXT_INTERACT, "Armar Explosivo");
 		else if(GetItemTypeLiquidContainerType(itemtype) != -1)
 		{
-			if(GetLiquidItemLiquidType(itemid) != liquid_Petrol && GetLiquidItemLiquidAmount(itemid) > 0.0) 
+			if(GetLiquidItemLiquidType(itemid) != liquid_Petrol) 
 				AddToolTipText(playerid, KEYTEXT_INTERACT, "Beber");
 		}
 	}
