@@ -5,7 +5,7 @@
 ==============================================================================*/
 
 #undef MAX_PLAYERS
-#define MAX_PLAYERS						(10)
+#define MAX_PLAYERS						(32)
 
 // YSI
 #define _DEBUG							0
@@ -43,7 +43,7 @@
 // SS/item
 #define MAX_ITEM						Item:32768
 #define MAX_ITEM_TYPE					(ItemType:324)
-#define MAX_ITEM_NAME					(20)
+#define MAX_ITEM_NAME					(24)
 #define MAX_ITEM_TEXT					(64)
 #define MAX_CONTAINER_SLOTS				(100)
 

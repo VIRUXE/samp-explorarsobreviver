@@ -742,6 +742,8 @@ public OnPlayerGiveDamageDynamicActor(playerid, actorid, Float:amount, weaponid,
 	/*
 		Bag item
 	*/
+		itemid = INVALID_ITEM_ID;
+		
 		new bag_data[ITM_ARR_MAX_ARRAY_DATA];
 
 		length = modio_read(filename, _T<B,A,G,I>, sizeof(bag_data), bag_data);
@@ -760,32 +762,34 @@ public OnPlayerGiveDamageDynamicActor(playerid, actorid, Float:amount, weaponid,
 	/*
 		Bag - Itemid = ^
 	*/
-		if(IsValidContainer(GetBagItemContainerID(Item:itemid)))
-		{
-			length = modio_read(filename, _T<B,A,G,0>, ITEM_SERIALIZER_RAW_SIZE, itm_arr_Serialized);
-			if(length < 0)
+		if(IsValidItem(itemid)){
+			if(IsValidContainer(GetBagItemContainerID(Item:itemid)))
 			{
-				Logger_Err("modio read failed _T<B,A,G,0>",
-					Logger_I("error", length));
-			}
-			else if(!DeserialiseItems(itm_arr_Serialized, length, false))
-			{
-				new Item:itemid2;
-				for(new i, j = GetStoredItemCount(); i < j; i++)
+				length = modio_read(filename, _T<B,A,G,0>, ITEM_SERIALIZER_RAW_SIZE, itm_arr_Serialized);
+				if(length < 0)
 				{
-					itemtype = GetStoredItemType(i);
-					itemid2 = CreateItem(itemtype, .virtual = 1);
-
-					if(!IsItemTypeSafebox(itemtype) && !IsItemTypeBag(itemtype))
-						SetItemArrayDataFromStored(itemid2, i);
-
-					AddItemToContainer(GetBagItemContainerID(Item:itemid), itemid2);
+					Logger_Err("modio read failed _T<B,A,G,0>",
+						Logger_I("error", length));
 				}
-				ClearSerializer();
+				else if(!DeserialiseItems(itm_arr_Serialized, length, false))
+				{
+					new Item:itemid2;
+					for(new i, j = GetStoredItemCount(); i < j; i++)
+					{
+						itemtype = GetStoredItemType(i);
+						itemid2 = CreateItem(itemtype, .virtual = 1);
+
+						if(!IsItemTypeSafebox(itemtype) && !IsItemTypeBag(itemtype))
+							SetItemArrayDataFromStored(itemid2, i);
+
+						AddItemToContainer(GetBagItemContainerID(Item:itemid), itemid2);
+					}
+					ClearSerializer();
+				}
+
+				AddItemToContainer(containerid, itemid);
 			}
 		}
-		
-		AddItemToContainer(containerid, itemid);
 		
 		data[SAVED_BODY_WORLD] = 33;
 		modio_push(filename, _T<D,A,T,A>, SAVED_BODY_END, data);

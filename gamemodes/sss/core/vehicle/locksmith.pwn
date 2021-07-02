@@ -16,11 +16,6 @@ hook OnItemCreate(Item:itemid)
 	{
 		SetItemArrayDataSize(itemid, 2);
 	}
-
-	if(GetItemType(itemid) == item_WheelLock)
-	{
-		SetItemArrayDataSize(itemid, 2);
-	}
 }
 
 public OnPlayerInteractVehicle(playerid, vehicleid, Float:angle)
@@ -248,22 +243,6 @@ hook OnItemNameRender(Item:itemid, ItemType:itemtype)
 					GetVehicleTypeName(vehicletype, vehicletypename);
 					SetItemNameExtra(itemid, vehicletypename);
 				}
-			}
-		}
-	}
-	else if(itemtype == item_WheelLock)
-	{
-		new value, Error:e;
-		e = GetItemArrayDataAtCell(itemid, value, 0);
-		if(!IsError(e))
-		{
-			if(value == 0)
-			{
-				SetItemNameExtra(itemid, "Uncut");
-			}
-			else
-			{
-				SetItemNameExtra(itemid, "Cut");
 			}
 		}
 	}

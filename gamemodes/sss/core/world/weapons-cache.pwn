@@ -166,7 +166,7 @@ timer WeaponsCacheSignal[WEPCACHE_SIGNAL_INTERVAL](count, Float:x, Float:y, Floa
 		Float:angleto,
 		Float:distanceto;
 
-	for(new i, j = random(Iter_Free(wepc_Index)); i < j; i++)
+	for(new i, j = random(Iter_Free(wepc_Index)) - 1; i < j; i++)
 	{
 		ref_x = wepc_DropLocationData[i][wepc_posX];
 		ref_y = wepc_DropLocationData[i][wepc_posY];
