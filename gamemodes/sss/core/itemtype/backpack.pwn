@@ -38,7 +38,6 @@ Item:		bag_ContainerItem		[MAX_CONTAINER],
 static
 Item:		bag_PlayerBagID			[MAX_PLAYERS],
 			bag_InventoryOptionID	[MAX_PLAYERS],
-bool:		bag_PuttingInBag		[MAX_PLAYERS],
 bool:		bag_TakingOffBag		[MAX_PLAYERS],
 Item:		bag_CurrentBag			[MAX_PLAYERS],
 Timer:		bag_OtherPlayerEnter	[MAX_PLAYERS],
@@ -68,7 +67,6 @@ hook OnScriptInit()
 hook OnPlayerConnect(playerid)
 {
 	bag_PlayerBagID[playerid] = INVALID_ITEM_ID;
-	bag_PuttingInBag[playerid] = false;
 	bag_TakingOffBag[playerid] = false;
 	bag_CurrentBag[playerid] = INVALID_ITEM_ID;
 	bag_LookingInBag[playerid] = INVALID_PLAYER_ID;
@@ -362,9 +360,6 @@ _BagEquipHandler(playerid)
 	if(!IsValidItem(itemid))
 		return 0;
 
-	if(bag_PuttingInBag[playerid])
-		return 0;
-
 	if(GetTickCountDifference(GetTickCount(), GetPlayerLastHolsterTick(playerid)) < 1000)
 		return 0;
 
@@ -463,12 +458,6 @@ _BagRummageHandler(playerid)
 	return 1;
 }
 
-timer bag_PutItemIn[300](playerid, itemid, containerid)
-{
-	AddItemToContainer(Container:containerid, Item:itemid, playerid);
-	bag_PuttingInBag[playerid] = false;
-}
-
 timer bag_EnterOtherPlayer[250](playerid, targetid)
 {
 	_DisplayBagDialog(playerid, Item:bag_PlayerBagID[targetid], false);
@@ -557,8 +546,7 @@ hook OnPlayerAddToInventory(playerid, Item:itemid, success)
 					{
 						ShowActionText(playerid, ls(playerid, "BAGITMADDED", true), 3000, 150);
 						ApplyAnimation(playerid, "PED", "PHONE_IN", 4.0, 1, 0, 0, 0, 300);
-						bag_PuttingInBag[playerid] = true;
-						defer bag_PutItemIn(playerid, _:itemid, _:containerid);
+						AddItemToContainer(containerid, itemid, playerid);
 					}
 					
 					return Y_HOOKS_CONTINUE_RETURN_0;
