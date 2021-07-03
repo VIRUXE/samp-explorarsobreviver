@@ -39,7 +39,7 @@ hook OnPlayerConnect(playerid)
 {
 	defer _WhitelistConnect(playerid);
 
-	wl_CountdownUI[playerid]		=CreatePlayerTextDraw(playerid, 430.0, 40.0, "Not whitelisted~n~Time remaining: 00:00");
+	wl_CountdownUI[playerid]		=CreatePlayerTextDraw(playerid, 430.0, 40.0, "Nao se encontra na Whitelist~n~Tempo restante: 00:00");
 	PlayerTextDrawAlignment			(playerid, wl_CountdownUI[playerid], 2);
 	PlayerTextDrawBackgroundColor	(playerid, wl_CountdownUI[playerid], 255);
 	PlayerTextDrawFont				(playerid, wl_CountdownUI[playerid], 1);
@@ -215,9 +215,9 @@ stock WhitelistWarn(playerid)
 	new str[999];
 
 	format(str, sizeof(str), ""C_WHITE"Você precisa registrar na WhiteList para jogar no servidor.\n\n\
-		"C_WHITE"\t1. Entre em: "C_BLUE"%s"C_WHITE".\n\
+		"C_WHITE"\t1. Entre em: "C_BLUE"%s"C_WHITE". (Enquanto mantém o jogo aberto!)\n\
 		"C_WHITE"\t2. Digite %P"C_WHITE" em #whitelist\n\
-		"C_WHITE"\t3. Volte aqui e pronto, você já pode jogar :) \n\n\
+		"C_WHITE"\t3. Volte aqui, clique em \"Jogar\" e pronto, você já pode se divertir! :) \n\n\
 		"C_YELLOW"Aviso:"C_WHITE" Isso serve como proteção para o servidor.\nPedimos sua compreensão.",
 		gWebsiteURL, playerid);
 		
