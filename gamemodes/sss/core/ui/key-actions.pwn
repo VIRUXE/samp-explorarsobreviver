@@ -364,27 +364,16 @@ _UpdateKeyActions(playerid)
 	if(GetItemTypeWeapon(itemtype) != -1)
 	{
 		ClearPlayerKeyActionUI(playerid);
-
-		foreach(new i : Player)
-		{
-			if(IsPlayerNextToPlayer(playerid, i))
-			{
-				inplayerarea = i;
-				break;
-			}
-		}
-
 		AddToolTipText(playerid, KEYTEXT_PUT_AWAY, "Guardar no Coldre");
 		AddToolTipText(playerid, KEYTEXT_RELOAD, "Recarregar");
-		AddToolTipText(playerid, KEYTEXT_DROP_ITEM, "(Aperta) Descarregar");
+		AddToolTipText(playerid, KEYTEXT_DROP_ITEM, "(Segurar) Descarregar");
 	}
 	else
 		AddToolTipText(playerid, KEYTEXT_PUT_AWAY, "Colocar no Inventario");
 
-	if(inplayerarea == -1)
-		AddToolTipText(playerid, KEYTEXT_DROP_ITEM, "Jogar Fora");
-	else
-		AddToolTipText(playerid, KEYTEXT_DROP_ITEM, "Dar");
+	//if(inplayerarea == -1)
+	AddToolTipText(playerid, KEYTEXT_DROP_ITEM, "Jogar Fora");
+	//else AddToolTipText(playerid, KEYTEXT_DROP_ITEM, "Dar");
 
 	AddToolTipText(playerid, KEYTEXT_INVENTORY, "Abrir Inventario");
 	ShowPlayerKeyActionUI(playerid);
