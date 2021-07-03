@@ -196,7 +196,7 @@ ActivateDefenceItem(Item:itemid)
 	return 0;
 }
 
-DeconstructDefence(Item:itemid)
+DeconstructDefence(Item:itemid, playerid)
 {
 	new
 		Float:x,
@@ -211,11 +211,43 @@ DeconstructDefence(Item:itemid)
 	GetItemArrayData(itemid, itemdata);
 	GetItemTypeName(itemtype, name);
 
-	if(itemdata[def_pose] == DEFENCE_POSE_VERTICAL)
-		z -= def_TypeData[def_ItemTypeDefenceType[itemtype]][def_placeOffsetZ];
+	CA_DestroyObject(def_Col[itemid]);
 
+	if(itemdata[def_pose] == DEFENCE_POSE_VERTICAL)
+	{
+		new
+			Item:list[MAX_CONSTRUCT_SET_ITEMS] = {INVALID_ITEM_ID, ...},
+			size, ItemType:itemtype2, active, pose, Float:x2, Float:y2, Float:z2;
+
+		size = GetItemsInRange(x, y, z + ( 2 * def_TypeData[def_ItemTypeDefenceType[itemtype]][def_placeOffsetZ]), 1.5, list);
+
+		if(size > 0){
+			for(new i; i < size; i++){
+				if(list[i] == itemid)
+					continue;
+
+				itemtype2 = GetItemType(list[i]);
+				if(def_ItemTypeDefenceType[itemtype2] != -1){
+					GetItemArrayDataAtCell(list[i], active, def_active);
+					if(active){
+						GetItemArrayDataAtCell(list[i], pose, def_pose);
+						if(pose == DEFENCE_POSE_VERTICAL){
+							GetItemPos(list[i], x2, y2, z2);
+							if( z2 > z){
+								z -= def_TypeData[def_ItemTypeDefenceType[itemtype]][def_placeOffsetZ];
+								SetItemPos(list[i], x2, y2, z + def_TypeData[def_ItemTypeDefenceType[itemtype2]][def_placeOffsetZ]);
+								CallLocalFunction("OnDefenceModified", "d", _:list[i]);
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+
+	GetPlayerPos(playerid, x, y, z);
 	SetItemLabel(itemid, name);
-	SetItemPos(itemid, x, y, z);
+	SetItemPos(itemid, x, y, z - ITEM_FLOOR_OFFSET);
 	SetItemRot(itemid, 0.0, 0.0, 0.0, true);
 
 	SetItemArrayDataAtCell(itemid, false, def_active);
@@ -224,8 +256,6 @@ DeconstructDefence(Item:itemid)
 	SetItemArrayDataAtCell(itemid, 0, def_keypad);
 	SetItemArrayDataAtCell(itemid, 0, def_pass);
 	SetItemArrayDataAtCell(itemid, 0, def_mod);
-
-	CA_DestroyObject(def_Col[itemid]);
 
 	CallLocalFunction("OnDefenceDestroy", "d", _:itemid);
 }
@@ -617,7 +647,7 @@ hook OnHoldActionFinish(playerid)
 			ShowActionText(playerid, ls(playerid, "DEFDISMANTL"));
 			GetItemTypeModel(GetItemType(def_CurrentDefenceEdit[playerid]), model);
 
-			DeconstructDefence(def_CurrentDefenceEdit[playerid]);
+			DeconstructDefence(def_CurrentDefenceEdit[playerid], playerid);
 
 			log("[CROWBAR] %p broke defence %d (%s) (%d, %f, %f, %f, %f, %f, %f)",
 				playerid, _:def_CurrentDefenceEdit[playerid], uuid,
@@ -797,8 +827,54 @@ hook OnItemTweakUpdate(playerid, Item:itemid)
 {
 	if(def_TweakArrow[playerid] != INVALID_OBJECT_ID)
 	{
+		// Automatically stack defenses
+		new pose;
+		GetItemArrayDataAtCell(Item:itemid, pose, def_pose);
+		if(pose == DEFENCE_POSE_VERTICAL)
+		{
+			new
+				Item:list[MAX_CONSTRUCT_SET_ITEMS] = {INVALID_ITEM_ID, ...},
+				size, Float:x, Float:y, Float:z, ItemType:itemtype, active,
+				modelid, Float:tmp, Float:maxz, Float:x2, Float:y2, Float:z2;
+
+			GetItemPos(itemid, x, y, z);
+
+			size = GetItemsInRange(x, y, z, 1.0, list);
+
+			if(size > 0){
+				for(new i; i < size; i++){
+					if(list[i] == itemid)
+						continue;
+
+					itemtype = GetItemType(list[i]);
+					if(def_ItemTypeDefenceType[itemtype] != -1){
+						GetItemArrayDataAtCell(list[i], active, def_active);
+						if(active){
+							GetItemArrayDataAtCell(list[i], pose, def_pose);
+							if(pose == DEFENCE_POSE_VERTICAL)
+							{
+								GetItemTypeModel(GetItemType(list[i]), modelid);
+								CA_GetModelBoundingBox(modelid, tmp, tmp, tmp, tmp, tmp, maxz);
+								GetItemPos(list[i], x2, y2, z2);
+								if(z < z2 + (maxz - 0.1)){
+									CA_RayCastLine(x2, y2, z2 + maxz + 0.1, x2, y2, z2 - 10.0, tmp, tmp, tmp);
+									SetItemPos(itemid, x, y, tmp + (def_TypeData[def_ItemTypeDefenceType[GetItemType(itemid)]][def_placeOffsetZ] - 0.09));
+								}
+								return 1;
+							}
+						}
+					}
+				}
+			}
+
+			CA_RayCastLine(x, y, z, x, y, z - 300.0, tmp, tmp, tmp);
+			SetItemPos(itemid, x, y, tmp + def_TypeData[def_ItemTypeDefenceType[GetItemType(itemid)]][def_placeOffsetZ] + 0.08);
+		}
+
 		_UpdateDefenceTweakArrow(playerid, itemid);
 	}
+
+	return 1;
 }
 
 hook OnItemTweakFinish(playerid, Item:itemid)
