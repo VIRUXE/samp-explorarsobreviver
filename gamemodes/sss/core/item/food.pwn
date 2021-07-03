@@ -189,7 +189,7 @@ hook OnHoldActionFinish(playerid)
 {
 	if(food_CurrentItem[playerid] != INVALID_ITEM_ID)
 	{
-		_EatItem(playerid, food_CurrentItem[playerid]);
+		//_EatItem(playerid, food_CurrentItem[playerid]);
 		return Y_HOOKS_BREAK_RETURN_1;
 	}
 
@@ -208,10 +208,10 @@ hook OnItemNameRender(Item:itemid, ItemType:itemtype)
 		if(food_Data[foodtype][food_canCook])
 		{
 			if(data[food_cooked] == 1)
-				SetItemNameExtra(itemid, sprintf("Cooked, %d%%", floatround((float(amount) / food_Data[foodtype][food_maxBites]) * 100.0)));
+				SetItemNameExtra(itemid, sprintf("Cozido, %d%%", floatround((float(amount) / food_Data[foodtype][food_maxBites]) * 100.0)));
 
 			else
-				SetItemNameExtra(itemid, sprintf("Uncooked, %d%%", floatround((float(amount) / food_Data[foodtype][food_maxBites]) * 100.0)));
+				SetItemNameExtra(itemid, sprintf("Cru, %d%%", floatround((float(amount) / food_Data[foodtype][food_maxBites]) * 100.0)));
 		}
 		else
 		{
