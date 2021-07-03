@@ -680,6 +680,8 @@ _inv_HandleGearSlotClick_Back(playerid)
 	if(!IsValidItem(itemid))
 		return 0;
 
+	ClosePlayerInventory(playerid);
+
 	new Container:containerid;
 	GetPlayerCurrentContainer(playerid, containerid);
 	if(containerid == GetBagItemContainerID(itemid))
@@ -687,9 +689,13 @@ _inv_HandleGearSlotClick_Back(playerid)
 		ClosePlayerContainer(playerid);
 
 		if(IsValidContainer(inv_TempContainerID[playerid]))
+		{
 			DisplayContainerInventory(playerid, inv_TempContainerID[playerid]);
+		}
 		else
+		{
 			DisplayPlayerInventory(playerid);
+		}
 
 		inv_TempContainerID[playerid] = INVALID_CONTAINER_ID;
 	}
@@ -700,10 +706,11 @@ _inv_HandleGearSlotClick_Back(playerid)
 		DisplayContainerInventory(playerid, GetBagItemContainerID(itemid));
 	}
 
-	UpdatePlayerGear(playerid);
+	UpdatePlayerGear(playerid, 0);
 
 	return 1;
 }
+
 
 
 hook OnPlayerViewCntOpt(playerid, Container:containerid)
