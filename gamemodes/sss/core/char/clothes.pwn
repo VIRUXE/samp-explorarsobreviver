@@ -84,10 +84,10 @@ hook OnItemNameRender(Item:itemid, ItemType:itemtype)
 		GetItemExtraData(itemid, data);
 
 		if(skin_Data[data][skin_gender] == GENDER_MALE)
-			strcat(exname, "Male ");
+			strcat(exname, "Homem ");
 
 		else
-			strcat(exname, "Female ");
+			strcat(exname, "Mulher ");
 
 		strcat(exname, skin_Data[data][skin_name]);
 
@@ -129,6 +129,7 @@ StartUsingClothes(playerid, Item:itemid)
 	StartHoldAction(playerid, 3000);
 	CancelPlayerMovement(playerid);
 	skin_CurrentlyUsing[playerid] = itemid;
+	ApplyAnimation(playerid, "CLOTHES", "CLO_Pose_Loop", 4.0, 0, 0, 0, 0, 0, 1);
 }
 
 StopUsingClothes(playerid)
@@ -150,6 +151,9 @@ hook OnHoldActionFinish(playerid)
 		SetPlayerClothes(playerid, skinid);
 		SetItemExtraData(skin_CurrentlyUsing[playerid], currentclothes);
 		StopUsingClothes(playerid);
+
+		SetPlayerHatItem(playerid, RemovePlayerHatItem(playerid));
+		SetPlayerMaskItem(playerid, RemovePlayerMaskItem(playerid));
 
 		return Y_HOOKS_BREAK_RETURN_1;
 	}
