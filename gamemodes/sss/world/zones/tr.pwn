@@ -1,7 +1,6 @@
 
 #include <YSI_Coding\y_hooks>
 
-
 Load_TR()
 {
 	CreateFuelOutlet(-1465.4766, 1868.2734, 32.8203, 2.0, 100.0, frandom(40.0));
@@ -20,11 +19,10 @@ Load_TR()
 	TR_District_Sherman();
 	TR_District_RobadaGen();
 
-	DefineSupplyDropPos("Tierra Robada South", -720.72766, 972.52899, 11.04721);
+	DefineSupplyDropPos("Sul de Tierra Robada", -720.72766, 972.52899, 11.04721);
 	DefineSupplyDropPos("Tierra Robada Midland", -1484.86084, 1977.28833, 46.76990);
-	DefineSupplyDropPos("Tierra Robada North Freeway", -2547.67798, 2614.91919, 59.90747);
+	DefineSupplyDropPos("Auto-estrada a Norte de Tierra Robada", -2547.67798, 2614.91919, 59.90747);
 }
-
 
 TR_District_Bayside()
 {

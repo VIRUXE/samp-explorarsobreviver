@@ -49,20 +49,20 @@ func runDiscord(ctx context.Context, ps *pubsub.PubSub, cfg Config) {
 		panic(err)
 	}
 
-	discord.ChannelMessageSend(cfg.DiscordChannelInfo, "Scavenge and Survive server starting!") //nolint:errcheck
+	discord.ChannelMessageSend(cfg.DiscordChannelInfo, "Servidor iniciando!") //nolint:errcheck
 
 	discord.AddHandler(func(s *discordgo.Session, m *discordgo.MessageCreate) {
 		switch m.Message.Content {
-		case "/status":
-			server, err := sampquery.GetServerInfo(ctx, "play.scavengesurvive.com:7777", false)
+		case "/estado":
+			server, err := sampquery.GetServerInfo(ctx, "sv.explorarsobreviver", false)
 			if err != nil {
-				discord.ChannelMessageSend(cfg.DiscordChannelInfo, "Failed to query :("+err.Error()) //nolint:errcheck
+				discord.ChannelMessageSend(cfg.DiscordChannelInfo, "Falhou :("+err.Error()) //nolint:errcheck
 			} else {
 				discord.ChannelMessageSendEmbed(cfg.DiscordChannelInfo, &discordgo.MessageEmbed{ //nolint:errcheck
-					Title: "Server Status",
+					Title: "Estado do Servidor",
 					Type:  discordgo.EmbedTypeRich,
 					Description: fmt.Sprintf(
-						"Players: %d/%d\nPing: %d",
+						"Jogadores: %d/%d\nPing: %d",
 						server.Players,
 						server.MaxPlayers,
 						server.Ping,
@@ -94,7 +94,7 @@ func runDiscord(ctx context.Context, ps *pubsub.PubSub, cfg Config) {
 			// }
 
 		case d := <-infoUpdate:
-			if _, err := discord.ChannelMessageSend(cfg.DiscordChannelInfo, fmt.Sprintf("A server update is on the way in %s", d.(time.Duration))); err != nil {
+			if _, err := discord.ChannelMessageSend(cfg.DiscordChannelInfo, fmt.Sprintf("Servidor irá ser actualizado em %s", d.(time.Duration))); err != nil {
 				zap.L().Error("failed to send discord message", zap.Error(err))
 			}
 
@@ -106,7 +106,7 @@ func runDiscord(ctx context.Context, ps *pubsub.PubSub, cfg Config) {
 
 			title, ok := data[sampLoggerMessageKey]
 			if !ok {
-				title = "Error"
+				title = "Erro"
 			}
 
 			fields := []*discordgo.MessageEmbedField{}
