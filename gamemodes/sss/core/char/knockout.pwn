@@ -62,6 +62,14 @@ stock KnockOutPlayer(playerid, duration)
 
 	ShowPlayerProgressBar(playerid, KnockoutBar);
 
+	new Float:z;
+	GetPlayerPos(playerid, z, z, z);
+	if(z < -0.5)
+	{
+		SetPlayerHP(playerid, -1);
+		return 1;
+	}
+
 	if(IsPlayerInAnyVehicle(playerid))
 	{
 		knockout_InVehicleID[playerid] = GetPlayerVehicleID(playerid);
