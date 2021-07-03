@@ -490,7 +490,7 @@ PlayerVehicleUpdate(playerid)
 			{
 				new Float:enginechance = (20 - ((health - VEHICLE_HEALTH_CHUNK_2) / 3));
 
-				SetVehicleHealth(vehicleid, health - ((VEHICLE_HEALTH_CHUNK_1 - (health - VEHICLE_HEALTH_CHUNK_1)) / 1000.0));
+				SetVehicleHealth(vehicleid, health - ((VEHICLE_HEALTH_CHUNK_1 - (health - VEHICLE_HEALTH_CHUNK_1)) / 900.0));
 
 				if(GetPlayerTotalVelocity(playerid) > 30.0)
 				{
