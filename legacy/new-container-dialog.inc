@@ -151,8 +151,6 @@ stock DisplayContainerInventory(playerid, Container:containerid) {
 	format(cnt_InventoryString[playerid], sizeof(cnt_InventoryString[]), "%s%d\tInventario >\n",
 		cnt_InventoryString[playerid], GetPlayerSkin(playerid));
 
-	cnt_ItemListTotal[playerid]++;
-	
 	cnt_CurrentContainer[playerid] = containerid;
 
 	if(CallLocalFunction("OnPlayerOpenContainer", "dd", playerid, _:containerid)) {
