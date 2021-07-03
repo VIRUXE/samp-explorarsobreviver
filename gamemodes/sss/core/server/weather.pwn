@@ -103,6 +103,7 @@ _WeatherUpdate()
 {
 	foreach(new i : Player)
 	{
+		SetWeatherForPlayer(playerid, weather_Current);
 		_WeatherUpdateForPlayer(i);
 	}
 }
