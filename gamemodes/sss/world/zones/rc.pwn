@@ -31,7 +31,7 @@ Load_RC()
 
 RC_District_LogCamp()
 {
-	ChatMsgAll(YELLOW, " » Loading world region: 'RC_District_LogCamp' please wait...");
+	ChatMsgAll(YELLOW, " » Carregando região 'RC_District_LogCamp'. Aguarde...");
 
 	CreateStaticLootSpawn(-535.624877, -102.932212, 62.287090,		GetLootIndexFromName("world_industrial"), 15.0);
 	CreateStaticLootSpawn(-488.137359, -171.310974, 77.203811,		GetLootIndexFromName("world_industrial"), 15.0);
@@ -53,7 +53,7 @@ RC_District_LogCamp()
 }
 RC_District_BlueberryAcres()
 {
-	ChatMsgAll(YELLOW, " » Loading world region: 'RC_District_BlueberryAcres' please wait...");
+	ChatMsgAll(YELLOW, " » Carregando região 'RC_District_BlueberryAcres'. Aguarde...");
 
 	CreateItem(item_Workbench, 94.44927, -168.05229, 1.55108, 0.0, 0.0, -180.77998);
 
@@ -90,7 +90,7 @@ RC_District_BlueberryAcres()
 }	
 RC_District_BlueberryTown()
 {	
-	ChatMsgAll(YELLOW, " » Loading world region: 'RC_District_BlueberryTown' please wait...");
+	ChatMsgAll(YELLOW, " » Carregando região 'RC_District_BlueberryTown'. Aguarde...");
 
 	CreateStaticLootSpawn(195.407531, -119.271759, 3.895359,		GetLootIndexFromName("world_civilian"), 20.0);
 	CreateStaticLootSpawn(207.479248, -107.625923, 3.894959,		GetLootIndexFromName("world_civilian"), 20.0);
@@ -255,7 +255,7 @@ RC_District_BlueberryTown()
 }
 RC_District_Dillmore()
 {
-	ChatMsgAll(YELLOW, " » Loading world region: 'RC_District_Dillmore' please wait...");
+	ChatMsgAll(YELLOW, " » Carregando região 'RC_District_Dillmore'. Aguarde...");
 
 	CreateStaticLootSpawn(747.589782, -499.690704, 16.324209,		GetLootIndexFromName("world_civilian"), 20.0);
 	CreateStaticLootSpawn(690.599609, -506.115722, 15.331480,		GetLootIndexFromName("world_civilian"), 20.0);
@@ -350,7 +350,7 @@ RC_District_Dillmore()
 }
 RC_District_Montgomery()
 {
-	ChatMsgAll(YELLOW, " » Loading world region: 'RC_District_Montgomery' please wait...");
+	ChatMsgAll(YELLOW, " » Carregando região 'RC_District_Montgomery'. Aguarde...");
 
 	CreateStaticLootSpawn(1367.052734, 258.962219, 18.549060,		GetLootIndexFromName("world_civilian"), 20.0);
 	CreateStaticLootSpawn(1355.000488, 242.343338, 18.548120,		GetLootIndexFromName("world_civilian"), 20.0);
@@ -523,7 +523,7 @@ RC_District_Montgomery()
 }
 RC_District_Palomino()
 {
-	ChatMsgAll(YELLOW, " » Loading world region: 'RC_District_Palomino' please wait...");
+	ChatMsgAll(YELLOW, " » Carregando região 'RC_District_Palomino'. Aguarde...");
 
 	CreateItem(item_Workbench, 2560.82031, 73.39390, 25.42815, 0.0, 0.0, 0.00000);
 
@@ -662,7 +662,7 @@ RC_District_Palomino()
 }
 RC_District_RedGen()
 {
-	ChatMsgAll(YELLOW, " » Loading world region: 'RC_District_RedGen' please wait...");
+	ChatMsgAll(YELLOW, " » Carregando região 'RC_District_RedGen'. Aguarde...");
 
 	CreateStaticLootSpawn(1549.540283, 13.358389, 23.150590,		GetLootIndexFromName("world_civilian"), 20.0);
 	CreateStaticLootSpawn(1111.852172, -354.848999, 72.989982,		GetLootIndexFromName("world_civilian"), 20.0);

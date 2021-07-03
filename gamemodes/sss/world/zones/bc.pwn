@@ -48,7 +48,7 @@ Load_BC()
 
 BC_District_Payasdas()
 {
-	ChatMsgAll(YELLOW, " » Loading world region: 'BC_District_Payasdas' please wait...");
+	ChatMsgAll(YELLOW, " » Carregando região 'BC_District_Payasdas'. Aguarde...");
 
 	CreateStaticLootSpawn(-162.708709, 2764.035888, 61.619419,		GetLootIndexFromName("world_civilian"), 20.0);
 	CreateStaticLootSpawn(-168.285522, 2727.203857, 61.401859,		GetLootIndexFromName("world_civilian"), 20.0);
@@ -85,7 +85,7 @@ BC_District_Payasdas()
 }
 BC_District_Verdant()
 {
-	ChatMsgAll(YELLOW, " » Loading world region: 'BC_District_Verdant' please wait...");
+	ChatMsgAll(YELLOW, " » Carregando região 'BC_District_Verdant'. Aguarde...");
 
 	CreateStaticLootSpawn(377.433288, 2594.337890, 15.473210,		GetLootIndexFromName("world_civilian"), 20.0);
 	CreateStaticLootSpawn(413.673675, 2536.922363, 18.147050,		GetLootIndexFromName("world_civilian"), 20.0);
@@ -142,7 +142,7 @@ BC_District_Verdant()
 }
 BC_District_Area69()
 {
-	ChatMsgAll(YELLOW, " » Loading world region: 'BC_District_Area69' please wait...");
+	ChatMsgAll(YELLOW, " » Carregando região 'BC_District_Area69'. Aguarde...");
 
 	CreateStaticLootSpawn(211.756774, 1859.329711, 12.133520,		GetLootIndexFromName("world_industrial"), 20.0);
 	CreateStaticLootSpawn(222.789550, 1855.840698, 11.984900,		GetLootIndexFromName("world_industrial"), 20.0);
@@ -257,7 +257,7 @@ BC_District_Area69()
 }
 BC_District_BoneEast()
 {
-	ChatMsgAll(YELLOW, " » Loading world region: 'BC_District_BoneEast' please wait...");
+	ChatMsgAll(YELLOW, " » Carregando região 'BC_District_BoneEast'. Aguarde...");
 
 	CreateStaticLootSpawn(790.219055, 1990.437377, 4.361800,		GetLootIndexFromName("world_civilian"), 20.0);
 	CreateStaticLootSpawn(701.584167, 1992.585693, 4.535160,		GetLootIndexFromName("world_civilian"), 20.0);
@@ -293,7 +293,7 @@ BC_District_BoneEast()
 }
 BC_District_BigEar()
 {
-	ChatMsgAll(YELLOW, " » Loading world region: 'BC_District_BigEar' please wait...");
+	ChatMsgAll(YELLOW, " » Carregando região 'BC_District_BigEar'. Aguarde...");
 
 	CreateStaticLootSpawn(-299.839294, 1577.899414, 74.346000,		GetLootIndexFromName("world_civilian"), 20.0);
 	CreateStaticLootSpawn(-324.601623, 1535.770629, 74.552757,		GetLootIndexFromName("world_civilian"), 20.0);
@@ -315,7 +315,7 @@ BC_District_BigEar()
 }
 BC_District_Probe()
 {
-	ChatMsgAll(YELLOW, " » Loading world region: 'BC_District_Probe' please wait...");
+	ChatMsgAll(YELLOW, " » Carregando região 'BC_District_Probe'. Aguarde...");
 
 	CreateStaticLootSpawn(-226.105682, 1405.623779, 26.767429,		GetLootIndexFromName("world_civilian"), 20.0);
 	CreateStaticLootSpawn(-16.725469, 1385.647094, 8.141059,		GetLootIndexFromName("world_civilian"), 20.0);
@@ -340,7 +340,7 @@ BC_District_Probe()
 }
 BC_District_Octane()
 {
-	ChatMsgAll(YELLOW, " » Loading world region: 'BC_District_Octane' please wait...");
+	ChatMsgAll(YELLOW, " » Carregando região 'BC_District_Octane'. Aguarde...");
 
 	CreateStaticLootSpawn(406.390502, 1161.583251, 6.903639,		GetLootIndexFromName("world_civilian"), 20.0);
 	CreateStaticLootSpawn(502.410369, 1119.108764, 13.740139,		GetLootIndexFromName("world_civilian"), 20.0);
@@ -395,7 +395,7 @@ BC_District_Octane()
 }
 BC_District_Carson()
 {
-	ChatMsgAll(YELLOW, " » Loading world region: 'BC_District_Carson' please wait...");
+	ChatMsgAll(YELLOW, " » Carregando região 'BC_District_Carson'. Aguarde...");
 
 	CreateItem(item_Workbench, 318.60028, 1145.81543, 7.54844, 0.0, 0.0, -181.56007);
 
@@ -565,7 +565,7 @@ BC_District_Carson()
 }
 BC_District_Hunter()
 {
-	ChatMsgAll(YELLOW, " » Loading world region: 'BC_District_Hunter' please wait...");
+	ChatMsgAll(YELLOW, " » Carregando região 'BC_District_Hunter'. Aguarde...");
 
 	CreateItem(item_Workbench, 585.17377, 873.72583, -43.51944, 0.0, 0.0, 94.26003);
 
@@ -591,7 +591,7 @@ BC_District_Hunter()
 }
 BC_District_BoneGen()
 {
-	ChatMsgAll(YELLOW, " » Loading world region: 'BC_District_BoneGen' please wait...");
+	ChatMsgAll(YELLOW, " » Carregando região 'BC_District_BoneGen'. Aguarde...");
 
 	CreateItem(item_Workbench, -371.56595, 2235.98975, 41.43906, 0.0, 0.0, 12.84000);
 
