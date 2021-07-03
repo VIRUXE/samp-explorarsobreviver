@@ -475,9 +475,9 @@ ptask UpdatePlayerPSU[500](playerid)
 					PR_UINT16, i,
 			        PR_UINT8, GetPlayerTeam(i),
 			        PR_UINT32, GetPlayerSkin(i),
-			        PR_FLOAT, 0.0,
-			        PR_FLOAT, 0.0,
-			        PR_FLOAT, 0.0,
+			        PR_FLOAT, 3000.0,
+			        PR_FLOAT, 3000.0,
+			        PR_FLOAT, 1000.0,
 			        PR_FLOAT, 0.0,
 			        PR_UINT32, GetPlayerColor(i),
 			        PR_UINT8, GetPlayerFightingStyle(i));
