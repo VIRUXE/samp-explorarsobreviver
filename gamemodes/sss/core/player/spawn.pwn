@@ -300,6 +300,7 @@ PlayerSpawnNewCharacter(playerid, gender)
 		SetPlayerHP(playerid, spawn_NewBlood);
 		SetPlayerFP(playerid, spawn_NewFood);
 		SetPlayerBleedRate(playerid, spawn_NewBleed);
+		ChatMsg(playerid, CHAT_RADIO, " » Quer jogar com um amigo? Sincronize sua Radio na mesma frequencia dele.");
 	}
 	else
 	{
