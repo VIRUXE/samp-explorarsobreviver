@@ -20,6 +20,7 @@ Float:		wepc_DropLocationData[MAX_WEPCACHE_LOCATIONS][E_WEPCACHE_LOCATION_DATA],
 Float:		wepc_CurrentPosX,
 Float:		wepc_CurrentPosY,
 Float:		wepc_CurrentPosZ,
+			wepc_Object,
 			webc_ActiveDrop = -1,
 Container:	webc_Containerid = INVALID_CONTAINER_ID,
 Button:		webc_Button = INVALID_BUTTON_ID;
@@ -112,7 +113,10 @@ WeaponsCacheDrop(Float:x, Float:y, Float:z)
 	if(webc_ActiveDrop != -1)
 		return 0;
 
-	CreateDynamicObject(964, x, y, z - 0.0440, 0.0, 0.0, 0.0, .streamdistance = 1000.0, .drawdistance = 1000.0);
+	if(IsValidDynamicObject(wepc_Object))
+		DestroyDynamicObject(wepc_Object);
+
+	wepc_Object = CreateDynamicObject(964, x, y, z - 0.0440, 0.0, 0.0, 0.0, .streamdistance = 1000.0, .drawdistance = 1000.0);
 
 	wepc_CurrentPosX = x;
 	wepc_CurrentPosY = y;
