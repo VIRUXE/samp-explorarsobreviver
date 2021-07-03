@@ -22,8 +22,9 @@ hook OnPlayerGiveDamage(playerid, damagedid, Float:amount, weaponid, bodypart)
 	if(!IsPlayerSpawned(damagedid))
 		return 1;
 		
+	// Anti knife bug
 	if(GetPlayerAnimationIndex(playerid) == 747){
-		SetPlayerHealth(damagedid, 0.0);
+		SetPlayerHP(damagedid, 0.0);
 		return 1;
 	}
 	
