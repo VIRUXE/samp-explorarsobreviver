@@ -203,6 +203,10 @@ _HolsterChecks(playerid)
 	if(GetPlayerAnimationIndex(playerid) == 1381)
 		return 0;
 
+	// Put item animation
+	if(GetPlayerAnimationIndex(playerid) == 638)
+		return 0;
+
 	// Within 1 second of previously holstering/unholstering
 	if(GetTickCountDifference(GetTickCount(), hols_LastHolster[playerid]) < 1000)
 		return 0;
