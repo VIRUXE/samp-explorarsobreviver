@@ -30,7 +30,7 @@ public DCC_OnMessageCreate(DCC_Message:message)
     DCC_IsUserBot(author, is_bot);
     
     if(is_bot){
-        defer DelWhiteMsg(_:message);
+        //defer DelWhiteMsg(_:message);
         return 0;
     }
 
@@ -76,45 +76,18 @@ public DCC_OnMessageCreate(DCC_Message:message)
     else if(channel == whitelist)
     {
         if(strlen(msg) > MAX_PLAYER_NAME - 1)
-        { 
             format(str, sizeof(str), "O nome [%s] esta muito grande.", msg);
-        }
         else if(IsNameInWhitelist(msg))
-        {
             format(str, sizeof(str), "O nome [%s] ja foi aceito.", msg); 
-        }
         else if(IsNameInWhitelist(user_id))
-        {
             format(str, sizeof(str), "Voce ja tem uma conta registrada nesse discord."); 
-        }
-        else
-        {
-            new 
-                bool:IsWConnected,
-                pName[MAX_PLAYER_NAME];
+        else{
+            AddNameToWhitelist(msg, true);
+            AddNameToWhitelist(user_id);
 
-            foreach(new i : Player)
-            {   
-                GetPlayerName(i, pName, MAX_PLAYER_NAME);
+            ChatMsgAll(BLUE, "[Discord] "C_WHITE"Conta '%s' registrada na WhiteList!", msg);
 
-                if(!strcmp(pName, msg, false))
-                    IsWConnected = true;
-            }
-
-            if(!IsWConnected)
-            {
-                format(str, sizeof(str), "Voce precisa estar conectado no Servidor.");
-            }
-            else
-            {
-                //color = GREEN;
-                AddNameToWhitelist(msg, true);
-                AddNameToWhitelist(user_id);
-
-                ChatMsgAll(BLUE, "[Discord] "C_WHITE"Conta '%s' registrada na WhiteList!", msg);
-
-                format(str, sizeof(str), "Sua conta [%s] foi aceita com Sucesso. Bom jogo!", msg);
-            }
+            format(str, sizeof(str), "Sua conta [%s] foi aceita com Sucesso. Bom jogo!", msg);
         }
 
         DCC_SendChannelMessage(DCC_Channel:channel, str);
@@ -122,14 +95,14 @@ public DCC_OnMessageCreate(DCC_Message:message)
         //DCC_SendChannelEmbedMessage(DCC_Channel:channel,
             //DCC_CreateEmbed(user_name, str, "", "", color), "[WhiteList]");
 
-        DCC_DeleteMessage(DCC_Message:message);
+        //DCC_DeleteMessage(DCC_Message:message);
         return 1;
     }
     return 1;
 }
 
-timer DelWhiteMsg[60000](message)
-    DCC_DeleteMessage(DCC_Message:message);
+//timer DelWhiteMsg[60000](message)
+    //DCC_DeleteMessage(DCC_Message:message);
     
 forward OnPostPlayerStat(playerid);
 public OnPostPlayerStat(playerid)
