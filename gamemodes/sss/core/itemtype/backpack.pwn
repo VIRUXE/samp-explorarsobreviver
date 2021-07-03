@@ -607,7 +607,7 @@ hook OnPlayerViewInvOpt(playerid)
 	GetPlayerCurrentContainer(playerid, containerid);
 	if(IsValidItem(bag_PlayerBagID[playerid]) && !IsValidContainer(containerid))
 	{
-		bag_InventoryOptionID[playerid] = AddInventoryOption(playerid, "Move to bag");
+		bag_InventoryOptionID[playerid] = AddInventoryOption(playerid, "Mover para mochila >");
 	}
 }
 
