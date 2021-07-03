@@ -336,7 +336,7 @@ _twk_AdjustItemPos(playerid, Float:distance, Float:direction, Float:rotation)
 	new_y += distance * floatcos(-(rz + direction), degrees);
 	rz += rotation;
 
-	if(Distance(new_x, new_y, new_z, twk_Origin[playerid][0], twk_Origin[playerid][1], twk_Origin[playerid][2]) > radius)
+	if(Distance(new_x, new_y, new_z, twk_Origin[playerid][0], twk_Origin[playerid][1], twk_Origin[playerid][2]) > radius * 2)
 	{
 		stop twk_TimerClick[playerid];
 		ShowActionText(playerid, ls(playerid, "ITEMTWKTFAR"), 6000);
