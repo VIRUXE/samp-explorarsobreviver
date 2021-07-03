@@ -202,33 +202,17 @@ timer RespawnItem[5400000](itemid, Float:x, Float:y, Float:z, lootindex, Float:w
 	new Float:tx, Float:ty, Float:tz;
 	GetItemPos(Item:itemid, tx, ty, tz);
 
-	if(Distance(x, y, z, tx, ty, tz) > 5.0)
+	if(Distance(x, y, z, tx, ty, tz) > 10.0)
 		CreateStaticLootSpawn(x, y, z, lootindex, weight, size, worldid, interiorid);
 	else
 		defer RespawnItem(_:itemid, x, y, z, lootindex, weight, size, worldid, interiorid);
 }
 
 hook OnPlayerDroppedItem(playerid, Item:itemid)
-{
-	if(IsItemTypeSafebox(GetItemType(itemid)))
-	{
-		new Container:containerid;
-		GetItemArrayDataAtCell(itemid, _:containerid, 0);
-		if(!IsContainerEmpty(containerid))
-		{
-			return Y_HOOKS_CONTINUE_RETURN_0;
-		}
-	}
-
-	if(IsItemTypeDefence(GetItemType(itemid)))
-	{
-		return Y_HOOKS_CONTINUE_RETURN_0;
-	}
-		
+{	
 	new Float:tx, Float:ty, Float:tz;
 	GetItemPos(Item:itemid, tx, ty, tz);
 	defer DestroyUntilItem(_:itemid, tx, ty, tz);
-
 	return Y_HOOKS_CONTINUE_RETURN_0;
 }
 
@@ -246,10 +230,29 @@ timer DestroyUntilItem[5400000](itemid, Float:x, Float:y, Float:z)
 		}
 	}
 
+	if(IsItemTypeSafebox(GetItemType(Item:itemid)))
+	{
+		new Container:containerid;
+		GetItemArrayDataAtCell(Item:itemid, _:containerid, 0);
+		if(!IsContainerEmpty(containerid))
+			return;
+	}
+
+	if(IsItemTypeDefence(GetItemType(Item:itemid))){
+		new bool:active;
+		GetItemArrayDataAtCell(Item:itemid, active, 0);
+		if(active) return;
+	}
+
+	if(GetItemType(Item:itemid) == item_TentPack)
+		return;
+
 	new Float:tx, Float:ty, Float:tz;
 	GetItemPos(Item:itemid, tx, ty, tz);
 	if(tx == x && ty == y && tz == z)
 		DestroyItem(Item:itemid);
+
+	return;
 }
 
 stock Item:CreateLootItem(lootindex, Float:x = 0.0, Float:y = 0.0, Float:z = 0.0, worldid = 0, interiorid = 0)
