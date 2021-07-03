@@ -3116,11 +3116,11 @@ SF_District_Industrial()
 	CreateStaticLootSpawn(-1862.761840, 4.706430, 23.204010, GetLootIndexFromName("world_survivor"), 10.000000, 3);
 	CreateStaticLootSpawn(-1710.761600, 379.464750, 17.603860, GetLootIndexFromName("world_survivor"), 10.000000, 3);
 
-	CreateHackerTrap(-1844.83752, -101.30441, 4.64848,				GetLootIndexFromName("world_military"));
+	/*CreateHackerTrap(-1844.83752, -101.30441, 4.64848,				GetLootIndexFromName("world_military"));
 	CreateHackerTrap(-1842.06116, -103.07392, 4.64540,				GetLootIndexFromName("world_military"));
 	CreateHackerTrap(-1849.03284, -103.55869, 4.64305,				GetLootIndexFromName("world_military"));
 	CreateHackerTrap(-1848.35547, -98.46133, 4.64475,				GetLootIndexFromName("world_military"));
-	CreateHackerTrap(-1842.68433, -98.32790, 4.64715,				GetLootIndexFromName("world_military"));
+	CreateHackerTrap(-1842.68433, -98.32790, 4.64715,				GetLootIndexFromName("world_military"));*/
 }
 SF_District_SfAirport()
 {

@@ -263,7 +263,7 @@ public OnCheatDetected(playerid, const ip_address[], type, code)
 			}
 		}
 
-		if(IsPlayerDataLoaded(playerid) && code < 13)
+		if(IsPlayerDataLoaded(playerid) && code < 13 && GetAdminsOnline() == 0)
 		{
 			ChatMsg(playerid, RED, "Você foi kickado por suspeita de %s.", NexCheatName[code]);
 			AntiCheatKickWithDesync(playerid, code);
@@ -280,8 +280,7 @@ public OnCheatWarning(playerid, const ip_address[], type, code, code2, count)
 		if(IsPlayerInTutorial(playerid) || IsPlayerOnAdminDuty(playerid))
 			return 1;
 			
-		ChatMsgAdmins(5, RED, "[Nex-Ac] Warning: %P(id:%d) Name: %s(%d) Code2: %d Count: %d",
-			playerid, playerid, NexCheatName[code], code2, count);
+		ChatMsgAdmins(6, RED, "[Nex-Ac] Warning: %P(id:%d) Name: %s(%d)", playerid, playerid, NexCheatName[code], code);
 	}
 	return 1;
 }

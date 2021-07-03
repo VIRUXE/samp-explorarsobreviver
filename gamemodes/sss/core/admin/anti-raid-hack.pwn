@@ -56,8 +56,19 @@ atr_PosCheck(playerid, Float:x, Float:y, Float:z)
 		atr_SetZ[playerid] = z;
 	} else {
 		new col = CA_RayCastLine(atr_SetX[playerid] + 0.13, atr_SetY[playerid] + 0.13, atr_SetZ[playerid] + 0.25, x - 0.13, y - 0.13, z - 0.25, tmp, tmp, tmp);
-		if(col != WATER_OBJECT && col)
-			atr_Check[playerid] = col, ChatMsgAdmins(6, RED, "%p(id:%d) Atravessou um objeto, modelid: %d", playerid, playerid, atr_Check[playerid]);
+		if(col != WATER_OBJECT && col){
+			atr_Check[playerid] = col;
+			
+			if(GetTickCountDifference(GetTickCount(), GetPlayerServerJoinTick(playerid)) < 10000)
+				return 1;
+
+			if(IsPlayerDead(playerid))
+				return 1;
+				
+			if(GetPlayerAdminLevel(playerid) > 0) return 1;
+
+			ChatMsgAdmins(6, RED, "%p(id:%d) Atravessou um objeto, modelid: %d", playerid, playerid, atr_Check[playerid]);
+		}
 		else {
 			atr_SetX[playerid] = x;
 			atr_SetY[playerid] = y;
