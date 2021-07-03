@@ -722,7 +722,7 @@ public OnScriptInit()
 	item_DoctorBag		= DefineItemType("Maleta de Doutor",				"DoctorBag",		11738,	3,	0.0, 0.0, 0.0,			0.0046,	0.265000, 0.029000, 0.041000,  0.000000, -99.100021, 0.000000, .maxhitpoints = 3);
 	item_DogsBreath		= DefineItemType("Dog's Breath",		"DogsBreath",		2034,	2,	0.0, 0.0, 0.0,			0.0,	0.176000, 0.020000, 0.039999,  89.199989, -0.900000, 1.099991, .maxhitpoints = 2);
 	item_Door			= DefineItemType("Porta de Madeira",			"Door",				1497,	8,	90.0, 0.0, 0.0,			0.0,	-0.073999,0.401213,0.939999,337.887634,172.861953,68.495330, true, .buttonz = ITEM_FLOOR_OFFSET,  .maxhitpoints = 4);
-	item_Doormat		= DefineItemType("Tapete de Porta",				"Doormat",			11737,	3,	0.0, 0.0, 0.0,			0.02,	0.441000, 0.027000, 0.017999,  96.300025, -2.500113, 97.699829, .maxhitpoints = 3);
+	item_Doormat		= DefineItemType("Porta de Container",			"Doormat",			11737,	3,	0.0, 0.0, 0.0,			0.02,	0.441000, 0.027000, 0.017999,  96.300025, -2.500113, 97.699829, .maxhitpoints = 3);
 	item_Dynamite		= DefineItemType("Dinamite",					"Dynamite",			1654,	2,	0.0, 0.0, 0.0,			0.0,	0.048000,0.106999,0.065999,0.000000,-3.399999,143.300079,	 .maxhitpoints = 2);
 	item_EasterEgg		= DefineItemType("Easter Egg",					"EasterEgg",		19345,	3,	0.0, 0.0, 0.0,			0.0,	0.000000, 0.000000, 0.000000, 0.000000, 90.000000, 0.000000, .maxhitpoints = 3);
 	item_EmpPhoneBomb	= DefineItemType("Phone Remote EMP",			"EmpPhoneBomb",		343,	2,	0.0, 0.0, 0.0,			0.0,	.maxhitpoints = 1);
@@ -747,7 +747,7 @@ public OnScriptInit()
 	item_FryingPan		= DefineItemType("Frigideira",			"FryingPan",		19581,	2,	0.0, 0.0, 0.0,			-0.028,	0.078000, 0.017999, 0.025000,  -29.900056, -88.800018, 59.299705, .maxhitpoints = 2);
 	item_Fusebox		= DefineItemType("Caixa de Fusiveis",			"Fusebox",			328,	2,	90.0, 0.0, 0.0,			0.0,	.maxhitpoints = 2);
 	item_GarageDoor		= DefineItemType("",					"GarageDoor",		19908,	14, 0.0, 90.0, 0.0,			0.0, .maxhitpoints = 10);
-	item_GasCan			= DefineItemType("Galao",						"GasCan",			1650,	3,	0.0, 0.0, 0.0,			0.27,	0.143402, 0.027548, 0.063652, 0.000000, 253.648208, 0.000000, .maxhitpoints = 3);
+	item_GasCan			= DefineItemType("Galao de Gasolina",						"GasCan",			1650,	3,	0.0, 0.0, 0.0,			0.27,	0.143402, 0.027548, 0.063652, 0.000000, 253.648208, 0.000000, .maxhitpoints = 3);
 	item_GasMask		= DefineItemType("Mascara de Gas",				"GasMask",			19472,	1,	180.0, 0.0, 0.0,		0.0,	0.062216, 0.055396, 0.001138, 90.000000, 0.000000, 180.000000, .maxhitpoints = 1);
 	item_GearBox		= DefineItemType("Transmissao",			"GearBox",			19918,	5,	0.0, 0.0, 0.0,			-0.0361,0.073999, -0.039000, -0.169000,  73.400024, -173.499984, 80.899993, .longpickup = true, .maxhitpoints = 4);
 	item_GolfClub		= DefineItemType("Golf Club",					"GolfClub",			333,	3,	90.0, .maxhitpoints = 3);
