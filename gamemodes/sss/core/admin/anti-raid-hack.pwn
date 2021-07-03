@@ -49,8 +49,7 @@ atr_PosCheck(playerid, Float:x, Float:y, Float:z)
 
 	if(atr_Check[playerid]){
 		if(CA_RayCastLine(x, y, z, x, y, z + 600.0, tmp, tmp, tmp))
-			return ChatMsgAdmins(5, RED, "%p(id:%d) Atravessou um objeto, modelid: %d", playerid, playerid, atr_Check[playerid]);
-
+			return 1;
 		atr_Check[playerid] = 0;
 		atr_SetX[playerid] = x;
 		atr_SetY[playerid] = y;
@@ -58,7 +57,7 @@ atr_PosCheck(playerid, Float:x, Float:y, Float:z)
 	} else {
 		new col = CA_RayCastLine(atr_SetX[playerid] + 0.13, atr_SetY[playerid] + 0.13, atr_SetZ[playerid] + 0.25, x - 0.13, y - 0.13, z - 0.25, tmp, tmp, tmp);
 		if(col != WATER_OBJECT && col)
-			atr_Check[playerid] = col;
+			atr_Check[playerid] = col, ChatMsgAdmins(6, RED, "%p(id:%d) Atravessou um objeto, modelid: %d", playerid, playerid, atr_Check[playerid]);
 		else {
 			atr_SetX[playerid] = x;
 			atr_SetY[playerid] = y;
