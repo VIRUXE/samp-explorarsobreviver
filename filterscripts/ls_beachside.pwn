@@ -46,7 +46,7 @@
 #include <a_samp>
 
 // For PlaySoundForPlayersInRange()
-#include "../include/gl_common.inc"
+// #include "../include/gl_common.inc"
 
 // -----------------------------------------------------------------------------
 // Defines
@@ -62,8 +62,7 @@
 // be sure to give enough time for doors to open
 #define ELEVATOR_WAIT_TIME  (5000)  
 
-// Dialog ID for the LS BeachSide elevator dialog
-#define DIALOG_ID           (877)
+// Dialog ID for O Elevador foi chamado           (877)
 
 // Position defines
 #define X_DOOR_R_OPENED     (289.542419)
@@ -98,20 +97,20 @@
 // Elevator floor names for the 3D text labels
 static FloorNames[14][] =
 {
-	"Car Park",
-	"Ground Floor",
-	"First Floor",
-	"Second Floor",
-	"Third Floor",
-	"Fourth Floor",
-	"Fifth Floor",
-	"Sixth Floor",
-	"Seventh Floor",
-	"Eighth Floor",
-	"Ninth Floor",
-	"Tenth Floor",
-	"Eleventh Floor",
-	"Twelfth Floor"
+    "Estacionamento",
+    "Térreo",
+    "1º Andar",
+    "2º Andar",
+    "3º Andar",
+    "4º Andar",
+    "5º Andar",
+    "6º Andar",
+    "7º Andar",
+    "8º Andar",
+    "9º Andar",
+    "10º Andar",
+    "11º Andar",
+    "12º Andar"
 };
 
 // Elevator floor Z heights
@@ -331,7 +330,7 @@ public OnObjectMoved(objectid)
 	    Floor_OpenDoors(ElevatorFloor);
 
 	    GetObjectPos(Obj_Elevator, x, y, z);
-	    Label_Elevator	= Create3DTextLabel("{CCCCCC}Press '{FFFFFF}~k~~CONVERSATION_YES~{CCCCCC}' to use elevator", 0xCCCCCCAA, X_ELEVATOR_POS + 1.6, Y_ELEVATOR_POS - 1.85, z - 0.4, 4.0, 0, 1);
+	    Label_Elevator	= Create3DTextLabel("{CCCCCC}Pressiona '{FFFFFF}~k~~CONVERSATION_YES~{CCCCCC}' para utilizar o Elevador", 0xCCCCCCAA, X_ELEVATOR_POS + 1.6, Y_ELEVATOR_POS - 1.85, z - 0.4, 4.0, 0, 1);
 
 	    ElevatorState 	= ELEVATOR_STATE_WAITING;
 	    SetTimer("Elevator_TurnToIdle", ELEVATOR_WAIT_TIME, 0);
@@ -348,9 +347,9 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
             return 0;
 
         if(FloorRequestedBy[listitem] != INVALID_PLAYER_ID || IsFloorInQueue(listitem))
-            GameTextForPlayer(playerid, "~r~The floor is already in the queue", 3500, 4);
+            GameTextForPlayer(playerid, "~r~Esse andar ja esta em espera", 3500, 4);
 		else if(DidPlayerRequestElevator(playerid))
-		    GameTextForPlayer(playerid, "~r~You already requested the elevator", 3500, 4);
+		    GameTextForPlayer(playerid, "~r~Ja chamou o elevador", 3500, 4);
 		else
 	        CallElevator(playerid, listitem);
 
@@ -408,10 +407,10 @@ public OnPlayerKeyStateChange(playerid, newkeys, oldkeys)
 				        if (ElevatorFloor == i + 1)
 				        {
 				            // Display gametext message to the player
-							GameTextForPlayer(playerid, "~n~~n~~n~~n~~n~~n~~n~~y~~h~LS BeachSide Elevator Is~n~~y~~h~Already On This Floor...~n~~w~Walk Inside It~n~~w~And Press '~k~~CONVERSATION_YES~'", 3500, 3);
+							GameTextForPlayer(playerid, "~n~~n~~n~~n~~n~~n~~n~~y~~h~Elevador~n~~y~~h~Ja esta neste andar...~n~~w~Entre dentro~n~~w~E pressione '~k~~CONVERSATION_YES~'", 3500, 3);
 
 							// Display chat text message to the player
-	                        SendClientMessage(playerid, COLOR_MESSAGE_YELLOW, "* The LS BeachSide elevator is already on this floor... walk inside it and press '{FFFFFF}~k~~CONVERSATION_YES~{CCCCCC}'");
+	                        SendClientMessage(playerid, COLOR_MESSAGE_YELLOW, "* O Elevador já está nesse andar... Entre e pressione '{FFFFFF}~k~~CONVERSATION_YES~{CCCCCC}'");
 	                        
 	                        // Exit here (return 1 so this callback is processed in other scripts)
 	                        return 1;
@@ -422,7 +421,7 @@ public OnPlayerKeyStateChange(playerid, newkeys, oldkeys)
 					CallElevator(playerid, i + 1);
 
 					// Display gametext message to the player
-					GameTextForPlayer(playerid, "~n~~n~~n~~n~~n~~n~~n~~n~~g~~h~LS BeachSide Elevator~n~~g~~h~Has Been Called...~n~~w~Please Wait", 3000, 3);
+					GameTextForPlayer(playerid, "~n~~n~~n~~n~~n~~n~~n~~n~~g~~h~Elevador~n~~g~~h~Foi chamado...~n~~w~Aguarde", 3000, 3);
 
 					// Create variable for formatted message
 					new strTempString[100];
@@ -431,7 +430,7 @@ public OnPlayerKeyStateChange(playerid, newkeys, oldkeys)
 					if (ElevatorState == ELEVATOR_STATE_MOVING)
 					{
 					    // Format chat text message
-						format(strTempString, sizeof(strTempString), "* The LS BeachSide elevator has been called... it is currently moving towards the %s.", FloorNames[ElevatorFloor]);
+						format(strTempString, sizeof(strTempString), "* O Elevador foi chamado... está actualmente a mover para o %s.", FloorNames[ElevatorFloor]);
 					}
 					else
 					{
@@ -439,12 +438,12 @@ public OnPlayerKeyStateChange(playerid, newkeys, oldkeys)
 					    if (ElevatorFloor == 0)
 					    {
 					    	// Format chat text message
-							format(strTempString, sizeof(strTempString), "* The LS BeachSide elevator has been called... it is currently at the %s.", FloorNames[ElevatorFloor]);
+							format(strTempString, sizeof(strTempString), "* O Elevador foi chamado... it is currently at the %s.", FloorNames[ElevatorFloor]);
 						}
 						else
 						{
 					    	// Format chat text message
-							format(strTempString, sizeof(strTempString), "* The LS BeachSide elevator has been called... it is currently on the %s.", FloorNames[ElevatorFloor]);
+							format(strTempString, sizeof(strTempString), "* O Elevador foi chamado... it is currently on the %s.", FloorNames[ElevatorFloor]);
 						}
 					}
 					
@@ -471,7 +470,7 @@ stock Elevator_Initialize()
 	Obj_ElevatorDoors[1] 	= CreateObject(18756, X_ELEVATOR_POS, Y_ELEVATOR_POS, GROUND_Z_COORD, 0.000000, 0.000000, 80.000000);
 
 	// Create the 3D text label for inside the elevator
-	Label_Elevator = Create3DTextLabel("{CCCCCC}Press '{FFFFFF}~k~~CONVERSATION_YES~{CCCCCC}' to use elevator", 0xCCCCCCAA, X_ELEVATOR_POS + 1.6, Y_ELEVATOR_POS - 1.85, GROUND_Z_COORD - 0.4, 4.0, 0, 1);
+	Label_Elevator = Create3DTextLabel("{CCCCCC}Pressione '{FFFFFF}~k~~CONVERSATION_YES~{CCCCCC}' para utilizar o Elevador", 0xCCCCCCAA, X_ELEVATOR_POS + 1.6, Y_ELEVATOR_POS - 1.85, GROUND_Z_COORD - 0.4, 4.0, 0, 1);
 
 	// Create variables
 	new string[128], Float:z;
@@ -484,7 +483,7 @@ stock Elevator_Initialize()
 		Obj_FloorDoors[i][1] 	= CreateObject(18756, X_ELEVATOR_POS, Y_ELEVATOR_POS - 0.245, GetDoorsZCoordForFloor(i) + 0.05, 0.000000, 0.000000, 80.000000);
 
         // Format string for the floor 3D text label
-		format(string, sizeof(string), "{CCCCCC}[%s]\n{CCCCCC}Press '{FFFFFF}~k~~CONVERSATION_YES~{CCCCCC}' to call", FloorNames[i]);
+		format(string, sizeof(string), "{CCCCCC}[%s]\n{CCCCCC}Pressione '{FFFFFF}~k~~CONVERSATION_YES~{CCCCCC}' para chamar", FloorNames[i]);
 
 		// Get label Z position
 		z = GetDoorsZCoordForFloor(i);
@@ -556,7 +555,7 @@ stock Floor_OpenDoors(floorid)
     MoveObject(Obj_FloorDoors[floorid][0], X_FDOOR_L_OPENED, Y_FDOOR_L_OPENED, GetDoorsZCoordForFloor(floorid) + 0.05, DOORS_SPEED);
 	MoveObject(Obj_FloorDoors[floorid][1], X_FDOOR_R_OPENED, Y_FDOOR_R_OPENED, GetDoorsZCoordForFloor(floorid) + 0.05, DOORS_SPEED);
 	
-	PlaySoundForPlayersInRange(6401, 50.0, X_ELEVATOR_POS, Y_ELEVATOR_POS, GetDoorsZCoordForFloor(floorid) + 5.0);
+	// PlaySoundForPlayersInRange(6401, 50.0, X_ELEVATOR_POS, Y_ELEVATOR_POS, GetDoorsZCoordForFloor(floorid) + 5.0);
 
 	return 1;
 }
@@ -568,7 +567,7 @@ stock Floor_CloseDoors(floorid)
     MoveObject(Obj_FloorDoors[floorid][0], X_ELEVATOR_POS, Y_ELEVATOR_POS - 0.245, GetDoorsZCoordForFloor(floorid) + 0.05, DOORS_SPEED);
 	MoveObject(Obj_FloorDoors[floorid][1], X_ELEVATOR_POS, Y_ELEVATOR_POS - 0.245, GetDoorsZCoordForFloor(floorid) + 0.05, DOORS_SPEED);
 	
-	PlaySoundForPlayersInRange(6401, 50.0, X_ELEVATOR_POS, Y_ELEVATOR_POS, GetDoorsZCoordForFloor(floorid) + 5.0);
+	// PlaySoundForPlayersInRange(6401, 50.0, X_ELEVATOR_POS, Y_ELEVATOR_POS, GetDoorsZCoordForFloor(floorid) + 5.0);
 
 	return 1;
 }
@@ -712,7 +711,7 @@ stock ShowElevatorDialog(playerid)
 	    strcat(string, "\n");
 	}
 
-	ShowPlayerDialog(playerid, DIALOG_ID, DIALOG_STYLE_LIST, "LS BeachSide Elevator...", string, "Accept", "Cancel");
+	ShowPlayerDialog(playerid, DIALOG_ID, DIALOG_STYLE_LISO Elevador foi chamado "Aceitar", "Cancelar");
 
 	return 1;
 }

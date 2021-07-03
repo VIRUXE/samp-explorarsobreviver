@@ -51,15 +51,15 @@ stock AddToolTipText(playerid, const key[], const use[])
 
 	if(IsPlayerMobile(playerid))
 	{
-		if(!strcmp(key, KEYTEXT_INTERACT)) strcat(tmp, "F");
-		else if(!strcmp(key, KEYTEXT_RELOAD)) strcat(tmp, "TAB");
-		else if(!strcmp(key, KEYTEXT_PUT_AWAY)) strcat(tmp, "Y");
-		else if(!strcmp(key, KEYTEXT_DROP_ITEM)) strcat(tmp, "N");
-		else if(!strcmp(key, KEYTEXT_INVENTORY)) strcat(tmp, "H");
-		else if(!strcmp(key, KEYTEXT_ENGINE)) strcat(tmp, "Y");
-		else if(!strcmp(key, KEYTEXT_LIGHTS)) strcat(tmp, "N");
-		else if(!strcmp(key, KEYTEXT_DOORS)) strcat(tmp, "2");
-		else if(!strcmp(key, KEYTEXT_RADIO)) strcat(tmp, "R");
+		if(!strcmp(key, KEYTEXT_INTERACT)) 			strcat(tmp, "F");
+		else if(!strcmp(key, KEYTEXT_RELOAD)) 		strcat(tmp, "TAB");
+		else if(!strcmp(key, KEYTEXT_PUT_AWAY)) 	strcat(tmp, "Y");
+		else if(!strcmp(key, KEYTEXT_DROP_ITEM)) 	strcat(tmp, "N");
+		else if(!strcmp(key, KEYTEXT_INVENTORY)) 	strcat(tmp, "H");
+		else if(!strcmp(key, KEYTEXT_ENGINE)) 		strcat(tmp, "Y");
+		else if(!strcmp(key, KEYTEXT_LIGHTS)) 		strcat(tmp, "N");
+		else if(!strcmp(key, KEYTEXT_DOORS)) 		strcat(tmp, "2");
+		else if(!strcmp(key, KEYTEXT_RADIO)) 		strcat(tmp, "R");
 
 		format(tmp, sizeof(tmp), "~y~%s ~w~%s~n~", tmp, use);
 	}
@@ -300,7 +300,7 @@ _UpdateKeyActions(playerid)
 				AddToolTipText(playerid, KEYTEXT_INTERACT, "Refuel vehicle");
 		}
 		else
-			AddToolTipText(playerid, KEYTEXT_INTERACT, "Fill at pump");
+			AddToolTipText(playerid, KEYTEXT_INTERACT, "Encher na Bomba");
 	}
 	else if(itemtype == item_Clothes)
 	{

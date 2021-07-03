@@ -8,10 +8,6 @@
 #include "sss/world/zones/fc.pwn"
 #include "sss/world/zones/bc.pwn"
 #include "sss/world/zones/tr.pwn"
-// #include "sss/world/misc/ls_apartments1.pwn"
-#include "sss/world/misc/ls_apartments2.pwn"
-// #include "sss/world/misc/ls_beachside.pwn"
-// #include "sss/world/misc/.pwn"
 #include "sss/world/puzzles/area69.pwn"
 #include "sss/world/puzzles/ranch.pwn"
 #include "sss/world/puzzles/mtchill.pwn"
@@ -22,7 +18,7 @@
 #include "sss/world/xmas.pwn"
 
 static
-	MapName[32] = "San Androcalypse",
+	MapName[32] = "San Apocalipse",
 	ItemCounts[MAX_ITEM_TYPE];
 
 #include <YSI_Coding\y_hooks>
