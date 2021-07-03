@@ -112,7 +112,7 @@ hook OnPlayerScriptUpdate(playerid)
 			GivePlayerHP(playerid, 0.5);
 	}
 
-	if(Bleeding[playerid])
+	if(bld_BleedRate[playerid] > 0.0)
 	{
 		new
 			Float:x,
