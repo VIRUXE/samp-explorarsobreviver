@@ -621,80 +621,79 @@ hook OnPlayerSelectInvOpt(playerid, option)
 		{
 			new
 				slot,
-				Item:itemid,
-				Error:e;
+				Item:itemid;
 			
-			e = GetItemArrayDataAtCell(bag_PlayerBagID[playerid], _:containerid, 1);
+			GetItemArrayDataAtCell(bag_PlayerBagID[playerid], _:containerid, 1);
+			slot = GetPlayerSelectedInventorySlot(playerid);
+			GetInventorySlotItem(playerid, slot, itemid);
 
-			if(!IsError(e)) {
-				slot = GetPlayerSelectedInventorySlot(playerid);
-				GetInventorySlotItem(playerid, slot, itemid);
-
-				if(!IsValidItem(itemid))
-				{
-					DisplayPlayerInventory(playerid);
-					return Y_HOOKS_CONTINUE_RETURN_0;
-				}
-
-				new required = AddItemToContainer(containerid, itemid, playerid);
-
-				if(required > 0)
-					ShowActionText(playerid, sprintf(ls(playerid, "BAGEXTRASLO", true), required), 3000, 150);
-
+			if(!IsValidItem(itemid))
+			{
 				DisplayPlayerInventory(playerid);
+				return Y_HOOKS_CONTINUE_RETURN_0;
 			}
+
+			new required = AddItemToContainer(containerid, itemid, playerid);
+
+			if(required > 0)
+				ShowActionText(playerid, sprintf(ls(playerid, "BAGEXTRASLO", true), required), 3000, 150);
+
+			DisplayPlayerInventory(playerid);
 		}
 	}
 
 	return Y_HOOKS_CONTINUE_RETURN_0;
 }
 
-hook OnPlayerViewCntOpt(playerid, Container:containerid){
-	if(IsValidItem(bag_PlayerBagID[playerid])){
-		new Container:bagcontainerid, Error:e;
-		e = GetItemArrayDataAtCell(bag_PlayerBagID[playerid], _:bagcontainerid, 1);
-		if(!IsError(e)) {
-			if(IsValidItem(bag_PlayerBagID[playerid]) && containerid != bagcontainerid){
-				bag_InventoryOptionID[playerid] = AddContainerOption(playerid, "Move to bag");
-			}
-		}
+hook OnPlayerViewCntOpt(playerid, Container:containerid)
+{
+	if(IsValidItem(bag_PlayerBagID[playerid]))
+	{
+		new Container:bagcontainerid;
+		GetItemArrayDataAtCell(bag_PlayerBagID[playerid], _:bagcontainerid, 1);
+
+		if(bagcontainerid != containerid)
+
+		bag_InventoryOptionID[playerid] = AddContainerOption(playerid, "Mover para mochila");
 	}
 }
 
 hook OnPlayerSelectCntOpt(playerid, Container:containerid, option)
 {
-	if(IsValidItem(bag_PlayerBagID[playerid])){
-		new Container:bagcontainerid, Error:e;
-		e = GetItemArrayDataAtCell(bag_PlayerBagID[playerid], _:bagcontainerid, 1);
+	if(IsValidItem(bag_PlayerBagID[playerid]))
+	{
+		if(option == bag_InventoryOptionID[playerid])
+		{
+			new Container:bagcontainerid;
+			GetItemArrayDataAtCell(bag_PlayerBagID[playerid], _:bagcontainerid, 1);
 
-		if(!IsError(e)) {
-			if(IsValidItem(bag_PlayerBagID[playerid]) && containerid != bagcontainerid)
+			if(containerid == bagcontainerid)
+				return Y_HOOKS_CONTINUE_RETURN_0;
+
+			new
+				slot,
+				Item:itemid;
+
+			GetPlayerContainerSlot(playerid, slot);
+			GetContainerSlotItem(containerid, slot, itemid);
+
+			if(!IsValidItem(itemid))
 			{
-				if(option == bag_InventoryOptionID[playerid])
-				{
-					new
-						slot,
-						Item:itemid;
-
-					GetPlayerContainerSlot(playerid, slot);
-					GetContainerSlotItem(containerid, slot, itemid);
-
-					if(!IsValidItem(itemid))
-					{
-						DisplayContainerInventory(playerid, containerid);
-						return Y_HOOKS_CONTINUE_RETURN_0;
-					}
-
-					new required = AddItemToContainer(bagcontainerid, itemid, playerid);
-
-					if(required > 0)
-						ShowActionText(playerid, sprintf(ls(playerid, "BAGEXTRASLO", true), required), 3000, 150);
-
-					DisplayContainerInventory(playerid, containerid);
-				}
+				DisplayContainerInventory(playerid, containerid);
+				return Y_HOOKS_CONTINUE_RETURN_0;
 			}
+
+			new required = AddItemToContainer(bagcontainerid, itemid, playerid);
+
+			if(required > 0)
+				ShowActionText(playerid, sprintf(ls(playerid, "BAGEXTRASLO", true), required), 3000, 150);
+			else
+				RemoveItemFromContainer(containerid, slot, playerid);
+
+			DisplayContainerInventory(playerid, containerid);
 		}
 	}
+
 	return Y_HOOKS_CONTINUE_RETURN_0;
 }
 
@@ -710,7 +709,6 @@ hook OnItemAddToContainer(Container:containerid, Item:itemid, playerid)
 
 	return Y_HOOKS_CONTINUE_RETURN_0;
 }
-
 
 /*==============================================================================
 
