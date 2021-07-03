@@ -280,8 +280,7 @@ public OnCheatWarning(playerid, const ip_address[], type, code, code2, count)
 		if(IsPlayerInTutorial(playerid) || IsPlayerOnAdminDuty(playerid))
 			return 1;
 			
-		ChatMsgAdmins(5, RED, "[Nex-Ac] Warning: %P(id:%d) Name: %s(%d) Code2: %d Count: %d",
-			playerid, playerid, NexCheatName[code], code2, count);
+		ChatMsgAdmins(6, RED, "[Nex-Ac] Warning: %P(id:%d) Name: %s(%d)", playerid, playerid, NexCheatName[code], code);
 	}
 	return 1;
 }
