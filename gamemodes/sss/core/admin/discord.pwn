@@ -29,8 +29,10 @@ public DCC_OnMessageCreate(DCC_Message:message)
     DCC_GetUserName(author, user_name);
     DCC_IsUserBot(author, is_bot);
     
-    if(is_bot)
+    if(is_bot){
+        defer DelWhiteMsg(_:message);
         return 0;
+    }
 
     if(strfind(msg, "/tab", true) == 0)
     {
@@ -126,6 +128,9 @@ public DCC_OnMessageCreate(DCC_Message:message)
     return 1;
 }
 
+timer DelWhiteMsg[60000](message)
+    DCC_DeleteMessage(DCC_Message:message);
+    
 forward OnPostPlayerStat(playerid);
 public OnPostPlayerStat(playerid)
 {
