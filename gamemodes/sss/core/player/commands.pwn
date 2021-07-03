@@ -42,21 +42,26 @@ CMD:mdd(playerid, params[])
 	return 1;
 }
 
+CMD:motd(playerid, params[])
+	return cmd_mdd(playerid, params);
+
 CMD:chat(playerid, params[])
 {
 	Dialog_Show(playerid, DIALOG_STYLE_MSGBOX, "Informação acerca do "C_BLUE"Sistema de ChatChat", ls(playerid, "GENCOMDCHAT"), "OK", "");
-
 	return 1;
 }
+CMD:chatinfo(playerid, params[])
+	return cmd_chat(playerid, params);
 
 CMD:dicas(playerid, params[])
 {
 	if(IsPlayerToolTipsOn(playerid)) ChatMsgLang(playerid, YELLOW, "TOOLTIPSOFF"); else ChatMsgLang(playerid, YELLOW, "TOOLTIPSON");
-
 	SetPlayerToolTips(playerid, !IsPlayerToolTipsOn(playerid));
-
 	return 1;
 }
+
+CMD:tools(playerid, params[])
+	return cmd_dicas(playerid, params);
 
 /*CMD:die(playerid, params[])
 {
@@ -133,6 +138,12 @@ CMD:mudarsenha(playerid,params[])
 	}
 	return 1;
 }
+
+CMD:changepass(playerid, params[])
+	return cmd_mudarsenha(playerid, params);
+
+CMD:changepassword(playerid, params[])
+	return cmd_mudarsenha(playerid, params);
 
 CMD:pos(playerid, params[])
 {
