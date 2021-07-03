@@ -105,11 +105,11 @@ hook OnItemCreateInWorld(Item:itemid)
 
 		if(itemtype == ItemType:item_Torso)
 		{
-			SetButtonText(buttonid, "Press "KEYTEXT_INTERACT" to open torso");
+			SetButtonText(buttonid, "Pressione "KEYTEXT_INTERACT" para revistar o corpo");
 		}
 		else if(itemtype == box_TypeData[box_ItemTypeBoxType[itemtype]][box_itemtype])
 		{
-			SetButtonText(buttonid, "Hold "KEYTEXT_INTERACT" to pick up~n~Press "KEYTEXT_INTERACT" to open");
+			SetButtonText(buttonid, "Segure "KEYTEXT_INTERACT" para pegar~n~Pressione "KEYTEXT_INTERACT" para abrir");
 		}
 	}
 
