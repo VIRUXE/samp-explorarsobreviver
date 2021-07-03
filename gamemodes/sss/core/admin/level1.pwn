@@ -12,6 +12,8 @@ hook OnGameModeInit()
 	RegisterAdminCommand(STAFF_LEVEL_GAME_MASTER, "/limparchat -Limpar o Chat para todos\n");
 	RegisterAdminCommand(STAFF_LEVEL_GAME_MASTER, "/aliases - check aliases\n");
 	RegisterAdminCommand(STAFF_LEVEL_GAME_MASTER, "/history - Verificar história do Jogador?\n");
+	RegisterAdminCommand(STAFF_LEVEL_GAME_MASTER, "/rr - Responder relatórios\n");
+	RegisterAdminCommand(STAFF_LEVEL_GAME_MASTER, "/blockrr - Bloquear alguém de enviar relatórios\n");
 }
 
 
