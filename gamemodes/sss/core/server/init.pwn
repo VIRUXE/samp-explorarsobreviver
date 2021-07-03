@@ -1684,7 +1684,7 @@ public OnScriptInit()
 			Medium:		The average size of most vehicles in this range.
 			Large:		Any exceptions that are larger. For cars, vehicles that are too large will just be moved to Truck category since some car spawns are in tight spots.
 	*/
-	vgroup_Civilian		= DefineVehicleSpawnGroup("Civil");
+	vgroup_Civilian		= DefineVehicleSpawnGroup("Civilian");
 	vgroup_Industrial	= DefineVehicleSpawnGroup("Industrial");
 	vgroup_Medical		= DefineVehicleSpawnGroup("Medical");
 	vgroup_Military		= DefineVehicleSpawnGroup("Military");
