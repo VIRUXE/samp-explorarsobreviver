@@ -195,6 +195,7 @@ _vint_LeaveArea(playerid, areaid)
 		if(varea_NearList[playerid][i] == data[1])
 		{
 			Iter_Remove(varea_NearIndex[playerid], i);
+			varea_NearList[playerid][i] = 0;
 			break;
 		}
 	}
