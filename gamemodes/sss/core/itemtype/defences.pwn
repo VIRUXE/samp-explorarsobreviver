@@ -179,13 +179,13 @@ ActivateDefenceItem(Item:itemid)
 
 	if(itemdata[def_motor])
 	{
-		SetButtonText(buttonid, sprintf("Press F to open %s", itemtypename));
-		SetItemLabel(itemid, sprintf("%s\n%d/%d", itemtypename, GetItemHitPoints(itemid), GetItemTypeMaxHitPoints(itemtype)));
+		SetButtonText(buttonid, sprintf("F para abrir %s", itemtypename));
+		SetItemLabel(itemid, sprintf("%d/%d", GetItemHitPoints(itemid), GetItemTypeMaxHitPoints(itemtype)));
 	}
 	else
 	{
-		SetButtonText(buttonid, sprintf("Press F to modify %s", itemtypename));
-		SetItemLabel(itemid, sprintf("%s\n%d/%d", itemtypename, GetItemHitPoints(itemid), GetItemTypeMaxHitPoints(itemtype)));
+		SetButtonText(buttonid, sprintf("F para modificar %s", itemtypename));
+		SetItemLabel(itemid, sprintf("%d/%d", GetItemHitPoints(itemid), GetItemTypeMaxHitPoints(itemtype)));
 	}
 
 	if(itemdata[def_hit] > 0)
