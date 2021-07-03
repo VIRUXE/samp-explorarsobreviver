@@ -54,7 +54,7 @@ hook OnGameModeInit()
 {
 	// Todo: custom weather array loaded from settings
 
-	weather_Current = random(19);
+	weather_Current = random(MAX_WEATHER_TYPES);
 	weather_LastChange = GetTickCount();
 }
 
@@ -103,7 +103,7 @@ _WeatherUpdate()
 {
 	foreach(new i : Player)
 	{
-		SetWeatherForPlayer(playerid, weather_Current);
+		SetWeatherForPlayer(i, weather_Current);
 		_WeatherUpdateForPlayer(i);
 	}
 }
