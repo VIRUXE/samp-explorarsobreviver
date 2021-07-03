@@ -95,6 +95,8 @@ IRawPacket:ID_CUSTOM_SYNC(playerid, BitStream:bs)
 
         PlayerMobileInfo[playerid][isMobile] = true; // system for newer version
 		PlayerMobileInfo[playerid][isHaveAutoaim] = bool:autoaim;
+
+		SetPlayerColor(playerid, 0xFFFFFF00);
 	}
 	return 1;
 }
