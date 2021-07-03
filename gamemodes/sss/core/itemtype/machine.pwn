@@ -110,7 +110,7 @@ hook OnItemCreateInWorld(Item:itemid)
 
 	new Button:buttonid;
 	GetItemButtonID(itemid, buttonid);
-	SetButtonText(buttonid, "Press "KEYTEXT_INTERACT" to access machine~n~Hold "KEYTEXT_INTERACT" to open menu~n~Use Petrol Can to add fuel");
+	SetButtonText(buttonid, "Pressiona "KEYTEXT_INTERACT" para acessar a máquina~n~Aperta "KEYTEXT_INTERACT" para abrir o menu~n~Utilize um Galão de Combustível para adicionar Gasolina");
 
 	return Y_HOOKS_CONTINUE_RETURN_0;
 }
@@ -153,7 +153,7 @@ _mach_PlayerUseMachine(playerid, Item:itemid)
 				MsToString(
 					cookduration -
 					GetTickCountDifference(GetTickCount(), starttick),
-				"%m minutes %s seconds")),
+				"%m minutos %s segundos")),
 			8000
 		);
 		return 1;
@@ -263,10 +263,8 @@ timer _mach_HoldInteract[250](playerid)
 
 				if(ret == 0)
 					ShowActionText(playerid, ls(playerid, "MACHNOITEMS", true), 5000);
-
 				else if(ret == -1)
 					ShowActionText(playerid, ls(playerid, "MACHRESTART", true), 6000);
-
 				else if(ret == -2)
 					ShowActionText(playerid, sprintf(
 						ls(playerid, "MACHNOTFUEL", true),
@@ -274,15 +272,15 @@ timer _mach_HoldInteract[250](playerid)
 					), 6000);
 
 				else
-					ShowActionText(playerid, sprintf(ls(playerid, "MACHCOOKTIM", true), MsToString(ret, "%m minutes %s seconds")), 6000);
+					ShowActionText(playerid, sprintf(ls(playerid, "MACHCOOKTIM", true), MsToString(ret, "%m minutos %s segundos")), 6000);
 
 				mach_CurrentMachine[playerid] = INVALID_ITEM_ID;
 			}
 		}
-		Dialog_ShowCallback(playerid, using inline Response, DIALOG_STYLE_MSGBOX, "Scrap Machine", sprintf(
-			"Press 'Start' to activate the scrap machine and convert certain types of items into scrap.\n\
-			Items that cannot be turned into scrap metal will be destroyed.\n\n\
-			"C_GREEN"Fuel amount: "C_WHITE"%.1f", fuel), "Start", "Cancel");
+		Dialog_ShowCallback(playerid, using inline Response, DIALOG_STYLE_MSGBOX, "Máquina de Sucata", sprintf(
+			"Pressiona 'Iniciar' para ativar a Máquina, para converter certos tipos de Itens em Sucata.\n\
+			Itens que não poderem ser tornado em Sucata será destruído.\n\n\
+			"C_GREEN"Gasolina Restante: "C_WHITE"%.1f", fuel), "Iniciar", "Cancelar");
 	}
 }
 
