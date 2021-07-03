@@ -33,12 +33,12 @@ Load_SF()
 		CreateButton(-2587.5229, 1162.4547, 55.5876, "Press F to enter"));
 */
 
-	DefineSupplyDropPos("San Fierro Airport", -1312.81885, -16.52664, 13.08027);
-	DefineSupplyDropPos("San Fierro Driving School", -2055.64697, -200.37950, 34.24461);
-	DefineSupplyDropPos("San Fierro Country Club", -2767.39209, -287.28488, 5.98262);
-	DefineSupplyDropPos("San Fierro Hospital", -2569.96948, 653.26270, 26.74425);
-	DefineSupplyDropPos("San Fierro Square", -1980.58887, 884.61041, 44.17714);
-	DefineSupplyDropPos("San Fierro Promenade", -1587.81201, 1180.50891, 5.97472);
+	DefineSupplyDropPos("Aerporto de San Fierro", -1312.81885, -16.52664, 13.08027);
+	DefineSupplyDropPos("Escola de Condução San Fierro", -2055.64697, -200.37950, 34.24461);
+	DefineSupplyDropPos("Clube de Golf de San Fierro", -2767.39209, -287.28488, 5.98262);
+	DefineSupplyDropPos("Hospital de San Fierro", -2569.96948, 653.26270, 26.74425);
+	DefineSupplyDropPos("Praça de San Fierro", -1980.58887, 884.61041, 44.17714);
+	DefineSupplyDropPos("Marginal de San Fierro", -1587.81201, 1180.50891, 5.97472);
 }
 
 
