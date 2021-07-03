@@ -705,7 +705,7 @@ public OnScriptInit()
 	item_Crowbar		= DefineItemType("Pe de Cabra",					"Crowbar",			18634,	2,	0.0, 90.0, 0.0,			0.0,	0.066177, 0.011153, 0.038410, 97.289527, 270.962554, 1.114514, .maxhitpoints = 2);
 	item_Cuntainer		= DefineItemType("Cuntainer",			"Container",		19321,	15,	0.0, 0.0, 0.0,		0.0,	0.0, 0.0, 0.0, 0.0, 0.0, 0.0, false, .buttonz = ITEM_FLOOR_OFFSET / 4,   .maxhitpoints = 20);
 	item_Cupboard		= DefineItemType("Cupboard",			"Cupboard",			19932,	12,	0.0, 0.0, 90.0,			0.0, .maxhitpoints = 12, .longpickup = true);
-	item_DarkWood		= DefineItemType("Porta de Madeira Escura",		"DarkWood",			19439,	9,	90.0, 0.0, 0.0,		0.0,	-0.094171,0.688217,-0.472795,-22.612369,169.761932,-15.201074, true, .buttonz = ITEM_FLOOR_OFFSET / 4,  .maxhitpoints = 5);
+	item_DarkWood		= DefineItemType("Porta de Madeira Escura",		"DarkWood",			19439,	9,	0.0, 90.0, 0.0,		0.0,	-0.094171,0.688217,-0.472795,-22.612369,169.761932,-15.201074, true, .buttonz = ITEM_FLOOR_OFFSET / 4,  .maxhitpoints = 5);
 	item_DataInterface	= DefineItemType("Interface de Dados",			"DataInterface",	19273,	1,	270.0, 0.0, 0.0,		0.0,	0.198234, 0.101531, 0.095477, 0.000000, 343.020019, 0.000000, .maxhitpoints = 1);
 	item_Daypack		= DefineItemType("Mochila Pequena",		"Daypack",			363,	3,	270.0, 0.0, 0.0,		0.0,	0.052853, 0.034967, -0.177413, 0.000000, 261.397491, 349.759826, .longpickup = true, .maxhitpoints = 3);
 	item_DeadLeg		= DefineItemType("Perna",						"DeadLeg",			2905,	4,	0.0, 0.0, 0.0,			0.0,	0.147815, 0.052444, -0.164205, 253.163970, 358.857666, 167.069869, true, .maxhitpoints = 4);
