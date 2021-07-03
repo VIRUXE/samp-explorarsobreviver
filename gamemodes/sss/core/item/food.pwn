@@ -189,7 +189,7 @@ hook OnHoldActionFinish(playerid)
 {
 	if(food_CurrentItem[playerid] != INVALID_ITEM_ID)
 	{
-		//_EatItem(playerid, food_CurrentItem[playerid]);
+		_EatItem(playerid, food_CurrentItem[playerid]);
 		return Y_HOOKS_BREAK_RETURN_1;
 	}
 
