@@ -127,6 +127,13 @@ SavePlayerChar(playerid)
 	player_data[PLY_CELL_TOOLTIPS] = IsPlayerToolTipsOn(playerid);
 
 	GetPlayerPos(playerid, Float:player_data[PLY_CELL_SPAWN_X], Float:player_data[PLY_CELL_SPAWN_Y], Float:player_data[PLY_CELL_SPAWN_Z]);
+
+	new Float:tmp;
+	if(CA_RayCastLine(Float:player_data[PLY_CELL_SPAWN_X], Float:player_data[PLY_CELL_SPAWN_Y], 3.0,
+		Float:player_data[PLY_CELL_SPAWN_X], Float:player_data[PLY_CELL_SPAWN_Y], Float:player_data[PLY_CELL_SPAWN_Z],
+		tmp, tmp, tmp) == WATER_OBJECT)
+		player_data[PLY_CELL_SPAWN_Z] = _:1.0;
+
 	GetPlayerFacingAngle(playerid, Float:player_data[PLY_CELL_SPAWN_R]);
 
 	player_data[PLY_CELL_MASK] = _:GetItemType(GetPlayerMaskItem(playerid));
@@ -326,7 +333,6 @@ LoadPlayerChar(playerid)
 
 	if(Float:player_data[PLY_CELL_HEALTH] <= 1.0 || !IsPlayerAlive(playerid)) {
 		SetPlayerHP(playerid, 0.0);
-		SetPlayerHealth(playerid, 0.0);
 	}
 	else
 	{	
