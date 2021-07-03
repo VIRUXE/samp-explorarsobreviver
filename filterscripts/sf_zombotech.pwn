@@ -37,7 +37,7 @@
 #include <a_samp>
 
 // For PlaySoundForPlayersInRange()
-#include "../include/gl_common.inc"
+// #include "../include/gl_common.inc"
 
 // -----------------------------------------------------------------------------
 // Defines
@@ -79,8 +79,8 @@
 // Elevator floor names for the 3D text labels
 static FloorNames[2][] =
 {
-	"Ground Floor",
-	"ZomboTech Lab"
+	"Térreo",
+	"Laboratório"
 };
 
 // Elevator floor Z heights
@@ -315,7 +315,7 @@ public OnObjectMoved(objectid)
 	    Floor_OpenDoors(ElevatorFloor);
 
 	    GetObjectPos(Obj_Elevator, x, y, z);
-	    Label_Elevator	= Create3DTextLabel("{CCCCCC}Press '{FFFFFF}~k~~CONVERSATION_YES~{CCCCCC}' to use elevator", 0xCCCCCCAA, X_ELEVATOR_POS - 1.8, Y_ELEVATOR_POS + 1.6, z - 0.6, 4.0, 0, 1);
+	    Label_Elevator	= Create3DTextLabel("{CCCCCC}Pressiona '{FFFFFF}~k~~CONVERSATION_YES~{CCCCCC}' para utilizar o Elevador", 0xCCCCCCAA, X_ELEVATOR_POS - 1.8, Y_ELEVATOR_POS + 1.6, z - 0.6, 4.0, 0, 1);
 
 	    ElevatorState 	= ELEVATOR_STATE_WAITING;
 	    SetTimer("Elevator_TurnToIdle", ELEVATOR_WAIT_TIME, 0);
@@ -332,9 +332,9 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
             return 0;
 
         if(FloorRequestedBy[listitem] != INVALID_PLAYER_ID || IsFloorInQueue(listitem))
-            GameTextForPlayer(playerid, "~r~The floor is already in the queue", 3500, 4);
+            GameTextForPlayer(playerid, "~r~O andar ja esta em espera", 3500, 4);
 		else if(DidPlayerRequestElevator(playerid))
-		    GameTextForPlayer(playerid, "~r~You already requested the elevator", 3500, 4);
+		    GameTextForPlayer(playerid, "~r~Ja requisitou o Elevador", 3500, 4);
 		else
 	        CallElevator(playerid, listitem);
 
@@ -364,9 +364,7 @@ public OnPlayerKeyStateChange(playerid, newkeys, oldkeys)
 		        
 		        // Check for ground floor
 		        if (pos[2] > (GROUND_Z_COORD - 2) && pos[2] < (GROUND_Z_COORD + 2))
-		        {
 		            i = 0;
-		        }
 		        else i = 1;
 		        
 		        // log("Floor = %d | State = %d | i = %d", ElevatorFloor, ElevatorState, i);
@@ -375,14 +373,14 @@ public OnPlayerKeyStateChange(playerid, newkeys, oldkeys)
 		        if (ElevatorState != ELEVATOR_STATE_MOVING && ElevatorFloor == i)
 		        {
 		            // Display a gametext message and exit here
-		            GameTextForPlayer(playerid, "~n~~n~~n~~n~~n~~r~ZomboTech Elevator~n~~r~Is Already On~n~~r~This Floor!", 3000, 5);
+		            GameTextForPlayer(playerid, "~n~~n~~n~~n~~n~~r~Elevador~n~~r~Ja esta~n~~r~Neste andar!", 3000, 5);
 		            return 1;
 		        }
 				
 			    // log("Call Elevator to Floor %i", i);
 			    
 				CallElevator(playerid, i);
-				GameTextForPlayer(playerid, "~r~Elevator called", 3500, 4);
+				GameTextForPlayer(playerid, "~r~Elevador chamado ", 3500, 4);
 		    }
 		}
 	}
@@ -399,7 +397,7 @@ stock Elevator_Initialize()
 	Obj_ElevatorDoors[0] 	= CreateObject(18757, X_ELEVATOR_POS, Y_ELEVATOR_POS, GROUND_Z_COORD, 0.000000, 0.000000, 270.000000);
 	Obj_ElevatorDoors[1] 	= CreateObject(18756, X_ELEVATOR_POS, Y_ELEVATOR_POS, GROUND_Z_COORD, 0.000000, 0.000000, 270.000000);
 
-	Label_Elevator          = Create3DTextLabel("{CCCCCC}Press '{FFFFFF}~k~~CONVERSATION_YES~{CCCCCC}' to use elevator", 0xCCCCCCAA, X_ELEVATOR_POS - 1.8, Y_ELEVATOR_POS + 1.6, GROUND_Z_COORD - 0.6, 4.0, 0, 1);
+	Label_Elevator          = Create3DTextLabel("{CCCCCC}Pressiona '{FFFFFF}~k~~CONVERSATION_YES~{CCCCCC}' para utilizar o Elevador", 0xCCCCCCAA, X_ELEVATOR_POS - 1.8, Y_ELEVATOR_POS + 1.6, GROUND_Z_COORD - 0.6, 4.0, 0, 1);
 
 	new string[128],
 		Float:z;
@@ -409,7 +407,7 @@ stock Elevator_Initialize()
 	    Obj_FloorDoors[i][0] 	= CreateObject(18757, X_ELEVATOR_POS, Y_ELEVATOR_POS + 0.245, GetDoorsZCoordForFloor(i), 0.000000, 0.000000, 270.000000);
 		Obj_FloorDoors[i][1] 	= CreateObject(18756, X_ELEVATOR_POS, Y_ELEVATOR_POS + 0.245, GetDoorsZCoordForFloor(i), 0.000000, 0.000000, 270.000000);
 
-		format(string, sizeof(string), "{CCCCCC}[%s]\n{CCCCCC}Press '{FFFFFF}~k~~CONVERSATION_YES~{CCCCCC}' to call", FloorNames[i]);
+		format(string, sizeof(string), "{CCCCCC}[%s]\n{CCCCCC}Pressiona '{FFFFFF}~k~~CONVERSATION_YES~{CCCCCC}' para chamar", FloorNames[i]);
 
 		if(i == 0)
 		    z = 47.460277;
@@ -484,7 +482,7 @@ stock Floor_OpenDoors(floorid)
     MoveObject(Obj_FloorDoors[floorid][0], X_DOOR_L_OPENED, Y_ELEVATOR_POS + 0.245, GetDoorsZCoordForFloor(floorid), DOORS_SPEED);
 	MoveObject(Obj_FloorDoors[floorid][1], X_DOOR_R_OPENED, Y_ELEVATOR_POS + 0.245, GetDoorsZCoordForFloor(floorid), DOORS_SPEED);
 	
-	PlaySoundForPlayersInRange(6401, 50.0, X_ELEVATOR_POS, Y_ELEVATOR_POS, GetDoorsZCoordForFloor(floorid) + 5.0);
+	// PlaySoundForPlayersInRange(6401, 50.0, X_ELEVATOR_POS, Y_ELEVATOR_POS, GetDoorsZCoordForFloor(floorid) + 5.0);
 
 	return 1;
 }
@@ -496,7 +494,7 @@ stock Floor_CloseDoors(floorid)
     MoveObject(Obj_FloorDoors[floorid][0], X_ELEVATOR_POS, Y_ELEVATOR_POS + 0.245, GetDoorsZCoordForFloor(floorid), DOORS_SPEED);
 	MoveObject(Obj_FloorDoors[floorid][1], X_ELEVATOR_POS, Y_ELEVATOR_POS + 0.245, GetDoorsZCoordForFloor(floorid), DOORS_SPEED);
 	
-	PlaySoundForPlayersInRange(6401, 50.0, X_ELEVATOR_POS, Y_ELEVATOR_POS, GetDoorsZCoordForFloor(floorid) + 5.0);
+	// PlaySoundForPlayersInRange(6401, 50.0, X_ELEVATOR_POS, Y_ELEVATOR_POS, GetDoorsZCoordForFloor(floorid) + 5.0);
 
 	return 1;
 }
@@ -640,7 +638,7 @@ stock ShowElevatorDialog(playerid)
 	    strcat(string, "\n");
 	}
 
-	ShowPlayerDialog(playerid, DIALOG_ID, DIALOG_STYLE_LIST, "ZomboTech Elevator...", string, "Accept", "Cancel");
+	ShowPlayerDialog(playerid, DIALOG_ID, DIALOG_STYLE_LIST, "Elevador...", string, "Aceitar", "Cancelar");
 
 	return 1;
 }

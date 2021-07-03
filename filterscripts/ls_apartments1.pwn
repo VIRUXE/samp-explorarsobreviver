@@ -10,7 +10,6 @@
 // Warning: This script uses a total of 45 objects, 22 3D Text Labels and 1 dialog.
 
 #include <a_samp>
-#include "../include/gl_common.inc" // for PlaySoundForPlayersInRange()
 
 #define ELEVATOR_SPEED      (5.0)   // Movement speed of the elevator.
 #define DOORS_SPEED         (5.0)   // Movement speed of the doors.
@@ -31,27 +30,27 @@
 -------------------*/
 static FloorNames[21][] =
 {
-	"Ground Floor",
-	"First Floor",
-	"Second Floor",
-	"Third Floor",
-	"Fourth Floor",
-	"Fifth Floor",
-	"Sixth Floor",
-	"Seventh Floor",
-	"Eighth Floor",
-	"Ninth Floor",
-	"Tenth Floor",
-	"Eleventh Floor",
-	"Twelfth Floor",
-	"Thirteenth Floor",
-	"Fourteenth Floor",
-	"Fifteenth Floor",
-	"Sixteenth Floor",
-	"Seventeenth Floor",
-	"Eighteenth Floor",
-	"Nineteenth Floor",
-	"Penthouse"
+    "Térreo",
+    "1º Andar",
+    "2º Andar",
+    "3º Andar",
+    "4º Andar",
+    "5º Andar",
+    "6º Andar",
+    "7º Andar",
+    "8º Andar",
+    "9º Andar",
+    "10º Andar",
+    "11º Andar",
+    "12º Andar"
+    "13º Andar",
+    "14º Andar",
+    "15º Andar",
+    "16º Andar",
+    "17º Andar",
+    "18º Andar",
+    "19º Andar",
+    "Cobertura"
 };
 
 static Float:FloorZOffsets[21] =
@@ -176,7 +175,7 @@ public OnObjectMoved(objectid)
 	    Floor_OpenDoors(ElevatorFloor);
 
 	    GetObjectPos(Obj_Elevator, x, y, z);
-	    Label_Elevator	= Create3DTextLabel("{CCCCCC}Press '{FFFFFF}~k~~CONVERSATION_YES~{CCCCCC}' to use elevator", 0xCCCCCCAA, 1784.9822, -1302.0426, z - 0.9, 4.0, 0, 1);
+	    Label_Elevator	= Create3DTextLabel("{CCCCCC}Pressione '{FFFFFF}~k~~CONVERSATION_YES~{CCCCCC}' para utilizar o Elevador", 0xCCCCCCAA, 1784.9822, -1302.0426, z - 0.9, 4.0, 0, 1);
 
 	    ElevatorState 	= ELEVATOR_STATE_WAITING;
 	    SetTimer("Elevator_TurnToIdle", ELEVATOR_WAIT_TIME, 0);
@@ -193,9 +192,9 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
             return 0;
 
         if(FloorRequestedBy[listitem] != INVALID_PLAYER_ID || IsFloorInQueue(listitem))
-            GameTextForPlayer(playerid, "~r~The floor is already in the queue", 3500, 4);
+            GameTextForPlayer(playerid, "~r~Esse andar ja esta em espera", 3500, 4);
 		else if(DidPlayerRequestElevator(playerid))
-		    GameTextForPlayer(playerid, "~r~You already requested the elevator", 3500, 4);
+		    GameTextForPlayer(playerid, "~r~Ja requisitou o elevador", 3500, 4);
 		else
 	        CallElevator(playerid, listitem);
 
@@ -228,7 +227,7 @@ public OnPlayerKeyStateChange(playerid, newkeys, oldkeys)
 				if(i <= 19)
 				{
 					CallElevator(playerid, i + 1);
-					GameTextForPlayer(playerid, "~r~Elevator called", 3500, 4);
+					GameTextForPlayer(playerid, "~r~Elevador chamado", 3500, 4);
 				}
 		    }
 		}
@@ -246,7 +245,7 @@ stock Elevator_Initialize()
 	Obj_ElevatorDoors[0] 	= CreateObject(18757, X_DOOR_CLOSED, -1303.459472, GROUND_Z_COORD, 0.000000, 0.000000, 270.000000);
 	Obj_ElevatorDoors[1] 	= CreateObject(18756, X_DOOR_CLOSED, -1303.459472, GROUND_Z_COORD, 0.000000, 0.000000, 270.000000);
 
-	Label_Elevator          = Create3DTextLabel("{CCCCCC}Press '{FFFFFF}~k~~CONVERSATION_YES~{CCCCCC}' to use elevator", 0xCCCCCCAA, 1784.9822, -1302.0426, 13.6491, 4.0, 0, 1);
+	Label_Elevator          = Create3DTextLabel("{CCCCCC}Pressione '{FFFFFF}~k~~CONVERSATION_YES~{CCCCCC}' para utilizar o Elevador", 0xCCCCCCAA, 1784.9822, -1302.0426, 13.6491, 4.0, 0, 1);
 
 	new string[128],
 		Float:z;
@@ -256,7 +255,7 @@ stock Elevator_Initialize()
 	    Obj_FloorDoors[i][0] 	= CreateObject(18757, X_DOOR_CLOSED, -1303.171142, GetDoorsZCoordForFloor(i), 0.000000, 0.000000, 270.000000);
 		Obj_FloorDoors[i][1] 	= CreateObject(18756, X_DOOR_CLOSED, -1303.171142, GetDoorsZCoordForFloor(i), 0.000000, 0.000000, 270.000000);
 
-		format(string, sizeof(string), "{CCCCCC}[%s]\n{CCCCCC}Press '{FFFFFF}~k~~CONVERSATION_YES~{CCCCCC}' to call", FloorNames[i]);
+		format(string, sizeof(string), "{CCCCCC}[%s]\n{CCCCCC}Pressione '{FFFFFF}~k~~CONVERSATION_YES~{CCCCCC}' para chamar", FloorNames[i]);
 
 		if(i == 0)
 		    z = 13.4713;
@@ -329,7 +328,7 @@ stock Floor_OpenDoors(floorid)
     MoveObject(Obj_FloorDoors[floorid][0], X_DOOR_L_OPENED, -1303.171142, GetDoorsZCoordForFloor(floorid), DOORS_SPEED);
 	MoveObject(Obj_FloorDoors[floorid][1], X_DOOR_R_OPENED, -1303.171142, GetDoorsZCoordForFloor(floorid), DOORS_SPEED);
 	
-	PlaySoundForPlayersInRange(6401, 50.0, X_DOOR_CLOSED, -1303.171142, GetDoorsZCoordForFloor(floorid) + 5.0);
+	// PlaySoundForPlayersInRange(6401, 50.0, X_DOOR_CLOSED, -1303.171142, GetDoorsZCoordForFloor(floorid) + 5.0);
 
 	return 1;
 }
@@ -341,7 +340,7 @@ stock Floor_CloseDoors(floorid)
     MoveObject(Obj_FloorDoors[floorid][0], X_DOOR_CLOSED, -1303.171142, GetDoorsZCoordForFloor(floorid), DOORS_SPEED);
 	MoveObject(Obj_FloorDoors[floorid][1], X_DOOR_CLOSED, -1303.171142, GetDoorsZCoordForFloor(floorid), DOORS_SPEED);
 	
-	PlaySoundForPlayersInRange(6401, 50.0, X_DOOR_CLOSED, -1303.171142, GetDoorsZCoordForFloor(floorid) + 5.0);
+	// PlaySoundForPlayersInRange(6401, 50.0, X_DOOR_CLOSED, -1303.171142, GetDoorsZCoordForFloor(floorid) + 5.0);
 
 	return 1;
 }
@@ -485,7 +484,7 @@ stock ShowElevatorDialog(playerid)
 	    strcat(string, "\n");
 	}
 
-	(playerid, DIALOG_ID, DIALOG_STYLE_LIST, "Elevator", string, "Accept", "Cancel");
+	(playerid, DIALOG_ID, DIALOG_STYLE_LIST, "Elevador", string, "Aceitar", "Cancelar");
 
 	return 1;
 }
