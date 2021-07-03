@@ -112,7 +112,7 @@ hook OnPlayerConnect(playerid)
 	PlayerTextDrawSetOutline		(playerid, veh_FuelUI[playerid], 1);
 	PlayerTextDrawSetProportional	(playerid, veh_FuelUI[playerid], 1);
 
-	veh_DamageUI[playerid]			=CreatePlayerTextDraw(playerid, 620.000000, 371.000000, "DMG");
+	veh_DamageUI[playerid]			=CreatePlayerTextDraw(playerid, 620.000000, 371.000000, "DANO");
 	PlayerTextDrawAlignment			(playerid, veh_DamageUI[playerid], 3);
 	PlayerTextDrawBackgroundColor	(playerid, veh_DamageUI[playerid], 255);
 	PlayerTextDrawFont				(playerid, veh_DamageUI[playerid], 2);
@@ -121,7 +121,7 @@ hook OnPlayerConnect(playerid)
 	PlayerTextDrawSetOutline		(playerid, veh_DamageUI[playerid], 1);
 	PlayerTextDrawSetProportional	(playerid, veh_DamageUI[playerid], 1);
 
-	veh_EngineUI[playerid]			=CreatePlayerTextDraw(playerid, 620.000000, 356.000000, "ENG");
+	veh_EngineUI[playerid]			=CreatePlayerTextDraw(playerid, 620.000000, 356.000000, "MOTOR");
 	PlayerTextDrawAlignment			(playerid, veh_EngineUI[playerid], 3);
 	PlayerTextDrawBackgroundColor	(playerid, veh_EngineUI[playerid], 255);
 	PlayerTextDrawFont				(playerid, veh_EngineUI[playerid], 2);
@@ -130,7 +130,7 @@ hook OnPlayerConnect(playerid)
 	PlayerTextDrawSetOutline		(playerid, veh_EngineUI[playerid], 1);
 	PlayerTextDrawSetProportional	(playerid, veh_EngineUI[playerid], 1);
 
-	veh_DoorsUI[playerid]			=CreatePlayerTextDraw(playerid, 620.000000, 341.000000, "DOR");
+	veh_DoorsUI[playerid]			=CreatePlayerTextDraw(playerid, 620.000000, 341.000000, "PORTAS");
 	PlayerTextDrawAlignment			(playerid, veh_DoorsUI[playerid], 3);
 	PlayerTextDrawBackgroundColor	(playerid, veh_DoorsUI[playerid], 255);
 	PlayerTextDrawFont				(playerid, veh_DoorsUI[playerid], 2);
@@ -300,7 +300,6 @@ _veh_create(type, Float:x, Float:y, Float:z, Float:r, colour1, colour2, world = 
 
 	if(isnull(uuid))
 		UUID(veh_Data[vehicleid][veh_uuid]);
-
 	else
 		strcat(veh_Data[vehicleid][veh_uuid], uuid, UUID_LEN);
 
@@ -318,7 +317,6 @@ _veh_SyncData(vehicleid)
 
 	if(VEHICLE_CATEGORY_MOTORBIKE <= GetVehicleTypeCategory(GetVehicleType(vehicleid)) <= VEHICLE_CATEGORY_PUSHBIKE)
 		SetVehicleParamsEx(vehicleid, 1, 0, 0, 0, 0, 0, 0);
-
 	else
 		SetVehicleParamsEx(vehicleid, 0, 0, 0, _:GetVehicleLockState(vehicleid), 0, 0, 0);
 
@@ -356,13 +354,10 @@ hook OnPlayerKeyStateChange(playerid, newkeys, oldkeys)
 			}
 		}
 		if(newkeys & KEY_NO)
-		{
 			VehicleLightsState(vehicleid, !VehicleLightsState(vehicleid));
-		}
+
 		if(newkeys & KEY_CTRL_BACK)//262144)
-		{
 			ShowRadioUI(playerid);
-		}
 
 		return 1;
 	}
@@ -425,9 +420,7 @@ PlayerVehicleUpdate(playerid)
 			}
 		}
 		else
-		{
 			SetVehicleHealth(vehicleid, 299.0);
-		}
 	}
 
 //	if(velocitychange > 70.0)
@@ -444,16 +437,12 @@ PlayerVehicleUpdate(playerid)
 
 	if(health <= VEHICLE_HEALTH_CHUNK_1)
 		PlayerTextDrawColor(playerid, veh_DamageUI[playerid], VEHICLE_HEALTH_CHUNK_1_COLOUR);
-
 	else if(health <= VEHICLE_HEALTH_CHUNK_2)
 		PlayerTextDrawColor(playerid, veh_DamageUI[playerid], VEHICLE_HEALTH_CHUNK_1_COLOUR);
-
 	else if(health <= VEHICLE_HEALTH_CHUNK_3)
 		PlayerTextDrawColor(playerid, veh_DamageUI[playerid], VEHICLE_HEALTH_CHUNK_2_COLOUR);
-
 	else if(health <= VEHICLE_HEALTH_CHUNK_4)
 		PlayerTextDrawColor(playerid, veh_DamageUI[playerid], VEHICLE_HEALTH_CHUNK_3_COLOUR);
-
 	else if(health <= VEHICLE_HEALTH_MAX)
 		PlayerTextDrawColor(playerid, veh_DamageUI[playerid], VEHICLE_HEALTH_CHUNK_4_COLOUR);
 
@@ -511,29 +500,18 @@ PlayerVehicleUpdate(playerid)
 			}
 		}
 		else
-		{
 			PlayerTextDrawColor(playerid, veh_EngineUI[playerid], VEHICLE_UI_INACTIVE);
-		}
 	}
 	else
-	{
 		PlayerTextDrawHide(playerid, veh_FuelUI[playerid]);
-	}
 
 	if(IsVehicleTypeLockable(vehicletype))
 	{
-		if(VehicleDoorsState(vehicleid))
-			PlayerTextDrawColor(playerid, veh_DoorsUI[playerid], VEHICLE_UI_ACTIVE);
-
-		else
-			PlayerTextDrawColor(playerid, veh_DoorsUI[playerid], VEHICLE_UI_INACTIVE);
-
+		PlayerTextDrawColor(playerid, veh_DoorsUI[playerid], VehicleDoorsState(vehicleid) ? VEHICLE_UI_ACTIVE : VEHICLE_UI_INACTIVE);
 		PlayerTextDrawShow(playerid, veh_DoorsUI[playerid]);
 	}
 	else
-	{
 		PlayerTextDrawHide(playerid, veh_DoorsUI[playerid]);
-	}
 
 	PlayerTextDrawShow(playerid, veh_DamageUI[playerid]);
 	PlayerTextDrawShow(playerid, veh_EngineUI[playerid]);
@@ -780,7 +758,6 @@ IsVehicleValidOutOfBounds(vehicleid)
 		{
 			case VEHICLE_CATEGORY_HELICOPTER, VEHICLE_CATEGORY_PLANE, VEHICLE_CATEGORY_BOAT:
 				return 1;
-
 			default:
 				return 0;
 		}
