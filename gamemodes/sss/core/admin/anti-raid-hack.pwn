@@ -136,15 +136,11 @@ IRPC:131(playerid, BitStream:bs){
 
 // EnterVehicle
 IRPC:26(playerid, BitStream:bs){
-	if(atr_Check[playerid]){
-		CA_RayCastLine(atr_SetX[playerid], atr_SetY[playerid], atr_SetZ[playerid] + 600,
-			atr_SetX[playerid], atr_SetY[playerid], atr_SetZ[playerid], atr_SetZ[playerid], atr_SetZ[playerid], atr_SetZ[playerid]);
-			
-		SetPlayerPos(playerid, atr_SetX[playerid], atr_SetY[playerid], atr_SetZ[playerid]);
+	if(atr_Check[playerid])
 		return 0;
-	}
 	return 1;
 }
+
 hook OnPlayerUseItemWithItem(playerid, Item:itemid, Item:withitemid)
 {
 	if(atr_Check[playerid])
