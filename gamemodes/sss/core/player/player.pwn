@@ -328,6 +328,9 @@ public OnPlayerSpawn(playerid)
 		return 1;
 	}
 
+	if(IsPlayerMobile(playerid))
+		SetPlayerColor(playerid, 0xFFFFFF00);
+
 	SetPlayerPos(playerid, DEFAULT_POS_X, DEFAULT_POS_Y, DEFAULT_POS_Z);
 	
 	ply_Data[playerid][ply_SpawnTick] = GetTickCount();
