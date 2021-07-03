@@ -110,7 +110,7 @@ hook OnItemCreateInWorld(Item:itemid)
 
 	new Button:buttonid;
 	GetItemButtonID(itemid, buttonid);
-	SetButtonText(buttonid, "Pressiona "KEYTEXT_INTERACT" para acessar a máquina~n~Aperta "KEYTEXT_INTERACT" para abrir o menu~n~Utilize um Galão de Combustível para adicionar Gasolina");
+	SetButtonText(buttonid, "Pressione "KEYTEXT_INTERACT" para acessar a máquina~n~Aperta "KEYTEXT_INTERACT" para abrir o menu~n~Utilize um Galão de Combustível para adicionar Gasolina");
 
 	return Y_HOOKS_CONTINUE_RETURN_0;
 }
@@ -278,7 +278,7 @@ timer _mach_HoldInteract[250](playerid)
 			}
 		}
 		Dialog_ShowCallback(playerid, using inline Response, DIALOG_STYLE_MSGBOX, "Máquina de Sucata", sprintf(
-			"Pressiona 'Iniciar' para ativar a Máquina, para converter certos tipos de Itens em Sucata.\n\
+			"Pressione 'Iniciar' para ativar a Máquina, para converter certos tipos de Itens em Sucata.\n\
 			Itens que não poderem ser tornado em Sucata será destruído.\n\n\
 			"C_GREEN"Gasolina Restante: "C_WHITE"%.1f", fuel), "Iniciar", "Cancelar");
 	}
