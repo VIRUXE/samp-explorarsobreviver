@@ -24,7 +24,7 @@ hook OnItemAddToContainer(Container:containerid, Item:itemid, playerid)
 	{
 		ShowActionText(playerid, sprintf(
 			ls(playerid, "MACHITEMTYP", true),
-			"Scrap Metal"
+			"Metal de Sucata"
 		));
 		return Y_HOOKS_BREAK_RETURN_1;
 	}
