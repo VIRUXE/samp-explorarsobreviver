@@ -375,11 +375,8 @@ public OnPlayerUpdate(playerid)
 		if(IsPlayerOnAdminDuty(playerid))
 			ply_Data[playerid][ply_HitPoints] = 250.0;
 
-		SetPlayerHealth(playerid, ply_Data[playerid][ply_HitPoints]);
 		SetPlayerArmour(playerid, ply_Data[playerid][ply_ArmourPoints]);
-	}
-	else
-		SetPlayerHealth(playerid, 100.0);		
+	}	
 
 	return 1;
 }
@@ -610,6 +607,8 @@ stock SetPlayerHP(playerid, Float:hp)
 		hp = 100.0;
 
 	ply_Data[playerid][ply_HitPoints] = hp;
+
+	SetPlayerHealth(playerid, hp);
 
 	return 1;
 }
