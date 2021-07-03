@@ -270,7 +270,7 @@ hook OnItemCreateInWorld(Item:itemid)
 	{
 		new Button:buttonid;
 		GetItemButtonID(itemid, buttonid);
-		SetButtonText(buttonid, "Hold "KEYTEXT_INTERACT" to pick up~n~Press "KEYTEXT_INTERACT" to open");
+		SetButtonText(buttonid, "Segure "KEYTEXT_INTERACT" para pegar~n~Pressione "KEYTEXT_INTERACT" abrir");
 	}
 }
 
