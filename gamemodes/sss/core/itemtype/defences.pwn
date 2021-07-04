@@ -744,12 +744,8 @@ ConvertItemToDefenceItem(Item:itemid, pose, playerid)
 
 	new
 		ItemType:itemtype = GetItemType(itemid),
-		Float:x,
-		Float:y,
-		Float:z,
-		Float:rx,
-		Float:ry,
-		Float:rz,
+		Float:x, Float:y, Float:z,
+		Float:rx, Float:ry, Float:rz,
 		Float:a;
 
 	GetPlayerPos(playerid, x, y, z);
@@ -771,7 +767,7 @@ ConvertItemToDefenceItem(Item:itemid, pose, playerid)
 		rz += def_TypeData[def_ItemTypeDefenceType[itemtype]][def_verticalRotZ];
 	}
 
-	SetItemPos(itemid, x + 0.6 * floatsin(-a, degrees), y + 0.6 * floatcos(-a, degrees), z);
+	SetItemPos(itemid, x + 0.9 * floatsin(-a, degrees), y + 0.9 * floatcos(-a, degrees), z);
 	SetItemRot(itemid, rx, ry, rz);
 	
 	return CallLocalFunction("OnDefenceCreate", "d", _:itemid);
@@ -828,53 +824,44 @@ hook OnItemTweakUpdate(playerid, Item:itemid)
 {
 	if(def_TweakArrow[playerid] != INVALID_OBJECT_ID)
 	{
-		// Automatically stack defenses
-		new pose;
-		GetItemArrayDataAtCell(Item:itemid, pose, def_pose);
-		if(pose == DEFENCE_POSE_VERTICAL)
-		{
-			new
-				Item:list[MAX_CONSTRUCT_SET_ITEMS] = {INVALID_ITEM_ID, ...},
-				size, Float:x, Float:y, Float:z, ItemType:itemtype, active,
-				modelid, Float:tmp, Float:maxz, Float:x2, Float:y2, Float:z2;
-
-			GetItemPos(itemid, x, y, z);
-
-			size = GetItemsInRange(x, y, z, 1.0, list);
-
-			if(size > 0){
-				for(new i; i < size; i++){
-					if(list[i] == itemid)
-						continue;
-
-					itemtype = GetItemType(list[i]);
-					if(def_ItemTypeDefenceType[itemtype] != -1){
-						GetItemArrayDataAtCell(list[i], active, def_active);
-						if(active){
-							GetItemArrayDataAtCell(list[i], pose, def_pose);
-							if(pose == DEFENCE_POSE_VERTICAL)
-							{
-								GetItemTypeModel(GetItemType(list[i]), modelid);
-								CA_GetModelBoundingBox(modelid, tmp, tmp, tmp, tmp, tmp, maxz);
-								GetItemPos(list[i], x2, y2, z2);
-								if(z < z2 + (maxz - 0.1)){
-									CA_RayCastLine(x2, y2, z2 + maxz + 0.1, x2, y2, z2 - 10.0, tmp, tmp, tmp);
-									SetItemPos(itemid, x, y, tmp + (def_TypeData[def_ItemTypeDefenceType[GetItemType(itemid)]][def_placeOffsetZ] - 0.09));
-								}
-								return 1;
-							}
-						}
-					}
-				}
-			}
-
-			CA_RayCastLine(x, y, z, x, y, z - 300.0, tmp, tmp, tmp);
-			SetItemPos(itemid, x, y, tmp + def_TypeData[def_ItemTypeDefenceType[GetItemType(itemid)]][def_placeOffsetZ] + 0.08);
-		}
-
 		_UpdateDefenceTweakArrow(playerid, itemid);
 	}
+	return 1;
+}
 
+hook OnPlayerUpdate(playerid)
+{
+	if(def_TweakArrow[playerid] != INVALID_OBJECT_ID)
+	{
+		new Item:itemid = GetPlayerTweakItem(playerid);
+
+		if(!IsValidItem(itemid))
+			return 1;
+
+		new pose;
+		GetItemArrayDataAtCell(itemid, pose, def_pose);
+		if(pose == DEFENCE_POSE_VERTICAL)
+		{
+			new 
+				Float:cx, Float:cy, Float:cz,
+				Float:x, Float:y, Float:z,
+				Float:ix, Float:iy, Float:iz;
+
+			GetPlayerCameraPos(playerid, cx, cy, cz);
+			GetPlayerPos(playerid, x, y, z);
+			GetItemPos(itemid, ix, iy, iz);
+
+			if(cz < z)
+				iz = z + (z - cz); // TODO: Find a way to raise the defense a little more
+			else
+				iz = z - (cz - z);	 
+
+			SetItemPos(itemid, ix, iy,
+				iz + def_TypeData[def_ItemTypeDefenceType[GetItemType(itemid)]][def_placeOffsetZ]);
+
+			_UpdateDefenceTweakArrow(playerid, itemid);
+		}
+	}
 	return 1;
 }
 
