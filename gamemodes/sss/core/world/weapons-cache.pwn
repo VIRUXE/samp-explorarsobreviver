@@ -166,9 +166,7 @@ timer WeaponsCacheSignal[WEPCACHE_SIGNAL_INTERVAL](count, Float:x, Float:y, Floa
 		location,
 		Float:ref_x,
 		Float:ref_y,
-		Float:ref_z,
-		Float:angleto,
-		Float:distanceto;
+		Float:ref_z;
 
 	for(new i, j = random(Iter_Free(wepc_Index)) - 1; i < j; i++)
 	{
@@ -190,10 +188,10 @@ timer WeaponsCacheSignal[WEPCACHE_SIGNAL_INTERVAL](count, Float:x, Float:y, Floa
 		ref_y = wepc_DropLocationData[location][wepc_posY];
 		ref_z = wepc_DropLocationData[location][wepc_posZ];
 
-		angleto = absoluteangle(360 - GetAngleToPoint(ref_x, ref_y, x, y));
-		distanceto = Distance2D(ref_x, ref_y, x, y);
+		//angleto = absoluteangle(360 - GetAngleToPoint(ref_x, ref_y, x, y));
+		//distanceto = Distance2D(ref_x, ref_y, x, y);
 
-		ChatMsgAll(YELLOW, " » [EBS]: WEAPONS CACHE SIGNAL: BEARING: %.1fDEG DISTANCE: %.1fM'", angleto, distanceto);
+		ChatMsgAll(YELLOW, " » [Exercito]: Caixa de Armas caindo no mapa.. {C_ORANGE}(Icone 'Arma')");
 	}
 	else
 	{
