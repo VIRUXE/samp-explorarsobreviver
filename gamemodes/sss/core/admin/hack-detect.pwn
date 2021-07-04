@@ -263,7 +263,7 @@ public OnCheatDetected(playerid, const ip_address[], type, code)
 			}
 		}
 
-		if(IsPlayerDataLoaded(playerid) && code < 13 && GetAdminsOnline() == 0)
+		if(IsPlayerDataLoaded(playerid) && code < 13 && GetAdminsOnline(1, 6) == 0)
 		{
 			ChatMsg(playerid, RED, "Você foi kickado por suspeita de %s.", NexCheatName[code]);
 			AntiCheatKickWithDesync(playerid, code);
