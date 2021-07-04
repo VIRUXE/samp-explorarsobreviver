@@ -57,7 +57,7 @@ ACMD:restart[4](playerid, params[])
 		return 1;
 	}
 
-	ChatMsg(playerid, YELLOW, " » Restarting the server in "C_BLUE"%02d:%02d"C_YELLOW".", duration / 60, duration % 60);
+	ChatMsg(playerid, YELLOW, " » Reiniciando em "C_BLUE"%02d:%02d"C_YELLOW".", duration / 60, duration % 60);
 	SetRestart(duration);
 
 	return 1;

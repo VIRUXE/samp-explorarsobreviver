@@ -325,7 +325,7 @@ ShowReportOptions(playerid)
 {
 	new options[128];
 
-	options = "Banir\nEliminar\nEliminar todos os relatórios deste Jogador\nMarcar como não lido\n";
+	options = "Banir\nEliminar\nEliminar todos os relatórios desse Jogador\nMarcar como não lido\n";
 
 	if(IsPlayerOnAdminDuty(playerid))
 	{

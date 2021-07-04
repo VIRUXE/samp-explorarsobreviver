@@ -5,12 +5,7 @@ CMD:recipes(playerid, params[])
 	Dialog_ShowCraftTypes(playerid);
 	return 1;
 }
-
-CMD:crafts(playerid, params[])
-{
-	Dialog_ShowCraftTypes(playerid);
-	return 1;
-}
+CMD:receitas(playerid, params[]) return cmd_recipes(playerid, params);
 
 Dialog_ShowCraftTypes(playerid)
 {

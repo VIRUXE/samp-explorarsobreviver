@@ -755,7 +755,7 @@ RestartGamemode()
 	ChatMsgAll(BLUE, " ");
 	ChatMsgAll(BLUE, " ");
 	ChatMsgAll(BLUE, "-------------------------------------------------------------------------------------------------------------------------");
-	ChatMsgAll(YELLOW, " » O Servidor está sendo Reíniciado. Por favor aguarde...");
+	ChatMsgAll(YELLOW, " » Reiniciando. Por favor aguarde...");
 	ChatMsgAll(BLUE, "-------------------------------------------------------------------------------------------------------------------------");
 }
 
@@ -769,7 +769,7 @@ task RestartUpdate[1000]()
 		if(gServerUptime >= gServerMaxUptime - 3600)
 		{
 			new str[36];
-			format(str, 36, "Servidor reinciiando em:~n~%02d:%02d", (gServerMaxUptime - gServerUptime) / 60, (gServerMaxUptime - gServerUptime) % 60);
+			format(str, 36, "Servidor reinciando em:~n~%02d:%02d", (gServerMaxUptime - gServerUptime) / 60, (gServerMaxUptime - gServerUptime) % 60);
 			TextDrawSetString(RestartCount, str);
 
 			foreach(new i : Player)
