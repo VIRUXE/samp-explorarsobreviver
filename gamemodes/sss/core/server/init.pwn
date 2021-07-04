@@ -753,7 +753,7 @@ public OnScriptInit()
 	item_GolfClub		= DefineItemType("Taco de Golfe",					"GolfClub",			333,	3,	90.0, .maxhitpoints = 3);
 	item_GreenGloop		= DefineItemType("Unknown",						"GreenGloop",		2976,	3,	0.0, 0.0, 0.0,			0.0,	0.063387, 0.013771, -0.595982, 341.793945, 352.972686, 226.892105, true, .maxhitpoints = 3);
 	item_Grenade		= DefineItemType("Granada",						"Grenade",			342,	2,	90.0, .maxhitpoints = 2);
-	item_GrnApple		= DefineItemType("Marca Verde",					"GrnApple",			19576,	1,	0.0, 0.0, 0.0,			0.03,	0.107000, 0.039000, 0.014999,  -168.799911, -161.400177, -0.400169, .maxhitpoints = 1);
+	item_GrnApple		= DefineItemType("Maca Verde",					"GrnApple",			19576,	1,	0.0, 0.0, 0.0,			0.03,	0.107000, 0.039000, 0.014999,  -168.799911, -161.400177, -0.400169, .maxhitpoints = 1);
 	item_GunCase		= DefineItemType("Gun Case",					"GunCase",			2046,	12,	0.0, 0.0, 0.0,			0.5, .maxhitpoints = 12, .longpickup = true);
 	item_Gyroscope		= DefineItemType("Giroscopio",					"Gyroscope",		1945,	1,	0.0, 0.0, 0.0,			0.0,	0.180000, 0.085000, 0.009000,  -86.099967, -112.099975, 92.699890, .maxhitpoints = 1);
 	item_HackDevice		= DefineItemType("Interface de Hackeamento",	"HackDevice",		364,	1,	0.0, 0.0, 0.0,			0.0,	0.134000, 0.080000, -0.037000,  84.299949, 3.399998, 9.400002, .maxhitpoints = 1);
