@@ -5,6 +5,7 @@ world_survivor, 1.0
 8.5,	Screwdriver
 11.0,	Hammer
 12.0,	Crowbar
+20.0,   Map
 # meds
 10.0,	Bandage
 25.0,	AntiSepBandage
