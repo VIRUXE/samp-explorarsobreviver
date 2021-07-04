@@ -750,6 +750,30 @@ public OnUnoccupiedVehicleUpdate(vehicleid, playerid, passenger_seat, Float:new_
     return 1;
 }
 
+hook OnPlayerEnterVehArea(playerid, vehicleid)
+	UpdateMobileVehPos(playerid, vehicleid);
+
+hook OnPlayerLeaveVehArea(playerid, vehicleid)
+	UpdateMobileVehPos(playerid, vehicleid);
+
+UpdateMobileVehPos(playerid, vehicleid){
+	if(!IsPlayerMobile(playerid))
+		return 0;
+
+	new Float:x, Float:y, Float:z, Float:r;
+	GetVehiclePos(vehicleid, x, y, z);
+	GetVehicleZAngle(vehicleid, r);
+	new BitStream:bs = BS_New();
+	BS_WriteValue(bs, PR_UINT16, vehicleid, PR_FLOAT, x, PR_FLOAT, y, PR_FLOAT, z);
+	PR_SendRPC(bs, playerid, 159);
+	BS_Delete(bs);
+	bs = BS_New();
+	BS_WriteValue(bs, PR_UINT16, vehicleid, PR_FLOAT, r);
+	PR_SendRPC(bs, playerid, 160);
+	BS_Delete(bs);
+	return 1;
+}
+
 IsVehicleValidOutOfBounds(vehicleid)
 {
 	if(IsPosInWater(veh_Data[vehicleid][veh_spawnX], veh_Data[vehicleid][veh_spawnY], veh_Data[vehicleid][veh_spawnZ] - 5.0))
