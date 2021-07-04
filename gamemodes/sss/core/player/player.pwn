@@ -329,7 +329,10 @@ public OnPlayerSpawn(playerid)
 	}
 
 	if(IsPlayerMobile(playerid))
+	{
+		EnableAntiCheatForPlayer(playerid, 52, false);
 		SetPlayerColor(playerid, 0x59595900);
+	}
 
 	SetPlayerPos(playerid, DEFAULT_POS_X, DEFAULT_POS_Y, DEFAULT_POS_Z);
 	
