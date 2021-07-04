@@ -19,7 +19,6 @@ enum
 }
 
 static
-	body_skin[MAX_BODY],
 	body_PlayerName[MAX_BODY][MAX_PLAYER_NAME],
 	Text3D:body_NameTag[MAX_BODY] = {Text3D:INVALID_3DTEXT_ID, ...};
 	
@@ -388,12 +387,13 @@ CreateBody(const name[], Float:x, Float:y, Float:z, Float:a, w, i, s)
 
 	body_PlayerName[id][0] = EOS;
 	strcat(body_PlayerName[id], name);
-	body_skin[id] = s;
 	
-	if(IsValidDynamic3DTextLabel(body_NameTag[id]))
+	if(IsValidDynamic3DTextLabel(body_NameTag[id])){
 		DestroyDynamic3DTextLabel(body_NameTag[id]);
+		body_NameTag[id] = Text3D:INVALID_3DTEXT_ID;
+	}
 
-	body_NameTag[id] = CreateDynamic3DTextLabel(sprintf("%s{FFFFFF}(Corpo)", body_PlayerName[id]), 0xB8B8B8FF, x, y, z, gNameTagDistance, INVALID_PLAYER_ID, INVALID_VEHICLE_ID, 1, w, i);
+	body_NameTag[id] = CreateDynamic3DTextLabel(sprintf("%s{FFFFFF}(Corpo)", body_PlayerName[id]), 0xB8B8B8FF, x, y, z, gNameTagDistance, INVALID_PLAYER_ID, INVALID_VEHICLE_ID, 0, w, i);
 
 	ApplyDynamicActorAnimation(id, "SUNBATHE", "PARKSIT_M_IN", 4.1, 0, 0, 0, 1, 0);
 
@@ -424,8 +424,10 @@ stock DestroyBody(bodyid)
 	body_PlayerName[bodyid][0] = EOS;
 	DestroyDynamicActor(bodyid);
 
-	if(IsValidDynamic3DTextLabel(body_NameTag[bodyid]))
+	if(IsValidDynamic3DTextLabel(body_NameTag[bodyid])){
 		DestroyDynamic3DTextLabel(body_NameTag[bodyid]);
+		body_NameTag[bodyid] = Text3D:INVALID_3DTEXT_ID;
+	}
 
 	return 1;
 }
@@ -607,6 +609,8 @@ public OnPlayerGiveDamageDynamicActor(playerid, actorid, Float:amount, weaponid,
 
 		itemid = CreateItem(ItemType:item_Torso, cx, cy, cz + 0.2, .world = GetPlayerVirtualWorld(playerid), .interior = GetPlayerInterior(playerid));
 
+		defer DestroyTorso(_:itemid);
+		
 		GetItemArrayDataAtCell(itemid, _:containerid, 0);
 
 		new name[MAX_PLAYER_NAME + 8];
@@ -794,8 +798,10 @@ public OnPlayerGiveDamageDynamicActor(playerid, actorid, Float:amount, weaponid,
 		data[SAVED_BODY_WORLD] = 33;
 		modio_push(filename, _T<D,A,T,A>, SAVED_BODY_END, data);
 
-		if(IsValidDynamic3DTextLabel(body_NameTag[actorid]))
+		if(IsValidDynamic3DTextLabel(body_NameTag[actorid])){
 			DestroyDynamic3DTextLabel(body_NameTag[actorid]);
+			body_NameTag[actorid] = Text3D:INVALID_3DTEXT_ID;
+		}
 
 		SetDynamicActorVirtualWorld(actorid, 33);
 		//CreateBody(body_PlayerName[actorid], 0.0, 0.0, 0.0, 0.0, 33, 0, 0);

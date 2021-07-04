@@ -158,6 +158,10 @@ _OnDeath(playerid, killerid)
 //timer DestroyReason[10 * 60000](label)
 	//DestroyDynamic3DTextLabel(STREAMER_TAG_3D_TEXT_LABEL:label);
 
+timer DestroyTorso[30 * 60000](itemid)
+	if(IsValidItem(Item:itemid))
+		DestroyItem(Item:itemid);
+
 DropItems(playerid, Float:x, Float:y, Float:z)
 {
 	new
@@ -170,6 +174,8 @@ DropItems(playerid, Float:x, Float:y, Float:z)
 		.world = GetPlayerVirtualWorld(playerid), .interior = GetPlayerInterior(playerid));
 	else
 		return;
+
+	defer DestroyTorso(_:itemid);
 
 	// Head
 	//CreateDynamicObject(2908, cx, cy, cz + 0.2, 0.0, 0.0, 0.0);
