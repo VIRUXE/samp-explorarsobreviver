@@ -191,7 +191,7 @@ timer WeaponsCacheSignal[WEPCACHE_SIGNAL_INTERVAL](count, Float:x, Float:y, Floa
 		//angleto = absoluteangle(360 - GetAngleToPoint(ref_x, ref_y, x, y));
 		//distanceto = Distance2D(ref_x, ref_y, x, y);
 
-		ChatMsgAll(YELLOW, " » [Exercito]: Caixa de Armas caindo no mapa.. {C_ORANGE}(Icone 'Arma')");
+		ChatMsgAll(YELLOW, " » [Exercito]: Caixa de Armas caindo no mapa.. "C_ORANGE"(Icone 'Arma')");
 	}
 	else
 	{
