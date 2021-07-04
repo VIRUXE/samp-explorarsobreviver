@@ -815,8 +815,8 @@ public OnScriptInit()
 	item_MediumBox		= DefineItemType("Caixa Media",					"MediumBox",		3014,	5,	0.0, 0.0, 0.0,			0.1844,	-0.027872, 0.145617, -0.246524, 243.789840, 347.397491, 349.931610, true, .longpickup = true, .maxhitpoints = 5);
 	item_Medkit			= DefineItemType("Kit Medico",					"Medkit",			11736,	1,	0.0, 0.0, 0.0,			0.004,	0.197999, 0.038000, 0.021000,  79.700012, 0.000000, 90.899978, .maxhitpoints = 1);
 	item_MetalFrame		= DefineItemType("Painel de Metal",				"MetalFrame",		19843,	10,	0.0, 0.0, 0.0,			0.0,	-0.093000, 0.414000, -0.347999,  77.500022, 105.500022, 80.100013, true, .maxhitpoints = 16);
-	item_MetalGate		= DefineItemType("Portal de Metal",				"MetalGate",		19303,	10,	90.0, 0.0, 0.0,			0.0,	-0.128823,0.758761,-0.508013,-19.839876,-10.353648,105.119079, true, .buttonz = ITEM_FLOOR_OFFSET / 2,  .maxhitpoints = 4);
-	item_MetalGate1		= DefineItemType("Portao Grande",			"MetalGate1",		19870,	15,	90.0, 0.0, 0.0,			0.0,	0.0, 0.0, 0.0, 0.0, 0.0, 0.0, false, .buttonz = ITEM_FLOOR_OFFSET / 2, .maxhitpoints = 15);
+	item_MetalGate		= DefineItemType("Grade",						"MetalGate",		19303,	10,	90.0, 0.0, 0.0,			0.0,	-0.128823,0.758761,-0.508013,-19.839876,-10.353648,105.119079, true, .buttonz = ITEM_FLOOR_OFFSET / 2,  .maxhitpoints = 4);
+	item_MetalGate1		= DefineItemType("Grade Grande",			"MetalGate1",		19870,	15,	90.0, 0.0, 0.0,			0.0,	0.0, 0.0, 0.0, 0.0, 0.0, 0.0, false, .buttonz = ITEM_FLOOR_OFFSET / 2, .maxhitpoints = 15);
 	item_MetPanel		= DefineItemType("Painel de Metal",				"MetPanel",			2911,	10,	90.0, 0.0, 0.0,			0.0,	0.334049,-0.414559,-1.151276,338.515014,349.801025,104.950340, true, .buttonz = ITEM_FLOOR_OFFSET / 2,  .maxhitpoints = 3);
 	item_Microphone		= DefineItemType("Microfone",			"Microphone",		19610,	1,	0.0, 0.0, 0.0,			0.000,	0.078000, 0.030999, 0.012000,  53.499919, -99.100090, -46.300144, .maxhitpoints = 1);
 	item_MilitaryGate	= DefineItemType("Portao Militar",				"MilitaryGate",		2929,	12, 90.0, 0.0, 0.0,			0.0,	-0.564093,1.766212,-0.924849,337.887634,172.861953,68.495330, true, .buttonz = ITEM_FLOOR_OFFSET / 7,  .maxhitpoints = 15);
@@ -824,7 +824,7 @@ public OnScriptInit()
 	item_MilkCarton		= DefineItemType("Pacote de Leite",			"MilkCarton",		19569,	1,	0.0, 0.0, 0.0,			0.0298,	0.128000, 0.083999, -0.129000,  0.000000, 0.000000, 0.000000, .maxhitpoints = 1);
 	item_Minigun		= DefineItemType("Minigun",						"Minigun",			362,	7,	90.0, .maxhitpoints = 7);
 	item_MobilePhone	= DefineItemType("Celular",						"MobilePhone",		18865,	1,	0.0, 0.0, 0.0,			0.0,	0.103904, -0.003697, -0.015173, 94.655189, 184.031860, 0.000000, .maxhitpoints = 1);
-	item_Model70Rifle	= DefineItemType("Espingarda Modelo 70","Model70Rifle",		358,	5,	90.0,							.maxhitpoints = 5);
+	item_Model70Rifle	= DefineItemType("Rifle Modelo 70",				"Model70Rifle",		358,	5,	90.0,							.maxhitpoints = 5);
 	item_Molotov		= DefineItemType("Molotov",						"Molotov",			344,	2,	90.0, .maxhitpoints = 2);
 	item_MolotovEmpty	= DefineItemType("Molotov Vazio",				"MolotovEmpty",		344,	1,	-4.0, 0.0, 0.0,			0.1728,	0.000000, -0.004999, 0.000000,  0.000000, 0.000000, 0.000000, .maxhitpoints = 1);
 	item_Money			= DefineItemType("Dinheiro",					"Money",			1212,	1,	0.0, 0.0, 0.0,			0.0,	0.133999, 0.022000, 0.018000,  -90.700004, -11.199998, -101.600013, .maxhitpoints = 1);
@@ -858,7 +858,7 @@ public OnScriptInit()
 	item_PizzaOnly      = DefineItemType("Pizza",						"PizzaOnly",		19580,	3,	0.0, 0.0, 0.0,			0.000,	0.078000, 0.017999, 0.025000,  -29.900056, -88.800018, 59.299705, .maxhitpoints = 3);
 	item_PlantPot       = DefineItemType("Vaso",						"PlantPot",			2203,	4,	0.0, 0.0, 0.0,			0.138,	-0.027872, 0.145617, -0.246524, 243.789840, 347.397491, 349.931610, true, .longpickup = true, .maxhitpoints = 4);
 	item_PlotPole       = DefineItemType("Plot Pole",						"PlotPole",			3221,	3,	0.0, 0.0, 0.0,			0.0,	0.081356, 0.034642, -0.167247, 0.000000, 0.000000, 240.265777, .maxhitpoints = 3);
-	item_PoliceCap      = DefineItemType("Chapeu da Policia",			"PoliceCap",		18636,	1,	0.0, 0.0, 0.0,			0.05,	0.225000, 0.034000, 0.014000, 81.799942, 7.699998, 179.999954, .maxhitpoints = 1);
+	item_PoliceCap      = DefineItemType("Capacete de Policia",			"PoliceCap",		18636,	1,	0.0, 0.0, 0.0,			0.05,	0.225000, 0.034000, 0.014000, 81.799942, 7.699998, 179.999954, .maxhitpoints = 1);
 	item_PoliceHelm     = DefineItemType("Chapeu de Policia",		"PoliceHelm",		19200,	1,	0.0, 0.0, 0.0,			0.05,	0.173000, -0.010000, -0.020000,  -90.299995, 0.000000, 0.000000, .maxhitpoints = 1);
 	item_PoolCue        = DefineItemType("Taco de Bilhar",				"PoolCue",			338,	4,	90.0, .maxhitpoints = 4);
 	item_PowerSupply    = DefineItemType("Power Supply",				"PowerSupply",		3016,	1,	0.0, 0.0, 0.0,			0.0,	0.255000, -0.054000, 0.032000, -87.499984, -7.599999, -7.999998, .maxhitpoints = 1);
