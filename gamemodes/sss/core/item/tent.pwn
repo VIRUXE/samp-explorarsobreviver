@@ -493,7 +493,8 @@ hook OnHoldActionFinish(playerid)
 			ClearAnimations(playerid);
 			HideActionText(playerid);
 			tnt_TweakID[playerid] = CreateTentFromItem(tnt_CurrentTentItem[playerid]);
-			TweakItem(playerid, tnt_CurrentTentItem[playerid]);
+			//TweakItem(playerid, tnt_CurrentTentItem[playerid]);
+			StopBuildingTent(playerid);
 		}
 
 		if(GetItemType(GetPlayerItem(playerid)) == item_Crowbar)
