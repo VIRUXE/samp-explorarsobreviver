@@ -199,7 +199,7 @@ DropItems(playerid, Float:x, Float:y, Float:z)
 
 	new name[MAX_PLAYER_NAME + 8];
 	GetPlayerName(playerid, name, MAX_PLAYER_NAME);
-	format(name, sizeof(name), "Body of %s", name);
+	format(name, sizeof(name), "Corpo de %s", name);
 	SetContainerName(containerid, name);
 	SetItemLabel(itemid, name);
 	
