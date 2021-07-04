@@ -248,6 +248,10 @@ public OnCheatDetected(playerid, const ip_address[], type, code)
 		if(gServerInitialising || GetTickCountDifference(GetTickCount(), gServerInitialiseTick) < 5000)
 			return 1;
 			
+		
+		if(IsPlayerMobile(playerid) && code == 52)
+			return 1;
+			
 		switch(code)
 		{
 			case 40: SendClientMessage(playerid, AC_DEFAULT_COLOR, MAX_CONNECTS_MSG);
