@@ -219,7 +219,7 @@ timer SupplyDropTimer[SUPPLY_DROP_TICK_INTERVAL]()
 	else
 		name = "Unknown";
 
-	ChatMsgAll(YELLOW, " » [EBS]: SUPPLY DROP: "C_BLUE"\"%s\""C_YELLOW" INCOMING AT: "C_ORANGE"\"%s\"", name, sup_DropLocationData[id][supl_name]);
+	ChatMsgAll(YELLOW, " » [Exercito]: Caixa de Suprimentos: "C_BLUE"\"%s\""C_YELLOW" Caindo em: "C_ORANGE"\"%s\", (Icone 'S')", name, sup_DropLocationData[id][supl_name]);
 
 	// Remove the location from the index so it isn't chosen again.
 	Iter_Remove(sup_Index, id);
