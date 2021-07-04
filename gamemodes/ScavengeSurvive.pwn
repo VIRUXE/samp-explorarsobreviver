@@ -107,8 +107,8 @@ public OnGameModeInit()
 #include <container>
 #include <item-array-data>
 #include <item-serializer>
-#include <new-inventory-dialog>
-#include <new-container-dialog>
+#include <inventory-dialog>
+#include <container-dialog>
 #include <craft>
 #include <debug-labels>
 #include <weapon-data>
