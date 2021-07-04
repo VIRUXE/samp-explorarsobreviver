@@ -46,6 +46,7 @@ Timer:		sup_UpdateTimer,
 			sup_ObjCrate1 = INVALID_OBJECT_ID,
 			sup_ObjCrate2 = INVALID_OBJECT_ID,
 			sup_ObjPara = INVALID_OBJECT_ID,
+			sup_ObjSignal = INVALID_OBJECT_ID,
 Float:		sup_DropX,
 Float:		sup_DropY,
 Float:		sup_DropZ,
@@ -247,7 +248,7 @@ SupplyCrateDrop(type, Float:x, Float:y, Float:z)
 	sup_ObjCrate1 = CreateDynamicObject(3799, x, y, 1000.0, 0.0, 0.0, 0.0, .streamdistance = 10000),
 	sup_ObjCrate2 = CreateDynamicObject(3799, x + 0.01, y + 0.01, 1000.0 + 2.4650, 0.0, 180.0, 0.0, .streamdistance = 10000),
 	sup_ObjPara = CreateDynamicObject(18849, x, y, 1000.0 + 8.0, 0.0, 0.0, 0.0, .streamdistance = 10000),
-	CreateDynamicObject(18728, x, y, z - 1.0, 0.0, 0.0, 0.0);
+	sup_ObjSignal = CreateDynamicObject(18728, x, y, z - 1.0, 0.0, 0.0, 0.0);
 
 	MoveDynamicObject(sup_ObjCrate1, x, y, z, SUPPLY_DROP_SPEED, 0.0, 0.0, 720.0);
 	MoveDynamicObject(sup_ObjCrate2, x + 0.01, y + 0.01, z + 2.4650, SUPPLY_DROP_SPEED, 0.0, 180.0, 720.0);
@@ -309,10 +310,14 @@ SupplyCrateLand()
 	DestroyDynamicObject(sup_ObjCrate1);
 	DestroyDynamicObject(sup_ObjCrate2);
 	DestroyDynamicObject(sup_ObjPara);
-	sup_CurrentType = -1;
+	DestroyDynamicObject(sup_ObjSignal);
+	
 	sup_ObjCrate1 = INVALID_OBJECT_ID;
 	sup_ObjCrate2 = INVALID_OBJECT_ID;
 	sup_ObjPara = INVALID_OBJECT_ID;
+	sup_ObjSignal = INVALID_OBJECT_ID;
+
+	sup_CurrentType = -1;
 
 	sup_LastSupplyDrop = GetTickCount();
 
