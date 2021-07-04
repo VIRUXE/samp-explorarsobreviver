@@ -53,17 +53,17 @@ hook OnPlayerStreamIn(playerid, forplayerid)
 	if(GetPlayerRadioFrequency(playerid) > MIN_RADIO_FREQ)
 	{
 		if(GetPlayerRadioFrequency(playerid) == GetPlayerRadioFrequency(forplayerid))
-			UpdateRadioMarker(playerid);
+			UpdateRadioMarker(playerid, 0);
 	}
 }
 
-UpdateRadioMarker(playerid)
+UpdateRadioMarker(playerid, info = 1)
 {
 	if(GetPlayerRadioFrequency(playerid) > MIN_RADIO_FREQ)
 	{
 		//if(!IsPlayerMap(playerid)) return 0;
 
-		new count;
+		if(info) new count;
 		foreach(new i : Player)
 		{
 			if(i == playerid)
@@ -73,7 +73,7 @@ UpdateRadioMarker(playerid)
 			{
 				SetPlayerMarkerForPlayer(playerid, i, CHAT_RADIO);
 				SetPlayerMarkerForPlayer(i, playerid, CHAT_RADIO);
-				count ++;
+				if(info) count ++;
 			}
 			else
 			{
@@ -82,7 +82,7 @@ UpdateRadioMarker(playerid)
 			}
 		}
 
-		if(count) ChatMsgLang(playerid, CHAT_RADIO, "RADIOINFO", count, GetPlayerRadioFrequency(playerid));
+		if(info && count) ChatMsgLang(playerid, CHAT_RADIO, "RADIOINFO", count, GetPlayerRadioFrequency(playerid));
 	}
 	return 1;
 }
@@ -165,7 +165,7 @@ hook OnPlayerClickPlayerTD(playerid, PlayerText:playertextid)
 	if(playertextid == RadioUI_Freq[playerid])
 	{
 		if(rad_ChangeTick[playerid] > gettime())
-			ShowActionText(playerid, "_~n~_~n~_~r~Aguarda para trocar de Frequência novamente", 5000);
+			ShowActionText(playerid, "_~n~_~n~_~r~Aguarde para trocar a frequencia novamente", 5000);
 		else
 			ShowFrequencyDialog(playerid);
 	}
