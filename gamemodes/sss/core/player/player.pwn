@@ -431,7 +431,7 @@ hook OnPlayerEnterVehicle(playerid, vehicleid, ispassenger)
 			}
 		}
 
-		if(driverid == -1)
+		if(driverid != -1)
 			CancelPlayerMovement(playerid);
 	}
 
