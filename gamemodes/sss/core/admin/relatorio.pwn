@@ -29,6 +29,8 @@ ACMD:rr[1](playerid, params[])
 
 	if(RelatorioEnviado[prid] == false) return ChatMsg(playerid, RED, " > Esse player não enviou nenhum relatório ou já foi respondido.");
 
+	if(!IsPlayerConnected(prid)) return ChatMsg(playerid, RED, " > Jogador não conectado.");
+
     ChatMsg(prid, GREEN, "="C_WHITE"="C_GREEN"="C_WHITE"="C_GREEN"="C_WHITE"="C_GREEN"="C_WHITE"="C_GREEN"="C_WHITE"="C_GREEN"="C_WHITE"="C_GREEN"=");
 
 	new string[500];
@@ -79,7 +81,10 @@ CMD:relatorio(playerid, params[])
 }
 
 hook OnPlayerConnect(playerid)
+{
+	RelatorioTempo2[playerid] = 0;
 	RelatorioBlock[playerid] = false;
+}
 
 timer RelatorioFalse[1000](playerid)
 {
