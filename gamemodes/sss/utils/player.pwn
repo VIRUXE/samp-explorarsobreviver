@@ -114,15 +114,19 @@ stock GetPlayerIDFromName(const name[], bool:ignorecase = false, bool:partialnam
 
 stock CancelPlayerMovement(playerid)
 {
-	/*new
+	if(IsPlayerRaidBlock(playerid))
+		return 0;
+		
+	new
 		Float:x,
 		Float:y,
 		Float:z;
 
 	GetPlayerPos(playerid, x, y, z);
-	SetPlayerPos(playerid, x, y, z);*/
+	SetPlayerPos(playerid, x, y, z);
 	ClearAnimations(playerid);
 	TogglePlayerControllable(playerid, true);
+	return 1;
 }
 
 stock SetPlayerToFacePlayer(playerid, targetid, Float:offset = 0.0)
