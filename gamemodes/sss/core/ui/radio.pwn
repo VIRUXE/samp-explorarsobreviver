@@ -63,7 +63,7 @@ UpdateRadioMarker(playerid, info = 1)
 	{
 		//if(!IsPlayerMap(playerid)) return 0;
 
-		if(info) new count;
+		new count;
 		foreach(new i : Player)
 		{
 			if(i == playerid)
@@ -73,7 +73,7 @@ UpdateRadioMarker(playerid, info = 1)
 			{
 				SetPlayerMarkerForPlayer(playerid, i, CHAT_RADIO);
 				SetPlayerMarkerForPlayer(i, playerid, CHAT_RADIO);
-				if(info) count ++;
+				count ++;
 			}
 			else
 			{
