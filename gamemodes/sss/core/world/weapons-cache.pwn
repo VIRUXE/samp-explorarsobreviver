@@ -128,8 +128,8 @@ WeaponsCacheDrop(Float:x, Float:y, Float:z)
 	if(IsValidButton(webc_Button))
 		DestroyButton(webc_Button);
 
-	webc_Containerid = CreateContainer("Weapon Cache", 32);
-	webc_Button = CreateButton(x, y - 0.5, z + 1.0, "Weapon Cache", .label = 1, .labeltext = "Weapon Cache");
+	webc_Containerid = CreateContainer("Cache de Armamento", 32);
+	webc_Button = CreateButton(x, y - 0.5, z + 1.0, "Cache de Armamento", .label = 1, .labeltext = "Cache de Armamento");
 
 	FillContainerWithLoot(Container:webc_Containerid, 22 + random(11), GetLootIndexFromName("airdrop_military_weapons"));
 
@@ -175,9 +175,7 @@ timer WeaponsCacheSignal[WEPCACHE_SIGNAL_INTERVAL](count, Float:x, Float:y, Floa
 		ref_z = wepc_DropLocationData[i][wepc_posZ];
 
 		if(Distance(ref_x, ref_y, ref_z, wepc_CurrentPosX, wepc_CurrentPosY, wepc_CurrentPosZ) < 1000.0)
-		{
 			locationlist[idx++] = i;
-		}
 	}
 
 	if(idx > 0)
@@ -200,13 +198,9 @@ timer WeaponsCacheSignal[WEPCACHE_SIGNAL_INTERVAL](count, Float:x, Float:y, Floa
 	}
 
 	if(count < 3)
-	{
 		defer WeaponsCacheSignal(count + 1, x, y, z);
-	}
 	else
-	{
 		webc_ActiveDrop = -1;
-	}
 
 	return;
 }
