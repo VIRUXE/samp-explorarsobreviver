@@ -102,13 +102,10 @@ Load_Objects()
  	for(new i = 0; i < sizeof(rIds); i++)
 		CA_RemoveBuilding(rIds[i], 0.0, 0.0, 0.0, 4242.6407);
 
-	defer LoadColisions();
+	CA_Init();
 	return 1;
 }
 
-timer LoadColisions[100]()
-	CA_Init();
-	
 LoadConfig()
 {
 	new
