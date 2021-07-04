@@ -85,7 +85,7 @@ hook OnPlayerOpenInventory(playerid)
 
 hook OnPlayerCloseInventory(playerid)
 {
-	_UpdateKeyActions(playerid);
+	defer t_UpdateKeyActions(playerid);
 }
 
 hook OnPlayerOpenContainer(playerid, Container:containerid)
@@ -95,7 +95,7 @@ hook OnPlayerOpenContainer(playerid, Container:containerid)
 
 hook OnPlayerCloseContainer(playerid, Container:containerid)
 {
-	_UpdateKeyActions(playerid);
+	defer t_UpdateKeyActions(playerid);
 }
 
 hook OnPlayerAddToInventory(playerid, Item:itemid)
@@ -160,6 +160,10 @@ hook OnPlayerLeaveDynArea(playerid, areaid)
 {
 	_UpdateKeyActions(playerid);
 }
+
+
+timer t_UpdateKeyActions[100](playerid)
+	_UpdateKeyActions(playerid);
 
 // State change
 hook OnPlayerStateChange(playerid, newstate, oldstate)
@@ -364,9 +368,14 @@ _UpdateKeyActions(playerid)
 	if(GetItemTypeWeapon(itemtype) != -1)
 	{
 		ClearPlayerKeyActionUI(playerid);
-		AddToolTipText(playerid, KEYTEXT_PUT_AWAY, "Guardar no Coldre");
-		AddToolTipText(playerid, KEYTEXT_RELOAD, "Recarregar");
-		AddToolTipText(playerid, KEYTEXT_DROP_ITEM, "(Segurar) Descarregar");
+
+		if(IsValidHolsterItem(itemtype))
+			AddToolTipText(playerid, KEYTEXT_PUT_AWAY, "Guardar no Coldre");
+
+		if(GetItemWeaponCalibre(GetItemTypeWeapon(itemtype)) != NO_CALIBRE){
+			AddToolTipText(playerid, KEYTEXT_RELOAD, "Recarregar");
+			AddToolTipText(playerid, KEYTEXT_DROP_ITEM, "(Segurar) Descarregar");
+		}
 	}
 	else
 		AddToolTipText(playerid, KEYTEXT_PUT_AWAY, "Colocar no Inventario");
@@ -381,32 +390,17 @@ _UpdateKeyActions(playerid)
 	return;
 }
 
-_ShowRepairTip(playerid, vehicleid)
-{
+_ShowRepairTip(playerid, vehicleid){
 	new Float:health;
-
 	GetVehicleHealth(vehicleid, health);
-
 	if(health <= VEHICLE_HEALTH_CHUNK_2)
-	{
 		ShowHelpTip(playerid, ls(playerid, "TUTORVEHVER"), 20000);
-		return;
-	}
 	else if(health <= VEHICLE_HEALTH_CHUNK_3)
-	{
 		ShowHelpTip(playerid, ls(playerid, "TUTORVEHBRO"), 20000);
-		return;
-	}
 	else if(health <= VEHICLE_HEALTH_CHUNK_4)
-	{
 		ShowHelpTip(playerid, ls(playerid, "TUTORVEHBIT"), 20000);
-		return;
-	}
 	else if(health <= VEHICLE_HEALTH_MAX)
-	{
 		ShowHelpTip(playerid, ls(playerid, "TUTORVEHSLI"), 20000);
-		return;
-	}
 
 	return;
 }
