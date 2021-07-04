@@ -71,7 +71,10 @@ stock CreateVehicleArea(vehicleid)
 
 ==============================================================================*/
 
-
+hook OnPlayerConnect(playerid)
+	foreach(new i : varea_NearIndex[playerid])
+		varea_NearList[playerid][i] = 0;
+		
 hook OnVehicleCreated(vehicleid)
 {
 	CreateVehicleArea(vehicleid);
