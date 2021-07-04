@@ -37,7 +37,7 @@ world_industrial, 1.0
 3.0,	RadioPole
 
 # defences
-4.0,	Door
+4.0,	WoodDoor
 4.0,	MetPanel
 3.0,	MetalGate
 3.0,	CrateDoor

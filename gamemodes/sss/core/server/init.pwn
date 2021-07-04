@@ -705,7 +705,7 @@ public OnScriptInit()
 	item_Crowbar		= DefineItemType("Pe de Cabra",					"Crowbar",			18634,	2,	0.0, 90.0, 0.0,			0.0,	0.066177, 0.011153, 0.038410, 97.289527, 270.962554, 1.114514, .maxhitpoints = 2);
 	item_Cuntainer		= DefineItemType("Cuntainer",					"Container",		19321,	15,	0.0, 0.0, 0.0,		0.0,	0.0, 0.0, 0.0, 0.0, 0.0, 0.0, false, .buttonz = ITEM_FLOOR_OFFSET / 4,   .maxhitpoints = 20);
 	item_Cupboard		= DefineItemType("Cupboard",					"Cupboard",			19932,	12,	0.0, 0.0, 90.0,			0.0, .maxhitpoints = 12, .longpickup = true);
-	item_DarkWood		= DefineItemType("Porta de Madeira Escura",		"DarkWood",			19439,	9,	0.0, 90.0, 0.0,		0.0,	-0.094171,0.688217,-0.472795,-22.612369,169.761932,-15.201074, true, .buttonz = ITEM_FLOOR_OFFSET / 4,  .maxhitpoints = 5);
+	item_DarkWood		= DefineItemType("Madeira Escura",				"DarkWood",			19439,	9,	0.0, 90.0, 0.0,		0.0,	-0.094171,0.688217,-0.472795,-22.612369,169.761932,-15.201074, true, .buttonz = ITEM_FLOOR_OFFSET / 4,  .maxhitpoints = 5);
 	item_DataInterface	= DefineItemType("Interface de Dados",			"DataInterface",	19273,	1,	270.0, 0.0, 0.0,		0.0,	0.198234, 0.101531, 0.095477, 0.000000, 343.020019, 0.000000, .maxhitpoints = 1);
 	item_Daypack		= DefineItemType("Mochila Pequena",				"Daypack",			363,	3,	270.0, 0.0, 0.0,		0.0,	0.052853, 0.034967, -0.177413, 0.000000, 261.397491, 349.759826, .longpickup = true, .maxhitpoints = 3);
 	item_DeadLeg		= DefineItemType("Perna",						"DeadLeg",			2905,	4,	0.0, 0.0, 0.0,			0.0,	0.147815, 0.052444, -0.164205, 253.163970, 358.857666, 167.069869, true, .maxhitpoints = 4);
@@ -721,7 +721,7 @@ public OnScriptInit()
 	item_Dildo4			= DefineItemType("Dildo",						"Dildo4",			324,	1,	90.0, .maxhitpoints = 1);
 	item_DoctorBag		= DefineItemType("Maleta de Doutor",			"DoctorBag",		11738,	3,	0.0, 0.0, 0.0,			0.0046,	0.265000, 0.029000, 0.041000,  0.000000, -99.100021, 0.000000, .maxhitpoints = 3);
 	item_DogsBreath		= DefineItemType("Dog's Breath",				"DogsBreath",		2034,	2,	0.0, 0.0, 0.0,			0.0,	0.176000, 0.020000, 0.039999,  89.199989, -0.900000, 1.099991, .maxhitpoints = 2);
-	item_Door			= DefineItemType("Porta de Madeira",			"Door",				1497,	8,	90.0, 0.0, 0.0,			0.0,	-0.073999,0.401213,0.939999,337.887634,172.861953,68.495330, true, .buttonz = ITEM_FLOOR_OFFSET,  .maxhitpoints = 4);
+	item_Door			= DefineItemType("Porta de Madeira",			"WoodDoor",				1497,	8,	90.0, 0.0, 0.0,			0.0,	-0.073999,0.401213,0.939999,337.887634,172.861953,68.495330, true, .buttonz = ITEM_FLOOR_OFFSET,  .maxhitpoints = 4);
 	item_Doormat		= DefineItemType("Tapete",						"Doormat",			11737,	3,	0.0, 0.0, 0.0,			0.02,	0.441000, 0.027000, 0.017999,  96.300025, -2.500113, 97.699829, .maxhitpoints = 3);
 	item_Dynamite		= DefineItemType("Dinamite",					"Dynamite",			1654,	2,	0.0, 0.0, 0.0,			0.0,	0.048000,0.106999,0.065999,0.000000,-3.399999,143.300079,	 .maxhitpoints = 2);
 	item_EasterEgg		= DefineItemType("Ovo de Pascoa",				"EasterEgg",		19345,	3,	0.0, 0.0, 0.0,			0.0,	0.000000, 0.000000, 0.000000, 0.000000, 90.000000, 0.000000, .maxhitpoints = 3);
@@ -929,7 +929,7 @@ public OnScriptInit()
 	item_WaterMachine	= DefineItemType("Purificador de Agua",		"WaterMachine",		958,	12,	0.0, 0.0, 0.0,			0.8195,	.maxhitpoints = 12);
 	item_WeddingCake	= DefineItemType("Bolo de Casamento",		"WeddingCake",		19525,	1,	0.0, 0.0, 0.0,			0.036,	0.076999, 0.032000, -0.126000,  -179.400054, -175.200042, -2.499999, .maxhitpoints = 1);
 	item_Wheel			= DefineItemType("Roda",						"Wheel",			1079,	5,	0.0, 0.0, 90.0,			0.436,	-0.098016, 0.356168, -0.309851, 258.455596, 346.618103, 354.313049, true, .maxhitpoints = 5);
-	item_WheelLock		= DefineItemType("Corrente com Cadeado",		"WheelLock",		2680,	1,	0.0, 0.0, 0.0,			0.000,	0.215000, -0.037999, 0.059000,  -48.999996, -110.599960, -54.000000, .maxhitpoints = 1);
+	item_WheelLock		= DefineItemType("Corrente",		"WheelLock",		2680,	1,	0.0, 0.0, 0.0,			0.000,	0.215000, -0.037999, 0.059000,  -48.999996, -110.599960, -54.000000, .maxhitpoints = 1);
 	item_Whisky			= DefineItemType("Whisky",				"Whisky",			19823,	1,	0.0, 0.0, 0.0,			0.0,	0.132000, 0.041000, -0.286999,  -178.499954, -170.700210, -10.200168, .maxhitpoints = 1);
 	item_Wine1			= DefineItemType("Vinho",				"Wine1",			19820,	1,	0.0, 0.0, 0.0,			0.0,	0.169000, 0.053000, -0.506999,  -178.499954, -170.700210, -10.200168, .maxhitpoints = 1);
 	item_Wine2			= DefineItemType("Vinho",				"Wine2",			19821,	1,	0.0, 0.0, 0.0,			0.0,	0.169000, 0.053000, -0.506999,  -178.499954, -170.700210, -10.200168, .maxhitpoints = 1);
