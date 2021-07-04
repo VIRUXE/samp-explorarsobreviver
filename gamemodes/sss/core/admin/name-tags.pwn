@@ -57,12 +57,10 @@ ToggleNameTagsForPlayer(playerid, toggle)
 
 	tags_Toggle[playerid] = toggle;
 
-	if(toggle)
-		foreach(new i : Player)
-			if(!Streamer_IsInArrayData(STREAMER_TYPE_3D_TEXT_LABEL, tags_Nametag[i], E_STREAMER_PLAYER_ID, playerid))
-				Streamer_AppendArrayData(STREAMER_TYPE_3D_TEXT_LABEL, tags_Nametag[i], E_STREAMER_PLAYER_ID, playerid);
-	else
-		foreach(new i : Player)
+	foreach(new i : Player)
+		if(toggle)
+			Streamer_AppendArrayData(STREAMER_TYPE_3D_TEXT_LABEL, tags_Nametag[i], E_STREAMER_PLAYER_ID, playerid);
+		else
 			Streamer_RemoveArrayData(STREAMER_TYPE_3D_TEXT_LABEL, tags_Nametag[i], E_STREAMER_PLAYER_ID, playerid);
 
 	return 1;
