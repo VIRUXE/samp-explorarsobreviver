@@ -454,6 +454,11 @@ timer UpdateSpectateMode[100](playerid)
 	}
 }
 
+hook OnPlayerStateChange(playerid, newstate, oldstate)
+	foreach(new i : Player)
+		if(spectate_Target[i] == playerid)
+			_RefreshSpectate(i);
+
 hook OnPlayerKeyStateChange(playerid, newkeys, oldkeys)
 {
 	if(spectate_Target[playerid] != INVALID_PLAYER_ID)
