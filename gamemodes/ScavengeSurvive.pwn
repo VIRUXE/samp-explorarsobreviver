@@ -85,7 +85,7 @@ public OnGameModeInit()
 #include <Pawn.RakNet>
 #include <colandreas> 
 #include <streamer>
-#include <optidraw>
+//#include <optidraw>
 #include <nex-ac>
 #include <whirlpool>
 #include <sqlitei>
