@@ -14,7 +14,6 @@ static
 hook OnPlayerConnect(playerid)
 {
 	anj_CurrentlyEntering[playerid] = INVALID_VEHICLE_ID;
-
 	return 1;
 }
 
@@ -69,10 +68,10 @@ hook OnPlayerKeyStateChange(playerid, newkeys, oldkeys)
 				}
 			}
 
-			if(targetid != INVALID_PLAYER_ID)
+			if(targetid != INVALID_PLAYER_ID && IsPlayerRaidBlock(playerid))
 			{
 				RemovePlayerFromVehicle(targetid);
-				//SetPlayerPos(targetid, x + floatsin(-a + 90.0, degrees), y + floatcos(-a + 90.0, degrees), z);
+				SetPlayerPos(targetid, x + floatsin(-a + 90.0, degrees), y + floatcos(-a + 90.0, degrees), z);
 			}
 
 			anj_CurrentlyEntering[playerid] = INVALID_VEHICLE_ID;
