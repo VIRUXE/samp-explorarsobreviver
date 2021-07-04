@@ -570,9 +570,17 @@ CMD:mc(playerid, params[])
 
 public OnPlayerGiveDamageDynamicActor(playerid, actorid, Float:amount, weaponid, bodypart)
 {
-	new Float:x, Float:y, Float:z, Float:health;
+	new 
+		Float:x, Float:y, Float:z,
+		Float:px, Float:py, Float:pz,
+		Float:health, Float:tmp;
 
 	GetDynamicActorPos(actorid, x, y, z);
+	GetPlayerPos(playerid, px, py, pz);
+
+	if(CA_RayCastLine(x, y, z, px, py, pz, tmp, tmp, tmp))
+		return 1;
+
 	SetDynamicActorPos(actorid, x, y, z);
 	ClearDynamicActorAnimations(actorid);
 	
@@ -822,7 +830,6 @@ public OnPlayerGiveDamageDynamicActor(playerid, actorid, Float:amount, weaponid,
 	//ChatMsg(playerid, -1, "Actorid: %d, Amount: %0.2f, Weaponid: %d, bodypart: %d", actorid, Float:amount, weaponid, bodypart);
 	return 1;
 }
-
 
 /*
 forward OnPlayerGiveDamageDynamicActor(playerid, STREAMER_TAG_ACTOR:actorid, Float:amount, weaponid, bodypart);
