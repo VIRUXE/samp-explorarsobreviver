@@ -754,9 +754,9 @@ RestartGamemode()
 	ChatMsgAll(BLUE, "    file, You can obtain one at http://mozilla.org/MPL/2.0/.");
 	ChatMsgAll(BLUE, " ");
 	ChatMsgAll(BLUE, " ");
-	ChatMsgAll(BLUE, "-------------------------------------------------------------------------------------------------------------------------");
-	ChatMsgAll(YELLOW, " » Reiniciando. Por favor aguarde...");
-	ChatMsgAll(BLUE, "-------------------------------------------------------------------------------------------------------------------------");
+	ChatMsgAll(BLUE, "»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»");
+	ChatMsgAll(YELLOW, "»»» Reiniciando. Por favor aguarde...");
+	ChatMsgAll(BLUE, "»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»");
 }
 
 task RestartUpdate[1000]()
