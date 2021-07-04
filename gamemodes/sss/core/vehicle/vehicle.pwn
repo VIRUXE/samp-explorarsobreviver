@@ -805,6 +805,9 @@ public OnVehicleDeath(vehicleid, killerid)
 
 	veh_Data[vehicleid][veh_state] = VEHICLE_STATE_DYING;
 
+	if(GetPlayerVehicleID(killerid) == vehicleid)
+		RemovePlayerFromVehicle(killerid);
+
 	log("[OnVehicleDeath] Vehicle %s (%d) killed by %s at %f %f %f", GetVehicleUUID(vehicleid), vehicleid, name, veh_Data[vehicleid][veh_spawnX], veh_Data[vehicleid][veh_spawnY], veh_Data[vehicleid][veh_spawnZ]);
 	return 1;
 }

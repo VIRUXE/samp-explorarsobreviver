@@ -79,8 +79,10 @@ public DCC_OnMessageCreate(DCC_Message:message)
             format(str, sizeof(str), "O nome [%s] esta muito grande.", msg);
         else if(IsNameInWhitelist(msg))
             format(str, sizeof(str), "O nome [%s] ja foi aceito.", msg); 
+        else if(!IsValidUsername(msg))
+            format(str, sizeof(str), "O nome [%s] invalido.", msg); 
         else if(IsNameInWhitelist(user_id))
-            format(str, sizeof(str), "Voce ja tem uma conta registrada nesse discord."); 
+            format(str, sizeof(str), "Voce ja tem uma conta registrada nesse discord.");
         else{
             AddNameToWhitelist(msg, true);
             AddNameToWhitelist(user_id);

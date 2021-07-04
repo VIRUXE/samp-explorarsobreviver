@@ -367,7 +367,6 @@ new stock
 	Modules that declare setup functions and constants used throughout.
 */
 
-#include "sss/core/player/item.pwn"
 #include "sss/core/vehicle/vehicle-type.pwn"
 #include "sss/core/vehicle/lock.pwn"
 #include "sss/core/player/player.pwn"
@@ -381,6 +380,8 @@ new stock
 #include "sss/core/world/tree.pwn"
 #include "sss/core/world/explosive.pwn"
 #include "sss/core/world/craft-construct.pwn"
+
+#include "sss/core/player/item.pwn"
 
 /*
 	MODULE INITIALISATION CALLS

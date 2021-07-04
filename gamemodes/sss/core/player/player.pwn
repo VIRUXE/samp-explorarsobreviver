@@ -324,7 +324,7 @@ public OnPlayerSpawn(playerid)
 
 	if(IsPlayerOnAdminDuty(playerid))
 	{
-		SetPlayerPos(playerid, 0.0, 0.0, 3.0);
+		SetPlayerPos(playerid, 0.0, 0.0, 5.0);
 		return 1;
 	}
 
@@ -336,7 +336,7 @@ public OnPlayerSpawn(playerid)
 		SetPlayerColor(playerid, 0x59595900);
 	}
 
-	SetPlayerPos(playerid, DEFAULT_POS_X, DEFAULT_POS_Y, DEFAULT_POS_Z);
+	//SetPlayerPos(playerid, DEFAULT_POS_X, DEFAULT_POS_Y, DEFAULT_POS_Z);
 	
 	ply_Data[playerid][ply_SpawnTick] = GetTickCount();
 
