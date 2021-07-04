@@ -70,6 +70,8 @@ stock KnockOutPlayer(playerid, duration)
 		return 1;
 	}
 
+	SetPlayerVelocity(playerid, 0.0, 0.0, 0.0);
+
 	if(IsPlayerInAnyVehicle(playerid))
 	{
 		knockout_InVehicleID[playerid] = GetPlayerVehicleID(playerid);
@@ -176,8 +178,6 @@ timer KnockOutUpdate[100](playerid)
 
 _PlayKnockOutAnimation(playerid)
 {
-	SetPlayerVelocity(playerid, 0.0, 0.0, 0.0);
-	
 	if(!IsPlayerInAnyVehicle(playerid))
 	{
 		ApplyAnimation(playerid, "PED", "KO_SHOT_STOM", 4.0, 0, 1, 1, 1, 0, 1);
