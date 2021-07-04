@@ -391,7 +391,7 @@ _inv_displaySlotOptions(playerid, slotid)
 
 					ClosePlayerInventory(playerid, true);
 				} else {
-					ShowActionText(playerid, "Já está segurando algo", 3000, 200);
+					ShowActionText(playerid, "Ja esta segurando algo", 3000, 200);
 					DisplayPlayerInventory(playerid);
 				}
 			}
@@ -418,7 +418,7 @@ _inv_displaySlotOptions(playerid, slotid)
 				}
 				else
 				{
-					ShowActionText(playerid, "Já está segurando algo", 3000, 200);
+					ShowActionText(playerid, "Ja esta segurando algo", 3000, 200);
 					DisplayPlayerInventory(playerid);
 				}
 			}
