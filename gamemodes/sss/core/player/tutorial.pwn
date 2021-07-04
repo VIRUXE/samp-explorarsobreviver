@@ -161,6 +161,9 @@ hook OnPlayerDisconnect(playerid, reason)
 
 ExitTutorial(playerid)
 {
+	if(!IsPlayerConnected(playerid))
+		return 0;
+
 	if(!PlayerInTutorial[playerid])
 		return 0;
 		
@@ -384,6 +387,9 @@ CMD:exit(playerid, params[]) return cmd_sair(playerid, params);
 
 stock IsPlayerInTutorial(playerid)
 {
+	if(!IsPlayerConnected(playerid))
+		return 0;
+		
 	if(PlayerInTutorial[playerid])
 		return 1;
 
