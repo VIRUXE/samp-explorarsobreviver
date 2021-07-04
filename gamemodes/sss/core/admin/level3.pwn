@@ -813,6 +813,10 @@ ACMD:addvehicle[3](playerid, params[])
 	vehicleid = CreateLootVehicle(type, x, y, z, r);
 	SetVehicleFuel(vehicleid, 100000.0);
 	SetVehicleHealth(vehicleid, 990.0);
+	SetVehicleParamsEx(vehicleid, 0, random(2), !random(100), 0, random(2), random(2), 0);
+	SetVehicleExternalLock(vehicleid, E_LOCK_STATE_OPEN);
+	SetVehicleTrunkLock(vehicleid, 0);
+
 
 	if(GetPlayerAdminLevel(playerid) < STAFF_LEVEL_LEAD)
 	{
