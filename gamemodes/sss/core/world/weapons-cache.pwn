@@ -122,10 +122,10 @@ WeaponsCacheDrop(Float:x, Float:y, Float:z)
 	wepc_CurrentPosY = y;
 	wepc_CurrentPosZ = z;
 
-	if(webc_Containerid != INVALID_CONTAINER_ID)
+	if(IsValidContainer(webc_Containerid))
 		DestroyContainer(webc_Containerid);
 
-	if(webc_Button != INVALID_BUTTON_ID)
+	if(IsValidButton(webc_Button))
 		DestroyButton(webc_Button);
 
 	webc_Containerid = CreateContainer("Weapon Cache", 32);
