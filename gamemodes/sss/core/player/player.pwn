@@ -329,7 +329,7 @@ public OnPlayerSpawn(playerid)
 	}
 
 	if(IsPlayerMobile(playerid))
-		SetPlayerColor(playerid, 0xFFFFFF00);
+		SetPlayerColor(playerid, 0x33333300);
 
 	SetPlayerPos(playerid, DEFAULT_POS_X, DEFAULT_POS_Y, DEFAULT_POS_Z);
 	
