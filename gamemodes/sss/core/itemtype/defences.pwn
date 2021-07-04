@@ -745,13 +745,14 @@ ConvertItemToDefenceItem(Item:itemid, pose, playerid)
 	new
 		ItemType:itemtype = GetItemType(itemid),
 		Float:x, Float:y, Float:z,
+		Float:ix, Float:iy, Float:iz,
 		Float:rx, Float:ry, Float:rz,
 		Float:a;
 
 	GetPlayerPos(playerid, x, y, z);
-	GetItemPos(itemid, z, z, z);
+	GetItemPos(itemid, ix, iy, iz);
 	GetItemRot(itemid, rx, ry, rz);
-	GetPlayerFacingAngle(playerid, a);
+	a = GetAngleToPoint(x, y, ix, iy);
 
 	if(pose == DEFENCE_POSE_HORIZONTAL)
 	{
@@ -761,13 +762,13 @@ ConvertItemToDefenceItem(Item:itemid, pose, playerid)
 	}
 	else if(pose == DEFENCE_POSE_VERTICAL)
 	{
-		z += def_TypeData[def_ItemTypeDefenceType[itemtype]][def_placeOffsetZ];
+		iz += def_TypeData[def_ItemTypeDefenceType[itemtype]][def_placeOffsetZ];
 		rx = def_TypeData[def_ItemTypeDefenceType[itemtype]][def_verticalRotX];
 		ry = def_TypeData[def_ItemTypeDefenceType[itemtype]][def_verticalRotY];
 		rz += def_TypeData[def_ItemTypeDefenceType[itemtype]][def_verticalRotZ];
 	}
 
-	SetItemPos(itemid, x + 0.9 * floatsin(-a, degrees), y + 0.9 * floatcos(-a, degrees), z);
+	SetItemPos(itemid, x + 0.9 * floatsin(-a, degrees), y + 0.9 * floatcos(-a, degrees), iz);
 	SetItemRot(itemid, rx, ry, rz);
 	
 	return CallLocalFunction("OnDefenceCreate", "d", _:itemid);
