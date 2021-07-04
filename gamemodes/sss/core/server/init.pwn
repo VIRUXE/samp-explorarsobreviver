@@ -921,7 +921,7 @@ public OnScriptInit()
 	item_Tomato			= DefineItemType("Tomate",				"Tomato",			19577,	1,	170.0, 0.0, 0.0,		0.03,	0.054000, 0.055999, 0.013999, 0.000000, 0.000003, 0.000003, .maxhitpoints = 1);
 	item_ToolBox		= DefineItemType("Caixa de Ferramenta",			"ToolBox",			19921,	7,	0.0, 0.0, 0.0,			0.0541,	-0.209000, 0.052999, -0.231000,  73.400024, -173.499984, 80.899993, true, .longpickup = true, .maxhitpoints = 8);
 	item_TopHat			= DefineItemType("Chapeu de Artista",			"TopHat",			19352,	2,	0.0, 0.0, 0.0,			-0.023,	0.225000, 0.034000, 0.014000, 81.799942, 7.699998, 179.999954, .maxhitpoints = 2);
-	item_Torso			= DefineItemType("Tronco",						"Torso",			2907,	12,	0.0, 0.0, 270.0,		0.0,	.longpickup = true,	.maxhitpoints = 10);
+	item_Torso			= DefineItemType("Corpo",						"Torso",			2907,	12,	0.0, 0.0, 270.0,		0.0,	.longpickup = true,	.maxhitpoints = 10);
 	item_TruckCap		= DefineItemType("Chapeu de Camineiro",			"TruckCap",			18961,	1,	0.0, 0.0, 0.0,			0.01,	0.225000, 0.034000, 0.014000, 81.799942, 7.699998, 179.999954, .maxhitpoints = 1);
 	item_VehicleWeapon	= DefineItemType("VEHICLE_WEAPON",		"VehicleWeapon",	356,	99,	90.0,							.maxhitpoints = 99);
 	item_WalkingCane	= DefineItemType("Cane",						"WalkingCane",		326,	3,	90.0, .maxhitpoints = 3);
