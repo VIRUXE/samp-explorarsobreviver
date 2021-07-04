@@ -293,10 +293,10 @@ SupplyCrateLand()
 		UpdatePlayerMap(i);
 	}
 
-	if(sup_Containerid != INVALID_CONTAINER_ID)
+	if(IsValidContainer(sup_Containerid))
 		DestroyContainer(sup_Containerid);
 
-	if(sup_Button != INVALID_BUTTON_ID)
+	if(IsValidButton(sup_Button))
 		DestroyButton(sup_Button);
 		
 	sup_Containerid = CreateContainer("Supply Crate", 32);
