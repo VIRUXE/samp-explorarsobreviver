@@ -328,6 +328,8 @@ public OnPlayerSpawn(playerid)
 		return 1;
 	}
 
+	SetPlayerColor(playerid, 0xB8B8B800);
+	
 	if(IsPlayerMobile(playerid))
 	{
 		EnableAntiCheatForPlayer(playerid, 52, false);
