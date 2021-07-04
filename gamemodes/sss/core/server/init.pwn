@@ -627,7 +627,7 @@ public OnScriptInit()
 
 
 // ITEM TYPE DEFINITIONS
-	item_Accelerometer	= DefineItemType("Acelarometro",				"Accelerometer",	327,	1,	0.0, 0.0, 0.0,			0.0,	0.008151, 0.012682, -0.050635, 0.000000, 0.000000, 0.000000, .maxhitpoints = 1);
+	item_Accelerometer	= DefineItemType("Acelerometro",				"Accelerometer",	327,	1,	0.0, 0.0, 0.0,			0.0,	0.008151, 0.012682, -0.050635, 0.000000, 0.000000, 0.000000, .maxhitpoints = 1);
 	item_AdvancedKeypad	= DefineItemType("Teclado Avancado",			"AdvancedKeypad",	19273,	2,	270.0, 0.0, 0.0,		0.0,	0.198234, 0.101531, 0.095477, 0.000000, 343.020019, 0.000000, .maxhitpoints = 2);
 	item_AK47Rifle		= DefineItemType("AK-47",						"AK47Rifle",		355,	5,	90.0,							.maxhitpoints = 5);
 	item_Ammo308		= DefineItemType("Municao .308 Rounds",			"Ammo308",			2039,	1,	0.0, 0.0, 0.0,			0.082,	0.221075, 0.067746, 0.037494, 87.375968, 305.182189, 5.691741, .maxhitpoints = 1);
@@ -867,8 +867,8 @@ public OnScriptInit()
 	item_PussyMask      = DefineItemType("Mascara de Buceta",			"PussyMask",		19557,	1,	0.0, 265.0, 0.0,		-0.059,	0.146999, -0.009999, 0.012999,  5.600010, -84.900131, -109.300079, .maxhitpoints = 1);
 	item_Radio          = DefineItemType("Radio",						"Radio",			2966,	1,	0.0, 0.0, 0.0,			0.0,	0.073999, 0.066999, -0.057000,  101.699996, -151.699951, 0.000000, .maxhitpoints = 1);
 	item_RadioBox       = DefineItemType("Amplificador Pequeno",		"RadioBox",			19612,	8,	0.0, 0.0, 0.0,			-0.020,	-0.090000, 0.132999, -0.202000,  63.499916, 108.599983, 95.499877, .maxhitpoints = 8);
-	item_RadioPole      = DefineItemType("Receiver",					"RadioPole",		3221,	3,	0.0, 0.0, 0.0,			0.0,	0.081356, 0.034642, -0.167247, 0.000000, 0.000000, 240.265777, .maxhitpoints = 3);
-	item_Rake           = DefineItemType("Rake",						"Rake",				18890,	6,	90.0, 0.0, 0.0,			0.0,	-0.002599, 0.003984, 0.026356, 190.231231, 0.222518, 271.565185, .maxhitpoints = 6);
+	item_RadioPole      = DefineItemType("Receptor",					"RadioPole",		3221,	3,	0.0, 0.0, 0.0,			0.0,	0.081356, 0.034642, -0.167247, 0.000000, 0.000000, 240.265777, .maxhitpoints = 3);
+	item_Rake           = DefineItemType("Ancinho",						"Rake",				18890,	6,	90.0, 0.0, 0.0,			0.0,	-0.002599, 0.003984, 0.026356, 190.231231, 0.222518, 271.565185, .maxhitpoints = 6);
 	item_RawFish        = DefineItemType("Peixe",				"RawFish",			19630,	9,	0.0, 0.0, 0.0,			0.000,	0.047000, 0.021999, 0.083000,  -84.299980, -75.299972, 103.100028, .maxhitpoints = 9);
 	item_RedApple       = DefineItemType("Maca Vermelha",			"RedApple",			19575,	1,	170.0, 0.0, 0.0,		0.03,	0.100000, 0.039000, 0.018000,  4.400032, -2.300116, 138.699905, .maxhitpoints = 1);
 	item_RedCrate       = DefineItemType("Red Crate",			"RedCrate",			2669,	15,	0.0, 0.0, 0.0,		0.0,	0.0, 0.0, 0.0, 0.0, 0.0, 0.0, false, .buttonz = ITEM_FLOOR_OFFSET / 4,  .maxhitpoints = 20);
