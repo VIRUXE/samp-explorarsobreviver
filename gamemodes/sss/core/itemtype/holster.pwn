@@ -234,6 +234,9 @@ _HolsterChecks(playerid)
 	if(IsPlayerViewingInventory(playerid))
 		return 0;
 
+	if(GetTickCountDifference(GetTickCount(), GetPutAwayTick(playerid)) < 900)
+		return 0;
+
 	return 1;
 }
 

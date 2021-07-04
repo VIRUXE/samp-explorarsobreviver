@@ -580,7 +580,7 @@ hook OnPlayerUnHolsteredItem(playerid, Item:itemid)
 
 hook OnPlayerKeyStateChange(playerid, newkeys, oldkeys)
 {
-	if(newkeys & 1)
+	if( (newkeys & 1) || (newkeys & KEY_WALK))
 	{
 		if(IsPlayerKnockedOut(playerid))
 			return Y_HOOKS_CONTINUE_RETURN_1;
