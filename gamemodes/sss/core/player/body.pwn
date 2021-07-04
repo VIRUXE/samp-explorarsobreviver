@@ -393,7 +393,7 @@ CreateBody(const name[], Float:x, Float:y, Float:z, Float:a, w, i, s)
 		body_NameTag[id] = Text3D:INVALID_3DTEXT_ID;
 	}
 
-	body_NameTag[id] = CreateDynamic3DTextLabel(sprintf("%s{FFFFFF}(Corpo)", body_PlayerName[id]), 0xB8B8B8FF, x, y, z, gNameTagDistance, INVALID_PLAYER_ID, INVALID_VEHICLE_ID, 0, w, i);
+	body_NameTag[id] = CreateDynamic3DTextLabel(sprintf("%s{FFFFFF}(Corpo)", body_PlayerName[id]), 0xB8B8B8FF, x, y, z, 15.0, INVALID_PLAYER_ID, INVALID_VEHICLE_ID, 0, w, i);
 
 	ApplyDynamicActorAnimation(id, "SUNBATHE", "PARKSIT_M_IN", 4.1, 0, 0, 0, 1, 0);
 
