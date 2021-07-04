@@ -48,7 +48,7 @@ Item:		def_CurrentDefenceOpen[MAX_PLAYERS],
 			def_LastPassEntry[MAX_PLAYERS],
 			def_Cooldown[MAX_PLAYERS],
 			def_PassFails[MAX_PLAYERS],
-			def_Col[MAX_ITEM];
+			def_Col[MAX_ITEM] = {-1, ...};
 
 forward OnDefenceCreate(Item:itemid);
 forward OnDefenceDestroy(Item:itemid);
@@ -212,6 +212,7 @@ DeconstructDefence(Item:itemid, playerid)
 	GetItemTypeName(itemtype, name);
 
 	CA_DestroyObject(def_Col[itemid]);
+	def_Col[itemid] = -1;
 
 	if(itemdata[def_pose] == DEFENCE_POSE_VERTICAL)
 	{
@@ -1076,6 +1077,7 @@ timer MoveDefence[1000](itemid, playerid)
 	SetItemRot(Item:itemid, rx, ry, rz);
 
 	CA_DestroyObject(def_Col[Item:itemid]);
+	def_Col[Item:itemid] = -1;
 	CreateDefenceColision(Item:itemid);
 
 	CallLocalFunction("OnDefenceMove", "d", itemid);
@@ -1113,11 +1115,13 @@ hook OnItemDestroy(Item:itemid)
 
 	if(def_ItemTypeDefenceType[itemtype] != -1)
 	{
+		if(def_Col[itemid] != -1)
+			CA_DestroyObject(def_Col[itemid]), def_Col[itemid] = -1;
+		
 		new active;
 		GetItemArrayDataAtCell(itemid, active, def_active);
 		if(active)
 		{
-			CA_DestroyObject(def_Col[itemid]);
 			CallLocalFunction("OnDefenceDestroy", "d", _:itemid);
 		}
 	}
