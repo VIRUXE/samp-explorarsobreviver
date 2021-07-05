@@ -1342,8 +1342,8 @@ public OnScriptInit()
 	DefineSafeboxType(item_SmallBox,		8);
 	DefineSafeboxType(item_Suitcase,		6);
 	DefineSafeboxType(item_ToolBox,			8);
-	DefineSafeboxType(item_Torso,			90);
-	DefineSafeboxType(item_Workbench,		16, false);
+	DefineSafeboxType(item_Torso,			90, .animateonuse = false);
+	DefineSafeboxType(item_Workbench,		16, false, false);
 	
 	// SEED TYPE DEFINITIONS
 	DefineSeedType("Maça", item_GrnApple,	5, 802, 0.72044);
