@@ -87,7 +87,7 @@ SavePlayerChar(playerid)
 	Character
 */
 
-	if(IsPlayerInTutorial(playerid))
+	if(player_data[PLY_CELL_WORLD] != 0)
 		player_data[PLY_CELL_HEALTH] = _:0.0;
 	else
 		player_data[PLY_CELL_HEALTH]	= _:GetPlayerHP(playerid);
