@@ -245,6 +245,18 @@ SupplyCrateDrop(type, Float:x, Float:y, Float:z)
 		return 0;
 	}
 
+	if(sup_ObjCrate1 != INVALID_OBJECT_ID)
+		DestroyDynamicObject(sup_ObjCrate1);
+
+	if(sup_ObjCrate2 != INVALID_OBJECT_ID)
+		DestroyDynamicObject(sup_ObjCrate2);
+
+	if(sup_ObjPara != INVALID_OBJECT_ID)
+		DestroyDynamicObject(sup_ObjPara);
+
+	if(sup_ObjSignal != INVALID_OBJECT_ID)	
+		DestroyDynamicObject(sup_ObjSignal);
+
 	sup_ObjCrate1 = CreateDynamicObject(3799, x, y, 1000.0, 0.0, 0.0, 0.0, .streamdistance = 10000),
 	sup_ObjCrate2 = CreateDynamicObject(3799, x + 0.01, y + 0.01, 1000.0 + 2.4650, 0.0, 180.0, 0.0, .streamdistance = 10000),
 	sup_ObjPara = CreateDynamicObject(18849, x, y, 1000.0 + 8.0, 0.0, 0.0, 0.0, .streamdistance = 10000),
@@ -307,10 +319,17 @@ SupplyCrateLand()
 	GetContainerFreeSlots(Container:sup_Containerid, freeslots);
 	dbg("supply-crate", 2, "[SupplyCrateLand] Spawned %d items in supply crate container %d", 32 - freeslots, _:sup_Containerid);
 
-	DestroyDynamicObject(sup_ObjCrate1);
-	DestroyDynamicObject(sup_ObjCrate2);
-	DestroyDynamicObject(sup_ObjPara);
-	DestroyDynamicObject(sup_ObjSignal);
+	if(sup_ObjCrate1 == INVALID_OBJECT_ID)
+		DestroyDynamicObject(sup_ObjCrate1);
+
+	if(sup_ObjCrate2 == INVALID_OBJECT_ID)
+		DestroyDynamicObject(sup_ObjCrate2);
+
+	if(sup_ObjPara == INVALID_OBJECT_ID)
+		DestroyDynamicObject(sup_ObjPara);
+
+	if(sup_ObjSignal == INVALID_OBJECT_ID)	
+		DestroyDynamicObject(sup_ObjSignal);
 	
 	sup_ObjCrate1 = INVALID_OBJECT_ID;
 	sup_ObjCrate2 = INVALID_OBJECT_ID;
