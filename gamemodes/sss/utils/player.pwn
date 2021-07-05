@@ -124,7 +124,7 @@ stock CancelPlayerMovement(playerid)
 
 	GetPlayerPos(playerid, x, y, z);
 	SetPlayerPos(playerid, x, y, z);
-	ClearAnimations(playerid);
+	ClearAnimations(playerid, 1);
 	TogglePlayerControllable(playerid, true);
 	return 1;
 }
