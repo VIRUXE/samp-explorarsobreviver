@@ -143,11 +143,10 @@ hook OnPlayerScriptUpdate(playerid)
 		if(IsValidDynamicObject(BloodObjects[playerid][idx]))
 			DestroyDynamicObject(BloodObjects[playerid][idx]);
 
-		new Float:cx, Float:cy, Float:cz, Float:crx, Float:cry, Float:crz;
+		new Float:cx, Float:cy, Float:cz, Float:crx, Float:cry, Float:crz = z;
 
-		CA_RayCastLineAngle(x, y, z, x, y, z - 600.0, cx, cy, cz, crx, cry, crz);
-
-		BloodObjects[playerid][idx] = CreateDynamicObject(19836, cx, cy, cz + 0.1, crx, cry, crz, worldid, interiorid);
+		if(CA_RayCastLineAngle(x, y, z, x, y, z - 600.0, cx, cy, cz, crx, cry, crz) != WATER_OBJECT)
+			BloodObjects[playerid][idx] = CreateDynamicObject(19836, cx, cy, cz + 0.1, crx, cry, crz, worldid, interiorid);
 
 		BloodObjectIndex[playerid] = idx;
 	}
