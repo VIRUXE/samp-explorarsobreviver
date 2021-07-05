@@ -87,11 +87,7 @@ SavePlayerChar(playerid)
 	Character
 */
 
-	if(player_data[PLY_CELL_WORLD] != 0)
-		player_data[PLY_CELL_HEALTH] = _:0.0;
-	else
-		player_data[PLY_CELL_HEALTH]	= _:GetPlayerHP(playerid);
-
+	player_data[PLY_CELL_HEALTH]	= _:GetPlayerHP(playerid);
 	player_data[PLY_CELL_ARMOUR]	= _:GetPlayerAP(playerid);
 	player_data[PLY_CELL_FOOD]		= _:GetPlayerFP(playerid);
 	player_data[PLY_CELL_SKIN]		= GetPlayerClothes(playerid);
