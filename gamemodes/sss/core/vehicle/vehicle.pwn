@@ -178,6 +178,10 @@ stock DestroyWorldVehicle(vehicleid, bool:perma = false)
 	if(!IsValidVehicle(vehicleid))
 		return 0;
 
+	foreach(new i : Player)
+		if(GetPlayerVehicleID(i) == vehicleid)
+			RemovePlayerFromVehicle(i);
+			
 	CallLocalFunction("OnVehicleDestroyed", "d", vehicleid);
 	Iter_Remove(veh_Index, vehicleid);
 	
@@ -804,9 +808,6 @@ public OnVehicleDeath(vehicleid, killerid)
 	GetVehiclePos(vehicleid, veh_Data[vehicleid][veh_spawnX], veh_Data[vehicleid][veh_spawnY], veh_Data[vehicleid][veh_spawnZ]);
 
 	veh_Data[vehicleid][veh_state] = VEHICLE_STATE_DYING;
-
-	if(GetPlayerVehicleID(killerid) == vehicleid)
-		RemovePlayerFromVehicle(killerid);
 
 	log("[OnVehicleDeath] Vehicle %s (%d) killed by %s at %f %f %f", GetVehicleUUID(vehicleid), vehicleid, name, veh_Data[vehicleid][veh_spawnX], veh_Data[vehicleid][veh_spawnY], veh_Data[vehicleid][veh_spawnZ]);
 	return 1;
