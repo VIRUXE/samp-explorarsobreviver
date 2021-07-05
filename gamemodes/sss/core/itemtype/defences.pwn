@@ -176,16 +176,11 @@ ActivateDefenceItem(Item:itemid)
 	new
 		itemtypename[MAX_ITEM_NAME],
 		itemdata[e_DEFENCE_DATA],
-		Button:buttonid,
-		STREAMER_TAG_OBJECT:objectid;
+		Button:buttonid;
 
 	GetItemTypeName(def_TypeData[defencetype][def_itemtype], itemtypename);
 	GetItemArrayData(itemid, itemdata);
 	GetItemButtonID(itemid, buttonid);
-	GetItemObjectID(itemid, objectid);
-
-	Streamer_SetFloatData(STREAMER_TYPE_OBJECT, objectid, E_STREAMER_STREAM_DISTANCE, 400.0);
-	Streamer_SetFloatData(STREAMER_TYPE_OBJECT, objectid, E_STREAMER_DRAW_DISTANCE, 400.0);
 
 	itemdata[def_active] = true;
 
