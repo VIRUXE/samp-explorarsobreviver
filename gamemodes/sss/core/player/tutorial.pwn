@@ -139,6 +139,8 @@ hook OnPlayerClickPlayerTD(playerid, PlayerText:playertextid)
 		ChatMsg(playerid, GREEN, " » "C_WHITE" %s", ls(playerid, "TUTORINTROD"));
 		ChatMsg(playerid, GREEN, " » "C_WHITE" %s", ls(playerid, "TUTOREXITCM"));
 
+		SetPlayerBleedRate(playerid, 0.0);
+		SetPlayerFP(playerid, 100.0);
 		SetPlayerHealth(playerid, 0.9);
 	}
 }
