@@ -949,8 +949,6 @@ ptask VehicleHealthCheck[1000](playerid)
 		BanPlayer(playerid, reason, -1, 0);
 
 		defer vh_ResetVehiclePosition(vehicleid);
-
-		vh_ReportTick[playerid] = GetTickCount();
 	}
 
 	return;
