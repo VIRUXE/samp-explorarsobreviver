@@ -120,7 +120,7 @@ hook OnItemCreateInWorld(Item:itemid)
 		if(itemdata[def_hit] > 0)
 			SetItemHitPoints(itemid, itemdata[def_hit]);
 
-		SetButtonSize(buttonid, 1.5); // Default = 1.0;
+		SetButtonSize(buttonid, 1.2); // Default = 1.0;
 
 		SetItemArrayData(itemid, itemdata, e_DEFENCE_DATA);
 	}
