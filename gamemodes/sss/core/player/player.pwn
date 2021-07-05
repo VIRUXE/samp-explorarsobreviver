@@ -332,11 +332,14 @@ public OnPlayerSpawn(playerid)
 	
 	if(IsPlayerMobile(playerid))
 	{
-		EnableAntiCheatForPlayer(playerid, 52, false);
+		EnableAntiCheatForPlayer(playerid, 52, false); // Anti-Nop
+		EnableAntiCheatForPlayer(playerid, 39, false); // Dialog-Hack
 		SetPlayerColor(playerid, 0x59595900);
 	}
 
-	//SetPlayerPos(playerid, DEFAULT_POS_X, DEFAULT_POS_Y, DEFAULT_POS_Z);
+	EnableAntiCheatForPlayer(playerid, 4, false); // Anti-teleport hack (into/between vehicles)
+	EnableAntiCheatForPlayer(playerid, 11, false); // Anti-Health hack (in vehicle)
+	EnableAntiCheatForPlayer(playerid, 15, false); // Anti-Weapon hack
 	
 	ply_Data[playerid][ply_SpawnTick] = GetTickCount();
 
