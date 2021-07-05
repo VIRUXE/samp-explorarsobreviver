@@ -109,4 +109,16 @@ hook OnItemCreateInWorld(Item:itemid){
 hook OnItemCreate(Item:itemid) 
 	SetItemNameExtra(itemid, "");
 
+/*==============================================================================
+
+	Temporary Disable Give Item
+	
+==============================================================================*/
+
+hook OnPlayerGiveItem(playerid, targetid, Item:itemid){
+	PlayerDropItem(playerid);
+	return Y_HOOKS_BREAK_RETURN_1;
+}
+
+
 
