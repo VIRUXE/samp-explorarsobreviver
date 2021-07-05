@@ -593,6 +593,26 @@ ACMD:ilhals[3](playerid)
 	return 1;
 }
 
+ACMD:ilhalv[3](playerid)
+{
+    if(!(IsPlayerOnAdminDuty(playerid)) && GetPlayerAdminLevel(playerid) < STAFF_LEVEL_SECRET)
+		return 6;
+
+    ChatMsgAdmins(1, BLUE, "[Admin-Log] %p(id:%d) usou o teleporte /ilhalv", playerid, playerid);
+    SetPlayerPos(playerid, 291.6670, 4330.2515, 2.9280);
+	return 1;
+}
+
+ACMD:ilhasf[3](playerid)
+{
+    if(!(IsPlayerOnAdminDuty(playerid)) && GetPlayerAdminLevel(playerid) < STAFF_LEVEL_SECRET)
+		return 6;
+
+    ChatMsgAdmins(1, BLUE, "[Admin-Log] %p(id:%d) usou o teleporte /ilhasf", playerid, playerid);
+    SetPlayerPos(playerid, -4496.7695, 437.8691, 17.0272);
+	return 1;
+}
+
 ACMD:teleportes[3](playerid)
 {
     new stringtp[800];
@@ -617,6 +637,8 @@ ACMD:teleportes[3](playerid)
     strcat(stringtp, ""C_BLUE"Militar do Barranco - /militarls1\n");
     strcat(stringtp, ""C_BLUE"Militar da Fazenda - /militarls2\n");
     strcat(stringtp, ""C_BLUE"Ilha de Los Santos - /ilhals\n");
+	strcat(stringtp, ""C_BLUE"Ilha de Los Santos - /ilhalv\n");
+	strcat(stringtp, ""C_BLUE"Ilha de Los Santos - /ilhasf\n");
     ShowPlayerDialog(playerid, 11478, DIALOG_STYLE_MSGBOX, "Teleportes", stringtp, "Fechar", "");
 	return 1;
 }
