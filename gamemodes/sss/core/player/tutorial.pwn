@@ -5,7 +5,7 @@
 static
 PlayerText:	ClassButtonTutorial		[MAX_PLAYERS],
 bool:		PlayerInTutorial		[MAX_PLAYERS],
-			PlayerTutorialVehicle	[MAX_PLAYERS],
+			PlayerTutorialVehicle	[MAX_PLAYERS] = {INVALID_VEHICLE_ID, ...},
 Item:		PlayerTutorial_Item     [MAX_TUTORIAL_ITEMS][MAX_PLAYERS];
 
 hook OnPlayerConnect(playerid)
@@ -89,6 +89,9 @@ hook OnPlayerClickPlayerTD(playerid, PlayerText:playertextid)
 
 		PlayerInTutorial[playerid] = true;
 
+		if(PlayerTutorialVehicle[playerid] != INVALID_VEHICLE_ID)
+			DestroyWorldVehicle(PlayerTutorialVehicle[playerid], true);
+	
 		//	Vehicle
 		PlayerTutorialVehicle[playerid] = CreateWorldVehicle(veht_Bobcat, 949.1641,2060.3074,10.8203, 272.1444, random(100), random(100), .world = playerid + 1);
 		SetVehicleHealth(PlayerTutorialVehicle[playerid], 321.9);
@@ -103,7 +106,7 @@ hook OnPlayerClickPlayerTD(playerid, PlayerText:playertextid)
 		//	Items
 		//PlayerTutorial_Item[0][playerid] = CreateItem(item_CorPanel, 975.1069,2071.6677,9.8603, .rz = frandom(360.0), .world = playerid + 1);
 		//PlayerTutorial_Item[1][playerid] = CreateItem(item_MetalGate, 973.7677,2075.0117,9.8603, .rz = frandom(360.0), .world = playerid + 1);
-		//PlayerTutorial_Item[2][playerid] = CreateItem(item_Door, 973.7151,2067.4258,9.8603, .rz = frandom(360.0), .world = playerid + 1);
+		PlayerTutorial_Item[2][playerid] = CreateItem(item_Spanner, 945.02, 2069.25,9.8603, .rz = frandom(360.0), .world = playerid + 1);
 		PlayerTutorial_Item[3][playerid] = CreateItem(item_Wheel, 951.7727,2068.0540,9.8603, .rz = frandom(360.0), .world = playerid + 1);
 		PlayerTutorial_Item[4][playerid] = CreateItem(item_Wheel, 954.4612,2068.2312,9.8603, .rz = frandom(360.0), .world = playerid + 1);
 		PlayerTutorial_Item[5][playerid] = CreateItem(item_Wheel, 952.7346,2070.6902,9.8603, .rz = frandom(360.0), .world = playerid + 1);
@@ -173,6 +176,8 @@ ExitTutorial(playerid)
 	RemovePlayerBag(playerid);
 	RemovePlayerHolsterItem(playerid);
 	
+	SetPlayerPos(playerid, DEFAULT_POS_X, DEFAULT_POS_Y, DEFAULT_POS_Z);
+
 	PlayerInTutorial[playerid] = false;
 	SetPlayerSpawnedState(playerid, false);
 	SetPlayerAliveState(playerid, false);
@@ -181,13 +186,8 @@ ExitTutorial(playerid)
 	SetPlayerBrightness(playerid, 255);
 
 	for(new i = 0; i < MAX_TUTORIAL_ITEMS; i++)
-	{
 		if(IsValidItem(PlayerTutorial_Item[i][playerid]))
 			DestroyItem(PlayerTutorial_Item[i][playerid]);
-	}
-		
-	DestroyWorldVehicle(PlayerTutorialVehicle[playerid], true);
-	PlayerTutorialVehicle[playerid] = INVALID_VEHICLE_ID;
 
 	for(new i = 0; i < 20; i++)
 		SendClientMessage(playerid, GREEN, "");
