@@ -116,7 +116,7 @@ hook OnItemRemovedFromPlayer(playerid, Item:itemid)
 // Pickup/drop item
 hook OnPlayerPickedUpItem(playerid, Item:itemid)
 {
-	_UpdateKeyActions(playerid);
+	defer t_UpdateKeyActions(playerid);
 }
 
 hook OnPlayerDroppedItem(playerid, Item:itemid)
@@ -380,10 +380,7 @@ _UpdateKeyActions(playerid)
 	else
 		AddToolTipText(playerid, KEYTEXT_PUT_AWAY, "Colocar no Inventario");
 
-	if(inplayerarea == -1 || IsValidItem(GetPlayerItem(inplayerarea)))
-		AddToolTipText(playerid, KEYTEXT_DROP_ITEM, "Jogar Fora");
-	else
-		AddToolTipText(playerid, KEYTEXT_DROP_ITEM, "Dar");
+	AddToolTipText(playerid, KEYTEXT_DROP_ITEM, "Dar");
 
 	AddToolTipText(playerid, KEYTEXT_INVENTORY, "Abrir Inventario");
 	ShowPlayerKeyActionUI(playerid);
