@@ -128,6 +128,18 @@ hook OnItemCreateInWorld(Item:itemid)
 	return Y_HOOKS_CONTINUE_RETURN_0;
 }
 
+hook OnGameModeExit(){
+    foreach(new i : itm_WorldIndex){
+		if(IsItemTypeDefence(GetItemType(Item:i))){
+			new active;
+			GetItemArrayDataAtCell(Item:i, active, def_active);
+			if(active){
+				CA_DestroyObject(def_Col[Item:i]);
+			}
+		}
+    }
+}
+
 CreateDefenceColision(Item:itemid)
 {
 	new 
