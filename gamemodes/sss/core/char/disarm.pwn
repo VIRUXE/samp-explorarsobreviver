@@ -1,6 +1,7 @@
 
 #include <YSI_Coding\y_hooks>
 
+new Timer:DisarmDelay[MAX_PLAYERS];
 
 hook OnPlayerKeyStateChange(playerid, newkeys, oldkeys)
 {
@@ -18,7 +19,8 @@ hook OnPlayerKeyStateChange(playerid, newkeys, oldkeys)
 			{
 				if(IsPlayerKnockedOut(i) || GetPlayerAnimationIndex(i) == 1381)
 				{
-					DisarmPlayer(playerid, i);
+					stop DisarmDelay[playerid];
+					DisarmDelay[playerid] = defer DisarmPlayer(playerid, i);
 					break;
 				}
 			}
@@ -28,10 +30,19 @@ hook OnPlayerKeyStateChange(playerid, newkeys, oldkeys)
 	return 1;
 }
 
-DisarmPlayer(playerid, i)
+hook OnPlayerDisconnect(playerid, reason)
+	stop DisarmDelay[playerid];
+
+timer DisarmPlayer[1000](playerid, i)
 {
 	if(IsValidItem(GetPlayerItem(playerid)))
-		return 0;
+		return;
+
+	if(!IsPlayerKnockedOut(i) && GetPlayerAnimationIndex(i) != 1381)
+		return;
+		
+	if(!IsPlayerConnected(i))
+		return;
 
 	new Item:itemid = GetPlayerItem(i);
 
@@ -40,7 +51,7 @@ DisarmPlayer(playerid, i)
 		RemoveCurrentItem(i);
 		GiveWorldItemToPlayer(playerid, itemid);
 
-		return 1;
+		return;
 	}
 
 	itemid = GetPlayerHolsterItem(i);
@@ -51,8 +62,8 @@ DisarmPlayer(playerid, i)
 		CreateItemInWorld(itemid);
 		GiveWorldItemToPlayer(playerid, itemid);
 
-		return 1;
+		return;
 	}
 
-	return 0;
+	return;
 }
