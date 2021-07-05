@@ -116,6 +116,7 @@ hook OnHoldActionUpdate(playerid, progress){
 
 hook OnHoldActionFinish(playerid){
 	if(IsValidItem(Bed_Item[playerid])) {
+		ClearAnimations(playerid, 1);
 		GetItemPos(Bed_Item[playerid], Bed_Pos[playerid][0], Bed_Pos[playerid][1], Bed_Pos[playerid][2]);
 
 		SetPlayerPos(playerid, Bed_Pos[playerid][0], Bed_Pos[playerid][1], Bed_Pos[playerid][2] + 0.9);
