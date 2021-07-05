@@ -156,7 +156,7 @@ hook OnPlayerUseItem(playerid, Item:itemid)
 
 		if(IsItemInWorld(itemid))
 		{
-			if(IsPlayerMobile(playerid) && GetItemType(itemid) != ItemType:item_Torso)
+			if(IsPlayerMobile(playerid) && box_TypeData[box_ItemTypeBoxType[itemtype]][box_animate])
 				PlayerPickUpItem(playerid, itemid);
 
 			if(_DisplaySafeboxDialog(playerid, itemid, box_TypeData[box_ItemTypeBoxType[itemtype]][box_animate]))
