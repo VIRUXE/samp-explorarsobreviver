@@ -28,6 +28,7 @@ vehicle_military, 1.0
 # misc
 10.0,	Wheel
 45.0,	Crowbar
-45.0,	Hammer
-45.0,	Screwdriver
+35.0,	Hammer
+30.0,   Spanner
+40.0,	Screwdriver
 45.0,	Wrench

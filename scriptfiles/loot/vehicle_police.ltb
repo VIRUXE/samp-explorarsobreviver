@@ -2,8 +2,9 @@ vehicle_police, 1.0
 
 # tools,	useful stuff, etc
 41.0,	Wrench
-45.0,	Screwdriver
-42.0,	Hammer
+35.0,	Screwdriver
+30.0,	Hammer
+25.0,   Spanner
 44.0,	Crowbar
 20.0,	AntiSepBandage
 15.0,	Medkit
