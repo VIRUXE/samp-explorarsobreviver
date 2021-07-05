@@ -140,7 +140,8 @@ hook OnPlayerScriptUpdate(playerid)
 			}
 		}
 
-		DestroyDynamicObject(BloodObjects[playerid][idx]);
+		if(IsValidDynamicObject(BloodObjects[playerid][idx]))
+			DestroyDynamicObject(BloodObjects[playerid][idx]);
 
 		new Float:cx, Float:cy, Float:cz, Float:crx, Float:cry, Float:crz;
 
