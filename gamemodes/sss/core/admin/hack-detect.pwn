@@ -913,3 +913,50 @@ AccuracyWarning(playerid, total)
 		"Accuracy Warning: %P (%d) Shots: %d Hits: %d Accuracy: %.2f (%d/10) Checks: %d",
 		playerid, playerid, shots, hits, accuracy, total, ea_TotalChecks[playerid]);
 }
+
+/*==============================================================================
+	Vehicle Health
+==============================================================================*/
+
+
+ptask VehicleHealthCheck[1000](playerid)
+{
+	if(!IsPlayerInAnyVehicle(playerid))
+		return;
+
+	if(IsPlayerOnAdminDuty(playerid))
+		return;
+
+	new
+		Float:vehiclehp,
+		vehicleid = GetPlayerVehicleID(playerid);
+
+	GetVehicleHealth(vehicleid, vehiclehp);
+
+	if(vehiclehp > 990.0 && GetPlayerVehicleSeat(playerid) == 0) // Only check the driver - Checking passengers causes a false ban
+	{
+		new
+			Float:x,
+			Float:y,
+			Float:z,
+			name[MAX_PLAYER_NAME],
+			reason[64];
+
+		GetPlayerPos(playerid, x, y, z);
+		GetPlayerName(playerid, name, MAX_PLAYER_NAME);
+		format(reason, sizeof(reason), "Vehicle health of %.2f (impossible via server)", vehiclehp);
+		ReportPlayer(name, reason, -1, REPORT_TYPE_VHEALTH, x, y, z, GetPlayerVirtualWorld(playerid), GetPlayerInterior(playerid), "");
+		BanPlayer(playerid, reason, -1, 0);
+
+		defer vh_ResetVehiclePosition(vehicleid);
+
+		vh_ReportTick[playerid] = GetTickCount();
+	}
+
+	return;
+}
+
+timer vh_ResetVehiclePosition[1000](vehicleid)
+{
+	SetVehicleHealth(vehicleid, 300.0);
+}
