@@ -75,21 +75,6 @@ hook OnPlayerDisconnect(playerid, reason){
 
 /*==============================================================================
 
-	Temporary fix long pickup on mobile
-
-==============================================================================*/
-
-hook OnButtonPress(playerid, Button:id) {
-	if(IsPlayerMobile(playerid)){
-		new Item:itemid = GetItemFromButtonID(id);
-		if(IsValidItem(itemid) && IsItemTypeLongPickup(GetItemType(itemid)))
-			if(!CallLocalFunction("OnPlayerPickUpItem", "dd", playerid, _:itemid)) 
-				PlayerPickUpItem(playerid, itemid);
-	}
-}
-
-/*==============================================================================
-
 	Anti Drop item bug
 	
 ==============================================================================*/
@@ -113,19 +98,6 @@ hook OnItemCreateInWorld(Item:itemid){
 	new Button:buttonid;
 	GetItemButtonID(itemid, buttonid);
 	SetButtonText(buttonid, "Pressione F para pegar");
-}
-
-
-/*==============================================================================
-
-	Temporary disable give item
-	
-==============================================================================*/
-
-hook OnPlayerGiveItem(playerid, targetid, Item:itemid)
-{
-	return Y_HOOKS_BREAK_RETURN_1;
-	//return Y_HOOKS_CONTINUE_RETURN_0;
 }
 
 /*==============================================================================
