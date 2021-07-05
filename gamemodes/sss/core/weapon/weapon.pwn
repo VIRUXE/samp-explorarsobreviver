@@ -707,7 +707,7 @@ timer _UnloadWeapon[300](playerid, _itemid)
 	new Item:itemid = Item:_itemid;
 
 	dbg("weapon-core", 1, "[_UnloadWeapon] unloading item %d magammo %d reserve %d", _:itemid, GetItemWeaponItemMagAmmo(itemid), GetItemWeaponItemReserve(itemid));
-	if(GetPlayerItem(playerid) != itemid || !IsValidItem(Item:_itemid))
+	if(GetPlayerItem(playerid) != itemid)
 	{
 		itmw_DropItemID[playerid] = INVALID_ITEM_ID;
 		return;
@@ -728,9 +728,6 @@ timer _UnloadWeapon[300](playerid, _itemid)
 		Item:ammoitemid;
 
 	ammoitemtype = GetItemWeaponItemAmmoItem(itemid);
-
-	if(!IsValidItemType(ammoitemtype))
-		return;
 		
 	GetPlayerPos(playerid, x, y, z);
 	GetPlayerFacingAngle(playerid, r);
@@ -777,13 +774,13 @@ hook OnItemNameRender(Item:itemid, ItemType:itemtype)
 		exname[MAX_ITEM_TEXT];
 
 	if(itmw_Data[itmw_ItemTypeWeapon[itemtype]][itmw_flags] & WEAPON_FLAG_LIQUID_AMMO)
-		calibrename = "Liquid";
+		calibrename = "Liquido";
 
 	else
 		GetCalibreName(itmw_Data[itemweaponid][itmw_calibre], calibrename);
 
 	if(ammotype == -1)
-		ammoname = "Unloaded";
+		ammoname = "Descarregado";
 
 	else
 		GetAmmoTypeName(ammotype, ammoname);
