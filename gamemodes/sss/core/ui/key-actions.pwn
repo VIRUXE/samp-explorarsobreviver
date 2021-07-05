@@ -338,7 +338,7 @@ _UpdateKeyActions(playerid)
 		else
 			AddToolTipText(playerid, KEYTEXT_INTERACT, "Curar a Si Proprio");
 	}
-	else if(itemtype == item_Wrench || itemtype == item_Screwdriver || itemtype == item_Hammer)
+	else if(itemtype == item_Wrench || itemtype == item_Screwdriver || itemtype == item_Hammer || itemtype == item_Spanner)
 	{
 		if(invehiclearea != INVALID_VEHICLE_ID)
 		{
