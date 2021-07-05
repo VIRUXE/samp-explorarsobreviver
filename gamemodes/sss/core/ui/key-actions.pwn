@@ -52,7 +52,7 @@ stock AddToolTipText(playerid, const key[], const use[])
 	if(IsPlayerMobile(playerid))
 	{
 		if(!strcmp(key, KEYTEXT_INTERACT)) 			strcat(tmp, "F");
-		else if(!strcmp(key, KEYTEXT_RELOAD)) 		strcat(tmp, "TAB");
+		else if(!strcmp(key, KEYTEXT_RELOAD)) 		strcat(tmp, "ALT");
 		else if(!strcmp(key, KEYTEXT_PUT_AWAY)) 	strcat(tmp, "Y");
 		else if(!strcmp(key, KEYTEXT_DROP_ITEM)) 	strcat(tmp, "N");
 		else if(!strcmp(key, KEYTEXT_INVENTORY)) 	strcat(tmp, "H");
@@ -380,9 +380,10 @@ _UpdateKeyActions(playerid)
 	else
 		AddToolTipText(playerid, KEYTEXT_PUT_AWAY, "Colocar no Inventario");
 
-	//if(inplayerarea == -1)
-	AddToolTipText(playerid, KEYTEXT_DROP_ITEM, "Jogar Fora");
-	//else AddToolTipText(playerid, KEYTEXT_DROP_ITEM, "Dar");
+	if(inplayerarea == -1 || IsValidItem(GetPlayerItem(inplayerarea)))
+		AddToolTipText(playerid, KEYTEXT_DROP_ITEM, "Jogar Fora");
+	else
+		AddToolTipText(playerid, KEYTEXT_DROP_ITEM, "Dar");
 
 	AddToolTipText(playerid, KEYTEXT_INVENTORY, "Abrir Inventario");
 	ShowPlayerKeyActionUI(playerid);
