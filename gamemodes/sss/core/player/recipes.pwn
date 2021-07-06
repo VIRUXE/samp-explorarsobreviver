@@ -6,6 +6,8 @@ CMD:recipes(playerid, params[])
 	return 1;
 }
 CMD:receitas(playerid, params[]) return cmd_recipes(playerid, params);
+CMD:craft(playerid, params[]) return cmd_recipes(playerid, params);
+CMD:crafts(playerid, params[]) return cmd_recipes(playerid, params);
 
 Dialog_ShowCraftTypes(playerid)
 {
