@@ -220,14 +220,14 @@ timer DestroyUntilItem[5400000](itemid, Float:x, Float:y, Float:z)
 	if(!IsValidItem(Item:itemid))
 		return;
 
-	/*foreach(new i : Player)
+	foreach(new i : Player)
 	{
 		if(IsPlayerInRangeOfPoint(i, 20.0, x, y, z))
 		{
 			defer DestroyUntilItem(_:itemid, x, y, z);
 			return;
 		}
-	}*/
+	}
 
 	if(IsItemTypeSafebox(GetItemType(Item:itemid)))
 	{
