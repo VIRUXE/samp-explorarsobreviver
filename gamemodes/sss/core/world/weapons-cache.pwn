@@ -174,25 +174,13 @@ timer WeaponsCacheSignal[WEPCACHE_SIGNAL_INTERVAL](count, Float:x, Float:y, Floa
 		ref_y = wepc_DropLocationData[i][wepc_posY];
 		ref_z = wepc_DropLocationData[i][wepc_posZ];
 
-		if(Distance(ref_x, ref_y, ref_z, wepc_CurrentPosX, wepc_CurrentPosY, wepc_CurrentPosZ) < 1000.0)
+		if(Distance(ref_x, ref_y, ref_z, wepc_CurrentPosX, wepc_CurrentPosY, wepc_CurrentPosZ) < 100.0)
 			locationlist[idx++] = i;
 	}
 
 	if(idx > 0)
-	{
-		location = locationlist[random(idx)];
-
-		ref_x = wepc_DropLocationData[location][wepc_posX];
-		ref_y = wepc_DropLocationData[location][wepc_posY];
-		ref_z = wepc_DropLocationData[location][wepc_posZ];
-
-		//angleto = absoluteangle(360 - GetAngleToPoint(ref_x, ref_y, x, y));
-		//distanceto = Distance2D(ref_x, ref_y, x, y);
-
 		ChatMsgAll(YELLOW, " » [Exercito]: Caixa de Armas caindo no mapa.. "C_ORANGE"(Icone 'Arma')");
-	}
-	else
-	{
+	else{
 		err("No reference point found.");
 		return;
 	}
