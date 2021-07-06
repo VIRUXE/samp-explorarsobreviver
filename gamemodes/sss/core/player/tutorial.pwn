@@ -163,14 +163,14 @@ hook OnPlayerSave(playerid, filename[])
 	new data[1];
 	data[0] = PlayerInTutorial[playerid];
 
-	modio_push(filename, _T<L,A,N,G>, 1, _:data);
+	modio_push(filename, _T<T,U,T,R>, 1, _:data);
 }
 
 hook OnPlayerLoad(playerid, filename[])
 {
 	new data[1];
 
-	modio_read(filename, _T<L,A,N,G>, 1, _:data);
+	modio_read(filename, _T<T,U,T,R>, 1, _:data);
 
 	PlayerInTutorial[playerid] = bool:data[0];
 	if(PlayerInTutorial[playerid])
