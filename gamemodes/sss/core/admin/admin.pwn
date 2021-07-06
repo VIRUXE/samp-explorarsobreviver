@@ -268,8 +268,7 @@ KickPlayer(playerid, const reason[], bool:tellplayer = true)
 
 	if(tellplayer)
 		ChatMsgLang(playerid, GREY, "KICKMESSAGE", reason);
-
-	Kick(playerid);
+		
 	return 1;
 }
 
