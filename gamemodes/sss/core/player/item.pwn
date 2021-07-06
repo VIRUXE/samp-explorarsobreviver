@@ -1,18 +1,41 @@
 
 #include <YSI_Coding\y_hooks>
 
-static PlayerText:item_TD[MAX_PLAYERS] = {PlayerText:INVALID_TEXT_DRAW, ...};
+static 
+	Text:item_Prev,
+	PlayerText:item_TD[MAX_PLAYERS] = {PlayerText:INVALID_TEXT_DRAW, ...};
+	
+hook OnGameModeInit(){
+	item_Prev = TextDrawCreate(291.000000, 400.000000, "Preview_Model");
+	TextDrawFont(item_Prev, 5);
+	TextDrawLetterSize(item_Prev, 0.600000, 2.000000);
+	TextDrawTextSize(item_Prev, 53.000000, 41.000000);		
+	TextDrawSetOutline(item_Prev, 0);
+	TextDrawSetShadow(item_Prev, 0);
+	TextDrawAlignment(item_Prev, 1);
+	TextDrawColor(item_Prev, -1);
+	TextDrawUseBox(item_Prev, true);
+	TextDrawBoxColor(item_Prev, 2);
+	TextDrawBackgroundColor(item_Prev, 0);
+	TextDrawSetProportional(item_Prev, 1);
+	TextDrawSetPreviewRot(item_Prev, -10.000000, 0.100000, -20.000000, 1.0);
+	TextDrawSetPreviewModel(item_Prev, 19300);
+	TextDrawSetSelectable(item_Prev, true);
+}
+
+hook OnGameModeExit()
+	TextDrawDestroy(item_Prev);
 
 hook OnPlayerConnect(playerid){
-	/*
-	If you have any respect for me or my work that I do completely free:
-	DO NOT REMOVE THIS MESSAGE.
-	It's just one line of text that appears when a player joins.
-	Feel free to add your own message UNDER this one with information regarding
-	your own modifications you've made to the code but DO NOT REMOVE THIS!
+/*
+		If you have any respect for me or my work that I do completely free:
+		DO NOT REMOVE THIS MESSAGE.
+		It's just one line of text that appears when a player joins.
+		Feel free to add your own message UNDER this one with information regarding
+		your own modifications you've made to the code but DO NOT REMOVE THIS!
 
-	Thank you :)
-	*/
+		Thank you :)
+*/
 	item_TD[playerid] = CreatePlayerTextDraw(playerid, 318.000000, 435.000000, "Scavenge and Survive ~b~(Copyright (C) 2016 \"Southclaws\")");
 	PlayerTextDrawFont(playerid, item_TD[playerid], 1);
 	PlayerTextDrawLetterSize(playerid, item_TD[playerid], 0.254165, 1.250000);
@@ -42,8 +65,16 @@ UpdatePlayerPreviewItem(playerid){
 hook OnPlayerGetItem(playerid, Item:itemid){
 	UpdatePlayerPreviewItem(playerid);
 
+	new 
+		modelid,
+		ItemType:itype = GetItemType(itemid);
+
+	GetItemTypeModel(itype, modelid);
+	TextDrawSetPreviewModel(item_Prev, modelid);
+	TextDrawShowForPlayer(playerid, item_Prev);
+
 	// Temporary fix Special Action on mobile
-	if(IsItemTypeCarry(GetItemType(itemid)) && IsPlayerMobile(playerid)) {
+	if(IsItemTypeCarry(itype) && IsPlayerMobile(playerid)) {
 		RemovePlayerAttachedObject(playerid, ITEM_ATTACH_INDEX);
 	}
 
@@ -61,16 +92,19 @@ hook OnItemDestroy(Item:itemid){
 	foreach(new i : Player){
 		if(GetPlayerItem(i) == itemid){
 			PlayerTextDrawHide(i, item_TD[i]);
+			TextDrawHideForPlayer(i, item_Prev);
 		}
 	}
 }
 
 hook OnItemRemovedFromPlayer(playerid, Item:itemid){
 	PlayerTextDrawHide(playerid, item_TD[playerid]);
+	TextDrawHideForPlayer(playerid, item_Prev);
 }
 
 hook OnPlayerDisconnect(playerid, reason){
 	PlayerTextDrawDestroy(playerid, item_TD[playerid]);
+	TextDrawHideForPlayer(playerid, item_Prev);
 }
 
 /*==============================================================================
