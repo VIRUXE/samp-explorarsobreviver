@@ -186,6 +186,8 @@ hook OnItemAddToInventory(playerid, Item:itemid, slot)
 	return Y_HOOKS_CONTINUE_RETURN_0;
 }
 
+hook OnPlayerWearBag(playerid, Item:itemid)
+	hols_LastHolster[playerid] = GetTickCount();
 
 _HolsterChecks(playerid)
 {
