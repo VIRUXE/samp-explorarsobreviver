@@ -1,9 +1,9 @@
 
 #include <YSI_Coding\y_hooks>
 
-#define MAX_TRASH   (86)
+#define MAX_TRASH   (106)
 
-new Float:Trash_Pos[MAX_TRASH][3] =
+static Float:Trash_Pos[MAX_TRASH][3] =
 {
 // 1372
 	{776.828002, 	1866.160034, 	3.890630},
@@ -37,7 +37,6 @@ new Float:Trash_Pos[MAX_TRASH][3] =
 	{1577.589965, 	2161.149902, 	10.210900},
 	{1577.589965, 	2119.100097, 	10.210900},
 	{1577.589965, 	2091.540039, 	10.210900},
-
 // 1334
 	{-2174.860107, 	-2365.270019, 	30.796899},
 	{-2136.500000, 	-2263.899902, 	30.726600},
@@ -63,7 +62,6 @@ new Float:Trash_Pos[MAX_TRASH][3] =
 	{1680.050048, 	1168.270019, 	10.929697},
 	{1680.050048, 	1164.160034, 	10.929697},
 	{1734.260009, 	1249.050048, 	10.929697},
-
 //1331
 	{-2136.550048, 	-2450.590087, 	30.554700},
 	{1004.809997, 	1068.069946, 	10.625000},
@@ -82,7 +80,7 @@ new Float:Trash_Pos[MAX_TRASH][3] =
 	{ -2218.88, -2336.21, 30.4844 },
 	{ -2213.96, -2339.30, 30.4844 },
 	{ -2176.34, -2424.58, 30.5547 },
-//1415
+// 1415
 	{ -77.22, -1188.37, 0.8359 },
 	{ -68.35, -1104.99, 0.2188 },
 	{ -63.81, -1106.42, 0.2188 },
@@ -95,86 +93,84 @@ new Float:Trash_Pos[MAX_TRASH][3] =
 	{ 569.51, -1765.03, 13.5312 },
 	{ 732.85, -1332.90, 12.6875 },
 	{ 387.15, -1751.51, 7.9453 },
-	{ -826.28, 495.12, 1357.8600 },
 	{ 1694.41, 1160.86, 9.8125 },
-	{ 1680.27, 1251.86, 9.9063 }
-};
+	{ 1680.27, 1251.86, 9.9063 },
+//1358
+	{ 1356.38, 485.19, 20.3750 },
+	{ -2462.15, 2512.74, 16.9922 },
+	{ -2401.62, 2357.53, 5.1250 },
+	{ 2671.60, 867.85, 11.1250 },
+	{ 2808.80, 857.20, 10.9297 },
+	{ 2863.79, 857.20, 10.9297 },
+	{ 2796.84, 977.70, 10.8047 },
+	{ 2212.94, 2790.92, 11.0078 },
+	{ 2233.80, 2814.15, 11.0078 },
+	{ 2332.62, 2785.86, 11.0078 },
+	{ 2388.81, 2758.67, 11.0078 },
+	{ 1379.03, 980.77, 11.0703 },
+	{ 1679.70, 767.43, 11.0078 },
+	{ 1689.16, 889.28, 11.0078 },
+	{ 1756.03, 771.64, 10.9844 },
+	{ 1752.90, 980.40, 10.9844 },
+	{ 1653.02, 1076.97, 11.0078 },
+	{ 1683.88, 1112.98, 10.9453 },
+	{ 1699.51, 1263.01, 11.0000 },
+	{ 1740.67, 1217.26, 11.0000 },
+	{ 1370.98, 1916.29, 11.0156 }
+},
 
-static
-	Button:Trash_Button[MAX_TRASH],
-	disable_Trash[MAX_TRASH],
-	Player_Trash[MAX_PLAYERS];
+	Button:Trash_Button	[MAX_TRASH],
+	disable_Trash		[MAX_TRASH],
+	Player_Trash		[MAX_PLAYERS];
 
-hook OnGameModeInit()
-{
-    for(new i = 0; i < MAX_TRASH; i++)
-	{
+hook OnGameModeInit(){
+    for(new i = 0; i < MAX_TRASH; i++){
         Trash_Button[i] = CreateButton(Trash_Pos[i][0], Trash_Pos[i][1], Trash_Pos[i][2] + 0.5,
 			"Pressione F para vasculhar", 0, 0, 2.1, 1, "Lixeira", .testlos = false);
 
+		SetButtonExtraData(Trash_Button[i], i + MAX_TRASH);
         disable_Trash[i] = 0;
 	}
 }
 
 hook OnPlayerConnect(playerid)
-{
     Player_Trash[playerid] = -1;
-}
 
-hook OnButtonPress(playerid, Button:buttonid)
-{
-	if(Player_Trash[playerid] != -1)
-	{
+hook OnButtonPress(playerid, Button:buttonid){
+	if(Player_Trash[playerid] != -1){
 		StopHoldAction(playerid);
 		ClearAnimations(playerid);
 		Player_Trash[playerid] = -1;
 	} else {
-		for(new i = 0; i < MAX_TRASH; i++){
-			if(buttonid == Button:Trash_Button[i]){
-				if(disable_Trash[i])
-				{
-					ShowActionText(playerid, "~r~Nada encontrado.");
-					break;
-				}
-				StartHoldAction(playerid, 5000);
-				ApplyAnimation(playerid, "BOMBER", "BOM_Plant_Loop", 4.0, 1, 0, 0, 0, 0);
-				Player_Trash[playerid] = i;
-				PlayerPlaySound(playerid,1131,0.0,0.0,0.0);
-				break;
-			}
+		new trashid;
+		GetButtonExtraData(buttonid, trashid);
+		if(trashid >= MAX_TRASH){
+			Player_Trash[playerid] = trashid - MAX_TRASH;
+			StartHoldAction(playerid, 6000);
+			ApplyAnimation(playerid, "BOMBER", "BOM_Plant_Loop", 4.0, 1, 0, 0, 0, 0);
+			PlayerPlaySound(playerid,1131,0.0,0.0,0.0);
+			ShowActionText(playerid, "Revistando Lixo...", 6000);
 		}
 	}
 }
 
-hook OnHoldActionUpdate(playerid, progress)
-{
+hook OnHoldActionUpdate(playerid, progress){
     if(Player_Trash[playerid] != -1)
-	{
-	    ShowActionText(playerid, "Revistando Lixo...");
-
 		if(random(5) == 1)
 	    	PlayerPlaySound(playerid, 1131, 0.0, 0.0, 0.0);
-	}
+
 	return Y_HOOKS_CONTINUE_RETURN_0;
 }
 
-hook OnHoldActionFinish(playerid)
-{
-	if(Player_Trash[playerid] != -1)
-	{
-	    if(disable_Trash[Player_Trash[playerid]])
-		{
+hook OnHoldActionFinish(playerid){
+	if(Player_Trash[playerid] != -1) {
+	    if(disable_Trash[Player_Trash[playerid]] || random(5) == 2) {
 	        ShowActionText(playerid, "~r~Nada encontrado.");
-	    }
-	    else
-	    {
-			new
-				Float:x,
-				Float:y,
-				Float:z;
-
+	    } else {
+			new Float:x, Float:y, Float:z;
 			GetPlayerPos(playerid, x, y, z);
-			CreateLootItem(GetLootIndexFromName("world_civilian"), x, y, z - ITEM_FLOOR_OFFSET);
+			CreateLootItem(GetLootIndexFromName("world_survivor"), x, y, z - ITEM_FLOOR_OFFSET);
+			defer RestartTrash(Player_Trash[playerid]);
 	    }
 
 	    ClearAnimations(playerid);
@@ -183,4 +179,7 @@ hook OnHoldActionFinish(playerid)
 	}
 	return Y_HOOKS_CONTINUE_RETURN_0;
 }
+
+timer RestartTrash[10800000](trashid)
+	disable_Trash[trashid] = 0;
 

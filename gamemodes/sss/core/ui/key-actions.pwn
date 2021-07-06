@@ -374,13 +374,17 @@ _UpdateKeyActions(playerid)
 
 		if(GetItemWeaponCalibre(GetItemTypeWeapon(itemtype)) != NO_CALIBRE){
 			AddToolTipText(playerid, KEYTEXT_RELOAD, "Recarregar");
-			AddToolTipText(playerid, KEYTEXT_DROP_ITEM, "(Segurar) Descarregar");
+			AddToolTipText(playerid, KEYTEXT_DROP_ITEM, "Soltar");
+
+			if(GetItemTypeAmmoType(GetItemWeaponItemAmmoItem(itemid)) != -1)
+				if(GetItemWeaponItemMagAmmo(itemid) + GetItemWeaponItemReserve(itemid) != 0)
+					AddToolTipText(playerid, KEYTEXT_INTERACT, "Descarregar");
 		}
 	}
 	else
 		AddToolTipText(playerid, KEYTEXT_PUT_AWAY, "Colocar no Inventario");
 
-	AddToolTipText(playerid, KEYTEXT_DROP_ITEM, "Jogar item");
+	AddToolTipText(playerid, KEYTEXT_DROP_ITEM, "Soltar item");
 
 	AddToolTipText(playerid, KEYTEXT_INVENTORY, "Abrir Inventario");
 	ShowPlayerKeyActionUI(playerid);

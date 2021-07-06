@@ -587,20 +587,6 @@ hook OnPlayerDropItem(playerid, Item:itemid)
 	return Y_HOOKS_CONTINUE_RETURN_0;
 }
 
-hook OnPlayerGiveItem(playerid, targetid, Item:itemid)
-{
-	if(IsItemTypeBag(GetItemType(itemid)))
-	{
-		if(bag_TakingOffBag[playerid])
-		{
-			bag_TakingOffBag[playerid] = false;
-			return Y_HOOKS_BREAK_RETURN_1;
-		}
-	}
-
-	return Y_HOOKS_CONTINUE_RETURN_0;
-}
-
 hook OnPlayerViewInvOpt(playerid)
 {
 	new Container:containerid;

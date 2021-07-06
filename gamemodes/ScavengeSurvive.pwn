@@ -86,7 +86,6 @@ public OnGameModeInit()
 #include <colandreas> 
 #include <streamer>
 #include <optidraw>
-#include <advanced_kicks>
 #include <nex-ac>
 #include <whirlpool>
 #include <sqlitei>
@@ -742,6 +741,9 @@ RestartGamemode()
 	{
 		SavePlayerData(i);
 		ResetVariables(i);
+		
+		if(IsPlayerInAnyVehicle(i))
+			SaveVehicle(GetPlayerVehicleID(i));
 	}
 
 	CloseSaveSessions();

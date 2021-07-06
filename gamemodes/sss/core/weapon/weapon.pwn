@@ -42,26 +42,10 @@ static
 static
 			tick_LastReload[MAX_PLAYERS],
 			tick_GetWeaponTick[MAX_PLAYERS],
-Timer:		itmw_RepeatingFireTimer[MAX_PLAYERS],
-Item:		itmw_DropItemID[MAX_PLAYERS] = {INVALID_ITEM_ID, ...},
-Timer:		itmw_DropTimer[MAX_PLAYERS];
+Timer:		itmw_RepeatingFireTimer[MAX_PLAYERS];
 
 
 forward ItemType:GetItemWeaponItemAmmoItem(Item:itemid);
-
-
-/*==============================================================================
-
-	Core
-
-==============================================================================*/
-
-
-hook OnPlayerConnect(playerid)
-{
-	itmw_DropItemID[playerid] = INVALID_ITEM_ID;
-}
-
 
 /*==============================================================================
 
@@ -636,27 +620,6 @@ hook OnPlayerKeyStateChange(playerid, newkeys, oldkeys)
 			stop itmw_RepeatingFireTimer[playerid];
 		}
 	}
-
-	if(oldkeys & KEY_NO)
-	{
-		new Item:itemid = itmw_DropItemID[playerid];
-		if(!IsValidItem(itmw_DropItemID[playerid]))
-			return Y_HOOKS_CONTINUE_RETURN_1;
-
-		new ItemType:itemtype = GetItemType(itemid);
-		if(itmw_ItemTypeWeapon[itemtype] == -1)
-			return Y_HOOKS_CONTINUE_RETURN_1;
-
-		dbg("weapon-core", 2, "[OnPlayerKeyStateChange] dropping item %d magammo %d reserve %d",
-			_:itemid,
-			GetItemWeaponItemMagAmmo(itemid),
-			GetItemWeaponItemReserve(itemid));
-
-		stop itmw_DropTimer[playerid];
-		PlayerDropItem(playerid);
-		itmw_DropItemID[playerid] = INVALID_ITEM_ID;
-	}
-
 	return Y_HOOKS_CONTINUE_RETURN_1;
 }
 
@@ -666,16 +629,30 @@ timer DestroyThrowable[1000](playerid, itemid)
 	ResetPlayerWeapons(playerid);
 }
 
-hook OnPlayerDropItem(playerid, Item:itemid)
-{
-	if(_unload_DropHandler(playerid, itemid))
-		return Y_HOOKS_BREAK_RETURN_1;
+hook OnPlayerEnterVehicle(playerid, vehicleid, ispassenger)
+	tick_GetWeaponTick[playerid] = GetTickCount();
 
-	return Y_HOOKS_CONTINUE_RETURN_0;
+hook OnPlayerExitVehicle(playerid, vehicleid)
+	tick_GetWeaponTick[playerid] = GetTickCount();
+
+hook OnPlayerUseItemWithItem(playerid, Item:itemid, Item:withitemid)
+	tick_GetWeaponTick[playerid] = GetTickCount();
+	
+hook OnPlayerUseItem(playerid, Item:itemid){
+	if(!_UnloadWeapon(playerid, itemid))
+		return Y_HOOKS_CONTINUE_RETURN_0;
+
+	return Y_HOOKS_BREAK_RETURN_1;
 }
 
-_unload_DropHandler(playerid, Item:itemid)
+_UnloadWeapon(playerid, Item:itemid)
 {
+	if(GetTickCountDifference(GetTickCount(), tick_LastReload[playerid]) < 1000)
+		return 0;
+		
+	if(GetTickCountDifference(GetTickCount(), tick_GetWeaponTick[playerid]) < 1000)
+		return 0;
+
 	new
 		ItemType:itemtype,
 		weapontype;
@@ -689,35 +666,14 @@ _unload_DropHandler(playerid, Item:itemid)
 	if(itmw_Data[weapontype][itmw_maxReserveMags] == 0)
 		return 0;
 
-	if(itmw_DropItemID[playerid] != INVALID_ITEM_ID)
-		return 0;
-
 	if(itmw_Data[weapontype][itmw_flags] & WEAPON_FLAG_LIQUID_AMMO)
 		return 0;
 
-	dbg("weapon-core", 1, "[OnPlayerDropItem] dropping item %d magammo %d reserve %d", _:itemid, GetItemWeaponItemMagAmmo(itemid), GetItemWeaponItemReserve(itemid));
-	itmw_DropItemID[playerid] = itemid;
-	itmw_DropTimer[playerid] = defer _UnloadWeapon(playerid, _:itemid);
+	if(GetItemTypeAmmoType(GetItemWeaponItemAmmoItem(itemid)) == -1)
+		return 0;
 
-	return 1;
-}
-
-timer _UnloadWeapon[300](playerid, _itemid)
-{
-	new Item:itemid = Item:_itemid;
-
-	dbg("weapon-core", 1, "[_UnloadWeapon] unloading item %d magammo %d reserve %d", _:itemid, GetItemWeaponItemMagAmmo(itemid), GetItemWeaponItemReserve(itemid));
-	if(GetPlayerItem(playerid) != itemid)
-	{
-		itmw_DropItemID[playerid] = INVALID_ITEM_ID;
-		return;
-	}
-
-	if(itmw_DropItemID[playerid] != itemid)
-	{
-		itmw_DropItemID[playerid] = INVALID_ITEM_ID;
-		return;
-	}
+	if(GetItemWeaponItemMagAmmo(itemid) + GetItemWeaponItemReserve(itemid) == 0)
+	    return 0;
 
 	new
 		ItemType:ammoitemtype,
@@ -747,14 +703,13 @@ timer _UnloadWeapon[300](playerid, _itemid)
 	SetItemWeaponItemReserve(itemid, 0);
 	SetItemWeaponItemAmmoItem(itemid, INVALID_ITEM_TYPE);
 	UpdatePlayerWeaponItem(playerid);
-	itmw_DropItemID[playerid] = INVALID_ITEM_ID;
 
 	PlayerPlaySound(playerid, 36401, 0.0, 0.0, 0.0); //Audio
 
 	ApplyAnimation(playerid, "BOMBER", "BOM_PLANT_IN", 5.0, 1, 0, 0, 0, 450, 1);
 	ShowActionText(playerid, ls(playerid, "WEAPAUNLOAD", true), 3000);
 
-	return;
+	return 1;
 }
 
 hook OnItemNameRender(Item:itemid, ItemType:itemtype)

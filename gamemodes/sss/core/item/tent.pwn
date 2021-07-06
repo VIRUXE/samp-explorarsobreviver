@@ -300,7 +300,7 @@ _tent_Remove(tentid)
 
 hook OnItemAddedToContainer(Container:containerid, Item:itemid, playerid)
 {
-	if(gServerInitialising)
+	if(gServerInitialising || !IsPlayerConnected(playerid))
 		return Y_HOOKS_CONTINUE_RETURN_0;
 
 	if(GetContainerTent(containerid) != -1 && !IsPlayerInTutorial(playerid))
@@ -310,6 +310,17 @@ hook OnItemAddedToContainer(Container:containerid, Item:itemid, playerid)
 }
 
 hook OnItemRemovedFromCnt(Container:containerid, slotid, playerid)
+{
+	if(gServerInitialising || !IsPlayerConnected(playerid))
+		return Y_HOOKS_CONTINUE_RETURN_0;
+
+	if(GetContainerTent(containerid) != -1 && !IsPlayerInTutorial(playerid))
+		SaveTent(GetContainerTent(containerid));
+
+	return Y_HOOKS_CONTINUE_RETURN_0;
+}
+
+hook OnPlayerCloseContainer(playerid, Container:containerid)
 {
 	if(gServerInitialising)
 		return Y_HOOKS_CONTINUE_RETURN_0;
@@ -330,6 +341,7 @@ hook OnPlayerPickUpItem(playerid, Item:itemid)
 		if(IsValidTent(tentid))
 		{
 			DisplayContainerInventory(playerid, tnt_Data[tentid][tnt_containerId]);
+			SaveTent(tentid);
 			return Y_HOOKS_BREAK_RETURN_1;
 		}
 	}

@@ -6,6 +6,20 @@
 ==============================================================================*/
 
 
+ACMD:serverpass[5](playerid,params[])
+{
+	if(!(0 < strlen(params) < 64))
+		return ChatMsg(playerid,YELLOW," » Usage: /serverpass [password]");
+
+	new str[74];
+	format(str, sizeof(str), "password %s", params);
+	SendRconCommand(str);
+
+	ChatMsg(playerid, YELLOW, " » Server password set to "C_BLUE"%s", params);
+
+	return 1;
+}
+
 ACMD:gamename[5](playerid,params[])
 {
 	if(!(0 < strlen(params) < 64))
@@ -276,32 +290,6 @@ ACMD:wc[5](playerid, params[])
 
 	WeaponsCacheDrop(x, y, z - 0.8);
 	SetPlayerPos(playerid, x, y, z + 1.0);
-
-	return 1;
-}
-
-static cloneid[MAX_PLAYERS] = {INVALID_ACTOR_ID, ...};
-
-ACMD:clone[5](playerid, params[])
-{
-	if(cloneid[playerid] == INVALID_ACTOR_ID)
-	{
-		new
-			Float:x,
-			Float:y,
-			Float:z,
-			Float:a;
-
-		GetPlayerPos(playerid, x, y, z);
-		GetPlayerFacingAngle(playerid, a);
-
-		cloneid[playerid] = CreateActor(GetPlayerSkin(playerid), x, y, z, a);
-	}
-	else
-	{
-		DestroyActor(cloneid[playerid]);
-		cloneid[playerid] = INVALID_ACTOR_ID;
-	}
 
 	return 1;
 }

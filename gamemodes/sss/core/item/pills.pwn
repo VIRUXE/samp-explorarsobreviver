@@ -44,7 +44,7 @@ hook OnItemNameRender(Item:itemid, ItemType:itemtype)
 			case PILL_TYPE_ANTIBIOTICS:		SetItemNameExtra(itemid, "Antibiotics");
 			case PILL_TYPE_PAINKILL:		SetItemNameExtra(itemid, "Painkiller");
 			case PILL_TYPE_LSD:				SetItemNameExtra(itemid, "LSD");
-			default:						SetItemNameExtra(itemid, "Empty");
+			default:						SetItemNameExtra(itemid, "Vazio");
 		}
 	}
 }
@@ -59,28 +59,21 @@ hook OnPlayerUseItem(playerid, Item:itemid)
 	return Y_HOOKS_CONTINUE_RETURN_0;
 }
 
-hook OnPlayerKeyStateChange(playerid, newkeys, oldkeys)
-{
-	if(newkeys & 16 && pill_CurrentlyTaking[playerid] != INVALID_ITEM_ID)
-	{
-		StopTakingPills(playerid);
-	}
-
-	return 1;
-}
-
 StartTakingPills(playerid)
 {
-	pill_CurrentlyTaking[playerid] = GetPlayerItem(playerid);
-	ApplyAnimation(playerid, "BAR", "dnk_stndM_loop", 3.0, 0, 1, 1, 0, 1000, 1);
-	StartHoldAction(playerid, 1000);
+	if(pill_CurrentlyTaking[playerid] != INVALID_ITEM_ID)
+		StopTakingPills(playerid);
+	else {
+		pill_CurrentlyTaking[playerid] = GetPlayerItem(playerid);
+		ApplyAnimation(playerid, "BAR", "dnk_stndM_loop", 3.0, 0, 1, 1, 0, 1000, 1);
+		StartHoldAction(playerid, 1000);
+	}
 }
 
 StopTakingPills(playerid)
 {
 	ClearAnimations(playerid);
 	StopHoldAction(playerid);
-
 	pill_CurrentlyTaking[playerid] = INVALID_ITEM_ID;
 }
 
@@ -127,6 +120,7 @@ hook OnHoldActionFinish(playerid)
 		}
 
 		DestroyItem(pill_CurrentlyTaking[playerid]);
+		pill_CurrentlyTaking[playerid] = INVALID_ITEM_ID;
 
 		return Y_HOOKS_BREAK_RETURN_1;
 	}

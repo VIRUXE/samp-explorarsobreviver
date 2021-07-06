@@ -58,7 +58,8 @@ DBStatement:	stmt_AdminGetLevel;
 
 static
 				admin_Level[MAX_PLAYERS],
-				admin_OnDuty[MAX_PLAYERS];
+				admin_OnDuty[MAX_PLAYERS],
+				admin_PlayerKicked[MAX_PLAYERS];
 
 
 hook OnScriptInit()
@@ -83,7 +84,7 @@ hook OnPlayerConnect(playerid)
 {
 	admin_Level[playerid] = 0;
 	admin_OnDuty[playerid] = 0;
-
+	admin_PlayerKicked[playerid] = 0;
 	return 1;
 }
 
@@ -91,6 +92,7 @@ hook OnPlayerDisconnected(playerid)
 {
 	admin_Level[playerid] = 0;
 	admin_OnDuty[playerid] = 0;
+	admin_PlayerKicked[playerid] = 0;
 }
 
 
@@ -232,11 +234,15 @@ TimeoutPlayer(playerid, const reason[])
 	if(!IsPlayerConnected(playerid))
 		return 0;
 
+	if(admin_PlayerKicked[playerid])
+		return 0;
+
 	new ip[16];
 
 	GetPlayerIp(playerid, ip, sizeof(ip));
 
 	BlockIpAddress(ip, 11500);
+	admin_PlayerKicked[playerid] = true;
 
 	log("[PART] %p (timeout: %s)", playerid, reason);
 
@@ -250,15 +256,26 @@ KickPlayer(playerid, const reason[], bool:tellplayer = true)
 	if(!IsPlayerConnected(playerid))
 		return 0;
 
+	if(admin_PlayerKicked[playerid])
+		return 0;
+
+	defer KickPlayerDelay(playerid);
+	admin_PlayerKicked[playerid] = true;
+
 	log("[PART] %p (kick: %s)", playerid, reason);
 
 	ChatMsgAdmins(1, GREY, " » %P"C_GREY" foi Kickado. Motivo: "C_BLUE"%s", playerid, reason);
 
 	if(tellplayer)
 		ChatMsgLang(playerid, GREY, "KICKMESSAGE", reason);
-
-	Kick(playerid);
+		
 	return 1;
+}
+
+timer KickPlayerDelay[1000](playerid)
+{
+	Kick(playerid);
+	admin_PlayerKicked[playerid] = false;
 }
 
 ChatMsgAdminsFlat(level, colour, const message[])
