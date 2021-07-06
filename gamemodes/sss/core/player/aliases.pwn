@@ -145,6 +145,9 @@ stock GetAccountAliasesByAll(name[], list[][MAX_PLAYER_NAME], &count, max, &admi
 	if(serial[0] == '0')
 		return 0;
 
+	if(!strcmp(serial, MOBILE_AUTH_KEY))
+		return 0;
+
 	stmt_bind_value(stmt_AliasesFromAll, 0, DB::TYPE_STRING, pass, sizeof(pass));
 	stmt_bind_value(stmt_AliasesFromAll, 1, DB::TYPE_INTEGER, ip);
 	stmt_bind_value(stmt_AliasesFromAll, 2, DB::TYPE_STRING, serial, sizeof(serial));
