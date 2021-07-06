@@ -71,15 +71,6 @@ ptask AfkCheckUpdate[100](playerid)
 			tab_TabOutTick[playerid] = GetTickCount();
 			tab_IsTabbed[playerid] = true;
 		}
-
-		if(!IsPlayerOnAdminDuty(playerid))
-		{
-			if(GetTickCountDifference(GetTickCount(), tab_TabOutTick[playerid]) > gMaxTaboutTime * 1000)
-			{
-				KickPlayer(playerid, sprintf("Unfocused for over %d seconds, could starve or cause bugs", gMaxTaboutTime));
-				return;
-			}
-		}
 	}
 
 	if(!tab_Check[playerid])
@@ -99,7 +90,26 @@ ptask AfkCheckUpdate[100](playerid)
 	return;
 }
 
-stock IsPlayerUnfocused(playerid)
+hook OnPlayerGiveDamage(playerid, damagedid, Float:amount, weaponid, bodypart)
+	AFK_CheckKick(damagedid);
+
+hook OnPlayerTakeDamage(playerid, issuerid, Float:amount, weaponid, bodypart)
+	AFK_CheckKick(playerid);
+
+hook OnPlayerMeleePlayer(playerid, targetid, Float:bleedrate, Float:knockmult)
+	AFK_CheckKick(targetid);
+
+stock AFK_CheckKick(playerid)
 {
-	return tab_IsTabbed[playerid];
+	if(IsPlayerConnected(playerid) && !IsPlayerOnAdminDuty(playerid))
+	{
+		if(GetTickCountDifference(GetTickCount(), tab_TabOutTick[playerid]) > gMaxTaboutTime * 1000)
+		{
+			KickPlayer(playerid, sprintf("Ausente por mais de %d segundos", gMaxTaboutTime));
+		}
+	}
 }
+
+stock IsPlayerUnfocused(playerid)
+	return tab_IsTabbed[playerid];
+
