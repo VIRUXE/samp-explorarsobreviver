@@ -70,9 +70,7 @@ ptask AfkCheckUpdate[100](playerid)
 			tab_TabOutTick[playerid] = GetTickCount();
 			tab_IsTabbed[playerid] = true;
 		}
-
-		if(GetTickCountDifference(GetTickCount(), tab_TabOutTick[playerid]) > gMaxTaboutTime * 1000)
-			return;
+		return;
 	}
 
 	if(!tab_Check[playerid])
@@ -92,7 +90,6 @@ ptask AfkCheckUpdate[100](playerid)
 	return;
 }
 
-
 hook OnPlayerGiveDamage(playerid, damagedid, Float:amount, weaponid, bodypart)
 	AFK_CheckKick(damagedid);
 
@@ -104,7 +101,7 @@ hook OnPlayerMeleePlayer(playerid, targetid, Float:bleedrate, Float:knockmult)
 
 stock AFK_CheckKick(playerid)
 {
-	if(IsPlayerConnected(playerid) && !IsPlayerOnAdminDuty(playerid))
+	if(IsPlayerConnected(playerid) && !IsPlayerOnAdminDuty(playerid) && tab_IsTabbed[playerid])
 	{
 		if(GetTickCountDifference(GetTickCount(), tab_TabOutTick[playerid]) > gMaxTaboutTime * 1000)
 		{
