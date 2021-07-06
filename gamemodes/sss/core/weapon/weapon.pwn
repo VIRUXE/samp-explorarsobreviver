@@ -629,22 +629,16 @@ timer DestroyThrowable[1000](playerid, itemid)
 	ResetPlayerWeapons(playerid);
 }
 
+hook OnPlayerEnterVehicle(playerid, vehicleid, ispassenger)
+	tick_GetWeaponTick[playerid] = GetTickCount();
+
+hook OnPlayerExitVehicle(playerid, vehicleid)
+	tick_GetWeaponTick[playerid] = GetTickCount();
+
+hook OnPlayerUseItemWithItem(playerid, Item:itemid, Item:withitemid)
+	tick_GetWeaponTick[playerid] = GetTickCount();
+	
 hook OnPlayerUseItem(playerid, Item:itemid){
-	if(!_UnloadWeapon(playerid, itemid))
-		return Y_HOOKS_CONTINUE_RETURN_0;
-
-	return Y_HOOKS_BREAK_RETURN_1;
-}
-
-hook OnPlayerUseItemWithItem(playerid, Item:itemid, Item:withitemid){
-	new ItemType:ammoitemtype = GetItemType(withitemid);
-
-	if(GetItemTypeWeapon(ammoitemtype) != -1)
-		return Y_HOOKS_CONTINUE_RETURN_0;
-
-	if(GetItemTypeAmmoType(ammoitemtype) != -1)
-		return Y_HOOKS_CONTINUE_RETURN_0;
-
 	if(!_UnloadWeapon(playerid, itemid))
 		return Y_HOOKS_CONTINUE_RETURN_0;
 
@@ -653,6 +647,12 @@ hook OnPlayerUseItemWithItem(playerid, Item:itemid, Item:withitemid){
 
 _UnloadWeapon(playerid, Item:itemid)
 {
+	if(GetTickCountDifference(GetTickCount(), tick_LastReload[playerid]) < 1000)
+		return 0;
+		
+	if(GetTickCountDifference(GetTickCount(), tick_GetWeaponTick[playerid]) < 1000)
+		return 0;
+
 	new
 		ItemType:itemtype,
 		weapontype;
