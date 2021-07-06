@@ -213,7 +213,7 @@ static Prev_CreateTextDraws() {
 			TextDrawSetShadow(Prev@ModelTD[textdrawid], 0);
 			TextDrawAlignment(Prev@ModelTD[textdrawid], 1);
 			TextDrawColor(Prev@ModelTD[textdrawid], -1);
-			TextDrawBackgroundColor(Prev@ModelTD[textdrawid], 0x00000065);
+			TextDrawBackgroundColor(Prev@ModelTD[textdrawid], 0);
 			TextDrawSetProportional(Prev@ModelTD[textdrawid], 1);
 			TextDrawSetPreviewRot(Prev@ModelTD[textdrawid], -10.000000, 0.000000, -20.000000, 1.000000);
 			TextDrawSetSelectable(Prev@ModelTD[textdrawid], 1);
