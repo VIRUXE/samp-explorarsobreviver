@@ -338,10 +338,6 @@ public OnPlayerSpawn(playerid)
 		SetPlayerColor(playerid, 0x59595900);
 	}
 
-	EnableAntiCheatForPlayer(playerid, 4, false); // Anti-teleport hack (into/between vehicles)
-	EnableAntiCheatForPlayer(playerid, 11, false); // Anti-Health hack (in vehicle)
-	EnableAntiCheatForPlayer(playerid, 15, false); // Anti-Weapon hack
-
 	ply_Data[playerid][ply_SpawnTick] = GetTickCount();
 
 	SetAllWeaponSkills(playerid, 500);

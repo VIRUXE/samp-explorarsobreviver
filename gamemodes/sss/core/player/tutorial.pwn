@@ -24,6 +24,7 @@ hook OnPlayerConnect(playerid)
 	PlayerTextDrawTextSize			(playerid, ClassButtonTutorial[playerid], 34.000000, 155.000000);
 	PlayerTextDrawSetSelectable		(playerid, ClassButtonTutorial[playerid], true);
 	PlayerTextDrawHide(playerid, ClassButtonTutorial[playerid]);
+	PlayerInTutorial[playerid] = false;
 }
 
 hook OnPlayerSpawnChar(playerid)
@@ -138,10 +139,6 @@ hook OnPlayerClickPlayerTD(playerid, PlayerText:playertextid)
 
 		ChatMsg(playerid, GREEN, " » "C_WHITE" %s", ls(playerid, "TUTORINTROD"));
 		ChatMsg(playerid, GREEN, " » "C_WHITE" %s", ls(playerid, "TUTOREXITCM"));
-
-		SetPlayerBleedRate(playerid, 0.0);
-		SetPlayerFP(playerid, 100.0);
-		SetPlayerHealth(playerid, 0.9);
 	}
 }
 
@@ -161,11 +158,28 @@ hook OnPlayerDeath(playerid)
 	ExitTutorial(playerid);
 }
 
-hook OnPlayerDisconnect(playerid, reason)
+hook OnPlayerSave(playerid, filename[])
 {
-	ExitTutorial(playerid);
+	new data[1];
+	data[0] = PlayerInTutorial[playerid];
+
+	modio_push(filename, _T<T,U,T,R>, 1, _:data);
 }
 
+hook OnPlayerLoad(playerid, filename[])
+{
+	new data[1];
+
+	modio_read(filename, _T<T,U,T,R>, 1, _:data);
+
+	PlayerInTutorial[playerid] = bool:data[0];
+	if(PlayerInTutorial[playerid])
+		defer ExitTutor(playerid);
+}
+
+timer ExitTutor[3000](playerid)
+	ExitTutorial(playerid);
+	
 ExitTutorial(playerid)
 {
 	if(!IsPlayerConnected(playerid))

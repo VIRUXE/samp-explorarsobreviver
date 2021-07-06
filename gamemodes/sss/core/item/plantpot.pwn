@@ -183,6 +183,9 @@ _pot_Load(Item:itemid)
 
 _pot_UpdateModel(Item:itemid, bool:toggle = true)
 {
+	if(!IsValidItem(itemid))
+		return 0;
+		
 	dbg("plantpot", 1, "[_pot_UpdateModel] itemid %d toggle %d", _:itemid, toggle);
 	if(!IsItemInWorld(itemid))
 		toggle = false;
@@ -247,12 +250,16 @@ _pot_UpdateModel(Item:itemid, bool:toggle = true)
 			SetItemArrayDataAtCell(itemid, id, E_PLANT_POT_OBJECT_ID, false, false);
 		}
 	}
-	else
+	else if(!IsItemDestroying(itemid))
 	{
-		new objectid;
-		GetItemArrayDataAtCell(itemid, objectid, E_PLANT_POT_OBJECT_ID);
-		DestroyDynamicObject(objectid);
-		SetItemArrayDataAtCell(itemid, INVALID_OBJECT_ID, E_PLANT_POT_OBJECT_ID, false, false);
+		new objectid, Error:e;
+
+		e = GetItemArrayDataAtCell(itemid, objectid, E_PLANT_POT_OBJECT_ID);
+
+		if(!IsError(e) && IsValidDynamicObject(objectid)){
+			DestroyDynamicObject(objectid);
+			SetItemArrayDataAtCell(itemid, INVALID_OBJECT_ID, E_PLANT_POT_OBJECT_ID, false, false);
+		}
 	}
 
 	return 1;

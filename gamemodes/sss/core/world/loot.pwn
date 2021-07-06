@@ -93,8 +93,8 @@ stock CreateStaticLootSpawn(Float:x, Float:y, Float:z, lootindex, Float:weight, 
 {
 	if(loot_SpawnTotal >= MAX_LOOT_SPAWN - 1)
 	{
-		err("Loot spawn limit reached. Set to 0");
-		loot_SpawnTotal = 0;
+		err("Loot spawn limit reached.");
+		return -1;
 	}
 
 	if(!(0 <= lootindex < loot_IndexTotal))
@@ -113,7 +113,7 @@ stock CreateStaticLootSpawn(Float:x, Float:y, Float:z, lootindex, Float:weight, 
 
 	loot_SpawnData[lootspawnid][loot_posX] = x;
 	loot_SpawnData[lootspawnid][loot_posY] = y;
-	loot_SpawnData[lootspawnid][loot_posZ] = (z + 0.1132);
+	loot_SpawnData[lootspawnid][loot_posZ] = (z + 0.1832);
 	loot_SpawnData[lootspawnid][loot_world] = worldid;
 	loot_SpawnData[lootspawnid][loot_interior] = interiorid;
 	loot_SpawnData[lootspawnid][loot_weight] = weight;
@@ -173,7 +173,7 @@ stock CreateStaticLootSpawn(Float:x, Float:y, Float:z, lootindex, Float:weight, 
 			z, .rz = frandom(360.0), .world = worldid, .interior = interiorid);
 
 		
-		defer RespawnItem(_:itemid, x, y, z, lootindex, weight, size, worldid, interiorid);
+		defer RespawnItem(_:itemid, x, y, z, lootindex, worldid, interiorid);
 
 		loot_SpawnData[lootspawnid][loot_items][loot_SpawnData[lootspawnid][loot_total]] = itemid;
 		loot_SpawnData[lootspawnid][loot_total]++;
@@ -182,38 +182,37 @@ stock CreateStaticLootSpawn(Float:x, Float:y, Float:z, lootindex, Float:weight, 
 	return loot_SpawnTotal++;
 }
 
-timer RespawnItem[5400000](itemid, Float:x, Float:y, Float:z, lootindex, Float:weight, size, worldid, interiorid)
-{
-	if(!IsValidItem(Item:itemid))
-	{
-		CreateStaticLootSpawn(x, y, z, lootindex, weight, size, worldid, interiorid);
-		return;
+timer RespawnItem[5400000](itemid, Float:x, Float:y, Float:z, lootindex, worldid, interiorid){
+	if(!IsValidItem(Item:itemid) || !IsItemInWorld(Item:itemid))
+		itemid = _:CreateLootItem(lootindex, x, y, z, worldid, interiorid);
+
+	else {
+		new Float:tx, Float:ty, Float:tz;
+		GetItemPos(Item:itemid, tx, ty, tz);
+
+		if(Distance(x, y, z, tx, ty, tz) < 2.5)
+			DestroyItem(Item:itemid);
+
+		itemid = _:CreateLootItem(lootindex, x, y, z, worldid, interiorid);
 	}
 
-	/*foreach(new i : Player)
-	{
-		if(IsPlayerInRangeOfPoint(i, 20.0, x, y, z))
-		{
-			defer RespawnItem(_:itemid, x, y, z, lootindex, weight, size, worldid, interiorid);
-			return;
-		}
-	}*/
-
-	new Float:tx, Float:ty, Float:tz;
-	GetItemPos(Item:itemid, tx, ty, tz);
-
-	if(Distance(x, y, z, tx, ty, tz) > 10.0)
-		CreateStaticLootSpawn(x, y, z, lootindex, weight, size, worldid, interiorid);
-	else
-		defer RespawnItem(_:itemid, x, y, z, lootindex, weight, size, worldid, interiorid);
+	defer RespawnItem(_:itemid, x, y, z, lootindex, worldid, interiorid);
 }
+
+new Timer:DestroyUItem[MAX_ITEM];
 
 hook OnPlayerDroppedItem(playerid, Item:itemid)
 {	
 	new Float:tx, Float:ty, Float:tz;
 	GetItemPos(Item:itemid, tx, ty, tz);
-	defer DestroyUntilItem(_:itemid, tx, ty, tz);
+	stop DestroyUItem[itemid];
+	DestroyUItem[itemid] = defer DestroyUntilItem(_:itemid, tx, ty, tz);
 	return Y_HOOKS_CONTINUE_RETURN_0;
+}
+
+hook OnItemRemoveFromWorld(Item:itemid)
+{
+	stop DestroyUItem[itemid];
 }
 
 timer DestroyUntilItem[5400000](itemid, Float:x, Float:y, Float:z)
@@ -446,13 +445,13 @@ _loot_ContainerItemsOfType(containerid, ItemType:itemtype)
 	return count;
 }
 */
+
 hook OnItemDestroy(Item:itemid)
 {
 	loot_ItemLootIndex[itemid] = -1;
 
 	return Y_HOOKS_CONTINUE_RETURN_0;
 }
-
 
 /*==============================================================================
 

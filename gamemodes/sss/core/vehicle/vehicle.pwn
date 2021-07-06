@@ -733,21 +733,23 @@ public OnUnoccupiedVehicleUpdate(vehicleid, playerid, passenger_seat, Float:new_
 	if(GetPlayerAnimationIndex(playerid) == 1084)
 		return 1;
 
-	if(GetPlayerDistanceFromPoint(playerid, new_x, new_y, new_z) < 10.0 ){
-		new Float:x, Float:y, Float:z;
-		GetVehiclePos(vehicleid, x, y, z);
-		if(Distance2D(x, y, new_x, new_y) > 0.1){
-			if(new_z <= z) z = new_z;
-			new Float:r;
-			GetVehicleZAngle(vehicleid, r);
-			SetVehiclePos(vehicleid, x, y, z);
-			SetVehicleZAngle(vehicleid, r);
+	new Float:x, Float:y, Float:z;
+	GetVehiclePos(vehicleid, x, y, z);
 
-			pLastVehUpd[playerid][vehicleid] ++;
-			if(pLastVehUpd[playerid][vehicleid] >= 10) {
-				ApplyAnimation(playerid, "PED", "DAM_stomach_frmFT", 4.1, 0, 1, 1, 0, 0, 1);
-				pLastVehUpd[playerid][vehicleid] = 0;
-			}
+	if(GetPlayerDistanceFromPoint(playerid, x, y, z) > 10.0){
+		new BitStream:bs = BS_New();
+		BS_WriteValue(bs, PR_UINT16, vehicleid, PR_FLOAT, x, PR_FLOAT, y, PR_FLOAT, z);
+		PR_SendRPC(bs, playerid, 159);
+		BS_Delete(bs);
+		return 0;
+	}
+	
+	if(Distance2D(x, y, new_x, new_y) > 0.1){
+		SetVehiclePos(vehicleid, x, y, z);
+		pLastVehUpd[playerid][vehicleid] ++;
+		if(pLastVehUpd[playerid][vehicleid] >= 12) {
+			ApplyAnimation(playerid, "PED", "DAM_stomach_frmFT", 4.1, 0, 1, 1, 0, 0, 1);
+			pLastVehUpd[playerid][vehicleid] = 0;
 		}
 	}
 
