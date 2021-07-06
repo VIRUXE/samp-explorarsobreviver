@@ -265,7 +265,6 @@ enum
 
 
 new
-		gBuildNumber,
 bool:	gServerInitialising = true,
 		gServerInitialiseTick,
 bool:	gServerRestarting = false,
@@ -650,20 +649,7 @@ OnGameModeInit_Setup()
 {
 	print("[OnGameModeInit_Setup] Setting up...");
 
-	// removed the file thing, so left this at the last version number for now.
-	// probably needs a better method, like a build-time variable or something.
-	new buildstring[12] = "1769";
-
-	// file_read("BUILD_NUMBER", buildstring);
-	gBuildNumber = strval(buildstring);
-
-	if(gBuildNumber < 1000)
-	{
-		printf("UNKNOWN ERROR: gBuildNumber is below 1000: %d this should never happen! Ensure you've cloned the repository correctly.", gBuildNumber);
-		for(;;){}
-	}
-
-	Logger_Log("Initialising Scavenge and Survive", Logger_I("build", gBuildNumber));
+	Logger_Log("Initialising Scavenge and Survive");
 
 	Streamer_ToggleErrorCallback(true);
 
@@ -773,7 +759,7 @@ task RestartUpdate[1000]()
 		if(gServerUptime >= gServerMaxUptime - 3600)
 		{
 			new str[36];
-			format(str, 36, "Servidor reinciando em:~n~%02d:%02d", (gServerMaxUptime - gServerUptime) / 60, (gServerMaxUptime - gServerUptime) % 60);
+			format(str, 36, "Servidor reiniciando em:~n~%02d:%02d", (gServerMaxUptime - gServerUptime) / 60, (gServerMaxUptime - gServerUptime) % 60);
 			TextDrawSetString(RestartCount, str);
 
 			foreach(new i : Player)
