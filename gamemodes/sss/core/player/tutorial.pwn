@@ -174,9 +174,12 @@ hook OnPlayerLoad(playerid, filename[])
 
 	PlayerInTutorial[playerid] = bool:data[0];
 	if(PlayerInTutorial[playerid])
-		ExitTutorial(playerid);
+		defer ExitTutor(playerid);
 }
 
+timer ExitTutor[3000](playerid)
+	ExitTutorial(playerid);
+	
 ExitTutorial(playerid)
 {
 	if(!IsPlayerConnected(playerid))
