@@ -137,6 +137,7 @@ _twk_Commit(playerid)
 	CancelPlayerMovement(playerid);
 	ShowActionText(playerid, ls(playerid, "ITEMTWKFINI"), 5000);
 	_twk_Reset(playerid);
+	HideHelpTip(playerid);
 
 	return 1;
 }
