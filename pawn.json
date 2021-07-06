@@ -50,9 +50,7 @@
 		"samp-anti-cheat/OnPlayerTurnUpsideDown",
 		"samp-anti-cheat/no-reload",
 		"samp-anti-cheat/rapid-fire",
-		"YashasSamaga/BA-AntiAimbot",
-		"IllidanS4/PawnPlus:v1.3.2",
-		"Mergevos/samp-advanced-kicks"
+		"YashasSamaga/BA-AntiAimbot"
 	],
 	"build": {
 		"compiler":
