@@ -163,7 +163,6 @@ timer WeaponsCacheSignal[WEPCACHE_SIGNAL_INTERVAL](count, Float:x, Float:y, Floa
 	new
 		locationlist[MAX_WEPCACHE_LOCATIONS],
 		idx,
-		location,
 		Float:ref_x,
 		Float:ref_y,
 		Float:ref_z;
