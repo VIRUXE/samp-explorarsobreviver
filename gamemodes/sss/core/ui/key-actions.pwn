@@ -380,7 +380,7 @@ _UpdateKeyActions(playerid)
 	else
 		AddToolTipText(playerid, KEYTEXT_PUT_AWAY, "Colocar no Inventario");
 
-	AddToolTipText(playerid, KEYTEXT_DROP_ITEM, "Dar");
+	AddToolTipText(playerid, KEYTEXT_DROP_ITEM, "Jogar item");
 
 	AddToolTipText(playerid, KEYTEXT_INVENTORY, "Abrir Inventario");
 	ShowPlayerKeyActionUI(playerid);
