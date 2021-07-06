@@ -8,17 +8,20 @@ Text:HitMark_offset = Text:INVALID_TEXT_DRAW;
 
 public OnPlayerTakeDamage(playerid, issuerid, Float:amount, weaponid, bodypart)
 {
+	if(!IsPlayerConnected(issuerid))
+		return 1;
+		
 	if(IsPlayerOnAdminDuty(playerid))
 		return 0;
 
 	if(!IsPlayerSpawned(playerid))
-		return 1;
+		return 0;
 
 	if(IsPlayerOnAdminDuty(issuerid))
 		return 0;
 
 	if(!IsPlayerSpawned(issuerid))
-		return 1;
+		return 0;
 
 	if(bodypart == BODY_PART_HEAD)
 	{

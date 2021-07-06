@@ -233,6 +233,9 @@ static NexCheatName[53][45] = {
 };
 
 hook OnGameModeInit()
+	defer DisableUntilAC();
+
+timer DisableUntilAC[1000]()
 {
 	EnableAntiCheat(4, false); // Anti-teleport hack (into/between vehicles)
 	EnableAntiCheat(11, false); // Anti-Health hack (in vehicle)
