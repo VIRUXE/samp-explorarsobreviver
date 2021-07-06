@@ -232,6 +232,14 @@ static NexCheatName[53][45] = {
 	{"NOPs"}
 };
 
+hook OnGameModeInit()
+{
+	EnableAntiCheat(4, false); // Anti-teleport hack (into/between vehicles)
+	EnableAntiCheat(11, false); // Anti-Health hack (in vehicle)
+	EnableAntiCheat(5, false); // Anti-Teleport (vehicle to player)
+	EnableAntiCheat(15, false); // Anti-Weapon hack
+}
+
 forward OnCheatDetected(playerid, const ip_address[], type, code);
 public OnCheatDetected(playerid, const ip_address[], type, code)
 {
