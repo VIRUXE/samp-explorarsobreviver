@@ -1,4 +1,3 @@
-
 #include <YSI_Coding\y_hooks>
 
 
@@ -71,6 +70,9 @@ ptask AfkCheckUpdate[100](playerid)
 			tab_TabOutTick[playerid] = GetTickCount();
 			tab_IsTabbed[playerid] = true;
 		}
+
+		if(GetTickCountDifference(GetTickCount(), tab_TabOutTick[playerid]) > gMaxTaboutTime * 1000)
+			return;
 	}
 
 	if(!tab_Check[playerid])
@@ -89,6 +91,7 @@ ptask AfkCheckUpdate[100](playerid)
 
 	return;
 }
+
 
 hook OnPlayerGiveDamage(playerid, damagedid, Float:amount, weaponid, bodypart)
 	AFK_CheckKick(damagedid);
