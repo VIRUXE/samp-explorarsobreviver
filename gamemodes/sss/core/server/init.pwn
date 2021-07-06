@@ -682,7 +682,7 @@ public OnScriptInit()
 	item_Burger			= DefineItemType("Burger",						"Burger",			2703,	1,	-76.0, 257.0, -11.0,	0.0,	0.066739, 0.041782, 0.026828, 3.703052, 3.163064, 6.946474, .maxhitpoints = 1);
 	item_BurgerBag		= DefineItemType("Saco Burgershot",				"BurgerBag",		2663,	2,	0.0, 0.0, 0.0,			0.205,	0.320356, 0.042146, 0.049817, 0.000000, 260.512817, 349.967254, .maxhitpoints = 2);
 	item_BurgerBox		= DefineItemType("Hamburger",					"BurgerBox",		2768,	1,	0.0, 0.0, 0.0,			0.0,	0.107883, 0.093265, 0.029676, 91.010627, 7.522015, 0.000000, .maxhitpoints = 1);
-	item_BurntLog		= DefineItemType("Tronco Queimado",				"BurntLog",			19793,	3,	0.0, 0.0, 0.0,			0.046,	0.079000, 0.039000, -0.194999,  73.600059, -175.100250, 83.199836, true, 0xFF000000, .maxhitpoints = 3);
+	item_BurntLog		= DefineItemType("Madeira Queimado",			"BurntLog",			19793,	3,	0.0, 0.0, 0.0,			0.046,	0.079000, 0.039000, -0.194999,  73.600059, -175.100250, 83.199836, true, 0xFF000000, .maxhitpoints = 3);
 	item_CakeSlice		= DefineItemType("Fatia de Bolo",				"CakeSlice",		11742,	1,	0.0, 0.0, 0.0,			0.026,	0.107000, 0.052000, 0.017999,  96.300025, -87.400100, 7.399830, .maxhitpoints = 1);
 	item_Camera			= DefineItemType("Camera",						"Camera",			367,	2,	90.0, .maxhitpoints = 2);
 	item_Campfire		= DefineItemType("Campfire",					"Campfire",			19632,	5,	0.0, 0.0, 0.0,			0.0,	0.106261, 0.004634, -0.144552, 246.614654, 345.892211, 258.267395, true, .maxhitpoints = 5);
@@ -939,7 +939,7 @@ public OnScriptInit()
 	item_Wine2			= DefineItemType("Vinho",						"Wine2",			19821,	1,	0.0, 0.0, 0.0,			0.0,	0.169000, 0.053000, -0.506999,  -178.499954, -170.700210, -10.200168, .maxhitpoints = 1);
 	item_Wine3			= DefineItemType("Vinho",						"Wine3",			19822,	1,	0.0, 0.0, 0.0,			0.0,	0.169000, 0.053000, -0.423999,  -178.499954, -170.700210, -10.200168, .maxhitpoints = 1);
 	item_WitchesHat		= DefineItemType("Chapeu de Bruxa",				"WitchesHat",		19528,	1,	0.0, -84.0, 0.0,		0.0,	0.290000, 0.018000, 0.053999,  -107.600021, 102.500000, 0.000000, .maxhitpoints = 1);
-	item_WoodLog		= DefineItemType("Tronco",						"WoodLog",			19793,	1,	0.0, 0.0, 0.0,			0.000,	0.034999, 0.018998, -0.150000,  -74.199989, -110.000022, -54.900020, .maxhitpoints = 1);
+	item_WoodLog		= DefineItemType("Madeira",						"WoodLog",			19793,	1,	0.0, 0.0, 0.0,			0.000,	0.034999, 0.018998, -0.150000,  -74.199989, -110.000022, -54.900020, .maxhitpoints = 1);
 	item_WoodPanel		= DefineItemType("Rampa de Madeira",			"WoodPanel",		5153,	11,	0.0, 23.537, 0.0,		0.0,	-0.342762, 0.908910, -0.453703, 296.326019, 46.126548, 226.118209,  true, .buttonz = ITEM_FLOOR_OFFSET / 2, .maxhitpoints = 7);
 	item_Workbench		= DefineItemType("Mesa de Trabalho",			"Workbench",		936,	12,	0.0, 0.0, 0.0,			0.4434,	.longpickup = true, .maxhitpoints = 12);
 	item_WrappedMeat	= DefineItemType("Carne Embrulhada",			"WrappedMeat",		19560,	1,	0.0, 0.0, 0.0,			0.0,	0.223000, 0.052999, 0.064999,  -70.300064, 165.600082, 10.500000, .maxhitpoints = 1);
