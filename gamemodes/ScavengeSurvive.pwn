@@ -741,6 +741,9 @@ RestartGamemode()
 	{
 		SavePlayerData(i);
 		ResetVariables(i);
+		
+		if(IsPlayerInAnyVehicle(i))
+			SaveVehicle(GetPlayerVehicleID(i));
 	}
 
 	CloseSaveSessions();
