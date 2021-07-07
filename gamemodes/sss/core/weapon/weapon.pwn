@@ -629,51 +629,84 @@ timer DestroyThrowable[1000](playerid, itemid)
 	ResetPlayerWeapons(playerid);
 }
 
-hook OnPlayerEnterVehicle(playerid, vehicleid, ispassenger)
-	tick_GetWeaponTick[playerid] = GetTickCount();
+/*==============================================================================
 
-hook OnPlayerExitVehicle(playerid, vehicleid)
-	tick_GetWeaponTick[playerid] = GetTickCount();
+	Unload/Drop weapon
 
-hook OnPlayerUseItemWithItem(playerid, Item:itemid, Item:withitemid)
-	tick_GetWeaponTick[playerid] = GetTickCount();
-	
-hook OnPlayerUseItem(playerid, Item:itemid){
-	if(!_UnloadWeapon(playerid, itemid))
-		return Y_HOOKS_CONTINUE_RETURN_0;
+==============================================================================*/
 
-	return Y_HOOKS_BREAK_RETURN_1;
-}
+static 
+Item:itmw_DropItemID[MAX_PLAYERS] = {INVALID_ITEM_ID, ...},
+Timer:itmw_DropTimer[MAX_PLAYERS];
 
-_UnloadWeapon(playerid, Item:itemid)
+hook OnPlayerConnect(playerid)
+	itmw_DropItemID[playerid] = INVALID_ITEM_ID;
+
+hook OnPlayerDropItem(playerid, Item:itemid)
 {
-	if(GetTickCountDifference(GetTickCount(), tick_LastReload[playerid]) < 1000)
-		return 0;
-		
-	if(GetTickCountDifference(GetTickCount(), tick_GetWeaponTick[playerid]) < 1000)
-		return 0;
-
 	new
 		ItemType:itemtype,
 		weapontype;
 
 	itemtype = GetItemType(itemid);
 	weapontype = GetItemTypeWeapon(itemtype);
-
+	
 	if(weapontype == -1)
-		return 0;
+		return Y_HOOKS_CONTINUE_RETURN_0;
 
 	if(itmw_Data[weapontype][itmw_maxReserveMags] == 0)
-		return 0;
+		return Y_HOOKS_CONTINUE_RETURN_0;
+
+	if(itmw_DropItemID[playerid] != INVALID_ITEM_ID)
+		return Y_HOOKS_CONTINUE_RETURN_0;
 
 	if(itmw_Data[weapontype][itmw_flags] & WEAPON_FLAG_LIQUID_AMMO)
-		return 0;
+		return Y_HOOKS_CONTINUE_RETURN_0;
 
 	if(GetItemTypeAmmoType(GetItemWeaponItemAmmoItem(itemid)) == -1)
-		return 0;
+		return Y_HOOKS_CONTINUE_RETURN_0;
 
 	if(GetItemWeaponItemMagAmmo(itemid) + GetItemWeaponItemReserve(itemid) == 0)
-	    return 0;
+	    return Y_HOOKS_CONTINUE_RETURN_0;
+
+	itmw_DropItemID[playerid] = itemid;
+	stop itmw_DropTimer[playerid];
+
+	inline Response(pid, dialogid, response, listitem, string:inputtext[])
+	{
+		#pragma unused pid, dialogid, listitem, inputtext
+
+		if(response)
+		{
+			stop itmw_DropTimer[playerid];
+			itmw_DropTimer[playerid] = defer _UnloadWeapon(playerid, _:itemid);
+		} else {
+			stop itmw_DropTimer[playerid];
+			PlayerDropItem(playerid);
+			itmw_DropItemID[playerid] = INVALID_ITEM_ID;
+		}
+		return 1;
+	}
+	Dialog_ShowCallback(playerid, using inline Response, DIALOG_STYLE_MSGBOX, " ", "Escolha descarregar ou soltar arma..", "Descarregar", "Soltar");
+	return Y_HOOKS_BREAK_RETURN_1;
+}
+
+timer _UnloadWeapon[500](playerid, _itemid)
+{
+	new Item:itemid = Item:_itemid;
+
+	dbg("weapon-core", 1, "[_UnloadWeapon] unloading item %d magammo %d reserve %d", _:itemid, GetItemWeaponItemMagAmmo(itemid), GetItemWeaponItemReserve(itemid));
+	if(GetPlayerItem(playerid) != itemid)
+	{
+		itmw_DropItemID[playerid] = INVALID_ITEM_ID;
+		return;
+	}
+
+	if(itmw_DropItemID[playerid] != itemid)
+	{
+		itmw_DropItemID[playerid] = INVALID_ITEM_ID;
+		return;
+	}
 
 	new
 		ItemType:ammoitemtype,
@@ -684,7 +717,6 @@ _UnloadWeapon(playerid, Item:itemid)
 		Item:ammoitemid;
 
 	ammoitemtype = GetItemWeaponItemAmmoItem(itemid);
-		
 	GetPlayerPos(playerid, x, y, z);
 	GetPlayerFacingAngle(playerid, r);
 
@@ -697,19 +729,24 @@ _UnloadWeapon(playerid, Item:itemid)
 		.world = GetPlayerVirtualWorld(playerid),
 		.interior = GetPlayerInterior(playerid));
 
+	if(!IsValidItemType(ammoitemtype))
+	{
+		itmw_DropItemID[playerid] = INVALID_ITEM_ID;
+		return;
+	}
+
 	SetItemExtraData(ammoitemid, GetItemWeaponItemMagAmmo(itemid) + GetItemWeaponItemReserve(itemid));
 
 	SetItemWeaponItemMagAmmo(itemid, 0);
 	SetItemWeaponItemReserve(itemid, 0);
 	SetItemWeaponItemAmmoItem(itemid, INVALID_ITEM_TYPE);
 	UpdatePlayerWeaponItem(playerid);
+	itmw_DropItemID[playerid] = INVALID_ITEM_ID;
 
-	PlayerPlaySound(playerid, 36401, 0.0, 0.0, 0.0); //Audio
-
-	ApplyAnimation(playerid, "BOMBER", "BOM_PLANT_IN", 5.0, 1, 0, 0, 0, 450, 1);
+	ApplyAnimation(playerid, "BOMBER", "BOM_PLANT_IN", 5.0, 1, 0, 0, 0, 450);
 	ShowActionText(playerid, ls(playerid, "WEAPAUNLOAD", true), 3000);
 
-	return 1;
+	return;
 }
 
 hook OnItemNameRender(Item:itemid, ItemType:itemtype)
