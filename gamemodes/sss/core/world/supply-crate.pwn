@@ -319,23 +319,6 @@ SupplyCrateLand()
 	GetContainerFreeSlots(Container:sup_Containerid, freeslots);
 	dbg("supply-crate", 2, "[SupplyCrateLand] Spawned %d items in supply crate container %d", 32 - freeslots, _:sup_Containerid);
 
-	if(IsValidDynamicObject(sup_ObjCrate1))
-		DestroyDynamicObject(sup_ObjCrate1);
-
-	if(IsValidDynamicObject(sup_ObjCrate2))
-		DestroyDynamicObject(sup_ObjCrate2);
-
-	if(IsValidDynamicObject(sup_ObjPara))
-		DestroyDynamicObject(sup_ObjPara);
-
-	if(IsValidDynamicObject(sup_ObjSignal))
-		DestroyDynamicObject(sup_ObjSignal);
-	
-	sup_ObjCrate1 = INVALID_OBJECT_ID;
-	sup_ObjCrate2 = INVALID_OBJECT_ID;
-	sup_ObjPara = INVALID_OBJECT_ID;
-	sup_ObjSignal = INVALID_OBJECT_ID;
-
 	sup_CurrentType = -1;
 
 	sup_LastSupplyDrop = GetTickCount();
