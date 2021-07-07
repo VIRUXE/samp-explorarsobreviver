@@ -9,7 +9,7 @@
 
 new Timer:IsPlayerRunning[MAX_PLAYERS], sprintcount[MAX_PLAYERS];
 
-hook OnPlayerSpawn(playerid)
+hook OnPlayerDeath(playerid, killerid, reason)
 {
 	stop IsPlayerRunning[playerid];
 	sprintcount[playerid] = 0;
@@ -241,6 +241,18 @@ timer DisableUntilAC[1000]()
 	EnableAntiCheat(11, false); // Anti-Health hack (in vehicle)
 	EnableAntiCheat(5, false); // Anti-Teleport (vehicle to player)
 	EnableAntiCheat(15, false); // Anti-Weapon hack
+}
+
+hook OnPlayerSpawn(playerid)
+{
+	if(IsPlayerMobile(playerid))
+	{
+		EnableAntiCheatForPlayer(playerid, 52, false); // Anti-Nop
+		EnableAntiCheatForPlayer(playerid, 39, false); // Dialog-Hack
+		EnableAntiCheatForPlayer(playerid, 28, false); // Anti-FakeKill
+	}
+	stop IsPlayerRunning[playerid];
+	sprintcount[playerid] = 0;
 }
 
 forward OnCheatDetected(playerid, const ip_address[], type, code);
