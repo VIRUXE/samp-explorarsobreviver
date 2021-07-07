@@ -145,7 +145,7 @@ hook OnPlayerScriptUpdate(playerid)
 
 		if(BloodObjects[playerid][idx] != INVALID_OBJECT_ID)
 		{
-			DestroyDynamicObject(BloodObjects[playerid][i]);
+			DestroyDynamicObject(BloodObjects[playerid][idx]);
 			BloodObjects[playerid][idx] = INVALID_OBJECT_ID;
 		}
 
