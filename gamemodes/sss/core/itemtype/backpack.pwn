@@ -174,33 +174,32 @@ stock RemovePlayerBag(playerid)
 	if(!IsValidItem(bag_PlayerBagID[playerid]))
 		return 0;
 
-	new Container:containerid, Error:e;
-	e = GetItemArrayDataAtCell(bag_PlayerBagID[playerid], _:containerid, 1);
+	new Container:containerid;
+	GetItemArrayDataAtCell(bag_PlayerBagID[playerid], _:containerid, 1);
 
-	if(!IsError(e)){
-		if(!IsValidContainer(containerid))
+	if(!IsValidContainer(containerid))
+	{
+		new bagtype = bag_ItemTypeBagType[GetItemType(bag_PlayerBagID[playerid])];
+
+		if(bagtype == -1)
 		{
-			new bagtype = bag_ItemTypeBagType[GetItemType(bag_PlayerBagID[playerid])];
-
-			if(bagtype == -1)
-			{
-				err("Player (%d) bag item type (%d) is not a valid bag type.", playerid, bagtype);
-				return 0;
-			}
-
-			err("Bag (%d) container ID (%d) was invalid container has to be recreated.", _:bag_PlayerBagID[playerid], _:containerid);
-
-			containerid = CreateContainer(bag_TypeData[bagtype][bag_name], bag_TypeData[bagtype][bag_size]);
-
-			SetItemArrayDataAtCell(bag_PlayerBagID[playerid], _:containerid, 1);
+			err("Player (%d) bag item type (%d) is not a valid bag type.", playerid, bagtype);
+			return 0;
 		}
 
-		RemovePlayerAttachedObject(playerid, ATTACHSLOT_BAG);
-		CreateItemInWorld(bag_PlayerBagID[playerid], 0.0, 0.0, 0.0, .world = GetPlayerVirtualWorld(playerid), .interior = GetPlayerInterior(playerid));
+		err("Bag (%d) container ID (%d) was invalid container has to be recreated.", _:bag_PlayerBagID[playerid], _:containerid);
 
-		bag_ContainerPlayer[containerid] = INVALID_PLAYER_ID;
-		bag_PlayerBagID[playerid] = INVALID_ITEM_ID;
+		containerid = CreateContainer(bag_TypeData[bagtype][bag_name], bag_TypeData[bagtype][bag_size]);
+
+		SetItemArrayDataAtCell(bag_PlayerBagID[playerid], _:containerid, 1);
 	}
+
+	RemovePlayerAttachedObject(playerid, ATTACHSLOT_BAG);
+	CreateItemInWorld(bag_PlayerBagID[playerid], 0.0, 0.0, 0.0, .world = GetPlayerVirtualWorld(playerid), .interior = GetPlayerInterior(playerid));
+
+	bag_ContainerPlayer[containerid] = INVALID_PLAYER_ID;
+	bag_PlayerBagID[playerid] = INVALID_ITEM_ID;
+
 	return 1;
 }
 
