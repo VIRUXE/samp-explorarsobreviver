@@ -69,7 +69,7 @@ UpdateRadioMarker(playerid, info = 1)
 			if(i == playerid)
 				continue;
 			
-			if(GetPlayerRadioFrequency(playerid) == GetPlayerRadioFrequency(i))
+			if(GetPlayerRadioFrequency(playerid) == GetPlayerRadioFrequency(i) && !IsPlayerOnAdminDuty(i))
 			{
 				SetPlayerMarkerForPlayer(playerid, i, CHAT_RADIO);
 				SetPlayerMarkerForPlayer(i, playerid, CHAT_RADIO);
