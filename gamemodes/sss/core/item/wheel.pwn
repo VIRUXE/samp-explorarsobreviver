@@ -160,7 +160,9 @@ timer upVehWheel[7000](playerid, vehicleid, panels, doors, lights, tires){
 	UpdateVehicleDamageStatus(vehicleid, panels, doors, lights, tires);
 	PlayerPlaySound(playerid, 4202, 0.0, 0.0, 0.0);
 	ShowActionText(playerid, ls(playerid, "TIREREPP", true), 2000);
-	DestroyItem(GetPlayerItem(playerid));
+
+	if(GetItemType(GetPlayerItem(playerid)) == item_Wheel)
+		DestroyItem(GetPlayerItem(playerid));
 }
 
 hook OnPlayerOpenInventory(playerid){
