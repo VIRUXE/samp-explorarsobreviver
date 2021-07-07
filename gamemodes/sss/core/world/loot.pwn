@@ -221,7 +221,7 @@ hook OnItemDestroyed(Item:itemid)
 // 5400000 = 1 Hour and 30 minutes
 timer DestroyUntilItem[5400000](itemid, Float:x, Float:y, Float:z)
 {
-	if(!IsValidItem(Item:itemid))
+	if(!IsValidItem(Item:itemid) || !IsItemInWorld(Item:itemid))
 		return;
 
 	foreach(new i : Player)
