@@ -212,11 +212,8 @@ stock DestroyPlayerBag(playerid)
 	if(!IsValidItem(bag_PlayerBagID[playerid]))
 		return 0;
 
-	new Container:containerid, Error:e;
-	e = GetItemArrayDataAtCell(bag_PlayerBagID[playerid], _:containerid, 1);
-
-	if(IsError(e))
-		return 0;
+	new Container:containerid;
+	GetItemArrayDataAtCell(bag_PlayerBagID[playerid], _:containerid, 1);
 
 	if(IsValidContainer(containerid))
 	{
