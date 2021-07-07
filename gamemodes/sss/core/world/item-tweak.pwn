@@ -213,20 +213,20 @@ hook OnPlayerClickPlayerTD(playerid, PlayerText:playertextid){
 		PlayerTextDrawColor(playerid, twk_RotR[playerid], -1);
 		PlayerTextDrawColor(playerid, twk_RotL[playerid], -1);
 
-		if(playertextid == PlayerText:twk_Click[playerid] && (GetTickCount() - twk_ClickTick[playerid]) <= 200) {
+		/*if(playertextid == PlayerText:twk_Click[playerid] && (GetTickCount() - twk_ClickTick[playerid]) <= 200) {
 			PlayerTextDrawColor(playerid, playertextid, 0xffff00ff);
 			PlayerTextDrawShow(playerid, playertextid);
 			stop twk_TimerClick[playerid];
-			twk_TimerClick[playerid] = repeat TweakClick(playerid, _:playertextid);
-		}
-		else {
-			if(PlayerText:playertextid != twk_Unlock[playerid] && PlayerText:playertextid != twk_Done[playerid])
-				twk_ClickTick[playerid] = GetTickCount();
-				
-			twk_Click[playerid] = playertextid;
-			stop twk_TimerClick[playerid];
 			twk_TimerClick[playerid] = defer TweakClick(playerid, _:playertextid);
 		}
+		else {*/
+		if(PlayerText:playertextid != twk_Unlock[playerid] && PlayerText:playertextid != twk_Done[playerid])
+			twk_ClickTick[playerid] = GetTickCount();
+			
+		twk_Click[playerid] = playertextid;
+		stop twk_TimerClick[playerid];
+		twk_TimerClick[playerid] = defer TweakClick(playerid, _:playertextid);
+		//}
 
 		PlayerTextDrawShow(playerid, twk_MoveF[playerid]);
 		PlayerTextDrawShow(playerid, twk_MoveB[playerid]);
