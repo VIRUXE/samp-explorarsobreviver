@@ -62,10 +62,9 @@ stock DestroyTracer(id)
 	if(!Iter_Contains(tracer_Index, id))
 		return 0;
 
-	if(!IsValidDynamicObject(tracer_ObjectID[id]))
-		return 0;
-
-	DestroyDynamicObject(tracer_ObjectID[id]);
+	if(IsValidDynamicObject(tracer_ObjectID[id]))
+		DestroyDynamicObject(tracer_ObjectID[id]);
+		
 	Iter_Remove(tracer_Index, id);
 
 	return 1;
