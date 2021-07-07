@@ -15,8 +15,11 @@ hook OnPlayerDisconnect(playerid, reason)
 {
 	for(new i; i < MAX_BLOOD_OBJECTS; i++)
 	{
-		if(IsValidDynamicObject(BloodObjects[playerid][i]))
+		if(BloodObjects[playerid][i] != INVALID_OBJECT_ID)
+		{
 			DestroyDynamicObject(BloodObjects[playerid][i]);
+			BloodObjects[playerid][i] = INVALID_OBJECT_ID;
+		}
 	}
 }
 
@@ -140,8 +143,11 @@ hook OnPlayerScriptUpdate(playerid)
 			}
 		}
 
-		if(IsValidDynamicObject(BloodObjects[playerid][idx]))
-			DestroyDynamicObject(BloodObjects[playerid][idx]);
+		if(BloodObjects[playerid][idx] != INVALID_OBJECT_ID)
+		{
+			DestroyDynamicObject(BloodObjects[playerid][i]);
+			BloodObjects[playerid][idx] = INVALID_OBJECT_ID;
+		}
 
 		new Float:cx, Float:cy, Float:cz, Float:crx, Float:cry, Float:crz = z;
 

@@ -282,7 +282,7 @@ public OnCheatDetected(playerid, const ip_address[], type, code)
 	}
 	return 1;
 }
-
+/*
 forward OnCheatWarning(playerid, const ip_address[], type, code, code2, count);
 public OnCheatWarning(playerid, const ip_address[], type, code, code2, count)
 {
@@ -295,7 +295,7 @@ public OnCheatWarning(playerid, const ip_address[], type, code, code2, count)
 	}
 	return 1;
 }
-
+*/
 /*==============================================================================
 
 	Anti-rapid-fire

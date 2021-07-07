@@ -158,7 +158,7 @@ _OnDeath(playerid, killerid)
 //timer DestroyReason[10 * 60000](label)
 	//DestroyDynamic3DTextLabel(STREAMER_TAG_3D_TEXT_LABEL:label);
 
-timer DestroyTorso[30 * 60000](itemid)
+timer DestroyTorso[10 * 60000](itemid)
 	if(IsValidItem(Item:itemid))
 		DestroyItem(Item:itemid);
 

@@ -298,10 +298,10 @@ hook OnPlayerUseItem(playerid, Item:itemid)
 			return Y_HOOKS_CONTINUE_RETURN_0;
 
 		if(IsItemInWorld(itemid)) {
-			if(IsPlayerMobile(playerid))
+			if(IsPlayerMobile(playerid) && IsContainerEmpty(containerid))
 				PlayerPickUpItem(playerid, itemid);
-				
-			_DisplayBagDialog(playerid, itemid, true);
+			else
+				_DisplayBagDialog(playerid, itemid, true);
 		}
 		else
 			_DisplayBagDialog(playerid, itemid, false);

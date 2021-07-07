@@ -121,7 +121,7 @@ public OnGameModeInit()
 #include <rapid-fire>
 #include <optud>
 #include <discord-connector>
-#include <mapfix>
+//#include <mapfix>
 /*==============================================================================
 
 	Definitions

@@ -20,7 +20,6 @@ hook OnGameModeInit(){
 	TextDrawSetProportional(item_Prev, 1);
 	TextDrawSetPreviewRot(item_Prev, -10.000000, 0.100000, -20.000000, 1.0);
 	TextDrawSetPreviewModel(item_Prev, 19300);
-	TextDrawSetSelectable(item_Prev, true);
 }
 
 hook OnGameModeExit()
@@ -74,10 +73,8 @@ hook OnPlayerGetItem(playerid, Item:itemid){
 	TextDrawShowForPlayer(playerid, item_Prev);
 
 	// Temporary fix Special Action on mobile
-	if(IsItemTypeCarry(itype) && IsPlayerMobile(playerid)) {
+	if(IsItemTypeCarry(itype) && IsPlayerMobile(playerid)) 
 		RemovePlayerAttachedObject(playerid, ITEM_ATTACH_INDEX);
-	}
-
 }
 
 hook OnItemArrayDataChanged(Item:itemid){

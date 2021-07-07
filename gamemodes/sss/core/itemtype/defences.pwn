@@ -801,14 +801,12 @@ _UpdateDefenceTweakArrow(playerid, Item:itemid)
 	GetItemWorld(itemid, world);
 	GetItemInterior(itemid, interior);
 	
-	if(!IsValidDynamicObject(def_TweakArrow[playerid]))
-	{
-		def_TweakArrow[playerid] = CreateDynamicObject(19133, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, world, interior);
+	if(!IsValidDynamicObject(def_TweakArrow[playerid])){
+		def_TweakArrow[playerid] = CreateDynamicObject(19133, x, y, z, 0.0, 0.0, 0.0, world, interior);
 		SetDynamicObjectMaterial(def_TweakArrow[playerid], 0, 10765, "airportgnd_sfse", "desgreengrass", 0xFF00FF00);
 		SetDynamicObjectMaterial(def_TweakArrow[playerid], 1, -1, "none", "none", 0xFF00FF00);
-	}
-
-	SetDynamicObjectPos(def_TweakArrow[playerid], x, y, z);
+	} else 
+		SetDynamicObjectPos(def_TweakArrow[playerid], x, y, z);
 
 	new pose;
 	GetItemArrayDataAtCell(itemid, pose, def_pose);
