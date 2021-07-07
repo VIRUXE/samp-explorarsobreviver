@@ -187,15 +187,15 @@ CheckForExtraAccounts(playerid)
 {
 	new
 		name[MAX_PLAYER_NAME],
-		list[6][MAX_PLAYER_NAME],
+		list[10][MAX_PLAYER_NAME],
 		count,
 		adminlevel,
 		bool:donewarning,
-		string[(MAX_PLAYER_NAME + 2) * 6];
+		string[(MAX_PLAYER_NAME + 2) * 10];
 
 	GetPlayerName(playerid, name, MAX_PLAYER_NAME);
 
-	GetAccountAliasesByAll(name, list, count, 6, adminlevel);
+	GetAccountAliasesByAll(name, list, count, 10, adminlevel);
 
 	if(count == 0)
 		return 0;
@@ -207,6 +207,9 @@ CheckForExtraAccounts(playerid)
 	{
 		for(new i; i < count && i < sizeof(list); i++)
 		{
+			if(i >= 9)
+				continue;
+
 			strcat(string, list[i]);
 			strcat(string, ", ");
 
