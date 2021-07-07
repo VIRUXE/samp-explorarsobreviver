@@ -9,7 +9,7 @@ static
 Float:	bld_BleedRate[MAX_PLAYERS],
 bool:	Bleeding[MAX_PLAYERS],
 		BloodObjectIndex[MAX_PLAYERS],
-		BloodObjects[MAX_PLAYERS][MAX_BLOOD_OBJECTS];
+		BloodObjects[MAX_PLAYERS][MAX_BLOOD_OBJECTS] = {INVALID_OBJECT_ID, ...};
 
 hook OnPlayerDisconnect(playerid, reason)
 {
