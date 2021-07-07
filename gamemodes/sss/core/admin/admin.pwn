@@ -365,6 +365,7 @@ TogglePlayerAdminDuty(playerid, toggle)
 		admin_OnDuty[playerid] = true;
 
 		SetPlayerSkin(playerid, GetPlayerGender(playerid) == GENDER_MALE ? 217 : 211);
+		SetPlayerColor(playerid, GetPlayerColor(playerid));
 	}
 	else
 	{
