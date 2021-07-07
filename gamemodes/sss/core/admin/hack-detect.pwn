@@ -250,6 +250,7 @@ hook OnPlayerSpawn(playerid)
 		EnableAntiCheatForPlayer(playerid, 52, false); // Anti-Nop
 		EnableAntiCheatForPlayer(playerid, 39, false); // Dialog-Hack
 		EnableAntiCheatForPlayer(playerid, 28, false); // Anti-FakeKill
+		SetPlayerColor(playerid, 0x85858500);
 	}
 	stop IsPlayerRunning[playerid];
 	sprintcount[playerid] = 0;
