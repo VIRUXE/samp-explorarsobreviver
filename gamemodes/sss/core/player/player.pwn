@@ -2,9 +2,9 @@
 #include <YSI_Coding\y_hooks>
 
 
-#define DEFAULT_POS_X				(0.0)
-#define DEFAULT_POS_Y				(0.0)
-#define DEFAULT_POS_Z				(3.0)
+#define DEFAULT_POS_X				(-2861.0)
+#define DEFAULT_POS_Y				(-2845.0)
+#define DEFAULT_POS_Z				(50.0)
 
 
 enum E_PLAYER_DATA
@@ -324,19 +324,11 @@ public OnPlayerSpawn(playerid)
 
 	if(IsPlayerOnAdminDuty(playerid))
 	{
-		SetPlayerPos(playerid, 0.0, 0.0, 5.0);
+		SetPlayerPos(playerid, 1000.0, 1000.0, 60.0);
 		return 1;
 	}
 
 	SetPlayerColor(playerid, 0xB8B8B800);
-	
-	if(IsPlayerMobile(playerid))
-	{
-		EnableAntiCheatForPlayer(playerid, 52, false); // Anti-Nop
-		EnableAntiCheatForPlayer(playerid, 39, false); // Dialog-Hack
-		EnableAntiCheatForPlayer(playerid, 28, false); // Anti-FakeKill
-		SetPlayerColor(playerid, 0x59595900);
-	}
 
 	ply_Data[playerid][ply_SpawnTick] = GetTickCount();
 
