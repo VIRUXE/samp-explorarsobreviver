@@ -25,6 +25,17 @@ hook OnPlayerDisconnect(playerid, reason)
 	DestroyPlayerProgressBar(playerid, ActionBar);
 }
 
+hook OnPlayerOpenInventory(playerid)
+{
+	StopHoldAction(playerid);
+	return Y_HOOKS_CONTINUE_RETURN_0;
+}
+
+hook OnPlayerOpenContainer(playerid, containerid)
+{
+	StopHoldAction(playerid);
+	return Y_HOOKS_CONTINUE_RETURN_0;
+}
 
 StartHoldAction(playerid, duration, startvalue = 0)
 {
