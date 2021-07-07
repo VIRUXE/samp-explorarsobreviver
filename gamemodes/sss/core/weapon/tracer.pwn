@@ -15,6 +15,9 @@ stock CreateTracer(Float:originx, Float:originy, Float:originz, Float:targetx, F
 	if(id == ITER_NONE)
 		return -1;
 
+	if(IsValidDynamicObject(tracer_ObjectID[id]))
+		return -1;
+
 	new
 		Float:vecx,
 		Float:vecy,
@@ -27,7 +30,7 @@ stock CreateTracer(Float:originx, Float:originy, Float:originz, Float:targetx, F
 	vecy = targety - originy;
 	vecz = targetz - originz;
 
-	rotation = absoluteangle(-(90-(atan2((vecy), (vecx)))));
+	rotation = GetAbsoluteAngle(-(90-(atan2((vecy), (vecx)))));
 	elevation = 90-floatabs(atan2(floatsqroot(floatpower(vecx, 2.0) + floatpower(vecy, 2.0)), vecz));
 
 	tracer_ObjectID[id] = CreateDynamicObject(18650,
@@ -41,14 +44,14 @@ stock CreateTracer(Float:originx, Float:originy, Float:originz, Float:targetx, F
 
 	Streamer_SetArrayData(STREAMER_TYPE_OBJECT, tracer_ObjectID[id], E_STREAMER_EXTRA_ID, arr);
 
-	MoveDynamicObject(tracer_ObjectID[id], targetx, targety, targetz, 800.0);
-/*
+	MoveDynamicObject(tracer_ObjectID[id], targetx, targety, targetz, 600.0);
+
 	log("Created tracer: %f, %f, %f > %f, %f, %f",
 		originx + (2.0 * floatsin(rotation, degrees) * floatcos(elevation, degrees)),
 		originy + (2.0 * floatcos(rotation, degrees) * floatcos(elevation, degrees)),
 		originz + (2.0 * floatsin(elevation, degrees)),
 		targetx, targety, targetz);
-*/
+
 	Iter_Add(tracer_Index, id);
 
 	return id;
@@ -57,6 +60,9 @@ stock CreateTracer(Float:originx, Float:originy, Float:originz, Float:targetx, F
 stock DestroyTracer(id)
 {
 	if(!Iter_Contains(tracer_Index, id))
+		return 0;
+
+	if(!IsValidDynamicObject(tracer_ObjectID[id]))
 		return 0;
 
 	DestroyDynamicObject(tracer_ObjectID[id]);
@@ -91,6 +97,9 @@ tracer_HandleObjectMoved(objectid)
 
 hook OnPlayerWeaponShot(playerid, weaponid, hittype, hitid, Float:fX, Float:fY, Float:fZ)
 {
+	if(hittype == BULLET_HIT_TYPE_NONE)
+		return 1;
+		
 	if(IsBaseWeaponClipBased(weaponid))
 	{
 		new ItemType:ammoitemtype = GetItemWeaponItemAmmoItem(GetPlayerItem(playerid));
