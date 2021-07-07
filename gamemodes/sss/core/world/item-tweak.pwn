@@ -1,5 +1,7 @@
 #include <YSI_Coding\y_hooks>
 
+#define NO_GO_ZONE_SIZE		(2.2)
+#define TWK_AREA_IDENTIFIER	(1234)
 
 static
 
@@ -17,7 +19,9 @@ PlayerText:	twk_Unlock[MAX_PLAYERS],
 PlayerText:	twk_Done[MAX_PLAYERS],
 PlayerText: twk_Click[MAX_PLAYERS],
 	   		twk_ClickTick[MAX_PLAYERS],
-Timer: 		twk_TimerClick[MAX_PLAYERS];
+Timer: 		twk_TimerClick[MAX_PLAYERS],
+			twk_NoGoZone[MAX_PLAYERS] = {INVALID_STREAMER_ID, ...},
+			twk_NoGoZoneCount[MAX_PLAYERS];
 
 forward OnItemTweakUpdate(playerid, itemid);
 forward OnItemTweakFinish(playerid, itemid);
@@ -57,6 +61,7 @@ stock TweakItem(playerid, Item:itemid)
 {
 	new
 		uuid[UUID_LEN],
+		data[2],
 		world,
 		interior;
 
@@ -73,6 +78,13 @@ stock TweakItem(playerid, Item:itemid)
 	twk_Item[playerid] = itemid;
 	twk_Tweaker[itemid] = playerid;
 	GetItemPos(itemid, twk_Origin[playerid][0], twk_Origin[playerid][1], twk_Origin[playerid][2]);
+
+	twk_NoGoZone[playerid] = CreateDynamicSphere(twk_Origin[playerid][0], twk_Origin[playerid][1], twk_Origin[playerid][2], NO_GO_ZONE_SIZE, world, interior);
+
+	data[0] = TWK_AREA_IDENTIFIER;
+	data[1] = _:itemid;
+	Streamer_SetArrayData(STREAMER_TYPE_AREA, twk_NoGoZone[playerid], E_STREAMER_EXTRA_ID, data);
+
 
 	HidePlayerKeyActionUI(playerid);
 
@@ -101,7 +113,13 @@ _twk_Reset(playerid)
 	if(IsValidItem(twk_Item[playerid]))
 		twk_Tweaker[twk_Item[playerid]] = INVALID_PLAYER_ID;
 
+	DestroyDynamicArea(twk_NoGoZone[playerid]);
+	twk_NoGoZone[playerid] = INVALID_STREAMER_ID;
+	twk_NoGoZoneCount[playerid] = 0;
+
 	twk_Item[playerid] = INVALID_ITEM_ID;
+
+	stop twk_TimerClick[playerid];
 
 	_twk_HideUI(playerid);
 }
@@ -138,7 +156,8 @@ _twk_Commit(playerid)
 	ShowActionText(playerid, ls(playerid, "ITEMTWKFINI"), 5000);
 	_twk_Reset(playerid);
 	HideHelpTip(playerid);
-
+	stop twk_TimerClick[playerid];
+	
 	return 1;
 }
 
@@ -308,6 +327,7 @@ _twk_AdjustItemPos(playerid, Float:distance, Float:direction, Float:rotation)
 	if(!IsPlayerConnected(playerid))
 	{
 		err("Called on invalid player %d", playerid);
+		stop twk_TimerClick[playerid];
 		return 1;
 	}
 
@@ -316,6 +336,13 @@ _twk_AdjustItemPos(playerid, Float:distance, Float:direction, Float:rotation)
 		err("Called on invalid item %d", _:twk_Item[playerid]);
 		_twk_Reset(playerid);
 		return 2;
+	}
+
+	if(twk_NoGoZoneCount[playerid] > 0)
+	{
+		stop twk_TimerClick[playerid];
+		ShowActionText(playerid, ls(playerid, "ITEMTWKMOVE"), 6000);
+		return 3;
 	}
 
 	new
@@ -350,6 +377,52 @@ _twk_AdjustItemPos(playerid, Float:distance, Float:direction, Float:rotation)
 	CallLocalFunction("OnItemTweakUpdate", "dd", playerid, _:twk_Item[playerid]);
 
 	return 0;
+}
+
+
+hook OnPlayerEnterDynArea(playerid, areaid)
+{
+	new data[2];
+	Streamer_GetArrayData(STREAMER_TYPE_AREA, areaid, E_STREAMER_EXTRA_ID, data);
+
+	if(data[0] != TWK_AREA_IDENTIFIER)
+		return Y_HOOKS_CONTINUE_RETURN_0;
+
+	if(!IsValidItem(Item:data[1]))
+		return Y_HOOKS_CONTINUE_RETURN_0;
+
+	if(!IsPlayerConnected(twk_Tweaker[Item:data[1]]))
+	{
+		err("Player entered area of tweaked item %d item has no connected player.", data[1]);
+		return Y_HOOKS_CONTINUE_RETURN_0;
+	}
+
+	ShowActionText(playerid, ls(playerid, "ITEMTWKBLOC"), 6000);
+	twk_NoGoZoneCount[twk_Tweaker[Item:data[1]]]++;
+
+	return Y_HOOKS_CONTINUE_RETURN_0;
+}
+
+hook OnPlayerLeaveDynArea(playerid, areaid)
+{
+	new data[2];
+	Streamer_GetArrayData(STREAMER_TYPE_AREA, areaid, E_STREAMER_EXTRA_ID, data);
+
+	if(data[0] != TWK_AREA_IDENTIFIER)
+		return Y_HOOKS_CONTINUE_RETURN_0;
+
+	if(!IsValidItem(Item:data[1]))
+		return Y_HOOKS_CONTINUE_RETURN_0;
+
+	if(!IsPlayerConnected(twk_Tweaker[Item:data[1]]))
+	{
+		err("Player left area of tweaked item %d item has no connected player.", data[1]);
+		return Y_HOOKS_CONTINUE_RETURN_0;
+	}
+
+	twk_NoGoZoneCount[twk_Tweaker[Item:data[1]]]--;
+
+	return Y_HOOKS_CONTINUE_RETURN_0;
 }
 
 _twk_BuildUI(playerid)
