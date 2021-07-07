@@ -432,32 +432,6 @@ stock DestroyBody(bodyid)
 	return 1;
 }
 
-new torso_CntOptionID[MAX_PLAYERS];
-
-hook OnPlayerOpenContainer(playerid, Container:containerid)
-{
-	if(GetItemType(GetContainerSafeboxItem(containerid)) == item_Torso)
-		torso_CntOptionID[playerid] = AddContainerOption(playerid, "Enterrar Corpo");
-
-	return Y_HOOKS_CONTINUE_RETURN_0;
-}
-
-hook OnPlayerSelectCntOpt(playerid, Container:containerid, option)
-{
-	if(GetItemType(GetContainerSafeboxItem(containerid)) == item_Torso)
-	{
-		if(option == torso_CntOptionID[playerid])
-		{
-			HidePlayerGear(playerid);
-			HideBodyPreviewUI(playerid);
-			ClosePlayerContainer(playerid, true);
-			CancelSelectTextDraw(playerid);
-			DestroyItem(GetContainerSafeboxItem(containerid));
-		}
-	}
-	return Y_HOOKS_CONTINUE_RETURN_0;
-}
-
 //OnCameraTarget 
 /*IRPC:168(playerid, BitStream:bs)
 {
