@@ -562,10 +562,13 @@ hook OnPlayerAddToInventory(playerid, Item:itemid, success)
 		new ItemType:itemtype = GetItemType(itemid);
 
 		if(IsItemTypeBag(itemtype))
-			return Y_HOOKS_BREAK_RETURN_1;
+			return Y_HOOKS_BREAK_RETURN_1; // break
 
 		if(IsItemTypeCarry(itemtype))
-			return Y_HOOKS_BREAK_RETURN_1;
+			return Y_HOOKS_BREAK_RETURN_1; // break
+
+		if(IsValidHolsterItem(itemtype))
+			return Y_HOOKS_CONTINUE_RETURN_0; // continue
 
 		ShowActionText(playerid, ls(playerid, "INVITMADDED"), 3000, 150);
 	}
