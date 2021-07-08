@@ -117,8 +117,8 @@ world_civilian, 1.0
 6.0,    PizzaHat
 4.0,    WitchesHat
 8.0,    StrawHat
-8.0,    fire_hat1
-8.0,    fire_hat2
+8.0,    FireHelmet
+8.0,    FireHelmet1
 7.0,    headphones04
 
 # crafting, construction and base stuff

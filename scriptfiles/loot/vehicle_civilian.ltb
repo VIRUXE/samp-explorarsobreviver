@@ -114,8 +114,8 @@ vehicle_civilian, 1.0
 16.0,    PizzaHat
 14.0,    WitchesHat
 18.0,    StrawHat
-18.0,    fire_hat1
-18.0,    fire_hat2
+18.0,    FireHelmet
+18.0,    FireHelmet1
 17.0,    headphones04
 
 # crafting, construction and base stuff
