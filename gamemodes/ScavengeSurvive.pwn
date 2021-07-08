@@ -682,7 +682,7 @@ OnGameModeInit_Setup()
 	GetSettingInt("server/global-debug-level", 0, gGlobalDebugLevel);
 	debug_set_level("global", gGlobalDebugLevel);
 
-	RestartCount				=TextDrawCreate(410.000000, 10.000000, "Servidor reiniciando em:~n~00:00");
+	RestartCount				=TextDrawCreate(410.000000, 10.000000, "Reiniciando em:~n~00:00");
 	TextDrawAlignment			(RestartCount, 2);
 	TextDrawBackgroundColor		(RestartCount, 255);
 	TextDrawFont				(RestartCount, 1);
@@ -761,7 +761,7 @@ task RestartUpdate[1000]()
 		if(gServerUptime >= gServerMaxUptime - 3600)
 		{
 			new str[36];
-			format(str, 36, "Servidor reiniciando em:~n~%02d:%02d", (gServerMaxUptime - gServerUptime) / 60, (gServerMaxUptime - gServerUptime) % 60);
+			format(str, 36, "Reiniciando em:~n~%02d:%02d", (gServerMaxUptime - gServerUptime) / 60, (gServerMaxUptime - gServerUptime) % 60);
 			TextDrawSetString(RestartCount, str);
 
 			foreach(new i : Player)
