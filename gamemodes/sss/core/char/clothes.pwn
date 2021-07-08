@@ -79,7 +79,7 @@ hook OnItemNameRender(Item:itemid, ItemType:itemtype)
 	{
 		new
 			data,
-			exname[32];
+			exname[10];
 
 		GetItemExtraData(itemid, data);
 
