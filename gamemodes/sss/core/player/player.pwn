@@ -9,34 +9,34 @@
 
 enum E_PLAYER_DATA
 {
-			// Database Account Data
-			ply_Password[MAX_PASSWORD_LEN],
-			ply_IP,
-			ply_RegisterTimestamp,
-			ply_LastLogin,
-			ply_TotalSpawns,
-			ply_VIP,
+		// Database Account Data
+		ply_Password[MAX_PASSWORD_LEN],
+		ply_IP,
+		ply_RegisterTimestamp,
+		ply_LastLogin,
+		ply_TotalSpawns,
+		ply_VIP,
 
-			// Character Data
-bool:		ply_Alive,
-Float:		ply_HitPoints,
-Float:		ply_ArmourPoints,
-Float:		ply_FoodPoints,
-			ply_Clothes,
-			ply_Gender,
-Float:		ply_Velocity,
-			ply_CreationTimestamp,
+		// Character Data
+bool:	ply_Alive,
+Float:	ply_HitPoints,
+Float:	ply_ArmourPoints,
+Float:	ply_FoodPoints,
+		ply_Clothes,
+		ply_Gender,
+Float:	ply_Velocity,
+		ply_CreationTimestamp,
 
-			// Internal Data
-			ply_ShowHUD,
-			ply_PingLimitStrikes,
-			ply_stance,
-			ply_JoinTick,
-			ply_SpawnTick
+		// Internal Data
+		ply_ShowHUD,
+		ply_PingLimitStrikes,
+		ply_stance,
+		ply_JoinTick,
+		ply_SpawnTick
 }
 
 static
-			ply_Data[MAX_PLAYERS][E_PLAYER_DATA];
+		ply_Data[MAX_PLAYERS][E_PLAYER_DATA];
 
 
 forward OnPlayerScriptUpdate(playerid);
@@ -48,14 +48,14 @@ forward Float:GetPlayerTotalVelocity(playerid);
 
 public OnPlayerConnect(playerid)
 {
-	Logger_Log("player connected", Logger_P(playerid));
-
-	SetPlayerColor(playerid, 0xB8B8B800);
-	TogglePlayerClock(playerid, 1);
-	
 	if(IsPlayerNPC(playerid))
 		return 1;
 
+	Logger_Log("player connected", Logger_P(playerid));
+
+	SetPlayerColor(playerid, !IsPlayerMobile(playerid) ? COLOR_PLAYER_NORMAL : COLOR_PLAYER_MOBILE); // Cinza Claro | Cinza Escuro
+	TogglePlayerClock(playerid, true);
+	
 	ResetVariables(playerid);
 
 	ply_Data[playerid][ply_JoinTick] = GetTickCount();
@@ -244,9 +244,7 @@ ptask PlayerUpdateFast[100](playerid)
 		}
 	}
 	else
-	{
 		ply_Data[playerid][ply_PingLimitStrikes] = 0;
-	}
 
 	if(NetStats_MessagesRecvPerSecond(playerid) > 200)
 	{

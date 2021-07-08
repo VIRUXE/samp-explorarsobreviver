@@ -250,7 +250,6 @@ hook OnPlayerSpawn(playerid)
 		EnableAntiCheatForPlayer(playerid, 52, false); // Anti-Nop
 		EnableAntiCheatForPlayer(playerid, 39, false); // Dialog-Hack
 		EnableAntiCheatForPlayer(playerid, 28, false); // Anti-FakeKill
-		SetPlayerColor(playerid, 0x85858500);
 	}
 	stop IsPlayerRunning[playerid];
 	sprintcount[playerid] = 0;
@@ -260,9 +259,7 @@ forward OnCheatDetected(playerid, const ip_address[], type, code);
 public OnCheatDetected(playerid, const ip_address[], type, code)
 {
 	if(type)
-	{
 		BlockIpAddress(ip_address, 0);
-	}
 	else
 	{
 		if(IsPlayerInTutorial(playerid) || IsPlayerOnAdminDuty(playerid))
