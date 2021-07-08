@@ -1015,6 +1015,10 @@ ShowEnterPassDialog_KeypadAdv(playerid, msg = 0)
 
 timer MoveDefence[1000](itemid, playerid)
 {
+
+	if(!IsItemInWorld(Item:itemid))
+		return;
+		
 	new
 		Float:px,
 		Float:py,
