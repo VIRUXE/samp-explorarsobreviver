@@ -156,11 +156,11 @@ hook OnPlayerUseItem(playerid, Item:itemid)
 
 		if(IsItemInWorld(itemid))
 		{
-			if(IsPlayerMobile(playerid) && box_TypeData[box_ItemTypeBoxType[itemtype]][box_animate] && IsContainerEmpty(containerid))
+			if(IsPlayerMobile(playerid) && box_TypeData[box_ItemTypeBoxType[itemtype]][box_animate])
 				PlayerPickUpItem(playerid, itemid);
-
+				
 			if(_DisplaySafeboxDialog(playerid, itemid, box_TypeData[box_ItemTypeBoxType[itemtype]][box_animate]))
-				return Y_HOOKS_BREAK_RETURN_1;
+					return Y_HOOKS_BREAK_RETURN_1;
 		}
 
 		else
