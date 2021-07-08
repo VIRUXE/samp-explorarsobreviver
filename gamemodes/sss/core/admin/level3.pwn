@@ -177,6 +177,7 @@ ACMD:free[2](playerid)
 ACMD:recam[2](playerid, params[])
 {
 	SetCameraBehindPlayer(playerid);
+	ExitFreeMode(playerid);
 	return 1;
 }
 

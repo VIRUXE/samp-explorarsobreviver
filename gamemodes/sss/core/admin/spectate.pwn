@@ -119,13 +119,15 @@ EnterFreeMode(playerid, Float:camX = 0.0, Float:camY = 0.0, Float:camZ = 0.0)
 	spectate_Type[playerid] = SPECTATE_TYPE_FREE;
 	TogglePlayerControllable(playerid, true);
 
+	GetPlayerPos(playerid, spectate_StartPos[playerid][0], spectate_StartPos[playerid][1], spectate_StartPos[playerid][2]);
 	DestroyObject(spectate_CameraObject[playerid]);
 	spectate_CameraObject[playerid] = CreateObject(19300, camX, camY, camZ, 0.0, 0.0, 0.0);
 	TogglePlayerSpectating(playerid, false);
 	TogglePlayerSpectating(playerid, true);
 	AttachCameraToObject(playerid, spectate_CameraObject[playerid]);
-	GetPlayerPos(playerid, spectate_StartPos[playerid][0], spectate_StartPos[playerid][1], spectate_StartPos[playerid][2]);
 	spectate_Timer[playerid] = repeat UpdateSpectateMode(playerid);
+
+	ChatMsg(playerid, YELLOW, " » Use /Free ou /Recam novamente para sair do modo Camera Livre.");
 }
 
 ExitFreeMode(playerid)
@@ -166,7 +168,7 @@ ExitSpectateMode(playerid)
 	return 1;
 }
 
-timer ReturnToDuty[100](playerid)
+timer ReturnToDuty[1000](playerid)
 {
 	SetPlayerPos(playerid, spectate_StartPos[playerid][0], spectate_StartPos[playerid][1], spectate_StartPos[playerid][2]);
 	if(GetPlayerGender(playerid) == GENDER_MALE)
