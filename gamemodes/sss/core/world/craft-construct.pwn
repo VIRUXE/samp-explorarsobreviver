@@ -110,6 +110,9 @@ hook OnPlayerUseItem(playerid, Item:itemid)
 
 		for(new i; i < size; i++)
 		{
+			if(i >= MAX_CONSTRUCT_SET_ITEMS - 1)
+				break;
+
 			if(IsItemTypeDefence(GetItemType(list[i]))){
 				new bool:active;
 				GetItemArrayDataAtCell(list[i], active, 0);
