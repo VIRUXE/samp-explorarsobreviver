@@ -76,7 +76,7 @@ hook OnItemNameRender(Item:itemid, ItemType:itemtype)
 		}
 		else
 		{
-			SetItemNameExtra(itemid, "Empty");
+			SetItemNameExtra(itemid, "Vazio");
 		}
 	}
 }
