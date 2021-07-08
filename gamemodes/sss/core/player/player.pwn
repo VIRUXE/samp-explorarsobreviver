@@ -53,7 +53,6 @@ public OnPlayerConnect(playerid)
 
 	Logger_Log("player connected", Logger_P(playerid));
 
-	SetPlayerColor(playerid, !IsPlayerMobile(playerid) ? COLOR_PLAYER_NORMAL : COLOR_PLAYER_MOBILE); // Cinza Claro | Cinza Escuro
 	TogglePlayerClock(playerid, true);
 	
 	ResetVariables(playerid);
@@ -326,7 +325,7 @@ public OnPlayerSpawn(playerid)
 		return 1;
 	}
 
-	SetPlayerColor(playerid, 0xB8B8B800);
+	SetPlayerColor(playerid, !IsPlayerMobile(playerid) ? COLOR_PLAYER_NORMAL : COLOR_PLAYER_MOBILE); // Cinza Claro | Cinza Escuro
 
 	ply_Data[playerid][ply_SpawnTick] = GetTickCount();
 
