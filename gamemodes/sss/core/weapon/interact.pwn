@@ -67,7 +67,7 @@ _PickUpAmmoTransferCheck(playerid, Item:helditemid, Item:ammoitemid)
 
 			if(heldcalibre != GetItemWeaponCalibre(ammotypeid))
 			{
-				ShowActionText(playerid, ls(playerid, "AMWRONGCALI", true), 3000);
+				ShowActionText(playerid, ls(playerid, "AMWRONGCALI"), 3000);
 				return 1;
 			}
 
@@ -77,7 +77,7 @@ _PickUpAmmoTransferCheck(playerid, Item:helditemid, Item:ammoitemid)
 			{
 				if(loadedammoitemtype != GetItemWeaponItemAmmoItem(ammoitemid))
 				{
-					ShowActionText(playerid, ls(playerid, "AMDIFFATYPE", true), 5000);
+					ShowActionText(playerid, ls(playerid, "AMDIFFATYPE"), 5000);
 					return 1;
 				}
 			}
@@ -112,7 +112,7 @@ _PickUpAmmoTransferCheck(playerid, Item:helditemid, Item:ammoitemid)
 
 				if(canfuel <= 0.0)
 				{
-					ShowActionText(playerid, ls(playerid, "EMPTY", true), 3000);
+					ShowActionText(playerid, ls(playerid, "EMPTY"), 3000);
 					return 1;
 				}
 
@@ -128,7 +128,7 @@ _PickUpAmmoTransferCheck(playerid, Item:helditemid, Item:ammoitemid)
 
 			if(heldcalibre != GetAmmoTypeCalibre(ammotypeid))
 			{
-				ShowActionText(playerid, ls(playerid, "AMWRONGCALI", true), 3000);
+				ShowActionText(playerid, ls(playerid, "AMWRONGCALI"), 3000);
 				return 1;
 			}
 
@@ -138,7 +138,7 @@ _PickUpAmmoTransferCheck(playerid, Item:helditemid, Item:ammoitemid)
 			{
 				if(loadedammoitemtype != ammoitemtype)
 				{
-					ShowActionText(playerid, ls(playerid, "AMDIFFATYPE", true), 5000);
+					ShowActionText(playerid, ls(playerid, "AMDIFFATYPE"), 5000);
 					return 1;
 				}
 			}
@@ -168,7 +168,7 @@ _PickUpAmmoTransferCheck(playerid, Item:helditemid, Item:ammoitemid)
 
 			if(heldcalibre != GetItemWeaponCalibre(ammotypeid))
 			{
-				ShowActionText(playerid, ls(playerid, "AMWRONGCALI", true), 3000);
+				ShowActionText(playerid, ls(playerid, "AMWRONGCALI"), 3000);
 				return 1;
 			}
 
@@ -178,7 +178,7 @@ _PickUpAmmoTransferCheck(playerid, Item:helditemid, Item:ammoitemid)
 			{
 				if(loadedammoitemtype != helditemtype)
 				{
-					ShowActionText(playerid, ls(playerid, "AMDIFFATYPE", true), 5000);
+					ShowActionText(playerid, ls(playerid, "AMDIFFATYPE"), 5000);
 					return 1;
 				}
 			}
@@ -433,7 +433,7 @@ DisplayTransferAmmoDialog(playerid, Container:containerid, msg[] = "")
 					}
 					else
 					{
-						DisplayTransferAmmoDialog(playerid, containerid, sprintf("%s only contains %d ammo", sourceitemname, sourceitemammo));
+						DisplayTransferAmmoDialog(playerid, containerid, sprintf("%s contem apenas %d balas", sourceitemname, sourceitemammo));
 					}
 
 				}
@@ -453,7 +453,7 @@ DisplayTransferAmmoDialog(playerid, Container:containerid, msg[] = "")
 					}
 					else
 					{
-						DisplayTransferAmmoDialog(playerid, containerid, sprintf("%s only contains %d ammo", sourceitemname, sourceitemammo));
+						DisplayTransferAmmoDialog(playerid, containerid, sprintf("%s contem apenas %d balas", sourceitemname, sourceitemammo));
 					}
 				}
 			}
@@ -476,7 +476,7 @@ DisplayTransferAmmoDialog(playerid, Container:containerid, msg[] = "")
 					}
 					else
 					{
-						DisplayTransferAmmoDialog(playerid, containerid, sprintf("%s only contains %d ammo", sourceitemname, sourceitemammo));
+						DisplayTransferAmmoDialog(playerid, containerid, sprintf("%s contem apenas %d balas", sourceitemname, sourceitemammo));
 					}
 				}
 				else if(GetItemTypeAmmoType(targetitemtype) != -1)
@@ -496,7 +496,7 @@ DisplayTransferAmmoDialog(playerid, Container:containerid, msg[] = "")
 					}
 					else
 					{
-						DisplayTransferAmmoDialog(playerid, containerid, sprintf("%s only contains %d ammo", sourceitemname, sourceitemammo));
+						DisplayTransferAmmoDialog(playerid, containerid, sprintf("%s contem apenas %d balas", sourceitemname, sourceitemammo));
 					}
 				}
 			}
@@ -506,5 +506,5 @@ DisplayTransferAmmoDialog(playerid, Container:containerid, msg[] = "")
 		trans_SelectedItem[playerid] = INVALID_ITEM_ID;
 		DisplayContainerInventory(playerid, containerid);
 	}
-	Dialog_ShowCallback(playerid, using inline Response, DIALOG_STYLE_INPUT, "Transfer Ammo", sprintf("Enter amount of ammo to transfer from %s to %s\n\n%s", sourceitemname, targetitemname, msg), "Accept", "Cancel");
+	Dialog_ShowCallback(playerid, using inline Response, DIALOG_STYLE_INPUT, "Transferir municao", sprintf("Coloque um valor de balas para transferir de %s para %s\n\n%s", sourceitemname, targetitemname, msg), "Pronto", "Cancelar");
 }
