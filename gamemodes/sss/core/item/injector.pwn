@@ -44,11 +44,11 @@ hook OnItemNameRender(Item:itemid, ItemType:itemtype)
 		GetItemExtraData(itemid, type);
 		switch(type)
 		{
-			case INJECT_TYPE_EMPTY:			SetItemNameExtra(itemid, "Empty");
-			case INJECT_TYPE_MORPHINE:		SetItemNameExtra(itemid, "Morphine");
-			case INJECT_TYPE_ADRENALINE:	SetItemNameExtra(itemid, "Adrenaline");
-			case INJECT_TYPE_HEROIN:		SetItemNameExtra(itemid, "Heroin");
-			default:						SetItemNameExtra(itemid, "Empty");
+			case INJECT_TYPE_EMPTY:			SetItemNameExtra(itemid, "Vazio");
+			case INJECT_TYPE_MORPHINE:		SetItemNameExtra(itemid, "Morfina");
+			case INJECT_TYPE_ADRENALINE:	SetItemNameExtra(itemid, "Adrenalina");
+			case INJECT_TYPE_HEROIN:		SetItemNameExtra(itemid, "Heroina");
+			default:						SetItemNameExtra(itemid, "Vazio");
 		}
 	}
 }
