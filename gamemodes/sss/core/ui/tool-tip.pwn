@@ -92,12 +92,25 @@ hook OnPlayerGiveItem(playerid, targetid, Item:itemid)
 hook OnPlayerOpenInventory(playerid)
 {
 	if(ToolTips[playerid])
+	{
+		defer tHideHelpTip(playerid);
+	}
+	return Y_HOOKS_CONTINUE_RETURN_0;
+}
+
+timer tHideHelpTip[100](playerid)
+	if(IsPlayerConnected(playerid))
+		HideHelpTip(playerid);
+
+hook OnPlayerOpenContainer(playerid, containerid)
+{
+	if(ToolTips[playerid])
 		HideHelpTip(playerid);
 
 	return Y_HOOKS_CONTINUE_RETURN_0;
 }
 
-hook OnPlayerOpenContainer(playerid, containerid)
+hook OnPlayerOpenedContainer(playerid, containerid)
 {
 	if(ToolTips[playerid])
 		HideHelpTip(playerid);
