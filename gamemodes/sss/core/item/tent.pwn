@@ -213,7 +213,7 @@ SaveTent(tentid, bool:active = true)
 		Item:itemid = GetTentItem(tentid),
 		Container:containerid = GetTentContainer(tentid);
 
-	if(IsContainerEmpty(containerid))
+	if(IsContainerEmpty(containerid) || GetItemType(itemid) == item_TentPack)
 	{
 		RemoveSavedItem(itemid, DIRECTORY_TENT);
 		return 2;
@@ -256,6 +256,12 @@ public _tent_onLoad(Item:itemid, active, uuid[], data[], length)
 	tentid = CreateTentFromItem(itemid);
 	containerid = GetTentContainer(tentid);
 
+	if(IsContainerEmpty(containerid) || GetItemType(itemid) == item_TentPack)
+	{
+		RemoveSavedItem(itemid, DIRECTORY_TENT);
+		return 0;
+	}
+
 	if(!DeserialiseItems(data, length))
 	{
 		for(new i, j = GetStoredItemCount(); i < j; i++)
@@ -273,7 +279,7 @@ public _tent_onLoad(Item:itemid, active, uuid[], data[], length)
 
 			subitem = CreateItem(itemtype);
 
-			if(!IsItemTypeSafebox(itemtype) && !IsItemTypeBag(itemtype) && itemtype != item_TentPack)
+			if(!IsItemTypeSafebox(itemtype) && !IsItemTypeBag(itemtype))
 				SetItemArrayDataFromStored(subitem, i);
 
 			AddItemToContainer(containerid, subitem);
