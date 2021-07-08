@@ -437,6 +437,7 @@ new stock
 #include "sss/core/player/country.pwn"
 #include "sss/core/player/recipes.pwn"
 #include "sss/core/player/score.pwn"
+#include "sss/core/player/anti-pedslots.pwn"
 
 // CHARACTER SCRIPTS
 #include "sss/core/char/movement.pwn"

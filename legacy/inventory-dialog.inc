@@ -322,7 +322,7 @@ _inv_displaySlotOptions(playerid, slotid)
 	GetItemTypeSize(GetItemType(itemid), itemsize);
 	format(name, sizeof(name), "[%d]%s", itemsize, name);
 	
-	inv_OptionsList[playerid] = "Equipar\nUtilizar\nJogar Fora\n";
+	inv_OptionsList[playerid] = "Equipar\nUsar\nJogar Fora\n";
 	inv_OptionsCount[playerid] = 0;
 
 	CallLocalFunction("OnPlayerViewInventoryOpt", "d", playerid);

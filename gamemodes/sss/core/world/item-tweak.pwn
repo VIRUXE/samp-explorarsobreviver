@@ -17,9 +17,6 @@ PlayerText:	twk_RotR[MAX_PLAYERS],
 PlayerText:	twk_RotL[MAX_PLAYERS],
 PlayerText:	twk_Unlock[MAX_PLAYERS],
 PlayerText:	twk_Done[MAX_PLAYERS],
-PlayerText: twk_Click[MAX_PLAYERS],
-	   		twk_ClickTick[MAX_PLAYERS],
-Timer: 		twk_TimerClick[MAX_PLAYERS],
 			twk_NoGoZone[MAX_PLAYERS] = {INVALID_STREAMER_ID, ...},
 			twk_NoGoZoneCount[MAX_PLAYERS];
 
@@ -63,7 +60,8 @@ stock TweakItem(playerid, Item:itemid)
 		uuid[UUID_LEN],
 		data[2],
 		world,
-		interior;
+		interior,
+		objectid;
 
 	GetItemUUID(itemid, uuid);
 
@@ -74,6 +72,7 @@ stock TweakItem(playerid, Item:itemid)
 
 	GetItemWorld(itemid, world);
 	GetItemInterior(itemid, interior);
+	GetItemObjectID(itemid, objectid);
 
 	twk_Item[playerid] = itemid;
 	twk_Tweaker[itemid] = playerid;
@@ -85,6 +84,7 @@ stock TweakItem(playerid, Item:itemid)
 	data[1] = _:itemid;
 	Streamer_SetArrayData(STREAMER_TYPE_AREA, twk_NoGoZone[playerid], E_STREAMER_EXTRA_ID, data);
 
+	AttachDynamicAreaToObject(twk_NoGoZone[playerid], objectid);
 
 	HidePlayerKeyActionUI(playerid);
 
@@ -95,9 +95,8 @@ stock TweakItem(playerid, Item:itemid)
 	return 1;
 }
 
-stock Item:GetPlayerTweakItem(playerid){
+stock Item:GetPlayerTweakItem(playerid)
 	return twk_Item[playerid];
-}
 
 /*==============================================================================
 
@@ -109,17 +108,15 @@ stock Item:GetPlayerTweakItem(playerid){
 _twk_Reset(playerid)
 {
 	twk_Locked[playerid] = false;
+	DestroyDynamicArea(twk_NoGoZone[playerid]);
+	
+	twk_NoGoZone[playerid] = INVALID_STREAMER_ID;
+	twk_NoGoZoneCount[playerid] = 0;
 
 	if(IsValidItem(twk_Item[playerid]))
 		twk_Tweaker[twk_Item[playerid]] = INVALID_PLAYER_ID;
 
-	DestroyDynamicArea(twk_NoGoZone[playerid]);
-	twk_NoGoZone[playerid] = INVALID_STREAMER_ID;
-	twk_NoGoZoneCount[playerid] = 0;
-
 	twk_Item[playerid] = INVALID_ITEM_ID;
-
-	stop twk_TimerClick[playerid];
 
 	_twk_HideUI(playerid);
 }
@@ -156,7 +153,6 @@ _twk_Commit(playerid)
 	ShowActionText(playerid, ls(playerid, "ITEMTWKFINI"), 5000);
 	_twk_Reset(playerid);
 	HideHelpTip(playerid);
-	stop twk_TimerClick[playerid];
 	
 	return 1;
 }
@@ -199,80 +195,42 @@ _twk_ToggleMouse(playerid, bool:toggle)
 		CancelSelectTextDraw(playerid);
 		PlayerTextDrawSetString(playerid, twk_Unlock[playerid], ls(playerid, "ITEMTWKBTNE"));
 	}
-
-	PlayerTextDrawColor(playerid, twk_Click[playerid], -1);
-	stop twk_TimerClick[playerid];
 }
 
-hook OnPlayerClickPlayerTD(playerid, PlayerText:playertextid){
-	if(IsValidItem(twk_Item[playerid])) {
-		PlayerTextDrawColor(playerid, twk_MoveF[playerid], -1);
-		PlayerTextDrawColor(playerid, twk_MoveB[playerid], -1);
-		PlayerTextDrawColor(playerid, twk_MoveL[playerid], -1);
-		PlayerTextDrawColor(playerid, twk_MoveR[playerid], -1);
-		PlayerTextDrawColor(playerid, twk_RotR[playerid], -1);
-		PlayerTextDrawColor(playerid, twk_RotL[playerid], -1);
-
-		/*if(playertextid == PlayerText:twk_Click[playerid] && (GetTickCount() - twk_ClickTick[playerid]) <= 200) {
-			PlayerTextDrawColor(playerid, playertextid, 0xffff00ff);
-			PlayerTextDrawShow(playerid, playertextid);
-			stop twk_TimerClick[playerid];
-			twk_TimerClick[playerid] = defer TweakClick(playerid, _:playertextid);
-		}
-		else {*/
-		if(PlayerText:playertextid != twk_Unlock[playerid] && PlayerText:playertextid != twk_Done[playerid])
-			twk_ClickTick[playerid] = GetTickCount();
-			
-		twk_Click[playerid] = playertextid;
-		stop twk_TimerClick[playerid];
-		twk_TimerClick[playerid] = defer TweakClick(playerid, _:playertextid);
-		//}
-
-		PlayerTextDrawShow(playerid, twk_MoveF[playerid]);
-		PlayerTextDrawShow(playerid, twk_MoveB[playerid]);
-		PlayerTextDrawShow(playerid, twk_MoveL[playerid]);
-		PlayerTextDrawShow(playerid, twk_MoveR[playerid]);
-		PlayerTextDrawShow(playerid, twk_RotR[playerid]);
-		PlayerTextDrawShow(playerid, twk_RotL[playerid]);
-	}
-}
-
-timer TweakClick[100](playerid, playertextid){
-	if(PlayerText:playertextid == twk_Unlock[playerid])
-		_twk_ToggleMouse(playerid, false);
+hook OnPlayerClickPlayerTD(playerid, PlayerText:playertextid)
+{
+	if(IsValidItem(twk_Item[playerid]))
+	{
+		if(playertextid == twk_Unlock[playerid])
+			_twk_ToggleMouse(playerid, false);
 		
-	if(PlayerText:playertextid == twk_Done[playerid])
-		_twk_Commit(playerid);
+		if(playertextid == twk_Done[playerid])
+			_twk_Commit(playerid);
 
-	if(PlayerText:playertextid == twk_MoveF[playerid])
-		_twk_AdjustItemPos(playerid, 0.05, 0.0, 0.0);
+		if(playertextid == twk_MoveF[playerid])
+			_twk_AdjustItemPos(playerid, 0.05, 0.0, 0.0);
 
-	if(PlayerText:playertextid == twk_MoveB[playerid])
-		_twk_AdjustItemPos(playerid, 0.05, 180.0, 0.0);
+		if(playertextid == twk_MoveB[playerid])
+			_twk_AdjustItemPos(playerid, 0.05, 180.0, 0.0);
 
-	if(PlayerText:playertextid == twk_MoveL[playerid])
-		_twk_AdjustItemPos(playerid, 0.05, 90.0, 0.0);
+		if(playertextid == twk_MoveL[playerid])
+			_twk_AdjustItemPos(playerid, 0.05, 90.0, 0.0);
 
-	if(PlayerText:playertextid == twk_MoveR[playerid])
-		_twk_AdjustItemPos(playerid, 0.05, -90.0, 0.0);
+		if(playertextid == twk_MoveR[playerid])
+			_twk_AdjustItemPos(playerid, 0.05, -90.0, 0.0);
 
-	if(PlayerText:playertextid == twk_RotR[playerid])
-		_twk_AdjustItemPos(playerid, 0.0, 0.0, -1.5);
+		if(playertextid == twk_RotR[playerid])
+			_twk_AdjustItemPos(playerid, 0.0, 0.0, -1.5);
 
-	if(PlayerText:playertextid == twk_RotL[playerid])
-		_twk_AdjustItemPos(playerid, 0.0, 0.0, 1.5);
+		if(playertextid == twk_RotL[playerid])
+			_twk_AdjustItemPos(playerid, 0.0, 0.0, 1.5);
+	}
 }
 
 hook OnPlayerClickTextDraw(playerid, Text:clickedid)
-{
 	if(clickedid == Text:65535)
-	{
 	 	if(twk_Locked[playerid])
-		{
 		    _twk_ToggleMouse(playerid, false);
-		}
-	}
-}
 
 hook OnPlayerKeyStateChange(playerid, newkeys, oldkeys)
 {
@@ -287,47 +245,34 @@ hook OnPlayerKeyStateChange(playerid, newkeys, oldkeys)
 }
 
 hook OnPlayerUseItemWithItem(playerid, Item:itemid, Item:withitemid)
-{
 	if(IsValidItem(twk_Item[playerid]))
 		_twk_Commit(playerid);
-}
 
 hook OnPlayerStateChange(playerid, newstate, oldstate)
-{
 	if(IsValidItem(twk_Item[playerid]))
 		_twk_Commit(playerid);
-}
 
 hook OnPlayerDropItem(playerid, Item:itemid)
-{
 	if(IsValidItem(twk_Item[playerid]))
 		_twk_Commit(playerid);
-}
 
 hook OnPlayerGiveItem(playerid, targetid, Item:itemid)
-{
 	if(IsValidItem(twk_Item[playerid]))
 		_twk_Commit(playerid);
-}
 
 hook OnPlayerOpenInventory(playerid)
-{
 	if(IsValidItem(twk_Item[playerid]))
 		_twk_Commit(playerid);
-}
 
 hook OnPlayerOpenContainer(playerid, containerid)
-{
 	if(IsValidItem(twk_Item[playerid]))
 		_twk_Commit(playerid);
-}
 
 _twk_AdjustItemPos(playerid, Float:distance, Float:direction, Float:rotation)
 {
 	if(!IsPlayerConnected(playerid))
 	{
 		err("Called on invalid player %d", playerid);
-		stop twk_TimerClick[playerid];
 		return 1;
 	}
 
@@ -340,7 +285,6 @@ _twk_AdjustItemPos(playerid, Float:distance, Float:direction, Float:rotation)
 
 	if(twk_NoGoZoneCount[playerid] > 0)
 	{
-		stop twk_TimerClick[playerid];
 		ShowActionText(playerid, ls(playerid, "ITEMTWKMOVE"), 6000);
 		return 3;
 	}
@@ -366,7 +310,6 @@ _twk_AdjustItemPos(playerid, Float:distance, Float:direction, Float:rotation)
 
 	if(Distance(new_x, new_y, new_z, twk_Origin[playerid][0], twk_Origin[playerid][1], twk_Origin[playerid][2]) > radius * 2)
 	{
-		stop twk_TimerClick[playerid];
 		ShowActionText(playerid, ls(playerid, "ITEMTWKTFAR"), 6000);
 		return 4;
 	}
@@ -382,6 +325,9 @@ _twk_AdjustItemPos(playerid, Float:distance, Float:direction, Float:rotation)
 
 hook OnPlayerEnterDynArea(playerid, areaid)
 {
+	if(twk_NoGoZone[playerid] == INVALID_STREAMER_ID)
+		return Y_HOOKS_CONTINUE_RETURN_0;
+
 	new data[2];
 	Streamer_GetArrayData(STREAMER_TYPE_AREA, areaid, E_STREAMER_EXTRA_ID, data);
 
@@ -405,6 +351,9 @@ hook OnPlayerEnterDynArea(playerid, areaid)
 
 hook OnPlayerLeaveDynArea(playerid, areaid)
 {
+	if(twk_NoGoZone[playerid] == INVALID_STREAMER_ID)
+		return Y_HOOKS_CONTINUE_RETURN_0;
+
 	new data[2];
 	Streamer_GetArrayData(STREAMER_TYPE_AREA, areaid, E_STREAMER_EXTRA_ID, data);
 

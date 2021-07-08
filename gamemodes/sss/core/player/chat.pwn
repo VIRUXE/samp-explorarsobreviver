@@ -48,6 +48,9 @@ hook OnPlayerText(playerid, text[])
 
 PlayerSendChat(playerid, chat[], Float:frequency)
 {
+	if(isnull(chat))
+		return 0;
+		
 	if(!IsPlayerLoggedIn(playerid))
 		return 0;
 

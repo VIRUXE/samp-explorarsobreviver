@@ -176,6 +176,7 @@ ActivateDefenceItem(Item:itemid)
 	new
 		itemtypename[MAX_ITEM_NAME],
 		itemdata[e_DEFENCE_DATA],
+		Float:x, Float:y, Float:z,
 		Button:buttonid;
 
 	GetItemTypeName(def_TypeData[defencetype][def_itemtype], itemtypename);
@@ -197,6 +198,13 @@ ActivateDefenceItem(Item:itemid)
 
 	if(itemdata[def_hit] > 0)
 		SetItemHitPoints(itemid, itemdata[def_hit]);
+
+	if(itemdata[def_pose] == DEFENCE_POSE_VERTICAL)
+	{
+		GetButtonPos(buttonid, x, y, z);
+		SetButtonPos(buttonid, x, y,
+			(z - def_TypeData[defencetype][def_placeOffsetZ]) + 0.1);
+	}
 
 	SetItemArrayData(itemid, itemdata, e_DEFENCE_DATA);
 
@@ -587,6 +595,7 @@ hook OnHoldActionFinish(playerid)
 
 		StopBuildingDefence(playerid);
 		TweakItem(playerid, itemid);
+		defer UpdateDefenceZ(playerid);
 
 		_UpdateDefenceTweakArrow(playerid, itemid);
 		PlayerGainSkillExperience(playerid, "Construction");
@@ -760,7 +769,7 @@ ConvertItemToDefenceItem(Item:itemid, pose, playerid)
 	GetItemPos(itemid, ix, iy, iz);
 	GetItemRot(itemid, rx, ry, rz);
 	a = GetAngleToPoint(x, y, ix, iy);
-
+	
 	if(pose == DEFENCE_POSE_HORIZONTAL)
 	{
 		rx = def_TypeData[def_ItemTypeDefenceType[itemtype]][def_horizontalRotX];
@@ -777,7 +786,15 @@ ConvertItemToDefenceItem(Item:itemid, pose, playerid)
 
 	SetItemPos(itemid, x + 0.9 * floatsin(-a, degrees), y + 0.9 * floatcos(-a, degrees), iz);
 	SetItemRot(itemid, rx, ry, rz);
-	
+
+	if(pose == DEFENCE_POSE_VERTICAL)
+	{
+		new Button:buttonid;
+		GetItemButtonID(itemid, buttonid);
+		SetButtonPos(buttonid, x, y,
+			(iz - def_TypeData[def_ItemTypeDefenceType[itemtype]][def_placeOffsetZ]) + 0.1);
+	}
+
 	return CallLocalFunction("OnDefenceCreate", "d", _:itemid);
 }
 
@@ -835,14 +852,17 @@ hook OnItemTweakUpdate(playerid, Item:itemid)
 	return 1;
 }
 
-hook OnPlayerUpdate(playerid)
+timer UpdateDefenceZ[900](playerid)
 {
+	if(!IsPlayerConnected(playerid))
+		return;
+
 	if(def_TweakArrow[playerid] != INVALID_OBJECT_ID)
 	{
 		new Item:itemid = GetPlayerTweakItem(playerid);
 
 		if(!IsValidItem(itemid))
-			return 1;
+			return;
 
 		new pose;
 		GetItemArrayDataAtCell(itemid, pose, def_pose);
@@ -857,10 +877,12 @@ hook OnPlayerUpdate(playerid)
 			GetPlayerPos(playerid, x, y, z);
 			GetItemPos(itemid, ix, iy, iz);
 
+			defer UpdateDefenceZ(playerid);
+
 			if(cz < z)
 				iz = z + (z - cz); // TODO: Find a way to raise the defense a little more
 			else
-				iz = z - (cz - z);	 
+				iz = z - (cz - z);
 
 			SetItemPos(itemid, ix, iy,
 				iz + def_TypeData[def_ItemTypeDefenceType[GetItemType(itemid)]][def_placeOffsetZ]);
@@ -868,7 +890,6 @@ hook OnPlayerUpdate(playerid)
 			_UpdateDefenceTweakArrow(playerid, itemid);
 		}
 	}
-	return 1;
 }
 
 hook OnItemTweakFinish(playerid, Item:itemid)
@@ -1047,11 +1068,13 @@ timer MoveDefence[1000](itemid, playerid)
 		Float:ry,
 		Float:rz,
 		uuid[UUID_LEN],
-		pose;
+		pose,
+		Button:buttonid;
 
 	GetItemRot(Item:itemid, rx, ry, rz);
 	GetItemUUID(Item:itemid, uuid);
 	GetItemArrayDataAtCell(Item:itemid, pose, def_pose);
+	GetItemButtonID(Item:itemid, buttonid);
 
 	if(pose == DEFENCE_POSE_HORIZONTAL)
 	{
@@ -1060,6 +1083,10 @@ timer MoveDefence[1000](itemid, playerid)
 		rz += def_TypeData[def_ItemTypeDefenceType[itemtype]][def_verticalRotZ];
 		iz += def_TypeData[def_ItemTypeDefenceType[itemtype]][def_placeOffsetZ];
 		SetItemArrayDataAtCell(Item:itemid, DEFENCE_POSE_VERTICAL, def_pose);
+		SetItemPos(Item:itemid, ix, iy, iz);
+		SetItemRot(Item:itemid, rx, ry, rz);
+		SetButtonPos(buttonid, ix, iy,
+			(iz - def_TypeData[def_ItemTypeDefenceType[itemtype]][def_placeOffsetZ]) + 0.1);
 	}
 	else
 	{
@@ -1067,11 +1094,10 @@ timer MoveDefence[1000](itemid, playerid)
 		ry = def_TypeData[def_ItemTypeDefenceType[itemtype]][def_horizontalRotY];
 		rz += def_TypeData[def_ItemTypeDefenceType[itemtype]][def_horizontalRotZ];
 		iz -= def_TypeData[def_ItemTypeDefenceType[itemtype]][def_placeOffsetZ];
+		SetItemPos(Item:itemid, ix, iy, iz);
+		SetItemRot(Item:itemid, rx, ry, rz);
 		SetItemArrayDataAtCell(Item:itemid, DEFENCE_POSE_HORIZONTAL, def_pose);
 	}
-
-	SetItemPos(Item:itemid, ix, iy, iz);
-	SetItemRot(Item:itemid, rx, ry, rz);
 
 	CA_DestroyObject(def_Col[Item:itemid]);
 	def_Col[Item:itemid] = -1;
@@ -1088,12 +1114,7 @@ hook OnItemHitPointsUpdate(Item:itemid, oldvalue, newvalue)
 
 	if(def_ItemTypeDefenceType[itemtype] != -1)
 	{
-		new itemtypename[MAX_ITEM_NAME];
-		GetItemTypeName(itemtype, itemtypename);
-		SetItemLabel(itemid,
-			sprintf("%s\n%d/%d", itemtypename, GetItemHitPoints(itemid), GetItemTypeMaxHitPoints(itemtype)),
-			RED, 20.0);
-
+		SetItemLabel(itemid, sprintf("%d/%d", GetItemHitPoints(itemid), GetItemTypeMaxHitPoints(itemtype)), RED, 20.0);
 		SetItemArrayDataAtCell(itemid, def_hit, GetItemHitPoints(itemid));
 
 		new active;

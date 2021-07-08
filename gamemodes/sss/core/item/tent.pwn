@@ -273,7 +273,7 @@ public _tent_onLoad(Item:itemid, active, uuid[], data[], length)
 
 			subitem = CreateItem(itemtype);
 
-			if(!IsItemTypeSafebox(itemtype) && !IsItemTypeBag(itemtype))
+			if(!IsItemTypeSafebox(itemtype) && !IsItemTypeBag(itemtype) && itemtype != item_TentPack)
 				SetItemArrayDataFromStored(subitem, i);
 
 			AddItemToContainer(containerid, subitem);

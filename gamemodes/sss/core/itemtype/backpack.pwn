@@ -1,4 +1,3 @@
-
 #include <YSI_Coding\y_hooks>
 
 
@@ -38,6 +37,7 @@ Item:		bag_ContainerItem		[MAX_CONTAINER],
 static
 Item:		bag_PlayerBagID			[MAX_PLAYERS],
 			bag_InventoryOptionID	[MAX_PLAYERS],
+bool:		bag_PuttingInBag		[MAX_PLAYERS],
 bool:		bag_TakingOffBag		[MAX_PLAYERS],
 Item:		bag_CurrentBag			[MAX_PLAYERS],
 Timer:		bag_OtherPlayerEnter	[MAX_PLAYERS],
@@ -67,6 +67,7 @@ hook OnScriptInit()
 hook OnPlayerConnect(playerid)
 {
 	bag_PlayerBagID[playerid] = INVALID_ITEM_ID;
+	bag_PuttingInBag[playerid] = false;
 	bag_TakingOffBag[playerid] = false;
 	bag_CurrentBag[playerid] = INVALID_ITEM_ID;
 	bag_LookingInBag[playerid] = INVALID_PLAYER_ID;
@@ -119,48 +120,44 @@ stock GivePlayerBag(playerid, Item:itemid)
 
 	if(bagtype != -1)
 	{
-		new Container:containerid, Error:e;
-		e = GetItemArrayDataAtCell(itemid, _:containerid, 1);
+		new Container:containerid;
+		GetItemArrayDataAtCell(itemid, _:containerid, 1);
 
-		if(!IsError(e)){
-			if(!IsValidContainer(containerid))
-			{
-				err("Bag (%d) container ID (%d) was invalid container has to be recreated.", _:itemid, _:containerid);
+		if(!IsValidContainer(containerid))
+		{
+			err("Bag (%d) container ID (%d) was invalid container has to be recreated.", _:itemid, _:containerid);
 
-				containerid = CreateContainer(bag_TypeData[bagtype][bag_name], bag_TypeData[bagtype][bag_size]);
+			containerid = CreateContainer(bag_TypeData[bagtype][bag_name], bag_TypeData[bagtype][bag_size]);
 
-				SetItemArrayDataAtCell(itemid, _:containerid, 1);
-			}
-
-			new colour;
-			GetItemTypeColour(bag_TypeData[bagtype][bag_itemtype], colour);
-
-			bag_PlayerBagID[playerid] = itemid;
-
-			new 
-				model,
-				skinid = GetPlayerSkin(playerid);
-				
-			GetItemTypeModel(bag_TypeData[bagtype][bag_itemtype], model);
-
-			SetPlayerAttachedObject(playerid, ATTACHSLOT_BAG, model, 1,
-				bag_TypeDataFloat[bagtype][skinid][bag_offs_x],
-				bag_TypeDataFloat[bagtype][skinid][bag_offs_y],
-				bag_TypeDataFloat[bagtype][skinid][bag_offs_z],
-				bag_TypeDataFloat[bagtype][skinid][bag_offs_rx],
-				bag_TypeDataFloat[bagtype][skinid][bag_offs_ry],
-				bag_TypeDataFloat[bagtype][skinid][bag_offs_rz],
-				bag_TypeDataFloat[bagtype][skinid][bag_offs_sx],
-				bag_TypeDataFloat[bagtype][skinid][bag_offs_sy],
-				bag_TypeDataFloat[bagtype][skinid][bag_offs_sz], colour, colour);
-
-			bag_ContainerItem[containerid] = itemid;
-			bag_ContainerPlayer[containerid] = playerid;
-			RemoveItemFromWorld(itemid);
-			RemoveCurrentItem(GetItemHolder(itemid));
-
-			return 1;
+			SetItemArrayDataAtCell(itemid, _:containerid, 1);
 		}
+
+		new colour;
+		GetItemTypeColour(bag_TypeData[bagtype][bag_itemtype], colour);
+
+		bag_PlayerBagID[playerid] = itemid;
+
+		new model, skinid = GetPlayerSkin(playerid);
+		
+		GetItemTypeModel(bag_TypeData[bagtype][bag_itemtype], model);
+
+		SetPlayerAttachedObject(playerid, ATTACHSLOT_BAG, model, 1,
+			bag_TypeDataFloat[bagtype][skinid][bag_offs_x],
+  			bag_TypeDataFloat[bagtype][skinid][bag_offs_y],
+		    bag_TypeDataFloat[bagtype][skinid][bag_offs_z],
+		    bag_TypeDataFloat[bagtype][skinid][bag_offs_rx],
+		    bag_TypeDataFloat[bagtype][skinid][bag_offs_ry],
+		    bag_TypeDataFloat[bagtype][skinid][bag_offs_rz],
+		    bag_TypeDataFloat[bagtype][skinid][bag_offs_sx],
+		    bag_TypeDataFloat[bagtype][skinid][bag_offs_sy],
+		    bag_TypeDataFloat[bagtype][skinid][bag_offs_sz], colour, colour);
+
+		bag_ContainerItem[containerid] = itemid;
+		bag_ContainerPlayer[containerid] = playerid;
+		RemoveItemFromWorld(itemid);
+		RemoveCurrentItem(GetItemHolder(itemid));
+
+		return 1;
 	}
 
 	return 0;
@@ -274,16 +271,13 @@ hook OnItemDestroy(Item:itemid)
 {
 	if(IsItemTypeBag(GetItemType(itemid)))
 	{
-		new Container:containerid, Error:e;
-		e = GetItemArrayDataAtCell(itemid, _:containerid, 1);
-
-		if(!IsError(e)) {
-			if(IsValidContainer(containerid))
-			{
-				bag_ContainerPlayer[containerid] = INVALID_PLAYER_ID;
-				bag_ContainerItem[containerid] = INVALID_ITEM_ID;
-				DestroyContainer(containerid);
-			}
+		new Container:containerid;
+		GetItemArrayDataAtCell(itemid, _:containerid, 1);
+		if(IsValidContainer(containerid))
+		{
+			bag_ContainerPlayer[containerid] = INVALID_PLAYER_ID;
+			bag_ContainerItem[containerid] = INVALID_ITEM_ID;
+			DestroyContainer(containerid);
 		}
 	}
 }
@@ -356,6 +350,9 @@ _BagEquipHandler(playerid)
 	if(!IsValidItem(itemid))
 		return 0;
 
+	if(bag_PuttingInBag[playerid])
+		return 0;
+
 	if(GetTickCountDifference(GetTickCount(), GetPlayerLastHolsterTick(playerid)) < 1000)
 		return 0;
 
@@ -381,8 +378,66 @@ _BagEquipHandler(playerid)
 
 		return 0;
 	}
+	else
+	{
+		defer AddItemToPlayer(playerid, _:itemid);
+	}
+
 	return 1;
 }
+
+timer AddItemToPlayer[300](playerid, itemid)
+{
+	if(!IsValidItem(Item:itemid))
+		return;
+
+	if(bag_PuttingInBag[playerid])
+		return;
+
+	if(GetTickCountDifference(GetTickCount(), GetPlayerLastHolsterTick(playerid)) < 1000)
+		return;
+
+	if(GetPlayerItem(playerid) != Item:itemid)
+		return;
+
+	new ItemType:itemtype = GetItemType(Item:itemid);
+
+	if(IsItemTypeCarry(itemtype)  || IsValidHolsterItem(itemtype))
+		return;
+
+	new Container:containerid;
+	GetItemArrayDataAtCell(bag_PlayerBagID[playerid], _:containerid, 1);
+
+	if(!IsValidContainer(containerid))
+		return;
+
+	new
+		itemsize,
+		freeslots;
+
+	GetItemTypeSize(GetItemType(Item:itemid), itemsize);
+	GetContainerFreeSlots(containerid, freeslots);
+
+	if(itemsize > freeslots)
+	{
+		ShowActionText(playerid, sprintf(ls(playerid, "BAGEXTRASLO", true), itemsize - freeslots), 3000, 150);
+		return;
+	}
+
+	ShowActionText(playerid, ls(playerid, "BAGITMADDED", true), 3000, 150);
+	ApplyAnimation(playerid, "PED", "PHONE_IN", 4.0, 1, 0, 0, 0, 300);
+	bag_PuttingInBag[playerid] = true;
+	defer bag_PutItemIn(playerid, _:itemid, _:containerid);
+
+	return;
+}
+
+timer bag_PutItemIn[300](playerid, itemid, containerid)
+{
+	AddItemToContainer(Container:containerid, Item:itemid, playerid);
+	bag_PuttingInBag[playerid] = false;
+}
+
 
 _BagDropHandler(playerid)
 {
@@ -398,11 +453,8 @@ _BagDropHandler(playerid)
 	if(CallLocalFunction("OnPlayerRemoveBag", "dd", playerid, _:bag_PlayerBagID[playerid]))
 		return 0;
 
-	new Container:containerid, Error:e;
-	e = GetItemArrayDataAtCell(bag_PlayerBagID[playerid], _:containerid, 1);
-
-	if(IsError(e))
-		return 0;
+	new Container:containerid;
+	GetItemArrayDataAtCell(bag_PlayerBagID[playerid], _:containerid, 1);
 
 	if(!IsValidContainer(containerid))
 		return 0;
@@ -475,19 +527,16 @@ PlayerBagUpdate(playerid)
 
 _DisplayBagDialog(playerid, Item:itemid, animation)
 {
-	new Container:containerid, Error:e;
-	e = GetItemArrayDataAtCell(itemid, _:containerid, 1);
+	new Container:containerid;
+	GetItemArrayDataAtCell(itemid, _:containerid, 1);
+	DisplayContainerInventory(playerid, containerid);
+	bag_CurrentBag[playerid] = itemid;
 
-	if(!IsError(e)) {
-		DisplayContainerInventory(playerid, containerid);
-		bag_CurrentBag[playerid] = itemid;
+	if(animation)
+		ApplyAnimation(playerid, "BOMBER", "BOM_PLANT_IN", 4.0, 0, 0, 0, 1, 0);
 
-		if(animation)
-			ApplyAnimation(playerid, "BOMBER", "BOM_PLANT_IN", 4.0, 0, 0, 0, 1, 0);
-
-		else
-			CancelPlayerMovement(playerid);
-	}
+	else
+		CancelPlayerMovement(playerid);
 }
 
 hook OnItemAddToInventory(playerid, Item:itemid, slot)
@@ -505,55 +554,36 @@ hook OnItemAddToInventory(playerid, Item:itemid, slot)
 
 hook OnPlayerAddToInventory(playerid, Item:itemid, success)
 {
-	new ItemType:itemtype = GetItemType(itemid);
-
-	if(IsItemTypeBag(itemtype))
-		return Y_HOOKS_BREAK_RETURN_1;
-
-	if(IsItemTypeCarry(itemtype) || IsValidHolsterItem(itemtype))
-		return Y_HOOKS_BREAK_RETURN_1;
-
 	if(success)
 	{
-		ShowActionText(playerid, ls(playerid, "INVITMADDED", true), 3000, 150);
+		new ItemType:itemtype = GetItemType(itemid);
+
+		if(IsItemTypeBag(itemtype))
+			return Y_HOOKS_BREAK_RETURN_1;
+
+		if(IsItemTypeCarry(itemtype))
+			return Y_HOOKS_BREAK_RETURN_1;
+
+		ShowActionText(playerid, ls(playerid, "INVITMADDED"), 3000, 150);
 	}
 	else
 	{
+		new ItemType:itemtype = GetItemType(itemid);
+
+		if(IsItemTypeBag(itemtype))
+			return Y_HOOKS_BREAK_RETURN_1;
+
+		if(IsItemTypeCarry(itemtype) || IsValidHolsterItem(itemtype))
+			return Y_HOOKS_BREAK_RETURN_1;
+
 		new
 			itemsize,
 			freeslots;
 
-		if(IsValidItem(bag_PlayerBagID[playerid]))
-		{
-			new Container:containerid, Error:e;
-			e = GetItemArrayDataAtCell(bag_PlayerBagID[playerid], _:containerid, 1);
-
-			if(!IsError(e)) {
-				if(IsValidContainer(containerid))
-				{
-					GetItemTypeSize(GetItemType(itemid), itemsize);
-					GetContainerFreeSlots(containerid, freeslots);
-
-					if(itemsize > freeslots)
-					{
-						ShowActionText(playerid, sprintf(ls(playerid, "BAGEXTRASLO", true), itemsize - freeslots), 3000, 150);
-					}
-					else 
-					{
-						ShowActionText(playerid, ls(playerid, "BAGITMADDED", true), 3000, 150);
-						ApplyAnimation(playerid, "PED", "PHONE_IN", 4.0, 1, 0, 0, 0, 300);
-						AddItemToContainer(containerid, itemid, playerid);
-					}
-					
-					return Y_HOOKS_CONTINUE_RETURN_0;
-				}
-			}
-		}
-
 		GetItemTypeSize(GetItemType(itemid), itemsize);
 		GetInventoryFreeSlots(playerid, freeslots);
 
-		ShowActionText(playerid, sprintf(ls(playerid, "CNTEXTRASLO", true), itemsize - freeslots), 3000, 150);
+		ShowActionText(playerid, sprintf(ls(playerid, "CNTEXTRASLO"), itemsize - freeslots), 3000, 150);
 	}
 
 	return Y_HOOKS_CONTINUE_RETURN_0;
@@ -583,13 +613,27 @@ hook OnPlayerDropItem(playerid, Item:itemid)
 	return Y_HOOKS_CONTINUE_RETURN_0;
 }
 
+hook OnPlayerGiveItem(playerid, targetid, Item:itemid)
+{
+	if(IsItemTypeBag(GetItemType(itemid)))
+	{
+		if(bag_TakingOffBag[playerid])
+		{
+			bag_TakingOffBag[playerid] = false;
+			return Y_HOOKS_BREAK_RETURN_1;
+		}
+	}
+
+	return Y_HOOKS_CONTINUE_RETURN_0;
+}
+
 hook OnPlayerViewInvOpt(playerid)
 {
 	new Container:containerid;
 	GetPlayerCurrentContainer(playerid, containerid);
 	if(IsValidItem(bag_PlayerBagID[playerid]) && !IsValidContainer(containerid))
 	{
-		bag_InventoryOptionID[playerid] = AddInventoryOption(playerid, "Mover para mochila >");
+		bag_InventoryOptionID[playerid] = AddInventoryOption(playerid, "Mover para Mochila");
 	}
 }
 
@@ -619,7 +663,9 @@ hook OnPlayerSelectInvOpt(playerid, option)
 
 			if(required > 0)
 				ShowActionText(playerid, sprintf(ls(playerid, "BAGEXTRASLO", true), required), 3000, 150);
-
+			else
+				RemoveItemFromContainer(containerid, slot, playerid);
+				
 			DisplayPlayerInventory(playerid);
 		}
 	}
@@ -633,10 +679,10 @@ hook OnPlayerViewCntOpt(playerid, Container:containerid)
 	{
 		new Container:bagcontainerid;
 		GetItemArrayDataAtCell(bag_PlayerBagID[playerid], _:bagcontainerid, 1);
-
-		if(bagcontainerid != containerid)
-
-		bag_InventoryOptionID[playerid] = AddContainerOption(playerid, "Mover para mochila");
+		if(IsValidContainer(bagcontainerid) && containerid != bagcontainerid)
+		{
+			bag_InventoryOptionID[playerid] = AddContainerOption(playerid, "Mover para Mochila");
+		}
 	}
 }
 
@@ -644,38 +690,36 @@ hook OnPlayerSelectCntOpt(playerid, Container:containerid, option)
 {
 	if(IsValidItem(bag_PlayerBagID[playerid]))
 	{
-		if(option == bag_InventoryOptionID[playerid])
+		new Container:bagcontainerid;
+		GetItemArrayDataAtCell(bag_PlayerBagID[playerid], _:bagcontainerid, 1);
+		if(IsValidContainer(bagcontainerid) && containerid != bagcontainerid)
 		{
-			new Container:bagcontainerid;
-			GetItemArrayDataAtCell(bag_PlayerBagID[playerid], _:bagcontainerid, 1);
-
-			if(containerid == bagcontainerid)
-				return Y_HOOKS_CONTINUE_RETURN_0;
-
-			new
-				slot,
-				Item:itemid;
-
-			GetPlayerContainerSlot(playerid, slot);
-			GetContainerSlotItem(containerid, slot, itemid);
-
-			if(!IsValidItem(itemid))
+			if(option == bag_InventoryOptionID[playerid])
 			{
+				new
+					slot,
+					Item:itemid;
+
+				GetPlayerContainerSlot(playerid, slot);
+				GetContainerSlotItem(containerid, slot, itemid);
+
+				if(!IsValidItem(itemid))
+				{
+					DisplayContainerInventory(playerid, containerid);
+					return Y_HOOKS_CONTINUE_RETURN_0;
+				}
+
+				new required = AddItemToContainer(bagcontainerid, itemid, playerid);
+
+				if(required > 0)
+					ShowActionText(playerid, sprintf(ls(playerid, "BAGEXTRASLO", true), required), 3000, 150);
+				else
+					RemoveItemFromContainer(containerid, slot, playerid);
+					
 				DisplayContainerInventory(playerid, containerid);
-				return Y_HOOKS_CONTINUE_RETURN_0;
 			}
-
-			new required = AddItemToContainer(bagcontainerid, itemid, playerid);
-
-			if(required > 0)
-				ShowActionText(playerid, sprintf(ls(playerid, "BAGEXTRASLO", true), required), 3000, 150);
-			else
-				RemoveItemFromContainer(containerid, slot, playerid);
-
-			DisplayContainerInventory(playerid, containerid);
 		}
 	}
-
 	return Y_HOOKS_CONTINUE_RETURN_0;
 }
 
@@ -692,11 +736,13 @@ hook OnItemAddToContainer(Container:containerid, Item:itemid, playerid)
 	return Y_HOOKS_CONTINUE_RETURN_0;
 }
 
+
 /*==============================================================================
 
 	Interface
 
 ==============================================================================*/
+
 
 stock IsItemTypeBag(ItemType:itemtype)
 {
@@ -744,7 +790,9 @@ stock Container:GetBagItemContainerID(Item:itemid)
 		return INVALID_CONTAINER_ID;
 
 	new Container:containerid, Error:e;
+
 	e = GetItemArrayDataAtCell(itemid, _:containerid, 1);
+	
 	if(IsError(e))
 		return INVALID_CONTAINER_ID;
 

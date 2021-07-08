@@ -592,10 +592,26 @@ stock CreateExplosionOfPreset(Float:x, Float:y, Float:z, EXP_PRESET:preset)
 				
 				if(IsItemTypeDefence(itemtype))
 				{
-					obj = CA_RayCastLineID(x, y, z, ix, iy, iz, cx, cy, cz);
-					if(Item:CA_GetObjectExtraID(obj, 0) == Item:id)
+					// RayCastLineExplode
+					for(new Float:lat = -180.0; lat < 180.0; lat += (10.0 * 0.75))
 					{
-						defer HitItemExp(_:id, GetItemHitPoints(Item:id) - exp_Presets[preset][exp_itemDmg]);
+						for(new Float:lon = -90.0; lon < 90.0; lon += 10.0)
+						{
+							new Float:LAT = lat * 3.141593 / 180.0,
+								Float:LON = lon * 3.141593 / 180.0,
+								Float:ex = -1.0 * floatcos(LAT) * floatcos(LON),
+								Float:ey = 1.0 * floatcos(LAT) * floatsin(LON),
+								Float:ez = 1.0 * floatsin(LAT);
+
+							obj = CA_RayCastLineID(x, y, z, x + ex, y + ey, z + ez, ex, ey, ez);
+							if(Item:CA_GetObjectExtraID(obj, 0) == id)
+							{
+								defer HitItemExp(_:id, GetItemHitPoints(id) - exp_Presets[preset][exp_itemDmg]);
+								break;
+							}
+						}
+						if(Item:CA_GetObjectExtraID(obj, 0) == id)
+							break;
 					}
 					continue;
 				}
@@ -616,7 +632,8 @@ stock CreateExplosionOfPreset(Float:x, Float:y, Float:z, EXP_PRESET:preset)
 }
 
 timer HitItemExp[200](id, hit)
-	SetItemHitPoints(Item:id, hit);
+	if(IsValidItem(Item:id))
+		SetItemHitPoints(Item:id, hit);
 
 CreateIncenExplosion(Float:x, Float:y, Float:z, Float:range)
 {

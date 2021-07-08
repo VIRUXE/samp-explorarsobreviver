@@ -13,7 +13,7 @@ Float:		E_VEHICLE_AREA_DISTANCE
 }
 
 static
-			varea_AreaID[MAX_VEHICLES],
+			varea_AreaID[MAX_VEHICLES] = {INVALID_STREAMER_ID, ...},
 			varea_NearList[MAX_PLAYERS][MAX_VEHICLES_IN_RANGE],
    Iterator:varea_NearIndex[MAX_PLAYERS]<MAX_VEHICLES_IN_RANGE>;
 
@@ -120,6 +120,11 @@ _vint_EnterArea(playerid, areaid)
 		return;
 	}
 
+	if(varea_AreaID[data[1]] == INVALID_STREAMER_ID)
+	{
+		return;
+	}
+
 	if(!IsValidVehicle(data[1]))
 	{
 		return;
@@ -185,6 +190,11 @@ _vint_LeaveArea(playerid, areaid)
 		return;
 	}
 
+	if(varea_AreaID[data[1]] == INVALID_STREAMER_ID)
+	{
+		return;
+	}
+	
 	if(!IsValidVehicle(data[1]))
 	{
 		return;
