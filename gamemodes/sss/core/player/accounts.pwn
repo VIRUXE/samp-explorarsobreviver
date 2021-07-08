@@ -638,7 +638,6 @@ Logout(playerid, docombatlogcheck = 1)
 
 ==============================================================================*/
 
-
 SavePlayerData(playerid)
 {
 	dbg("accounts", 1, "[SavePlayerData] Saving '%p'", playerid);
@@ -655,22 +654,69 @@ SavePlayerData(playerid)
 		return 0;
 	}
 
-	new	Float:x, Float:y, Float:z;
+	new
+		Float:x,
+		Float:y,
+		Float:z,
+		Float:r;
 
 	GetPlayerPos(playerid, x, y, z);
+	GetPlayerFacingAngle(playerid, r);
+
+	if(IsAtConnectionPos(x, y, z))
+	{
+		dbg("accounts", 1, "[SavePlayerData] ERROR: At connection pos");
+		return 0;
+	}
 
 	SaveBlockAreaCheck(x, y, z);
 
-	stmt_bind_value(stmt_AccountUpdate, 0, DB::TYPE_INTEGER, 1);
-	stmt_bind_value(stmt_AccountUpdate, 1, DB::TYPE_INTEGER, GetPlayerVIP(playerid));
-	stmt_bind_value(stmt_AccountUpdate, 2, DB::TYPE_PLAYER_NAME, playerid);
+	if(IsPlayerInAnyVehicle(playerid))
+		x += 1.5;
 
-	if(!stmt_execute(stmt_AccountUpdate))
-		err("Statement 'stmt_AccountUpdate' failed to execute.");
+	if(IsPlayerAlive(playerid) && !IsPlayerInTutorial(playerid))
+	{
+		dbg("accounts", 2, "[SavePlayerData] Player is alive");
+		if(IsAtDefaultPos(x, y, z))
+		{
+			dbg("accounts", 2, "[SavePlayerData] ERROR: Player at default position");
+			return 0;
+		}
 
-	dbg("accounts", 2, "[SavePlayerData] Saving character data");
-	
-	SavePlayerChar(playerid);
+		if(GetPlayerState(playerid) == PLAYER_STATE_SPECTATING)
+		{
+			dbg("accounts", 2, "[SavePlayerData] Player is spectating");
+			if(!gServerRestarting)
+			{
+				dbg("accounts", 2, "[SavePlayerData] Server is not restarting, aborting save");
+				return 0;
+			}
+		}
+
+		stmt_bind_value(stmt_AccountUpdate, 0, DB::TYPE_INTEGER, 1);
+		stmt_bind_value(stmt_AccountUpdate, 1, DB::TYPE_INTEGER, GetPlayerVIP(playerid));
+		stmt_bind_value(stmt_AccountUpdate, 2, DB::TYPE_PLAYER_NAME, playerid);
+
+		if(!stmt_execute(stmt_AccountUpdate))
+		{
+			err("Statement 'stmt_AccountUpdate' failed to execute.");
+		}
+
+		dbg("accounts", 2, "[SavePlayerData] Saving character data");
+		SavePlayerChar(playerid);
+	}
+	else
+	{
+		dbg("accounts", 2, "[SavePlayerData] Player is dead");
+		stmt_bind_value(stmt_AccountUpdate, 0, DB::TYPE_INTEGER, 0);
+		stmt_bind_value(stmt_AccountUpdate, 1, DB::TYPE_INTEGER, GetPlayerVIP(playerid));
+		stmt_bind_value(stmt_AccountUpdate, 2, DB::TYPE_PLAYER_NAME, playerid);
+
+		if(!stmt_execute(stmt_AccountUpdate))
+		{
+			err("Statement 'stmt_AccountUpdate' failed to execute.");
+		}
+	}
 
 	return 1;
 }
