@@ -534,6 +534,7 @@ new stock
 #include "sss/core/item/map.pwn"
 #include "sss/core/item/trash.pwn"
 #include "sss/core/item/barrel.pwn"
+#include "sss/core/item/wooddoor.pwn"
 
 // HATS
 #include "sss/core/apparel/hats/HelmArmy.pwn"
@@ -552,7 +553,8 @@ new stock
 #include "sss/core/apparel/hats/fire_hat1.pwn"
 #include "sss/core/apparel/hats/headphones04.pwn"
 #include "sss/core/apparel/hats/ArmyHelmet2.pwn"
-/*#include "sss/core/apparel/hats/CowboyHat.pwn"
+#include "sss/core/apparel/hats/CowboyHat.pwn"
+/*
 #include "sss/core/apparel/hats/CaptainsCap.pwn"
 #include "sss/core/apparel/hats/CapBack5.pwn"
 #include "sss/core/apparel/hats/CapBack4.pwn"
