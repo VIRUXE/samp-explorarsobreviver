@@ -554,7 +554,7 @@ new stock
 #include "sss/core/apparel/hats/WitchesHat.pwn"
 #include "sss/core/apparel/hats/PoliceHelm.pwn"
 #include "sss/core/apparel/hats/StrawHat.pwn"
-#include "sss/core/apparel/hats/headphones04.pwn"
+#include "sss/core/apparel/hats/HeadPhones.pwn"
 #include "sss/core/apparel/hats/ArmyHelmet2.pwn"
 #include "sss/core/apparel/hats/CowboyHat.pwn"
 /*

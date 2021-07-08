@@ -492,7 +492,7 @@ ItemType:		item_CluBellHat1 	= INVALID_ITEM_TYPE,
 ItemType:		item_Balaclava		= INVALID_ITEM_TYPE,
 ItemType:		item_FireHelmet		= INVALID_ITEM_TYPE,
 ItemType:		item_FireHelmet1	= INVALID_ITEM_TYPE,
-ItemType:		item_HeadPhones04	= INVALID_ITEM_TYPE,
+ItemType:		item_HeadPhones		= INVALID_ITEM_TYPE,
 ItemType:		item_ArmyHelmet2	= INVALID_ITEM_TYPE,
 ItemType:		item_CapBack5		= INVALID_ITEM_TYPE,
 ItemType:		item_CapBack4		= INVALID_ITEM_TYPE,
@@ -774,7 +774,7 @@ public OnScriptInit()
 	item_HandCuffs		= DefineItemType("Algemas",						"HandCuffs",		19418,	1,	270.0, 0.0, 0.0,		0.0,	0.077635, 0.011612, 0.000000, 0.000000, 90.000000, 0.000000, .maxhitpoints = 1);
 	item_HardDrive		= DefineItemType("Disco Rigido",				"HardDrive",		328,	1,	90.0, 0.0, 0.0,			0.0,	.maxhitpoints = 1);
 	item_Headlight		= DefineItemType("Farol",						"Headlight",		19280,	1,	90.0, 0.0, 0.0,			0.0,	0.107282, 0.051477, 0.023807, 0.000000, 259.073913, 351.287475, .maxhitpoints = 1);
-	item_HeadPhones04	= DefineItemType("Fone de Ouvido",				"headphones",		19424,	1,	180.0, 0.0, 0.0,		0.0,	0.062216, 0.055396, 0.001138, 90.000000, 0.000000, 180.000000, .maxhitpoints = 1);
+	item_HeadPhones		= DefineItemType("Fone de Ouvido",				"HeadPhones",		19424,	1,	180.0, 0.0, 0.0,		0.0,	0.062216, 0.055396, 0.001138, 90.000000, 0.000000, 180.000000, .maxhitpoints = 1);
 	item_HeartShapedBox	= DefineItemType("Caixa de Coracao",			"HeartShapedBox",	1240,	1,	90.0, 0.0, 0.0,			-0.02,	0.171999, 0.077999, -0.016999,  0.000000, 0.000000, 10.200000, .longpickup = true, .maxhitpoints = 1);
 	item_Heatseeker		= DefineItemType("Heatseeker",					"Heatseeker",		360,	6,	90.0, .maxhitpoints = 6);
 	item_HelmArmy		= DefineItemType("Capacete Militar",			"HelmArmy",			19106,	2,	345.0, 270.0, 0.0,		0.045,	0.184999, -0.007999, 0.046999, 94.199989, 22.700027, 4.799994, .maxhitpoints = 2);
