@@ -8,6 +8,14 @@ hook OnItemTypeDefined(uname[])
 		SetItemTypeMaxArrayData(GetItemTypeFromUniqueName("StunGun"), 1);
 }
 
+hook OnItemCreate(Item:itemid)
+{
+	if(GetItemType(itemid) == item_StunGun)
+	{
+		SetItemExtraData(itemid, 1);
+	}
+}
+
 hook OnPlayerMeleePlayer(playerid, targetid, Float:bleedrate, Float:knockmult)
 {
 	new Item:itemid = GetPlayerItem(playerid);
@@ -60,11 +68,11 @@ hook OnItemNameRender(Item:itemid, ItemType:itemtype)
 		new charged;
 		GetItemExtraData(itemid, charged);
 		if(charged == 1)
-			SetItemNameExtra(itemid, "Charged");
+			SetItemNameExtra(itemid, "Carregado");
 
 		else
-			SetItemNameExtra(itemid, "Uncharged");
+			SetItemNameExtra(itemid, "Descarregada");
 	}
 
-	//return Y_HOOKS_CONTINUE_RETURN_0;
+	return Y_HOOKS_CONTINUE_RETURN_0;
 }
