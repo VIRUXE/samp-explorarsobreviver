@@ -405,6 +405,9 @@ timer AddItemToPlayer[300](playerid, itemid)
 	if(IsItemTypeCarry(itemtype)  || IsValidHolsterItem(itemtype))
 		return;
 
+	if(!IsValidItem(bag_PlayerBagID[playerid]))
+		return;
+		
 	new Container:containerid;
 	GetItemArrayDataAtCell(bag_PlayerBagID[playerid], _:containerid, 1);
 
