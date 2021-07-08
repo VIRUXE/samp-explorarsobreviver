@@ -187,6 +187,8 @@ public OnGameModeInit()
 #define CHAT_LOCAL					0xADABD1FF
 #define CHAT_RADIO					0x00FF00FF
 
+#define COLOR_PLAYER_NORMAL			0xB8B8B800
+#define COLOR_PLAYER_MOBILE			0x85858500
 
 // Embedding Colours
 #define C_YELLOW					"{FFFF00}"
@@ -541,7 +543,8 @@ new stock
 #include "sss/core/apparel/hats/HelmArmy.pwn"
 #include "sss/core/apparel/hats/TruckCap.pwn"
 #include "sss/core/apparel/hats/BoaterHat.pwn"
-#include "sss/core/apparel/hats/fire_hat2.pwn"
+#include "sss/core/apparel/hats/FireHelmet.pwn"
+#include "sss/core/apparel/hats/FireHelmet1.pwn"
 #include "sss/core/apparel/hats/BowlerHat.pwn"
 #include "sss/core/apparel/hats/PoliceCap.pwn"
 #include "sss/core/apparel/hats/TopHat.pwn"
@@ -551,8 +554,7 @@ new stock
 #include "sss/core/apparel/hats/WitchesHat.pwn"
 #include "sss/core/apparel/hats/PoliceHelm.pwn"
 #include "sss/core/apparel/hats/StrawHat.pwn"
-#include "sss/core/apparel/hats/fire_hat1.pwn"
-#include "sss/core/apparel/hats/headphones04.pwn"
+#include "sss/core/apparel/hats/HeadPhones.pwn"
 #include "sss/core/apparel/hats/ArmyHelmet2.pwn"
 #include "sss/core/apparel/hats/CowboyHat.pwn"
 /*
@@ -683,7 +685,7 @@ OnGameModeInit_Setup()
 	GetSettingInt("server/global-debug-level", 0, gGlobalDebugLevel);
 	debug_set_level("global", gGlobalDebugLevel);
 
-	RestartCount				=TextDrawCreate(410.000000, 10.000000, "Servidor reiniciando em:~n~00:00");
+	RestartCount				=TextDrawCreate(410.000000, 10.000000, "Reiniciando em:~n~00:00");
 	TextDrawAlignment			(RestartCount, 2);
 	TextDrawBackgroundColor		(RestartCount, 255);
 	TextDrawFont				(RestartCount, 1);
@@ -762,7 +764,7 @@ task RestartUpdate[1000]()
 		if(gServerUptime >= gServerMaxUptime - 3600)
 		{
 			new str[36];
-			format(str, 36, "Servidor reiniciando em:~n~%02d:%02d", (gServerMaxUptime - gServerUptime) / 60, (gServerMaxUptime - gServerUptime) % 60);
+			format(str, 36, "Reiniciando em:~n~%02d:%02d", (gServerMaxUptime - gServerUptime) / 60, (gServerMaxUptime - gServerUptime) % 60);
 			TextDrawSetString(RestartCount, str);
 
 			foreach(new i : Player)

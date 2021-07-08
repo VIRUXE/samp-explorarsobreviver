@@ -13,12 +13,12 @@
 // SKINS/CLOTHES
 new stock
 	skin_Civ0M,  //60,		"Civil",			0, 1.0,		true, true);
-	skin_Civ1M,  //170,	"Civil",			0, 1.0,		true, true);
-	skin_Civ2M,  //250,	"Civil",			0, 1.0,		true, true);
-	skin_Civ3M,  //188,	"Civil",			0, 1.0,		true, true);
-	skin_Civ4M,  //206,	"Civil",			0, 1.0,		true, true);
+	skin_Civ1M,  //170,		"Civil",			0, 1.0,		true, true);
+	skin_Civ2M,  //250,		"Civil",			0, 1.0,		true, true);
+	skin_Civ3M,  //188,		"Civil",			0, 1.0,		true, true);
+	skin_Civ4M,  //206,		"Civil",			0, 1.0,		true, true);
 	skin_Civ5M,  //44,		"Civil",			0, 1.0,		true, true);
-	skin_Civ6M,  //289,	"Civil",			0, 1.0,		false, false);
+	skin_Civ6M,  //289,		"Civil",			0, 1.0,		false, false);
 	skin_Civ7M,  //25,		"Civil",			0, 1.0,		true, true);
 	skin_Civ8M,  //45,		"Civil",			0, 1.0,		true, true);
 	skin_Civ9M,  //59,		"Civil",			0, 1.0,		true, true);
@@ -27,7 +27,7 @@ new stock
 	skin_Civ12M,  //119,	"Civil",			0, 1.0,		true, true);
 	skin_Civ13M,  //121,	"Civil",			0, 1.0,		true, true);
 	skin_Civ14M,  //124,	"Civil",			0, 1.0,		true, true);
-	skin_Civ15M,  //154,	"Civil",			0, 1.0,		true, true); //
+	skin_Civ15M,  //154,	"Civil",			0, 1.0,		true, true);
 	skin_Civ16M,  //162,	"Civil",			0, 1.0,		true, true);
 	skin_Civ17M,  //184,	"Civil",			0, 1.0,		true, true);
 	skin_Civ18M,  //208,	"Civil",			0, 1.0,		true, true);
@@ -36,41 +36,41 @@ new stock
 
 	// male special
 	skin_MechM,  //50,		"Mechanic",			0, 0.6,		true, true);
-	skin_BikeM,  //254,	"Biker",			0, 0.3,		true, true);
-	skin_PoliM,  //283,	"Cop",				0, 0.3,		false, false);
-	skin_ArmyM,  //287,	"Military",			0, 0.2,		false, true);
-	skin_SwatM,  //285,	"S.W.A.T.",			0, 0.1,		false, false);
-	skin_TriaM,  //294,	"Triad",			0, 0.2,		false, false);
-	skin_ClawM,  //101,	"Southclaw",		0, 0.1,		true, true);
-	skin_FreeM,  //156,	"Morgan Freeman",	0, 0.01,	true, true);
-	skin_police,  //300,	"Policial",			0, 0.5,		true, true);
-	skin_12	,  //22,		"12",				0, 0.3,		true, true);
-	skin_medico,  //70,		"Médico",			0, 0.5,		true, true);
+	skin_BikeM,  //254,		"Biker",			0, 0.3,		true, true);
+	skin_PoliM,  //283,		"Cop",				0, 0.3,		false, false);
+	skin_ArmyM,  //287,		"Military",			0, 0.2,		false, true);
+	skin_SwatM,  //285,		"S.W.A.T.",			0, 0.1,		false, false);
+	skin_TriaM,  //294,		"Triad",			0, 0.2,		false, false);
+	skin_ClawM,  //101,		"Southclaw",		0, 0.1,		true, true);
+	skin_FreeM,  //156,		"Morgan Freeman",	0, 0.01,	true, true);
+	skin_police, //300,		"Policial",			0, 0.5,		true, true);
+	skin_12	,  	 //22,		"12",				0, 0.3,		true, true);
+	skin_medico, //70,		"Médico",			0, 0.5,		true, true);
 
 	// female civil
-	skin_Civ0F,  //192,	"Civil",			1, 1.0,		true, true);
-	skin_Civ1F,  //93,		"Civil",			1, 1.0,		true, true);
-	skin_Civ2F,  //233,	"Civil",			1, 1.0,		true, true);
-	skin_Civ3F,  //193,	"Civil",			1, 1.0,		true, true);
-	skin_Civ4F,  //90,		"Civil",			1, 1.0,		false, false);
-	skin_Civ5F,  //190,	"Civil",			1, 1.0,		false, false);
-	skin_Civ6F,  //195,	"Civil",			1, 1.0,		true, true);
-	skin_Civ7F,  //41,		"Civil",			1, 1.0,		false, false);
-	skin_Civ8F,  //56,		"Civil",			1, 1.0,		true, true);
-	skin_Civ9F,  //69,		"Civil",			1, 1.0,		true, true);
-	skin_Civ10F,  //76,		"Civil",			1, 1.0,		true, true);
-	skin_Civ11F,  //91,		"Civil",			1, 1.0,		true, true);
-	skin_Civ12F,  //138,	"Civil",			1, 1.0,		true, true);
-	skin_Civ13F,  //150,	"Civil",			1, 1.0,		true, true);
-	skin_Civ14F,  //169,	"Civil",			1, 1.0,		true, true);
-	skin_Civ15F,  //216,	"Civil",			1, 1.0,		true, true);
+	skin_Civ0F,  	//192,	"Civil",			1, 1.0,		true, true);
+	skin_Civ1F,  	//93,	"Civil",			1, 1.0,		true, true);
+	skin_Civ2F,  	//233,	"Civil",			1, 1.0,		true, true);
+	skin_Civ3F,  	//193,	"Civil",			1, 1.0,		true, true);
+	skin_Civ4F,  	//90,	"Civil",			1, 1.0,		false, false);
+	skin_Civ5F,  	//190,	"Civil",			1, 1.0,		false, false);
+	skin_Civ6F,  	//195,	"Civil",			1, 1.0,		true, true);
+	skin_Civ7F,  	//41,	"Civil",			1, 1.0,		false, false);
+	skin_Civ8F,  	//56,	"Civil",			1, 1.0,		true, true);
+	skin_Civ9F,  	//69,	"Civil",			1, 1.0,		true, true);
+	skin_Civ10F,  	//76,	"Civil",			1, 1.0,		true, true);
+	skin_Civ11F,  	//91,	"Civil",			1, 1.0,		true, true);
+	skin_Civ12F,  	//138,	"Civil",			1, 1.0,		true, true);
+	skin_Civ13F,  	//150,	"Civil",			1, 1.0,		true, true);
+	skin_Civ14F,  	//169,	"Civil",			1, 1.0,		true, true);
+	skin_Civ15F,  	//216,	"Civil",			1, 1.0,		true, true);
 
 	// female special
-	skin_IndiF,  //131,	"Indian",			1, 0.6,		true, true);
-	skin_Cnt0F,  //157,	"Country",			1, 0.7,		false, false);
-	skin_Cnt1F,  //201,	"Country",			1, 0.7,		false, false);
-	skin_GangF,  //298,	"Country",			1, 0.6,		false, false);
-	skin_ArmyF,  //191,	"Military",			1, 0.2,		true, true);
+	skin_IndiF,  	//131,	"Indian",			1, 0.6,		true, true);
+	skin_Cnt0F,  	//157,	"Country",			1, 0.7,		false, false);
+	skin_Cnt1F,  	//201,	"Country",			1, 0.7,		false, false);
+	skin_GangF,  	//298,	"Country",			1, 0.6,		false, false);
+	skin_ArmyF,  	//191,	"Military",			1, 0.2,		true, true);
 	skin_BusiF;
 
 
@@ -490,9 +490,9 @@ ItemType:		item_Barrel			= INVALID_ITEM_TYPE,
 // 310
 ItemType:		item_CluBellHat1 	= INVALID_ITEM_TYPE,
 ItemType:		item_Balaclava		= INVALID_ITEM_TYPE,
-ItemType:		item_FireHat1		= INVALID_ITEM_TYPE,
-ItemType:		item_FireHat2		= INVALID_ITEM_TYPE,
-ItemType:		item_HeadPhones04	= INVALID_ITEM_TYPE,
+ItemType:		item_FireHelmet		= INVALID_ITEM_TYPE,
+ItemType:		item_FireHelmet1	= INVALID_ITEM_TYPE,
+ItemType:		item_HeadPhones		= INVALID_ITEM_TYPE,
 ItemType:		item_ArmyHelmet2	= INVALID_ITEM_TYPE,
 ItemType:		item_CapBack5		= INVALID_ITEM_TYPE,
 ItemType:		item_CapBack4		= INVALID_ITEM_TYPE,
@@ -653,8 +653,10 @@ public OnScriptInit()
 	item_AntiSepBandage	= DefineItemType("Bandagem Antiseptica",		"AntiSepBandage",	11748,	2,	0.0, 0.0, 0.0,			0.01,	0.072000, 0.041999, 0.000000,  90.299995, 1.500011, 103.599960, .maxhitpoints = 2);
 	item_AppleJuice		= DefineItemType("Suco de Maca",				"AppleJuice",		19564,	1,	0.0, 0.0, 0.0,			0.039,	0.099000, 0.009999, 0.145999,  -161.999969, 8.400005, -1.699998, .maxhitpoints = 1);
 	item_Armour			= DefineItemType("Armadura",					"Armour",			19515,	4,	90.0, 0.0, 0.0,			0.0,	0.300333, -0.090105, 0.000000, 0.000000, 0.000000, 180.000000, .maxhitpoints = 4);
+	item_ArmyHelmet2	= DefineItemType("Capacete Militar",			"ArmyHelmet2",		19102,	1,	0.0, 0.0, 0.0,			0.0,	0.062216, 0.055396, 0.001138, 90.000000, 0.000000, 0.000000, .maxhitpoints = 1);
 	item_AutoInjec		= DefineItemType("Seringa",						"AutoInjec",		2711,	1,	90.0, 0.0, 0.0,			0.028,	0.145485, 0.020127, 0.034870, 0.000000, 260.512817, 349.967254, .maxhitpoints = 1);
 	item_Backpack		= DefineItemType("Mochila",						"Backpack",			3026,	4,	270.0, 0.0, 90.0,		0.0,	0.470918, 0.150153, 0.055384, 181.319580, 7.513789, 163.436065, .longpickup = true, .maxhitpoints = 4);
+    item_Balaclava		= DefineItemType("Mascarade Ladrao",			"Balaclava",		19801,	1,	0.0, 0.0, 0.0,			0.0,	0.062216, 0.055396, 0.001138, 90.000000, 0.000000, 0.000000, .maxhitpoints = 1);
 	item_Banana			= DefineItemType("Banana",						"Banana",			19578,	1,	0.0, 0.0, 0.0,			0.000,	0.059000, 0.017998, 0.026000,  86.399932, -161.300003, 83.699714, .maxhitpoints = 1);
 	item_Bandage		= DefineItemType("Bandagem Suja",				"Bandage",			11747,	2,	90.0, 0.0, 0.0,			0.0,	0.076999, 0.059000, 0.000000,  2.799999, -5.600000, 0.000000, .maxhitpoints = 2);
 	item_BandanaBlue	= DefineItemType("Bandana",						"BandanaBl",		18917,	1,	0.0, 0.0, 0.0,			0.0,	0.095999, 0.064999, 0.000000, -1.300025, -67.899948, -92.999908);
@@ -692,6 +694,9 @@ public OnScriptInit()
 	item_Canister		= DefineItemType("Canister",					"Canister",			19816,	5,	0.0, 0.0, 0.0,			0.218,	0.081000, 0.032999, -0.195999,  164.900070, 8.099815, 96.199882, true, .maxhitpoints = 5);
 	item_CapBack1		= DefineItemType("Bone",						"CapBack1",			18939,	1,	180.0, 0.0, 0.0,		0.0,	0.062216, 0.055396, 0.001138, 90.000000, 0.000000, 180.000000, .maxhitpoints = 1);
 	item_CapBack2		= DefineItemType("Chapeu",						"CapBack2",			18940,	1,	180.0, 0.0, 0.0,		0.0,	0.062216, 0.055396, 0.001138, 90.000000, 0.000000, 180.000000, .maxhitpoints = 1);
+	item_CapBack3		= DefineItemType("Chapeu",						"CapBack3",			18941,	1,	0.0, 0.0, 0.0,			0.0,	0.062216, 0.055396, 0.001138, 90.000000, 0.000000, 180.000000, .maxhitpoints = 1);
+    item_CapBack4		= DefineItemType("Chapeu",						"CapBack4",			18942,	1,	0.0, 0.0, 0.0,			0.0,	0.062216, 0.055396, 0.001138, 90.000000, 0.000000, 180.000000, .maxhitpoints = 1);
+    item_CapBack5		= DefineItemType("Chapeu",						"CapBack5",			18943,	1,	0.0, 0.0, 0.0,			0.0,	0.062216, 0.055396, 0.001138, 90.000000, 0.000000, 180.000000, .maxhitpoints = 1);
 	item_Capsule		= DefineItemType("Capsula",						"Capsule",			3082,	3,	0.0, 0.0, 0.0,			0.0,	0.096439, 0.034642, -0.313377, 341.793945, 348.492706, 240.265777, true, .longpickup = true, .maxhitpoints = 3);
 	item_CaptainsCap	= DefineItemType("Capacete",					"CaptainsCap",		19520,	1,	0.0, -91.0, 11.0,		0.0,	0.157999, 0.043000, 0.020999,  76.099891, -100.200050, -2.499999, .maxhitpoints = 1);
 	item_Cereal1		= DefineItemType("Cereal",						"Cereal1",			19562,	1,	0.0, 0.0, 0.0,			0.022,	0.245000, 0.123999, -0.175000,  -161.999969, -165.499984, -1.699998, .maxhitpoints = 1);
@@ -728,7 +733,7 @@ public OnScriptInit()
 	item_DogsBreath		= DefineItemType("Dog's Breath",				"DogsBreath",		2034,	2,	0.0, 0.0, 0.0,			0.0,	0.176000, 0.020000, 0.039999,  89.199989, -0.900000, 1.099991, .maxhitpoints = 2);
 	item_WoodDoor		= DefineItemType("Porta de Madeira",			"WoodDoor",			1497,	8,	90.0, 0.0, 0.0,			0.0,	-0.073999,0.401213,0.939999,337.887634,172.861953,68.495330, true,  .maxhitpoints = 4);
 	item_Doormat		= DefineItemType("Tapete",						"Doormat",			11737,	3,	0.0, 0.0, 0.0,			0.02,	0.441000, 0.027000, 0.017999,  96.300025, -2.500113, 97.699829, .maxhitpoints = 3);
-	item_Dynamite		= DefineItemType("Dinamite",					"Dynamite",			1654,	2,	0.0, 0.0, 0.0,			0.0,	0.048000,0.106999,0.065999,0.000000,-3.399999,143.300079,	 .maxhitpoints = 2);
+	item_Dynamite		= DefineItemType("DinamiteF",					"Dynamite",			1654,	2,	0.0, 0.0, 0.0,			0.0,	0.048000,0.106999,0.065999,0.000000,-3.399999,143.300079,	 .maxhitpoints = 2);
 	item_EasterEgg		= DefineItemType("Ovo de Pascoa",				"EasterEgg",		19345,	3,	0.0, 0.0, 0.0,			0.0,	0.000000, 0.000000, 0.000000, 0.000000, 90.000000, 0.000000, .maxhitpoints = 3);
 	item_EmpPhoneBomb	= DefineItemType("PEM com Celular",				"EmpPhoneBomb",		343,	2,	0.0, 0.0, 0.0,			0.0,	.maxhitpoints = 1);
 	item_EmpProxMine	= DefineItemType("PEM de Proximidade",			"EmpProxMine",		343,	2,	0.0, 0.0, 0.0,			0.0,	.maxhitpoints = 1);
@@ -736,6 +741,8 @@ public OnScriptInit()
 	item_EmpTripMine	= DefineItemType("Mina PEM",					"EmpTripMine",		343,	2,	0.0, 0.0, 0.0,			0.0,	.maxhitpoints = 1);
 	item_Explosive		= DefineItemType("TNT",							"Explosive",		1576,	2,	0.0, 0.0, 0.0,			0.0,	0.269091, 0.166367, 0.000000, 90.000000, 0.000000, 0.000000, .maxhitpoints = 2);
 	item_Extinguisher	= DefineItemType("Extintor",					"Extinguisher",		366,	4,	90.0, .maxhitpoints = 4);
+	item_FireHelmet		= DefineItemType("Chapeu de Bombeiro",			"FireHelmet",		19330,	1,	0.0, 0.0, 0.0,			0.0,	0.062216, 0.055396, 0.001138, 90.000000, 0.000000, 0.000000, .maxhitpoints = 1);
+    item_FireHelmet1	= DefineItemType("Chapeu de Bombeiro",			"FireHelmet1",		19331,	1,	0.0, 0.0, 0.0,			0.0,	0.062216, 0.055396, 0.001138, 90.000000, 0.000000, 0.000000, .maxhitpoints = 1);
 	item_FireLighter	= DefineItemType("Isqueiro",					"FireLighter",		19998,	1,	0.0, 0.0, 0.0,			0.0,	.maxhitpoints = 1);
 	item_FireworkBox	= DefineItemType("Fogo de Artificio",			"FireworkBox",		2039,	2,	0.0, 0.0, 0.0,			0.0,	0.096996, 0.044811, 0.035688, 4.759557, 255.625167, 0.000000, .maxhitpoints = 2);
 	item_FishRod		= DefineItemType("Cana de Pesca",				"FishRod",			18632,	6,	90.0, 0.0, 0.0,			0.0,	0.091496, 0.019614, 0.000000, 185.619995, 354.958374, 0.000000, .maxhitpoints = 6);
@@ -767,6 +774,7 @@ public OnScriptInit()
 	item_HandCuffs		= DefineItemType("Algemas",						"HandCuffs",		19418,	1,	270.0, 0.0, 0.0,		0.0,	0.077635, 0.011612, 0.000000, 0.000000, 90.000000, 0.000000, .maxhitpoints = 1);
 	item_HardDrive		= DefineItemType("Disco Rigido",				"HardDrive",		328,	1,	90.0, 0.0, 0.0,			0.0,	.maxhitpoints = 1);
 	item_Headlight		= DefineItemType("Farol",						"Headlight",		19280,	1,	90.0, 0.0, 0.0,			0.0,	0.107282, 0.051477, 0.023807, 0.000000, 259.073913, 351.287475, .maxhitpoints = 1);
+	item_HeadPhones		= DefineItemType("Fone de Ouvido",				"HeadPhones",		19424,	1,	180.0, 0.0, 0.0,		0.0,	0.062216, 0.055396, 0.001138, 90.000000, 0.000000, 180.000000, .maxhitpoints = 1);
 	item_HeartShapedBox	= DefineItemType("Caixa de Coracao",			"HeartShapedBox",	1240,	1,	90.0, 0.0, 0.0,			-0.02,	0.171999, 0.077999, -0.016999,  0.000000, 0.000000, 10.200000, .longpickup = true, .maxhitpoints = 1);
 	item_Heatseeker		= DefineItemType("Heatseeker",					"Heatseeker",		360,	6,	90.0, .maxhitpoints = 6);
 	item_HelmArmy		= DefineItemType("Capacete Militar",			"HelmArmy",			19106,	2,	345.0, 270.0, 0.0,		0.045,	0.184999, -0.007999, 0.046999, 94.199989, 22.700027, 4.799994, .maxhitpoints = 2);
@@ -781,8 +789,8 @@ public OnScriptInit()
 	item_IedProxMine	= DefineItemType("DEI de Proximidade",			"IedProxMine",		2033,	2,	0.0, 0.0, 0.0,			0.0,	0.100000, 0.055999, 0.000000,  -86.099967, -112.099975, 100.099891, .maxhitpoints = 1);
 	item_IedTimebomb	= DefineItemType("DEI Temporizado",				"IedTimebomb",		2033,	2,	0.0, 0.0, 0.0,			0.0,	0.100000, 0.055999, 0.000000,  -86.099967, -112.099975, 100.099891, .maxhitpoints = 1);
 	item_IedTripMine	= DefineItemType("DEI de Mina",					"IedTripMine",		2033,	2,	0.0, 0.0, 0.0,			0.0,	0.100000, 0.055999, 0.000000,  -86.099967, -112.099975, 100.099891, .maxhitpoints = 1);
-	item_InsulDoor		= DefineItemType("Entrada Isolada",				"InsulDoor",		19398,	8,	0.0, 90.0, 0.0,			0.0,	-0.087714,1.606874,-0.771602,-111.012359,172.861953,-169.801147, true,  .maxhitpoints = 7);
-	item_InsulPanel		= DefineItemType("Painel Insulado",				"InsulPanel",		19371,	10,	0.0, 90.0, 0.0,			0.0,	-0.339715,1.431000,-0.739000,337.887634,170.962066,162.198867, true,  .maxhitpoints = 7);
+	item_InsulDoor		= DefineItemType("Entrada Isolada",				"InsulDoor",		19398,	8,	0.0, 90.0, 0.0,			0.0,	-0.087714,1.606874,-0.771602,-111.012359,172.861953,-169.801147, true, .buttonz = ITEM_FLOOR_OFFSET / 8,  .maxhitpoints = 7);
+	item_InsulPanel		= DefineItemType("Painel Insulado",				"InsulPanel",		19371,	10,	0.0, 90.0, 0.0,			0.0,	-0.339715,1.431000,-0.739000,337.887634,170.962066,162.198867, true, .buttonz = ITEM_FLOOR_OFFSET / 8,  .maxhitpoints = 7);
 	item_IoUnit			= DefineItemType("Unidade de I/O",				"IoUnit",			19273,	1,	270.0, 0.0, 0.0,		0.0,	0.198234, 0.101531, 0.095477, 0.000000, 343.020019, 0.000000, .maxhitpoints = 1);
 	item_Ketchup		= DefineItemType("Ketchup",						"Ketchup",			11722,	1,	0.0, 0.0, 0.0,			-0.1,	0.100000, 0.077000, 0.041000,  4.400032, -2.300116, 138.699905, .maxhitpoints = 1);
 	item_Key			= DefineItemType("Chave",						"Key",				11746,	1,	90.0, 0.0, 0.0,			0.08,	0.059999,0.000000,0.073999,0.000000,77.300025,-152.099929,	.maxhitpoints = 1);
@@ -947,15 +955,7 @@ public OnScriptInit()
 	item_Wrench			= DefineItemType("Chave de Roda",				"Wrench",			18633,	2,	0.0, 90.0, 0.0,			0.0,	0.084695, -0.009181, 0.152275, 98.865089, 270.085449, 0.000000, .maxhitpoints = 2);
 	item_XmasHat		= DefineItemType("Chapeu de Natal",				"XmasHat",			19066,	1,	0.0, 0.0, 0.0,			0.0,	0.135000, -0.018001, -0.002000,  90.000000, 174.500061, 9.600001, .maxhitpoints = 1);
 	item_ZorroMask		= DefineItemType("Mascara de Zorro",			"ZorroMask",		18974,	1,	0.0, 0.0, 0.0,			0.0,	0.193932, 0.050861, 0.017257, 90.000000, 0.000000, 0.000000, .maxhitpoints = 1);
-    item_ArmyHelmet2	= DefineItemType("Capacete",					"ArmyHelmet2",		19102,	1,	180.0, 0.0, 0.0,		0.0,	0.062216, 0.055396, 0.001138, 90.000000, 0.000000, 180.000000, .maxhitpoints = 1);
-    item_Balaclava		= DefineItemType("Mascara",						"Balaclava",		19801,	1,	180.0, 0.0, 0.0,		0.0,	0.062216, 0.055396, 0.001138, 90.000000, 0.000000, 180.000000, .maxhitpoints = 1);
-    item_CapBack3		= DefineItemType("Chapeu",						"CapBack3",			18941,	1,	180.0, 0.0, 0.0,		0.0,	0.062216, 0.055396, 0.001138, 90.000000, 0.000000, 180.000000, .maxhitpoints = 1);
-    item_CapBack4		= DefineItemType("Chapeu",						"CapBack4",			18942,	1,	180.0, 0.0, 0.0,		0.0,	0.062216, 0.055396, 0.001138, 90.000000, 0.000000, 180.000000, .maxhitpoints = 1);
-    item_CapBack5		= DefineItemType("Chapeu",						"CapBack5",			18943,	1,	180.0, 0.0, 0.0,		0.0,	0.062216, 0.055396, 0.001138, 90.000000, 0.000000, 180.000000, .maxhitpoints = 1);
-    item_FireHat1		= DefineItemType("Chapeu",						"fire_hat1",		19330,	1,	180.0, 0.0, 0.0,		0.0,	0.062216, 0.055396, 0.001138, 90.000000, 0.000000, 180.000000, .maxhitpoints = 1);
-    item_FireHat2		= DefineItemType("Chapeu",						"fire_hat2",		19331,	1,	180.0, 0.0, 0.0,		0.0,	0.062216, 0.055396, 0.001138, 90.000000, 0.000000, 180.000000, .maxhitpoints = 1);
-    item_HeadPhones04	= DefineItemType("Fone de Ouvido",				"headphones04",		19424,	1,	180.0, 0.0, 0.0,		0.0,	0.062216, 0.055396, 0.001138, 90.000000, 0.000000, 180.000000, .maxhitpoints = 1);
-    
+
 
 	// SETTING ITEM TYPE SCRAP VALUE
 
