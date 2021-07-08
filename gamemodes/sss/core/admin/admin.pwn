@@ -356,8 +356,6 @@ TogglePlayerAdminDuty(playerid, toggle)
 
 		SetPlayerScore(playerid, 0);
 
-		SetPlayerColor(playerid, RED);
-
 		Logout(playerid, 1); // docombatlogcheck = 1
 
 		RemovePlayerArmourItem(playerid);
@@ -367,7 +365,7 @@ TogglePlayerAdminDuty(playerid, toggle)
 		admin_OnDuty[playerid] = true;
 
 		SetPlayerSkin(playerid, GetPlayerGender(playerid) == GENDER_MALE ? 217 : 211);
-		SetPlayerColor(playerid, GetPlayerColor(playerid));
+		SetPlayerColor(playerid, !IsPlayerMobile(playerid) ? COLOR_PLAYER_NORMAL : COLOR_PLAYER_MOBILE); // 
 	}
 	else
 	{
