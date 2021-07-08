@@ -110,6 +110,12 @@ hook OnPlayerUseItem(playerid, Item:itemid)
 
 		for(new i; i < size; i++)
 		{
+			if(IsItemTypeDefence(GetItemType(list[i]))){
+				new bool:active;
+				GetItemArrayDataAtCell(list[i], active, 0);
+				if(active) continue;
+			}
+
 			cons_SelectedItems[playerid][i][craft_selectedItemType] = GetItemType(list[i]);
 			cons_SelectedItems[playerid][i][craft_selectedItemID] = list[i];
 			cons_SelectedItemCount[playerid]++;
