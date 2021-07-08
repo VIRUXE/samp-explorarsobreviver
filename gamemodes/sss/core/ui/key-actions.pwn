@@ -242,7 +242,7 @@ _UpdateKeyActions(playerid)
 	if(invehiclearea != INVALID_VEHICLE_ID)
 	{
 		if(IsPlayerAtVehicleTrunk(playerid, invehiclearea))
-			AddToolTipText(playerid, KEYTEXT_INTERACT, "Abrir Porta-mala");
+			AddToolTipText(playerid, KEYTEXT_INTERACT, "Abrir Porta-malas");
 
 		if(IsPlayerAtVehicleBonnet(playerid, invehiclearea))
 			AddToolTipText(playerid, KEYTEXT_INTERACT, "Reparar com Ferramenta");
@@ -280,11 +280,11 @@ _UpdateKeyActions(playerid)
 	// Single items
 
 	if(itemtype == item_Note)
-		AddToolTipText(playerid, KEYTEXT_INTERACT, "Por Ler");
+		AddToolTipText(playerid, KEYTEXT_INTERACT, "Ler");
 	if(itemtype == item_Sign)
-		AddToolTipText(playerid, KEYTEXT_INTERACT, "Colocar Sinal");
+		AddToolTipText(playerid, KEYTEXT_INTERACT, "Colocar Placa");
 	else if(itemtype == item_Armour)
-		AddToolTipText(playerid, KEYTEXT_INTERACT, "Vestir Armadura");
+		AddToolTipText(playerid, KEYTEXT_INTERACT, "Vestir");
 	else if(itemtype == item_Crowbar)
 		AddToolTipText(playerid, KEYTEXT_INTERACT, "Desmontar");
 	else if(itemtype == item_Shield)
@@ -352,7 +352,7 @@ _UpdateKeyActions(playerid)
 			AddToolTipText(playerid, KEYTEXT_INTERACT, "Comer");
 		else if(IsItemTypeBag(itemtype))
 		{
-			AddToolTipText(playerid, KEYTEXT_INTERACT, "Abrir Mochila");
+			AddToolTipText(playerid, KEYTEXT_INTERACT, "Abrir");
 			AddToolTipText(playerid, KEYTEXT_PUT_AWAY, "Vestir");
 		}
 		else if(GetHatFromItem(itemtype) != -1)
@@ -381,8 +381,8 @@ _UpdateKeyActions(playerid)
 		}
 	}
 	else {
-		AddToolTipText(playerid, KEYTEXT_PUT_AWAY, "Colocar no Inventario");
-		AddToolTipText(playerid, KEYTEXT_DROP_ITEM, "Soltar item");
+		AddToolTipText(playerid, KEYTEXT_PUT_AWAY, "Guardar");
+		AddToolTipText(playerid, KEYTEXT_DROP_ITEM, "Soltar");
 	}
 	
 	AddToolTipText(playerid, KEYTEXT_INVENTORY, "Abrir Inventario");
