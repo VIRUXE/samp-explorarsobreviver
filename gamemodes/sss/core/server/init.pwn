@@ -726,7 +726,7 @@ public OnScriptInit()
 	item_Dildo4			= DefineItemType("Dildo",						"Dildo4",			324,	1,	90.0, .maxhitpoints = 1);
 	item_DoctorBag		= DefineItemType("Maleta de Doutor",			"DoctorBag",		11738,	3,	0.0, 0.0, 0.0,			0.0046,	0.265000, 0.029000, 0.041000,  0.000000, -99.100021, 0.000000, .maxhitpoints = 3);
 	item_DogsBreath		= DefineItemType("Dog's Breath",				"DogsBreath",		2034,	2,	0.0, 0.0, 0.0,			0.0,	0.176000, 0.020000, 0.039999,  89.199989, -0.900000, 1.099991, .maxhitpoints = 2);
-	item_Door			= DefineItemType("Porta de Madeira",			"WoodDoor",				1497,	8,	90.0, 0.0, 0.0,			0.0,	-0.073999,0.401213,0.939999,337.887634,172.861953,68.495330, true, .buttonz = ITEM_FLOOR_OFFSET,  .maxhitpoints = 4);
+	item_Door			= DefineItemType("Porta de Madeira",			"WoodDoor",			1497,	8,	90.0, 0.0, 0.0,			0.0,	-0.073999,0.401213,0.939999,337.887634,172.861953,68.495330, true, .buttonz = ITEM_FLOOR_OFFSET,  .maxhitpoints = 4);
 	item_Doormat		= DefineItemType("Tapete",						"Doormat",			11737,	3,	0.0, 0.0, 0.0,			0.02,	0.441000, 0.027000, 0.017999,  96.300025, -2.500113, 97.699829, .maxhitpoints = 3);
 	item_Dynamite		= DefineItemType("Dinamite",					"Dynamite",			1654,	2,	0.0, 0.0, 0.0,			0.0,	0.048000,0.106999,0.065999,0.000000,-3.399999,143.300079,	 .maxhitpoints = 2);
 	item_EasterEgg		= DefineItemType("Ovo de Pascoa",				"EasterEgg",		19345,	3,	0.0, 0.0, 0.0,			0.0,	0.000000, 0.000000, 0.000000, 0.000000, 90.000000, 0.000000, .maxhitpoints = 3);
@@ -1322,7 +1322,7 @@ public OnScriptInit()
 	DefineDefenceItem(item_CorPanel,	0.0, 90.0, 0.0,		90.0, 90.0, 0.0,	1.306163, 	true);
 	DefineDefenceItem(item_CrateDoor,	0.0, 0.0, 0.0,		90.0, 0.0, 0.0,		1.397231, 	true);
 	DefineDefenceItem(item_Cuntainer,	0.0, 0.0, 0.0,		0.0, 0.0, 0.0,		1.453499, 	false);
-	DefineDefenceItem(item_DarkWood,	0.0, 0.0, 90.0,		0.0, 0.0, 	0.0,	1.720000, 	false);
+	DefineDefenceItem(item_DarkWood,	0.0, 0.0, 90.0,		0.0, 0.0, 0.0,		1.720000, 	false);
 	DefineDefenceItem(item_Door,		0.0, 0.0, 0.0,		90.0, 0.0, 0.0,		0.031968, 	true);
 	DefineDefenceItem(item_InsulDoor,	0.0, 0.0, 90.0,		180.0, 90.0, 0.0,	1.700000, 	false);
 	DefineDefenceItem(item_InsulPanel,	90.0, 90.0, 0.0,	180.0, 90.0, 0.0,	1.700000, 	true);
