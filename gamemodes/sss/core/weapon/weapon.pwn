@@ -666,8 +666,8 @@ hook OnPlayerDropItem(playerid, Item:itemid)
 	if(GetItemTypeAmmoType(GetItemWeaponItemAmmoItem(itemid)) == -1)
 		return Y_HOOKS_CONTINUE_RETURN_0;
 
-	if(GetItemWeaponItemMagAmmo(itemid) + GetItemWeaponItemReserve(itemid) == 0)
-	    return Y_HOOKS_CONTINUE_RETURN_0;
+	//if(GetItemWeaponItemMagAmmo(itemid) + GetItemWeaponItemReserve(itemid) == 0)
+	    //return Y_HOOKS_CONTINUE_RETURN_0;
 
 	itmw_DropItemID[playerid] = itemid;
 	stop itmw_DropTimer[playerid];
