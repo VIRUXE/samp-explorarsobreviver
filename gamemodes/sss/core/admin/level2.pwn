@@ -28,6 +28,11 @@ ACMD:adm[2](playerid, params[])
 		return 1;
 	}
 
+	if(!IsPlayerOnAdminDuty(playerid))
+		ChatMsgAll(RED, " » Administrador %P "C_RED" entrou em Modo de Administração.", playerid);
+	else
+		ChatMsgAll(GREEN, " » Administrador %P "C_GREEN" saiu de Modo de Administração.", playerid);
+
 	TogglePlayerAdminDuty(playerid, !IsPlayerOnAdminDuty(playerid));
 
 	return 1;
