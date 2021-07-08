@@ -187,6 +187,8 @@ public OnGameModeInit()
 #define CHAT_LOCAL					0xADABD1FF
 #define CHAT_RADIO					0x00FF00FF
 
+#define COLOR_PLAYER_NORMAL			0xB8B8B800
+#define COLOR_PLAYER_MOBILE			0x85858500
 
 // Embedding Colours
 #define C_YELLOW					"{FFFF00}"
