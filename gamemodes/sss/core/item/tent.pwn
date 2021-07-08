@@ -213,7 +213,7 @@ SaveTent(tentid, bool:active = true)
 		Item:itemid = GetTentItem(tentid),
 		Container:containerid = GetTentContainer(tentid);
 
-	if(IsContainerEmpty(containerid) || GetItemType(itemid) == item_TentPack)
+	if(IsContainerEmpty(containerid) || GetItemType(itemid) != item_TentPack)
 	{
 		RemoveSavedItem(itemid, DIRECTORY_TENT);
 		return 2;
@@ -256,7 +256,7 @@ public _tent_onLoad(Item:itemid, active, uuid[], data[], length)
 	tentid = CreateTentFromItem(itemid);
 	containerid = GetTentContainer(tentid);
 
-	if(IsContainerEmpty(containerid) || GetItemType(itemid) == item_TentPack)
+	if(IsContainerEmpty(containerid) || GetItemType(itemid) != item_TentPack)
 	{
 		RemoveSavedItem(itemid, DIRECTORY_TENT);
 		return 0;
