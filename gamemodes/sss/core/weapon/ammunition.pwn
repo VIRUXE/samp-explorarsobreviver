@@ -97,14 +97,11 @@ hook OnItemNameRender(Item:itemid, ItemType:itemtype)
 
 hook OnItemCreate(Item:itemid)
 {
-	if(GetItemLootIndex(itemid) != -1)
-	{
-		new ammotype = GetItemTypeAmmoType(GetItemType(itemid));
+	new ammotype = GetItemTypeAmmoType(GetItemType(itemid));
 
-		if(ammotype != -1)
-		{
-			SetItemExtraData(itemid, ammo_Data[ammotype][ammo_size] == 1 ? random(1) : random(ammo_Data[ammotype][ammo_size] - 1) + 1);
-		}
+	if(ammotype != -1)
+	{
+		SetItemExtraData(itemid, ammo_Data[ammotype][ammo_size] == 1 ? random(1) : random(ammo_Data[ammotype][ammo_size] - 1) + 1);
 	}
 }
 
