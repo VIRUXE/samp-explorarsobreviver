@@ -37,7 +37,7 @@ new
 
 forward OnTentCreate(tentid);
 forward OnTentDestroy(tentid);
-forward _tent_onLoad(Item:itemid, active, uuid[], data[], length);
+forward OnTentLoad(Item:itemid, active, uuid[], data[], length);
 
 
 /*==============================================================================
@@ -54,7 +54,7 @@ hook OnScriptInit()
 
 hook OnGameModeInit()
 {
-	LoadItems(DIRECTORY_TENT, "_tent_onLoad");
+	LoadItems(DIRECTORY_TENT, "OnTentLoad");
 }
 
 hook OnPlayerConnect(playerid)
@@ -211,18 +211,18 @@ SaveTent(tentid, bool:active = true)
 
 	new
 		Item:itemid = GetTentItem(tentid),
-		Container:containerid = GetTentContainer(tentid);
+		Container:containerid = GetTentContainer(tentid),
+		uuid[UUID_LEN];
 
-	if(IsContainerEmpty(containerid) || GetItemType(itemid) != item_TentPack)
+	if(GetItemType(itemid) != item_TentPack)
 	{
 		RemoveSavedItem(itemid, DIRECTORY_TENT);
 		return 2;
 	}
 
-	new uuid[UUID_LEN];
 	GetItemUUID(itemid, uuid);
 
-	if(!IsValidContainer(containerid))
+	if(!IsValidContainer(containerid) || IsContainerEmpty(containerid))
 	{
 		err("Can't save tent %d (%s): Not valid container (%d).", _:itemid, uuid, _:containerid);
 		return 3;
@@ -233,8 +233,14 @@ SaveTent(tentid, bool:active = true)
 		itemcount;
 
 	GetContainerItemCount(containerid, itemcount);
+
 	for(new i; i < itemcount; i++)
+	{
+		if(!IsValidItem(items[i]))
+			break;
+
 		GetContainerSlotItem(containerid, i, items[i]);
+	}
 
 	if(!SerialiseItems(items, itemcount))
 	{
@@ -245,7 +251,7 @@ SaveTent(tentid, bool:active = true)
 	return 0;
 }
 
-public _tent_onLoad(Item:itemid, active, uuid[], data[], length)
+public OnTentLoad(Item:itemid, active, uuid[], data[], length)
 {
 	new
 		tentid,
@@ -277,7 +283,7 @@ public _tent_onLoad(Item:itemid, active, uuid[], data[], length)
 			if(itemtype == ItemType:0)
 				break;
 
-			subitem = CreateItem(itemtype);
+			subitem = CreateItem(itemtype, .virtual = 1);
 
 			if(!IsItemTypeSafebox(itemtype) && !IsItemTypeBag(itemtype))
 				SetItemArrayDataFromStored(subitem, i);
