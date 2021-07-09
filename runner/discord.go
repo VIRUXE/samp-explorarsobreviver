@@ -89,9 +89,9 @@ func runDiscord(ctx context.Context, ps *pubsub.PubSub, cfg Config) {
 	for {
 		select {
 		case <-infoRestart:
-			// if _, err := discord.ChannelMessageSend(cfg.DiscordChannelInfo, "Server restart!"); err != nil {
-			// 	zap.L().Error("failed to send discord message", zap.Error(err))
-			// }
+			if _, err := discord.ChannelMessageSend(cfg.DiscordChannelInfo, "Reiniciando!"); err != nil {
+				zap.L().Error("failed to send discord message", zap.Error(err))
+			}
 
 		case d := <-infoUpdate:
 			if _, err := discord.ChannelMessageSend(cfg.DiscordChannelInfo, fmt.Sprintf("Servidor irá ser actualizado em %s", d.(time.Duration))); err != nil {
