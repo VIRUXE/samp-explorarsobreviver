@@ -1,4 +1,3 @@
-
 #include <YSI_Coding\y_hooks>
 
 
@@ -52,9 +51,7 @@ public OnPlayerDeath(playerid, killerid, reason)
 _OnDeath(playerid, killerid)
 {
 	if(!IsPlayerAlive(playerid) || IsPlayerOnAdminDuty(playerid))
-	{
 		return 0;
-	}
 
 	new
 		Item:deathreason = GetLastHitByWeapon(playerid),
@@ -93,34 +90,24 @@ _OnDeath(playerid, killerid)
 		{
 			case 0..3, 5..7, 10..15:
 				deathreasonstring = "They were beaten to death.";
-
 			case 4:
 				deathreasonstring = "They suffered small lacerations on the torso, possibly from a knife.";
-
 			case 8:
 				deathreasonstring = "Large lacerations cover the torso and head, looks like a finely sharpened sword.";
-
 			case 9:
 				deathreasonstring = "There's bits everywhere, probably suffered a chainsaw to the torso.";
-
 			case 16, 39, 35, 36, 255:
 				deathreasonstring = "They suffered massive concussion due to an explosion.";
-
 			case 18, 37:
 				deathreasonstring = "The entire body is charred and burnt.";
-
 			case 22..34, 38:
 				deathreasonstring = "They died of blood loss caused by what looks like bullets.";
-
 			case 41, 42:
 				deathreasonstring = "They were sprayed and suffocated by a high pressure substance.";
-
 			case 44, 45:
 				deathreasonstring = "Somehow, they were killed by goggles.";
-
 			case 43:
 				deathreasonstring = "Somehow, they were killed by a camera.";
-
 			default:
 				deathreasonstring = "They bled to death.";
 		}
@@ -136,13 +123,10 @@ _OnDeath(playerid, killerid)
 		{
 			case 53:
 				deathreasonstring = "They drowned.";
-
 			case 54:
 				deathreasonstring = "Most bones are broken, looks like they fell from a great height.";
-
 			case 255:
 				deathreasonstring = "They suffered massive concussion due to an explosion.";
-
 			default:
 				deathreasonstring = "They died for an unknown reason.";
 		}
@@ -219,9 +203,7 @@ DropItems(playerid, Float:x, Float:y, Float:z)
 	itemid = GetPlayerItem(playerid);
 
 	if(IsValidItem(itemid))
-	{
 		AddItemToContainer(containerid, itemid);
-	}
 
 	/*
 		Holstered item
@@ -271,9 +253,7 @@ DropItems(playerid, Float:x, Float:y, Float:z)
 	itemid = RemovePlayerHatItem(playerid);
 
 	if(IsValidItem(itemid))
-	{
 		AddItemToContainer(containerid, itemid);
-	}
 
 	/*
 		Face-wear item
@@ -282,9 +262,7 @@ DropItems(playerid, Float:x, Float:y, Float:z)
 	itemid = RemovePlayerMaskItem(playerid);
 
 	if(IsValidItem(itemid))
-	{
 		AddItemToContainer(containerid, itemid);
-	}
 
 	/*
 		Armour item
@@ -388,7 +366,7 @@ timer SpawnDeathDelay[1200](playerid)
 
 hook OnGameModeInit()
 {
-	DeathText					=TextDrawCreate(320.000000, 300.000000, "YOU ARE DEAD!");
+	DeathText					=TextDrawCreate(320.000000, 300.000000, "VOCE MORREU!");
 	TextDrawAlignment			(DeathText, 2);
 	TextDrawBackgroundColor		(DeathText, 255);
 	TextDrawFont				(DeathText, 1);
@@ -401,7 +379,7 @@ hook OnGameModeInit()
 	TextDrawBoxColor			(DeathText, 85);
 	TextDrawTextSize			(DeathText, 20.000000, 150.000000);
 
-	DeathButton					=TextDrawCreate(320.000000, 323.000000, ">Play Again<");
+	DeathButton					=TextDrawCreate(320.000000, 323.000000, ">Jogar Novamente<");
 	TextDrawAlignment			(DeathButton, 2);
 	TextDrawBackgroundColor		(DeathButton, 255);
 	TextDrawFont				(DeathButton, 1);
