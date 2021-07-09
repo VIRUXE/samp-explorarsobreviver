@@ -269,6 +269,10 @@ LoadVehiclesFromFile(file[])
 					continue;
 			}
 
+			foreach(new i : veh_Index)
+				if(GetVehicleDistanceFromPoint(i, posX, posY, posZ) < 7.0)
+					continue;
+
 			vehicleid = CreateLootVehicle(type, posX, posY, posZ, rotZ);
 
 			if(vehicleid == MAX_VEHICLES - 1)
