@@ -352,7 +352,7 @@ _container_displayOptions(playerid, slotid)
 				} else {
 					Logger_Dbg("container-dialog", "closing container via option response");
 					ClosePlayerInventory(playerid);
-					ClosePlayerContainer(playerid, true);
+					//ClosePlayerContainer(playerid, true);
 				}
 			}
 		}
@@ -456,7 +456,7 @@ hook OnPlayerSelectInvOpt(playerid, option) {
 	return Y_HOOKS_CONTINUE_RETURN_0;
 }
 
-timer _container_showInv[1](playerid) {
+timer _container_showInv[0](playerid) {
 	DisplayPlayerInventory(playerid);
 }
 
