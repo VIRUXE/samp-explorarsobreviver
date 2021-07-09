@@ -277,7 +277,8 @@ _container_displayOptions(playerid, slotid)
 
 					RemoveItemFromContainer(cnt_CurrentContainer[playerid], cnt_SelectedSlot[playerid], playerid);
 					GiveWorldItemToPlayer(playerid, itemid);
-					DisplayContainerInventory(playerid, cnt_CurrentContainer[playerid]);
+					//DisplayContainerInventory(playerid, cnt_CurrentContainer[playerid]);
+					ClosePlayerContainer(playerid, true);
 				} else {
 					ShowActionText(playerid, "Voce ja esta segurando um item", 3000, 200);
 					DisplayContainerInventory(playerid, cnt_CurrentContainer[playerid]);
@@ -319,7 +320,9 @@ _container_displayOptions(playerid, slotid)
 					RemoveItemFromContainer(cnt_CurrentContainer[playerid], slot, playerid);
 				}
 
-				DisplayContainerInventory(playerid, cnt_CurrentContainer[playerid]);
+				//DisplayContainerInventory(playerid, cnt_CurrentContainer[playerid]);
+				ClosePlayerContainer(playerid, true);
+				DisplayPlayerInventory(playerid);
 
 				return 1;
 			}
@@ -330,6 +333,7 @@ _container_displayOptions(playerid, slotid)
 				} else {
 					Logger_Dbg("container-dialog", "closing container via option response");
 					ClosePlayerInventory(playerid);
+					ClosePlayerContainer(playerid, true);
 				}
 			}
 		}
