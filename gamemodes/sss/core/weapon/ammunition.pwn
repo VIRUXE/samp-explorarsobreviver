@@ -89,19 +89,26 @@ hook OnItemNameRender(Item:itemid, ItemType:itemtype)
 	if(ammotype == -1)
 		return 0;
 
+	if(GetItemLootIndex(itemid) == -1)
+		return 0;
+		
 	new amount;
 	GetItemExtraData(itemid, amount);
 	SetItemNameExtra(itemid, sprintf("%d, %s, %s", amount, clbr_Data[ammo_Data[ammotype][ammo_calibre]][clbr_name], ammo_Data[ammotype][ammo_name]) );
+
 	return 1;
 }
 
 hook OnItemCreate(Item:itemid)
 {
-	new ammotype = GetItemTypeAmmoType(GetItemType(itemid));
-
-	if(ammotype != -1)
+	if(GetItemLootIndex(itemid) != -1)
 	{
-		SetItemExtraData(itemid, ammo_Data[ammotype][ammo_size] == 1 ? random(1) : random(ammo_Data[ammotype][ammo_size] - 1) + 1);
+		new ammotype = GetItemTypeAmmoType(GetItemType(itemid));
+
+		if(ammotype != -1)
+		{
+			SetItemExtraData(itemid, ammo_Data[ammotype][ammo_size] == 1 ? random(1) : random(ammo_Data[ammotype][ammo_size] - 1) + 1);
+		}
 	}
 }
 
