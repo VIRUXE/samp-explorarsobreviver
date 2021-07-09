@@ -557,29 +557,24 @@ hook OnItemAddToInventory(playerid, Item:itemid, slot)
 
 hook OnPlayerAddToInventory(playerid, Item:itemid, success)
 {
+	new ItemType:itemtype = GetItemType(itemid);
+
+	if(IsItemTypeBag(itemtype))
+			return Y_HOOKS_BREAK_RETURN_1;
+
+	if(IsItemTypeCarry(itemtype))
+			return Y_HOOKS_BREAK_RETURN_1;
+
 	if(success)
 	{
-		new ItemType:itemtype = GetItemType(itemid);
-
-		if(IsItemTypeBag(itemtype))
-			return Y_HOOKS_BREAK_RETURN_1; // break
-
-		if(IsItemTypeCarry(itemtype))
-			return Y_HOOKS_BREAK_RETURN_1; // break
-
 		if(IsValidHolsterItem(itemtype))
-			return Y_HOOKS_CONTINUE_RETURN_0; // continue
+			return Y_HOOKS_CONTINUE_RETURN_0;
 
 		ShowActionText(playerid, ls(playerid, "INVITMADDED"), 3000, 150);
 	}
 	else
 	{
-		new ItemType:itemtype = GetItemType(itemid);
-
-		if(IsItemTypeBag(itemtype))
-			return Y_HOOKS_BREAK_RETURN_1;
-
-		if(IsItemTypeCarry(itemtype) || IsValidHolsterItem(itemtype))
+		if(IsValidHolsterItem(itemtype))
 			return Y_HOOKS_BREAK_RETURN_1;
 
 		new
@@ -669,8 +664,6 @@ hook OnPlayerSelectInvOpt(playerid, option)
 
 			if(required > 0)
 				ShowActionText(playerid, sprintf(ls(playerid, "BAGEXTRASLO", true), required), 3000, 150);
-			else
-				RemoveItemFromContainer(containerid, slot, playerid);
 				
 			DisplayPlayerInventory(playerid);
 		}
@@ -707,22 +700,25 @@ hook OnPlayerSelectCntOpt(playerid, Container:containerid, option)
 					Item:itemid;
 
 				GetPlayerContainerSlot(playerid, slot);
-				GetContainerSlotItem(containerid, slot, itemid);
-
-				if(!IsValidItem(itemid))
+				if(!GetContainerSlotItem(containerid, slot, itemid))
 				{
-					DisplayContainerInventory(playerid, containerid);
-					return Y_HOOKS_CONTINUE_RETURN_0;
+					if(!IsValidItem(itemid))
+					{
+						DisplayContainerInventory(playerid, containerid);
+						return Y_HOOKS_CONTINUE_RETURN_0;
+					}
+
+					new required = AddItemToContainer(bagcontainerid, itemid, playerid);
+
+					if(required > 0)
+						ShowActionText(playerid, sprintf(ls(playerid, "BAGEXTRASLO", true), required), 3000, 150);
+					else
+						RemoveItemFromContainer(containerid, slot, playerid, true);
+
+					ClosePlayerContainer(playerid, true);
+					//DisplayContainerInventory(playerid, containerid);
+					return Y_HOOKS_BREAK_RETURN_1;
 				}
-
-				new required = AddItemToContainer(bagcontainerid, itemid, playerid);
-
-				if(required > 0)
-					ShowActionText(playerid, sprintf(ls(playerid, "BAGEXTRASLO", true), required), 3000, 150);
-				else
-					RemoveItemFromContainer(containerid, slot, playerid);
-					
-				DisplayContainerInventory(playerid, containerid);
 			}
 		}
 	}
