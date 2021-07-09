@@ -281,6 +281,8 @@ Error:CreateAccount(playerid, const password[])
 	acc_LoggedIn[playerid] = true;
 	SetPlayerToolTips(playerid, true);
 
+	SetPlayerRadioFrequency(playerid, 1.0); // Global chat by default
+	
 	//PlayerCreateNewCharacter(playerid);
 	DisplayLoginPrompt(playerid);
 

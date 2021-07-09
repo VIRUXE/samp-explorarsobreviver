@@ -26,6 +26,7 @@ forward OnPlayerSendChat(playerid, text[], Float:frequency);
 hook OnPlayerConnect(playerid)
 {
 	chat_LastMessageTick[playerid] = 0;
+	chat_Freq[playerid] = 0.0;
 	return 1;
 }
 
