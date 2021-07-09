@@ -1,7 +1,6 @@
 
 #include <YSI_Coding\y_hooks>
 
-
 static
 			trunk_ContainerVehicle	[MAX_CONTAINER] = {INVALID_VEHICLE_ID, ...},
 Container:	trunk_ContainerID		[MAX_VEHICLES] = {INVALID_CONTAINER_ID, ...},
@@ -12,7 +11,7 @@ Container:	trunk_ContainerID		[MAX_VEHICLES] = {INVALID_CONTAINER_ID, ...},
 /*==============================================================================
 
 	Internal
-
+	
 ==============================================================================*/
 
 
@@ -29,7 +28,7 @@ hook OnVehicleCreated(vehicleid)
 	{
 		new vehicletypename[MAX_VEHICLE_TYPE_NAME];
 		GetVehicleTypeName(vehicletype, vehicletypename);
-		trunk_ContainerID[vehicleid] = CreateContainer(vehicletypename, trunksize);
+		trunk_ContainerID[vehicleid] = CreateContainer(sprintf("%s porta-malas", vehicletypename), trunksize);
 		trunk_ContainerVehicle[trunk_ContainerID[vehicleid]] = vehicleid;
 		trunk_Locked[vehicleid] = false;
 	}
