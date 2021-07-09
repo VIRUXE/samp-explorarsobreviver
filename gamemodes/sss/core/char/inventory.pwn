@@ -680,8 +680,6 @@ _inv_HandleGearSlotClick_Back(playerid)
 	if(!IsValidItem(itemid))
 		return 0;
 
-	ClosePlayerInventory(playerid);
-
 	new Container:containerid;
 	GetPlayerCurrentContainer(playerid, containerid);
 	if(containerid == GetBagItemContainerID(itemid))
@@ -706,11 +704,10 @@ _inv_HandleGearSlotClick_Back(playerid)
 		DisplayContainerInventory(playerid, GetBagItemContainerID(itemid));
 	}
 
-	UpdatePlayerGear(playerid, 0);
+	UpdatePlayerGear(playerid);
 
 	return 1;
 }
-
 
 
 hook OnPlayerViewCntOpt(playerid, Container:containerid)
@@ -721,7 +718,7 @@ hook OnPlayerViewCntOpt(playerid, Container:containerid)
 		{
 			new
 				name[MAX_CONTAINER_NAME],
-				str[9 + MAX_CONTAINER_NAME];
+				str[12 + MAX_CONTAINER_NAME];
 
 			GetContainerName(inv_TempContainerID[playerid], name);
 			format(str, sizeof(str), "Mover para %s", name);
@@ -757,9 +754,13 @@ hook OnPlayerSelectCntOpt(playerid, Container:containerid, option)
 				new required = AddItemToContainer(inv_TempContainerID[playerid], itemid, playerid);
 
 				if(required > 0)
+				{
 					ShowActionText(playerid, sprintf(ls(playerid, "CNTEXTRASLO", true), required), 3000, 150);
+				}
 				else
+				{
 					DisplayContainerInventory(playerid, containerid);
+				}
 			}
 		}
 	}
