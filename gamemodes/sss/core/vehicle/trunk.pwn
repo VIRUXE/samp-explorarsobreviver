@@ -14,6 +14,10 @@ Container:	trunk_ContainerID		[MAX_VEHICLES] = {INVALID_CONTAINER_ID, ...},
 	
 ==============================================================================*/
 
+hook OnPlayerConnect(playerid)
+{
+	trunk_CurrentVehicle[playerid] = INVALID_VEHICLE_ID;
+}
 
 hook OnVehicleCreated(vehicleid)
 {
@@ -33,6 +37,7 @@ hook OnVehicleCreated(vehicleid)
 		trunk_Locked[vehicleid] = false;
 	}
 }
+
 
 hook OnVehicleReset(oldid, newid)
 {
@@ -71,8 +76,8 @@ hook OnPlayerInteractVehicle(playerid, vehicleid, Float:angle)
 			CancelPlayerMovement(playerid);
 			SetPlayerFacingAngle(playerid, (vehicleangle-angle)-180.0);
 
-			DisplayContainerInventory(playerid, GetVehicleContainer(vehicleid));
 			trunk_CurrentVehicle[playerid] = vehicleid;
+			DisplayContainerInventory(playerid, GetVehicleContainer(vehicleid));
 
 			HideActionText(playerid);
 
@@ -111,6 +116,16 @@ hook OnPlayerCloseContainer(playerid, Container:containerid)
 	}
 
 	return Y_HOOKS_CONTINUE_RETURN_0;
+}
+
+hook OnPlayerCloseInventory(playerid)
+{
+	if(IsValidVehicle(trunk_CurrentVehicle[playerid]))
+	{
+		VehicleBootState(trunk_CurrentVehicle[playerid], 0);
+		VehicleTrunkUpdateSave(playerid);
+		trunk_CurrentVehicle[playerid] = INVALID_VEHICLE_ID;
+	}
 }
 
 hook OnPlayerUseItem(playerid, Item:itemid)
