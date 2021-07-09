@@ -214,17 +214,17 @@ SaveTent(tentid, bool:active = true)
 		Container:containerid = GetTentContainer(tentid),
 		uuid[UUID_LEN];
 
-	if(GetItemType(itemid) != item_TentPack)
+	GetItemUUID(itemid, uuid);
+
+	if(!IsValidContainer(containerid))
 	{
-		RemoveSavedItem(itemid, DIRECTORY_TENT);
+		err("Can't save tent %d (%s): Not valid container (%d).", _:itemid, uuid, _:containerid);
 		return 2;
 	}
 
-	GetItemUUID(itemid, uuid);
-
-	if(!IsValidContainer(containerid) || IsContainerEmpty(containerid))
+	if(GetItemType(itemid) != item_TentPack || IsContainerEmpty(containerid))
 	{
-		err("Can't save tent %d (%s): Not valid container (%d).", _:itemid, uuid, _:containerid);
+		RemoveSavedItem(itemid, DIRECTORY_TENT);
 		return 3;
 	}
 
