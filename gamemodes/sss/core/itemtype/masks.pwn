@@ -83,8 +83,10 @@ stock SetPlayerMaskItem(playerid, Item:itemid)
 
 	new skinid = GetPlayerClothes(playerid);
 
-	if(!GetClothesMaskStatus(skinid))
+	if(!GetClothesMaskStatus(skinid)){
+		ShowActionText(playerid, "Sua roupa nao permite usar este acessorio", 4000);
 		return 0;
+	}
 
 	if(mask_CurrentMaskItem[playerid] == itemid)
 	    return 0;
