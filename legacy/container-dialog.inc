@@ -141,9 +141,6 @@ stock DisplayContainerInventory(playerid, Container:containerid) {
 	GetContainerFreeSlots(containerid, freeSlots);
 
 	for(new i; i < freeSlots; i++) {
-		if(cnt_ItemListTotal[playerid] == (MAX_DIALOG_PREVIEW_COLUMNS * MAX_DIALOG_PREVIEW_ROWS) - 1)
-			break;
-
 		strcat(cnt_InventoryString[playerid], "19300\t<Vazio>\n");
 		cnt_ItemListTotal[playerid]++;
 	}
@@ -257,8 +254,7 @@ _container_displayOptions(playerid, slotid)
 
 	inline Response(pid, dialogid, response, listitem, string:inputtext[]) {
 		#pragma unused pid, dialogid, inputtext
-		if(!response) 
-		{
+		if(!response) {
 			DisplayContainerInventory(playerid, cnt_CurrentContainer[playerid]);
 			return 1;
 		}
@@ -275,7 +271,7 @@ _container_displayOptions(playerid, slotid)
 						Logger_Err("current container invalid in dialog call",
 							Logger_I("containerid", _:cnt_CurrentContainer[playerid]),
 							Logger_I("playerid", playerid));
-						ShowActionText(playerid, "Ocorreu um Erro", 3000, 200);
+						ShowActionText(playerid, "O correu um erro", 3000, 200);
 						return 1;
 					}
 
@@ -283,7 +279,7 @@ _container_displayOptions(playerid, slotid)
 					GiveWorldItemToPlayer(playerid, itemid);
 					DisplayContainerInventory(playerid, cnt_CurrentContainer[playerid]);
 				} else {
-					ShowActionText(playerid, "Ja esta segurando algo", 3000, 200);
+					ShowActionText(playerid, "Voce ja esta segurando um item", 3000, 200);
 					DisplayContainerInventory(playerid, cnt_CurrentContainer[playerid]);
 				}
 			}
@@ -298,7 +294,7 @@ _container_displayOptions(playerid, slotid)
 					Logger_Err("current container invalid in dialog call",
 						Logger_I("containerid", _:cnt_CurrentContainer[playerid]),
 						Logger_I("playerid", playerid));
-					ShowActionText(playerid, "Ocorreu um erro", 3000, 200);
+					ShowActionText(playerid, "O correu um erro", 3000, 200);
 					return 1;
 				}
 
@@ -315,7 +311,7 @@ _container_displayOptions(playerid, slotid)
 
 				if(required > 0) {
 					new str[32];
-					format(str, sizeof(str), "Necessita de mais %d espacos", required);
+					format(str, sizeof(str), "Precisa de %d slots", required);
 					ShowActionText(playerid, str, 3000, 150);
 				} else if(required == 0) {
 					new slot;
@@ -329,10 +325,9 @@ _container_displayOptions(playerid, slotid)
 			}
 
 			default: {
-				if(!CallLocalFunction("OnPlayerSelectContainerOpt", "ddd", playerid, _:cnt_CurrentContainer[playerid], listitem - 2))
+				if(!CallLocalFunction("OnPlayerSelectContainerOpt", "ddd", playerid, _:cnt_CurrentContainer[playerid], listitem - 2)) {
 					DisplayContainerInventory(playerid, cnt_CurrentContainer[playerid]);
-				else 
-				{
+				} else {
 					Logger_Dbg("container-dialog", "closing container via option response");
 					ClosePlayerInventory(playerid);
 				}
@@ -355,8 +350,9 @@ hook OnDialogModelResponse(playerid, dialogid, response, listitem)
 			Logger_I("containerid", _:cnt_CurrentContainer[playerid]));
 
 		if(response) {
-			if(!IsValidContainer(cnt_CurrentContainer[playerid]))
+			if(!IsValidContainer(cnt_CurrentContainer[playerid])) {
 				return 0;
+			}
 
 			// Logger_Dbg("container-dialog", "listitem %d total %d itemcount %d freeslots %d", listitem, cnt_ItemListTotal[playerid], GetContainerItemCount(cnt_CurrentContainer[playerid]), GetContainerFreeSlots(cnt_CurrentContainer[playerid]));
 
@@ -377,8 +373,9 @@ hook OnDialogModelResponse(playerid, dialogid, response, listitem)
 					_container_displayOptions(playerid, listitem);
 				}
 			}
-		} else
+		} else {
 			ClosePlayerContainer(playerid, true);
+		}
 	}
 	return 1;
 }
@@ -427,7 +424,7 @@ hook OnPlayerSelectInvOpt(playerid, option) {
 					return Y_HOOKS_CONTINUE_RETURN_0;
 			}
 
-			DisplayPlayerInventory(playerid);
+			defer _container_showInv(playerid);
 
 			return Y_HOOKS_CONTINUE_RETURN_0;
 		}
@@ -436,11 +433,8 @@ hook OnPlayerSelectInvOpt(playerid, option) {
 	return Y_HOOKS_CONTINUE_RETURN_0;
 }
 
-hook OnPlayerCloseInventory(playerid) {
-	if(IsValidContainer(cnt_CurrentContainer[playerid]))
-		ClosePlayerContainer(playerid, true);
-
-	return Y_HOOKS_CONTINUE_RETURN_0;
+timer _container_showInv[0](playerid) {
+	DisplayPlayerInventory(playerid);
 }
 
 hook OnPlayerOpenInventory(playerid) {
