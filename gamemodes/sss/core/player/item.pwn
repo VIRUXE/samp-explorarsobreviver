@@ -157,7 +157,7 @@ hook OnPlayerGiveItem(playerid, targetid, Item:itemid){
 	
 ==============================================================================*/
 
-hook OnMoveItemToInventory(playerid, Item:itemid, Container:containerid)
-	return Y_HOOKS_BREAK_RETURN_0;
+/*hook OnMoveItemToInventory(playerid, Item:itemid, Container:containerid)
+	return Y_HOOKS_BREAK_RETURN_0;*/
 
 
