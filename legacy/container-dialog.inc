@@ -315,9 +315,7 @@ _container_displayOptions(playerid, slotid)
 					format(str, sizeof(str), "Precisa de %d slots", required);
 					ShowActionText(playerid, str, 3000, 150);
 				} else if(required == 0) {
-					new slot;
-					GetItemContainerSlot(itemid, slot);
-					RemoveItemFromContainer(cnt_CurrentContainer[playerid], slot, playerid);
+					RemoveItemFromContainer(cnt_CurrentContainer[playerid], cnt_SelectedSlot[playerid], playerid);
 				}
 
 				ClosePlayerContainer(playerid, true);
@@ -458,7 +456,7 @@ hook OnPlayerSelectInvOpt(playerid, option) {
 	return Y_HOOKS_CONTINUE_RETURN_0;
 }
 
-timer _container_showInv[0](playerid) {
+timer _container_showInv[1](playerid) {
 	DisplayPlayerInventory(playerid);
 }
 
