@@ -157,6 +157,8 @@ stock DisplayPlayerInventory(playerid)
 
 	new slots;
 	ret_outer = GetInventoryFreeSlots(playerid, slots);
+	if(ret_outer) 
+		return 3;
 
 	for(new i; i < slots; i++)
 	{
@@ -168,7 +170,7 @@ stock DisplayPlayerInventory(playerid)
 	inv_ExtraItemCount[playerid] = 0;
 
 	if(CallLocalFunction("OnPlayerOpenInventory", "d", playerid))
-		return 3;
+		return 4;
 
 	if(!isnull(inv_ExtraItemList[playerid]))
 		strcat(list, inv_ExtraItemList[playerid]);
