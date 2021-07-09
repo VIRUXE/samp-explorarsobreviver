@@ -34,7 +34,8 @@ bool:		def_active,
 			def_keypad,
 			def_pass,
 			def_mod,
-			def_hit
+			def_hit,
+Float:		def_buttonz
 }
 
 static
@@ -42,13 +43,16 @@ static
 			def_TypeTotal,
 			def_ItemTypeDefenceType[MAX_ITEM_TYPE] = {INVALID_DEFENCE_TYPE, ...},
 			def_TweakArrow[MAX_PLAYERS] = {INVALID_OBJECT_ID, ...},
+
 Item:		def_CurrentDefenceItem[MAX_PLAYERS],
 Item:		def_CurrentDefenceEdit[MAX_PLAYERS],
 Item:		def_CurrentDefenceOpen[MAX_PLAYERS],
 			def_LastPassEntry[MAX_PLAYERS],
 			def_Cooldown[MAX_PLAYERS],
 			def_PassFails[MAX_PLAYERS],
-			def_Col[MAX_ITEM] = {-1, ...};
+			def_Col[MAX_ITEM] = {-1, ...},
+PlayerText:	def_MoveTD[MAX_PLAYERS][2],
+Timer:		def_MoveTime[MAX_PLAYERS];
 
 forward OnDefenceCreate(Item:itemid);
 forward OnDefenceDestroy(Item:itemid);
@@ -77,8 +81,47 @@ hook OnPlayerConnect(playerid)
 	def_LastPassEntry[playerid] = 0;
 	def_Cooldown[playerid] = 2000;
 	def_PassFails[playerid] = 0;
+
+	def_MoveTD[playerid][0] = CreatePlayerTextDraw(playerid, 473.000000, 270.000000, "up");
+	PlayerTextDrawFont(playerid, def_MoveTD[playerid][0], 5);
+	PlayerTextDrawLetterSize(playerid, def_MoveTD[playerid][0], 0.600000, 2.000000);
+	PlayerTextDrawTextSize(playerid, def_MoveTD[playerid][0], 38.000000, 45.000000);
+	PlayerTextDrawSetOutline(playerid, def_MoveTD[playerid][0], 0);
+	PlayerTextDrawSetShadow(playerid, def_MoveTD[playerid][0], 0);
+	PlayerTextDrawAlignment(playerid, def_MoveTD[playerid][0], 1);
+	PlayerTextDrawColor(playerid, def_MoveTD[playerid][0], 0xFFFFFFFF);
+	PlayerTextDrawBackgroundColor(playerid, def_MoveTD[playerid][0], 125);
+	PlayerTextDrawBoxColor(playerid, def_MoveTD[playerid][0], 100);
+	PlayerTextDrawUseBox(playerid, def_MoveTD[playerid][0], 1);
+	PlayerTextDrawSetProportional(playerid, def_MoveTD[playerid][0], 1);
+	PlayerTextDrawSetSelectable(playerid, def_MoveTD[playerid][0], 1);
+	PlayerTextDrawSetPreviewModel(playerid, def_MoveTD[playerid][0], 19133);
+	PlayerTextDrawSetPreviewVehCol(playerid, def_MoveTD[playerid][0], 1, 1);
+	PlayerTextDrawSetPreviewRot(playerid, def_MoveTD[playerid][0], 180.000000, 0.000000, 90.000000, 1.000000);
+
+	def_MoveTD[playerid][1] = CreatePlayerTextDraw(playerid, 583.000000, 270.000000, "down");
+	PlayerTextDrawFont(playerid, def_MoveTD[playerid][1], 5);
+	PlayerTextDrawLetterSize(playerid, def_MoveTD[playerid][1], 0.600000, 2.000000);
+	PlayerTextDrawTextSize(playerid, def_MoveTD[playerid][1], 38.000000, 45.000000);
+	PlayerTextDrawSetOutline(playerid, def_MoveTD[playerid][1], 0);
+	PlayerTextDrawSetShadow(playerid, def_MoveTD[playerid][1], 0);
+	PlayerTextDrawAlignment(playerid, def_MoveTD[playerid][1], 1);
+	PlayerTextDrawColor(playerid, def_MoveTD[playerid][1], 0xFFFFFFFF);
+	PlayerTextDrawBackgroundColor(playerid, def_MoveTD[playerid][1], 125);
+	PlayerTextDrawBoxColor(playerid, def_MoveTD[playerid][1], 100);
+	PlayerTextDrawUseBox(playerid, def_MoveTD[playerid][1], 1);
+	PlayerTextDrawSetProportional(playerid, def_MoveTD[playerid][1], 1);
+	PlayerTextDrawSetSelectable(playerid, def_MoveTD[playerid][1], 1);
+	PlayerTextDrawSetPreviewModel(playerid, def_MoveTD[playerid][1], 19133);
+	PlayerTextDrawSetPreviewRot(playerid, def_MoveTD[playerid][1], -10.000000, 0.000000, 90.000000, 1.000000);
 }
 
+hook OnPlayerDisconnet(playerid, reason)
+{
+	PlayerTextDrawDestroy(playerid, def_MoveTD[playerid][0]);
+	PlayerTextDrawDestroy(playerid, def_MoveTD[playerid][1]);
+	stop def_MoveTime[playerid];
+}
 
 /*==============================================================================
 
@@ -199,12 +242,9 @@ ActivateDefenceItem(Item:itemid)
 	if(itemdata[def_hit] > 0)
 		SetItemHitPoints(itemid, itemdata[def_hit]);
 
-	if(itemdata[def_pose] == DEFENCE_POSE_VERTICAL)
-	{
-		GetButtonPos(buttonid, x, y, z);
-		SetButtonPos(buttonid, x, y,
-			(z - def_TypeData[defencetype][def_placeOffsetZ]) + 0.1);
-	}
+
+	GetButtonPos(buttonid, x, y, z);
+	SetButtonPos(buttonid, x, y, itemdata[def_buttonz]);
 
 	SetItemArrayData(itemid, itemdata, e_DEFENCE_DATA);
 
@@ -442,7 +482,8 @@ _InteractDefence(playerid, Item:itemid)
 		else
 		{
 			ShowActionText(playerid, ls(playerid, "DEFMOVINGIT"), 3000);
-			defer MoveDefence(_:itemid, playerid);
+			stop def_MoveTime[playerid];
+			def_MoveTime[playerid] = defer MoveDefence(_:itemid, playerid);
 		}
 	}
 
@@ -558,6 +599,8 @@ hook OnHoldActionUpdate(playerid, progress)
 {
 	if(def_CurrentDefenceItem[playerid] != INVALID_ITEM_ID)
 	{
+		stop def_MoveTime[playerid];
+		
 		if(!IsItemInWorld(def_CurrentDefenceItem[playerid]))
 			StopHoldAction(playerid);
 	}
@@ -595,12 +638,12 @@ hook OnHoldActionFinish(playerid)
 
 		StopBuildingDefence(playerid);
 		TweakItem(playerid, itemid);
-		defer UpdateDefenceZ(playerid);
-
 		_UpdateDefenceTweakArrow(playerid, itemid);
 		PlayerGainSkillExperience(playerid, "Construction");
-
 		ShowHelpTip(playerid, ls(playerid, "TIPTWEAKDEF"));
+
+		PlayerTextDrawShow(playerid, def_MoveTD[playerid][0]);
+		PlayerTextDrawShow(playerid, def_MoveTD[playerid][1]);
 
 		return Y_HOOKS_BREAK_RETURN_0;
 	}
@@ -712,7 +755,8 @@ hook OnPlayerKeypadEnter(playerid, keypadid, code, match)
 			if(code == match)
 			{
 				ShowActionText(playerid, ls(playerid, "DEFMOVINGIT"), 3000);
-				defer MoveDefence(_:def_CurrentDefenceOpen[playerid], playerid);
+				stop def_MoveTime[playerid];
+				def_MoveTime[playerid] = defer MoveDefence(_:def_CurrentDefenceOpen[playerid], playerid);
 				def_CurrentDefenceOpen[playerid] = INVALID_ITEM_ID;
 			}
 			else
@@ -763,13 +807,14 @@ ConvertItemToDefenceItem(Item:itemid, pose, playerid)
 		Float:x, Float:y, Float:z,
 		Float:ix, Float:iy, Float:iz,
 		Float:rx, Float:ry, Float:rz,
-		Float:a;
+		Float:a, Button:buttonid;
 
 	GetPlayerPos(playerid, x, y, z);
 	GetItemPos(itemid, ix, iy, iz);
 	GetItemRot(itemid, rx, ry, rz);
 	a = GetAngleToPoint(x, y, ix, iy);
-	
+	GetItemButtonID(itemid, buttonid);
+
 	if(pose == DEFENCE_POSE_HORIZONTAL)
 	{
 		rx = def_TypeData[def_ItemTypeDefenceType[itemtype]][def_horizontalRotX];
@@ -784,16 +829,14 @@ ConvertItemToDefenceItem(Item:itemid, pose, playerid)
 		rz += def_TypeData[def_ItemTypeDefenceType[itemtype]][def_verticalRotZ];
 	}
 
-	SetItemPos(itemid, x + 0.9 * floatsin(-a, degrees), y + 0.9 * floatcos(-a, degrees), iz);
+	x += 0.9 * floatsin(-a, degrees);
+	y += 0.9 * floatcos(-a, degrees);
+
+	SetItemPos(itemid, x, y, iz);
 	SetItemRot(itemid, rx, ry, rz);
 
-	if(pose == DEFENCE_POSE_VERTICAL)
-	{
-		new Button:buttonid;
-		GetItemButtonID(itemid, buttonid);
-		SetButtonPos(buttonid, x, y,
-			(iz - def_TypeData[def_ItemTypeDefenceType[itemtype]][def_placeOffsetZ]) + 0.1);
-	}
+	SetItemArrayDataAtCell(itemid, _:z, def_buttonz);
+	SetButtonPos(buttonid, x, y, z);
 
 	return CallLocalFunction("OnDefenceCreate", "d", _:itemid);
 }
@@ -801,7 +844,6 @@ ConvertItemToDefenceItem(Item:itemid, pose, playerid)
 _UpdateDefenceTweakArrow(playerid, Item:itemid)
 {
 	new
-		Button:buttonid,
 		Float:x,
 		Float:y,
 		Float:z,
@@ -810,25 +852,30 @@ _UpdateDefenceTweakArrow(playerid, Item:itemid)
 		Float:rz,
 		world,
 		interior,
-		ItemType:type = GetItemType(itemid);
-		
-	GetItemButtonID(itemid, buttonid);
-	GetButtonPos(buttonid, x, y, z);
+		ItemType:type = GetItemType(itemid),
+		Button:buttonid, 
+		Float:buttonz;
+
+	GetItemPos(itemid, x, y, z);
 	GetItemRot(itemid, rx, ry, rz);
 	GetItemWorld(itemid, world);
 	GetItemInterior(itemid, interior);
-	
+	GetItemButtonID(itemid, buttonid);
+	GetItemArrayDataAtCell(itemid, _:buttonz, def_buttonz);
+
+	SetButtonPos(buttonid, x, y, buttonz);
+
 	if(!IsValidDynamicObject(def_TweakArrow[playerid])){
 		def_TweakArrow[playerid] = CreateDynamicObject(19133, x, y, z, 0.0, 0.0, 0.0, world, interior);
 		SetDynamicObjectMaterial(def_TweakArrow[playerid], 0, 10765, "airportgnd_sfse", "desgreengrass", 0xFF00FF00);
 		SetDynamicObjectMaterial(def_TweakArrow[playerid], 1, -1, "none", "none", 0xFF00FF00);
-	} else 
-		SetDynamicObjectPos(def_TweakArrow[playerid], x, y, z);
-
+	}
+		
 	new pose;
 	GetItemArrayDataAtCell(itemid, pose, def_pose);
 	if(pose == DEFENCE_POSE_VERTICAL)
 	{
+		SetDynamicObjectPos(def_TweakArrow[playerid], x, y, z - def_TypeData[def_ItemTypeDefenceType[type]][def_placeOffsetZ]);
 		SetDynamicObjectRot(def_TweakArrow[playerid],
 			rx - def_TypeData[def_ItemTypeDefenceType[type]][def_verticalRotX] + 90,
 			ry - def_TypeData[def_ItemTypeDefenceType[type]][def_verticalRotY],
@@ -836,6 +883,7 @@ _UpdateDefenceTweakArrow(playerid, Item:itemid)
 	}
 	else
 	{
+		SetDynamicObjectPos(def_TweakArrow[playerid], x, y, z);
 		SetDynamicObjectRot(def_TweakArrow[playerid],
 			rx - def_TypeData[def_ItemTypeDefenceType[type]][def_horizontalRotX],
 			ry - def_TypeData[def_ItemTypeDefenceType[type]][def_horizontalRotY],
@@ -852,54 +900,47 @@ hook OnItemTweakUpdate(playerid, Item:itemid)
 	return 1;
 }
 
-timer UpdateDefenceZ[900](playerid)
-{
-	if(!IsPlayerConnected(playerid))
-		return;
-
-	if(def_TweakArrow[playerid] != INVALID_OBJECT_ID)
-	{
-		new Item:itemid = GetPlayerTweakItem(playerid);
-
-		if(!IsValidItem(itemid))
-			return;
-
-		new pose;
-		GetItemArrayDataAtCell(itemid, pose, def_pose);
-		if(pose == DEFENCE_POSE_VERTICAL)
-		{
-			new 
-				Float:cx, Float:cy, Float:cz,
-				Float:x, Float:y, Float:z,
-				Float:ix, Float:iy, Float:iz;
-
-			GetPlayerCameraPos(playerid, cx, cy, cz);
-			GetPlayerPos(playerid, x, y, z);
-			GetItemPos(itemid, ix, iy, iz);
-
-			defer UpdateDefenceZ(playerid);
-
-			if(cz < z)
-				iz = z + (z - cz); // TODO: Find a way to raise the defense a little more
-			else
-				iz = z - (cz - z);
-
-			SetItemPos(itemid, ix, iy,
-				iz + def_TypeData[def_ItemTypeDefenceType[GetItemType(itemid)]][def_placeOffsetZ]);
-
-			_UpdateDefenceTweakArrow(playerid, itemid);
-		}
-	}
-}
-
 hook OnItemTweakFinish(playerid, Item:itemid)
 {
 	if(def_TweakArrow[playerid] != INVALID_OBJECT_ID)
 	{
+		PlayerTextDrawHide(playerid, def_MoveTD[playerid][0]);
+		PlayerTextDrawHide(playerid, def_MoveTD[playerid][1]);
+
 		DestroyDynamicObject(def_TweakArrow[playerid]);
 		def_TweakArrow[playerid] = INVALID_OBJECT_ID;
 		CreateDefenceColision(itemid);
 		CallLocalFunction("OnDefenceModified", "d", _:itemid);
+	}
+}
+
+hook OnPlayerClickPlayerTD(playerid, PlayerText:playertextid)
+{
+	if(def_TweakArrow[playerid] != INVALID_OBJECT_ID)
+	{
+		new Item:itemid = GetPlayerTweakItem(playerid);
+
+		if(IsValidItem(itemid))
+		{
+			new Float:x, Float:y, Float:z, Float:pz;
+
+			GetItemPos(itemid, x, y, z);
+			GetPlayerPos(playerid, pz, pz, pz);
+
+			if(playertextid == def_MoveTD[playerid][0])
+				if(z < pz + (5.0) )
+					SetItemPos(itemid, x, y, z + 0.05);
+				else
+					ShowActionText(playerid, "Nao sobe mais que isto");
+
+			if(playertextid == def_MoveTD[playerid][1])
+				if(z > pz - 0.2)
+					SetItemPos(itemid, x, y, z - 0.05);
+				else
+					ShowActionText(playerid, "Nao desce mais que isto");
+
+			_UpdateDefenceTweakArrow(playerid, itemid);
+		}
 	}
 }
 
@@ -992,7 +1033,8 @@ ShowEnterPassDialog_KeypadAdv(playerid, msg = 0)
 			if(pass == defpass && strlen(inputtext) >= 4)
 			{
 				ShowActionText(playerid, ls(playerid, "DEFMOVINGIT"), 3000);
-				defer MoveDefence(_:def_CurrentDefenceOpen[playerid], playerid);
+				stop def_MoveTime[playerid];
+				def_MoveTime[playerid] = defer MoveDefence(_:def_CurrentDefenceOpen[playerid], playerid);
 				def_CurrentDefenceOpen[playerid] = INVALID_ITEM_ID;
 			}
 			else
@@ -1056,8 +1098,7 @@ timer MoveDefence[1000](itemid, playerid)
 
 		if(Distance(px, py, pz, ix, iy, iz) < 3.0)
 		{
-			defer MoveDefence(itemid, playerid);
-
+			def_MoveTime[playerid] = defer MoveDefence(itemid, playerid);
 			return;
 		}
 	}
@@ -1069,7 +1110,8 @@ timer MoveDefence[1000](itemid, playerid)
 		Float:rz,
 		uuid[UUID_LEN],
 		pose,
-		Button:buttonid;
+		Button:buttonid,
+		Float:buttonz;
 
 	GetItemRot(Item:itemid, rx, ry, rz);
 	GetItemUUID(Item:itemid, uuid);
@@ -1083,10 +1125,6 @@ timer MoveDefence[1000](itemid, playerid)
 		rz += def_TypeData[def_ItemTypeDefenceType[itemtype]][def_verticalRotZ];
 		iz += def_TypeData[def_ItemTypeDefenceType[itemtype]][def_placeOffsetZ];
 		SetItemArrayDataAtCell(Item:itemid, DEFENCE_POSE_VERTICAL, def_pose);
-		SetItemPos(Item:itemid, ix, iy, iz);
-		SetItemRot(Item:itemid, rx, ry, rz);
-		SetButtonPos(buttonid, ix, iy,
-			(iz - def_TypeData[def_ItemTypeDefenceType[itemtype]][def_placeOffsetZ]) + 0.1);
 	}
 	else
 	{
@@ -1094,10 +1132,14 @@ timer MoveDefence[1000](itemid, playerid)
 		ry = def_TypeData[def_ItemTypeDefenceType[itemtype]][def_horizontalRotY];
 		rz += def_TypeData[def_ItemTypeDefenceType[itemtype]][def_horizontalRotZ];
 		iz -= def_TypeData[def_ItemTypeDefenceType[itemtype]][def_placeOffsetZ];
-		SetItemPos(Item:itemid, ix, iy, iz);
-		SetItemRot(Item:itemid, rx, ry, rz);
 		SetItemArrayDataAtCell(Item:itemid, DEFENCE_POSE_HORIZONTAL, def_pose);
 	}
+
+	SetItemPos(Item:itemid, ix, iy, iz);
+	SetItemRot(Item:itemid, rx, ry, rz);
+
+	GetItemArrayDataAtCell(Item:itemid, _:buttonz, def_buttonz);
+	SetButtonPos(buttonid, ix, iy, buttonz);
 
 	CA_DestroyObject(def_Col[Item:itemid]);
 	def_Col[Item:itemid] = -1;
