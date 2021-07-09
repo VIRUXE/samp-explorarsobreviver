@@ -75,7 +75,7 @@ PlayerSendChat(playerid, chat[], Float:frequency)
 	}
 	else
 	{
-		if(GetTickCountDifference(GetTickCount(), chat_LastMessageTick[playerid]) < 1000)
+		if(GetTickCountDifference(GetTickCount(), chat_LastMessageTick[playerid]) < 1000 && !GetPlayerAdminLevel(playerid))
 		{
 			chat_MessageStreak[playerid]++;
 			if(chat_MessageStreak[playerid] == 3)
@@ -92,7 +92,7 @@ PlayerSendChat(playerid, chat[], Float:frequency)
 		}
 	}
 
-	if(GetTickCountDifference(GetTickCount(), chat_LastMessageTick[playerid]) < 4500 && frequency == 1.0)
+	if(GetTickCountDifference(GetTickCount(), chat_LastMessageTick[playerid]) < 4500 && frequency == 1.0 && !GetPlayerAdminLevel(playerid))
 	{
 		ChatMsgLang(playerid, RED, "GLOBALFLOOD");
 		return 0;
