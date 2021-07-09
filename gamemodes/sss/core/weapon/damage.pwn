@@ -134,9 +134,7 @@ stock PlayerInflictWound(playerid, targetid, E_WND_TYPE:type, Float:bleedrate, F
 		knockouttime = floatround((knockmult * 0.2) * ((woundcount + 1) * ((totalbleedrate * 10) + 1) * (110.0 - hp) + (200 * (110.0 - hp))));
 
 		if(knockouttime > 1500)
-		{
 			KnockOutPlayer(targetid, knockouttime);
-		}
 	}
 
 	dmg_TookDamageTick[targetid] = GetTickCount();
@@ -171,7 +169,7 @@ stock PlayerInflictWound(playerid, targetid, E_WND_TYPE:type, Float:bleedrate, F
 			Logger_S("source", source));
 	}
 
-	ShowActionText(targetid, sprintf(ls(targetid, "WOUNDEDMSSG", true), source, (knockmult * (((woundcount + 1) * 0.2) * ((totalbleedrate * 50) + 1)) < 50.0 ? ("Minor") : ("Severe"))), 5000);
+	ShowActionText(targetid, sprintf(ls(targetid, "WOUNDEDMSSG", true), source, (knockmult * (((woundcount + 1) * 0.2) * ((totalbleedrate * 50) + 1)) < 50.0 ? ("Leve") : ("Grave"))), 5000);
 
 	return 1;
 }
@@ -415,9 +413,7 @@ stock SetPlayerWoundDataFromArray(playerid, input[])
 			sourcelen = MAX_WOUND_SRCLEN;
 		}
 		else if(sourcelen == 0)
-		{
 			err("sourcelen:%d <= 0, truncating.", sourcelen);
-		}
 
 		// memcpy(wnd_Data[playerid][woundid][wnd_source], input[idx], 0, 32 * 4); // no idx++
 		// idx += sourcelen; // jump over the string
