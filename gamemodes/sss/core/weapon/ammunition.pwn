@@ -88,9 +88,6 @@ hook OnItemNameRender(Item:itemid, ItemType:itemtype)
 
 	if(ammotype == -1)
 		return 0;
-
-	if(GetItemLootIndex(itemid) == -1)
-		return 0;
 		
 	new amount;
 	GetItemExtraData(itemid, amount);
