@@ -896,6 +896,7 @@ hook OnItemTweakUpdate(playerid, Item:itemid)
 	if(def_TweakArrow[playerid] != INVALID_OBJECT_ID)
 	{
 		_UpdateDefenceTweakArrow(playerid, itemid);
+		ShowActionText(playerid, "Movendo..", 1000);
 	}
 	return 1;
 }
@@ -928,16 +929,16 @@ hook OnPlayerClickPlayerTD(playerid, PlayerText:playertextid)
 			GetPlayerPos(playerid, pz, pz, pz);
 
 			if(playertextid == def_MoveTD[playerid][0])
-				if(z < pz + (5.0) )
-					SetItemPos(itemid, x, y, z + 0.05);
+				if(z < pz + (3.0) )
+					SetItemPos(itemid, x, y, z + 0.05), ShowActionText(playerid, "Movendo..", 1000);
 				else
-					ShowActionText(playerid, "Nao sobe mais que isto");
+					ShowActionText(playerid, "Nao sobe mais que isto", 1000);
 
 			if(playertextid == def_MoveTD[playerid][1])
-				if(z > pz - 0.2)
-					SetItemPos(itemid, x, y, z - 0.05);
+				if(z > pz - 1.0)
+					SetItemPos(itemid, x, y, z - 0.05), ShowActionText(playerid, "Movendo..", 1000);
 				else
-					ShowActionText(playerid, "Nao desce mais que isto");
+					ShowActionText(playerid, "Nao desce mais que isto", 1000);
 
 			_UpdateDefenceTweakArrow(playerid, itemid);
 		}
@@ -1137,7 +1138,7 @@ timer MoveDefence[1000](itemid, playerid)
 
 	SetItemPos(Item:itemid, ix, iy, iz);
 	SetItemRot(Item:itemid, rx, ry, rz);
-
+	
 	GetItemArrayDataAtCell(Item:itemid, _:buttonz, def_buttonz);
 	SetButtonPos(buttonid, ix, iy, buttonz);
 
@@ -1149,6 +1150,7 @@ timer MoveDefence[1000](itemid, playerid)
 
 	return;
 }
+
 
 hook OnItemHitPointsUpdate(Item:itemid, oldvalue, newvalue)
 {
