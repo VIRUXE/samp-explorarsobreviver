@@ -265,7 +265,7 @@ LoadVehiclesFromFile(file[])
 
 			if(GetVehicleTypeCategory(type) == VEHICLE_CATEGORY_BOAT){
 				new Float:tmp;
-				if(CA_RayCastLine(posX, posY, posZ, posX, posY, posZ - 100.0, tmp, tmp, tmp) != WATER_OBJECT)
+				if(CA_RayCastLine(posX, posY, posZ + 30, posX, posY, posZ - 100.0, tmp, tmp, tmp) != WATER_OBJECT)
 					continue;
 			}
 

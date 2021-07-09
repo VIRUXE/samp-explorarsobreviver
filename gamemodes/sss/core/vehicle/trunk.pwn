@@ -1,7 +1,6 @@
 
 #include <YSI_Coding\y_hooks>
 
-
 static
 			trunk_ContainerVehicle	[MAX_CONTAINER] = {INVALID_VEHICLE_ID, ...},
 Container:	trunk_ContainerID		[MAX_VEHICLES] = {INVALID_CONTAINER_ID, ...},
@@ -12,9 +11,13 @@ Container:	trunk_ContainerID		[MAX_VEHICLES] = {INVALID_CONTAINER_ID, ...},
 /*==============================================================================
 
 	Internal
-
+	
 ==============================================================================*/
 
+hook OnPlayerConnect(playerid)
+{
+	trunk_CurrentVehicle[playerid] = INVALID_VEHICLE_ID;
+}
 
 hook OnVehicleCreated(vehicleid)
 {
@@ -29,11 +32,12 @@ hook OnVehicleCreated(vehicleid)
 	{
 		new vehicletypename[MAX_VEHICLE_TYPE_NAME];
 		GetVehicleTypeName(vehicletype, vehicletypename);
-		trunk_ContainerID[vehicleid] = CreateContainer(vehicletypename, trunksize);
+		trunk_ContainerID[vehicleid] = CreateContainer(sprintf("%s porta-malas", vehicletypename), trunksize);
 		trunk_ContainerVehicle[trunk_ContainerID[vehicleid]] = vehicleid;
 		trunk_Locked[vehicleid] = false;
 	}
 }
+
 
 hook OnVehicleReset(oldid, newid)
 {
@@ -72,8 +76,8 @@ hook OnPlayerInteractVehicle(playerid, vehicleid, Float:angle)
 			CancelPlayerMovement(playerid);
 			SetPlayerFacingAngle(playerid, (vehicleangle-angle)-180.0);
 
-			DisplayContainerInventory(playerid, GetVehicleContainer(vehicleid));
 			trunk_CurrentVehicle[playerid] = vehicleid;
+			DisplayContainerInventory(playerid, GetVehicleContainer(vehicleid));
 
 			HideActionText(playerid);
 
@@ -112,6 +116,16 @@ hook OnPlayerCloseContainer(playerid, Container:containerid)
 	}
 
 	return Y_HOOKS_CONTINUE_RETURN_0;
+}
+
+hook OnPlayerCloseInventory(playerid)
+{
+	if(IsValidVehicle(trunk_CurrentVehicle[playerid]))
+	{
+		VehicleBootState(trunk_CurrentVehicle[playerid], 0);
+		VehicleTrunkUpdateSave(playerid);
+		trunk_CurrentVehicle[playerid] = INVALID_VEHICLE_ID;
+	}
 }
 
 hook OnPlayerUseItem(playerid, Item:itemid)

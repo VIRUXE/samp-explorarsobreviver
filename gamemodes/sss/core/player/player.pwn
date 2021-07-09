@@ -53,7 +53,7 @@ public OnPlayerConnect(playerid)
 
 	Logger_Log("player connected", Logger_P(playerid));
 
-	SetPlayerColor(playerid, 0xFFFFFF00);
+	SetPlayerColor(playerid, COLOR_PLAYER_NORMAL);
 
 	TogglePlayerClock(playerid, true);
 	
@@ -316,6 +316,10 @@ public OnPlayerClickTextDraw(playerid, Text:clickedid)
 	return 1;
 }
 
+timer UpdateDutyPos[1000](playerid)
+	if(IsPlayerOnAdminDuty(playerid))
+		SetPlayerPos(playerid, 1000.0, 1000.0, 50.0);
+
 public OnPlayerSpawn(playerid)
 {
 	if(IsPlayerNPC(playerid))
@@ -323,7 +327,8 @@ public OnPlayerSpawn(playerid)
 
 	if(IsPlayerOnAdminDuty(playerid))
 	{
-		SetPlayerPos(playerid, 1000.0, 1000.0, 60.0);
+		SetPlayerPos(playerid, 1000.0, 1000.0, 50.0);
+		defer UpdateDutyPos(playerid);
 		return 1;
 	}
 

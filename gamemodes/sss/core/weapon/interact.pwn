@@ -340,6 +340,19 @@ static
 	Item:trans_SelectedItem[MAX_PLAYERS] = {INVALID_ITEM_ID, ...};
 
 
+hook OnPlayerConnect(playerid)
+{
+	trans_ContainerOptionID[playerid] = -1;
+	trans_SelectedItem[playerid] = INVALID_ITEM_ID;
+}
+
+hook OnPlayerCloseContainer(playerid, Container:containerid)
+{
+	trans_ContainerOptionID[playerid] = -1;
+	trans_SelectedItem[playerid] = INVALID_ITEM_ID;
+	return Y_HOOKS_CONTINUE_RETURN_0;
+}
+
 hook OnPlayerViewCntOpt(playerid, Container:containerid)
 {
 	new

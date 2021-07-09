@@ -197,7 +197,7 @@ hook OnHoldActionFinish(playerid)
 }
 
 hook OnHoldActionUpdate(playerid, progress)
-{
+{	
 	if(IsValidVehicle(fuel_CurrentlyRefuelling[playerid]))
 	{
 		new
@@ -249,6 +249,13 @@ hook OnHoldActionUpdate(playerid, progress)
 	}
 	else if(fuel_CurrentFuelOutlet[playerid] != INVALID_FUEL_OUTLET_ID)
 	{
+		if(fuel_Data[fuel_CurrentFuelOutlet[playerid]][fuel_amount] <= 0.0) {
+			defer ReFuelOutlet(fuel_CurrentFuelOutlet[playerid]);
+			fuel_Data[fuel_CurrentFuelOutlet[playerid]][fuel_amount] = 0.0;
+			StopRefuellingFuelCan(playerid);
+			return Y_HOOKS_CONTINUE_RETURN_0;
+		}
+		
 		new
 			Item:itemid,
 			liqcont,
@@ -271,14 +278,8 @@ hook OnHoldActionUpdate(playerid, progress)
 		amount = GetLiquidItemLiquidAmount(itemid);
 		capacity = GetLiquidContainerTypeCapacity(liqcont);
 
-		if(fuel_Data[fuel_CurrentFuelOutlet[playerid]][fuel_amount] <= 0.0) {
-			defer ReFuelOutlet(fuel_CurrentFuelOutlet[playerid]);
-			fuel_Data[fuel_CurrentFuelOutlet[playerid]][fuel_amount] = 0.0;
-			StopRefuellingFuelCan(playerid);
-			return Y_HOOKS_CONTINUE_RETURN_0;
-		}
-
-		if(amount >= capacity)
+		
+		if(amount >= capacity || fuel_Data[fuel_CurrentFuelOutlet[playerid]][fuel_amount] <= 0.0)
 		{
 			StopRefuellingFuelCan(playerid);
 			return Y_HOOKS_CONTINUE_RETURN_0;
@@ -296,12 +297,11 @@ hook OnHoldActionUpdate(playerid, progress)
 		transfer = (amount + 1.2 > capacity) ? capacity - amount : 1.2;
 		SetLiquidItemLiquidAmount(itemid, amount + transfer);
 		SetLiquidItemLiquidType(itemid, liquid_Petrol);
-
 		fuel_Data[fuel_CurrentFuelOutlet[playerid]][fuel_amount] -= transfer;
 
 		if(fuel_Data[fuel_CurrentFuelOutlet[playerid]][fuel_amount] < 0.0)
 			fuel_Data[fuel_CurrentFuelOutlet[playerid]][fuel_amount] = 0.0;
-
+			
 		UpdateFuelText(fuel_CurrentFuelOutlet[playerid]);
 	}
 

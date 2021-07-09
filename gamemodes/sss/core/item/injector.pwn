@@ -170,7 +170,7 @@ hook OnPlayerDrugWearOff(playerid, drugtype)
 	if(drugtype == drug_Heroin)
 	{
 		SetTimeForPlayer(playerid, -1, -1, true);
-		SetWeatherForPlayer(playerid);
+		SetWeatherForPlayer(playerid, GetGlobalWeather());
 	}
 
 	return Y_HOOKS_CONTINUE_RETURN_0;
