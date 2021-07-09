@@ -3,7 +3,7 @@
 
 
 #define MAX_TENT			(2048)
-#define MAX_TENT_ITEMS		(16)
+#define MAX_TENT_ITEMS		(40)
 #define INVALID_TENT_ID		(-1)
 #define DIRECTORY_TENT		DIRECTORY_MAIN"tent/"
 
@@ -262,7 +262,7 @@ public OnTentLoad(Item:itemid, active, uuid[], data[], length)
 	tentid = CreateTentFromItem(itemid);
 	containerid = GetTentContainer(tentid);
 
-	if(IsContainerEmpty(containerid) || GetItemType(itemid) != item_TentPack)
+	if(GetItemType(itemid) != item_TentPack)
 	{
 		RemoveSavedItem(itemid, DIRECTORY_TENT);
 		return 0;
