@@ -355,11 +355,11 @@ hook OnPlayerViewCntOpt(playerid, Container:containerid)
 	{
 		if(IsValidItem(trans_SelectedItem[playerid]) && trans_SelectedItem[playerid] != itemid)
 		{
-			trans_ContainerOptionID[playerid] = AddContainerOption(playerid, "Transfer Ammo Here");
+			trans_ContainerOptionID[playerid] = AddContainerOption(playerid, "Transferir municao aqui");
 		}
 		else
 		{
-			trans_ContainerOptionID[playerid] = AddContainerOption(playerid, "Transfer Ammo...");
+			trans_ContainerOptionID[playerid] = AddContainerOption(playerid, "Transferir municao...");
 		}
 	}
 
