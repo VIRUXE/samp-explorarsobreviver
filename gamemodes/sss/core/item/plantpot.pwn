@@ -193,7 +193,7 @@ _pot_UpdateModel(Item:itemid, bool:toggle = true)
 	if(toggle)
 	{
 		new active;
-		GetItemArrayDataAtCell(itemid, active, E_PLANT_POT_ACTIVE);
+		GetItemArrayDataAtCell(itemid, _:active, E_PLANT_POT_ACTIVE);
 		if(!active)
 			return 0;
 
