@@ -212,17 +212,16 @@ timer SupplyDropTimer[SUPPLY_DROP_TICK_INTERVAL]()
 	// of loot a drop contains. This uncertainty also brings in a skill of
 	// keeping track of drops. If a rare drop hasn't appeared for hours then an
 	// unknown drop is more likely to be of that type so more worth the risk.
-	new name[MAX_SUPPLY_DROP_TYPE_NAME];
+	new supplyType[MAX_SUPPLY_DROP_TYPE_NAME];
 
 	if(random(100) < 50)
-		strcat(name, sup_TypeData[type][supt_name], MAX_SUPPLY_DROP_TYPE_NAME);
-
+		strcat(supplyType, sup_TypeData[type][supt_name], MAX_SUPPLY_DROP_TYPE_NAME);
 	else
-		name = "Unknown";
+		supplyType = "Desconhecido";
 
-	ChatMsgAll(WHITE, ""C_YELLOW" » Suprimentos: "C_BLUE"\"%s\""C_YELLOW" Caindo em: "C_ORANGE"\"%s\","C_WHITE" (Icone 'S')", name, sup_DropLocationData[id][supl_name]);
+	ChatMsgAll(YELLOW, "» "C_GREEN"[Exército]"C_YELLOW" Caixa de Suprimentos caindo em "C_BLUE"\"%s\"."C_WHITE" (Icone 'S' no Radar)", sup_DropLocationData[id][supl_name]);
+	ChatMsgAll(YELLOW, "» "C_GREEN"[Exército]"C_YELLOW" Suprimentos do Tipo "C_BLUE"\"%s\"", supplyType);
 
-	// Remove the location from the index so it isn't chosen again.
 	Iter_Remove(sup_Index, id);
 
 	// Record the current time and store it for next time this function is
