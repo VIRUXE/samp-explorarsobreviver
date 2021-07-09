@@ -21,9 +21,12 @@ hook OnPlayerSpawnNewChar(playerid)
 
 ptask UpdatePlayerScore[60000](playerid)
 {
-	if(!IsPlayerOnAdminDuty(playerid))
-	{
-		SetPlayerScore(playerid, GetPlayerScore(playerid) + 1);
-	}
+	if(IsPlayerOnAdminDuty(playerid))
+		return;
+
+	if(IsPlayerUnfocused(playerid))
+		return;
+
+	SetPlayerScore(playerid, GetPlayerScore(playerid) + 1);
 }
 
