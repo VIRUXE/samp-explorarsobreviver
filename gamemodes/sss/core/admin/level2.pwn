@@ -26,7 +26,7 @@ ACMD:adm[2](playerid, params[])tr
 		return 1;
 	}
 	
-	TogglePlayerAdminDuty(playerid, !IsPlayerOnAdminDuty(playerid), strcmp(params, "here", true, 4));
+	TogglePlayerAdminDuty(playerid, !IsPlayerOnAdminDuty(playerid), strcmp(params, "aqui", true, 4));
 
 	return 1;
 }
