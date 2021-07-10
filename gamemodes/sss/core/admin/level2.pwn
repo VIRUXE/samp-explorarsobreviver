@@ -18,7 +18,7 @@ hook OnGameModeInit()
 	Enter admin duty mode, disabling normal gameplay mechanics
 
 ==============================================================================*/
-ACMD:adm[2](playerid, params[])tr
+ACMD:adm[2](playerid, params[])
 {
 	if(GetPlayerState(playerid) == PLAYER_STATE_SPECTATING)
 	{
