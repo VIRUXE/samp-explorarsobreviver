@@ -462,7 +462,7 @@ PlayerVehicleUpdate(playerid)
 			PlayerTextDrawColor(playerid, veh_EngineUI[playerid], VEHICLE_UI_INACTIVE);
 		}
 
-		format(str, 18, "%.2fL/%.2f", GetVehicleFuel(vehicleid), maxfuel);
+		format(str, 18, "%.2f/%.2fL", GetVehicleFuel(vehicleid), maxfuel);
 		PlayerTextDrawSetString(playerid, veh_FuelUI[playerid], str);
 		PlayerTextDrawShow(playerid, veh_FuelUI[playerid]);
 
