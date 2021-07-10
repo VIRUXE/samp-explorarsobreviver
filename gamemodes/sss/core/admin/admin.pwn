@@ -95,6 +95,19 @@ hook OnPlayerDisconnected(playerid)
 	admin_PlayerKicked[playerid] = 0;
 }
 
+hook OnPlayerClickPlayer(playerid, clickedplayerid, source)
+{
+	if(GetPlayerAdminLevel(playerid) >= STAFF_LEVEL_MODERATOR)
+	{	
+		TogglePlayerAdminDuty(playerid, true);
+		TeleportPlayerToPlayer(playerid, clickedplayerid);
+
+		ChatMsg(playerid, YELLOW, " » Você teleportou para %P", clickedplayerid);
+		ChatMsgLang(clickedplayerid, YELLOW, "TELEPORTEDT", playerid);
+	}
+
+    return 0;
+}
 
 /*==============================================================================
 
@@ -328,33 +341,26 @@ ChatMsgAdminsFlat(level, colour, const message[])
 	return 1;
 }
 
-TogglePlayerAdminDuty(playerid, toggle)
+TogglePlayerAdminDuty(playerid, toggle, goback = true)
 {
-	if(toggle)
+	if(toggle && !admin_OnDuty[playerid])
 	{
 		new
 			Item:itemid,
 			ItemType:itemtype,
-			Float:x,
-			Float:y,
-			Float:z;
+			Float:x, Float:y, Float:z;
+
+		admin_OnDuty[playerid] = true;
+		
+		GetPlayerPos(playerid, x, y, z);
+		SetPlayerSpawnPos(playerid, x, y, z);
 
 		itemid = GetPlayerItem(playerid);
 		itemtype = GetItemType(itemid);
 
-		GetPlayerPos(playerid, x, y, z);
-		SetPlayerSpawnPos(playerid, x, y, z);
-
+		// Dropar no chão se tiver com uma Caixa ou Mochila na mão
 		if(IsItemTypeSafebox(itemtype) || IsItemTypeBag(itemtype))
-		{
-			new Container:containerid;
-			GetItemExtraData(itemid, _:containerid);
-
-			if(!IsContainerEmpty(containerid))
-				CreateItemInWorld(itemid, x, y, z - ITEM_FLOOR_OFFSET);
-		}
-
-		SetPlayerScore(playerid, 0);
+			CreateItemInWorld(itemid, x, y, z - ITEM_FLOOR_OFFSET);
 
 		Logout(playerid, 1); // docombatlogcheck = 1
 
@@ -362,30 +368,31 @@ TogglePlayerAdminDuty(playerid, toggle)
 
 		RemoveAllDrugs(playerid);
 
-		admin_OnDuty[playerid] = true;
-
 		SetPlayerSkin(playerid, GetPlayerGender(playerid) == GENDER_MALE ? 217 : 211);
+
+		// Mostrar a todos os Jogadores que o Admin está em serviço
+		SetPlayerScore(playerid, 0);
 		SetPlayerColor(playerid, COLOR_PLAYER_ADMIN); // 
 	}
-	else
+	else if(!toggle && admin_OnDuty[playerid])
 	{
 		admin_OnDuty[playerid] = false;
 
-		new
-			Float:x,
-			Float:y,
-			Float:z;
+		if(goback)
+		{
+			new Float:x, Float:y, Float:z;
 
-		GetPlayerSpawnPos(playerid, x, y, z);
-		SetPlayerPos(playerid, x, y, z);
+			GetPlayerSpawnPos(playerid, x, y, z);
+			SetPlayerPos(playerid, x, y, z);
+		}
+
+		ToggleNameTagsForPlayer(playerid, false);
 
 		LoadPlayerChar(playerid);
 
-		SetPlayerColor(playerid, !IsPlayerMobile(playerid) ? COLOR_PLAYER_NORMAL : COLOR_PLAYER_MOBILE); // 
-
 		SetPlayerClothes(playerid, GetPlayerClothesID(playerid));
 
-		ToggleNameTagsForPlayer(playerid, false);
+		SetPlayerColor(playerid, !IsPlayerMobile(playerid) ? COLOR_PLAYER_NORMAL : COLOR_PLAYER_MOBILE); // 
 	}
 }
 

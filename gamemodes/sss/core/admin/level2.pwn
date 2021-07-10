@@ -18,17 +18,15 @@ hook OnGameModeInit()
 	Enter admin duty mode, disabling normal gameplay mechanics
 
 ==============================================================================*/
-
-
-ACMD:adm[2](playerid, params[])
+ACMD:adm[2](playerid, params[])tr
 {
 	if(GetPlayerState(playerid) == PLAYER_STATE_SPECTATING)
 	{
 		ChatMsg(playerid, YELLOW, " » Não pode entrar em Modo de Admin enquanto está em Spectate.");
 		return 1;
 	}
-
-	TogglePlayerAdminDuty(playerid, !IsPlayerOnAdminDuty(playerid));
+	
+	TogglePlayerAdminDuty(playerid, !IsPlayerOnAdminDuty(playerid), strcmp(params, "here", true, 4));
 
 	return 1;
 }
