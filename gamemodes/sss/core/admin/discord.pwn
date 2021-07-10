@@ -10,21 +10,12 @@ hook OnScriptInit()
 public DCC_OnMessageCreate(DCC_Message:message)
 {
     new
-        dest[DCC_ID_SIZE],
-        DCC_Channel:channel,
-        DCC_User:author,
-        nickname[MAX_PLAYER_NAME],
-        user_id[DCC_ID_SIZE],
-        user_name[DCC_USERNAME_SIZE],
-        bool:is_bot;
+        DCC_Channel:    channel,
+        DCC_User:       author,
+        bool:           is_bot;
 
-    DCC_GetMessageId(DCC_Message:message, dest);
     DCC_GetMessageChannel(DCC_Message:message, channel);
     DCC_GetMessageAuthor(DCC_Message:message, author);
-    DCC_GetMessageContent(DCC_Message:message, nickname);
-
-    DCC_GetUserId(author, user_id);
-    DCC_GetUserName(author, user_name);
 
     DCC_IsUserBot(author, is_bot);
     
@@ -33,7 +24,13 @@ public DCC_OnMessageCreate(DCC_Message:message)
 
     if(channel == whitelist)
     {
-        new result[84+MAX_PLAYER_NAME];
+        new 
+            result[84+MAX_PLAYER_NAME],
+            nickname[MAX_PLAYER_NAME],
+            userid[DCC_ID_SIZE];
+
+        DCC_GetUserId(author, userid);
+        DCC_GetMessageContent(DCC_Message:message, nickname);
 
         if(strlen(nickname) > MAX_PLAYER_NAME - 1)
             format(result, sizeof(result),      "> Esse nick `%s` é muito grande.", nickname);
@@ -43,17 +40,24 @@ public DCC_OnMessageCreate(DCC_Message:message)
             format(result, sizeof(result),      "> Esse nick `%s` ja foi aceito.", nickname); 
         else if(!IsValidUsername(nickname))
             format(result, sizeof(result),      "> Esse nick `%s` é inválido.", nickname); 
-        else if(IsNameInWhitelist(user_id))
+        else if(IsNameInWhitelist(userid))
             format(result, sizeof(result),      "> Você já vinculou essa conta de Jogo com uma conta de Discord.");
         else
         {
-            new DCC_Guild:guild;
+            new 
+            DCC_Guild:  guild,
+                        discordname[DCC_USERNAME_SIZE];
+
+            DCC_GetUserName(author, discordname);
             
             AddNameToWhitelist(nickname, true);
-            AddNameToWhitelist(user_id);
+            AddNameToWhitelist(userid);
+
             DCC_GetChannelGuild(channel, guild);
             DCC_SetGuildMemberNickname(guild, author, nickname);
-            ChatMsgAll(BLUE, " » '%s' vinculou sua conta de Discord!", nickname);
+
+            ChatMsgAll(BLUE, " » '%s' vinculou sua conta de Discord ('%s')!", nickname, discordname);
+
             format(result, sizeof(result), "> Sua conta de Jogo `%s` foi vinculada com sua conta de Discord com Sucesso. Bom jogo!", nickname);
         }
         DCC_SendChannelMessage(DCC_Channel:channel, result);
