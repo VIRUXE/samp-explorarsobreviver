@@ -88,7 +88,7 @@ hook OnPlayerInteractVehicle(playerid, vehicleid, Float:angle)
 	return Y_HOOKS_CONTINUE_RETURN_0;
 }
 
-hook OnPlayerOpenContainer(playerid, Container:containerid)
+/*hook OnPlayerOpenContainer(playerid, Container:containerid)
 {
 	new vehicleid = trunk_ContainerVehicle[containerid];
 
@@ -101,21 +101,16 @@ hook OnPlayerOpenContainer(playerid, Container:containerid)
 		}
 	}
 	return Y_HOOKS_CONTINUE_RETURN_0;
-}
+}*/
 
 hook OnPlayerCloseContainer(playerid, Container:containerid)
 {
 	if(IsValidVehicle(trunk_CurrentVehicle[playerid]))
 	{
-		if(containerid == GetVehicleContainer(trunk_CurrentVehicle[playerid]))
-		{
-			VehicleBootState(trunk_CurrentVehicle[playerid], 0);
-			VehicleTrunkUpdateSave(playerid);
-			trunk_CurrentVehicle[playerid] = INVALID_VEHICLE_ID;
-		}
+		VehicleBootState(trunk_CurrentVehicle[playerid], 0);
+		VehicleTrunkUpdateSave(playerid);
+		trunk_CurrentVehicle[playerid] = INVALID_VEHICLE_ID;
 	}
-
-	return Y_HOOKS_CONTINUE_RETURN_0;
 }
 
 hook OnPlayerCloseInventory(playerid)
