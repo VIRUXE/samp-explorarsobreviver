@@ -154,7 +154,7 @@ hook OnHoldActionFinish(playerid)
 
 		SetPlayerHatItem(playerid, RemovePlayerHatItem(playerid));
 		SetPlayerMaskItem(playerid, RemovePlayerMaskItem(playerid));
-		GivePlayerBag(playerid, GetPlayerBagItem(playerid));
+		//GivePlayerBag(playerid, GetPlayerBagItem(playerid));
 
 		return Y_HOOKS_BREAK_RETURN_1;
 	}
