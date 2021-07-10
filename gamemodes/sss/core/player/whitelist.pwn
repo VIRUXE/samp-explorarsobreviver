@@ -82,7 +82,7 @@ public DCC_OnMessageCreate(DCC_Message:message)
     if(channel == wl_DiscordChannel)
     {
         new 
-            result[84+MAX_PLAYER_NAME] = "Resultado inesperado.",
+            result[84+MAX_PLAYER_NAME] = "Tem de fornecer o nick que vai utilizar dentro do jogo.",
             nickname[MAX_PLAYER_NAME],
             userid[DCC_ID_SIZE];
 
