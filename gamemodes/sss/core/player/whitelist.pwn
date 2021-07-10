@@ -71,8 +71,8 @@ public DCC_OnMessageCreate(DCC_Message:message)
         DCC_User:       author,
         bool:           is_bot;
 
-    DCC_GetMessageChannel(DCC_Message:message, channel);
-    DCC_GetMessageAuthor(DCC_Message:message, author);
+    DCC_GetMessageChannel(message, channel);
+    DCC_GetMessageAuthor(message, author);
 
     DCC_IsUserBot(author, is_bot);
     
@@ -82,12 +82,12 @@ public DCC_OnMessageCreate(DCC_Message:message)
     if(channel == wl_DiscordChannel)
     {
         new 
-            result[84+MAX_PLAYER_NAME],
+            result[84+MAX_PLAYER_NAME] = "Resultado inesperado.",
             nickname[MAX_PLAYER_NAME],
             userid[DCC_ID_SIZE];
 
         DCC_GetUserId(author, userid);
-        DCC_GetMessageContent(DCC_Message:message, nickname);
+        DCC_GetMessageContent(message, nickname);
 
         if(strlen(nickname) > MAX_PLAYER_NAME - 1)
             format(result, sizeof(result),      "> Esse nick `%s` é muito grande.", nickname);
@@ -98,26 +98,25 @@ public DCC_OnMessageCreate(DCC_Message:message)
         else if(!IsValidUsername(nickname))
             format(result, sizeof(result),      "> Esse nick `%s` é inválido.", nickname); 
         else if(IsNameInWhitelist(userid))
-            format(result, sizeof(result),      "> Você já vinculou essa conta de Jogo com uma conta de Discord.");
+            result =							"> Você já vinculou essa conta de Jogo com uma conta de Discord.";
         else
         {
             new 
             DCC_Guild:  guild,
                         discordname[DCC_USERNAME_SIZE];
 
-            DCC_GetUserName(author, discordname);
-            
             AddNameToWhitelist(nickname, true);
             AddNameToWhitelist(userid);
 
             DCC_GetChannelGuild(channel, guild);
             DCC_SetGuildMemberNickname(guild, author, nickname);
 
+            DCC_GetUserName(author, discordname);
             ChatMsgAll(BLUE, " » '%s' vinculou sua conta de Discord ('%s')!", nickname, discordname);
 
             format(result, sizeof(result), "> Sua conta de Jogo `%s` foi vinculada com sua conta de Discord com Sucesso. Bom jogo!", nickname);
         }
-        DCC_SendChannelMessage(DCC_Channel:channel, result);
+        DCC_SendChannelMessage(channel, result);
     }
     return 1;
 }
