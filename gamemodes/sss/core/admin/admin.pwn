@@ -361,9 +361,14 @@ TogglePlayerAdminDuty(playerid, toggle, goback = true)
 		itemid = GetPlayerItem(playerid);
 		itemtype = GetItemType(itemid);
 
-		// Dropar no chão se tiver com uma Caixa ou Mochila na mão
 		if(IsItemTypeSafebox(itemtype) || IsItemTypeBag(itemtype))
-			CreateItemInWorld(itemid, x, y, z - ITEM_FLOOR_OFFSET);
+		{
+			new Container:containerid;
+			GetItemExtraData(itemid, _:containerid);
+
+			if(!IsContainerEmpty(containerid))
+				CreateItemInWorld(itemid, x, y, z - ITEM_FLOOR_OFFSET);
+		}
 
 		Logout(playerid, 1); // docombatlogcheck = 1
 
