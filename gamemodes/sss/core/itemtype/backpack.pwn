@@ -257,16 +257,6 @@ hook OnItemCreate(Item:itemid)
 	}
 }
 
-hook OnItemCreateInWorld(Item:itemid)
-{
-	if(IsItemTypeBag(GetItemType(itemid)))
-	{
-		new Button:buttonid;
-		GetItemButtonID(itemid, buttonid);
-		SetButtonText(buttonid, "Segure "KEYTEXT_INTERACT" para pegar~n~Pressione "KEYTEXT_INTERACT" para abrir");
-	}
-}
-
 hook OnItemDestroy(Item:itemid)
 {
 	if(IsItemTypeBag(GetItemType(itemid)))
