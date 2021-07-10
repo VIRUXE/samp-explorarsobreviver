@@ -455,7 +455,7 @@ Login(playerid)
 
 	CheckAdminLevel(playerid);
 
-	if(GetPlayerAdminLevel(playerid) > 0)
+	if(GetPlayerAdminLevel(playerid))
 	{
 		new
 			reports = GetUnreadReports(),
@@ -463,10 +463,10 @@ Login(playerid)
 
 		ChatMsg(playerid, BLUE, " » Nível de Admin: %d", GetPlayerAdminLevel(playerid));
 
-		if(reports > 0)
-			ChatMsg(playerid, YELLOW, " » %d relatórios por ler. Digite "C_BLUE"/relatorios", reports);
+		if(reports)
+			ChatMsg(playerid, YELLOW, " » %d relatórios por ler. Digite "C_BLUE"/reports", reports);
 
-		if(issues > 0)
+		if(issues)
 			ChatMsg(playerid, YELLOW, " » %d Bugs reportados. Digite "C_BLUE"/bugs", issues);
 	}
 
