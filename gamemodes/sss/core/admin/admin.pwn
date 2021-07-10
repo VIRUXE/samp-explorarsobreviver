@@ -365,7 +365,7 @@ TogglePlayerAdminDuty(playerid, toggle)
 		admin_OnDuty[playerid] = true;
 
 		SetPlayerSkin(playerid, GetPlayerGender(playerid) == GENDER_MALE ? 217 : 211);
-		SetPlayerColor(playerid, !IsPlayerMobile(playerid) ? COLOR_PLAYER_NORMAL : COLOR_PLAYER_MOBILE); // 
+		SetPlayerColor(playerid, COLOR_PLAYER_ADMIN); // 
 	}
 	else
 	{

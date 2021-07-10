@@ -188,6 +188,7 @@ public OnGameModeInit()
 
 #define COLOR_PLAYER_NORMAL			0xB8B8B800
 #define COLOR_PLAYER_MOBILE			0x85858500
+#define COLOR_PLAYER_ADMIN			0xE8545400
 
 // Embedding Colours
 #define C_YELLOW					"{FFFF00}"
