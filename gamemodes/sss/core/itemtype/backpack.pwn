@@ -39,9 +39,9 @@ Item:		bag_PlayerBagID			[MAX_PLAYERS],
 			bag_InventoryOptionID	[MAX_PLAYERS],
 bool:		bag_PuttingInBag		[MAX_PLAYERS],
 bool:		bag_TakingOffBag		[MAX_PLAYERS],
-Item:		bag_CurrentBag			[MAX_PLAYERS],
-Timer:		bag_OtherPlayerEnter	[MAX_PLAYERS],
-			bag_LookingInBag		[MAX_PLAYERS];
+Item:		bag_CurrentBag			[MAX_PLAYERS];
+//Timer:		bag_OtherPlayerEnter	[MAX_PLAYERS],
+//			bag_LookingInBag		[MAX_PLAYERS];
 
 
 forward OnPlayerWearBag(playerid, Item:itemid);
@@ -70,7 +70,7 @@ hook OnPlayerConnect(playerid)
 	bag_PuttingInBag[playerid] = false;
 	bag_TakingOffBag[playerid] = false;
 	bag_CurrentBag[playerid] = INVALID_ITEM_ID;
-	bag_LookingInBag[playerid] = INVALID_PLAYER_ID;
+	//bag_LookingInBag[playerid] = INVALID_PLAYER_ID;
 }
 
 
@@ -319,10 +319,10 @@ hook OnPlayerKeyStateChange(playerid, newkeys, oldkeys)
 		_BagDropHandler(playerid);
 	}
 
-	if(newkeys & 16)
+	/*if(newkeys & 16)
 	{
 		_BagRummageHandler(playerid);
-	}
+	}*/
 
 	return 1;
 }
@@ -370,7 +370,7 @@ _BagEquipHandler(playerid)
 	return 1;
 }
 
-timer AddItemToPlayer[300](playerid, itemid)
+timer AddItemToPlayer[100](playerid, itemid)
 {
 	if(!IsValidItem(Item:itemid))
 		return;
@@ -419,7 +419,7 @@ timer AddItemToPlayer[300](playerid, itemid)
 	return;
 }
 
-timer bag_PutItemIn[300](playerid, itemid, containerid)
+timer bag_PutItemIn[150](playerid, itemid, containerid)
 {
 	AddItemToContainer(Container:containerid, Item:itemid, playerid);
 	bag_PuttingInBag[playerid] = false;
@@ -456,6 +456,7 @@ _BagDropHandler(playerid)
 	return 1;
 }
 
+/*
 _BagRummageHandler(playerid)
 {
 	foreach(new i : Player)
@@ -511,6 +512,7 @@ PlayerBagUpdate(playerid)
 		}
 	}
 }
+*/
 
 _DisplayBagDialog(playerid, Item:itemid, animation)
 {
@@ -580,7 +582,17 @@ hook OnPlayerCloseContainer(playerid, containerid)
 	{
 		ClearAnimations(playerid);
 		bag_CurrentBag[playerid] = INVALID_ITEM_ID;
-		bag_LookingInBag[playerid] = -1;
+		//bag_LookingInBag[playerid] = -1;
+	}
+}
+
+hook OnPlayerCloseInventory(playerid)
+{
+	if(IsValidItem(bag_CurrentBag[playerid]))
+	{
+		ClearAnimations(playerid);
+		bag_CurrentBag[playerid] = INVALID_ITEM_ID;
+		//bag_LookingInBag[playerid] = -1;
 	}
 }
 
