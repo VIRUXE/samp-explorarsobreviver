@@ -61,9 +61,10 @@ UpdateRadioMarker(playerid, info = 1)
 {
 	if(GetPlayerRadioFrequency(playerid) > MIN_RADIO_FREQ)
 	{
-		//if(!IsPlayerMap(playerid)) return 0;
+		new playersInFreq;
+		
+		//if(!PlayerHasMap(playerid)) return 0;
 
-		new count;
 		foreach(new i : Player)
 		{
 			if(i == playerid)
@@ -73,7 +74,7 @@ UpdateRadioMarker(playerid, info = 1)
 			{
 				SetPlayerMarkerForPlayer(playerid, i, CHAT_RADIO);
 				SetPlayerMarkerForPlayer(i, playerid, CHAT_RADIO);
-				count ++;
+				playersInFreq++;
 			}
 			else
 			{
@@ -82,7 +83,7 @@ UpdateRadioMarker(playerid, info = 1)
 			}
 		}
 
-		if(info && count) ChatMsgLang(playerid, CHAT_RADIO, "RADIOINFO", count, GetPlayerRadioFrequency(playerid));
+		if(info && playersInFreq) ChatMsgLang(playerid, CHAT_RADIO, "RADIOINFO", playersInFreq, GetPlayerRadioFrequency(playerid));
 	}
 	return 1;
 }
@@ -110,7 +111,7 @@ UpdateRadioUI(playerid)
 {
 	new str[18];
 
-	format(str, 18, "Frequency: %.2f", GetPlayerRadioFrequency(playerid));
+	format(str, 18, "Frequencia: %.2f", GetPlayerRadioFrequency(playerid));
 	PlayerTextDrawSetString(playerid, RadioUI_Freq[playerid], str);
 
 	if(GetPlayerChatMode(playerid) == CHAT_MODE_LOCAL)
