@@ -97,7 +97,7 @@ hook OnPlayerDisconnected(playerid)
 
 hook OnPlayerClickPlayer(playerid, clickedplayerid, source)
 {
-	if(GetPlayerAdminLevel(playerid) >= STAFF_LEVEL_MODERATOR && )
+	if(GetPlayerAdminLevel(playerid) >= STAFF_LEVEL_MODERATOR)
 	{	
 		if(GetPlayerState(playerid) == PLAYER_STATE_SPECTATING)
 			ExitSpectateMode(playerid);
