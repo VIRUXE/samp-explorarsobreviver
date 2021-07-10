@@ -359,7 +359,6 @@ new stock
 #include "sss/core/player/language.pwn"
 #include "sss/core/admin/anti-raid-hack.pwn"
 //#include "sss/core/admin/anti-object-wall.pwn"
-#include "sss/core/admin/discord.pwn"
 //#include "sss/core/admin/telegram.pwn"
 
 
