@@ -29,7 +29,7 @@ static
 			tnt_ObjData[MAX_TENT][E_TENT_OBJECT_DATA],
 			tnt_ContainerTent[MAX_CONTAINER] = {-1, ...},
 Item:		tnt_CurrentTentItem[MAX_PLAYERS],
-			tnt_TweakID[MAX_PLAYERS];
+			tnt_TweakID[MAX_PLAYERS] = {INVALID_TENT_ID, ...};
 
 new
    Iterator:tnt_Index<MAX_TENT>;
@@ -424,6 +424,7 @@ StopBuildingTent(playerid)
 	ClearAnimations(playerid);
 	HideActionText(playerid);
 	tnt_CurrentTentItem[playerid] = INVALID_ITEM_ID;
+	tnt_TweakID[playerid] = INVALID_TENT_ID;
 
 	return;
 }
@@ -517,6 +518,7 @@ hook OnHoldActionFinish(playerid)
 			ClearAnimations(playerid);
 			HideActionText(playerid);
 			tnt_TweakID[playerid] = CreateTentFromItem(tnt_CurrentTentItem[playerid]);
+			StopBuildingTent(playerid);
 			TweakItem(playerid, tnt_CurrentTentItem[playerid]);
 		}
 
