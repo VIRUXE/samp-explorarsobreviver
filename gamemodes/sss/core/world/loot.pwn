@@ -212,8 +212,10 @@ hook OnPlayerDroppedItem(playerid, Item:itemid)
 }
 
 hook OnItemRemoveFromWorld(Item:itemid)
+{
+	loot_ItemLootIndex[itemid] = -1;
 	stop DestroyUItem[itemid];
-
+}
 
 hook OnItemDestroyed(Item:itemid)
 	stop DestroyUItem[itemid];
