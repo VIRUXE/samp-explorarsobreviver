@@ -246,7 +246,7 @@ TimeoutPlayer(playerid, const reason[])
 
 	log("[PART] %p (timeout: %s)", playerid, reason);
 
-	ChatMsgAdmins(1, GREY, " » %P"C_GREY" caiu. Motivo: "C_BLUE"%s", playerid, reason);
+	ChatMsgAdmins(1, GREY, " » %P"C_GREY" foi timeout. Motivo: "C_BLUE"%s", playerid, reason);
 
 	return 1;
 }
@@ -377,8 +377,8 @@ TogglePlayerAdminDuty(playerid, toggle)
 			Float:z;
 
 		GetPlayerSpawnPos(playerid, x, y, z);
-
 		SetPlayerPos(playerid, x, y, z);
+
 		LoadPlayerChar(playerid);
 
 		SetPlayerColor(playerid, !IsPlayerMobile(playerid) ? COLOR_PLAYER_NORMAL : COLOR_PLAYER_MOBILE); // 
