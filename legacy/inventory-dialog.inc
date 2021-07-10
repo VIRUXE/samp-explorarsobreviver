@@ -130,8 +130,6 @@ stock DisplayPlayerInventory(playerid)
 
 	inv_ItemListTotal[playerid] = 0;
 
-	inv_ItemListTotal[playerid] = 0;
-
 	new ret_outer = GetPlayerInventorySize(playerid, size);
 	if(ret_outer) {
 		return 2;

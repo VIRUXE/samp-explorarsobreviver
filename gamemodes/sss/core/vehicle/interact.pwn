@@ -2,7 +2,7 @@
 #include <YSI_Coding\y_hooks>
 
 
-#define MAX_VEHICLES_IN_RANGE			(6)
+#define MAX_VEHICLES_IN_RANGE			(10)
 #define VEH_STREAMER_AREA_IDENTIFIER	(500)
 
 
@@ -73,7 +73,7 @@ stock CreateVehicleArea(vehicleid)
 
 hook OnPlayerConnect(playerid)
 	foreach(new i : varea_NearIndex[playerid])
-		varea_NearList[playerid][i] = INVALID_VEHICLE_ID;
+		varea_NearList[playerid][i] = 0;
 		
 hook OnVehicleCreated(vehicleid)
 {

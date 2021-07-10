@@ -45,10 +45,12 @@ hook OnPlayerCloseInventory(playerid)
 	UpdatePlayerMap(playerid);
 
 hook OnItemRemovedFromPlayer(playerid, Item:itemid)
-	UpdatePlayerMap(playerid);
+	if(GetItemType(itemid) == item_Map)
+		UpdatePlayerMap(playerid);
 
 hook OnPlayerGetItem(playerid, Item:itemid)
-	UpdatePlayerMap(playerid);
+	if(GetItemType(itemid) == item_Map)
+		UpdatePlayerMap(playerid);
 
 bool:PlayerHasMap(playerid) {
 	new Item:itemid = GetPlayerItem(playerid);
