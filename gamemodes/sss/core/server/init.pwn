@@ -924,7 +924,7 @@ public OnScriptInit()
 	item_TallFrame		= DefineItemType("Frame de Metal",				"TallFrame",		3025,	14,	0.0, 180.0, 0.0,			0.0);
 	item_Teargas		= DefineItemType("Teargas",						"Teargas",			343,	2,	90.0, .maxhitpoints = 2);
 	item_Tec9			= DefineItemType("Tec 9",						"Tec9",				372,	2,	90.0, .maxhitpoints = 2);
-	item_TentPack		= DefineItemType("Tenda",						"TentPack",			11745,	6,  0.0, 0.0, 0.0,			0.12,	0.049000,0.112999,-0.202000,74.200035,-177.200164,-6.000167, true, .maxhitpoints = 6);
+	item_TentPack		= DefineItemType("Tenda",						"TentPack",			11745,	6,  0.0, 0.0, 90.0,			0.12,	0.049000,0.112999,-0.202000,74.200035,-177.200164,-6.000167, true, .maxhitpoints = 6);
 	item_ThermalVision	= DefineItemType("Visao Termica",				"ThermalVision",	000,	2,	90.0, .maxhitpoints = 2);
 	item_Timer			= DefineItemType("Temporizador",				"Timer",			2922,	2,	90.0, 0.0, 0.0,			0.0,	0.231612, 0.050027, 0.017069, 0.000000, 343.020019, 180.000000, .maxhitpoints = 2);
 	item_TntPhoneBomb	= DefineItemType("TNT com Celular",				"TntPhoneBomb",		1576,	2,	0.0, 0.0, 0.0,			0.0,	0.269091, 0.166367, 0.000000, 90.000000, 0.000000, 0.000000, .maxhitpoints = 2);
