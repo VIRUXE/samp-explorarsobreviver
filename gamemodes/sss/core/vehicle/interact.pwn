@@ -2,7 +2,7 @@
 #include <YSI_Coding\y_hooks>
 
 
-#define MAX_VEHICLES_IN_RANGE			(8)
+#define MAX_VEHICLES_IN_RANGE			(6)
 #define VEH_STREAMER_AREA_IDENTIFIER	(500)
 
 
@@ -73,7 +73,7 @@ stock CreateVehicleArea(vehicleid)
 
 hook OnPlayerConnect(playerid)
 	foreach(new i : varea_NearIndex[playerid])
-		varea_NearList[playerid][i] = 0;
+		varea_NearList[playerid][i] = INVALID_VEHICLE_ID;
 		
 hook OnVehicleCreated(vehicleid)
 {
@@ -106,7 +106,7 @@ _vint_EnterArea(playerid, areaid)
 		return;
 	}
 
-	if(Iter_Count(varea_NearIndex[playerid]) == MAX_VEHICLES_IN_RANGE)
+	if(Iter_Count(varea_NearIndex[playerid]) >= MAX_VEHICLES_IN_RANGE - 1)
 	{
 		return;
 	}
@@ -176,7 +176,7 @@ _vint_LeaveArea(playerid, areaid)
 		return;
 	}
 
-	if(Iter_Count(varea_NearIndex[playerid]) == 0)
+	if(Iter_Count(varea_NearIndex[playerid]) <= 0)
 	{
 		return;
 	}
