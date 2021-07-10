@@ -353,28 +353,23 @@ TogglePlayerAdminDuty(playerid, toggle, goback = true)
 			ItemType:itemtype,
 			Float:x, Float:y, Float:z;
 
-		admin_OnDuty[playerid] = true;
-		
 		GetPlayerPos(playerid, x, y, z);
 		SetPlayerSpawnPos(playerid, x, y, z);
 
 		itemid = GetPlayerItem(playerid);
 		itemtype = GetItemType(itemid);
 
+		// Pousar Item no chão se for uma Caixa ou Mochila
 		if(IsItemTypeSafebox(itemtype) || IsItemTypeBag(itemtype))
-		{
-			new Container:containerid;
-			GetItemExtraData(itemid, _:containerid);
-
-			if(!IsContainerEmpty(containerid))
-				CreateItemInWorld(itemid, x, y, z - ITEM_FLOOR_OFFSET);
-		}
+			CreateItemInWorld(itemid, x, y, z - ITEM_FLOOR_OFFSET);
 
 		Logout(playerid, 1); // docombatlogcheck = 1
 
 		RemovePlayerArmourItem(playerid);
 
 		RemoveAllDrugs(playerid);
+
+		admin_OnDuty[playerid] = true;
 
 		SetPlayerSkin(playerid, GetPlayerGender(playerid) == GENDER_MALE ? 217 : 211);
 
