@@ -116,7 +116,7 @@ BanPlayerByName(const name[], const reason[], byid, duration)
 	else
 	{
 		ip = GetPlayerIpAsInt(id);
-		KickPlayer(id, "BanPlayer");
+		KickPlayer(id, "Banido");
 	}
 
 	stmt_bind_value(stmt_BanInsert, 0, DB::TYPE_STRING, name, MAX_PLAYER_NAME);
@@ -199,10 +199,10 @@ BanCheck(playerid)
 			format(string, 256, "\
 				"C_YELLOW"Data:\n\t\t"C_BLUE"%s\n\n\
 				"C_YELLOW"Motivo:\n\t\t"C_BLUE"%s\n\n\
-				"C_YELLOW"Desban:\n\t\t"C_BLUE"%s",
+				"C_YELLOW"Data de Desban:\n\t\t"C_BLUE"%s",
 				TimestampToDateTime(timestamp),
 				reason,
-				duration ? (TimestampToDateTime(timestamp + duration)) : "Never");
+				duration ? (TimestampToDateTime(timestamp + duration)) : "Nunca!");
 
 			Dialog_Show(playerid, DIALOG_STYLE_MSGBOX, "Banido", string, "Sair", "");
 
