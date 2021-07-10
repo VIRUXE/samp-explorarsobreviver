@@ -352,7 +352,7 @@ TogglePlayerAdminDuty(playerid, toggle, goback = true)
 			Item:itemid,
 			ItemType:itemtype,
 			Float:x, Float:y, Float:z;
-
+		
 		GetPlayerPos(playerid, x, y, z);
 		SetPlayerSpawnPos(playerid, x, y, z);
 
@@ -376,6 +376,8 @@ TogglePlayerAdminDuty(playerid, toggle, goback = true)
 		// Mostrar a todos os Jogadores que o Admin está em serviço
 		SetPlayerScore(playerid, 0);
 		SetPlayerColor(playerid, COLOR_PLAYER_ADMIN); // 
+
+		admin_OnDuty[playerid] = true;
 	}
 	else if(!toggle && admin_OnDuty[playerid])
 	{
