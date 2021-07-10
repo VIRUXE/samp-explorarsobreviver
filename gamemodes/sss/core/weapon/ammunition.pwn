@@ -1,7 +1,7 @@
 
 #define MAX_ITEM_AMMO_TYPES		(20)
 #define MAX_AMMO_CALIBRE		(20)
-#define MAX_AMMO_CALIBRE_NAME	(32)
+#define MAX_AMMO_CALIBRE_NAME	(16)
 #define NO_CALIBRE				(-1)
 
 
@@ -87,13 +87,22 @@ hook OnItemNameRender(Item:itemid, ItemType:itemtype)
 	new ammotype = ammo_ItemTypeAmmoType[itemtype];
 
 	if(ammotype == -1)
-		return 0;
-		
-	new amount;
-	GetItemExtraData(itemid, amount);
-	SetItemNameExtra(itemid, sprintf("%d, %s, %s", amount, clbr_Data[ammo_Data[ammotype][ammo_calibre]][clbr_name], ammo_Data[ammotype][ammo_name]) );
+		return Y_HOOKS_CONTINUE_RETURN_0;
 
-	return 1;
+	new
+		amount,
+		str[MAX_ITEM_TEXT];
+
+	GetItemExtraData(itemid, amount);
+
+	format(str, sizeof(str), "%d, %s, %s",
+		amount,
+		clbr_Data[ammo_Data[ammotype][ammo_calibre]][clbr_name],
+		ammo_Data[ammotype][ammo_name]);
+
+	SetItemNameExtra(itemid, str);
+
+	return Y_HOOKS_CONTINUE_RETURN_0;
 }
 
 hook OnItemCreate(Item:itemid)

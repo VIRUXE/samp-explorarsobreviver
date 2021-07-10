@@ -35,7 +35,7 @@ ptask BrightnessUpdate[100](playerid)
 
 	new Float:hp = GetPlayerHP(playerid);
 
-	if(BrightnessLevel[playerid] > 0)
+	if(BrightnessLevel[playerid] > 0.0)
 	{
 		PlayerTextDrawBoxColor(playerid, BrightnessUI[playerid], BrightnessLevel[playerid]);
 		PlayerTextDrawShow(playerid, BrightnessUI[playerid]);
@@ -57,7 +57,7 @@ ptask BrightnessUpdate[100](playerid)
 	if(hp >= 40.0)
 	{
 		if(IsPlayerSpawned(playerid))
-			PlayerTextDrawBoxColor(playerid, BrightnessUI[playerid], 0);
+			PlayerTextDrawHide(playerid, BrightnessUI[playerid]);
 
 		return;
 	}
@@ -113,6 +113,9 @@ stock SetPlayerBrightness(playerid, level)
 
 	PlayerTextDrawBoxColor(playerid, BrightnessUI[playerid], BrightnessLevel[playerid]);
 	PlayerTextDrawShow(playerid, BrightnessUI[playerid]);
+
+	if(level <= 0)
+		PlayerTextDrawHide(playerid, BrightnessUI[playerid]);
 
 	return 1;
 }

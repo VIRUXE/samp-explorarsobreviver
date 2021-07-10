@@ -83,8 +83,10 @@ stock SetPlayerHatItem(playerid, Item:itemid)
 
 	new skinid = GetPlayerClothes(playerid);
 
-	if(!GetClothesHatStatus(skinid))
+	if(!GetClothesHatStatus(skinid)) {
+		ShowActionText(playerid, "Sua roupa nao permite usar este acessorio", 4000);
 		return 0;
+	}
 
 	if(hat_CurrentHatItem[playerid] == itemid)
 		return 0;

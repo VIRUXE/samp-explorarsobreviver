@@ -102,6 +102,9 @@ hook OnPlayerUseItem(playerid, Item:itemid)
 
 	size = GetItemsInRange(x, y, z, 1.7, list);
 
+	if(size >= MAX_CONSTRUCT_SET_ITEMS - 1)
+		return Y_HOOKS_CONTINUE_RETURN_0;
+		
 	if(size > 1)
 	{
 		dbg("craft-construct", 1, "[OnPlayerUseItem] Item list size %d, comparing with craft lists", size);
@@ -110,9 +113,6 @@ hook OnPlayerUseItem(playerid, Item:itemid)
 
 		for(new i; i < size; i++)
 		{
-			if(i >= MAX_CONSTRUCT_SET_ITEMS - 1)
-				break;
-
 			if(IsItemTypeDefence(GetItemType(list[i]))){
 				new bool:active;
 				GetItemArrayDataAtCell(list[i], active, 0);

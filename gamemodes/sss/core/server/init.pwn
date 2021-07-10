@@ -630,8 +630,6 @@ public OnScriptInit()
 	EnableAntiCheat(11, false); // Anti-Health hack (in vehicle)
 	EnableAntiCheat(5, false); // Anti-Teleport (vehicle to player)
 	EnableAntiCheat(15, false); // Anti-Weapon hack
-	
-	AddPlayerClass(0, DEFAULT_POS_X, DEFAULT_POS_Y, DEFAULT_POS_Z, 0.0, 0, 0, 0, 0, 0, 0);
 
 // ITEM TYPE DEFINITIONS
 	item_Accelerometer	= DefineItemType("Acelerometro",				"Accelerometer",	327,	1,	0.0, 0.0, 0.0,			0.0,	0.008151, 0.012682, -0.050635, 0.000000, 0.000000, 0.000000, .maxhitpoints = 1);
@@ -1254,17 +1252,17 @@ public OnScriptInit()
 		ammo to the item.
 	*/
 	//					itemtype				name				calibre			bld		ko		pen		size
-	DefineItemTypeAmmo(item_Ammo308,			"Encamisada",		calibre_308,	1.2,	1.1,	0.8,	10);
-	DefineItemTypeAmmo(item_Ammo357,			"Encamisada",		calibre_357,	1.2,	1.1,	0.9,	10);
+	DefineItemTypeAmmo(item_Ammo308,			"FMJ",				calibre_308,	1.2,	1.1,	0.8,	10);
+	DefineItemTypeAmmo(item_Ammo357,			"FMJ",				calibre_357,	1.2,	1.1,	0.9,	10);
 	DefineItemTypeAmmo(item_Ammo357Tracer,		"Tracer",			calibre_357,	1.2,	1.1,	0.6,	10);
-	DefineItemTypeAmmo(item_Ammo50,				"Action Express",	calibre_50cae,	1.0,	1.5,	0.9,	28);
+	DefineItemTypeAmmo(item_Ammo50,				"Expresso",			calibre_50cae,	1.0,	1.5,	0.9,	28);
 	DefineItemTypeAmmo(item_Ammo50BMG,			"BMG",				calibre_50bmg,	1.8,	1.8,	1.0,	16);
-	DefineItemTypeAmmo(item_Ammo556,			"Encamisada",		calibre_556,	1.1,	1.2,	0.8,	30);
+	DefineItemTypeAmmo(item_Ammo556,			"FMJ",				calibre_556,	1.1,	1.2,	0.8,	30);
 	DefineItemTypeAmmo(item_Ammo556HP,			"Ponta Oca",		calibre_556,	1.3,	1.6,	0.4,	30);
 	DefineItemTypeAmmo(item_Ammo556Tracer,		"Tracer",			calibre_556,	0.9,	1.1,	0.5,	30);
-	DefineItemTypeAmmo(item_Ammo762,			"Encamisada",		calibre_762,	1.3,	1.1,	0.9,	30);
+	DefineItemTypeAmmo(item_Ammo762,			"FMJ",				calibre_762,	1.3,	1.1,	0.9,	30);
 	DefineItemTypeAmmo(item_Ammo9mm,			"Ponta Oca",		calibre_9mm,	1.0,	1.0,	0.2,	20);
-	DefineItemTypeAmmo(item_Ammo9mmFMJ,			"Encamisada",		calibre_9mm,	1.2,	0.5,	0.8,	20);
+	DefineItemTypeAmmo(item_Ammo9mmFMJ,			"FMJ",				calibre_9mm,	1.2,	0.5,	0.8,	20);
 	DefineItemTypeAmmo(item_AmmoBuck,			"No. 1",			calibre_12g,	1.1,	1.8,	0.5,	24);
 	DefineItemTypeAmmo(item_AmmoFlechette,		"Flechette",		calibre_12g,	1.6,	0.6,	0.2,	8);
 	DefineItemTypeAmmo(item_AmmoHomeBuck,		"Improvisada",		calibre_12g,	1.6,	0.4,	0.3,	14);

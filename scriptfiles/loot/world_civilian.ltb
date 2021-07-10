@@ -124,7 +124,7 @@ world_civilian, 1.0
 # crafting, construction and base stuff
 10.0,	Motor
 12.0,	SeedBag
-30.0,	TentPack
+23.0,	TentPack
 35.0,	PlantPot
 47.0,	Battery
 40.0,	MobilePhone
