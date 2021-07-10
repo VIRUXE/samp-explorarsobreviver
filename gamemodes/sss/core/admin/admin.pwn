@@ -369,8 +369,6 @@ TogglePlayerAdminDuty(playerid, toggle, goback = true)
 
 		RemoveAllDrugs(playerid);
 
-		admin_OnDuty[playerid] = true;
-
 		SetPlayerSkin(playerid, GetPlayerGender(playerid) == GENDER_MALE ? 217 : 211);
 
 		// Mostrar a todos os Jogadores que o Admin está em serviço
