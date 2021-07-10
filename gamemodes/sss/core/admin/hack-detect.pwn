@@ -908,7 +908,7 @@ ptask VehicleHealthCheck[1000](playerid)
 
 		GetPlayerPos(playerid, x, y, z);
 		GetPlayerName(playerid, name, MAX_PLAYER_NAME);
-		format(reason, sizeof(reason), "Vehicle health of %.2f (impossible via server)", vehiclehp);
+		format(reason, sizeof(reason), "Veículo com %.2f de Vida (Impossível pelo Servidor)", vehiclehp);
 		ReportPlayer(name, reason, -1, REPORT_TYPE_VHEALTH, x, y, z, GetPlayerVirtualWorld(playerid), GetPlayerInterior(playerid), "");
 		BanPlayer(playerid, reason, -1, 0);
 
