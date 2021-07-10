@@ -11,7 +11,7 @@ hook OnPlayerSpawn(playerid) {
 }
 
 UpdatePlayerMap(playerid){
-	if(IsPlayerMap(playerid)){
+	if(PlayerHasMap(playerid)){
 		GangZoneHideForPlayer(playerid, MiniMapOverlay);
 		static Float:x, Float:y, Float:z;
 
@@ -50,7 +50,7 @@ hook OnItemRemovedFromPlayer(playerid, Item:itemid)
 hook OnPlayerGetItem(playerid, Item:itemid)
 	UpdatePlayerMap(playerid);
 
-stock bool:IsPlayerMap(playerid) {
+bool:PlayerHasMap(playerid) {
 	new Item:itemid = GetPlayerItem(playerid);
 	
 	if(GetItemType(itemid) == item_Map)
@@ -69,6 +69,7 @@ stock bool:IsPlayerMap(playerid) {
 	if(IsValidItem(GetPlayerBagItem(playerid))){
 		new Container:containerid = GetBagItemContainerID(GetPlayerBagItem(playerid));
 		new size;
+
 		GetContainerSize(containerid, size);
 
 		// 19 = MAX_BAG_CONTAINER_SIZE !!
