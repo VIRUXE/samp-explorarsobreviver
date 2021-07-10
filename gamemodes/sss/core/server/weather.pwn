@@ -56,6 +56,7 @@ hook OnGameModeInit()
 
 	weather_Current = random(MAX_WEATHER_TYPES);
 	weather_LastChange = GetTickCount();
+	gettime(weather_CurrentHour, weather_CurrentMinute);
 }
 
 hook OnPlayerConnect(playerid)
@@ -76,6 +77,18 @@ hook OnPlayerSpawnNewChar(playerid)
 	SetWeatherForPlayer(playerid, weather_Current);
 }
 
+task updateHour[30000]()
+{
+	if(weather_CurrentMinute >= 60)
+	{
+		if(weather_CurrentHour >= 24)
+			weather_CurrentHour = 0;
+
+		weather_CurrentHour ++;
+		weather_CurrentMinute = 0;
+	}
+	weather_CurrentMinute ++;
+}
 
 task WeatherUpdate[600000]()
 {
@@ -170,4 +183,10 @@ stock GetTimeForPlayer(playerid, &hour, &minute)
 {
 	hour = weather_PlayerHour[playerid];
 	minute = weather_PlayerMinute[playerid];
+}
+
+stock GetServerTime(&hour, &minute)
+{
+	hour = weather_CurrentHour;
+	minute = weather_CurrentMinute;
 }

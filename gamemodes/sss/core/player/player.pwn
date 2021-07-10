@@ -264,7 +264,7 @@ ptask PlayerUpdateFast[100](playerid)
 			VehicleSurfingCheck(playerid);
 	}
 
-	PlayerBagUpdate(playerid);
+	//PlayerBagUpdate(playerid);
 
 	new
 		hour,
@@ -275,7 +275,7 @@ ptask PlayerUpdateFast[100](playerid)
 
 	// If it's -1, just use the default instead.
 	if(hour == -1 || minute == -1)
-		gettime(hour, minute);
+		GetServerTime(hour, minute);
 
 	SetPlayerTime(playerid, hour, minute);
 
