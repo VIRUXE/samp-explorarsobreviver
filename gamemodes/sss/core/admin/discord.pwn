@@ -35,16 +35,16 @@ public DCC_OnMessageCreate(DCC_Message:message)
     if(channel == whitelist)
     {
         if(strlen(msg) > MAX_PLAYER_NAME - 1)
-            format(str, sizeof(str),    "> O nome (%s) esta muito grande.", msg);
+            format(str, sizeof(str),    "> O nome `%s` esta muito grande.", msg);
 
         else if(!strfind(msg, "."))
             format(str, sizeof(str),    "> Seu nome nao pode ter ponto (.) no inicio.", msg); 
 
         else if(IsNameInWhitelist(msg))
-            format(str, sizeof(str),    "> O nome (%s) ja foi aceito.", msg); 
+            format(str, sizeof(str),    "> O nome `%s` ja foi aceito.", msg); 
 
         else if(!IsValidUsername(msg))
-            format(str, sizeof(str),    "> O nome (%s) invalido.", msg); 
+            format(str, sizeof(str),    "> O nome `%s` invalido.", msg); 
 
         else if(IsNameInWhitelist(user_id))
             format(str, sizeof(str),    "> Voce ja tem uma conta registrada nesse discord.");
@@ -53,9 +53,9 @@ public DCC_OnMessageCreate(DCC_Message:message)
             AddNameToWhitelist(msg, true);
             AddNameToWhitelist(user_id);
 
-            ChatMsgAll(BLUE, " » Conta (%s) registrada na WhiteList!", msg);
+            ChatMsgAll(BLUE, " » Conta `%s` registrada na WhiteList!", msg);
 
-            format(str, sizeof(str), "> Sua conta (%s) foi aceita com Sucesso. Bom jogo!", msg);
+            format(str, sizeof(str), "> Sua conta `%s` foi aceita com Sucesso. Bom jogo!", msg);
         }
 
         DCC_SendChannelMessage(DCC_Channel:channel, str);
