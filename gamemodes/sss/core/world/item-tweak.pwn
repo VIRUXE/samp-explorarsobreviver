@@ -41,9 +41,7 @@ hook OnPlayerConnect(playerid)
 hook OnPlayerDisconnect(playerid, reason)
 {
 	if(IsValidItem(twk_Item[playerid]))
-	{
 		_twk_Commit(playerid);
-	}
 }
 
 
@@ -238,7 +236,6 @@ hook OnPlayerKeyStateChange(playerid, newkeys, oldkeys)
 	{
 		if(!twk_Locked[playerid] && newkeys & KEY_WALK)
 			_twk_ToggleMouse(playerid, true);
-
 		else if(twk_Locked[playerid] && newkeys & 16)
 			_twk_Commit(playerid);
 	}
@@ -454,7 +451,7 @@ _twk_BuildUI(playerid)
 	PlayerTextDrawTextSize			(playerid, twk_RotL[playerid], 524.000000, 20.000000);
 	PlayerTextDrawSetSelectable		(playerid, twk_RotL[playerid], true);
 
-	twk_Unlock[playerid]			=CreatePlayerTextDraw(playerid, 547.000000, 200.000000, "Move");
+	twk_Unlock[playerid]			=CreatePlayerTextDraw(playerid, 547.000000, 200.000000, "Mover");
 	PlayerTextDrawAlignment			(playerid, twk_Unlock[playerid], 2);
 	PlayerTextDrawBackgroundColor	(playerid, twk_Unlock[playerid], 175);
 	PlayerTextDrawFont				(playerid, twk_Unlock[playerid], 1);
@@ -468,7 +465,7 @@ _twk_BuildUI(playerid)
 	PlayerTextDrawTextSize			(playerid, twk_Unlock[playerid], 20.0, 80.0);
 	PlayerTextDrawSetSelectable		(playerid, twk_Unlock[playerid], true);
 
-	twk_Done[playerid]				=CreatePlayerTextDraw(playerid, 547.000000, 230.000000, "Done");
+	twk_Done[playerid]				=CreatePlayerTextDraw(playerid, 547.000000, 230.000000, "Feito");
 	PlayerTextDrawAlignment			(playerid, twk_Done[playerid], 2);
 	PlayerTextDrawBackgroundColor	(playerid, twk_Done[playerid], 175);
 	PlayerTextDrawFont				(playerid, twk_Done[playerid], 1);
