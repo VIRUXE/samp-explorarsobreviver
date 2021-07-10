@@ -291,13 +291,7 @@ hook OnPlayerUseItem(playerid, Item:itemid)
 		if(IsValidContainer(containerid))
 			return Y_HOOKS_CONTINUE_RETURN_0;
 
-		if(IsItemInWorld(itemid)) {
-			if(IsPlayerMobile(playerid))
-				PlayerPickUpItem(playerid, itemid);
-			else
-				_DisplayBagDialog(playerid, itemid, true);
-		}
-		else
+		if(!IsItemInWorld(itemid))
 			_DisplayBagDialog(playerid, itemid, false);
 
 		return Y_HOOKS_BREAK_RETURN_1;
@@ -791,12 +785,9 @@ stock Container:GetBagItemContainerID(Item:itemid)
 	if(!IsItemTypeBag(GetItemType(itemid)))
 		return INVALID_CONTAINER_ID;
 
-	new Container:containerid, Error:e;
+	new Container:containerid;
 
-	e = GetItemArrayDataAtCell(itemid, _:containerid, 1);
-	
-	if(IsError(e))
-		return INVALID_CONTAINER_ID;
+	GetItemArrayDataAtCell(itemid, _:containerid, 1);
 
 	return containerid;
 }
