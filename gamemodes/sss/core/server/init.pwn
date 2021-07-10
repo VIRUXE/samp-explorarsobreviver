@@ -427,7 +427,7 @@ ItemType:		item_Mustard		= INVALID_ITEM_TYPE,
 ItemType:		item_Boot			= INVALID_ITEM_TYPE,
 ItemType:		item_Doormat		= INVALID_ITEM_TYPE,
 ItemType:		item_CakeSlice		= INVALID_ITEM_TYPE,
-ItemType:		item_Holdall		= INVALID_ITEM_TYPE,
+ItemType:		item_Sandbag		= INVALID_ITEM_TYPE,
 ItemType:		item_GrnApple		= INVALID_ITEM_TYPE,
 ItemType:		item_Wine1			= INVALID_ITEM_TYPE,
 ItemType:		item_Wine2			= INVALID_ITEM_TYPE,
@@ -780,7 +780,7 @@ public OnScriptInit()
 	item_HelmArmy		= DefineItemType("Capacete Militar",			"HelmArmy",			19106,	2,	345.0, 270.0, 0.0,		0.045,	0.184999, -0.007999, 0.046999, 94.199989, 22.700027, 4.799994, .maxhitpoints = 2);
 	item_HerpDerp		= DefineItemType("Unidade de Derp",				"HerpDerp",			19513,	1,	0.0, 0.0, 0.0,			0.0,	0.103904, -0.003697, -0.015173, 94.655189, 184.031860, 0.000000, .maxhitpoints = 1);
 	item_HockeyMask		= DefineItemType("Hockey Mask",					"HockeyMask",		19036,	1,	0.0, 0.0, 0.0,			0.082,	0.221075, 0.067746, 0.037494, 87.375968, 305.182189, 5.691741, .maxhitpoints = 1);
-	item_Holdall		= DefineItemType("Saco Gigante",				"Holdall",			11745,	4,	0.0, 0.0, 0.0,			0.113,	-0.015999, 0.150000, -0.187000,  74.200035, -161.400177, -6.000168, true, .longpickup = true, .maxhitpoints = 4);
+	item_Sandbag		= DefineItemType("Saco",						"Sandbag",			2060,	4,	0.0, 0.0, 0.0,			0.113,	0.069000,0.111000,-0.236999,71.899986,178.399810,84.899848, true, .longpickup = true, .maxhitpoints = 4);
 	item_HotDog			= DefineItemType("Cachorro Quente",				"HotDog",			19346,	1,	0.0, 0.0, 0.0,			0.0,	0.088718, 0.035828, 0.008570, 272.851745, 354.704772, 9.342185, .maxhitpoints = 1);
 	item_IceCream		= DefineItemType("Gelado",						"IceCream",			19568,	1,	0.0, 0.0, 0.0,			0.0308,	0.233000, 0.152999, 0.056999,  95.200012, -3.199998, 11.200000, .maxhitpoints = 1);
 	item_IceCreamBars	= DefineItemType("Barra de Gelado",				"IceCreamBars",		19565,	1,	-90.0, 0.0, 0.0,		-0.01,	0.272000, 0.000999, 0.180999,  -161.999969, 8.400005, -1.699998, .maxhitpoints = 1);
@@ -924,7 +924,7 @@ public OnScriptInit()
 	item_TallFrame		= DefineItemType("Frame de Metal",				"TallFrame",		3025,	14,	0.0, 180.0, 0.0,			0.0);
 	item_Teargas		= DefineItemType("Teargas",						"Teargas",			343,	2,	90.0, .maxhitpoints = 2);
 	item_Tec9			= DefineItemType("Tec 9",						"Tec9",				372,	2,	90.0, .maxhitpoints = 2);
-	item_TentPack		= DefineItemType("Tenda",						"TentPack",			1279,	6,	0.0, 0.0, 0.0,			0.0,	0.106261, 0.004634, -0.144552, 246.614654, 345.892211, 258.267395, true, .maxhitpoints = 6);
+	item_TentPack		= DefineItemType("Tenda",						"TentPack",			11745,	6,  0.0, 0.0, 0.0,			0.12,	0.049000,0.112999,-0.202000,74.200035,-177.200164,-6.000167, true, .maxhitpoints = 6);
 	item_ThermalVision	= DefineItemType("Visao Termica",				"ThermalVision",	000,	2,	90.0, .maxhitpoints = 2);
 	item_Timer			= DefineItemType("Temporizador",				"Timer",			2922,	2,	90.0, 0.0, 0.0,			0.0,	0.231612, 0.050027, 0.017069, 0.000000, 343.020019, 180.000000, .maxhitpoints = 2);
 	item_TntPhoneBomb	= DefineItemType("TNT com Celular",				"TntPhoneBomb",		1576,	2,	0.0, 0.0, 0.0,			0.0,	0.269091, 0.166367, 0.000000, 90.000000, 0.000000, 0.000000, .maxhitpoints = 2);
@@ -1340,7 +1340,7 @@ public OnScriptInit()
 	DefineSafeboxType(item_Cupboard,		5, false, false);
 	DefineSafeboxType(item_GearBox,			5);
 	DefineSafeboxType(item_GunCase,			5, false, false);
-	DefineSafeboxType(item_Holdall,			6);
+	DefineSafeboxType(item_Sandbag,			6);
 	DefineSafeboxType(item_LargeBox,		12);
 	DefineSafeboxType(item_Locker,			16, .animateonuse = false);
 	DefineSafeboxType(item_MediumBox,		10);
