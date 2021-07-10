@@ -123,13 +123,6 @@ SavePlayerChar(playerid)
 	player_data[PLY_CELL_TOOLTIPS] = IsPlayerToolTipsOn(playerid);
 
 	GetPlayerPos(playerid, Float:player_data[PLY_CELL_SPAWN_X], Float:player_data[PLY_CELL_SPAWN_Y], Float:player_data[PLY_CELL_SPAWN_Z]);
-
-	/*new Float:tmp;
-	if(CA_RayCastLine(Float:player_data[PLY_CELL_SPAWN_X], Float:player_data[PLY_CELL_SPAWN_Y], 3.0,
-		Float:player_data[PLY_CELL_SPAWN_X], Float:player_data[PLY_CELL_SPAWN_Y], Float:player_data[PLY_CELL_SPAWN_Z],
-		tmp, tmp, tmp) == WATER_OBJECT)
-		player_data[PLY_CELL_SPAWN_Z] = _:1.0;*/
-
 	GetPlayerFacingAngle(playerid, Float:player_data[PLY_CELL_SPAWN_R]);
 
 	player_data[PLY_CELL_MASK] = _:GetItemType(GetPlayerMaskItem(playerid));
@@ -316,10 +309,39 @@ LoadPlayerChar(playerid)
 	Character
 */
 
+	if(Float:player_data[PLY_CELL_HEALTH] <= 0.0)
+		player_data[PLY_CELL_HEALTH] = _:1.0;
+
+	SetPlayerHP(playerid, Float:player_data[PLY_CELL_HEALTH]);
+	SetPlayerAP(playerid, Float:player_data[PLY_CELL_ARMOUR]);
+	SetPlayerFP(playerid, Float:player_data[PLY_CELL_FOOD]);
+	SetPlayerClothesID(playerid, player_data[PLY_CELL_SKIN]);
+	SetPlayerClothes(playerid, player_data[PLY_CELL_SKIN]);
+
+	if(IsValidItemType(ItemType:player_data[PLY_CELL_HAT]))
+		SetPlayerHatItem(playerid, CreateItem(ItemType:player_data[PLY_CELL_HAT]));
+
+	if(GetPlayerAP(playerid) > 0.0)
+		CreatePlayerArmour(playerid);
+
+	if(player_data[PLY_CELL_BLEEDING] == 1)
+		player_data[PLY_CELL_BLEEDING] = _:Float:0.01;
+
+	if(Float:player_data[PLY_CELL_BLEEDING] > 1.0)
+		player_data[PLY_CELL_BLEEDING] = _:(Float:player_data[PLY_CELL_BLEEDING] / 10.0);
+
+	SetPlayerStance(playerid, player_data[PLY_CELL_STANCE]);
+	SetPlayerBleedRate(playerid, Float:player_data[PLY_CELL_BLEEDING]);
+	SetPlayerCuffs(playerid, player_data[PLY_CELL_CUFFED]);
 	SetPlayerVIP(playerid, player_data[PLY_CELL_VIP]);
 	SetPlayerRadioFrequency(playerid, Float:player_data[PLY_CELL_FREQ]);
 	SetPlayerChatMode(playerid, player_data[PLY_CELL_CHATMODE]);
 	SetPlayerToolTips(playerid, bool:player_data[PLY_CELL_TOOLTIPS]);
+	SetPlayerSpawnPos(playerid, Float:player_data[PLY_CELL_SPAWN_X], Float:player_data[PLY_CELL_SPAWN_Y], Float:player_data[PLY_CELL_SPAWN_Z]);
+	SetPlayerSpawnRot(playerid, Float:player_data[PLY_CELL_SPAWN_R]);
+
+	if(IsValidItemType(ItemType:player_data[PLY_CELL_MASK]))
+		SetPlayerMaskItem(playerid, CreateItem(ItemType:player_data[PLY_CELL_MASK]));
 
 	if(player_data[PLY_CELL_MUTE_TIME] != 0)
 		TogglePlayerMute(playerid, true, player_data[PLY_CELL_MUTE_TIME]);
@@ -327,191 +349,156 @@ LoadPlayerChar(playerid)
 	else
 		TogglePlayerMute(playerid, false);
 
-	if(Float:player_data[PLY_CELL_HEALTH] <= 1.0 || !IsPlayerAlive(playerid)) {
-		SetPlayerHP(playerid, 0.0);
+	if(player_data[PLY_CELL_KNOCKOUT] > 0)
+		KnockOutPlayer(playerid, player_data[PLY_CELL_KNOCKOUT]);
+
+	if(IsItemTypeBag(ItemType:player_data[PLY_CELL_BAGTYPE]))
+	{
+		itemid = CreateItem(ItemType:player_data[PLY_CELL_BAGTYPE], 0.0, 0.0, 0.0);
+		GivePlayerBag(playerid, itemid);
+
+		Logger_Dbg("save-load", "loading bag",
+			Logger_I("playerid", playerid),
+			Logger_I("type", player_data[PLY_CELL_BAGTYPE])
+		);
 	}
-	else
-	{	
-		SetPlayerHP(playerid, Float:player_data[PLY_CELL_HEALTH]);
-		SetPlayerAP(playerid, Float:player_data[PLY_CELL_ARMOUR]);
-		SetPlayerFP(playerid, Float:player_data[PLY_CELL_FOOD]);
-		SetPlayerClothesID(playerid, player_data[PLY_CELL_SKIN]);
-		SetPlayerClothes(playerid, player_data[PLY_CELL_SKIN]);
 
-		if(IsValidItemType(ItemType:player_data[PLY_CELL_HAT]))
-			SetPlayerHatItem(playerid, CreateItem(ItemType:player_data[PLY_CELL_HAT]));
+	SetPlayerVirtualWorld(playerid, player_data[PLY_CELL_WORLD]);
+	SetPlayerInterior(playerid, player_data[PLY_CELL_INTERIOR]);
 
-		if(GetPlayerAP(playerid) > 0.0)
-			CreatePlayerArmour(playerid);
+/*
+	Held item
+*/
 
-		if(player_data[PLY_CELL_BLEEDING] == 1)
-			player_data[PLY_CELL_BLEEDING] = _:Float:0.01;
+	{
+		new held_data[ITM_ARR_MAX_ARRAY_DATA];
 
-		if(Float:player_data[PLY_CELL_BLEEDING] > 1.0)
-			player_data[PLY_CELL_BLEEDING] = _:(Float:player_data[PLY_CELL_BLEEDING] / 10.0);
-
-		SetPlayerStance(playerid, player_data[PLY_CELL_STANCE]);
-		SetPlayerBleedRate(playerid, Float:player_data[PLY_CELL_BLEEDING]);
-		SetPlayerCuffs(playerid, player_data[PLY_CELL_CUFFED]);
-		
-		SetPlayerSpawnPos(playerid, Float:player_data[PLY_CELL_SPAWN_X], Float:player_data[PLY_CELL_SPAWN_Y], Float:player_data[PLY_CELL_SPAWN_Z]);
-		SetPlayerSpawnRot(playerid, Float:player_data[PLY_CELL_SPAWN_R]);
-
-		if(IsValidItemType(ItemType:player_data[PLY_CELL_MASK]))
-			SetPlayerMaskItem(playerid, CreateItem(ItemType:player_data[PLY_CELL_MASK]));
-
-		if(player_data[PLY_CELL_KNOCKOUT] > 0)
-			KnockOutPlayer(playerid, player_data[PLY_CELL_KNOCKOUT]);
-
-		if(IsItemTypeBag(ItemType:player_data[PLY_CELL_BAGTYPE]))
-		{
-			itemid = CreateItem(ItemType:player_data[PLY_CELL_BAGTYPE], 0.0, 0.0, 0.0);
-			GivePlayerBag(playerid, itemid);
-
-			Logger_Dbg("save-load", "loading bag",
-				Logger_I("playerid", playerid),
-				Logger_I("type", player_data[PLY_CELL_BAGTYPE])
-			);
-		}
-
-		SetPlayerInterior(playerid, player_data[PLY_CELL_INTERIOR]);
-		SetPlayerVirtualWorld(playerid, player_data[PLY_CELL_WORLD]);	
-
-		
-
-	/*
-		Held item
-	*/
-
-		{
-			new held_data[ITM_ARR_MAX_ARRAY_DATA];
-
-			length = modio_read(filename, _T<H,E,L,D>, sizeof(held_data), held_data);
-			if(length < 0)
-			{
-				Logger_Err("modio read failed _T<H,E,L,D>",
-					Logger_I("error", length));
-			}
-			else if(IsValidItemType(ItemType:held_data[0]) && length > 0)
-			{
-				itemid = AllocNextItemID(ItemType:held_data[0]);
-				SetItemNoResetArrayData(itemid, true);
-				SetItemArrayData(itemid, held_data[2], held_data[1]);
-				CreateItem_ExplicitID(itemid);
-				GiveWorldItemToPlayer(playerid, itemid);
-
-				Logger_Dbg("save-load", "loading held item",
-					Logger_I("playerid", playerid),
-					Logger_I("type", held_data[0]),
-					Logger_A("data", held_data, 2 + held_data[1])
-				);
-			}
-		}
-
-	/*
-		Holstered item
-	*/
-
-		{
-			new hols_data[ITM_ARR_MAX_ARRAY_DATA];
-
-			length = modio_read(filename, _T<H,O,L,S>, sizeof(hols_data), hols_data);
-			if(length < 0)
-			{
-				Logger_Err("modio read failed _T<H,O,L,S>",
-					Logger_I("error", length));
-			}
-			else if(IsValidItemType(ItemType:hols_data[0]) && length > 0)
-			{
-				itemid = AllocNextItemID(ItemType:hols_data[0]);
-				SetItemNoResetArrayData(itemid, true);
-				SetItemArrayData(itemid, hols_data[2], hols_data[1]);
-				CreateItem_ExplicitID(itemid);
-				SetPlayerHolsterItem(playerid, itemid);
-
-				Logger_Dbg("save-load", "loading holstered item",
-					Logger_I("playerid", playerid),
-					Logger_I("type", hols_data[0]),
-					Logger_A("data", hols_data, 2 + hols_data[1])
-				);
-			}
-		}
-
-	/*
-		Inventory
-	*/
-
-		length = modio_read(filename, _T<I,N,V,0>, ITEM_SERIALIZER_RAW_SIZE, itm_arr_Serialized);
+		length = modio_read(filename, _T<H,E,L,D>, sizeof(held_data), held_data);
 		if(length < 0)
 		{
-			Logger_Err("modio read failed _T<I,N,V,0>",
+			Logger_Err("modio read failed _T<H,E,L,D>",
+				Logger_I("error", length));
+		}
+		else if(IsValidItemType(ItemType:held_data[0]) && length > 0)
+		{
+			itemid = AllocNextItemID(ItemType:held_data[0]);
+			SetItemNoResetArrayData(itemid, true);
+			SetItemArrayData(itemid, held_data[2], held_data[1]);
+			CreateItem_ExplicitID(itemid);
+			GiveWorldItemToPlayer(playerid, itemid);
+
+			Logger_Dbg("save-load", "loading held item",
+				Logger_I("playerid", playerid),
+				Logger_I("type", held_data[0]),
+				Logger_A("data", held_data, 2 + held_data[1])
+			);
+		}
+	}
+
+/*
+	Holstered item
+*/
+
+	{
+		new hols_data[ITM_ARR_MAX_ARRAY_DATA];
+
+		length = modio_read(filename, _T<H,O,L,S>, sizeof(hols_data), hols_data);
+		if(length < 0)
+		{
+			Logger_Err("modio read failed _T<H,O,L,S>",
+				Logger_I("error", length));
+		}
+		else if(IsValidItemType(ItemType:hols_data[0]) && length > 0)
+		{
+			itemid = AllocNextItemID(ItemType:hols_data[0]);
+			SetItemNoResetArrayData(itemid, true);
+			SetItemArrayData(itemid, hols_data[2], hols_data[1]);
+			CreateItem_ExplicitID(itemid);
+			SetPlayerHolsterItem(playerid, itemid);
+
+			Logger_Dbg("save-load", "loading holstered item",
+				Logger_I("playerid", playerid),
+				Logger_I("type", hols_data[0]),
+				Logger_A("data", hols_data, 2 + hols_data[1])
+			);
+		}
+	}
+
+/*
+	Inventory
+*/
+
+	length = modio_read(filename, _T<I,N,V,0>, ITEM_SERIALIZER_RAW_SIZE, itm_arr_Serialized);
+	if(length < 0)
+	{
+		Logger_Err("modio read failed _T<I,N,V,0>",
+			Logger_I("error", length));
+	}
+	else if(!DeserialiseItems(itm_arr_Serialized, length, false))
+	{
+		for(new i, j = GetStoredItemCount(); i < j; i++)
+		{
+			itemtype = GetStoredItemType(i);
+
+			if(length == 0)
+				break;
+
+			if(itemtype == INVALID_ITEM_TYPE)
+				break;
+
+			if(itemtype == ItemType:0)
+				break;
+
+			itemid = CreateItem(itemtype, .virtual = 1);
+
+			if(!IsItemTypeSafebox(itemtype) && !IsItemTypeBag(itemtype))
+				SetItemArrayDataFromStored(itemid, i);
+		
+			AddItemToInventory(playerid, itemid, 0);
+
+			Logger_Dbg("save-load", "inventory item",
+				Logger_I("playerid", playerid),
+				Logger_I("slot", i),
+				Logger_I("type", _:itemtype));
+		}
+		ClearSerializer();
+	}
+
+/*
+	Bag
+*/
+
+	if(IsItemTypeBag(ItemType:player_data[PLY_CELL_BAGTYPE]))
+	{
+		length = modio_read(filename, _T<B,A,G,0>, ITEM_SERIALIZER_RAW_SIZE, itm_arr_Serialized);
+		if(length < 0)
+		{
+			Logger_Err("modio read failed _T<B,A,G,0>",
 				Logger_I("error", length));
 		}
 		else if(!DeserialiseItems(itm_arr_Serialized, length, false))
 		{
+			new Container:containerid = GetBagItemContainerID(GetPlayerBagItem(playerid));
+
 			for(new i, j = GetStoredItemCount(); i < j; i++)
 			{
 				itemtype = GetStoredItemType(i);
-
-				if(length == 0)
-					break;
-
-				if(itemtype == INVALID_ITEM_TYPE)
-					break;
-
-				if(itemtype == ItemType:0)
-					break;
-
 				itemid = CreateItem(itemtype, .virtual = 1);
 
 				if(!IsItemTypeSafebox(itemtype) && !IsItemTypeBag(itemtype))
 					SetItemArrayDataFromStored(itemid, i);
-			
-				AddItemToInventory(playerid, itemid, 0);
 
-				Logger_Dbg("save-load", "inventory item",
+				AddItemToContainer(containerid, itemid);
+
+				Logger_Dbg("save-load", "bag item",
 					Logger_I("playerid", playerid),
 					Logger_I("slot", i),
 					Logger_I("type", _:itemtype));
 			}
 			ClearSerializer();
 		}
-
-	/*
-		Bag
-	*/
-
-		if(IsItemTypeBag(ItemType:player_data[PLY_CELL_BAGTYPE]))
-		{
-			length = modio_read(filename, _T<B,A,G,0>, ITEM_SERIALIZER_RAW_SIZE, itm_arr_Serialized);
-			if(length < 0)
-			{
-				Logger_Err("modio read failed _T<B,A,G,0>",
-					Logger_I("error", length));
-			}
-			else if(!DeserialiseItems(itm_arr_Serialized, length, false))
-			{
-				new Container:containerid = GetBagItemContainerID(GetPlayerBagItem(playerid));
-
-				for(new i, j = GetStoredItemCount(); i < j; i++)
-				{
-					itemtype = GetStoredItemType(i);
-					itemid = CreateItem(itemtype, .virtual = 1);
-
-					if(!IsItemTypeSafebox(itemtype) && !IsItemTypeBag(itemtype))
-						SetItemArrayDataFromStored(itemid, i);
-
-					AddItemToContainer(containerid, itemid);
-
-					Logger_Dbg("save-load", "bag item",
-						Logger_I("playerid", playerid),
-						Logger_I("slot", i),
-						Logger_I("type", _:itemtype));
-				}
-				ClearSerializer();
-			}
-		}
 	}
+
 	CallLocalFunction("OnPlayerLoad", "ds", playerid, filename);
 
 	saveload_Loaded[playerid] = true;
