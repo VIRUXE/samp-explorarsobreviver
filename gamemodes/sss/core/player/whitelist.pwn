@@ -82,7 +82,7 @@ public DCC_OnMessageCreate(DCC_Message:message)
     if(channel == wl_DiscordChannel)
     {
         new 
-            result[84+MAX_PLAYER_NAME] = "Tem de fornecer o nick que vai utilizar dentro do jogo.",
+            result[84+MAX_PLAYER_NAME],
             nickname[MAX_PLAYER_NAME],
             userid[DCC_ID_SIZE];
 
@@ -101,9 +101,7 @@ public DCC_OnMessageCreate(DCC_Message:message)
             result =							"> Você já vinculou essa conta de Jogo com uma conta de Discord.";
         else
         {
-            new 
-            DCC_Guild:  guild,
-                        discordname[DCC_USERNAME_SIZE];
+            new DCC_Guild: guild;
 
             AddNameToWhitelist(nickname, true);
             AddNameToWhitelist(userid);
@@ -111,10 +109,7 @@ public DCC_OnMessageCreate(DCC_Message:message)
             DCC_GetChannelGuild(channel, guild);
             DCC_SetGuildMemberNickname(guild, author, nickname);
 
-            DCC_GetUserName(author, discordname);
-            ChatMsgAll(BLUE, " » '%s' vinculou sua conta de Discord ('%s')!", nickname, discordname);
-
-            format(result, sizeof(result), "> Sua conta de Jogo `%s` foi vinculada com sua conta de Discord com Sucesso. Bom jogo!", nickname);
+            format(result, sizeof(result), "> Sua conta de Jogo `%s` foi vinculada com sucesso com sua conta de Discord. Bom jogo!", nickname);
         }
         DCC_SendChannelMessage(channel, result);
     }
