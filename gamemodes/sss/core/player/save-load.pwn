@@ -238,35 +238,37 @@ SavePlayerChar(playerid)
 	if(IsValidItem(GetPlayerBagItem(playerid)))
 	{
 		new Container:containerid = GetBagItemContainerID(GetPlayerBagItem(playerid));
-		new size;
-		GetContainerSize(containerid, size);
+		if(IsValidContainer(containerid)) {
+			new size;
+			GetContainerSize(containerid, size);
 
-		for(new i; i < size && i < MAX_BAG_CONTAINER_SIZE; i++)
-		{
-			GetContainerSlotItem(containerid, i, items[i]);
+			for(new i; i < size && i < MAX_BAG_CONTAINER_SIZE; i++)
+			{
+				GetContainerSlotItem(containerid, i, items[i]);
 
-			if(!IsValidItem(items[i]))
-				break;
+				if(!IsValidItem(items[i]))
+					break;
 
-			itemcount++;
+				itemcount++;
 
-			Logger_Dbg("save-load", "saving held item",
-				Logger_I("playerid", playerid),
-				Logger_I("type", _:GetItemType(items[i]))
-			);
-		}
+				Logger_Dbg("save-load", "saving held item",
+					Logger_I("playerid", playerid),
+					Logger_I("type", _:GetItemType(items[i]))
+				);
+			}
 
-		ret = SerialiseItems(items, itemcount);
-		if(!ret)
-		{
-			modio_push(filename, _T<B,A,G,0>, GetSerialisedSize(), itm_arr_Serialized);
-			ClearSerializer();
-		}
-		else
-		{
-			Logger_Err("failed to serialise items for bag",
-				Logger_I("playerid", playerid),
-				Logger_I("code", ret));
+			ret = SerialiseItems(items, itemcount);
+			if(!ret)
+			{
+				modio_push(filename, _T<B,A,G,0>, GetSerialisedSize(), itm_arr_Serialized);
+				ClearSerializer();
+			}
+			else
+			{
+				Logger_Err("failed to serialise items for bag",
+					Logger_I("playerid", playerid),
+					Logger_I("code", ret));
+			}
 		}
 	}
 
