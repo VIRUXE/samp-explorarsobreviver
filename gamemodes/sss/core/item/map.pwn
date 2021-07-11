@@ -43,11 +43,14 @@ hook OnItemRemovedFromPlayer(playerid, Item:itemid)
 	if(GetItemType(itemid) == item_Map)
 		UpdatePlayerMap(playerid);
 
-hook OnItemRemoveFromContainer(Container:containerid, slotid, playerid){
-	new Item:itemid;
-	GetContainerSlotItem(containerid, slotid, itemid);
-	if(GetItemType(itemid) == item_Map)
-		UpdatePlayerMap(playerid);
+hook OnItemRemoveFromCnt(Container:containerid, slotid, playerid){
+	if(IsPlayerConnected(playerid) && IsValidItem(GetContainerBagItem(containerid)))
+	{
+		new Item:itemid;
+		GetContainerSlotItem(containerid, slotid, itemid);
+		if(GetItemType(itemid) == item_Map)
+			UpdatePlayerMap(playerid);
+	}
 }
 
 hook OnPlayerGetItem(playerid, Item:itemid)
