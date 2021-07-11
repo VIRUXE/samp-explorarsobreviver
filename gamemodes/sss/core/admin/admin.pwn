@@ -99,6 +99,9 @@ hook OnPlayerClickPlayer(playerid, clickedplayerid, source)
 {
 	if(GetPlayerAdminLevel(playerid) >= STAFF_LEVEL_MODERATOR)
 	{	
+		if(GetPlayerState(clickedplayerid) == PLAYER_STATE_SPECTATING && IsPlayerOnAdminDuty(clickedplayerid))
+			return 0;
+
 		if(GetPlayerState(playerid) == PLAYER_STATE_SPECTATING)
 			ExitSpectateMode(playerid);
 
