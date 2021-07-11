@@ -87,7 +87,10 @@ public OnPlayerConnect(playerid)
 			ChatMsg(i, WHITE, " » %P (%d)"C_WHITE" entrou no servidor.", playerid, playerid);
 
 	if(!isnull(gMessageOfTheDay))
-		ChatMsg(playerid, YELLOW, " » MdD: "C_BLUE"%s", gMessageOfTheDay);
+	{
+		ChatMsg(playerid, YELLOW, " » Mensagem do Dia:");
+		ChatMsg(playerid, YELLOW, " » "C_BLUE"%s", gMessageOfTheDay);
+	}
 
 	ply_Data[playerid][ply_ShowHUD] = true;
 
