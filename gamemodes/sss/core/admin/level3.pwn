@@ -3,10 +3,10 @@
 
 hook OnGameModeInit()
 {
-	RegisterAdminCommand(STAFF_LEVEL_ADMINISTRATOR, "/whitelist - add/remove name or turn whitelist on/off\n");
-	RegisterAdminCommand(STAFF_LEVEL_ADMINISTRATOR, "/spec - Spectar um Jogador\n");
+	RegisterAdminCommand(STAFF_LEVEL_ADMINISTRATOR, "/sethp - Define a vida do Jogador\n");
+	RegisterAdminCommand(STAFF_LEVEL_ADMINISTRATOR, "/spec - Spectar Jogadores\n");
 	RegisterAdminCommand(STAFF_LEVEL_ADMINISTRATOR, "/free - Viajar com a Câmera\n");
-	RegisterAdminCommand(STAFF_LEVEL_ADMINISTRATOR, "/ip - get a player's IP\n");
+	RegisterAdminCommand(STAFF_LEVEL_ADMINISTRATOR, "/ip - Obter o IP de um Jogador\n");
 	RegisterAdminCommand(STAFF_LEVEL_ADMINISTRATOR, "/vehicle - vehicle control (duty only)\n");
 	RegisterAdminCommand(STAFF_LEVEL_ADMINISTRATOR, "/move - nudge yourself\n");
 	RegisterAdminCommand(STAFF_LEVEL_ADMINISTRATOR, "/teleportes - lista de teleportes\n");
@@ -15,6 +15,27 @@ hook OnGameModeInit()
 	RegisterAdminCommand(STAFF_LEVEL_ADMINISTRATOR, "/resetpassword - reset a password\n");
 	RegisterAdminCommand(STAFF_LEVEL_ADMINISTRATOR, "/setactive - (de)activate accounts\n");
 	RegisterAdminCommand(STAFF_LEVEL_ADMINISTRATOR, "/delete(items/tents/defences/signs) - delete things\n");
+	RegisterAdminCommand(STAFF_LEVEL_ADMINISTRATOR, "/whitelist - add/remove name or turn whitelist on/off\n");
+}
+
+// Definir a vida do Jogador
+ACMD:sethp[3](playerid, params[])
+{
+	new 
+			targetid,
+	Float:	value;
+
+	if(sscanf(params, "df", targetid, value))
+		ChatMsg(playerid, YELLOW, " » Utilização: /sethp [jogador] [valor]");
+	else if(!value)
+		ChatMsg(playerid, YELLOW, "Jogador %P: %fHP", targetid, GetPlayerHP(targetid));	
+	else
+	{
+		SetPlayerHP(targetid, value);
+		ChatMsg(targetid, YELLOW, "HP do Jogador %P definida para %f", targetid, value);
+	}
+
+	return 1;
 }
 
 
