@@ -246,11 +246,16 @@ timer DestroyUntilItem[5400000](itemid, Float:x, Float:y, Float:z)
 	if(IsItemTypeDefence(GetItemType(Item:itemid))){
 		new bool:active;
 		GetItemArrayDataAtCell(Item:itemid, active, 0);
-		if(active) return;
+		if(active)
+			return;
 	}
 
-	if(GetItemType(Item:itemid) == item_TentPack)
-		return;
+	if(GetItemType(Item:itemid) == item_TentPack){
+		new tentid;
+		GetItemExtraData(Item:itemid, tentid);
+		if(IsValidTent(tentid))
+			return;
+	}
 
 	new Float:tx, Float:ty, Float:tz;
 	GetItemPos(Item:itemid, tx, ty, tz);

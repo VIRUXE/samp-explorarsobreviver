@@ -2,8 +2,8 @@
 #include <YSI_Coding\y_hooks>
 
 
-#define MAX_VEHICLES_IN_RANGE			(10)
-#define VEH_STREAMER_AREA_IDENTIFIER	(500)
+#define MAX_VEHICLES_IN_RANGE			(5)
+#define VEH_STREAMER_AREA_IDENTIFIER	(505)
 
 
 enum e_vehicle_range_data

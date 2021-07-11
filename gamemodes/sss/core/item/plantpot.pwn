@@ -192,9 +192,10 @@ _pot_UpdateModel(Item:itemid, bool:toggle = true)
 
 	if(toggle)
 	{
-		new active;
-		GetItemArrayDataAtCell(itemid, _:active, E_PLANT_POT_ACTIVE);
-		if(!active)
+		new potdata[e_plant_pot_data];
+		GetItemArrayData(itemid, potdata);
+		
+		if(!potdata[E_PLANT_POT_ACTIVE])
 			return 0;
 
 		new
@@ -203,50 +204,42 @@ _pot_UpdateModel(Item:itemid, bool:toggle = true)
 			Float:z,
 			Float:rz,
 			world,
-			interior,
-			seedtype;
+			interior;
 
 		GetItemPos(itemid, x, y, z);
 		GetItemRot(itemid, rz, rz, rz);
 		GetItemWorld(itemid, world);
 		GetItemInterior(itemid, interior);
-		GetItemArrayDataAtCell(itemid, seedtype, E_PLANT_POT_SEED_TYPE);
 
-		if(!IsValidSeedType(seedtype))
+		if(!IsValidSeedType(potdata[E_PLANT_POT_SEED_TYPE]))
 		{
 			return 0;
 		}
 
-		new growth;
-		GetItemArrayDataAtCell(itemid, growth, E_PLANT_POT_GROWTH);
+		new id = potdata[E_PLANT_POT_OBJECT_ID];
 
-		if(0 < growth < GetSeedTypeGrowthTime(seedtype))
+		if(0 < potdata[E_PLANT_POT_GROWTH] < GetSeedTypeGrowthTime(potdata[E_PLANT_POT_SEED_TYPE]))
 		{
 			// max: 0.2741 min: 0.0775
 			// step size: 0.1966 / max growth
 			// pos: step size * current growth+1
-			new id;
-			GetItemArrayDataAtCell(itemid, id, E_PLANT_POT_OBJECT_ID);
-
+			
 			if(id != INVALID_OBJECT_ID)
 				DestroyDynamicObject(id);
 
-			z += (0.1966 / GetSeedTypeGrowthTime(seedtype)) * growth;
+			z += (0.1966 / GetSeedTypeGrowthTime(potdata[E_PLANT_POT_SEED_TYPE])) * potdata[E_PLANT_POT_GROWTH];
 
 			id = CreateDynamicObject(2194, x, y, z, 0.0, 0.0, rz, world, interior, _, 50.0, 50.0);
 			SetItemArrayDataAtCell(itemid, id, E_PLANT_POT_OBJECT_ID, false, false);
 		}
 		else
 		{
-			new id;
-			GetItemArrayDataAtCell(itemid, id, E_PLANT_POT_OBJECT_ID);
-
 			if(id != INVALID_OBJECT_ID)
 				DestroyDynamicObject(id);
 
-			z += GetSeedTypePlantOffset(seedtype);
+			z += GetSeedTypePlantOffset(potdata[E_PLANT_POT_SEED_TYPE]);
 
-			id = CreateDynamicObject(GetSeedTypePlantModel(seedtype), x, y, z, 0.0, 0.0, rz, world, interior, _, 50.0, 50.0);
+			id = CreateDynamicObject(GetSeedTypePlantModel(potdata[E_PLANT_POT_SEED_TYPE]), x, y, z, 0.0, 0.0, rz, world, interior, _, 50.0, 50.0);
 			SetItemArrayDataAtCell(itemid, id, E_PLANT_POT_OBJECT_ID, false, false);
 		}
 	}
