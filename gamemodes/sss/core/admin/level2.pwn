@@ -55,15 +55,13 @@ ACMD:goto[2](playerid, params[])
 	if(!IsPlayerConnected(targetid))
 		return 4;
 
-	if(GetPlayerState(targetid) == PLAYER_STATE_SPECTATING && IsPlayerOnAdminDuty(targetid)){
-		ChatMsg(playerid, RED, " » Admin está spectando alguém");
-		return 1;
+	if(TeleportPlayerToPlayer(playerid, targetid))
+	{
+		ChatMsg(playerid, YELLOW, " » Você teleportou para %P", targetid);
+		ChatMsgLang(targetid, YELLOW, "TELEPORTEDT", playerid);
 	}
-
-	TeleportPlayerToPlayer(playerid, targetid);
-
-	ChatMsg(playerid, YELLOW, " » Você teleportou para %P", targetid);
-	ChatMsgLang(targetid, YELLOW, "TELEPORTEDT", playerid);
+	else
+		ChatMsg(playerid, RED, " » Não foi possível teleportar para %P", targetid);
 
 	return 1;
 }
