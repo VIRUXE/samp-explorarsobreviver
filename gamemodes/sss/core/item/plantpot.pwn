@@ -190,11 +190,11 @@ _pot_UpdateModel(Item:itemid, bool:toggle = true)
 	if(!IsItemInWorld(itemid))
 		toggle = false;
 
+	new potdata[e_plant_pot_data];
+	GetItemArrayData(itemid, potdata);
+
 	if(toggle)
 	{
-		new potdata[e_plant_pot_data];
-		GetItemArrayData(itemid, potdata);
-		
 		if(!potdata[E_PLANT_POT_ACTIVE])
 			return 0;
 
@@ -245,12 +245,9 @@ _pot_UpdateModel(Item:itemid, bool:toggle = true)
 	}
 	else if(!IsItemDestroying(itemid))
 	{
-		new objectid, Error:e;
-
-		e = GetItemArrayDataAtCell(itemid, objectid, E_PLANT_POT_OBJECT_ID);
-
-		if(!IsError(e) && IsValidDynamicObject(objectid)){
-			DestroyDynamicObject(objectid);
+		if(IsValidDynamicObject(potdata[E_PLANT_POT_OBJECT_ID]))
+		{
+			DestroyDynamicObject(potdata[E_PLANT_POT_OBJECT_ID]);
 			SetItemArrayDataAtCell(itemid, INVALID_OBJECT_ID, E_PLANT_POT_OBJECT_ID, false, false);
 		}
 	}
