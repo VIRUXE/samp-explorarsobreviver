@@ -75,7 +75,7 @@ bool:PlayerHasMap(playerid) {
 
 	if(IsValidItem(GetPlayerBagItem(playerid))){
 		new Container:containerid = GetBagItemContainerID(GetPlayerBagItem(playerid));
-		if(IsValidContainer(containerid){
+		if(IsValidContainer(containerid)) {
 			new size;
 			GetContainerSize(containerid, size);
 
