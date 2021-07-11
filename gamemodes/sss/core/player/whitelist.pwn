@@ -90,15 +90,15 @@ public DCC_OnMessageCreate(DCC_Message:message)
         DCC_GetMessageContent(message, nickname);
 
         if(strlen(nickname) > MAX_PLAYER_NAME - 1)
-            format(result, sizeof(result),      "> Esse nick `%s` é muito grande.", nickname);
+            format(result, sizeof(result),      "> Esse nick `%s` é grande demais (máximo de 24 caractéres).", nickname);
         else if(!strfind(nickname, "."))
-            result =                            "> Seu nick não pode ter ponto (.) no inicio."; 
+            result =                            "> Seu nick não pode ter ponto (.) no início."; 
         else if(IsNameInWhitelist(nickname))
-            format(result, sizeof(result),      "> Esse nick `%s` ja foi aceito.", nickname); 
+            format(result, sizeof(result),      "> Esse nick `%s` já está vinculado com uma outra conta de Discord.", nickname); 
         else if(!IsValidUsername(nickname))
-            format(result, sizeof(result),      "> Esse nick `%s` é inválido.", nickname); 
+            format(result, sizeof(result),      "> Esse nick `%s` não é válido para utilização no jogo.", nickname); 
         else if(IsNameInWhitelist(userid))
-            result =							"> Você já vinculou essa conta de Jogo com uma conta de Discord.";
+            result =							"> Você já tem a conta vinculada...";
         else
         {
             new DCC_Guild: guild;
@@ -269,7 +269,7 @@ stock WhitelistWarn(playerid)
 	new str[999];
 
 	format(str, sizeof(str), ""C_WHITE"Você precisa registrar na WhiteList para jogar no servidor.\n\n\
-		"C_WHITE"\t1. Entre em: "C_BLUE"%s"C_WHITE". (Enquanto mantém o jogo aberto!)\n\
+		"C_WHITE"\t1. Entre em: "C_BLUE"%s"C_WHITE". (Enquanto mantém o jogo aberto! "C_WHITE"Nota: necessita de vincular seu celular no Discord"C_WHITE")\n\
 		"C_WHITE"\t2. Digite %P"C_WHITE" em #whitelist\n\
 		"C_WHITE"\t3. Volte aqui, clique em \"Jogar\" e pronto, você já pode se divertir! :) \n\n\
 		"C_YELLOW"Aviso:"C_WHITE" Isso serve como proteção para o servidor.\nPedimos sua compreensão.",
@@ -289,7 +289,7 @@ stock ToggleWhitelist(bool:toggle)
 			if(!wl_Whitelisted[i])
 			{
 				wl_Countdown[i] = wl_NonWhitelistTime;
-				PlayerTextDrawSetString(i, wl_CountdownUI[i], sprintf("Not whitelisted~n~Time remaining: %02d:%02d", wl_Countdown[i] / 60, wl_Countdown[i] % 60));
+				PlayerTextDrawSetString(i, wl_CountdownUI[i], sprintf("Não se encontr na Whitelist~n~Tempo restante: %02d:%02d", wl_Countdown[i] / 60, wl_Countdown[i] % 60));
 				PlayerTextDrawShow(i, wl_CountdownUI[i]);
 				stop wl_CountdownTimer[i];
 				wl_CountdownTimer[i] = repeat _UpdateWhitelistCountdown(i);
