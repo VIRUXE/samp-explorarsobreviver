@@ -35,18 +35,20 @@ UpdatePlayerMap(playerid){
 hook OnPlayerLoad(playerid, filename[])
 	UpdatePlayerMap(playerid);
 
-hook OnPlayerAddToInventory(playerid, Item:itemid, success)
-	UpdatePlayerMap(playerid);
-
-hook OnPlayerCloseContainer(playerid, containerid)
-	UpdatePlayerMap(playerid);
-
-hook OnPlayerCloseInventory(playerid)
-	UpdatePlayerMap(playerid);
+hook OnPlayerAddedToInv(playerid, Item:itemid)
+	if(GetItemType(itemid) == item_Map)
+		UpdatePlayerMap(playerid);
 
 hook OnItemRemovedFromPlayer(playerid, Item:itemid)
 	if(GetItemType(itemid) == item_Map)
 		UpdatePlayerMap(playerid);
+
+hook OnItemRemoveFromContainer(Container:containerid, slotid, playerid){
+	new Item:itemid;
+	GetContainerSlotItem(containerid, slotid, itemid);
+	if(GetItemType(itemid) == item_Map)
+		UpdatePlayerMap(playerid);
+}
 
 hook OnPlayerGetItem(playerid, Item:itemid)
 	if(GetItemType(itemid) == item_Map)
