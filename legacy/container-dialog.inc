@@ -247,7 +247,7 @@ _container_displayOptions(playerid, slotid)
 	GetItemTypeSize(GetItemType(itemid_outer), itemsize);
 	format(tmp, sizeof(tmp), "[%d]%s", itemsize, tmp);
 	
-	cnt_OptionsList[playerid] = "Equipar\nMover para o Inventario\nJogar fora\n";
+	cnt_OptionsList[playerid] = "Equipar\nMover para o Inventario\n";
 	cnt_OptionsCount[playerid] = 0;
 
 	CallLocalFunction("OnPlayerViewContainerOpt", "dd", playerid, _:cnt_CurrentContainer[playerid]);
@@ -321,7 +321,7 @@ _container_displayOptions(playerid, slotid)
 				ClosePlayerContainer(playerid, true);
 				return 1;
 			}
-			case 2: {
+			/*case 2: {
 				if(GetPlayerItem(playerid) == INVALID_ITEM_ID) {
 					new
 						Item:itemid,
@@ -345,9 +345,9 @@ _container_displayOptions(playerid, slotid)
 					ShowActionText(playerid, "Ja esta segurando algo", 3000, 200);
 					DisplayContainerInventory(playerid, cnt_CurrentContainer[playerid]);
 				}
-			}
+			}*/
 			default: {
-				if(!CallLocalFunction("OnPlayerSelectContainerOpt", "ddd", playerid, _:cnt_CurrentContainer[playerid], listitem - 3)) {
+				if(!CallLocalFunction("OnPlayerSelectContainerOpt", "ddd", playerid, _:cnt_CurrentContainer[playerid], listitem - 2)) {
 					DisplayContainerInventory(playerid, cnt_CurrentContainer[playerid]);
 				} else {
 					Logger_Dbg("container-dialog", "closing container via option response");
