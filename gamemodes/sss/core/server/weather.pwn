@@ -77,7 +77,7 @@ hook OnPlayerSpawnNewChar(playerid)
 	SetWeatherForPlayer(playerid, weather_Current);
 }
 
-task updateHour[30000]()
+task updateHour[25000]()
 {
 	if(weather_CurrentMinute >= 60)
 	{
