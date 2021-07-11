@@ -124,8 +124,8 @@ stock GivePlayerBag(playerid, Item:itemid)
 			err("Bag (%d) container ID (%d) was invalid container has to be recreated.", _:itemid, _:containerid);
 
 			containerid = CreateContainer(bag_TypeData[bagtype][bag_name], bag_TypeData[bagtype][bag_size]);
-
-			SetItemArrayDataAtCell(itemid, _:containerid, 1, true);
+			SetItemArrayDataSize(itemid, 2);
+			SetItemArrayDataAtCell(itemid, _:containerid, 1);
 		}
 
 		new colour;
@@ -183,8 +183,8 @@ stock RemovePlayerBag(playerid)
 		err("Bag (%d) container ID (%d) was invalid container has to be recreated.", _:bag_PlayerBagID[playerid], _:containerid);
 
 		containerid = CreateContainer(bag_TypeData[bagtype][bag_name], bag_TypeData[bagtype][bag_size]);
-
-		SetItemArrayDataAtCell(bag_PlayerBagID[playerid], _:containerid, 1, true);
+		SetItemArrayDataSize(bag_PlayerBagID[playerid], 2);
+		SetItemArrayDataAtCell(bag_PlayerBagID[playerid], _:containerid, 1);
 	}
 
 	RemovePlayerAttachedObject(playerid, ATTACHSLOT_BAG);
@@ -240,14 +240,18 @@ hook OnItemCreate(Item:itemid)
 
 		containerid = CreateContainer(bag_TypeData[bagtype][bag_name], bag_TypeData[bagtype][bag_size]);
 
-		bag_ContainerItem[containerid] = itemid;
-		bag_ContainerPlayer[containerid] = INVALID_PLAYER_ID;
-
-		SetItemArrayDataAtCell(itemid, _:containerid, 1, true);
-
-		if(lootindex != -1)
+		if(IsValidContainer(containerid))
 		{
-			FillContainerWithLoot(containerid, random(4), lootindex);
+			bag_ContainerItem[containerid] = itemid;
+			bag_ContainerPlayer[containerid] = INVALID_PLAYER_ID;
+
+			SetItemArrayDataSize(itemid, 2);
+			SetItemArrayDataAtCell(itemid, _:containerid, 1);
+
+			if(lootindex != -1)
+			{
+				FillContainerWithLoot(containerid, random(4), lootindex);
+			}
 		}
 	}
 }
