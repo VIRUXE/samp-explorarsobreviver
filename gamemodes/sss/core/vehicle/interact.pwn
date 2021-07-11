@@ -72,9 +72,12 @@ stock CreateVehicleArea(vehicleid)
 ==============================================================================*/
 
 hook OnPlayerConnect(playerid)
-	foreach(new i : varea_NearIndex[playerid])
+{
+	for(new i = 0; i < MAX_VEHICLES_IN_RANGE; i++)
 		varea_NearList[playerid][i] = 0;
-		
+
+	Iter_Clear(varea_NearIndex[playerid]);	
+}
 hook OnVehicleCreated(vehicleid)
 {
 	CreateVehicleArea(vehicleid);
@@ -90,7 +93,6 @@ hook OnPlayerEnterDynArea(playerid, areaid)
 hook OnPlayerLeaveDynArea(playerid, areaid)
 {
 	_vint_LeaveArea(playerid, areaid);
-
 	return Y_HOOKS_CONTINUE_RETURN_0;
 }
 
