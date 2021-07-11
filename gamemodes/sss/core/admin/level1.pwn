@@ -37,7 +37,7 @@ ACMD:mute[1](playerid, params[])
 		return ChatMsg(playerid,YELLOW," » Utilização: /mute [id] ([segundos (utilize -1 se desejar que fique permanente)] [Motivo])");
 
 	if(!IsPlayerConnected(targetid))
-		return ChatMsg(playerid,RED, " » ID Inválido");
+		return 4;
 
 	if(GetPlayerAdminLevel(targetid) >= GetPlayerAdminLevel(playerid))
 		return 3;
@@ -84,7 +84,7 @@ ACMD:avisar[1](playerid, params[])
 		return ChatMsg(playerid, YELLOW, " » Utilização: /avisar [id] [Motivo]");
 
 	if(!IsPlayerConnected(targetid))
-		return ChatMsg(playerid,RED, " » ID Inválido");
+		return 4;
 
 	if(GetPlayerAdminLevel(targetid) >= GetPlayerAdminLevel(playerid) && playerid != targetid)
 		return 3;
