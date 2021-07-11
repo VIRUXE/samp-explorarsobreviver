@@ -91,7 +91,7 @@ hook OnItemNameRender(Item:itemid, ItemType:itemtype)
 
 	new
 		amount,
-		str[MAX_ITEM_TEXT];
+		str[MAX_ITEM_TEXT + MAX_ITEM_NAME];
 
 	GetItemExtraData(itemid, amount);
 
