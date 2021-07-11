@@ -26,7 +26,8 @@ ACMD:adm[2](playerid, params[])
 		return 1;
 	}
 	
-	TogglePlayerAdminDuty(playerid, !IsPlayerOnAdminDuty(playerid), strcmp(params, "aqui", true, 4));
+	if(!TogglePlayerAdminDuty(playerid, !IsPlayerOnAdminDuty(playerid), strcmp(params, "aqui", true, 4)))
+		ChatMsg(playerid, YELLOW, " » Aguarde para usar o modo admin.");
 
 	return 1;
 }

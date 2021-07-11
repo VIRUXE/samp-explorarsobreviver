@@ -59,6 +59,7 @@ DBStatement:	stmt_AdminGetLevel;
 static
 				admin_Level[MAX_PLAYERS],
 				admin_OnDuty[MAX_PLAYERS],
+				admin_DutyTick[MAX_PLAYERS],
 				admin_PlayerKicked[MAX_PLAYERS];
 
 
@@ -105,11 +106,14 @@ hook OnPlayerClickPlayer(playerid, clickedplayerid, source)
 		if(GetPlayerState(playerid) == PLAYER_STATE_SPECTATING)
 			ExitSpectateMode(playerid);
 
-		TogglePlayerAdminDuty(playerid, true);
-		TeleportPlayerToPlayer(playerid, clickedplayerid);
+		if(TogglePlayerAdminDuty(playerid, true))
+		{
+			TeleportPlayerToPlayer(playerid, clickedplayerid);
 
-		ChatMsg(playerid, YELLOW, " » Você teleportou para %P", clickedplayerid);
-		ChatMsgLang(clickedplayerid, YELLOW, "TELEPORTEDT", playerid);
+			ChatMsg(playerid, YELLOW, " » Você teleportou para %P", clickedplayerid);
+			ChatMsgLang(clickedplayerid, YELLOW, "TELEPORTEDT", playerid);
+		}
+		else ChatMsg(playerid, RED, " » Aguarde para teleportar novamente.");
 	}
 
     return 0;
@@ -349,6 +353,9 @@ ChatMsgAdminsFlat(level, colour, const message[])
 
 TogglePlayerAdminDuty(playerid, toggle, goback = true)
 {
+	if(GetTickCountDifference(GetTickCount(), admin_DutyTick[playerid]) < 1500)
+		return 0;
+
 	if(toggle && !admin_OnDuty[playerid])
 	{
 		new
@@ -400,6 +407,8 @@ TogglePlayerAdminDuty(playerid, toggle, goback = true)
 
 		SetPlayerColor(playerid, !IsPlayerMobile(playerid) ? COLOR_PLAYER_NORMAL : COLOR_PLAYER_MOBILE); // 
 	}
+	admin_DutyTick[playerid] = GetTickCount();
+	return 1;
 }
 
 
