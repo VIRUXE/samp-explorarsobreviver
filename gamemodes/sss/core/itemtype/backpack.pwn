@@ -260,13 +260,19 @@ hook OnItemDestroy(Item:itemid)
 {
 	if(IsItemTypeBag(GetItemType(itemid)))
 	{
-		new Container:containerid;
-		GetItemArrayDataAtCell(itemid, _:containerid, 1);
-		if(IsValidContainer(containerid))
+		new size;
+		GetItemArrayDataSize(itemid, size);
+
+		if(size > 1)
 		{
-			bag_ContainerPlayer[containerid] = INVALID_PLAYER_ID;
-			bag_ContainerItem[containerid] = INVALID_ITEM_ID;
-			DestroyContainer(containerid);
+			new Container:containerid;
+			GetItemArrayDataAtCell(itemid, _:containerid, 1);
+			if(IsValidContainer(containerid))
+			{
+				bag_ContainerPlayer[containerid] = INVALID_PLAYER_ID;
+				bag_ContainerItem[containerid] = INVALID_ITEM_ID;
+				DestroyContainer(containerid);
+			}
 		}
 	}
 }
@@ -317,11 +323,6 @@ hook OnPlayerKeyStateChange(playerid, newkeys, oldkeys)
 	{
 		_BagDropHandler(playerid);
 	}
-
-	/*if(newkeys & 16)
-	{
-		_BagRummageHandler(playerid);
-	}*/
 
 	return 1;
 }
@@ -740,6 +741,13 @@ stock Item:GetContainerBagItem(Container:containerid)
 stock Container:GetBagItemContainerID(Item:itemid)
 {
 	if(!IsItemTypeBag(GetItemType(itemid)))
+		return INVALID_CONTAINER_ID;
+
+	new size;
+
+	GetItemArrayDataSize(itemid, size);
+
+	if(size < 2)
 		return INVALID_CONTAINER_ID;
 
 	new Container:containerid;
