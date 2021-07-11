@@ -88,9 +88,9 @@ forward OnPlayerSelectInventoryOpt(playerid, option);
 // inventory using a key.
 forward OnPlayerAddToInventory(playerid, Item:itemid, bool:success);
 
-// OnPlayerAddedToInventory is called after a player has added an item to their
+// OnPlayerAddedToInv is called after a player has added an item to their
 // inventory.
-forward OnPlayerAddedToInventory(playerid, Item:itemid);
+forward OnPlayerAddedToInv(playerid, Item:itemid);
 
 
 // -
@@ -536,5 +536,5 @@ _inv_putAway(playerid) {
 
 timer PlayerPutItemInInventory[300](playerid, itemid) {
 	AddItemToInventory(playerid, Item:itemid);
-	CallLocalFunction("OnPlayerAddedToInventory", "dd", playerid, itemid);
+	CallLocalFunction("OnPlayerAddedToInv", "dd", playerid, itemid);
 }
