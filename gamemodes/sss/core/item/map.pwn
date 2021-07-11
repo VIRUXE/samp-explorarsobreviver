@@ -75,19 +75,20 @@ bool:PlayerHasMap(playerid) {
 
 	if(IsValidItem(GetPlayerBagItem(playerid))){
 		new Container:containerid = GetBagItemContainerID(GetPlayerBagItem(playerid));
-		new size;
+		if(IsValidContainer(containerid){
+			new size;
+			GetContainerSize(containerid, size);
 
-		GetContainerSize(containerid, size);
+			// 19 = MAX_BAG_CONTAINER_SIZE !!
+			for(new i; i < size && i < 19; i++){
+				GetContainerSlotItem(containerid, i, itemid);
 
-		// 19 = MAX_BAG_CONTAINER_SIZE !!
-		for(new i; i < size && i < 19; i++){
-			GetContainerSlotItem(containerid, i, itemid);
+				if(!IsValidItem(itemid))
+					break;
 
-			if(!IsValidItem(itemid))
-				break;
-
-			if(GetItemType(itemid) == item_Map)
-				return true;
+				if(GetItemType(itemid) == item_Map)
+					return true;
+			}
 		}
 	}
 
