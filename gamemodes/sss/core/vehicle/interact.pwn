@@ -2,8 +2,8 @@
 #include <YSI_Coding\y_hooks>
 
 
-#define MAX_VEHICLES_IN_RANGE			(10)
-#define VEH_STREAMER_AREA_IDENTIFIER	(500)
+#define MAX_VEHICLES_IN_RANGE			(5)
+#define VEH_STREAMER_AREA_IDENTIFIER	(505)
 
 
 enum e_vehicle_range_data
@@ -72,9 +72,12 @@ stock CreateVehicleArea(vehicleid)
 ==============================================================================*/
 
 hook OnPlayerConnect(playerid)
-	foreach(new i : varea_NearIndex[playerid])
+{
+	for(new i = 0; i < MAX_VEHICLES_IN_RANGE; i++)
 		varea_NearList[playerid][i] = 0;
-		
+
+	Iter_Clear(varea_NearIndex[playerid]);	
+}
 hook OnVehicleCreated(vehicleid)
 {
 	CreateVehicleArea(vehicleid);
@@ -90,7 +93,6 @@ hook OnPlayerEnterDynArea(playerid, areaid)
 hook OnPlayerLeaveDynArea(playerid, areaid)
 {
 	_vint_LeaveArea(playerid, areaid);
-
 	return Y_HOOKS_CONTINUE_RETURN_0;
 }
 

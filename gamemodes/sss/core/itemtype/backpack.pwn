@@ -129,6 +129,7 @@ stock GivePlayerBag(playerid, Item:itemid)
 
 			containerid = CreateContainer(bag_TypeData[bagtype][bag_name], bag_TypeData[bagtype][bag_size]);
 
+			SetItemArrayDataSize(itemid, 2, true);
 			SetItemArrayDataAtCell(itemid, _:containerid, 1);
 		}
 
@@ -188,6 +189,7 @@ stock RemovePlayerBag(playerid)
 
 		containerid = CreateContainer(bag_TypeData[bagtype][bag_name], bag_TypeData[bagtype][bag_size]);
 
+		SetItemArrayDataSize(bag_PlayerBagID[playerid], 2, true);
 		SetItemArrayDataAtCell(bag_PlayerBagID[playerid], _:containerid, 1);
 	}
 
@@ -247,7 +249,7 @@ hook OnItemCreate(Item:itemid)
 		bag_ContainerItem[containerid] = itemid;
 		bag_ContainerPlayer[containerid] = INVALID_PLAYER_ID;
 
-		SetItemArrayDataSize(itemid, 2);
+		SetItemArrayDataSize(itemid, 2, true);
 		SetItemArrayDataAtCell(itemid, _:containerid, 1);
 
 		if(lootindex != -1)
@@ -760,10 +762,18 @@ stock GetItemBagType(ItemType:itemtype)
 
 stock Item:GetPlayerBagItem(playerid)
 {
-	if(!(0 <= playerid < MAX_PLAYERS))
+	if(!IsPlayerConnected(playerid))
 		return INVALID_ITEM_ID;
 
 	return bag_PlayerBagID[playerid];
+}
+
+stock Item:GetPlayerCurrentBag(playerid)
+{
+	if(!IsPlayerConnected(playerid))
+		return INVALID_ITEM_ID;
+		
+	return bag_CurrentBag[playerid];
 }
 
 stock GetContainerPlayerBag(Container:containerid)

@@ -269,7 +269,7 @@ DeconstructDefence(Item:itemid, playerid)
 	CA_DestroyObject(def_Col[itemid]);
 	def_Col[itemid] = -1;
 
-	if(itemdata[def_pose] == DEFENCE_POSE_VERTICAL)
+	/*if(itemdata[def_pose] == DEFENCE_POSE_VERTICAL)
 	{
 		new
 			Item:list[MAX_CONSTRUCT_SET_ITEMS] = {INVALID_ITEM_ID, ...},
@@ -299,7 +299,7 @@ DeconstructDefence(Item:itemid, playerid)
 				}
 			}
 		}
-	}
+	}*/
 
 	GetPlayerPos(playerid, x, y, z);
 	SetItemLabel(itemid, name);
@@ -330,9 +330,9 @@ hook OnPlayerPickUpItem(playerid, Item:itemid)
 
 	if(def_ItemTypeDefenceType[itemtype] != INVALID_DEFENCE_TYPE)
 	{
-		new active;
-		GetItemArrayDataAtCell(itemid, active, def_active);
-		if(active)
+		new itemdata[e_DEFENCE_DATA];
+		GetItemArrayData(itemid, itemdata);
+		if(itemdata[def_active])
 		{
 			_InteractDefence(playerid, itemid);
 			return Y_HOOKS_BREAK_RETURN_1;
@@ -348,9 +348,9 @@ hook OnPlayerUseItemWithItem(playerid, Item:itemid, Item:withitemid)
 
 	if(def_ItemTypeDefenceType[withitemtype] != INVALID_DEFENCE_TYPE)
 	{
-		new active;
-		GetItemArrayDataAtCell(withitemid, active, def_active);
-		if(active)
+		new itemdata[e_DEFENCE_DATA];
+		GetItemArrayData(itemid, itemdata);
+		if(itemdata[def_active])
 		{
 			if(IsValidItem(def_CurrentDefenceEdit[playerid]))
 			{
@@ -1161,9 +1161,9 @@ hook OnItemHitPointsUpdate(Item:itemid, oldvalue, newvalue)
 		SetItemLabel(itemid, sprintf("%d/%d", GetItemHitPoints(itemid), GetItemTypeMaxHitPoints(itemtype)), RED, 20.0);
 		SetItemArrayDataAtCell(itemid, def_hit, GetItemHitPoints(itemid));
 
-		new active;
-		GetItemArrayDataAtCell(itemid, active, def_active);
-		if(active)
+		new itemdata[e_DEFENCE_DATA];
+		GetItemArrayData(itemid, itemdata);
+		if(itemdata[def_active])
 		{
 			CallLocalFunction("OnDefenceModified", "d", _:itemid);
 		}

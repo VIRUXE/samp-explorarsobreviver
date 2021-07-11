@@ -518,7 +518,7 @@ _inv_HandleGearSlotClick_Hand(playerid)
 	{
 		if(IsItemTypeBag(GetItemType(itemid)))
 		{
-			if(containerid == GetBagItemContainerID(itemid))
+			if(GetPlayerCurrentBag(playerid) == itemid)
 				return 1;
 		}
 

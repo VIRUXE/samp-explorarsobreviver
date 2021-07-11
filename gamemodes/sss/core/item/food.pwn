@@ -149,9 +149,12 @@ _EatItem(playerid, Item:itemid)
 		return 0;
 	}
 
-	new amount, cooked;
-	GetItemArrayDataAtCell(itemid, amount, food_amount);
-	GetItemArrayDataAtCell(itemid, cooked, food_cooked);
+	new data[e_FOOD_ITEM_DATA];
+	GetItemArrayData(itemid, data);
+
+	new 
+		amount = data[food_amount],
+		cooked = data[food_cooked];
 
 	if(amount > 0)
 	{

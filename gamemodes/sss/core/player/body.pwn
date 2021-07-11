@@ -511,11 +511,17 @@ CMD:mc(playerid, params[])
 {
 	if(IsPlayerMobile(playerid))
 	{
-		new STREAMER_TAG_ACTOR:actorid;
+		new actorid;
 
-		if(sscanf(params, "d", STREAMER_TAG_ACTOR:actorid))
+		if(sscanf(params, "d", actorid))
 		{
 			ChatMsg(playerid, RED, "[Mobile] > Digite /mv [id do corpo]");
+			return 1;
+		}
+
+		if(!IsValidDynamicActor(actorid))
+		{
+			ChatMsg(playerid, RED, "[Mobile] > Este corpo nao existe.");
 			return 1;
 		}
 
@@ -531,18 +537,19 @@ CMD:mc(playerid, params[])
 		GetPlayerPos(playerid, cx, cy, cz);
 
 		if(Distance(cx, cy, cz, x, y, z) < 5.0)
-		{
-			if(!CA_RayCastLine(x, y, z, cx, cy, cz,  cx, cy, cz))
-				CallLocalFunction("OnPlayerGiveDamageDynamicActor", "ddfdd", playerid, actorid, 100.0, 0, 1);
-			else 
-				ChatMsg(playerid, RED, "[Mobile] > Você não pode matar por que há algum objeto entre você e o corpo.");
-		}
-		else ChatMsg(playerid, RED, "[Mobile] > Você está muito longe do corpo.");
+			DamageBody(playerid, actorid, 100.0);
+		else
+			ChatMsg(playerid, RED, "[Mobile] > Você esta muito longe do corpo.");
 	}
 	return 1;
 }
 
 public OnPlayerGiveDamageDynamicActor(playerid, actorid, Float:amount, weaponid, bodypart)
+{
+	return DamageBody(playerid, actorid, Float:amount);
+}
+
+DamageBody(playerid, actorid, Float:amount)
 {
 	new 
 		Float:x, Float:y, Float:z,
