@@ -35,23 +35,13 @@ UpdatePlayerMap(playerid){
 hook OnPlayerLoad(playerid, filename[])
 	UpdatePlayerMap(playerid);
 
-hook OnPlayerAddedToInv(playerid, Item:itemid)
-	if(GetItemType(itemid) == item_Map)
-		UpdatePlayerMap(playerid);
-
 hook OnItemRemovedFromPlayer(playerid, Item:itemid)
 	if(GetItemType(itemid) == item_Map)
 		UpdatePlayerMap(playerid);
 
-hook OnItemRemoveFromCnt(Container:containerid, slotid, playerid){
-	if(IsPlayerConnected(playerid) && IsValidItem(GetContainerBagItem(containerid)))
-	{
-		new Item:itemid;
-		GetContainerSlotItem(containerid, slotid, itemid);
-		if(GetItemType(itemid) == item_Map)
-			UpdatePlayerMap(playerid);
-	}
-}
+hook OnItemAddedToContainer(Container:containerid, Item:itemid, playerid)
+	if(IsPlayerConnected(playerid) && GetItemType(itemid) == item_Map)
+		UpdatePlayerMap(playerid);
 
 hook OnPlayerGetItem(playerid, Item:itemid)
 	if(GetItemType(itemid) == item_Map)
