@@ -1,6 +1,12 @@
 
-stock TeleportPlayerToPlayer(playerid, targetid)
+TeleportPlayerToPlayer(playerid, targetid)
 {
+	if(targetid == playerid)
+		return 0;
+
+	if(GetPlayerState(targetid) == PLAYER_STATE_SPECTATING)
+		return 0;
+
 	new
 		Float:px,
 		Float:py,
@@ -12,6 +18,7 @@ stock TeleportPlayerToPlayer(playerid, targetid)
 		virtualworld = GetPlayerVirtualWorld(targetid),
 		interior = GetPlayerInterior(targetid);
 
+	// Obter as coordenadas do target
 	if(IsPlayerInAnyVehicle(targetid))
 	{
 		new vehicleid = GetPlayerVehicleID(targetid);
@@ -33,7 +40,7 @@ stock TeleportPlayerToPlayer(playerid, targetid)
 	SetPlayerInterior(playerid, interior);
 	SetPlayerVirtualWorld(playerid, virtualworld);
 	
-
+	// Obter as coordenadas de quem pediu o teleport
 	if(IsPlayerInAnyVehicle(playerid))
 	{
 		new vehicleid = GetPlayerVehicleID(playerid);
@@ -50,9 +57,11 @@ stock TeleportPlayerToPlayer(playerid, targetid)
 		SetPlayerFacingAngle(playerid, ang);
 		SetPlayerVelocity(playerid, vx, vy, vz);
 	}
+
+	return 1;
 }
 
-stock IsValidUsername(const name[])
+IsValidUsername(const name[])
 {
 	new
 		i,
