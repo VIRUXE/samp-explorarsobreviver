@@ -741,8 +741,8 @@ public OnScriptInit()
 	item_EmpTripMine	= DefineItemType("Mina PEM",					"EmpTripMine",		343,	2,	0.0, 0.0, 0.0,			0.0,	.maxhitpoints = 1);
 	item_Explosive		= DefineItemType("TNT",							"Explosive",		1576,	2,	0.0, 0.0, 0.0,			0.0,	0.269091, 0.166367, 0.000000, 90.000000, 0.000000, 0.000000, .maxhitpoints = 2);
 	item_Extinguisher	= DefineItemType("Extintor",					"Extinguisher",		366,	4,	90.0, .maxhitpoints = 4);
-	item_FireHelmet		= DefineItemType("Chapeu de Bombeiro",			"FireHelmet",		19330,	1,	0.0, 0.0, 0.0,			0.0,	0.062216, 0.055396, 0.001138, 90.000000, 0.000000, 0.000000, .maxhitpoints = 1);
-    item_FireHelmet1	= DefineItemType("Chapeu de Bombeiro",			"FireHelmet1",		19331,	1,	0.0, 0.0, 0.0,			0.0,	0.062216, 0.055396, 0.001138, 90.000000, 0.000000, 0.000000, .maxhitpoints = 1);
+	item_FireHelmet		= DefineItemType("Chapeu de Bombeiro",			"FireHelmet",		19330,	1,	0.0, -90.0, 0.0,			0.1,	0.062216, 0.055396, 0.001138, 90.000000, 0.000000, 0.000000, .maxhitpoints = 1);
+    item_FireHelmet1	= DefineItemType("Chapeu de Bombeiro",			"FireHelmet1",		19331,	1,	0.0, -90.0, 0.0,			0.1,	0.062216, 0.055396, 0.001138, 90.000000, 0.000000, 0.000000, .maxhitpoints = 1);
 	item_FireLighter	= DefineItemType("Isqueiro",					"FireLighter",		19998,	1,	0.0, 0.0, 0.0,			0.0,	.maxhitpoints = 1);
 	item_FireworkBox	= DefineItemType("Fogo de Artificio",			"FireworkBox",		2039,	2,	0.0, 0.0, 0.0,			0.0,	0.096996, 0.044811, 0.035688, 4.759557, 255.625167, 0.000000, .maxhitpoints = 2);
 	item_FishRod		= DefineItemType("Cana de Pesca",				"FishRod",			18632,	6,	90.0, 0.0, 0.0,			0.0,	0.091496, 0.019614, 0.000000, 185.619995, 354.958374, 0.000000, .maxhitpoints = 6);
