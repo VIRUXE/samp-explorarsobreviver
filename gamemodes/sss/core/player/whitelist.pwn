@@ -90,15 +90,15 @@ public DCC_OnMessageCreate(DCC_Message:message)
         DCC_GetMessageContent(message, nickname);
 
         if(strlen(nickname) > MAX_PLAYER_NAME - 1)
-            format(result, sizeof(result),      "> Esse nick `%s` é grande demais (máximo de 24 caractéres).", nickname);
+            format(result, sizeof(result),      "> Esse nick `%s` e grande demais (maximo de 24 caracteres).", nickname);
         else if(!strfind(nickname, "."))
-            result =                            "> Seu nick não pode ter ponto (.) no início."; 
+            result =                            "> Seu nick não pode ter ponto (.) no inicio."; 
         else if(IsNameInWhitelist(nickname))
-            format(result, sizeof(result),      "> Esse nick `%s` já está vinculado com uma outra conta de Discord.", nickname); 
+            format(result, sizeof(result),      "> Esse nick `%s` ja esta vinculado com uma outra conta de Discord.", nickname); 
         else if(!IsValidUsername(nickname))
-            format(result, sizeof(result),      "> Esse nick `%s` não é válido para utilização no jogo.", nickname); 
+            format(result, sizeof(result),      "> Esse nick `%s` não e valido para utilização no jogo.", nickname); 
         else if(IsNameInWhitelist(userid))
-            result =							"> Você já tem a conta vinculada...";
+            result =							"> Você ja tem a conta vinculada...";
         else
         {
             new DCC_Guild: guild;
@@ -271,7 +271,7 @@ stock WhitelistWarn(playerid)
 	format(str, sizeof(str), ""C_WHITE"Você precisa registrar na WhiteList para jogar no servidor.\n\n\
 		"C_WHITE"\t1. Entre em: "C_BLUE"%s"C_WHITE". (Enquanto mantém o jogo aberto! "C_WHITE"Nota: necessita de vincular seu celular no Discord"C_WHITE")\n\
 		"C_WHITE"\t2. Digite %P"C_WHITE" em #whitelist\n\
-		"C_WHITE"\t3. Volte aqui, clique em \"Jogar\" e pronto, você já pode se divertir! :) \n\n\
+		"C_WHITE"\t3. Volte aqui, clique em \"Jogar\" e pronto, você ja pode se divertir! :) \n\n\
 		"C_YELLOW"Aviso:"C_WHITE" Isso serve como proteção para o servidor.\nPedimos sua compreensão.",
 		gWebsiteURL, playerid);
 		
