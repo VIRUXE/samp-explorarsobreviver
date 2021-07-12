@@ -306,7 +306,7 @@ hook OnPlayerDisconnect(playerid, reason)
 	*/
 		itemcount = 0;
 
-		if(IsValidItem(GetPlayerBagItem(playerid)))
+		if(IsItemTypeBag(GetItemType(GetPlayerBagItem(playerid))))
 		{
 			new Container:containerid = GetBagItemContainerID(GetPlayerBagItem(playerid));
 			new size;
@@ -340,18 +340,21 @@ hook OnPlayerDisconnect(playerid, reason)
 	return 1;
 }
 
+static bool:KillPlayerBody[MAX_PLAYERS];
+
 hook OnPlayerLoadAccount(playerid)
 {
+	KillPlayerBody[playerid] = false;
 	new name[MAX_PLAYER_NAME];
 	GetPlayerName(playerid, name, MAX_PLAYER_NAME);
 
 	foreach(new i : body_Count){
 		if(!strcmp(body_PlayerName[i], name) && !isnull(body_PlayerName[i]))
 		{
-			if(GetDynamicActorVirtualWorld(i) == 33)
+			if(GetDynamicActorVirtualWorld(i) == 3333)
 			{
 				ChatMsg(playerid, RED, " » Você foi morto enquanto esteve ausente. :(");
-				SetAccountAliveState(name, 0);
+				KillPlayerBody[playerid] = true;
 			}
 			break;
 		}
@@ -360,6 +363,33 @@ hook OnPlayerLoadAccount(playerid)
 
 hook OnPlayerLogin(playerid)
 {
+	if(KillPlayerBody[playerid])
+	{
+		SetPlayerPos(playerid, DEFAULT_POS_X, DEFAULT_POS_Y, DEFAULT_POS_Z);
+		DestroyItem(GetPlayerItem(playerid));
+		DestroyItem(GetPlayerHolsterItem(playerid));
+		DestroyPlayerBag(playerid);
+		RemovePlayerHolsterItem(playerid);
+		RemovePlayerWeapon(playerid);
+
+		for(new i; i < MAX_INVENTORY_SLOTS; i++)
+		{
+			new Item:subitemid;
+			GetInventorySlotItem(playerid, 0, subitemid);
+			DestroyItem(subitemid);
+		}
+
+		if(IsValidItem(GetPlayerHatItem(playerid)))
+			RemovePlayerHatItem(playerid);
+
+		if(IsValidItem(GetPlayerMaskItem(playerid)))
+			RemovePlayerMaskItem(playerid);
+
+		SetPlayerHP(playerid, 0.0);
+		ChatMsg(playerid, RED, " » Você foi morto enquanto esteve ausente. :(");
+		KillPlayerBody[playerid] = false;
+	}
+
 	new name[MAX_PLAYER_NAME];
 	GetPlayerName(playerid, name, MAX_PLAYER_NAME);
 
@@ -393,7 +423,7 @@ CreateBody(const name[], Float:x, Float:y, Float:z, Float:a, w, i, s)
 		body_NameTag[id] = Text3D:INVALID_3DTEXT_ID;
 	}
 
-	body_NameTag[id] = CreateDynamic3DTextLabel(sprintf("%s{FFFFFF}(Corpo)", body_PlayerName[id]), 0xB8B8B8FF, x, y, z, 15.0, INVALID_PLAYER_ID, INVALID_VEHICLE_ID, 0, w, i);
+	body_NameTag[id] = CreateDynamic3DTextLabel(sprintf("%s{FFFFFF}(Corpo)", body_PlayerName[id]), 0xB8B8B8FF, x, y, z, 15.0, INVALID_PLAYER_ID, INVALID_VEHICLE_ID, 1, w, i);
 
 	ApplyDynamicActorAnimation(id, "SUNBATHE", "PARKSIT_M_IN", 4.1, 0, 0, 0, 1, 0);
 
@@ -454,27 +484,14 @@ stock DestroyBody(bodyid)
 const GIVEDAM = 115;
 
 IRPC:GIVEDAM(playerid, BitStream:bs){
-	/*new bool:bGiveOrTake, wPlayerID, Float:damage_amount, dWeaponID, dBodypart;
+	new bool:bGiveOrTake, wPlayerID, Float:damage_amount, dWeaponID, dBodypart;
 	BS_ReadValue(bs,
 		PR_BOOL, bGiveOrTake,
 		PR_UINT16, wPlayerID,
 		PR_FLOAT, damage_amount,
 		PR_UINT32, dWeaponID,
 		PR_UINT32, dBodypart
-	);
-
-	ChatMsg(playerid, -1,
-		"bGiveOrTake:%d, wPlayerID:%d, damage_amount:%0.2f, dWeaponID:%d, dBodypart:%d",
-			bGiveOrTake, wPlayerID, damage_amount, dWeaponID, dBodypart);
-	
-	if(wPlayerID > 999) // Is Body
-	{
-		SetPlayerHealth(wPlayerID, -damage_amount);
-		CallLocalFunction("OnPlayerGiveDamageDynamicActor", "ddfdd",
-			playerid, wPlayerID - 1000, damage_amount, dWeaponID, dBodypart);
-		return 0;
-	}*/
-		
+	);	
 
 	if(IsPlayerMobile(playerid))
 	{
@@ -492,7 +509,7 @@ IRPC:GIVEDAM(playerid, BitStream:bs){
 		{
 			GetDynamicActorPos(i, x, y, z);
 			
-			if(Distance(cx, cy, cz, x, y, z) < 5.0)
+			if(Distance(cx, cy, cz, x, y, z) < 8.0)
 			{
 				if(!CA_RayCastLine(x, y, z, cx, cy, cz,  cx, cy, cz))
 				{
@@ -503,6 +520,9 @@ IRPC:GIVEDAM(playerid, BitStream:bs){
 			}
 		}
 	}
+
+	if(wPlayerID == playerid)
+		return 0;
 
 	return 1;
 }
@@ -545,9 +565,7 @@ CMD:mc(playerid, params[])
 }
 
 public OnPlayerGiveDamageDynamicActor(playerid, actorid, Float:amount, weaponid, bodypart)
-{
 	return DamageBody(playerid, actorid, Float:amount);
-}
 
 DamageBody(playerid, actorid, Float:amount)
 {
@@ -735,8 +753,7 @@ DamageBody(playerid, actorid, Float:amount)
 	/*
 		Bag item
 	*/
-		itemid = INVALID_ITEM_ID;
-		
+
 		new bag_data[ITM_ARR_MAX_ARRAY_DATA];
 
 		length = modio_read(filename, _T<B,A,G,I>, sizeof(bag_data), bag_data);
@@ -755,7 +772,8 @@ DamageBody(playerid, actorid, Float:amount)
 	/*
 		Bag - Itemid = ^
 	*/
-		if(IsValidItem(itemid)){
+		if(IsItemTypeBag(GetItemType(itemid)))
+		{
 			if(IsValidContainer(GetBagItemContainerID(Item:itemid)))
 			{
 				length = modio_read(filename, _T<B,A,G,0>, ITEM_SERIALIZER_RAW_SIZE, itm_arr_Serialized);
@@ -784,7 +802,7 @@ DamageBody(playerid, actorid, Float:amount)
 			}
 		}
 		
-		data[SAVED_BODY_WORLD] = 33;
+		data[SAVED_BODY_WORLD] = 3333;
 		modio_push(filename, _T<D,A,T,A>, SAVED_BODY_END, data);
 
 		if(IsValidDynamic3DTextLabel(body_NameTag[actorid])){
@@ -792,7 +810,7 @@ DamageBody(playerid, actorid, Float:amount)
 			body_NameTag[actorid] = Text3D:INVALID_3DTEXT_ID;
 		}
 
-		SetDynamicActorVirtualWorld(actorid, 33);
+		SetDynamicActorVirtualWorld(actorid, 3333);
 		//CreateBody(body_PlayerName[actorid], 0.0, 0.0, 0.0, 0.0, 33, 0, 0);
 	}
 	else 
