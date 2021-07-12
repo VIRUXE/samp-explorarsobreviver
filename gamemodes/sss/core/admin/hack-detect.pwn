@@ -910,15 +910,16 @@ ptask VehicleHealthCheck[1000](playerid)
 		GetPlayerName(playerid, name, MAX_PLAYER_NAME);
 		format(reason, sizeof(reason), "Veículo com %.2f de Vida (Impossível pelo Servidor)", vehiclehp);
 		ReportPlayer(name, reason, -1, REPORT_TYPE_VHEALTH, x, y, z, GetPlayerVirtualWorld(playerid), GetPlayerInterior(playerid), "");
-		BanPlayer(playerid, reason, -1, 0);
+		KickPlayer(playerid, reason);
 
+		SetVehicleHealth(vehicleid, 300.0);
 		defer vh_ResetVehiclePosition(vehicleid);
 	}
 
 	return;
 }
 
-timer vh_ResetVehiclePosition[1000](vehicleid)
+timer vh_ResetVehiclePosition[1500](vehicleid)
 {
 	SetVehicleHealth(vehicleid, 300.0);
 }
