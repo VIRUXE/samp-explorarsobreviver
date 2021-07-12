@@ -182,8 +182,7 @@ stock CreateStaticLootSpawn(Float:x, Float:y, Float:z, lootindex, Float:weight, 
 	return loot_SpawnTotal++;
 }
 
-// 10800000 = 3 Hours
-timer RespawnItem[10800000](itemid, Float:x, Float:y, Float:z, lootindex, worldid, interiorid){
+timer RespawnItem[ITEM_RESPAWN_DELAY](itemid, Float:x, Float:y, Float:z, lootindex, worldid, interiorid){
 	if(!IsValidItem(Item:itemid) || !IsItemInWorld(Item:itemid))
 		itemid = _:CreateLootItem(lootindex, x, y, z, worldid, interiorid);
 
@@ -220,8 +219,7 @@ hook OnItemRemoveFromWorld(Item:itemid)
 hook OnItemDestroyed(Item:itemid)
 	stop DestroyUItem[itemid];
 
-// 5400000 = 1 Hour and 30 minutes
-timer DestroyUntilItem[5400000](itemid, Float:x, Float:y, Float:z)
+timer DestroyUntilItem[ITEM_RESPAWN_DELAY - 3600000](itemid, Float:x, Float:y, Float:z)
 {
 	if(!IsValidItem(Item:itemid) || !IsItemInWorld(Item:itemid))
 		return;
@@ -230,7 +228,7 @@ timer DestroyUntilItem[5400000](itemid, Float:x, Float:y, Float:z)
 	{
 		if(IsPlayerInRangeOfPoint(i, 20.0, x, y, z))
 		{
-			defer DestroyUntilItem(_:itemid, x, y, z);
+			DestroyUItem[Item:itemid] = defer DestroyUntilItem(_:itemid, x, y, z);
 			return;
 		}
 	}

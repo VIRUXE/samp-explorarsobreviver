@@ -180,6 +180,6 @@ hook OnHoldActionFinish(playerid){
 	return Y_HOOKS_CONTINUE_RETURN_0;
 }
 
-timer RestartTrash[10800000](trashid)
+timer RestartTrash[ITEM_RESPAWN_DELAY](trashid)
 	disable_Trash[trashid] = 0;
 
