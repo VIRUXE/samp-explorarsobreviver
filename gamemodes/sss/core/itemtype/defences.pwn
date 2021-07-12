@@ -1158,15 +1158,15 @@ hook OnItemHitPointsUpdate(Item:itemid, oldvalue, newvalue)
 
 	if(def_ItemTypeDefenceType[itemtype] != -1)
 	{
-		SetItemLabel(itemid, sprintf("%d/%d", GetItemHitPoints(itemid), GetItemTypeMaxHitPoints(itemtype)), RED, 20.0);
-		SetItemArrayDataAtCell(itemid, def_hit, GetItemHitPoints(itemid));
-
 		new itemdata[e_DEFENCE_DATA];
 		GetItemArrayData(itemid, itemdata);
 		if(itemdata[def_active])
 		{
+			SetItemLabel(itemid, sprintf("%d/%d", GetItemHitPoints(itemid), GetItemTypeMaxHitPoints(itemtype)), RED, 20.0);
+			itemdata[def_hit] = GetItemHitPoints(itemid);
 			CallLocalFunction("OnDefenceModified", "d", _:itemid);
 		}
+		SetItemArrayData(itemid, itemdata, e_DEFENCE_DATA);
 	}
 		
 }

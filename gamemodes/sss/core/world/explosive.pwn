@@ -42,13 +42,17 @@ EXP_PRESET:	exp_preset
 
 static		exp_Presets[EXP_PRESET][EXP_PRESET_DATA] =
 {
-	{12, 3.0, 1},	// EXP_SMALL
-	{00, 8.0, 2},	// EXP_MEDIUM
-	{06, 24.0, 3},	// EXP_LARGE
-	{02, 5.0, 0},	// EXP_INCEN - large fire anim from explosion
-	{04, 8.0, 0},	// EXP_THERM - fire anim from explosion combined with prt
-	{00, 12.0, 0},	// EXP_EMP - no exp anim or fire, prt used
-	{12, 10.0, 0}	// EXP_SHRAP - knockout range small, bleed range large
+
+//	type	size	Damage
+
+	{12, 	3.0, 	1},	// EXP_SMALL
+	{00, 	8.0, 	2},	// EXP_MEDIUM
+	{06, 	24.0, 	3},	// EXP_LARGE
+	{02, 	5.0, 	0},	// EXP_INCEN - large fire anim from explosion
+	{04, 	8.0, 	0},	// EXP_THERM - fire anim from explosion combined with prt
+	{00, 	12.0, 	0},	// EXP_EMP - no exp anim or fire, prt used
+	{12, 	10.0, 	0}	// EXP_SHRAP - knockout range small, bleed range large
+	
 };
 
 static
@@ -161,6 +165,10 @@ stock SetItemToExplode(Item:itemid)
 timer SetItemToExplodeDelay[delay](itemid, delay)
 {
 	#pragma unused delay
+
+	if(!IsItemInWorld(Item:itemid))
+		return;
+
 	SetItemToExplode(Item:itemid);
 }
 
@@ -171,6 +179,17 @@ timer SetItemToExplodeDelay[delay](itemid, delay)
 
 ==============================================================================*/
 
+hook OnPlayerDroppedItem(playerid, Item:itemid)
+{
+	new ItemType:itemtype = GetItemType(itemid);
+
+	if(exp_ItemTypeExplosive[itemtype] != INVALID_EXPLOSIVE_TYPE)
+	{
+		new Float:x, Float:y, Float:z;
+		GetPlayerPos(playerid, x, y, z);
+		SetItemPos(itemid, x, y, z - 0.9);
+	}
+}
 
 hook OnPlayerUseItem(playerid, Item:itemid)
 {
@@ -191,7 +210,7 @@ hook OnPlayerUseItem(playerid, Item:itemid)
 
 		if(exp_Data[exp_ItemTypeExplosive[itemtype]][exp_trigger] == TIMED)
 		{
-			CreateItemInWorld(RemoveCurrentItem(playerid), x, y, z - ITEM_FLOOR_OFFSET);
+			CreateItemInWorld(RemoveCurrentItem(playerid), x, y, z - 0.90);
 
 			exp_ArmingItem[playerid] = itemid;
 
@@ -201,7 +220,7 @@ hook OnPlayerUseItem(playerid, Item:itemid)
 		}
 		else if(exp_Data[exp_ItemTypeExplosive[itemtype]][exp_trigger] == PROXIMITY)
 		{
-			CreateItemInWorld(RemoveCurrentItem(playerid), x, y, z - ITEM_FLOOR_OFFSET);
+			CreateItemInWorld(RemoveCurrentItem(playerid), x, y, z - 0.90);
 			exp_ArmingItem[playerid] = itemid;
 
 			StartHoldAction(playerid, 1000);
@@ -210,7 +229,7 @@ hook OnPlayerUseItem(playerid, Item:itemid)
 		}
 		else if(exp_Data[exp_ItemTypeExplosive[itemtype]][exp_trigger] == MOTION)
 		{
-			CreateItemInWorld(RemoveCurrentItem(playerid), x, y, z - ITEM_FLOOR_OFFSET);
+			CreateItemInWorld(RemoveCurrentItem(playerid), x, y, z - 0.90);
 			exp_ArmingItem[playerid] = itemid;
 
 			StartHoldAction(playerid, 1000);
@@ -539,6 +558,7 @@ hook OnPlayerOpenContainer(playerid, Container:containerid)
 
 ==============================================================================*/
 
+new Timer:exp_HitItemExp[MAX_ITEM];
 
 stock CreateExplosionOfPreset(Float:x, Float:y, Float:z, EXP_PRESET:preset)
 {
@@ -565,64 +585,42 @@ stock CreateExplosionOfPreset(Float:x, Float:y, Float:z, EXP_PRESET:preset)
 			data[2],
 			Item:id,
 			count,
-			Float:ix,
-			Float:iy,
-			Float:iz,
-			Float:cx,
-			Float:cy,
-			Float:cz,
-			obj,
-			ItemType:itemtype;
+			Float:ix, Float:iy, Float:iz,
+			Float:tmp;
 
 		streamer_count = Streamer_GetNearbyItems(x, y, z, STREAMER_TYPE_AREA, streamer_items, .range = exp_Presets[preset][exp_size]);
 
 		for(new i; i < streamer_count && count < 256; ++i) {
 			Streamer_GetArrayData(STREAMER_TYPE_AREA, streamer_items[i], E_STREAMER_EXTRA_ID, data);
 
-			if(data[0] != BTN_STREAMER_AREA_IDENTIFIER) {
+			if(data[0] != BTN_STREAMER_AREA_IDENTIFIER)
 				continue;
-			}
 
 			id = GetItemFromButtonID(Button:data[1]);
 
-			if(IsValidItem(id))
-			{
+			// Explode itens
+			if(IsValidItem(id)){
 				GetItemPos(Item:id, ix, iy, iz);
-				itemtype = GetItemType(Item:id);
-				
-				if(IsItemTypeDefence(itemtype))
-				{
-					// RayCastLineExplode
-					for(new Float:lat = -180.0; lat < 180.0; lat += (10.0 * 0.75))
-					{
-						for(new Float:lon = -90.0; lon < 90.0; lon += 10.0)
-						{
-							new Float:LAT = lat * 3.141593 / 180.0,
-								Float:LON = lon * 3.141593 / 180.0,
-								Float:ex = -1.0 * floatcos(LAT) * floatcos(LON),
-								Float:ey = 1.0 * floatcos(LAT) * floatsin(LON),
-								Float:ez = 1.0 * floatsin(LAT);
+				if(!CA_RayCastLine(ix, iy, iz, x, y, z, tmp, tmp, tmp)){
+					stop exp_HitItemExp[Item:id];
+					exp_HitItemExp[Item:id] = defer HitItemExp(_:id, GetItemHitPoints(Item:id) - exp_Presets[preset][exp_itemDmg]);
+				}
+			}
+		}
 
-							obj = CA_RayCastLineID(x, y, z, x + ex, y + ey, z + ez, ex, ey, ez);
-							if(Item:CA_GetObjectExtraID(obj, 0) == id)
-							{
-								defer HitItemExp(_:id, GetItemHitPoints(id) - exp_Presets[preset][exp_itemDmg]);
-								break;
-							}
-						}
-						if(Item:CA_GetObjectExtraID(obj, 0) == id)
-							break;
-					}
-					continue;
-				}
-				else
-				{
-					obj = CA_RayCastLine(ix, iy, iz, x, y, z, cx, cy, cz);
-				}
-				
-				if(!obj)
-				{
-					defer HitItemExp(_:id, GetItemHitPoints(Item:id) - exp_Presets[preset][exp_itemDmg]);
+		// RayCastLineExplode for defences
+		for(new Float:lat = -180.0; lat < 180.0; lat += (10.0 * 0.75)){
+			for(new Float:lon = -90.0; lon < 90.0; lon += 10.0){
+				new Float:LAT = lat * 3.141593 / 180.0,
+					Float:LON = lon * 3.141593 / 180.0,
+					Float:ex = -1.0 * floatcos(LAT) * floatcos(LON),
+					Float:ey = 1.0 * floatcos(LAT) * floatsin(LON),
+					Float:ez = 1.0 * floatsin(LAT);
+
+				id = Item:CA_GetObjectExtraID(CA_RayCastLineID(x, y, z, x + ex, y + ey, z + ez, tmp, tmp, tmp), 0);
+				if(IsItemTypeDefence(GetItemType(id))){
+					stop exp_HitItemExp[Item:id];
+					exp_HitItemExp[Item:id] = defer HitItemExp(_:id, GetItemHitPoints(id) - exp_Presets[preset][exp_itemDmg]);
 				}
 			}
 		}
@@ -632,7 +630,7 @@ stock CreateExplosionOfPreset(Float:x, Float:y, Float:z, EXP_PRESET:preset)
 }
 
 timer HitItemExp[200](id, hit)
-	if(IsValidItem(Item:id))
+	if(IsValidItem(Item:id) && IsItemInWorld(Item:id))
 		SetItemHitPoints(Item:id, hit);
 
 CreateIncenExplosion(Float:x, Float:y, Float:z, Float:range)
