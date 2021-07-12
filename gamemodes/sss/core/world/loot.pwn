@@ -113,7 +113,9 @@ stock CreateStaticLootSpawn(Float:x, Float:y, Float:z, lootindex, Float:weight, 
 
 	loot_SpawnData[lootspawnid][loot_posX] = x;
 	loot_SpawnData[lootspawnid][loot_posY] = y;
-	loot_SpawnData[lootspawnid][loot_posZ] = (z + 0.1832);
+
+	loot_SpawnData[lootspawnid][loot_posZ] = (z + 0.5);
+
 	loot_SpawnData[lootspawnid][loot_world] = worldid;
 	loot_SpawnData[lootspawnid][loot_interior] = interiorid;
 	loot_SpawnData[lootspawnid][loot_weight] = weight;
