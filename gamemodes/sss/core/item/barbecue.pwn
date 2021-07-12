@@ -201,6 +201,9 @@ _LightBBQ(Item:itemid)
 
 timer bbq_FinishCooking[30000](itemid)
 {
+	if(!IsValidItem(itemid))
+		return;
+
 	new data[e_BBQ_DATA];
 
 	GetItemArrayData(Item:itemid, data);
@@ -213,6 +216,7 @@ timer bbq_FinishCooking[30000](itemid)
 
 	SetItemArrayDataAtCell(Item:itemid, data[bbq_fuel] - 1, bbq_fuel);
 	SetItemArrayDataAtCell(Item:itemid, COOKER_STATE_NONE, bbq_state);
+	return;
 }
 
 
