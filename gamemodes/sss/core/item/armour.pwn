@@ -48,6 +48,12 @@ hook OnItemNameRender(Item:itemid, ItemType:itemtype)
 {
 	if(itemtype == item_Armour)
 	{
+		new size;
+		GetItemArrayDataSize(itemid, size);
+
+		if(size < 1)
+			return Y_HOOKS_CONTINUE_RETURN_0;
+
 		new
 			amount,
 			str[11];
@@ -57,6 +63,7 @@ hook OnItemNameRender(Item:itemid, ItemType:itemtype)
 		
 		SetItemNameExtra(itemid, str);
 	}
+	return Y_HOOKS_CONTINUE_RETURN_0;
 }
 
 
