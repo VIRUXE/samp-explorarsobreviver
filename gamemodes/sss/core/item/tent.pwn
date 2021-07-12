@@ -3,7 +3,7 @@
 
 
 #define MAX_TENT			(2048)
-#define MAX_TENT_ITEMS		(40)
+#define MAX_TENT_ITEMS		(50)
 #define INVALID_TENT_ID		(-1)
 #define DIRECTORY_TENT		DIRECTORY_MAIN"tent/"
 
