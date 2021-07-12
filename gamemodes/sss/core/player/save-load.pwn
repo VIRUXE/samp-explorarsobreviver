@@ -129,7 +129,7 @@ SavePlayerChar(playerid)
 	player_data[PLY_CELL_MUTE_TIME] = GetPlayerMuteRemainder(playerid);
 	player_data[PLY_CELL_KNOCKOUT] = GetPlayerKnockOutRemainder(playerid);
 
-	if(IsValidItem(GetPlayerBagItem(playerid)))
+	if(IsItemTypeBag(GetItemType(GetPlayerBagItem(playerid))))
 	{
 		player_data[PLY_CELL_BAGTYPE] = _:GetItemType(GetPlayerBagItem(playerid));
 
@@ -138,7 +138,6 @@ SavePlayerChar(playerid)
 			Logger_I("type", player_data[PLY_CELL_BAGTYPE])
 		);
 	}
-
 
 	player_data[PLY_CELL_WORLD] = GetPlayerVirtualWorld(playerid);
 	player_data[PLY_CELL_INTERIOR] = GetPlayerInterior(playerid);
