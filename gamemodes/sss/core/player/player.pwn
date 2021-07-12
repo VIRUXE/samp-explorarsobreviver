@@ -36,7 +36,9 @@ Float:	ply_Velocity,
 }
 
 static
-		ply_Data[MAX_PLAYERS][E_PLAYER_DATA];
+		ply_Data[MAX_PLAYERS][E_PLAYER_DATA],
+Timer:	LoadDelay[MAX_PLAYERS],
+		LoadCount;
 
 
 forward OnPlayerScriptUpdate(playerid);
@@ -57,6 +59,8 @@ public OnPlayerConnect(playerid)
 
 	TogglePlayerClock(playerid, true);
 	
+	SetPlayerVirtualWorld(playerid, playerid + 1);
+
 	ResetVariables(playerid);
 
 	ply_Data[playerid][ply_JoinTick] = GetTickCount();
@@ -73,7 +77,9 @@ public OnPlayerConnect(playerid)
 	if(BanCheck(playerid))
 		return 0;
 
-	defer LoadAccountDelay(playerid);
+	stop LoadDelay[playerid];
+	LoadDelay[playerid] = defer LoadAccountDelay(playerid, 5000 + (LoadCount * 2000) );
+	LoadCount ++;
 
 	SetPlayerBrightness(playerid, 255);
 
@@ -123,15 +129,19 @@ public OnPlayerDisconnect(playerid, reason)
 	return 1;
 }
 
-timer LoadAccountDelay[5000](playerid)
+timer LoadAccountDelay[timer](playerid, timer)
 {
-	if(!IsPlayerConnected(playerid))
+	#pragma unused timer
+
+	if(!IsPlayerConnected(playerid)){
+		LoadCount --;
 		return;
+	}
 
 	if(gServerInitialising || GetTickCountDifference(GetTickCount(), gServerInitialiseTick) < 5000)
 	{
 		ChatMsg(playerid, YELLOW, " » Aguardando 5s enquanto o servidor inicía...");
-		defer LoadAccountDelay(playerid);
+		LoadDelay[playerid] = defer LoadAccountDelay(playerid, 5000 + (LoadCount * 2000) );
 		return;
 	}
 
@@ -140,10 +150,12 @@ timer LoadAccountDelay[5000](playerid)
 		if(!IsPlayerInWhitelist(playerid))
 		{
 			WhitelistWarn(playerid);
-			defer LoadAccountDelay(playerid);
+			LoadDelay[playerid] = defer LoadAccountDelay(playerid, 5000 + (LoadCount * 2000) );
 			return;
 		}
 	}
+
+	LoadCount --;
 
 	new Error:e = LoadAccount(playerid);
 	if(IsError(e)) // LoadAccount aborted, kick player.
