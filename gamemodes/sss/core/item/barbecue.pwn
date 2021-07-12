@@ -201,7 +201,7 @@ _LightBBQ(Item:itemid)
 
 timer bbq_FinishCooking[30000](itemid)
 {
-	if(!IsValidItem(itemid))
+	if(!IsValidItem(Item:itemid))
 		return;
 
 	new data[e_BBQ_DATA];
