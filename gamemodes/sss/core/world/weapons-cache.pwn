@@ -178,10 +178,10 @@ timer WeaponsCacheSignal[WEPCACHE_SIGNAL_INTERVAL](count, Float:x, Float:y, Floa
 	}
 
 	if(idx > 0)
-		ChatMsgAll(YELLOW, " » "C_GREEN"[Exército]: "C_YELLOW"Caixa de Armas caindo no mapa... "C_WHITE"(Icone 'Arma')");
+		ChatMsgAll(YELLOW, " » "C_GREEN"[Exército]: "C_YELLOW"Caixa de Armas caindo no mapa... (Icone '"C_WHITE"Arma"C_YELLOW"')");
 	else
 	{
-		err("No reference point found.");
+		log("No reference point found.");
 		return;
 	}
 
