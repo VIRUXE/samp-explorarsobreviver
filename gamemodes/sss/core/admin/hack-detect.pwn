@@ -408,7 +408,7 @@ IPacket:ONFOOT_SYNC(playerid, BitStream:bs) // incoming packet
     
 	if(GetPlayerTotalVelocity(playerid) > 50.0)
 	{
-        SetPlayerVelocity(playerid, onFootData[PR_velocity][0] / 2, onFootData[PR_velocity][1] / 2, onFootData[PR_velocity][2]);
+        //SetPlayerVelocity(playerid, onFootData[PR_velocity][0] / 2, onFootData[PR_velocity][1] / 2, onFootData[PR_velocity][2]);
         return 0;
 	}
 	
