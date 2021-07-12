@@ -179,7 +179,7 @@ hook OnItemAddToInventory(playerid, Item:itemid, slot)
 
 	if(IsPlayerConnected(playerid))
 	{
-		if(!IsPlayerViewingInventory(playerid))
+		if(!IsPlayerViewingInventory(playerid) && !IsValidContainer(containerid))
 			hols_LastHolster[playerid] = GetTickCount();
 	}
 	
