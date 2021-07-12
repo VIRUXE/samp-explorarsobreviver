@@ -481,7 +481,6 @@ StopRemovingTent(playerid)
 	return;
 }
 
-/*
 hook OnItemTweakUpdate(playerid, Item:itemid)
 {
 	if(tnt_CurrentTentItem[playerid] != INVALID_ITEM_ID)
@@ -494,96 +493,64 @@ hook OnItemTweakUpdate(playerid, Item:itemid)
 		z += 1.45;
 		rz += 90.0;
 		tentid = tnt_TweakID[playerid];
-
-		// S
+		
+		// Side Right
 		SetDynamicObjectPos(tnt_ObjData[tentid][tnt_objSideR1],
 			x + (0.49 * floatsin(-rz + 270.0, degrees)),
 			y + (0.49 * floatcos(-rz + 270.0, degrees)), z);
-
 		SetDynamicObjectRot(tnt_ObjData[tentid][tnt_objSideR1], 0.0, 45.0, rz);
 
 		SetDynamicObjectPos(tnt_ObjData[tentid][tnt_objSideR2],
 			x + (0.48 * floatsin(-rz + 270.0, degrees)),
 			y + (0.48 * floatcos(-rz + 270.0, degrees)), z);
-
 		SetDynamicObjectRot(tnt_ObjData[tentid][tnt_objSideR2], 0.0, 45.0, rz);
 
+		// Side Left
 		SetDynamicObjectPos(tnt_ObjData[tentid][tnt_objSideL1],
 			x + (0.49 * floatsin(-rz + 90.0, degrees)),
 			y + (0.49 * floatcos(-rz + 90.0, degrees)), z);
-
 		SetDynamicObjectRot(tnt_ObjData[tentid][tnt_objSideL1], 0.0, -45.0, rz);
 
 		SetDynamicObjectPos(tnt_ObjData[tentid][tnt_objSideL2],
 			x + (0.48 * floatsin(-rz + 90.0, degrees)),
 			y + (0.48 * floatcos(-rz + 90.0, degrees)), z);
-
 		SetDynamicObjectRot(tnt_ObjData[tentid][tnt_objSideL2], 0.0, -45.0, rz);
 
+		// Down Right
+		SetDynamicObjectPos(tnt_ObjData[tentid][tnt_objDownR1],
+			x + (1.48 * floatsin(-rz + 270.0, degrees)),
+			y + (1.48 * floatcos(-rz + 270.0, degrees)), z - 0.98);
+		SetDynamicObjectRot(tnt_ObjData[tentid][tnt_objDownR1], 0.0, 45.0, rz);
+
+		SetDynamicObjectPos(tnt_ObjData[tentid][tnt_objDownR2],
+			x + (1.47 * floatsin(-rz + 270.0, degrees)),
+			y + (1.47 * floatcos(-rz + 270.0, degrees)), z - 0.98);
+		SetDynamicObjectRot(tnt_ObjData[tentid][tnt_objDownR2], 0.0, 45.0, rz);
+
+		// Down Left
+		SetDynamicObjectPos(tnt_ObjData[tentid][tnt_objDownL1],
+			x + (1.48 * floatsin(-rz + 90.0, degrees)),
+			y + (1.48 * floatcos(-rz + 90.0, degrees)), z - 0.98);
+		SetDynamicObjectRot(tnt_ObjData[tentid][tnt_objDownL1], 0.0, -45.0, rz);
+
+		SetDynamicObjectPos(tnt_ObjData[tentid][tnt_objDownL2],
+			x + (1.47 * floatsin(-rz + 90.0, degrees)),
+			y + (1.47 * floatcos(-rz + 90.0, degrees)), z - 0.98);
+		SetDynamicObjectRot(tnt_ObjData[tentid][tnt_objDownL2], 0.0, -45.0, rz);
+
+		// Pole F
 		SetDynamicObjectPos(tnt_ObjData[tentid][tnt_objPoleF],
 			x + (1.3 * floatsin(-rz, degrees)),
 			y + (1.3 * floatcos(-rz, degrees)), z + 0.48);
-
 		SetDynamicObjectRot(tnt_ObjData[tentid][tnt_objPoleF], 0.0, 0.0, rz);
 
+		// Pole B
 		SetDynamicObjectPos(tnt_ObjData[tentid][tnt_objPoleB],
 			x - (1.3 * floatsin(-rz, degrees)),
 			y - (1.3 * floatcos(-rz, degrees)), z + 0.48);
-
 		SetDynamicObjectRot(tnt_ObjData[tentid][tnt_objPoleB], 0.0, 0.0, rz);
 	}
 }
-
-
-tnt_ObjData[id][tnt_objSideR1] = CreateDynamicObject(19477,
-		x + (0.49 * floatsin(-rz + 270.0, degrees)),
-		y + (0.49 * floatcos(-rz + 270.0, degrees)),
-		z, 0.0, 45.0, rz, worldid, interiorid);
-	tnt_ObjData[id][tnt_objSideR2] = CreateDynamicObject(19477,
-		x + (0.48 * floatsin(-rz + 270.0, degrees)),
-		y + (0.48 * floatcos(-rz + 270.0, degrees)),
-		z, 0.0, 45.0, rz, worldid, interiorid);
-
-	// Side Left
-	tnt_ObjData[id][tnt_objSideL1] = CreateDynamicObject(19477,
-		x + (0.49 * floatsin(-rz + 90.0, degrees)),
-		y + (0.49 * floatcos(-rz + 90.0, degrees)),
-		z, 0.0, -45.0, rz, worldid, interiorid);
-	tnt_ObjData[id][tnt_objSideL2] = CreateDynamicObject(19477,
-		x + (0.48 * floatsin(-rz + 90.0, degrees)),
-		y + (0.48 * floatcos(-rz + 90.0, degrees)),
-		z, 0.0, -45.0, rz, worldid, interiorid);
-
-	// Down Right
-	tnt_ObjData[id][tnt_objDownR1] = CreateDynamicObject(19477,
-		x + (1.48 * floatsin(-rz + 270.0, degrees)),
-		y + (1.48 * floatcos(-rz + 270.0, degrees)),
-		z - 0.98, 0.0, 45.0, rz, worldid, interiorid);
-	tnt_ObjData[id][tnt_objDownR2] = CreateDynamicObject(19477,
-		x + (1.47 * floatsin(-rz + 270.0, degrees)),
-		y + (1.47 * floatcos(-rz + 270.0, degrees)),
-		z - 0.98, 0.0, 45.0, rz, worldid, interiorid);
-		
-	// Down Left
-	tnt_ObjData[id][tnt_objDownL1] = CreateDynamicObject(19477,
-		x + (1.48 * floatsin(-rz + 90.0, degrees)),
-		y + (1.48 * floatcos(-rz + 90.0, degrees)),
-		z - 0.98, 0.0, -45.0, rz, worldid, interiorid);
-	tnt_ObjData[id][tnt_objDownL2] = CreateDynamicObject(19477,
-		x + (1.47 * floatsin(-rz + 90.0, degrees)),
-		y + (1.47 * floatcos(-rz + 90.0, degrees)),
-		z - 0.98, 0.0, -45.0, rz, worldid, interiorid);
-
-	tnt_ObjData[id][tnt_objPoleF] = CreateDynamicObject(19087,
-		x + (1.3 * floatsin(-rz, degrees)),
-		y + (1.3 * floatcos(-rz, degrees)),
-		z + 0.48, 0.0, 0.0, rz, worldid, interiorid);
-
-	tnt_ObjData[id][tnt_objPoleB] = CreateDynamicObject(19087,
-		x - (1.3 * floatsin(-rz, degrees)),
-		y - (1.3 * floatcos(-rz, degrees)),
-		z + 0.48, 0.0, 0.0, rz, worldid, interiorid);
-*/
 
 hook OnItemTweakFinish(playerid, Item:itemid)
 {
@@ -602,8 +569,7 @@ hook OnHoldActionFinish(playerid)
 			ClearAnimations(playerid);
 			HideActionText(playerid);
 			tnt_TweakID[playerid] = CreateTentFromItem(tnt_CurrentTentItem[playerid]);
-			//TweakItem(playerid, tnt_CurrentTentItem[playerid]);
-			StopBuildingTent(playerid);
+			TweakItem(playerid, tnt_CurrentTentItem[playerid]);
 		}
 
 		if(GetItemType(GetPlayerItem(playerid)) == item_Crowbar)
