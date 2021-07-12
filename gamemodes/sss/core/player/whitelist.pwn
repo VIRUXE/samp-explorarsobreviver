@@ -90,15 +90,15 @@ public DCC_OnMessageCreate(DCC_Message:message)
         DCC_GetMessageContent(message, nickname);
 
         if(strlen(nickname) > MAX_PLAYER_NAME - 1)
-            format(result, sizeof(result),      "> Esse nick `%s` e grande demais (maximo de 24 caracteres).", nickname);
+            format(result, sizeof(result),      "> Nome `%s` muito grande (maximo de 24 caracteres).", nickname);
         else if(!strfind(nickname, "."))
-            result =                            "> Seu nick não pode ter ponto (.) no inicio."; 
+            result =                            "> Seu Nome não pode ter ponto (.) no inicio."; 
         else if(IsNameInWhitelist(nickname))
-            format(result, sizeof(result),      "> Esse nick `%s` ja esta vinculado com uma outra conta de Discord.", nickname); 
+            format(result, sizeof(result),      "> O nome `%s` ja esta registrado.", nickname); 
         else if(!IsValidUsername(nickname))
-            format(result, sizeof(result),      "> Esse nick `%s` não e valido para utilização no jogo.", nickname); 
+            format(result, sizeof(result),      "> Nome `%s` invalido, tente outro.", nickname); 
         else if(IsNameInWhitelist(userid))
-            result =							"> Você ja tem a conta vinculada...";
+            result =							"> Voce ja tem a conta vinculada...";
         else
         {
             new DCC_Guild: guild;
@@ -109,7 +109,7 @@ public DCC_OnMessageCreate(DCC_Message:message)
             DCC_GetChannelGuild(channel, guild);
             DCC_SetGuildMemberNickname(guild, author, nickname);
 
-            format(result, sizeof(result), "> Sua conta de Jogo `%s` foi vinculada com sucesso com sua conta de Discord. Bom jogo!", nickname);
+            format(result, sizeof(result), "> Sua conta de Jogo `%s` foi vinculada com sua conta de Discord. Bom jogo!", nickname);
         }
         DCC_SendChannelMessage(channel, result);
     }
