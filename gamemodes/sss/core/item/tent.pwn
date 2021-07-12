@@ -20,6 +20,10 @@ enum E_TENT_OBJECT_DATA
 			tnt_objSideR2,
 			tnt_objSideL1,
 			tnt_objSideL2,
+			tnt_objDownR1,
+			tnt_objDownR2,
+			tnt_objDownL1,
+			tnt_objDownL2,	
 			tnt_objPoleF,
 			tnt_objPoleB
 }
@@ -29,7 +33,7 @@ static
 			tnt_ObjData[MAX_TENT][E_TENT_OBJECT_DATA],
 			tnt_ContainerTent[MAX_CONTAINER] = {-1, ...},
 Item:		tnt_CurrentTentItem[MAX_PLAYERS],
-			tnt_TweakID[MAX_PLAYERS] = {INVALID_TENT_ID, ...};
+			tnt_TweakID[MAX_PLAYERS];
 
 new
    Iterator:tnt_Index<MAX_TENT>;
@@ -60,6 +64,7 @@ hook OnGameModeInit()
 hook OnPlayerConnect(playerid)
 {
 	tnt_CurrentTentItem[playerid] = INVALID_ITEM_ID;
+	tnt_TweakID[playerid] = INVALID_TENT_ID;
 }
 
 hook OnItemTypeDefined(uname[])
@@ -115,57 +120,75 @@ stock CreateTentFromItem(Item:itemid)
 	GetItemPos(itemid, x, y, z);
 	GetItemRot(itemid, rz, rz, rz);
 
-	z += 0.4;
+	z += 1.45;
 	rz += 90.0;
 
 	tnt_Data[id][tnt_itemId] = itemid;
-	tnt_Data[id][tnt_containerId] = CreateContainer("Tent", MAX_TENT_ITEMS);
+	tnt_Data[id][tnt_containerId] = CreateContainer("Tenda", MAX_TENT_ITEMS);
 	tnt_ContainerTent[tnt_Data[id][tnt_containerId]] = id;
 
 	SetItemExtraData(itemid, id);
 
+	// Side Right
 	tnt_ObjData[id][tnt_objSideR1] = CreateDynamicObject(19477,
 		x + (0.49 * floatsin(-rz + 270.0, degrees)),
 		y + (0.49 * floatcos(-rz + 270.0, degrees)),
-		z,
-		0.0, 45.0, rz, worldid, interiorid, .streamdistance = 100.0);
-
+		z, 0.0, 45.0, rz, worldid, interiorid);
 	tnt_ObjData[id][tnt_objSideR2] = CreateDynamicObject(19477,
 		x + (0.48 * floatsin(-rz + 270.0, degrees)),
 		y + (0.48 * floatcos(-rz + 270.0, degrees)),
-		z,
-		0.0, 45.0, rz, worldid, interiorid, .streamdistance = 20.0);
+		z, 0.0, 45.0, rz, worldid, interiorid);
 
+	// Side Left
 	tnt_ObjData[id][tnt_objSideL1] = CreateDynamicObject(19477,
 		x + (0.49 * floatsin(-rz + 90.0, degrees)),
 		y + (0.49 * floatcos(-rz + 90.0, degrees)),
-		z,
-		0.0, -45.0, rz, worldid, interiorid, .streamdistance = 100.0);
-
+		z, 0.0, -45.0, rz, worldid, interiorid);
 	tnt_ObjData[id][tnt_objSideL2] = CreateDynamicObject(19477,
 		x + (0.48 * floatsin(-rz + 90.0, degrees)),
 		y + (0.48 * floatcos(-rz + 90.0, degrees)),
-		z,
-		0.0, -45.0, rz, worldid, interiorid, .streamdistance = 20.0);
+		z, 0.0, -45.0, rz, worldid, interiorid);
+
+	// Down Right
+	tnt_ObjData[id][tnt_objDownR1] = CreateDynamicObject(19477,
+		x + (1.48 * floatsin(-rz + 270.0, degrees)),
+		y + (1.48 * floatcos(-rz + 270.0, degrees)),
+		z - 0.98, 0.0, 45.0, rz, worldid, interiorid);
+	tnt_ObjData[id][tnt_objDownR2] = CreateDynamicObject(19477,
+		x + (1.47 * floatsin(-rz + 270.0, degrees)),
+		y + (1.47 * floatcos(-rz + 270.0, degrees)),
+		z - 0.98, 0.0, 45.0, rz, worldid, interiorid);
+		
+	// Down Left
+	tnt_ObjData[id][tnt_objDownL1] = CreateDynamicObject(19477,
+		x + (1.48 * floatsin(-rz + 90.0, degrees)),
+		y + (1.48 * floatcos(-rz + 90.0, degrees)),
+		z - 0.98, 0.0, -45.0, rz, worldid, interiorid);
+	tnt_ObjData[id][tnt_objDownL2] = CreateDynamicObject(19477,
+		x + (1.47 * floatsin(-rz + 90.0, degrees)),
+		y + (1.47 * floatcos(-rz + 90.0, degrees)),
+		z - 0.98, 0.0, -45.0, rz, worldid, interiorid);
 
 	tnt_ObjData[id][tnt_objPoleF] = CreateDynamicObject(19087,
 		x + (1.3 * floatsin(-rz, degrees)),
 		y + (1.3 * floatcos(-rz, degrees)),
-		z + 0.48,
-		0.0, 0.0, rz, worldid, interiorid, .streamdistance = 10.0);
+		z + 0.48, 0.0, 0.0, rz, worldid, interiorid);
 
 	tnt_ObjData[id][tnt_objPoleB] = CreateDynamicObject(19087,
 		x - (1.3 * floatsin(-rz, degrees)),
 		y - (1.3 * floatcos(-rz, degrees)),
-		z + 0.48,
-		0.0, 0.0, rz, worldid, interiorid, .streamdistance = 10.0);
+		z + 0.48, 0.0, 0.0, rz, worldid, interiorid);
 
 	SetDynamicObjectMaterial(tnt_ObjData[id][tnt_objSideR1], 0, 2068, "cj_ammo_net", "CJ_cammonet", 0);
 	SetDynamicObjectMaterial(tnt_ObjData[id][tnt_objSideR2], 0, 3095, "a51jdrx", "sam_camo", 0);
 	SetDynamicObjectMaterial(tnt_ObjData[id][tnt_objSideL1], 0, 2068, "cj_ammo_net", "CJ_cammonet", 0);
 	SetDynamicObjectMaterial(tnt_ObjData[id][tnt_objSideL2], 0, 3095, "a51jdrx", "sam_camo", 0);
-	SetDynamicObjectMaterial(tnt_ObjData[id][tnt_objPoleF], 0, 1270, "signs", "lamppost", 0);
-	SetDynamicObjectMaterial(tnt_ObjData[id][tnt_objPoleB], 0, 1270, "signs", "lamppost", 0);
+	SetDynamicObjectMaterial(tnt_ObjData[id][tnt_objDownR1], 0, 2068, "cj_ammo_net", "CJ_cammonet", 0);
+	SetDynamicObjectMaterial(tnt_ObjData[id][tnt_objDownR2], 0, 3095, "a51jdrx", "sam_camo", 0);
+	SetDynamicObjectMaterial(tnt_ObjData[id][tnt_objDownL1], 0, 2068, "cj_ammo_net", "CJ_cammonet", 0);
+	SetDynamicObjectMaterial(tnt_ObjData[id][tnt_objDownL2], 0, 3095, "a51jdrx", "sam_camo", 0);
+	SetDynamicObjectMaterial(tnt_ObjData[id][tnt_objPoleF],	 0, 1270, "signs", "lamppost", 0);
+	SetDynamicObjectMaterial(tnt_ObjData[id][tnt_objPoleB],  0, 1270, "signs", "lamppost", 0);
 
 	CallLocalFunction("OnTentCreate", "d", id);
 
@@ -187,12 +210,20 @@ stock DestroyTent(tentid)
 	DestroyDynamicObject(tnt_ObjData[tentid][tnt_objSideR2]);
 	DestroyDynamicObject(tnt_ObjData[tentid][tnt_objSideL1]);
 	DestroyDynamicObject(tnt_ObjData[tentid][tnt_objSideL2]);
+	DestroyDynamicObject(tnt_ObjData[tentid][tnt_objDownR1]);
+	DestroyDynamicObject(tnt_ObjData[tentid][tnt_objDownR2]);
+	DestroyDynamicObject(tnt_ObjData[tentid][tnt_objDownL1]);
+	DestroyDynamicObject(tnt_ObjData[tentid][tnt_objDownL2]);
 	DestroyDynamicObject(tnt_ObjData[tentid][tnt_objPoleF]);
 	DestroyDynamicObject(tnt_ObjData[tentid][tnt_objPoleB]);
 	tnt_ObjData[tentid][tnt_objSideR1] = INVALID_OBJECT_ID;
 	tnt_ObjData[tentid][tnt_objSideR2] = INVALID_OBJECT_ID;
 	tnt_ObjData[tentid][tnt_objSideL1] = INVALID_OBJECT_ID;
 	tnt_ObjData[tentid][tnt_objSideL2] = INVALID_OBJECT_ID;
+	tnt_ObjData[tentid][tnt_objDownR1] = INVALID_OBJECT_ID;
+	tnt_ObjData[tentid][tnt_objDownR2] = INVALID_OBJECT_ID;
+	tnt_ObjData[tentid][tnt_objDownL1] = INVALID_OBJECT_ID;
+	tnt_ObjData[tentid][tnt_objDownL2] = INVALID_OBJECT_ID;
 	tnt_ObjData[tentid][tnt_objPoleF] = INVALID_OBJECT_ID;
 	tnt_ObjData[tentid][tnt_objPoleB] = INVALID_OBJECT_ID;
 
@@ -450,6 +481,7 @@ StopRemovingTent(playerid)
 	return;
 }
 
+/*
 hook OnItemTweakUpdate(playerid, Item:itemid)
 {
 	if(tnt_CurrentTentItem[playerid] != INVALID_ITEM_ID)
@@ -459,10 +491,11 @@ hook OnItemTweakUpdate(playerid, Item:itemid)
 		GetItemPos(itemid, x, y, z);
 		GetItemRot(itemid, rz, rz, rz);
 
-		z += 0.4;
+		z += 1.45;
 		rz += 90.0;
 		tentid = tnt_TweakID[playerid];
 
+		// S
 		SetDynamicObjectPos(tnt_ObjData[tentid][tnt_objSideR1],
 			x + (0.49 * floatsin(-rz + 270.0, degrees)),
 			y + (0.49 * floatcos(-rz + 270.0, degrees)), z);
@@ -501,6 +534,57 @@ hook OnItemTweakUpdate(playerid, Item:itemid)
 	}
 }
 
+
+tnt_ObjData[id][tnt_objSideR1] = CreateDynamicObject(19477,
+		x + (0.49 * floatsin(-rz + 270.0, degrees)),
+		y + (0.49 * floatcos(-rz + 270.0, degrees)),
+		z, 0.0, 45.0, rz, worldid, interiorid);
+	tnt_ObjData[id][tnt_objSideR2] = CreateDynamicObject(19477,
+		x + (0.48 * floatsin(-rz + 270.0, degrees)),
+		y + (0.48 * floatcos(-rz + 270.0, degrees)),
+		z, 0.0, 45.0, rz, worldid, interiorid);
+
+	// Side Left
+	tnt_ObjData[id][tnt_objSideL1] = CreateDynamicObject(19477,
+		x + (0.49 * floatsin(-rz + 90.0, degrees)),
+		y + (0.49 * floatcos(-rz + 90.0, degrees)),
+		z, 0.0, -45.0, rz, worldid, interiorid);
+	tnt_ObjData[id][tnt_objSideL2] = CreateDynamicObject(19477,
+		x + (0.48 * floatsin(-rz + 90.0, degrees)),
+		y + (0.48 * floatcos(-rz + 90.0, degrees)),
+		z, 0.0, -45.0, rz, worldid, interiorid);
+
+	// Down Right
+	tnt_ObjData[id][tnt_objDownR1] = CreateDynamicObject(19477,
+		x + (1.48 * floatsin(-rz + 270.0, degrees)),
+		y + (1.48 * floatcos(-rz + 270.0, degrees)),
+		z - 0.98, 0.0, 45.0, rz, worldid, interiorid);
+	tnt_ObjData[id][tnt_objDownR2] = CreateDynamicObject(19477,
+		x + (1.47 * floatsin(-rz + 270.0, degrees)),
+		y + (1.47 * floatcos(-rz + 270.0, degrees)),
+		z - 0.98, 0.0, 45.0, rz, worldid, interiorid);
+		
+	// Down Left
+	tnt_ObjData[id][tnt_objDownL1] = CreateDynamicObject(19477,
+		x + (1.48 * floatsin(-rz + 90.0, degrees)),
+		y + (1.48 * floatcos(-rz + 90.0, degrees)),
+		z - 0.98, 0.0, -45.0, rz, worldid, interiorid);
+	tnt_ObjData[id][tnt_objDownL2] = CreateDynamicObject(19477,
+		x + (1.47 * floatsin(-rz + 90.0, degrees)),
+		y + (1.47 * floatcos(-rz + 90.0, degrees)),
+		z - 0.98, 0.0, -45.0, rz, worldid, interiorid);
+
+	tnt_ObjData[id][tnt_objPoleF] = CreateDynamicObject(19087,
+		x + (1.3 * floatsin(-rz, degrees)),
+		y + (1.3 * floatcos(-rz, degrees)),
+		z + 0.48, 0.0, 0.0, rz, worldid, interiorid);
+
+	tnt_ObjData[id][tnt_objPoleB] = CreateDynamicObject(19087,
+		x - (1.3 * floatsin(-rz, degrees)),
+		y - (1.3 * floatcos(-rz, degrees)),
+		z + 0.48, 0.0, 0.0, rz, worldid, interiorid);
+*/
+
 hook OnItemTweakFinish(playerid, Item:itemid)
 {
 	if(tnt_CurrentTentItem[playerid] != INVALID_ITEM_ID)
@@ -518,8 +602,8 @@ hook OnHoldActionFinish(playerid)
 			ClearAnimations(playerid);
 			HideActionText(playerid);
 			tnt_TweakID[playerid] = CreateTentFromItem(tnt_CurrentTentItem[playerid]);
-			StopBuildingTent(playerid);
 			//TweakItem(playerid, tnt_CurrentTentItem[playerid]);
+			StopBuildingTent(playerid);
 		}
 
 		if(GetItemType(GetPlayerItem(playerid)) == item_Crowbar)
