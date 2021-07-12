@@ -333,8 +333,7 @@ _inv_displaySlotOptions(playerid, slotid)
 
 	CallLocalFunction("OnPlayerViewInventoryOpt", "d", playerid);
 
-	inline Response(pid, dialogid, response, listitem, string:inputtext[])
-	{
+	inline Response(pid, dialogid, response, listitem, string:inputtext[]) {
 		#pragma unused pid, dialogid
 
 		Logger_Dbg("inventory-dialog", "player responded to inventory item options",
@@ -365,7 +364,7 @@ _inv_displaySlotOptions(playerid, slotid)
 					GiveWorldItemToPlayer(playerid, itemid2, 1);
 					DisplayPlayerInventory(playerid);
 				} else {
-					ShowActionText(playerid, "Ja esta segurando algo", 3000, 200);
+					ShowActionText(playerid, "Voce ja esta segurando um item", 3000, 200);
 					DisplayPlayerInventory(playerid);
 				}
 			}
@@ -388,7 +387,7 @@ _inv_displaySlotOptions(playerid, slotid)
 
 					ClosePlayerInventory(playerid, true);
 				} else {
-					ShowActionText(playerid, "Ja esta segurando algo", 3000, 200);
+					ShowActionText(playerid, "Voce ja esta segurando um item", 3000, 200);
 					DisplayPlayerInventory(playerid);
 				}
 			}
@@ -411,7 +410,7 @@ _inv_displaySlotOptions(playerid, slotid)
 
 					ClosePlayerInventory(playerid, true);
 				} else {
-					ShowActionText(playerid, "Ja esta segurando algo", 3000, 200);
+					ShowActionText(playerid, "Voce ja esta segurando um item", 3000, 200);
 					DisplayPlayerInventory(playerid);
 				}
 			}
@@ -425,7 +424,6 @@ _inv_displaySlotOptions(playerid, slotid)
 				}
 			}
 		}
-
 		return 1;
 	}
 	Dialog_ShowCallback(playerid, using inline Response, DIALOG_STYLE_LIST, name, inv_OptionsList[playerid], "Opções", "Sair");

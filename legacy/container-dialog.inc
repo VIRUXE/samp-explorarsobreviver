@@ -86,7 +86,7 @@ static
 	Container:cnt_CurrentContainer[MAX_PLAYERS],
 	cnt_SelectedSlot[MAX_PLAYERS],
 	cnt_InventoryString[MAX_PLAYERS][MAX_CONTAINER_SLOTS * (MAX_ITEM_NAME + MAX_ITEM_TEXT + 10)],
-	cnt_OptionsList[MAX_PLAYERS][128],
+	cnt_OptionsList[MAX_PLAYERS][150],
 	cnt_OptionsCount[MAX_PLAYERS],
 	cnt_InventoryContainerItem[MAX_PLAYERS],
 	cnt_InventoryOptionID[MAX_PLAYERS];
@@ -235,19 +235,16 @@ hook OnPlayerConnect(playerid)
 	cnt_CurrentContainer[playerid] = INVALID_CONTAINER_ID;
 }
 
-_container_displayOptions(playerid, slotid) 
-{
+_container_displayOptions(playerid, slotid) {
 	new
-		tmp[MAX_ITEM_NAME + MAX_ITEM_TEXT + 4],
-		Item:itemid_outer,
-		itemsize;
+		tmp[MAX_ITEM_NAME + MAX_ITEM_TEXT],
+		Item:itemid_outer;
 	
 	GetContainerSlotItem(cnt_CurrentContainer[playerid], slotid, itemid_outer);
+
 	GetItemName(itemid_outer, tmp);
-	GetItemTypeSize(GetItemType(itemid_outer), itemsize);
-	format(tmp, sizeof(tmp), "[%d]%s", itemsize, tmp);
-	
-	cnt_OptionsList[playerid] = "Equipar\nMover para o Inventario\n";
+
+	cnt_OptionsList[playerid] = "Equipar\nMover para inventario\nSoltar item\n";
 	cnt_OptionsCount[playerid] = 0;
 
 	CallLocalFunction("OnPlayerViewContainerOpt", "dd", playerid, _:cnt_CurrentContainer[playerid]);
@@ -271,14 +268,13 @@ _container_displayOptions(playerid, slotid)
 						Logger_Err("current container invalid in dialog call",
 							Logger_I("containerid", _:cnt_CurrentContainer[playerid]),
 							Logger_I("playerid", playerid));
-						ShowActionText(playerid, "O correu um erro", 3000, 200);
+						ShowActionText(playerid, "Erro", 3000, 200);
 						return 1;
 					}
-					
+
 					RemoveItemFromContainer(cnt_CurrentContainer[playerid], cnt_SelectedSlot[playerid], playerid);
 					GiveWorldItemToPlayer(playerid, itemid);
-					//DisplayContainerInventory(playerid, cnt_CurrentContainer[playerid]);
-					ClosePlayerContainer(playerid, true);
+					DisplayContainerInventory(playerid, cnt_CurrentContainer[playerid]);
 				} else {
 					ShowActionText(playerid, "Voce ja esta segurando um item", 3000, 200);
 					DisplayContainerInventory(playerid, cnt_CurrentContainer[playerid]);
@@ -295,7 +291,7 @@ _container_displayOptions(playerid, slotid)
 					Logger_Err("current container invalid in dialog call",
 						Logger_I("containerid", _:cnt_CurrentContainer[playerid]),
 						Logger_I("playerid", playerid));
-					ShowActionText(playerid, "O correu um erro", 3000, 200);
+					ShowActionText(playerid, "Erro", 3000, 200);
 					return 1;
 				}
 
@@ -312,47 +308,52 @@ _container_displayOptions(playerid, slotid)
 
 				if(required > 0) {
 					new str[32];
-					format(str, sizeof(str), "Precisa de %d slots", required);
+					format(str, sizeof(str), "Requer %d slots no inventario", required);
 					ShowActionText(playerid, str, 3000, 150);
 				} else if(required == 0) {
-					RemoveItemFromContainer(cnt_CurrentContainer[playerid], cnt_SelectedSlot[playerid], playerid);
+					new slot;
+					GetItemContainerSlot(itemid, slot);
+					RemoveItemFromContainer(cnt_CurrentContainer[playerid], slot, playerid);
 				}
 
-				ClosePlayerContainer(playerid, true);
+				DisplayContainerInventory(playerid, cnt_CurrentContainer[playerid]);
+
 				return 1;
 			}
-			/*case 2: {
+			case 2: {
 				if(GetPlayerItem(playerid) == INVALID_ITEM_ID) {
 					new
-						Item:itemid,
-						ret;
+					Item:itemid,
+					ret;
 
 					ret = GetContainerSlotItem(cnt_CurrentContainer[playerid], cnt_SelectedSlot[playerid], itemid);
 					if(ret) {
 						Logger_Err("current container invalid in dialog call",
 							Logger_I("containerid", _:cnt_CurrentContainer[playerid]),
 							Logger_I("playerid", playerid));
-						ShowActionText(playerid, "O correu um erro", 3000, 200);
+						ShowActionText(playerid, "Erro", 3000, 200);
 						return 1;
 					}
 
-					RemoveItemFromContainer(cnt_CurrentContainer[playerid], cnt_SelectedSlot[playerid], playerid);
-					GiveWorldItemToPlayer(playerid, itemid);
+					if(!IsValidItem(itemid)) {
+						DisplayContainerInventory(playerid, cnt_CurrentContainer[playerid]);
+						return 0;
+					}
 
+					GiveWorldItemToPlayer(playerid, itemid);
 					PlayerDropItem(playerid);
-					ClosePlayerContainer(playerid, true);
+					DisplayContainerInventory(playerid, cnt_CurrentContainer[playerid]);
 				} else {
 					ShowActionText(playerid, "Ja esta segurando algo", 3000, 200);
 					DisplayContainerInventory(playerid, cnt_CurrentContainer[playerid]);
 				}
-			}*/
+			}
 			default: {
-				if(!CallLocalFunction("OnPlayerSelectContainerOpt", "ddd", playerid, _:cnt_CurrentContainer[playerid], listitem - 2)) {
+				if(!CallLocalFunction("OnPlayerSelectContainerOpt", "ddd", playerid, _:cnt_CurrentContainer[playerid], listitem - 3)) {
 					DisplayContainerInventory(playerid, cnt_CurrentContainer[playerid]);
 				} else {
 					Logger_Dbg("container-dialog", "closing container via option response");
 					ClosePlayerInventory(playerid);
-					//ClosePlayerContainer(playerid, true);
 				}
 			}
 		}
