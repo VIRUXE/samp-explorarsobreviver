@@ -306,6 +306,73 @@ stock Item:CreateLootItem(lootindex, Float:x = 0.0, Float:y = 0.0, Float:z = 0.0
 	return itemid;
 }
 
+stock FillContainerWithLoot(Container:containerid, slots, lootindex)
+{
+	if(!(0 <= lootindex < loot_IndexTotal))
+	{
+		err("Loot index (%d) is invalid.", lootindex);
+		return -1;
+	}
+
+	if(!IsValidContainer(containerid))
+		return -1;
+
+	new containersize;
+	GetContainerSize(containerid, containersize);
+
+	if(slots > containersize)
+		slots = containersize;
+
+	else if(slots <= 0)
+		return 0;
+
+	new
+		ItemType:samplelist[MAX_LOOT_INDEX_ITEMS],
+		samplelistsize,
+		items,
+		Item:itemid,
+		ItemType:itemtype,
+		freeslots;
+
+	samplelistsize = _loot_GenerateSampleList(samplelist, lootindex);
+	GetContainerFreeSlots(containerid, freeslots);
+
+	if(samplelistsize == 0)
+		return 0;
+
+	while(items < slots && samplelistsize > 0 && freeslots > 0)
+	{
+		// Generate an item from the sample list
+
+		if(!_loot_PickFromSampleList(samplelist, samplelistsize, itemtype))
+			continue;
+
+		if(itemtype == item_NULL)
+		{
+			err("Chosen cell contained itemtype 0, index %d size %d: %s", lootindex, samplelistsize, atosr(_:samplelist, samplelistsize));
+			continue;
+		}
+
+		// Check if the generated item is legal
+		if(loot_ItemTypeLimit[itemtype] > 0 && GetItemTypeCount(itemtype) >= loot_ItemTypeLimit[itemtype])
+		{
+			continue;
+		}
+
+		// Create the item
+		itemid = CreateLootItem(lootindex);
+		if(IsValidItem(itemid))
+		{
+			loot_ItemLootIndex[itemid] = lootindex;
+			AddItemToContainer(containerid, itemid, .call = false);
+			items++;
+		}
+	}
+
+	return 1;
+}
+
+
 /*==============================================================================
 
 	Internal

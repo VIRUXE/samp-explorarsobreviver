@@ -195,7 +195,7 @@ DropItems(playerid, Float:x, Float:y, Float:z)
 
 	SetItemExtraData(itemid, GetPlayerClothes(playerid));
 
-	AddItemToContainer(containerid, itemid);
+	AddItemToContainer(containerid, itemid, .call = false);
 	
 	/*
 		Held item
@@ -203,7 +203,7 @@ DropItems(playerid, Float:x, Float:y, Float:z)
 	itemid = GetPlayerItem(playerid);
 
 	if(IsValidItem(itemid))
-		AddItemToContainer(containerid, itemid);
+		AddItemToContainer(containerid, itemid, .call = false);
 
 	/*
 		Holstered item
@@ -215,7 +215,7 @@ DropItems(playerid, Float:x, Float:y, Float:z)
 	{
 		RemovePlayerHolsterItem(playerid);
 
-		AddItemToContainer(containerid, itemid);
+		AddItemToContainer(containerid, itemid, .call = false);
 	}
 
 	/*
@@ -230,7 +230,7 @@ DropItems(playerid, Float:x, Float:y, Float:z)
 			break;
 
 		RemoveItemFromInventory(playerid, 0);
-		AddItemToContainer(containerid, itemid);
+		AddItemToContainer(containerid, itemid, .call = false);
 	}
 
 	/*
@@ -243,7 +243,7 @@ DropItems(playerid, Float:x, Float:y, Float:z)
 	{
 		RemovePlayerBag(playerid);
 
-		AddItemToContainer(containerid, itemid);
+		AddItemToContainer(containerid, itemid, .call = false);
 	}
 
 	/*
@@ -253,7 +253,7 @@ DropItems(playerid, Float:x, Float:y, Float:z)
 	itemid = RemovePlayerHatItem(playerid);
 
 	if(IsValidItem(itemid))
-		AddItemToContainer(containerid, itemid);
+		AddItemToContainer(containerid, itemid, .call = false);
 
 	/*
 		Face-wear item
@@ -262,7 +262,7 @@ DropItems(playerid, Float:x, Float:y, Float:z)
 	itemid = RemovePlayerMaskItem(playerid);
 
 	if(IsValidItem(itemid))
-		AddItemToContainer(containerid, itemid);
+		AddItemToContainer(containerid, itemid, .call = false);
 
 	/*
 		Armour item
@@ -271,7 +271,7 @@ DropItems(playerid, Float:x, Float:y, Float:z)
 	if(GetPlayerAP(playerid) > 0.0)
 	{
 		itemid = RemovePlayerArmourItem(playerid);
-		AddItemToContainer(containerid, itemid);
+		AddItemToContainer(containerid, itemid, .call = false);
 
 		SetPlayerAP(playerid, 0.0);
 	}
@@ -283,7 +283,7 @@ DropItems(playerid, Float:x, Float:y, Float:z)
 	if(GetPlayerSpecialAction(playerid) == SPECIAL_ACTION_CUFFED)
 	{
 		itemid = CreateItem(item_HandCuffs);
-		AddItemToContainer(containerid, itemid);
+		AddItemToContainer(containerid, itemid, .call = false);
 		SetPlayerCuffs(playerid, false);
 	}
 	

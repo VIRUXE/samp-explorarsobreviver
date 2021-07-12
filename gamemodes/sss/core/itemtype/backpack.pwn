@@ -262,10 +262,7 @@ hook OnItemCreate(Item:itemid)
 			SetItemArrayDataAtCell(itemid, _:containerid, 1);
 
 			if(lootindex != -1)
-			{
-				for(new i; i < random(4); i++)
-					AddItemToContainer(containerid, CreateLootItem(lootindex));
-			}
+				FillContainerWithLoot(containerid, random(4), lootindex);
 		}
 	}
 }

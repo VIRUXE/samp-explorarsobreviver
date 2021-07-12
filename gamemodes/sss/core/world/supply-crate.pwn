@@ -315,9 +315,7 @@ SupplyCrateLand()
 
 	lootindex = GetLootIndexFromName(sup_TypeData[sup_CurrentType][supt_loot]);
 	
-	for(new i; i < 4 + random(16); i++)
-		AddItemToContainer(sup_Containerid, CreateLootItem(lootindex));
-
+	FillContainerWithLoot(Container:sup_Containerid, 4 + random(16), lootindex);
 	GetContainerFreeSlots(Container:sup_Containerid, freeslots);
 	dbg("supply-crate", 2, "[SupplyCrateLand] Spawned %d items in supply crate container %d", 32 - freeslots, _:sup_Containerid);
 

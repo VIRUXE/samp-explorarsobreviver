@@ -489,7 +489,7 @@ LoadPlayerChar(playerid)
 				if(!IsItemTypeSafebox(itemtype) && !IsItemTypeBag(itemtype))
 					SetItemArrayDataFromStored(itemid, i);
 
-				AddItemToContainer(containerid, itemid);
+				AddItemToContainer(containerid, itemid, .call = false);
 
 				Logger_Dbg("save-load", "bag item",
 					Logger_I("playerid", playerid),
