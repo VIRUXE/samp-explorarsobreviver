@@ -484,6 +484,7 @@ new stock
 #include "sss/core/world/weapons-cache.pwn"
 #include "sss/core/world/loot.pwn"
 #include "sss/core/world/item-tweak.pwn"
+#include "sss/core/world/trash.pwn"
 
 // ITEM TYPE CATEGORIES
 #include "sss/core/itemtype/defences.pwn"
@@ -534,7 +535,6 @@ new stock
 #include "sss/core/item/laserpoint.pwn"
 #include "sss/core/item/bed.pwn"
 #include "sss/core/item/map.pwn"
-#include "sss/core/item/trash.pwn"
 #include "sss/core/item/barrel.pwn"
 #include "sss/core/item/wooddoor.pwn"
 
