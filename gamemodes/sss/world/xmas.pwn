@@ -26,7 +26,8 @@ CreateXmasTree(Float:x, Float:y, Float:z, Float:rx, Float:ry, Float:rz)
 	// TODO: FIX CHRISTMAS!
 	// containerid = CreateContainer("Christmas Present", 10, CreateButton(box_x, box_y, box_z + 1.0, "Merry Christmas!"));
 
-	FillContainerWithLoot(containerid, random(10) + 1, GetLootIndexFromName("world_military"));
+	for(new i; i < random(10) + 1; i++)
+		AddItemToContainer(containerid, CreateLootItem(GetLootIndexFromName("world_military")));
 
 	if(random(100) < 10)
 		AddItemToContainer(containerid, CreateItem(item_XmasHat));

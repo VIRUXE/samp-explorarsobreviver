@@ -97,7 +97,10 @@ hook OnPlayerClickPlayerTD(playerid, PlayerText:playertextid)
 		PlayerTutorialVehicle[playerid] = CreateWorldVehicle(veht_Bobcat, 949.1641,2060.3074,10.8203, 272.1444, random(100), random(100), .world = playerid + 1);
 		SetVehicleHealth(PlayerTutorialVehicle[playerid], 321.9);
 		SetVehicleFuel(PlayerTutorialVehicle[playerid], frandom(1.0));
-		FillContainerWithLoot(GetVehicleContainer(PlayerTutorialVehicle[playerid]), 5, GetLootIndexFromName("world_civilian"));
+
+		for(new i; i < 5; i++)
+			AddItemToContainer(GetVehicleContainer(PlayerTutorialVehicle[playerid]), CreateLootItem(GetLootIndexFromName("world_civilian")));
+		
 		SetVehicleDamageData(PlayerTutorialVehicle[playerid],
 			encode_panels(random(4), random(4), random(4), random(4), random(4), random(4), random(4)),
 			encode_doors(random(5), random(5), random(5), random(5)),

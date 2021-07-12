@@ -134,7 +134,8 @@ GenerateVehicleData(vehicleid)
 
 	if(lootindex != -1 && 0 < trunksize <= MAX_CONTAINER_SLOTS)
 	{
-		FillContainerWithLoot(GetVehicleContainer(vehicleid), random(trunksize / 3), lootindex);
+		for(new i; i < random(trunksize / 3); i++)
+			AddItemToContainer(GetVehicleContainer(vehicleid), CreateLootItem(lootindex));
 	}
 
 // Number plate

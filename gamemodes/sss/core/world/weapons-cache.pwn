@@ -131,7 +131,8 @@ WeaponsCacheDrop(Float:x, Float:y, Float:z)
 	webc_Containerid = CreateContainer("Caixa de Armamento", 32);
 	webc_Button = CreateButton(x, y - 0.5, z + 1.0, "Caixa de Armamento", .label = 1, .labeltext = "Cache de Armamento");
 
-	FillContainerWithLoot(Container:webc_Containerid, 22 + random(11), GetLootIndexFromName("airdrop_military_weapons"));
+	for(new i; i < 22 + random(11); i++)
+		AddItemToContainer(webc_Containerid, CreateLootItem(GetLootIndexFromName("airdrop_military_weapons")));
 
 	defer WeaponsCacheSignal(1, x, y, z);
 

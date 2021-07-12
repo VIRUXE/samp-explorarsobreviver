@@ -263,7 +263,8 @@ hook OnItemCreate(Item:itemid)
 
 			if(lootindex != -1)
 			{
-				FillContainerWithLoot(containerid, random(4), lootindex);
+				for(new i; i < random(4); i++)
+					AddItemToContainer(containerid, CreateLootItem(lootindex));
 			}
 		}
 	}
@@ -698,11 +699,10 @@ hook OnPlayerSelectCntOpt(playerid, Container:containerid, option)
 
 						if(required > 0)
 							ShowActionText(playerid, sprintf(ls(playerid, "BAGEXTRASLO", true), required), 3000, 150);
-						else
-							RemoveItemFromContainer(containerid, slot, playerid, true);
+						//else
+							//RemoveItemFromContainer(containerid, slot, playerid, true);
 
-						ClosePlayerContainer(playerid, true);
-						//DisplayContainerInventory(playerid, containerid);
+						DisplayContainerInventory(playerid, containerid);
 						return Y_HOOKS_BREAK_RETURN_1;
 					}
 				}
