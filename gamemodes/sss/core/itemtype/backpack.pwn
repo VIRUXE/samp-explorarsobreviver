@@ -116,6 +116,13 @@ stock GivePlayerBag(playerid, Item:itemid)
 
 	if(bagtype != -1)
 	{
+		new size;
+		GetItemArrayDataSize(itemid, size);
+
+		if(size < 2)
+			return 0;
+
+
 		new Container:containerid;
 		GetItemArrayDataAtCell(itemid, _:containerid, 1);
 
@@ -166,6 +173,12 @@ stock RemovePlayerBag(playerid)
 
 	if(!IsValidItem(bag_PlayerBagID[playerid]))
 		return 0;
+
+	new size;
+	GetItemArrayDataSize(bag_PlayerBagID[playerid], size);
+	if(size < 2)
+		return 0;
+
 
 	new Container:containerid;
 	GetItemArrayDataAtCell(bag_PlayerBagID[playerid], _:containerid, 1);
@@ -380,6 +393,12 @@ _BagDropHandler(playerid)
 	if(CallLocalFunction("OnPlayerRemoveBag", "dd", playerid, _:bag_PlayerBagID[playerid]))
 		return 0;
 
+	new size;
+	GetItemArrayDataSize(bag_PlayerBagID[playerid], size);
+
+	if(size < 2)
+		return 0;
+
 	new Container:containerid;
 	GetItemArrayDataAtCell(bag_PlayerBagID[playerid], _:containerid, 1);
 
@@ -480,6 +499,12 @@ AddItemToPlayer(playerid, Item:itemid)
 		return;
 
 	if(IsValidItem(bag_CurrentBag[playerid]))
+		return;
+
+	new size;
+	GetItemArrayDataSize(bag_PlayerBagID[playerid], size);
+
+	if(size < 2)
 		return;
 
 	new Container:containerid;
@@ -594,6 +619,12 @@ hook OnPlayerSelectInvOpt(playerid, option)
 				slot,
 				Item:itemid;
 			
+			new size;
+			GetItemArrayDataSize(bag_PlayerBagID[playerid], size);
+
+			if(size < 2)
+				return Y_HOOKS_CONTINUE_RETURN_0;
+
 			GetItemArrayDataAtCell(bag_PlayerBagID[playerid], _:containerid, 1);
 			slot = GetPlayerSelectedInventorySlot(playerid);
 			GetInventorySlotItem(playerid, slot, itemid);
@@ -620,11 +651,17 @@ hook OnPlayerViewCntOpt(playerid, Container:containerid)
 {
 	if(IsValidItem(bag_PlayerBagID[playerid]))
 	{
-		new Container:bagcontainerid;
-		GetItemArrayDataAtCell(bag_PlayerBagID[playerid], _:bagcontainerid, 1);
-		if(IsValidContainer(bagcontainerid) && containerid != bagcontainerid)
+		new size;
+		GetItemArrayDataSize(bag_PlayerBagID[playerid], size);
+
+		if(size > 1)
 		{
-			bag_InventoryOptionID[playerid] = AddContainerOption(playerid, "Mover para Mochila");
+			new Container:bagcontainerid;
+			GetItemArrayDataAtCell(bag_PlayerBagID[playerid], _:bagcontainerid, 1);
+			if(IsValidContainer(bagcontainerid) && containerid != bagcontainerid)
+			{
+				bag_InventoryOptionID[playerid] = AddContainerOption(playerid, "Mover para Mochila");
+			}
 		}
 	}
 }
@@ -633,35 +670,41 @@ hook OnPlayerSelectCntOpt(playerid, Container:containerid, option)
 {
 	if(IsValidItem(bag_PlayerBagID[playerid]))
 	{
-		new Container:bagcontainerid;
-		GetItemArrayDataAtCell(bag_PlayerBagID[playerid], _:bagcontainerid, 1);
-		if(IsValidContainer(bagcontainerid) && containerid != bagcontainerid)
+		new size;
+		GetItemArrayDataSize(bag_PlayerBagID[playerid], size);
+
+		if(size > 1)
 		{
-			if(option == bag_InventoryOptionID[playerid])
+			new Container:bagcontainerid;
+			GetItemArrayDataAtCell(bag_PlayerBagID[playerid], _:bagcontainerid, 1);
+			if(IsValidContainer(bagcontainerid) && containerid != bagcontainerid)
 			{
-				new
-					slot,
-					Item:itemid;
-
-				GetPlayerContainerSlot(playerid, slot);
-				if(!GetContainerSlotItem(containerid, slot, itemid))
+				if(option == bag_InventoryOptionID[playerid])
 				{
-					if(!IsValidItem(itemid))
+					new
+						slot,
+						Item:itemid;
+
+					GetPlayerContainerSlot(playerid, slot);
+					if(!GetContainerSlotItem(containerid, slot, itemid))
 					{
-						DisplayContainerInventory(playerid, containerid);
-						return Y_HOOKS_CONTINUE_RETURN_0;
+						if(!IsValidItem(itemid))
+						{
+							DisplayContainerInventory(playerid, containerid);
+							return Y_HOOKS_CONTINUE_RETURN_0;
+						}
+
+						new required = AddItemToContainer(bagcontainerid, itemid, playerid);
+
+						if(required > 0)
+							ShowActionText(playerid, sprintf(ls(playerid, "BAGEXTRASLO", true), required), 3000, 150);
+						else
+							RemoveItemFromContainer(containerid, slot, playerid, true);
+
+						ClosePlayerContainer(playerid, true);
+						//DisplayContainerInventory(playerid, containerid);
+						return Y_HOOKS_BREAK_RETURN_1;
 					}
-
-					new required = AddItemToContainer(bagcontainerid, itemid, playerid);
-
-					if(required > 0)
-						ShowActionText(playerid, sprintf(ls(playerid, "BAGEXTRASLO", true), required), 3000, 150);
-					else
-						RemoveItemFromContainer(containerid, slot, playerid, true);
-
-					ClosePlayerContainer(playerid, true);
-					//DisplayContainerInventory(playerid, containerid);
-					return Y_HOOKS_BREAK_RETURN_1;
 				}
 			}
 		}
