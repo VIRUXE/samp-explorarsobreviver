@@ -113,9 +113,7 @@ stock CreateStaticLootSpawn(Float:x, Float:y, Float:z, lootindex, Float:weight, 
 
 	loot_SpawnData[lootspawnid][loot_posX] = x;
 	loot_SpawnData[lootspawnid][loot_posY] = y;
-
-	loot_SpawnData[lootspawnid][loot_posZ] = (z + 0.64);
-
+	loot_SpawnData[lootspawnid][loot_posZ] = z;
 	loot_SpawnData[lootspawnid][loot_world] = worldid;
 	loot_SpawnData[lootspawnid][loot_interior] = interiorid;
 	loot_SpawnData[lootspawnid][loot_weight] = weight;
@@ -172,7 +170,7 @@ stock CreateStaticLootSpawn(Float:x, Float:y, Float:z, lootindex, Float:weight, 
 		CreateItem(itemtype,
 			x,
 			y,
-			z, .rz = frandom(360.0), .world = worldid, .interior = interiorid);
+			z + 0.1, .rz = frandom(360.0), .world = worldid, .interior = interiorid);
 
 		
 		defer RespawnItem(_:itemid, x, y, z, lootindex, worldid, interiorid);
