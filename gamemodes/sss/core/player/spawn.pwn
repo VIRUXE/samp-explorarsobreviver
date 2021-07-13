@@ -196,6 +196,8 @@ PlayerSpawnExistingCharacter(playerid)
 
 	CallLocalFunction("OnPlayerSpawnChar", "d", playerid);
 
+	Streamer_Update(playerid);
+
 	return 0;
 }
 
@@ -232,7 +234,6 @@ hook OnPlayerClickPlayerTD(playerid, PlayerText:playertextid)
 	else if(playertextid == ClassButtonFemale[playerid])
 		PlayerSpawnNewCharacter(playerid, GENDER_FEMALE);
 }
-
 
 
 hook OnPlayerClickTextDraw(playerid, Text:clickedid)
