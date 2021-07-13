@@ -422,6 +422,7 @@ PlayerVehicleUpdate(playerid)
 		else {
 			RemovePlayerFromVehicle(playerid);
 			SetVehicleHealth(vehicleid, 299.0);
+			ShowActionText(playerid, "Veiculo muito quebrado", 3000);
 		}
 	}
 
