@@ -211,7 +211,7 @@ _DisplaySafeboxDialog(playerid, Item:itemid, animation)
 
 hook OnItemAddToContainer(Container:containerid, Item:itemid, playerid)
 {
-	if(box_ItemTypeBoxType[GetItemType(itemid)] != -1)
+	if(IsValidItem(box_ContainerSafebox[containerid]) && IsPlayerConnected(playerid))
 	{
 		new size;
 		GetContainerSize(containerid, size);
