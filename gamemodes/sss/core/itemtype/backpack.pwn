@@ -36,7 +36,6 @@ Item:		bag_ContainerItem		[MAX_CONTAINER],
 Item:		bag_PlayerBagID			[MAX_PLAYERS],
 			bag_InventoryOptionID	[MAX_PLAYERS],
 bool:		bag_PuttingInBag		[MAX_PLAYERS],
-bool:		bag_TakingOffBag		[MAX_PLAYERS],
 Item:		bag_CurrentBag			[MAX_PLAYERS];
 
 
@@ -64,7 +63,6 @@ hook OnPlayerConnect(playerid)
 {
 	bag_PlayerBagID[playerid] = INVALID_ITEM_ID;
 	bag_PuttingInBag[playerid] = false;
-	bag_TakingOffBag[playerid] = false;
 	bag_CurrentBag[playerid] = INVALID_ITEM_ID;
 	//bag_LookingInBag[playerid] = INVALID_PLAYER_ID;
 }
@@ -408,7 +406,6 @@ _BagDropHandler(playerid)
 	GiveWorldItemToPlayer(playerid, bag_PlayerBagID[playerid], 1);
 	bag_ContainerPlayer[containerid] = INVALID_PLAYER_ID;
 	bag_PlayerBagID[playerid] = INVALID_ITEM_ID;
-	bag_TakingOffBag[playerid] = true;
 
 	return 1;
 }
@@ -566,35 +563,6 @@ hook OnPlayerCloseInventory(playerid)
 		//bag_LookingInBag[playerid] = -1;
 	}
 }
-
-hook OnPlayerDropItem(playerid, Item:itemid)
-{
-	if(IsItemTypeBag(GetItemType(itemid)))
-	{
-		if(bag_TakingOffBag[playerid])
-		{
-			bag_TakingOffBag[playerid] = false;
-			return Y_HOOKS_BREAK_RETURN_1;
-		}
-	}
-
-	return Y_HOOKS_CONTINUE_RETURN_0;
-}
-
-hook OnPlayerGiveItem(playerid, targetid, Item:itemid)
-{
-	if(IsItemTypeBag(GetItemType(itemid)))
-	{
-		if(bag_TakingOffBag[playerid])
-		{
-			bag_TakingOffBag[playerid] = false;
-			return Y_HOOKS_BREAK_RETURN_1;
-		}
-	}
-
-	return Y_HOOKS_CONTINUE_RETURN_0;
-}
-
 hook OnPlayerViewInvOpt(playerid)
 {
 	new Container:containerid;

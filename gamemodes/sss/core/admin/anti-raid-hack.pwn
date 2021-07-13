@@ -57,7 +57,7 @@ atr_PosCheck(playerid, Float:x, Float:y, Float:z)
 		atr_SetY[playerid] = y;
 		atr_SetZ[playerid] = z;
 	} else {
-		new col = CA_RayCastLine(atr_SetX[playerid], atr_SetY[playerid], atr_SetZ[playerid] + 0.2, x, y, z - 0.2, tmp, tmp, tmp);
+		new col = CA_RayCastLine(atr_SetX[playerid], atr_SetY[playerid], atr_SetZ[playerid], x, y, z, tmp, tmp, tmp);
 		if(col != WATER_OBJECT && col){
 			atr_Check[playerid] = col;
 			
