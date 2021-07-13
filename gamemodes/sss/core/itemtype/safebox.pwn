@@ -211,7 +211,7 @@ _DisplaySafeboxDialog(playerid, Item:itemid, animation)
 
 hook OnItemAddToContainer(Container:containerid, Item:itemid, playerid)
 {
-	if(box_ItemTypeBoxType[GetItemType(itemid)]] != -1)
+	if(box_ItemTypeBoxType[GetItemType(itemid)] != -1)
 	{
 		if(box_TypeData[box_ItemTypeBoxType[GetItemType(itemid)]][box_size] < 13)
 		{
