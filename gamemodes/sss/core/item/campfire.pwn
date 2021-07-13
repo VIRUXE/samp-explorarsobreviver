@@ -66,11 +66,12 @@ hook OnItemDestroy(Item:itemid)
 {
 	if(GetItemType(itemid) == item_Campfire)
 	{
-		new Item:fooditem;
-		GetItemArrayDataAtCell(itemid, _:fooditem, cmp_foodItem);
+		new data[e_CAMPFIRE_DATA];
+		
+		GetItemArrayData(itemid, data, e_CAMPFIRE_DATA);
 
-		if(IsValidItem(fooditem))
-			cmp_ItemBeingCooked[fooditem] = INVALID_ITEM_ID;
+		if(IsValidItem(Item:data[cmp_foodItem]))
+			cmp_ItemBeingCooked[Item:data[cmp_foodItem]] = INVALID_ITEM_ID;
 	}
 }
 
@@ -91,9 +92,9 @@ hook OnPlayerUseItemWithItem(playerid, Item:itemid, Item:withitemid)
 	{
 		if(IsItemTypeFood(GetItemType(itemid)))
 		{
-			new Item:fooditem;
-			GetItemArrayDataAtCell(withitemid, _:fooditem, cmp_foodItem);
-			if(fooditem == INVALID_ITEM_ID)
+			new data[e_CAMPFIRE_DATA];
+			GetItemArrayData(withitemid, data, e_CAMPFIRE_DATA);
+			if(Item:data[cmp_foodItem] == INVALID_ITEM_ID)
 			{
 				cmp_CookItem(withitemid, itemid);
 				ShowActionText(playerid, ls(playerid, "FIRELITSTAR", true), 3000);
@@ -140,21 +141,22 @@ timer cmp_BurnOut[time](itemid, time)
 
 timer cmp_FinishCooking[60000](itemid)
 {
-	new
-		Float:x,
-		Float:y,
-		Float:z,
-		Item:fooditem;
-	GetItemArrayDataAtCell(Item:itemid, _:fooditem, cmp_foodItem);
+	if(!IsValidItem(Item:itemid))
+		return;
 
-	if(!IsValidItem(fooditem))
+	new Float:x, Float:y, Float:z;
+
+	new data[e_CAMPFIRE_DATA];
+	GetItemArrayData(Item:itemid, data, e_CAMPFIRE_DATA);
+
+	if(!IsValidItem(Item:data[cmp_foodItem]))
 		return;
 
 	GetItemPos(Item:itemid, x, y, z);
 
 	CreateTimedDynamicObject(18726, x, y, z - 1.0, 0.0, 0.0, 0.0, 2000);
-	SetFoodItemCooked(fooditem, 1);
-	cmp_ItemBeingCooked[fooditem] = INVALID_ITEM_ID;
+	SetFoodItemCooked(Item:data[cmp_foodItem], 1);
+	cmp_ItemBeingCooked[Item:data[cmp_foodItem]] = INVALID_ITEM_ID;
 
 	return;
 }
