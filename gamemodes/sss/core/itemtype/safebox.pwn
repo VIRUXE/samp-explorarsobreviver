@@ -209,6 +209,22 @@ _DisplaySafeboxDialog(playerid, Item:itemid, animation)
 	return 1;
 }
 
+hook OnItemAddToContainer(Container:containerid, Item:itemid, playerid)
+{
+	if(box_ItemTypeBoxType[GetItemType(itemid)]] != -1)
+	{
+		if(box_TypeData[box_ItemTypeBoxType[GetItemType(itemid)]][box_size] < 13)
+		{
+			if(IsItemTypeCarry(GetItemType(itemid)))
+			{
+				return Y_HOOKS_BREAK_RETURN_1;
+			}
+		}
+	}
+
+	return Y_HOOKS_CONTINUE_RETURN_0;
+}
+
 hook OnPlayerCloseContainer(playerid, Container:containerid)
 {
 	if(IsValidItem(box_CurrentBoxItem[playerid]))
