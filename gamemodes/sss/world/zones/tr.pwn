@@ -214,7 +214,7 @@ TR_District_RobadaGen()
 {
 	ChatMsgAll(YELLOW, " » Carregando região 'TR_District_RobadaGen'. Aguarde...");
 
-	CreateItem(item_Workbench, -1513.53040, 1978.50232, 47.35660, 0.0, 0.0, 85.37996);
+	SetItemExtraData(CreateItem(item_Workbench, -1513.53040, 1978.50232, 47.35660, 0.0, 0.0, 85.37996), 1);
 
 	CreateStaticLootSpawn(-2084.18799, 2308.36963, 22.98837,	GetLootIndexFromName("world_civilian"), 20.0);
 	CreateStaticLootSpawn(-1957.37402, 2391.17017, 48.48126,	GetLootIndexFromName("world_civilian"), 20.0);

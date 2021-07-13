@@ -55,7 +55,7 @@ RC_District_BlueberryAcres()
 {
 	ChatMsgAll(YELLOW, " » Carregando região 'RC_District_BlueberryAcres'. Aguarde...");
 
-	CreateItem(item_Workbench, 94.44927, -168.05229, 1.55108, 0.0, 0.0, -180.77998);
+	SetItemExtraData(CreateItem(item_Workbench, 94.44927, -168.05229, 1.55108, 0.0, 0.0, -180.77998), 1);
 
 	CreateStaticLootSpawn(-21.749139, 82.340179, 2.108500,			GetLootIndexFromName("world_industrial"), 15.0);
 	CreateStaticLootSpawn(-29.512809, 62.143798, 2.109849,			GetLootIndexFromName("world_industrial"), 15.0);
@@ -525,7 +525,7 @@ RC_District_Palomino()
 {
 	ChatMsgAll(YELLOW, " » Carregando região 'RC_District_Palomino'. Aguarde...");
 
-	CreateItem(item_Workbench, 2560.82031, 73.39390, 25.42815, 0.0, 0.0, 0.00000);
+	SetItemExtraData(CreateItem(item_Workbench, 2560.82031, 73.39390, 25.42815, 0.0, 0.0, 0.00000), 1);
 
 	CreateStaticLootSpawn(2333.181884, -18.142669, 25.478500,		GetLootIndexFromName("world_civilian"), 20.0);
 	CreateStaticLootSpawn(2310.982421, -15.128290, 25.740230,		GetLootIndexFromName("world_civilian"), 20.0);

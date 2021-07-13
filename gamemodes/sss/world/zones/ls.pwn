@@ -587,7 +587,7 @@ LS_District_Housing2()
 {
 	ChatMsgAll(YELLOW, " » Carregando região 'LS_District_Housing2'. Aguarde...");
 
-	CreateItem(item_Workbench, 2458.86377, -1974.19800, 12.45251, 0.0, 0.0, -91.14005);
+	SetItemExtraData(CreateItem(item_Workbench, 2458.86377, -1974.19800, 12.45251, 0.0, 0.0, -91.14005), 1);
 
 	CreateStaticLootSpawn(2535.713134, -1657.764526, 14.267840,	GetLootIndexFromName("world_civilian"), 20, 3);
 	CreateStaticLootSpawn(2498.556640, -1643.643920, 12.746850,	GetLootIndexFromName("world_civilian"), 20, 3);

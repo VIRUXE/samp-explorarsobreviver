@@ -397,7 +397,7 @@ BC_District_Carson()
 {
 	ChatMsgAll(YELLOW, " » Carregando região 'BC_District_Carson'. Aguarde...");
 
-	CreateItem(item_Workbench, 318.60028, 1145.81543, 7.54844, 0.0, 0.0, -181.56007);
+	SetItemExtraData(CreateItem(item_Workbench, 318.60028, 1145.81543, 7.54844, 0.0, 0.0, -181.56007), 1);
 
 	CreateStaticLootSpawn(-204.049407, 1052.944702, 18.736200,		GetLootIndexFromName("world_civilian"), 20.0);
 	CreateStaticLootSpawn(-203.905685, 1061.835571, 18.736690,		GetLootIndexFromName("world_civilian"), 20.0);
@@ -567,7 +567,7 @@ BC_District_Hunter()
 {
 	ChatMsgAll(YELLOW, " » Carregando região 'BC_District_Hunter'. Aguarde...");
 
-	CreateItem(item_Workbench, 585.17377, 873.72583, -43.51944, 0.0, 0.0, 94.26003);
+	SetItemExtraData(CreateItem(item_Workbench, 585.17377, 873.72583, -43.51944, 0.0, 0.0, 94.26003), 1);
 
 	CreateStaticLootSpawn(627.578979, 894.678649, -42.107200,		GetLootIndexFromName("world_industrial"), 20.0);
 	CreateStaticLootSpawn(578.331787, 829.218872, -30.850990,		GetLootIndexFromName("world_industrial"), 20.0);
@@ -593,7 +593,7 @@ BC_District_BoneGen()
 {
 	ChatMsgAll(YELLOW, " » Carregando região 'BC_District_BoneGen'. Aguarde...");
 
-	CreateItem(item_Workbench, -371.56595, 2235.98975, 41.43906, 0.0, 0.0, 12.84000);
+	SetItemExtraData(CreateItem(item_Workbench, -371.56595, 2235.98975, 41.43906, 0.0, 0.0, 12.84000), 1);
 
 	CreateStaticLootSpawn(-583.062133, 2713.019042, 70.823257,		GetLootIndexFromName("world_civilian"), 20.0);
 	CreateStaticLootSpawn(-13.895059, 2345.650634, 23.131660,		GetLootIndexFromName("world_civilian"), 20.0);
