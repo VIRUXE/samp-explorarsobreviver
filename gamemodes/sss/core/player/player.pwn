@@ -422,7 +422,7 @@ hook OnPlayerEnterVehicle(playerid, vehicleid, ispassenger)
 
 		GetPlayerPos(playerid, x, y, z);
 		SetPlayerPos(playerid, x, y, z);
-		//CancelPlayerMovement(playerid);
+		CancelPlayerMovement(playerid);
 		return 0;
 	}
 
