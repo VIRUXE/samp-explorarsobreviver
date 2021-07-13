@@ -37,7 +37,6 @@ hook OnPlayerDisconnect(playerid, reason)
 		_wb_StopWorking(playerid);
 }
 
-
 /*==============================================================================
 
 	Core
@@ -97,6 +96,9 @@ hook OnPlayerUseItemWithItem(playerid, Item:itemid, Item:withitemid)
 
 		GetItemArrayDataAtCell(withitemid, _:containerid, 0);
 		GetContainerItemCount(containerid, itemcount);
+
+		if(itemcount >= MAX_CONSTRUCT_SET_ITEMS - 1)
+			return Y_HOOKS_CONTINUE_RETURN_0;
 
 		if(!IsValidContainer(containerid))
 		{
@@ -259,5 +261,20 @@ hook OnPlayerConstruct(playerid, consset)
 		return Y_HOOKS_BREAK_RETURN_1;
 	}
 
+	return Y_HOOKS_CONTINUE_RETURN_0;
+}
+
+hook OnPlayerDeconstruct(playerid, Item:itemid)
+{
+	if(GetItemType(itemid) == item_Crowbar)
+	{
+		new exdata;
+		GetItemExtraData(itemid, exdata);
+		if(exdata == 1)
+		{
+			ShowActionText(playerid, "Essa mesa nao pode ser desmontada~n~Construa a sua: /Receitas", 3000);
+			return Y_HOOKS_BREAK_RETURN_1;
+		}
+	}
 	return Y_HOOKS_CONTINUE_RETURN_0;
 }
