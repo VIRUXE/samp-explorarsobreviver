@@ -52,6 +52,7 @@ world_survivor, 1.0
 0.01,	DogsBreath
 0.01,	LenKnocksRifle
 0.10,   Nailbat
+1.0,    Dice
 
 # clothes etc
 20.0,	Clothes
