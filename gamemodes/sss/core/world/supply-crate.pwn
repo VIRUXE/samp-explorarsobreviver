@@ -328,7 +328,7 @@ SupplyCrateLand()
 
 hook OnButtonPress(playerid, Button:id)
 {
-	if(id == sup_Button)
+	if(id == sup_Button && IsValidContainer(Container:sup_Containerid))
 		DisplayContainerInventory(playerid, Container:sup_Containerid);
 }
 
