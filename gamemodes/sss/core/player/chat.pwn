@@ -70,7 +70,7 @@ PlayerSendChat(playerid, chat[], Float:frequency)
 		if(GetPlayerMuteRemainder(playerid) == -1)
 			ChatMsgLang(playerid, RED, "MUTEDPERMAN");
 		else
-			ChatMsgLang(playerid, RED, "MUTEDTIMERM", MsToString(GetPlayerMuteRemainder(playerid) * 1000, "%1h:%1m:%1s"));
+			ChatMsgLang(playerid, RED, "MUTEDTIMERM", MsToString(SEC(GetPlayerMuteRemainder(playerid)), "%1h:%1m:%1s"));
 
 		return 0;
 	}
@@ -303,7 +303,7 @@ CMD:g(playerid, params[])
 		if(GetPlayerMuteRemainder(playerid) == -1)
 			ChatMsgLang(playerid, RED, "MUTEDPERMAN");
 		else
-			ChatMsgLang(playerid, RED, "MUTEDTIMERM", MsToString(GetPlayerMuteRemainder(playerid) * 1000, "%1h:%1m:%1s"));
+			ChatMsgLang(playerid, RED, "MUTEDTIMERM", MsToString(SEC(GetPlayerMuteRemainder(playerid)), "%1h:%1m:%1s"));
 
 		return 7;
 	}

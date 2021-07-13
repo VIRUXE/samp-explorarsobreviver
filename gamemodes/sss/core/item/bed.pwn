@@ -88,7 +88,7 @@ BedCheck(playerid, Item:itemid, bool:spawn = false){
     Bed_Item[playerid] = itemid;
 	SetPlayerBrightness(playerid, 255);
 	
-    StartHoldAction(playerid, spawn ? (5 * 1000) : (30 * 1000) );
+    StartHoldAction(playerid, spawn ? SEC(5) : SEC(30) );
 	return 1;
 }
 

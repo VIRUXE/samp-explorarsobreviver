@@ -135,7 +135,7 @@ ACMD:freeze[2](playerid, params[])
 
 	if(!IsPlayerFrozen(targetid))
 	{
-		FreezePlayer(targetid, delay * 1000, true);
+		FreezePlayer(targetid, SEC(delay), true);
 			
 		if(delay > 0)
 		{
