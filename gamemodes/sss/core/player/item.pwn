@@ -177,3 +177,10 @@ hook OnPlayerCloseContainer(playerid, Container:containerid)
 hook OnPlayerCloseInventory(playerid)
 	if(IsPlayerInAnyVehicle(playerid))
 		ShowVehicleUI(playerid, GetPlayerLastVehicle(playerid));
+
+hook OnPlayerDropItem(playerid, Item:itemid){
+	if(IsPlayerInAnyVehicle(playerid))
+		return Y_HOOKS_BREAK_RETURN_1;
+		
+	return Y_HOOKS_CONTINUE_RETURN_0;
+}
