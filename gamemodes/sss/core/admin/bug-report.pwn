@@ -16,6 +16,7 @@ enum
 
 
 static
+DCC_Channel:	issue_DiscordChannel,
 				issue_RowIndex[MAX_ISSUES_PER_PAGE],
 
 DBStatement:	stmt_BugInsert,
@@ -39,6 +40,8 @@ hook OnGameModeInit()
 	stmt_BugList	= db_prepare(gAccounts, "SELECT "FIELD_BUGS_NAME", "FIELD_BUGS_REASON", rowid FROM "ACCOUNTS_TABLE_BUGS"");
 	stmt_BugTotal	= db_prepare(gAccounts, "SELECT COUNT(*) FROM "ACCOUNTS_TABLE_BUGS"");
 	stmt_BugInfo	= db_prepare(gAccounts, "SELECT * FROM "ACCOUNTS_TABLE_BUGS" WHERE rowid = ? LIMIT 1");
+
+	issue_DiscordChannel = DCC_FindChannelByName("bugs");
 }
 
 
@@ -73,7 +76,10 @@ ReportBug(playerid, bug[])
 	stmt_bind_value(stmt_BugInsert, 2, DB::TYPE_INTEGER, gettime());
 
 	if(stmt_execute(stmt_BugInsert))
-		ChatMsgAdmins(1, YELLOW, " » %P"C_YELLOW" reportou bug %s", playerid, bug);
+	{
+		ChatMsgAdmins(1, YELLOW, " » %P"C_YELLOW" reportou Bug:%s", playerid, bug);
+		DCC_SendChannelMessage(issue_DiscordChannel, format="```%s```", bug);
+	}
 }
 
 

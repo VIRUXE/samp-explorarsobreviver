@@ -103,7 +103,7 @@ stock AFK_CheckKick(playerid)
 {
 	if(IsPlayerConnected(playerid) && !IsPlayerOnAdminDuty(playerid) && tab_IsTabbed[playerid])
 	{
-		if(GetTickCountDifference(GetTickCount(), tab_TabOutTick[playerid]) > gMaxTaboutTime * 1000)
+		if(GetTickCountDifference(GetTickCount(), tab_TabOutTick[playerid]) > SEC(gMaxTaboutTime))
 		{
 			KickPlayer(playerid, sprintf("Ausente por mais de %d segundos", gMaxTaboutTime));
 		}

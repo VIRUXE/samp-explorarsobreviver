@@ -72,8 +72,8 @@ DefineSupplyDropType(const name[], const lootindex[], interval, rand, required)
 
 	strcat(sup_TypeData[sup_TypeTotal][supt_name], name, MAX_SUPPLY_DROP_TYPE_NAME);
 	strcat(sup_TypeData[sup_TypeTotal][supt_loot], lootindex, 32);
-	sup_TypeData[sup_TypeTotal][supt_interval] = interval * 1000;
-	sup_TypeData[sup_TypeTotal][supt_random] = rand * 1000;
+	sup_TypeData[sup_TypeTotal][supt_interval] = SEC(interval);
+	sup_TypeData[sup_TypeTotal][supt_random] = SEC(rand);
 	sup_TypeData[sup_TypeTotal][supt_required] = required;
 
 	sup_TypeData[sup_TypeTotal][supt_lastDrop] = GetTickCount() - sup_TypeData[sup_TypeTotal][supt_interval];

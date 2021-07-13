@@ -176,7 +176,7 @@ PlayerSpawnExistingCharacter(playerid)
 	SetPlayerGender(playerid, GetClothesGender(GetPlayerClothes(playerid)));
 
 	SetPlayerClothes(playerid, GetPlayerClothesID(playerid));
-	FreezePlayer(playerid, gLoginFreezeTime * 1000);
+	FreezePlayer(playerid, SEC(gLoginFreezeTime));
 
 	PrepareForSpawn(playerid);
 
@@ -315,7 +315,7 @@ PlayerSpawnNewCharacter(playerid, gender)
 
 	SetPlayerAliveState(playerid, true);
 
-	FreezePlayer(playerid, gLoginFreezeTime * 1000);
+	FreezePlayer(playerid, SEC(gLoginFreezeTime));
 	PrepareForSpawn(playerid);
 
 	PlayerTextDrawHide(playerid, ClassButtonMale[playerid]);

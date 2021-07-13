@@ -21,7 +21,7 @@ TogglePlayerMute(playerid, bool:toggle, duration = -1)
 		if(duration > 0)
 		{
 			stop mute_UnmuteTimer[playerid];
-			mute_UnmuteTimer[playerid] = defer UnMuteDelay(playerid, duration * 1000);
+			mute_UnmuteTimer[playerid] = defer UnMuteDelay(playerid, SEC(duration));
 		}
 	}
 	else

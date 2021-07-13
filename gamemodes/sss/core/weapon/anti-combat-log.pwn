@@ -71,7 +71,7 @@ hook OnPlayerDisconnect(playerid, reason)
 
 stock IsPlayerCombatLogging(playerid, &lastattacker, &Item:lastweapon)
 {
-	if(GetTickCountDifference(GetTickCount(), GetPlayerTookDamageTick(playerid)) < gCombatLogWindow * 1000 && IsPlayerConnected(combatlog_LastAttacker[playerid]) && !gServerRestarting)
+	if(GetTickCountDifference(GetTickCount(), GetPlayerTookDamageTick(playerid)) < SEC(gCombatLogWindow) && IsPlayerConnected(combatlog_LastAttacker[playerid]) && !gServerRestarting)
 	{
 		lastattacker = combatlog_LastAttacker[playerid];
 		lastweapon = combatlog_LastItem[playerid];

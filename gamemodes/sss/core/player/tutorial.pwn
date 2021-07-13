@@ -79,7 +79,7 @@ hook OnPlayerClickPlayerTD(playerid, PlayerText:playertextid)
 		SetPlayerAliveState(playerid, false);
 		SetPlayerSpawnedState(playerid, false);
 
-		FreezePlayer(playerid, gLoginFreezeTime * 1000);
+		FreezePlayer(playerid, SEC(gLoginFreezeTime));
 		PrepareForSpawn(playerid);
 
 		PlayerTextDrawHide(playerid, ClassButtonMale[playerid]);
