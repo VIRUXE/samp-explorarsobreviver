@@ -895,6 +895,9 @@ hook OnItemTweakUpdate(playerid, Item:itemid)
 {
 	if(def_TweakArrow[playerid] != INVALID_OBJECT_ID)
 	{
+		PlayerTextDrawShow(playerid, def_MoveTD[playerid][0]);
+		PlayerTextDrawShow(playerid, def_MoveTD[playerid][1]);
+		
 		_UpdateDefenceTweakArrow(playerid, itemid);
 		ShowActionText(playerid, "Movendo..", 1000);
 	}
