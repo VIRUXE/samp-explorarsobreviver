@@ -27,15 +27,18 @@ hook OnPlayerDisconnect(playerid, reason)
 
 hook OnPlayerOpenInventory(playerid)
 {
-	StopHoldAction(playerid);
+	defer t_StopHoldAction(playerid);
 	return Y_HOOKS_CONTINUE_RETURN_0;
 }
 
 hook OnPlayerOpenContainer(playerid, containerid)
 {
-	StopHoldAction(playerid);
+	defer t_StopHoldAction(playerid);
 	return Y_HOOKS_CONTINUE_RETURN_0;
 }
+
+timer t_StopHoldAction[50](playerid)
+	StopHoldAction(playerid);
 
 StartHoldAction(playerid, duration, startvalue = 0)
 {
