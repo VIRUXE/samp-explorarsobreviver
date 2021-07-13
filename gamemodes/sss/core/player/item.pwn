@@ -168,4 +168,12 @@ hook OnPlayerGiveItem(playerid, targetid, Item:itemid){
 
 hook OnPlayerKeyStateChange(playerid, newkeys, oldkeys)
 	if( (newkeys == 2) && IsPlayerInAnyVehicle(playerid))
-			DisplayPlayerInventory(playerid);
+			HideVehicleUI(playerid), DisplayPlayerInventory(playerid);
+
+hook OnPlayerCloseContainer(playerid, Container:containerid)
+	if(IsPlayerInAnyVehicle(playerid))
+		ShowVehicleUI(playerid, GetPlayerLastVehicle(playerid));
+
+hook OnPlayerCloseInventory(playerid)
+	if(IsPlayerInAnyVehicle(playerid))
+		ShowVehicleUI(playerid, GetPlayerLastVehicle(playerid));
