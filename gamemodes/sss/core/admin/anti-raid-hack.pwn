@@ -143,89 +143,99 @@ IRPC:26(playerid, BitStream:bs){
 	return 1;
 }
 
-hook OnPlayerUseItemWithItem(playerid, Item:itemid, Item:withitemid)
-{
-	if(atr_Check[playerid])
-	{
-		Dialog_Show(playerid, DIALOG_STYLE_MSGBOX, "Anti-Raid Protection", ls(playerid, "ANTRAIDP"), ""C_RED"X", "");
-		return Y_HOOKS_BREAK_RETURN_1;
-	}
-	return Y_HOOKS_CONTINUE_RETURN_0;
-}
-
-hook OnPlayerPickUpItem(playerid, Item:itemid)
-{
-	if(atr_Check[playerid])
-	{
-		Dialog_Show(playerid, DIALOG_STYLE_MSGBOX, "Anti-Raid Protection", ls(playerid, "ANTRAIDP"), ""C_RED"X", "");
-		return Y_HOOKS_BREAK_RETURN_1;
-	}
-	return Y_HOOKS_CONTINUE_RETURN_0;
-}
-
-hook OnPlayerGiveItem(playerid, targetid, Item:itemid)
-{
-	if(atr_Check[playerid])
-	{
-		Dialog_Show(playerid, DIALOG_STYLE_MSGBOX, "Anti-Raid Protection", ls(playerid, "ANTRAIDP"), ""C_RED"X", "");
-		return Y_HOOKS_BREAK_RETURN_1;
-	}
-	if(atr_Check[targetid])
-		return Y_HOOKS_BREAK_RETURN_1;
-
-	return Y_HOOKS_CONTINUE_RETURN_0;
-}
-
-hook OnItemRemoveFromCnt(containerid, slotid, playerid)
-{
-	if(IsPlayerConnected(playerid))
-	{
-		if(atr_Check[playerid])
+AntiRaidWarn(playerid){
+	inline Response(pid, dialogid, response, listitem, string:inputtext[]){
+		#pragma unused pid, dialogid, listitem, inputtext
+		if(response)
 		{
-			Dialog_Show(playerid, DIALOG_STYLE_MSGBOX, "Anti-Raid Protection", ls(playerid, "ANTRAIDP"), ""C_RED"X", "");
+			new BitStream:bs = BS_New();
+			BS_WriteValue(bs,
+				PR_FLOAT, atr_SetX[playerid],
+				PR_FLOAT, atr_SetY[playerid],
+				PR_FLOAT, atr_SetZ[playerid]
+			);
+			PR_SendRPC(bs, playerid, 12);
+			BS_Delete(bs);
+		}
+	}
+	Dialog_ShowCallback(playerid, using inline Response, DIALOG_STYLE_MSGBOX,
+		"Anti-Raid Protection", ls(playerid, "ANTRAIDP"), ""C_RED"Voltar", "Sair");
+}
+
+hook OnPlayerUseItemWithItem(playerid, Item:itemid, Item:withitemid){
+	if(atr_Check[playerid]){
+		AntiRaidWarn(playerid);
+		return Y_HOOKS_BREAK_RETURN_1;
+	}
+	return Y_HOOKS_CONTINUE_RETURN_0;
+}
+
+hook OnPlayerPickUpItem(playerid, Item:itemid){
+	if(atr_Check[playerid]){
+		AntiRaidWarn(playerid);
+		return Y_HOOKS_BREAK_RETURN_1;
+	}
+
+	return Y_HOOKS_CONTINUE_RETURN_0;
+}
+
+hook OnPlayerGiveItem(playerid, targetid, Item:itemid){
+	if(atr_Check[playerid]){
+		AntiRaidWarn(playerid);
+		return Y_HOOKS_BREAK_RETURN_1;
+	}
+
+	if(atr_Check[targetid]){
+		AntiRaidWarn(targetid);
+		return Y_HOOKS_BREAK_RETURN_1;
+	}
+
+	return Y_HOOKS_CONTINUE_RETURN_0;
+}
+
+hook OnItemRemoveFromCnt(containerid, slotid, playerid){
+	if(IsPlayerConnected(playerid)){
+		if(atr_Check[playerid]){
+			AntiRaidWarn(playerid);
 			return Y_HOOKS_BREAK_RETURN_1;
 		}
 	}
 	return Y_HOOKS_CONTINUE_RETURN_0;
 }
 
-hook OnPlayerOpenInventory(playerid)
-{
-	if(atr_Check[playerid])
-	{
-		Dialog_Show(playerid, DIALOG_STYLE_MSGBOX, "Anti-Raid Protection", ls(playerid, "ANTRAIDP"), ""C_RED"X", "");
+hook OnPlayerOpenInventory(playerid){
+	if(atr_Check[playerid]){
+		AntiRaidWarn(playerid);
 		return Y_HOOKS_BREAK_RETURN_1;
 	}
+
 	return Y_HOOKS_CONTINUE_RETURN_0;
 }
 
-hook OnPlayerOpenContainer(playerid, containerid)
-{
-	if(atr_Check[playerid])
-	{
-		Dialog_Show(playerid, DIALOG_STYLE_MSGBOX, "Anti-Raid Protection", ls(playerid, "ANTRAIDP"), ""C_RED"X", "");
+hook OnPlayerOpenContainer(playerid, containerid){
+	if(atr_Check[playerid]){
+		AntiRaidWarn(playerid);
 		return Y_HOOKS_BREAK_RETURN_1;
 	}
+
 	return Y_HOOKS_CONTINUE_RETURN_0;
 }
 
-hook OnPlayerUseItem(playerid, Item:itemid)
-{
-	if(atr_Check[playerid])
-	{
-		Dialog_Show(playerid, DIALOG_STYLE_MSGBOX, "Anti-Raid Protection", ls(playerid, "ANTRAIDP"), ""C_RED"X", "");
+hook OnPlayerUseItem(playerid, Item:itemid){
+	if(atr_Check[playerid]){
+		AntiRaidWarn(playerid);
 		return Y_HOOKS_BREAK_RETURN_1;
 	}
+
 	return Y_HOOKS_CONTINUE_RETURN_0;
 }
 
-hook OnPlayerDropItem(playerid, Item:itemid)
-{
-	if(atr_Check[playerid])
-	{
-		Dialog_Show(playerid, DIALOG_STYLE_MSGBOX, "Anti-Raid Protection", ls(playerid, "ANTRAIDP"), ""C_RED"X", "");
+hook OnPlayerDropItem(playerid, Item:itemid){
+	if(atr_Check[playerid]){
+		AntiRaidWarn(playerid);
 		return Y_HOOKS_BREAK_RETURN_1;
 	}
+
 	return Y_HOOKS_CONTINUE_RETURN_0;
 }
 
