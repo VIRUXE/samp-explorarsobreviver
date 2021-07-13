@@ -344,7 +344,7 @@ hook OnHoldActionFinish(playerid)
 				new world, interior;
 				GetItemWorld(cons_DeconstructingItem[playerid], world);
 				GetItemInterior(cons_DeconstructingItem[playerid], interior);
-				CreateItem(recipedata[i][craft_itemType], x + frandom(0.6), y + frandom(0.6), z, 0.0, 0.0, frandom(360.0), world, interior);
+				CreateItem(recipedata[i][craft_itemType], x + frandom(0.6), y + frandom(0.6), z - ITEM_FLOOR_OFFSET, 0.0, 0.0, frandom(360.0), world, interior);
 			}
 
 			StopRemovingConstructedItem(playerid);
