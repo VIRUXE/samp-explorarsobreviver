@@ -1,7 +1,7 @@
 #include <YSI_Coding\y_hooks>
 
-#define MAX_ISSUE_LENGTH			(128)
-#define MAX_ISSUES_PER_PAGE			(32)
+#define MAX_BUG_LENGTH				(128)
+#define MAX_BUGS_PER_PAGE			(32)
 #define ACCOUNTS_TABLE_BUGS			"Bugs"
 #define FIELD_BUGS_NAME				"name"		// 00
 #define FIELD_BUGS_REASON			"reason"	// 01
@@ -16,8 +16,8 @@ enum
 
 
 static
-DCC_Channel:	issue_DiscordChannel,
-				issue_RowIndex[MAX_ISSUES_PER_PAGE],
+DCC_Channel:	bug_DiscordChannel,
+				bug_RowIndex[MAX_BUGS_PER_PAGE],
 
 DBStatement:	stmt_BugInsert,
 DBStatement:	stmt_BugDelete,
@@ -41,7 +41,7 @@ hook OnGameModeInit()
 	stmt_BugTotal	= db_prepare(gAccounts, "SELECT COUNT(*) FROM "ACCOUNTS_TABLE_BUGS"");
 	stmt_BugInfo	= db_prepare(gAccounts, "SELECT * FROM "ACCOUNTS_TABLE_BUGS" WHERE rowid = ? LIMIT 1");
 
-	issue_DiscordChannel = DCC_FindChannelByName("bugs");
+	bug_DiscordChannel = DCC_FindChannelByName("bugs");
 }
 
 
@@ -71,15 +71,17 @@ CMD:bug(playerid, params[])
 
 ReportBug(playerid, bug[])
 {
+	new bugStr[MAX_BUG_LENGTH+6];
+
+	format(bugStr, sizeof(bugStr), "```%s```", bug);
+	DCC_SendChannelMessage(bug_DiscordChannel, bugStr);
+
 	stmt_bind_value(stmt_BugInsert, 0, DB::TYPE_PLAYER_NAME, playerid);
-	stmt_bind_value(stmt_BugInsert, 1, DB::TYPE_STRING, bug, MAX_ISSUE_LENGTH);
+	stmt_bind_value(stmt_BugInsert, 1, DB::TYPE_STRING, bug, MAX_BUG_LENGTH);
 	stmt_bind_value(stmt_BugInsert, 2, DB::TYPE_INTEGER, gettime());
 
 	if(stmt_execute(stmt_BugInsert))
-	{
 		ChatMsgAdmins(1, YELLOW, " » %P"C_YELLOW" reportou Bug:%s", playerid, bug);
-		DCC_SendChannelMessage(issue_DiscordChannel, "```%s```", bug);
-	}
 }
 
 
@@ -92,12 +94,8 @@ ReportBug(playerid, bug[])
 
 CMD:bugs(playerid, params[])
 {
-	new ret;
-
-	ret = ShowListOfBugs(playerid);
-
-	if(ret == 0)
-		ChatMsg(playerid, YELLOW, " » Não existem relatórios de Bug.");
+	if(!ShowListOfBugs(playerid))
+		ChatMsg(playerid, YELLOW, " » Não existem Bugs relatados.");
 
 	return 1;
 }
@@ -117,11 +115,11 @@ ShowListOfBugs(playerid)
 		return 0;
 
 	new
-		list[(MAX_PLAYER_NAME + 2 + 32 + 1) * MAX_ISSUES_PER_PAGE],
+		list[(MAX_PLAYER_NAME + 2 + 32 + 1) * MAX_BUGS_PER_PAGE],
 		idx;
 
 	// Some bug in sqlite causes 'name' to appear empty sometimes.
-	while(stmt_fetch_row(stmt_BugList) && idx < MAX_ISSUES_PER_PAGE)
+	while(stmt_fetch_row(stmt_BugList) && idx < MAX_BUGS_PER_PAGE)
 	{
 		strcat(list, name);
 		strcat(list, ": ");
@@ -133,7 +131,7 @@ ShowListOfBugs(playerid)
 
 		strcat(list, "\n");
 
-		issue_RowIndex[idx++] = rowid;
+		bug_RowIndex[idx++] = rowid;
 	}
 
 	if(idx == 0)
@@ -145,7 +143,7 @@ ShowListOfBugs(playerid)
 
 		if(response)
 		{
-			if(!ShowBugReportInfo(playerid, issue_RowIndex[listitem]))
+			if(!ShowBugReportInfo(playerid, bug_RowIndex[listitem]))
 				ChatMsg(playerid, RED, " » An error occurred while trying to execute statement 'stmt_BugInfo'.");
 		}
 	}
@@ -158,13 +156,13 @@ ShowBugReportInfo(playerid, rowid)
 {
 	new
 		name[MAX_PLAYER_NAME],
-		bug[MAX_ISSUE_LENGTH],
+		bug[MAX_BUG_LENGTH],
 		date,
 		message[512];
 
 	stmt_bind_value(stmt_BugInfo, 0, DB::TYPE_INTEGER, rowid);
 	stmt_bind_result_field(stmt_BugInfo, 0, DB::TYPE_STRING, name, MAX_PLAYER_NAME);
-	stmt_bind_result_field(stmt_BugInfo, 1, DB::TYPE_STRING, bug, MAX_ISSUE_LENGTH);
+	stmt_bind_result_field(stmt_BugInfo, 1, DB::TYPE_STRING, bug, MAX_BUG_LENGTH);
 	stmt_bind_result_field(stmt_BugInfo, 2, DB::TYPE_INTEGER, date);
 
 	if(!stmt_execute(stmt_BugInfo))
@@ -174,8 +172,8 @@ ShowBugReportInfo(playerid, rowid)
 
 	format(message, sizeof(message),
 		""C_YELLOW"Reporter:\n\t\t"C_BLUE"%s\n\n\
-		"C_YELLOW"Reason:\n\t\t"C_BLUE"%s\n\n\
-		"C_YELLOW"Date:\n\t\t"C_BLUE"%s",
+		"C_YELLOW"Razão:\n\t\t"C_BLUE"%s\n\n\
+		"C_YELLOW"Data:\n\t\t"C_BLUE"%s",
 		name, bug, TimestampToDateTime(date));
 
 	inline Response(pid, dialogid, response, listitem, string:inputtext[])
@@ -190,14 +188,11 @@ ShowBugReportInfo(playerid, rowid)
 				stmt_execute(stmt_BugDelete);
 			}
 		}
-
 		ShowListOfBugs(playerid);
 	}
 
 	if(GetPlayerAdminLevel(playerid) > 1)
-		Dialog_ShowCallback(playerid, using inline Response, DIALOG_STYLE_MSGBOX, "Bugs", message, "Eliminar", "Para Trás");
-	else
-		Dialog_ShowCallback(playerid, using inline Response, DIALOG_STYLE_MSGBOX, "Bugs", message, "Para Trás", "");
+		Dialog_ShowCallback(playerid, using inline Response, DIALOG_STYLE_MSGBOX, "Bugs", message, GetPlayerAdminLevel(playerid) > 1 ? "Eliminar" : "Para Trás", GetPlayerAdminLevel(playerid) > 1 ? "Para Trás" : "");
 
 	return 1;
 }
