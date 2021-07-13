@@ -33,17 +33,20 @@ hook OnPlayerConnect(playerid)
 
 hook OnPlayerText(playerid, text[])
 {
-	if(chat_Mode[playerid] == CHAT_MODE_LOCAL)
-		PlayerSendChat(playerid, text, 0.0);
+	new Float:freq;
 
-	if(chat_Mode[playerid] == CHAT_MODE_GLOBAL)
-		PlayerSendChat(playerid, text, 1.0);
-
-	if(chat_Mode[playerid] == CHAT_MODE_ADMIN)
-		PlayerSendChat(playerid, text, 3.0);
-
-	if(chat_Mode[playerid] == CHAT_MODE_RADIO)
-		PlayerSendChat(playerid, text, chat_Freq[playerid]);
+	switch(chat_Mode[playerid])
+	{
+		case CHAT_MODE_LOCAL:
+			freq = 0.0;
+		case CHAT_MODE_GLOBAL:
+			freq = 1.0;
+		case CHAT_MODE_ADMIN:
+			freq = 3.0;
+		case CHAT_MODE_RADIO:
+			freq = chat_Freq[playerid];
+	}
+	PlayerSendChat(playerid, text, freq);
 
 	return 0;
 }
@@ -62,14 +65,10 @@ PlayerSendChat(playerid, chat[], Float:frequency)
 	if(CallLocalFunction("OnPlayerSendChat", "dsf", playerid, chat, frequency))
 		return 0;
 
-	if(isnull(chat))
-		return 0;
-
 	if(IsPlayerMuted(playerid))
 	{
 		if(GetPlayerMuteRemainder(playerid) == -1)
 			ChatMsgLang(playerid, RED, "MUTEDPERMAN");
-
 		else
 			ChatMsgLang(playerid, RED, "MUTEDTIMERM", MsToString(GetPlayerMuteRemainder(playerid) * 1000, "%1h:%1m:%1s"));
 
@@ -247,7 +246,6 @@ PlayerSendChat(playerid, chat[], Float:frequency)
 					SendClientMessage(i, CHAT_RADIO, line2);
 			}
 		}
-
 		SetPlayerChatBubble(playerid, TagScan(chat), WHITE, 40.0, 10000);
 
 		return 1;
@@ -287,6 +285,7 @@ stock Float:GetPlayerRadioFrequency(playerid)
 
 	return chat_Freq[playerid];
 }
+
 stock SetPlayerRadioFrequency(playerid, Float:frequency)
 {
 	if(!IsPlayerConnected(playerid))
@@ -303,7 +302,6 @@ CMD:g(playerid, params[])
 	{
 		if(GetPlayerMuteRemainder(playerid) == -1)
 			ChatMsgLang(playerid, RED, "MUTEDPERMAN");
-
 		else
 			ChatMsgLang(playerid, RED, "MUTEDTIMERM", MsToString(GetPlayerMuteRemainder(playerid) * 1000, "%1h:%1m:%1s"));
 
@@ -316,9 +314,7 @@ CMD:g(playerid, params[])
 		ChatMsgLang(playerid, WHITE, "RADIOGLOBAL");
 	}
 	else
-	{
 		PlayerSendChat(playerid, params, 1.0);
-	}
 
 	return 7;
 }
@@ -331,9 +327,7 @@ CMD:l(playerid, params[])
 		ChatMsgLang(playerid, WHITE, "RADIOLOCAL");
 	}
 	else
-	{
 		PlayerSendChat(playerid, params, 0.0);
-	}
 
 	return 7;
 }
@@ -353,31 +347,19 @@ CMD:r(playerid, params[])
 		ChatMsgLang(playerid, WHITE, "RADIOFREQUN", chat_Freq[playerid]);
 	}
 	else
-	{
 		PlayerSendChat(playerid, params, chat_Freq[playerid]);
-	}
 
 	return 7;
 }
 
-CMD:goff(playerid, params[])
-	return cmd_quiet(playerid, params);
-	
 CMD:quiet(playerid, params[])
 {
-	if(chat_Quiet[playerid])
-	{
-		chat_Quiet[playerid] = false;
-		ChatMsgLang(playerid, WHITE, "RADIOQUIET0");
-	}
-	else
-	{
-		chat_Quiet[playerid] = true;
-		ChatMsgLang(playerid, WHITE, "RADIOQUIET1");
-	}
+	chat_Quiet[playerid] = !chat_Quiet[playerid];
+	ChatMsgLang(playerid, WHITE, chat_Quiet[playerid] ? "RADIOQUIET1" : "RADIOQUIET0");
 
 	return 1;
 }
+CMD:goff(playerid, params[]) return cmd_quiet(playerid, params);
 
 ACMD:a[1](playerid, params[])
 {
@@ -387,9 +369,7 @@ ACMD:a[1](playerid, params[])
 		ChatMsgLang(playerid, WHITE, "RADIOADMINC");
 	}
 	else
-	{
 		PlayerSendChat(playerid, params, 3.0);
-	}
 
 	return 7;
 }
