@@ -321,13 +321,11 @@ hook OnHoldActionFinish(playerid)
 			dbg("craft-construct", 2, "[OnHoldActionFinish] OnPlayerDeconstructed returned zero, destroying item and returning ingredients");
 
 			new
-				Float:x,
-				Float:y,
-				Float:z,
+				Float:x, Float:y, Float:z,
 				recipedata[CRAFT_MAX_CRAFT_SET_ITEMS][e_craft_item_data],
 				recipeitems;
 
-			GetItemPos(cons_DeconstructingItem[playerid], x, y, z);
+			GetPlayerPos(playerid, x, y, z);
 
 			DestroyItem(cons_DeconstructingItem[playerid]);
 
