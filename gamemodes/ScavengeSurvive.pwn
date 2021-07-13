@@ -163,6 +163,10 @@ public OnGameModeInit()
 #define SCMD:%1(%2)					forward scmd_%1(%2);\
 									public scmd_%1(%2)
 
+#define SEC(%0)						%0 * 1000
+#define MIN(%0)						SEC(%0) * 60
+#define HOUR(%0)					MIN(%0) * 60
+
 #define HOLDING(%0)					((newkeys & (%0)) == (%0))
 #define RELEASED(%0)				(((newkeys & (%0)) != (%0)) && ((oldkeys & (%0)) == (%0)))
 #define PRESSED(%0)					(((newkeys & (%0)) == (%0)) && ((oldkeys & (%0)) != (%0)))
