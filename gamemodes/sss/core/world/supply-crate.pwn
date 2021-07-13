@@ -219,8 +219,8 @@ timer SupplyDropTimer[SUPPLY_DROP_TICK_INTERVAL]()
 	else
 		supplyType = "Desconhecido";
 
-	ChatMsgAll(YELLOW, "» "C_GREEN"[Exército]"C_YELLOW" Suprimentos caindo em "C_BLUE"\"%s\""C_YELLOW".", sup_DropLocationData[id][supl_name]);
-	ChatMsgAll(YELLOW, "» Tipo "C_BLUE"\"%s\" "C_YELLOW"(Icone '"C_WHITE"S"C_YELLOW"' no Radar)", supplyType);
+	ChatMsgAll(YELLOW, " » "C_GREEN"[Exército]"C_YELLOW" Suprimentos caindo em "C_BLUE"\"%s\""C_YELLOW".", sup_DropLocationData[id][supl_name]);
+	ChatMsgAll(YELLOW, " » Tipo "C_BLUE"\"%s\" "C_YELLOW"(Icone '"C_WHITE"S"C_YELLOW"' no Radar)", supplyType);
 
 	Iter_Remove(sup_Index, id);
 
