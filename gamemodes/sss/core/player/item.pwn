@@ -160,4 +160,12 @@ hook OnPlayerGiveItem(playerid, targetid, Item:itemid){
 /*hook OnMoveItemToInventory(playerid, Item:itemid, Container:containerid)
 	return Y_HOOKS_BREAK_RETURN_0;*/
 
+/*==============================================================================
 
+	View inventory in Vehicle
+	
+==============================================================================*/
+
+hook OnPlayerKeyStateChange(playerid, newkeys, oldkeys)
+	if( (newkeys == 2) && IsPlayerInAnyVehicle(playerid))
+			DisplayPlayerInventory(playerid);
