@@ -78,7 +78,7 @@ ReportBug(playerid, bug[])
 	if(stmt_execute(stmt_BugInsert))
 	{
 		ChatMsgAdmins(1, YELLOW, " » %P"C_YELLOW" reportou Bug:%s", playerid, bug);
-		DCC_SendChannelMessage(issue_DiscordChannel, format="```%s```", bug);
+		DCC_SendChannelMessage(issue_DiscordChannel, "```%s```", bug);
 	}
 }
 
