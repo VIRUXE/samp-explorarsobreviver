@@ -7,6 +7,9 @@ hook OnPlayerOpenContainer(playerid, Container:containerid)
 
 	if(GetItemType(itemid) == item_Locker)
 	{
+		if(GetItemType(GetPlayerItem(playerid)) == item_Crowbar)
+			return Y_HOOKS_BREAK_RETURN_1;
+			
 		new objectid;
 		GetItemObjectID(itemid, objectid);
 		Streamer_SetIntData(STREAMER_TYPE_OBJECT, objectid, E_STREAMER_MODEL_ID, 11730);
