@@ -728,10 +728,12 @@ public OnVehicleDamageStatusUpdate(vehicleid, playerid)
 
 public OnUnoccupiedVehicleUpdate(vehicleid, playerid, passenger_seat, Float:new_x, Float:new_y, Float:new_z, Float:vel_x, Float:vel_y, Float:vel_z)
 {
-	if(GetVehicleDistanceFromPoint(vehicleid, new_x, new_y, new_z) > 7.0)
+	if(GetVehicleLockState(vehicleid) == E_LOCK_STATE_EXTERNAL){
 		UpdateVehPos(playerid, vehicleid);
+		return 0;
+	}
 
-    return 0;
+    return IsPlayerInVehicleArea(playerid, vehicleid);
 }
 
 hook OnPlayerEnterVehArea(playerid, vehicleid)
