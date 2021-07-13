@@ -1295,27 +1295,3 @@ stock GetDefenceType(Item:itemid)
 
 	return def_ItemTypeDefenceType[GetItemType(itemid)];
 }
-
-// def_pose
-stock GetDefencePose(Item:itemid)
-{
-	return GetItemArrayDataAtCell(itemid, def_pose);
-}
-
-// def_motor
-stock GetDefenceMotor(Item:itemid)
-{
-	return GetItemArrayDataAtCell(itemid, def_motor);
-}
-
-// def_keypad
-stock GetDefenceKeypad(Item:itemid)
-{
-	return GetItemArrayDataAtCell(itemid, def_keypad);
-}
-
-// def_pass
-stock GetDefencePass(Item:itemid)
-{
-	return GetItemArrayDataAtCell(itemid, def_pass);
-}
