@@ -327,6 +327,11 @@ stock Float:GetLiquidItemLiquidAmount(Item:itemid)
 	if(liq_ItemTypeLiquidContainer[GetItemType(itemid)] == -1)
 		return 0.0;
 
+	new size;
+	GetItemArrayDataSize(itemid, size);
+	if(size < 1)
+		return 0.0;
+		
 	new Float:amount, Error:e;
 	e = GetItemArrayDataAtCell(itemid, _:amount, _:LIQUID_ITEM_ARRAY_CELL_AMOUNT);
 

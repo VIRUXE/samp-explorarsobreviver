@@ -213,7 +213,9 @@ hook OnItemAddToContainer(Container:containerid, Item:itemid, playerid)
 {
 	if(box_ItemTypeBoxType[GetItemType(itemid)] != -1)
 	{
-		if(box_TypeData[box_ItemTypeBoxType[GetItemType(itemid)]][box_size] < 13)
+		new size;
+		GetContainerSize(containerid, size);
+		if(size < 13)
 		{
 			if(IsItemTypeCarry(GetItemType(itemid)))
 			{
