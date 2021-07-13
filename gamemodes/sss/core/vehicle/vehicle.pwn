@@ -463,7 +463,6 @@ PlayerVehicleUpdate(playerid)
 
 		format(str, 18, "%.2f/%.2fL", GetVehicleFuel(vehicleid), maxfuel);
 		PlayerTextDrawSetString(playerid, veh_FuelUI[playerid], str);
-		PlayerTextDrawShow(playerid, veh_FuelUI[playerid]);
 
 		if(GetVehicleEngine(vehicleid))
 		{
@@ -509,16 +508,18 @@ PlayerVehicleUpdate(playerid)
 		PlayerTextDrawHide(playerid, veh_FuelUI[playerid]);
 
 	if(IsVehicleTypeLockable(vehicletype))
-	{
 		PlayerTextDrawColor(playerid, veh_DoorsUI[playerid], VehicleDoorsState(vehicleid) ? VEHICLE_UI_ACTIVE : VEHICLE_UI_INACTIVE);
-		PlayerTextDrawShow(playerid, veh_DoorsUI[playerid]);
-	}
 	else
 		PlayerTextDrawHide(playerid, veh_DoorsUI[playerid]);
 
-	PlayerTextDrawShow(playerid, veh_DamageUI[playerid]);
-	PlayerTextDrawShow(playerid, veh_EngineUI[playerid]);
-
+	if(!IsPlayerViewingInventory(playerid))
+	{
+		PlayerTextDrawShow(playerid, veh_FuelUI[playerid]);
+		PlayerTextDrawShow(playerid, veh_DoorsUI[playerid]);
+		PlayerTextDrawShow(playerid, veh_DamageUI[playerid]);
+		PlayerTextDrawShow(playerid, veh_EngineUI[playerid]);
+	}
+	
 	if(IsBaseWeaponDriveby(GetPlayerWeapon(playerid)))
 	{
 		if(GetTickCountDifference(GetTickCount(), GetPlayerVehicleExitTick(playerid)) > 3000 && playerstate == PLAYER_STATE_DRIVER)
@@ -725,58 +726,36 @@ public OnVehicleDamageStatusUpdate(vehicleid, playerid)
 	return 1;
 }
 
-static pLastVehUpd[MAX_PLAYERS][MAX_VEHICLES];
-
 public OnUnoccupiedVehicleUpdate(vehicleid, playerid, passenger_seat, Float:new_x, Float:new_y, Float:new_z, Float:vel_x, Float:vel_y, Float:vel_z)
 {
-	if(GetPlayerAnimationIndex(playerid) == 1084)
-		return 1;
+	if(GetVehicleDistanceFromPoint(vehicleid, new_x, new_y, new_z) > 7.0)
+		UpdateVehPos(playerid, vehicleid);
 
-	new Float:x, Float:y, Float:z;
-	GetVehiclePos(vehicleid, x, y, z);
-
-	if(GetPlayerDistanceFromPoint(playerid, x, y, z) > 10.0){
-		new BitStream:bs = BS_New();
-		BS_WriteValue(bs, PR_UINT16, vehicleid, PR_FLOAT, x, PR_FLOAT, y, PR_FLOAT, z);
-		PR_SendRPC(bs, playerid, 159);
-		BS_Delete(bs);
-		return 0;
-	}
-	
-	if(Distance2D(x, y, new_x, new_y) > 0.1){
-		SetVehiclePos(vehicleid, x, y, z);
-		pLastVehUpd[playerid][vehicleid] ++;
-		if(pLastVehUpd[playerid][vehicleid] >= 12) {
-			ApplyAnimation(playerid, "PED", "DAM_stomach_frmFT", 4.1, 0, 1, 1, 0, 0, 1);
-			pLastVehUpd[playerid][vehicleid] = 0;
-		}
-	}
-
-    return 1;
+    return 0;
 }
 
 hook OnPlayerEnterVehArea(playerid, vehicleid)
-	UpdateMobileVehPos(playerid, vehicleid);
+	UpdateVehPos(playerid, vehicleid);
 
 hook OnPlayerLeaveVehArea(playerid, vehicleid)
-	UpdateMobileVehPos(playerid, vehicleid);
+	UpdateVehPos(playerid, vehicleid);
 
-UpdateMobileVehPos(playerid, vehicleid){
-	if(!IsPlayerMobile(playerid))
-		return 0;
+UpdateVehPos(playerid, vehicleid){
+	new 
+		Float:x, Float:y, Float:z,
+		Float:r, BitStream:bs = BS_New();
 
-	new Float:x, Float:y, Float:z, Float:r;
 	GetVehiclePos(vehicleid, x, y, z);
 	GetVehicleZAngle(vehicleid, r);
-	new BitStream:bs = BS_New();
+
 	BS_WriteValue(bs, PR_UINT16, vehicleid, PR_FLOAT, x, PR_FLOAT, y, PR_FLOAT, z);
 	PR_SendRPC(bs, playerid, 159);
 	BS_Delete(bs);
+	
 	bs = BS_New();
 	BS_WriteValue(bs, PR_UINT16, vehicleid, PR_FLOAT, r);
 	PR_SendRPC(bs, playerid, 160);
 	BS_Delete(bs);
-	return 1;
 }
 
 IsVehicleValidOutOfBounds(vehicleid)
