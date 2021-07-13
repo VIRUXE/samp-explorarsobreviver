@@ -869,6 +869,8 @@ _UpdateDefenceTweakArrow(playerid, Item:itemid)
 		def_TweakArrow[playerid] = CreateDynamicObject(19133, x, y, z, 0.0, 0.0, 0.0, world, interior);
 		SetDynamicObjectMaterial(def_TweakArrow[playerid], 0, 10765, "airportgnd_sfse", "desgreengrass", 0xFF00FF00);
 		SetDynamicObjectMaterial(def_TweakArrow[playerid], 1, -1, "none", "none", 0xFF00FF00);
+		PlayerTextDrawShow(playerid, def_MoveTD[playerid][0]);
+		PlayerTextDrawShow(playerid, def_MoveTD[playerid][1]);
 	}
 		
 	new pose;
@@ -895,9 +897,6 @@ hook OnItemTweakUpdate(playerid, Item:itemid)
 {
 	if(def_TweakArrow[playerid] != INVALID_OBJECT_ID)
 	{
-		PlayerTextDrawShow(playerid, def_MoveTD[playerid][0]);
-		PlayerTextDrawShow(playerid, def_MoveTD[playerid][1]);
-		
 		_UpdateDefenceTweakArrow(playerid, itemid);
 		ShowActionText(playerid, "Movendo..", 1000);
 	}
