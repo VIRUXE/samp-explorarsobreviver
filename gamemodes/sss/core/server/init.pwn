@@ -871,8 +871,8 @@ public OnScriptInit()
 	item_PizzaOnly      = DefineItemType("Pizza",						"PizzaOnly",		19580,	3,	0.0, 0.0, 0.0,			0.000,	0.078000, 0.017999, 0.025000,  -29.900056, -88.800018, 59.299705, .maxhitpoints = 3);
 	item_PlantPot       = DefineItemType("Vaso",						"PlantPot",			2203,	4,	0.0, 0.0, 0.0,			0.138,	-0.027872, 0.145617, -0.246524, 243.789840, 347.397491, 349.931610, true, .longpickup = true, .maxhitpoints = 4);
 	item_PlotPole       = DefineItemType("Plot Pole",					"PlotPole",			3221,	3,	0.0, 0.0, 0.0,			0.0,	0.081356, 0.034642, -0.167247, 0.000000, 0.000000, 240.265777, .maxhitpoints = 3);
-	item_PoliceCap      = DefineItemType("Capacete de Policia",			"PoliceCap",		18636,	1,	0.0, 0.0, 0.0,			0.05,	0.225000, 0.034000, 0.014000, 81.799942, 7.699998, 179.999954, .maxhitpoints = 1);
-	item_PoliceHelm     = DefineItemType("Chapeu de Policia",			"PoliceHelm",		19200,	1,	0.0, 0.0, 0.0,			0.05,	0.173000, -0.010000, -0.020000,  -90.299995, 0.000000, 0.000000, .maxhitpoints = 1);
+	item_PoliceCap      = DefineItemType("Bone de Policia",				"PoliceCap",		18636,	1,	0.0, 0.0, 0.0,			0.05,	0.225000, 0.034000, 0.014000, 81.799942, 7.699998, 179.999954, .maxhitpoints = 1);
+	item_PoliceHelm     = DefineItemType("Capacete de Policia",			"PoliceHelm",		19200,	1,	0.0, 0.0, 0.0,			0.05,	0.173000, -0.010000, -0.020000,  -90.299995, 0.000000, 0.000000, .maxhitpoints = 1);
 	item_PoolCue        = DefineItemType("Taco de Bilhar",				"PoolCue",			338,	4,	90.0, .maxhitpoints = 4);
 	item_PowerSupply    = DefineItemType("Power Supply",				"PowerSupply",		3016,	1,	0.0, 0.0, 0.0,			0.0,	0.255000, -0.054000, 0.032000, -87.499984, -7.599999, -7.999998, .maxhitpoints = 1);
 	item_Pumpkin        = DefineItemType("Abobora",						"Pumpkin",			19320,	5,	0.0, 0.0, 0.0,			0.3,	0.105948, 0.279332, -0.253927, 246.858016, 0.000000, 0.000000, true, .maxhitpoints = 5);
@@ -1342,7 +1342,7 @@ public OnScriptInit()
 	DefineSafeboxType(item_GunCase,			5, false, false);
 	DefineSafeboxType(item_Sandbag,			6);
 	DefineSafeboxType(item_LargeBox,		12);
-	DefineSafeboxType(item_Locker,			16, .animateonuse = false);
+	DefineSafeboxType(item_Locker,			32, .animateonuse = false);
 	DefineSafeboxType(item_MediumBox,		10);
 	DefineSafeboxType(item_SmallBox,		8);
 	DefineSafeboxType(item_Suitcase,		6);
