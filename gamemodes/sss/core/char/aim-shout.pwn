@@ -13,7 +13,7 @@ hook OnPlayerKeyStateChange(playerid, newkeys, oldkeys)
 		{
 			if(GetTickCountDifference(GetTickCount(), aimshout_Tick[playerid]) > 750)
 			{
-				new string[128];
+				new string[128] = "»";
 
 				strcat(string, aimshout_Text[playerid], 128);
 				PlayerSendChat(playerid, string, 0.0);
@@ -28,7 +28,7 @@ hook OnPlayerKeyStateChange(playerid, newkeys, oldkeys)
 		{
 			if(GetTickCountDifference(GetTickCount(), aimshout_Tick[playerid]) > 750)
 			{
-				new string[128];
+				new string[128] = "»";
 
 				strcat(string, aimshout_Text[playerid], 128);
 				PlayerSendChat(playerid, string, 0.0);
