@@ -366,6 +366,11 @@ stock GetLiquidItemLiquidType(Item:itemid)
 	if(liq_ItemTypeLiquidContainer[GetItemType(itemid)] == -1)
 		return -1;
 
+	new size;
+	GetItemArrayDataSize(Item:itemid, size);
+	if(size < 2)
+		SetItemArrayDataSize(itemid, 2);
+		
 	new type, Error:e;
 	e = GetItemArrayDataAtCell(itemid, type, LIQUID_ITEM_ARRAY_CELL_TYPE);
 	if(IsError(e))
