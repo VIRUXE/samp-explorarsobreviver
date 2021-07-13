@@ -848,6 +848,8 @@ ConvertItemToDefenceItem(Item:itemid, pose, playerid)
 	SetItemArrayDataAtCell(itemid, _:z, def_buttonz);
 	SetButtonPos(buttonid, x, y, z);
 
+	_UpdateDefenceTweakArrow(playerid, itemid);
+	
 	return CallLocalFunction("OnDefenceCreate", "d", _:itemid);
 }
 
