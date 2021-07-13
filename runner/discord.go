@@ -54,7 +54,7 @@ func runDiscord(ctx context.Context, ps *pubsub.PubSub, cfg Config) {
 	discord.AddHandler(func(s *discordgo.Session, m *discordgo.MessageCreate) {
 		switch m.Message.Content {
 		case "/estado":
-			server, err := sampquery.GetServerInfo(ctx, "sv.explorarsobreviver", false)
+			server, err := sampquery.GetServerInfo(ctx, "sv.explorarsobreviver.com:7777", false)
 			if err != nil {
 				discord.ChannelMessageSend(cfg.DiscordChannelInfo, "Falhou :("+err.Error()) //nolint:errcheck
 			} else {
@@ -145,7 +145,7 @@ func runDiscord(ctx context.Context, ps *pubsub.PubSub, cfg Config) {
 			}
 			lines = lines[:n]
 
-			if _, err := discord.ChannelMessageSend(cfg.DiscordChannelErrors, fmt.Sprintf("Error backtrace:\n```\n%s\n```", strings.Join(lines, "\n"))); err != nil {
+			if _, err := discord.ChannelMessageSend(cfg.DiscordChannelErrors, fmt.Sprintf("```\n%s\n```", strings.Join(lines, "\n"))); err != nil {
 				zap.L().Error("failed to send discord message", zap.Error(err))
 			}
 		}
