@@ -206,15 +206,10 @@ static Prev_CreateTextDraws() {
 		for (new b = 0; b < MAX_DIALOG_PREVIEW_COLUMNS; b++) {
 		    textdrawid = ((a * MAX_DIALOG_PREVIEW_COLUMNS) + b);
 			Prev@ModelTD[textdrawid] = TextDrawCreate((148.0000 + (b * DIALOG_PREVIEW_HORIZONTAL_GAP)), (197.0000 + (a * DIALOG_PREVIEW_VERTICAL_GAP)), "MODEL");
-			TextDrawFont(Prev@ModelTD[textdrawid], 5);
-			TextDrawLetterSize(Prev@ModelTD[textdrawid], 0.5000, 1.0000);
-			TextDrawTextSize(Prev@ModelTD[textdrawid], 55.5000, 62.5000);
-			TextDrawSetOutline(Prev@ModelTD[textdrawid], 0);
-			TextDrawSetShadow(Prev@ModelTD[textdrawid], 0);
-			TextDrawAlignment(Prev@ModelTD[textdrawid], 1);
+			TextDrawFont(Prev@ModelTD[textdrawid], TEXT_DRAW_FONT_MODEL_PREVIEW);
+			TextDrawBackgroundColor(Prev@ModelTD[textdrawid], 1);
 			TextDrawColor(Prev@ModelTD[textdrawid], -1);
-			TextDrawBackgroundColor(Prev@ModelTD[textdrawid], 0);
-			TextDrawSetProportional(Prev@ModelTD[textdrawid], 1);
+			TextDrawTextSize(Prev@ModelTD[textdrawid], 55.5000, 62.5000);
 			TextDrawSetPreviewRot(Prev@ModelTD[textdrawid], -10.000000, 0.000000, -20.000000, 1.000000);
 			TextDrawSetSelectable(Prev@ModelTD[textdrawid], 1);
 		}
