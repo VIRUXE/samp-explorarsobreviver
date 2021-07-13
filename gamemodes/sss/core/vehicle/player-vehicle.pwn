@@ -345,7 +345,7 @@ LoadPlayerVehicle(const filepath[])
 					if(!IsItemTypeSafebox(itemtype) && !IsItemTypeBag(itemtype))
 						SetItemArrayDataFromStored(itemid, i);
 
-					AddItemToContainer(containerid, itemid, .call = false);
+					AddItemToContainer(containerid, itemid);
 				}
 
 				ClearSerializer();
@@ -403,7 +403,7 @@ LoadPlayerVehicle(const filepath[])
 				if(!IsItemTypeSafebox(itemtype) && !IsItemTypeBag(itemtype))
 					SetItemArrayDataFromStored(itemid, i);
 
-				AddItemToContainer(containerid, itemid, .call = false);
+				AddItemToContainer(containerid, itemid);
 			}
 
 			ClearSerializer();

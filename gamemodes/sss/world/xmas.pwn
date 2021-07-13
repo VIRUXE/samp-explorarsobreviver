@@ -29,7 +29,7 @@ CreateXmasTree(Float:x, Float:y, Float:z, Float:rx, Float:ry, Float:rz)
 	FillContainerWithLoot(containerid, random(10) + 1, GetLootIndexFromName("world_military"));
 	
 	if(random(100) < 10)
-		AddItemToContainer(containerid, CreateItem(item_XmasHat), .call = false);
+		AddItemToContainer(containerid, CreateItem(item_XmasHat));
 
 	return 1;
 }

@@ -319,7 +319,7 @@ public OnTentLoad(Item:itemid, active, uuid[], data[], length)
 			if(!IsItemTypeSafebox(itemtype) && !IsItemTypeBag(itemtype))
 				SetItemArrayDataFromStored(subitem, i);
 
-			AddItemToContainer(containerid, subitem, .call = false);
+			AddItemToContainer(containerid, subitem);
 		}
 
 		ClearSerializer();
