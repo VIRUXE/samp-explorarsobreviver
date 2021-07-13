@@ -568,9 +568,7 @@ Logout(playerid, docombatlogcheck = 1)
 
 	if(IsItemTypeBag(itemtype))
 	{
-		new Container:containerid;
-		GetItemArrayDataAtCell(itemid, _:containerid, 1);
-		if(!IsContainerEmpty(containerid))
+		if(!IsContainerEmpty(GetBagItemContainerID(itemid)))
 		{
 			if(IsValidItem(GetPlayerBagItem(playerid)))
 			{
