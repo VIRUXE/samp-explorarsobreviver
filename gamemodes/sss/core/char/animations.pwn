@@ -47,6 +47,7 @@ hook OnPlayerKeyStateChange(playerid, newkeys, oldkeys)
 			if(GetPlayerAnimationIndex(playerid) == 43 || GetPlayerAnimationIndex(playerid) == 1497)
 			{
 				ApplyAnimation(playerid, "SUNBATHE", "PARKSIT_M_OUT", 4.0, 0, 0, 0, 0, 0, 1);
+				ShowActionText(playerid, "Voce sentou-se~n~Pressione C para levantar", 5000);
 			}
 		}
 		if(newkeys & KEY_JUMP && !(oldkeys & KEY_JUMP) && GetPlayerSpecialAction(playerid) == SPECIAL_ACTION_CUFFED)
