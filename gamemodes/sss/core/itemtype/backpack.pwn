@@ -118,8 +118,7 @@ stock GivePlayerBag(playerid, Item:itemid)
 		GetItemArrayDataSize(itemid, size);
 
 		if(size < 2)
-			return 0;
-
+			SetItemArrayDataSize(itemid, 2);
 
 		new Container:containerid;
 		GetItemArrayDataAtCell(itemid, _:containerid, 1);
