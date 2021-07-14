@@ -76,9 +76,7 @@ stock ChatMsgFlat(playerid, colour, const message[])
 		SendClientMessage(playerid, colour, string2);
 	}
 	else
-	{
 		SendClientMessage(playerid, colour, message);
-	}
 	
 	return 1;
 }
@@ -108,9 +106,7 @@ stock ChatMsgAllFlat(colour, const message[])
 		SendClientMessageToAll(colour, string2);
 	}
 	else
-	{
 		SendClientMessageToAll(colour, message);
-	}
 
 	return 1;
 }
