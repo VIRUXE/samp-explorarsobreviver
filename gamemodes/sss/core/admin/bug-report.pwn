@@ -73,7 +73,7 @@ ReportBug(playerid, bug[])
 {
 	new bugStr[MAX_BUG_LENGTH+6];
 
-	format(bugStr, sizeof(bugStr), "```%s```", bug);
+	format(bugStr, sizeof(bugStr), "**%p** reportou:\n```%s```", playerid, bug);
 	DCC_SendChannelMessage(bug_DiscordChannel, bugStr);
 
 	stmt_bind_value(stmt_BugInsert, 0, DB::TYPE_PLAYER_NAME, playerid);
@@ -81,7 +81,7 @@ ReportBug(playerid, bug[])
 	stmt_bind_value(stmt_BugInsert, 2, DB::TYPE_INTEGER, gettime());
 
 	if(stmt_execute(stmt_BugInsert))
-		ChatMsgAdmins(1, YELLOW, " » %P"C_YELLOW" reportou Bug:%s", playerid, bug);
+		ChatMsgAdmins(1, YELLOW, " » %P"C_YELLOW" reportou Bug: %s", playerid, bug);
 }
 
 
