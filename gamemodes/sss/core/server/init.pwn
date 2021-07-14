@@ -790,7 +790,7 @@ public OnScriptInit()
 	item_IedTimebomb	= DefineItemType("DEI Temporizado",				"IedTimebomb",		2033,	2,	0.0, 0.0, 0.0,			0.0,	0.100000, 0.055999, 0.000000,  -86.099967, -112.099975, 100.099891, .maxhitpoints = 1);
 	item_IedTripMine	= DefineItemType("DEI de Mina",					"IedTripMine",		2033,	2,	0.0, 0.0, 0.0,			0.0,	0.100000, 0.055999, 0.000000,  -86.099967, -112.099975, 100.099891, .maxhitpoints = 1);
 	item_InsulDoor		= DefineItemType("Entrada Isolada",				"InsulDoor",		19398,	8,	0.0, 90.0, 0.0,			0.0,	-0.087714,1.606874,-0.771602,-111.012359,172.861953,-169.801147, true, .buttonz = ITEM_FLOOR_OFFSET / 8,  .maxhitpoints = 7);
-	item_InsulPanel		= DefineItemType("Painel Insulado",				"InsulPanel",		19371,	10,	0.0, 90.0, 0.0,			0.0,	-0.339715,1.431000,-0.739000,337.887634,170.962066,162.198867, true, .buttonz = ITEM_FLOOR_OFFSET / 8,  .maxhitpoints = 7);
+	item_InsulPanel		= DefineItemType("Painel Isolado",				"InsulPanel",		19371,	10,	0.0, 90.0, 0.0,			0.0,	-0.339715,1.431000,-0.739000,337.887634,170.962066,162.198867, true, .buttonz = ITEM_FLOOR_OFFSET / 8,  .maxhitpoints = 7);
 	item_IoUnit			= DefineItemType("Unidade de I/O",				"IoUnit",			19273,	1,	270.0, 0.0, 0.0,		0.0,	0.198234, 0.101531, 0.095477, 0.000000, 343.020019, 0.000000, .maxhitpoints = 1);
 	item_Ketchup		= DefineItemType("Ketchup",						"Ketchup",			11722,	1,	0.0, 0.0, 0.0,			-0.1,	0.100000, 0.077000, 0.041000,  4.400032, -2.300116, 138.699905, .maxhitpoints = 1);
 	item_Key			= DefineItemType("Chave",						"Key",				11746,	1,	90.0, 0.0, 0.0,			0.08,	0.059999,0.000000,0.073999,0.000000,77.300025,-152.099929,	.maxhitpoints = 1);
