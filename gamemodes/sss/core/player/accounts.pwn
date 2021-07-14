@@ -677,7 +677,7 @@ SavePlayerData(playerid)
 	if(IsPlayerAlive(playerid) && !IsPlayerInTutorial(playerid))
 	{
 		dbg("accounts", 2, "[SavePlayerData] Player is alive");
-		if(IsAtDefaultPos(x, y, z))
+		if(IsAtConnectionPos(x, y, z))
 		{
 			dbg("accounts", 2, "[SavePlayerData] ERROR: Player at default position");
 			return 0;
