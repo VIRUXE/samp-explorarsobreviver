@@ -148,14 +148,17 @@ AntiRaidWarn(playerid){
 		#pragma unused pid, dialogid, listitem, inputtext
 		if(response)
 		{
-			new BitStream:bs = BS_New();
-			BS_WriteValue(bs,
-				PR_FLOAT, atr_SetX[playerid],
-				PR_FLOAT, atr_SetY[playerid],
-				PR_FLOAT, atr_SetZ[playerid]
-			);
-			PR_SendRPC(bs, playerid, 12);
-			BS_Delete(bs);
+			if(!IsAtConnectionPos(atr_SetX[playerid], atr_SetY[playerid], atr_SetZ[playerid]))
+			{
+				new BitStream:bs = BS_New();
+				BS_WriteValue(bs,
+					PR_FLOAT, atr_SetX[playerid],
+					PR_FLOAT, atr_SetY[playerid],
+					PR_FLOAT, atr_SetZ[playerid]
+				);
+				PR_SendRPC(bs, playerid, 12);
+				BS_Delete(bs);
+			} else GetPlayerPos(playerid, atr_SetX[playerid], atr_SetY[playerid], atr_SetZ[playerid]);
 		}
 	}
 	Dialog_ShowCallback(playerid, using inline Response, DIALOG_STYLE_MSGBOX,
