@@ -95,9 +95,9 @@ public DCC_OnMessageCreate(DCC_Message:message)
         else if(!IsValidUsername(nickname))
             SendDiscordMessage(channel, "> Nick com formato invalido, tente outro."); 
         else if(IsNameInWhitelist(nickname))
-            SendDiscordMessage(channel, "> Esse nick ja esta registrado."); 
+            SendDiscordMessage(channel, "> Esse nick ja se encontra vinculado com outra Conta de Discord."); 
         else if(IsNameInWhitelist(userid))
-            SendDiscordMessage(channel, "> Voce ja tem essa conta vinculada...");
+            SendDiscordMessage(channel, "> Voce ja tem uma Conta de Jogo vinculada...");
         else
         {
             new DCC_Guild: guild;
@@ -110,7 +110,7 @@ public DCC_OnMessageCreate(DCC_Message:message)
             DCC_GetChannelGuild(channel, guild);
             DCC_SetGuildMemberNickname(guild, author, nickname); 
 
-            SendDiscordMessage(channel, "> Sua conta de Jogo `%s` foi vinculada com sua conta de Discord. Bom jogo!", nickname);
+            SendDiscordMessage(channel, "> Sua Conta de Jogo `%s` foi vinculada com sua Conta de Discord. Bom jogo!", nickname);
         }
     }
     return 1;
