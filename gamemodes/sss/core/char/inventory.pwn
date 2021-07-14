@@ -753,6 +753,7 @@ hook OnPlayerSelectCntOpt(playerid, Container:containerid, option)
 				}
 				else
 				{
+					RemoveItemFromContainer(inv_TempContainerID[playerid], slot, playerid);
 					DisplayContainerInventory(playerid, containerid);
 				}
 			}
