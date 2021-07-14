@@ -57,7 +57,7 @@ public OnPlayerConnect(playerid)
 
 	SetPlayerColor(playerid, COLOR_PLAYER_NORMAL);
 
-	TogglePlayerClock(playerid, true);
+	TogglePlayerClock(playerid, false);
 	
 	SetPlayerVirtualWorld(playerid, playerid + 1);
 
