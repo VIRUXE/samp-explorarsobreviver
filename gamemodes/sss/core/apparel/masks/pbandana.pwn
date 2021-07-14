@@ -3,7 +3,7 @@
 hook OnGameModeInit(){
 	// 18920
 	new tmp;
-	tmp = DefineMaskItem(item_BandanaPattern);
+	tmp = DefineMaskItem(item_BandanaPat);
 	
 	SetMaskOffsetsForSkin(tmp, 60, 0.060999, 0.028000, -0.009000, -89.000007, 7.000000, -89.900032, 0.944000, 1.000000, 1.054000);
 	SetMaskOffsetsForSkin(tmp, 170, 0.060999, 0.028000, -0.009000, -89.000007, 7.000000, -89.900032, 0.944000, 1.000000, 1.054000);

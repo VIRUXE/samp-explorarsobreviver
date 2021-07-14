@@ -49,9 +49,6 @@ stock DefineMaskItem(ItemType:itemtype)
 
 stock SetMaskOffsetsForSkin(maskid, skinid, Float:offsetx, Float:offsety, Float:offsetz, Float:rotx, Float:roty, Float:rotz, Float:scalex, Float:scaley, Float:scalez)
 {
-	if(!(0 <= maskid < mask_Total))
-		return 0;
-
 	mask_Data[maskid][skinid][mask_offsetX] = offsetx;
 	mask_Data[maskid][skinid][mask_offsetY] = offsety;
 	mask_Data[maskid][skinid][mask_offsetZ] = offsetz;

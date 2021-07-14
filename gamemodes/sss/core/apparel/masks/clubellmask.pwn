@@ -3,7 +3,7 @@
 hook OnGameModeInit(){
 	// 19137
 	new tmp;
-	tmp = DefineMaskItem(item_CluBellHat1);
+	tmp = DefineMaskItem(item_CluBellMask);
 
 	SetMaskOffsetsForSkin(tmp, 60, 0.095999, 0.023000, 0.000000, 0.000000, 0.000000, 0.000000, 1.000000, 1.000000, 1.000000);
 	SetMaskOffsetsForSkin(tmp, 170, 0.095999, 0.023000, 0.000000, 0.000000, 0.000000, 0.000000, 1.000000, 1.000000, 1.000000);

@@ -62,9 +62,11 @@ world_survivor, 1.0
 5.0,    BandanaPat
 20.0,    GasMask
 10.0,    HockeyMask
+4.0,     RHockeyMask
+4.0,     GHockeyMask
 11.0,    DevilMask
-15.0,    CluckinBellHat1
-15.0,    Balaclava
+15.0,    CluBellMask
+5.0,     BalaclavaMask
 18.0,    TruckCap
 17.0,    BoaterHat
 17.0,    BowlerHat
@@ -72,7 +74,7 @@ world_survivor, 1.0
 10.5,    XmasHat
 16.0,    PizzaHat
 14.0,    WitchesHat
-18.0,    StrawHat
+9.0,     StrawHat
 18.0,    FireHelmet
 18.0,    FireHelmet1
 17.0,    HeadPhones
