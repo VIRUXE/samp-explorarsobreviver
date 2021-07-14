@@ -148,6 +148,10 @@ hook OnHoldActionUpdate(playerid, progress)
 			new mult = 2000;
 			mult = GetPlayerSkillTimeModifier(playerid, mult, "Repair");
 			fix_Progress[playerid] += (float(mult) / 1000.0);
+
+			if(fix_Progress[playerid] > 990.0)
+				fix_Progress[playerid] = 990.0;
+
 			SetVehicleHealth(fix_TargetVehicle[playerid], fix_Progress[playerid]);
 			SetPlayerToFaceVehicle(playerid, fix_TargetVehicle[playerid]);	
 		}
