@@ -633,6 +633,8 @@ public OnScriptInit()
 	EnableAntiCheat(11, false); // Anti-Health hack (in vehicle)
 	EnableAntiCheat(5, false); // Anti-Teleport (vehicle to player)
 	EnableAntiCheat(15, false); // Anti-Weapon hack
+	EnableAntiCheat(12, false); // Anti-Health hack (onfoot)
+
 
 // ITEM TYPE DEFINITIONS
 	item_Accelerometer	= DefineItemType("Acelerometro",				"Accelerometer",	327,	1,	0.0, 0.0, 0.0,			0.0,	0.008151, 0.012682, -0.050635, 0.000000, 0.000000, 0.000000, .maxhitpoints = 1);

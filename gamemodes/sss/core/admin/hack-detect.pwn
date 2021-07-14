@@ -17,6 +17,14 @@ hook OnPlayerDeath(playerid, killerid, reason)
 
 hook OnPlayerUpdate(playerid)
 {
+	new Float:health;
+	GetPlayerHealth(playerid, health);
+
+	if(!IsPlayerOnAdminDuty(playerid) && IsPlayerSpawned(playerid) && health > 99.9)
+	{
+		ChatMsgAdmins(3, RED, "[Anti-Health Hack Test] %p(%d) detected. Health: %f", playerid, playerid, health);
+	}
+
 	if(GetPlayerAnimationIndex(playerid) == 1266)
 	{
 		stop IsPlayerRunning[playerid];
@@ -882,7 +890,9 @@ AccuracyWarning(playerid, total)
 }
 
 /*==============================================================================
+
 	Vehicle Health
+
 ==============================================================================*/
 
 
