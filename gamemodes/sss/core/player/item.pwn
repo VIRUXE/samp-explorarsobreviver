@@ -153,12 +153,17 @@ hook OnPlayerGiveItem(playerid, targetid, Item:itemid){
 
 /*==============================================================================
 
-	Until function
+	Move itens
 	
 ==============================================================================*/
 
-/*hook OnMoveItemToInventory(playerid, Item:itemid, Container:containerid)
-	return Y_HOOKS_BREAK_RETURN_0;*/
+hook OnMoveItemToInventory(playerid, Item:itemid, Container:containerid){
+	return Y_HOOKS_BREAK_RETURN_0;
+}
+
+hook OnMoveItemToContainer(playerid, Item:itemid, Container:containerid){
+	return Y_HOOKS_BREAK_RETURN_0;
+}
 
 /*==============================================================================
 
