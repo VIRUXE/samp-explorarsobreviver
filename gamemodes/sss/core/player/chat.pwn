@@ -33,7 +33,7 @@ hook OnPlayerConnect(playerid)
 
 hook OnPlayerText(playerid, text[])
 {
-	new Float:freq;
+	new Float:freq = chat_Freq[playerid];
 
 	switch(chat_Mode[playerid])
 	{
@@ -43,8 +43,6 @@ hook OnPlayerText(playerid, text[])
 			freq = 1.0;
 		case CHAT_MODE_ADMIN:
 			freq = 3.0;
-		case CHAT_MODE_RADIO:
-			freq = chat_Freq[playerid];
 	}
 	PlayerSendChat(playerid, text, freq);
 
@@ -59,7 +57,7 @@ PlayerSendChat(playerid, chat[], Float:frequency)
 	if(!IsPlayerLoggedIn(playerid))
 		return 0;
 
-	if(GetTickCountDifference(GetTickCount(), GetPlayerServerJoinTick(playerid)) < 1000)
+	if(GetTickCountDifference(GetTickCount(), GetPlayerServerJoinTick(playerid)) < SEC(1))
 		return 0;
 
 	if(CallLocalFunction("OnPlayerSendChat", "dsf", playerid, chat, frequency))
@@ -76,7 +74,7 @@ PlayerSendChat(playerid, chat[], Float:frequency)
 	}
 	else
 	{
-		if(GetTickCountDifference(GetTickCount(), chat_LastMessageTick[playerid]) < 1000 && !GetPlayerAdminLevel(playerid))
+		if(GetTickCountDifference(GetTickCount(), chat_LastMessageTick[playerid]) < SEC(1) && !GetPlayerAdminLevel(playerid))
 		{
 			chat_MessageStreak[playerid]++;
 			if(chat_MessageStreak[playerid] == 3)
