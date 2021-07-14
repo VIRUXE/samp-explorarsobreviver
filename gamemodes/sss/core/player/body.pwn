@@ -652,7 +652,7 @@ DamageBody(playerid, actorid, Float:amount)
 			itemid = AllocNextItemID(ItemType:held_data[0]);
 			SetItemNoResetArrayData(itemid, true);
 			SetItemArrayData(itemid, held_data[2], held_data[1]);
-			AddItemToContainer(containerid, itemid, .call = false);
+			AddItemToContainer(containerid, itemid);
 			CreateItem_ExplicitID(itemid);
 		}
 
@@ -672,7 +672,7 @@ DamageBody(playerid, actorid, Float:amount)
 			itemid = AllocNextItemID(ItemType:hols_data[0]);
 			SetItemNoResetArrayData(itemid, true);
 			SetItemArrayData(itemid, hols_data[2], hols_data[1]);
-			AddItemToContainer(containerid, itemid, .call = false);
+			AddItemToContainer(containerid, itemid);
 			CreateItem_ExplicitID(itemid);
 		}
 
@@ -706,7 +706,7 @@ DamageBody(playerid, actorid, Float:amount)
 				if(!IsItemTypeSafebox(itemtype) && !IsItemTypeBag(itemtype))
 					SetItemArrayDataFromStored(itemid, i);
 			
-				AddItemToContainer(containerid, itemid, .call = false);
+				AddItemToContainer(containerid, itemid);
 			}
 			ClearSerializer();
 		}
@@ -728,7 +728,7 @@ DamageBody(playerid, actorid, Float:amount)
 			itemid = AllocNextItemID(ItemType:hat_data[0]);
 			SetItemNoResetArrayData(itemid, true);
 			SetItemArrayData(itemid, hat_data[2], hat_data[1]);
-			AddItemToContainer(containerid, itemid, .call = false);
+			AddItemToContainer(containerid, itemid);
 			CreateItem_ExplicitID(itemid);
 		}
 
@@ -749,7 +749,7 @@ DamageBody(playerid, actorid, Float:amount)
 			itemid = AllocNextItemID(ItemType:mask_data[0]);
 			SetItemNoResetArrayData(itemid, true);
 			SetItemArrayData(itemid, mask_data[2], mask_data[1]);
-			AddItemToContainer(containerid, itemid, .call = false);
+			AddItemToContainer(containerid, itemid);
 			CreateItem_ExplicitID(itemid);
 		}
 
@@ -796,12 +796,12 @@ DamageBody(playerid, actorid, Float:amount)
 						if(!IsItemTypeSafebox(itemtype) && !IsItemTypeBag(itemtype))
 							SetItemArrayDataFromStored(itemid2, i);
 
-						AddItemToContainer(GetBagItemContainerID(Item:itemid), itemid2, .call = false);
+						AddItemToContainer(GetBagItemContainerID(Item:itemid), itemid2);
 					}
 					ClearSerializer();
 				}
 
-				AddItemToContainer(containerid, itemid, .call = false);
+				AddItemToContainer(containerid, itemid);
 			}
 		}
 		

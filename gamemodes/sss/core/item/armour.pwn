@@ -23,6 +23,8 @@ hook OnItemCreate(Item:itemid)
 	}
 }
 
+hook OnPlayerConnect(playerid)
+	arm_PlayerArmourItem[playerid] = INVALID_ITEM_ID;
 
 hook OnPlayerUseItem(playerid, Item:itemid)
 {
@@ -30,14 +32,16 @@ hook OnPlayerUseItem(playerid, Item:itemid)
 	{
 		if(GetPlayerAP(playerid) <= 0.0)
 		{
-			new data;
+			new data, Float:armour = 0.00001;
+
 			GetItemExtraData(itemid, data);
+
 			if(data > 0)
-			{
-				SetPlayerArmourItem(playerid, itemid);
-				SetPlayerAP(playerid, float(data));
-				return Y_HOOKS_BREAK_RETURN_1;
-			}
+				armour = float(data);
+
+			SetPlayerArmourItem(playerid, itemid);
+			SetPlayerAP(playerid, armour);
+			return Y_HOOKS_BREAK_RETURN_1;
 		}
 	}
 
@@ -48,18 +52,12 @@ hook OnItemNameRender(Item:itemid, ItemType:itemtype)
 {
 	if(itemtype == item_Armour)
 	{
-		new size;
-		GetItemArrayDataSize(itemid, size);
-
-		if(size < 1)
-			return Y_HOOKS_CONTINUE_RETURN_0;
-
 		new
 			amount,
-			str[11];
+			str[16];
 
 		GetItemExtraData(itemid, amount);
-		format(str, sizeof(str), "%d", amount);
+		format(str, sizeof(str),  "%d%", amount);
 		
 		SetItemNameExtra(itemid, str);
 	}
@@ -88,6 +86,8 @@ hook OnPlayerShootPlayer(playerid, targetid, bodypart, Float:bleedrate, Float:kn
 
 			DMG_FIREARM_SetBleedRate(targetid, bleedrate);
 		}
+		else if(IsValidItem(arm_PlayerArmourItem[playerid]))
+			DestroyItem(RemovePlayerArmourItem(playerid));
 	}
 
 	return Y_HOOKS_CONTINUE_RETURN_0;
@@ -109,6 +109,12 @@ stock SetPlayerArmourItem(playerid, Item:itemid)
 
 	RemoveItemFromWorld(itemid);
 	RemoveCurrentItem(GetItemHolder(itemid));
+
+	if(IsValidItem(arm_PlayerArmourItem[playerid]))
+	{
+		GiveWorldItemToPlayer(playerid, arm_PlayerArmourItem[playerid]);
+	}
+
 	arm_PlayerArmourItem[playerid] = itemid;
 
 	return 1;

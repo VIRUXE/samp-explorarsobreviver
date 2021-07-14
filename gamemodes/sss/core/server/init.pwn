@@ -478,7 +478,7 @@ ItemType:		item_BandanaBlue	= INVALID_ITEM_TYPE,
 ItemType:		item_BandanaGrey	= INVALID_ITEM_TYPE,
 // 300
 ItemType:		item_BandanaWhite	= INVALID_ITEM_TYPE,
-ItemType:		item_BandanaPattern	= INVALID_ITEM_TYPE,
+ItemType:		item_BandanaPat		= INVALID_ITEM_TYPE,
 ItemType:		item_Cuntainer		= INVALID_ITEM_TYPE,
 ItemType:		item_RedCrate		= INVALID_ITEM_TYPE,
 ItemType:		item_MetalGate1		= INVALID_ITEM_TYPE,
@@ -488,8 +488,8 @@ ItemType:		item_LaserPointP	= INVALID_ITEM_TYPE,
 ItemType:		item_LaserPointG	= INVALID_ITEM_TYPE,
 ItemType:		item_Barrel			= INVALID_ITEM_TYPE,
 // 310
-ItemType:		item_CluBellHat1 	= INVALID_ITEM_TYPE,
-ItemType:		item_Balaclava		= INVALID_ITEM_TYPE,
+ItemType:		item_CluBellMask 	= INVALID_ITEM_TYPE,
+ItemType:		item_BalaclavaMask		= INVALID_ITEM_TYPE,
 ItemType:		item_FireHelmet		= INVALID_ITEM_TYPE,
 ItemType:		item_FireHelmet1	= INVALID_ITEM_TYPE,
 ItemType:		item_HeadPhones		= INVALID_ITEM_TYPE,
@@ -501,7 +501,10 @@ ItemType:		item_CapBack2		= INVALID_ITEM_TYPE,
 // 320
 ItemType:		item_CapBack1		= INVALID_ITEM_TYPE,
 ItemType:		item_Map			= INVALID_ITEM_TYPE,
-ItemType:		item_Bed			= INVALID_ITEM_TYPE;
+ItemType:		item_Bed			= INVALID_ITEM_TYPE,
+ItemType:		item_Clock			= INVALID_ITEM_TYPE,
+ItemType:		item_MaskGreen		= INVALID_ITEM_TYPE,
+ItemType:		item_MaskRed		= INVALID_ITEM_TYPE;
 
 
 
@@ -656,12 +659,12 @@ public OnScriptInit()
 	item_ArmyHelmet2	= DefineItemType("Capacete Militar",			"ArmyHelmet2",		19102,	1,	0.0, 0.0, 0.0,			0.0,	0.062216, 0.055396, 0.001138, 90.000000, 0.000000, 0.000000, .maxhitpoints = 1);
 	item_AutoInjec		= DefineItemType("Seringa",						"AutoInjec",		2711,	1,	90.0, 0.0, 0.0,			0.028,	0.145485, 0.020127, 0.034870, 0.000000, 260.512817, 349.967254, .maxhitpoints = 1);
 	item_Backpack		= DefineItemType("Mochila",						"Backpack",			3026,	4,	270.0, 0.0, 90.0,		0.0,	0.470918, 0.150153, 0.055384, 181.319580, 7.513789, 163.436065, .maxhitpoints = 4);
-    item_Balaclava		= DefineItemType("Mascarade Ladrao",			"Balaclava",		19801,	1,	0.0, 0.0, 0.0,			0.0,	0.062216, 0.055396, 0.001138, 90.000000, 0.000000, 0.000000, .maxhitpoints = 1);
+    item_BalaclavaMask		= DefineItemType("Mascara de Ladrao",			"BalaclavaMask",		19801,	1,	0.0, 0.0, 0.0,			0.0,	0.062216, 0.055396, 0.001138, 90.000000, 0.000000, 0.000000, .maxhitpoints = 1);
 	item_Banana			= DefineItemType("Banana",						"Banana",			19578,	1,	0.0, 0.0, 0.0,			0.000,	0.059000, 0.017998, 0.026000,  86.399932, -161.300003, 83.699714, .maxhitpoints = 1);
 	item_Bandage		= DefineItemType("Bandagem Suja",				"Bandage",			11747,	2,	90.0, 0.0, 0.0,			0.0,	0.076999, 0.059000, 0.000000,  2.799999, -5.600000, 0.000000, .maxhitpoints = 2);
 	item_BandanaBlue	= DefineItemType("Bandana",						"BandanaBl",		18917,	1,	0.0, 0.0, 0.0,			0.0,	0.095999, 0.064999, 0.000000, -1.300025, -67.899948, -92.999908);
 	item_BandanaGrey	= DefineItemType("Bandana",						"BandanaGr",		18918,	1,	0.0, 0.0, 0.0,			0.0,	0.095999, 0.064999, 0.000000, -1.300025, -67.899948, -92.999908);
-	item_BandanaPattern	= DefineItemType("Bandana",						"BandanaPat",		18920,	1,	0.0, 0.0, 0.0,			0.0,	0.095999, 0.064999, 0.000000, -1.300025, -67.899948, -92.999908);
+	item_BandanaPat		= DefineItemType("Bandana",						"BandanaPat",		18920,	1,	0.0, 0.0, 0.0,			0.0,	0.095999, 0.064999, 0.000000, -1.300025, -67.899948, -92.999908);
 	item_BandanaWhite	= DefineItemType("Bandana",						"BandanaWh",		18919,	1,	0.0, 0.0, 0.0,			0.0,	0.095999, 0.064999, 0.000000, -1.300025, -67.899948, -92.999908);
 	item_Barbecue		= DefineItemType("Churrasqueira",				"Barbecue",			19831,	6,	0.0, 0.0, 0.0,			-0.0313,0.321000, -0.611000, 0.084999,  66.000007, -163.699981, 80.899917, true, .maxhitpoints = 6);
 	item_Barrel			= DefineItemType("Barril",						"Barrel",			3632,	11,	0.0, 0.0, 0.0,			0.436,	0.087982,0.433165,-0.365849,-113.044448,-3.981883,-90.387023, true, .maxhitpoints = 1);
@@ -704,7 +707,7 @@ public OnScriptInit()
 	item_Chainsaw		= DefineItemType("Moto-serra",					"Chainsaw",			341,	5,	90.0, .maxhitpoints = 5);
 	item_Champagne		= DefineItemType("Champanhe",					"Champagne",		19824,	1,	0.0, 0.0, 0.0,			0.0,	0.132000, 0.041000, -0.346999,  -178.499954, -170.700210, -10.200168, .maxhitpoints = 1);
 	item_Clothes		= DefineItemType("Roupas",						"Clothes",			2891,	2,	0.0, 0.0, 0.0,			0.0,	0.269091, 0.166367, 0.000000, 90.000000, 0.000000, 0.000000, .maxhitpoints = 2);
-	item_CluBellHat1 	= DefineItemType("Mascara",						"CluckinBellHat1",	19137,	1,	180.0, 0.0, 0.0,		0.0,	0.062216, 0.055396, 0.001138, 90.000000, 0.000000, 180.000000, .maxhitpoints = 1);
+	item_CluBellMask 	= DefineItemType("Mascara",						"CluBellMask",	    19137,	1,	180.0, 0.0, 0.0,		0.0,	0.062216, 0.055396, 0.001138, 90.000000, 0.000000, 180.000000, .maxhitpoints = 1);
 	item_CodePart		= DefineItemType("Codigo",						"CodePart",			1898,	1,	90.0, 0.0, 0.0,			0.02,	0.086999, 0.017999, 0.075999,  0.000000, 0.000000, 100.700019, .maxhitpoints = 1);
 	item_Computer		= DefineItemType("Computador",					"Computer",			1719,	2,	0.0, 0.0, 0.0,			0.0251);
 	item_ControlBox		= DefineItemType("Caixa de Controle",			"ControlBox",		1958,	2,	0.0, 0.0, 0.0,			0.0211);
@@ -765,7 +768,7 @@ public OnScriptInit()
 	item_GolfClub		= DefineItemType("Taco de Golfe",				"GolfClub",			333,	3,	90.0, .maxhitpoints = 3);
 	item_GreenGloop		= DefineItemType("Desconhecido",				"GreenGloop",		2976,	3,	0.0, 0.0, 0.0,			0.0,	0.063387, 0.013771, -0.595982, 341.793945, 352.972686, 226.892105, true, .maxhitpoints = 3);
 	item_Grenade		= DefineItemType("Granada",						"Grenade",			342,	2,	90.0, .maxhitpoints = 2);
-	item_GrnApple		= DefineItemType("Marca Verde",					"GrnApple",			19576,	1,	0.0, 0.0, 0.0,			0.03,	0.107000, 0.039000, 0.014999,  -168.799911, -161.400177, -0.400169, .maxhitpoints = 1);
+	item_GrnApple		= DefineItemType("Maca Verde",					"GrnApple",			19576,	1,	0.0, 0.0, 0.0,			0.03,	0.107000, 0.039000, 0.014999,  -168.799911, -161.400177, -0.400169, .maxhitpoints = 1);
 	item_GunCase		= DefineItemType("Gun Case",					"GunCase",			2046,	12,	0.0, 0.0, 0.0,			0.5, .maxhitpoints = 12, .longpickup = true);
 	item_Gyroscope		= DefineItemType("Giroscopio",					"Gyroscope",		1945,	1,	0.0, 0.0, 0.0,			0.0,	0.180000, 0.085000, 0.009000,  -86.099967, -112.099975, 92.699890, .maxhitpoints = 1);
 	item_HackDevice		= DefineItemType("Hack Interface",				"HackDevice",		364,	1,	0.0, 0.0, 0.0,			0.0,	0.134000, 0.080000, -0.037000,  84.299949, 3.399998, 9.400002, .maxhitpoints = 1);
@@ -779,7 +782,7 @@ public OnScriptInit()
 	item_Heatseeker		= DefineItemType("Heatseeker",					"Heatseeker",		360,	6,	90.0, .maxhitpoints = 6);
 	item_HelmArmy		= DefineItemType("Capacete Militar",			"HelmArmy",			19106,	2,	345.0, 270.0, 0.0,		0.045,	0.184999, -0.007999, 0.046999, 94.199989, 22.700027, 4.799994, .maxhitpoints = 2);
 	item_HerpDerp		= DefineItemType("Unidade de Derp",				"HerpDerp",			19513,	1,	0.0, 0.0, 0.0,			0.0,	0.103904, -0.003697, -0.015173, 94.655189, 184.031860, 0.000000, .maxhitpoints = 1);
-	item_HockeyMask		= DefineItemType("Hockey Mask",					"HockeyMask",		19036,	1,	0.0, 0.0, 0.0,			0.082,	0.221075, 0.067746, 0.037494, 87.375968, 305.182189, 5.691741, .maxhitpoints = 1);
+	item_HockeyMask		= DefineItemType("Mascara de Hoquei",			"HockeyMask",		19036,	1,	0.0, 0.0, 0.0,			0.082,	0.221075, 0.067746, 0.037494, 87.375968, 305.182189, 5.691741, .maxhitpoints = 1);
 	item_Sandbag		= DefineItemType("Saco",						"Sandbag",			2060,	4,	0.0, 0.0, 0.0,			0.113,	0.069000,0.111000,-0.236999,71.899986,178.399810,84.899848, true, .longpickup = true, .maxhitpoints = 4);
 	item_HotDog			= DefineItemType("Cachorro Quente",				"HotDog",			19346,	1,	0.0, 0.0, 0.0,			0.0,	0.088718, 0.035828, 0.008570, 272.851745, 354.704772, 9.342185, .maxhitpoints = 1);
 	item_IceCream		= DefineItemType("Gelado",						"IceCream",			19568,	1,	0.0, 0.0, 0.0,			0.0308,	0.233000, 0.152999, 0.056999,  95.200012, -3.199998, 11.200000, .maxhitpoints = 1);
@@ -790,7 +793,7 @@ public OnScriptInit()
 	item_IedTimebomb	= DefineItemType("DEI Temporizado",				"IedTimebomb",		2033,	2,	0.0, 0.0, 0.0,			0.0,	0.100000, 0.055999, 0.000000,  -86.099967, -112.099975, 100.099891, .maxhitpoints = 1);
 	item_IedTripMine	= DefineItemType("DEI de Mina",					"IedTripMine",		2033,	2,	0.0, 0.0, 0.0,			0.0,	0.100000, 0.055999, 0.000000,  -86.099967, -112.099975, 100.099891, .maxhitpoints = 1);
 	item_InsulDoor		= DefineItemType("Entrada Isolada",				"InsulDoor",		19398,	8,	0.0, 90.0, 0.0,			0.0,	-0.087714,1.606874,-0.771602,-111.012359,172.861953,-169.801147, true, .buttonz = ITEM_FLOOR_OFFSET / 8,  .maxhitpoints = 7);
-	item_InsulPanel		= DefineItemType("Painel Insulado",				"InsulPanel",		19371,	10,	0.0, 90.0, 0.0,			0.0,	-0.339715,1.431000,-0.739000,337.887634,170.962066,162.198867, true, .buttonz = ITEM_FLOOR_OFFSET / 8,  .maxhitpoints = 7);
+	item_InsulPanel		= DefineItemType("Painel Isolado",				"InsulPanel",		19371,	10,	0.0, 90.0, 0.0,			0.0,	-0.339715,1.431000,-0.739000,337.887634,170.962066,162.198867, true, .buttonz = ITEM_FLOOR_OFFSET / 8,  .maxhitpoints = 7);
 	item_IoUnit			= DefineItemType("Unidade de I/O",				"IoUnit",			19273,	1,	270.0, 0.0, 0.0,		0.0,	0.198234, 0.101531, 0.095477, 0.000000, 343.020019, 0.000000, .maxhitpoints = 1);
 	item_Ketchup		= DefineItemType("Ketchup",						"Ketchup",			11722,	1,	0.0, 0.0, 0.0,			-0.1,	0.100000, 0.077000, 0.041000,  4.400032, -2.300116, 138.699905, .maxhitpoints = 1);
 	item_Key			= DefineItemType("Chave",						"Key",				11746,	1,	90.0, 0.0, 0.0,			0.08,	0.059999,0.000000,0.073999,0.000000,77.300025,-152.099929,	.maxhitpoints = 1);
@@ -955,10 +958,12 @@ public OnScriptInit()
 	item_Wrench			= DefineItemType("Chave de Roda",				"Wrench",			18633,	2,	0.0, 90.0, 0.0,			0.0,	0.084695, -0.009181, 0.152275, 98.865089, 270.085449, 0.000000, .maxhitpoints = 2);
 	item_XmasHat		= DefineItemType("Chapeu de Natal",				"XmasHat",			19066,	1,	0.0, 0.0, 0.0,			0.0,	0.135000, -0.018001, -0.002000,  90.000000, 174.500061, 9.600001, .maxhitpoints = 1);
 	item_ZorroMask		= DefineItemType("Mascara de Zorro",			"ZorroMask",		18974,	1,	0.0, 0.0, 0.0,			0.0,	0.193932, 0.050861, 0.017257, 90.000000, 0.000000, 0.000000, .maxhitpoints = 1);
+	item_Clock			= DefineItemType("Relogio",						"Clock",			2710,	1,	0.0, 0.0, 0.0,			0.0,	0.193932, 0.050861, 0.017257, 90.000000, 0.000000, 0.000000, .maxhitpoints = 1);
+	item_MaskRed		= DefineItemType("Mascara de Hoquei",			"RHockeyMask",		19037,	1,	0.0, 0.0, 0.0,			0.082,	0.221075, 0.067746, 0.037494, 87.375968, 305.182189, 5.691741, .maxhitpoints = 1);
+    item_MaskGreen		= DefineItemType("Mascara de Hoquei",			"GHockeyMask",		19038,	1,	0.0, 0.0, 0.0,			0.082,	0.221075, 0.067746, 0.037494, 87.375968, 305.182189, 5.691741, .maxhitpoints = 1);
 
 
 	// SETTING ITEM TYPE SCRAP VALUE
-
 	SetItemTypeScrapValue(item_Accelerometer,	1);
 	SetItemTypeScrapValue(item_AdvancedKeypad,	1);
 	SetItemTypeScrapValue(item_Ammo308,			1);

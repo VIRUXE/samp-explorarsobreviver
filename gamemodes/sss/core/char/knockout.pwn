@@ -122,7 +122,11 @@ stock WakeUpPlayer(playerid)
 	knockout_KnockedOut[playerid] = false;
 	knockout_InVehicleID[playerid] = INVALID_VEHICLE_ID;
 	knockout_InVehicleSeat[playerid] = -1;
+	defer ResyncWakeUp(playerid);
 }
+
+timer ResyncWakeUp[500](playerid)
+	CancelPlayerMovement(playerid);
 
 timer KnockOutUpdate[100](playerid)
 {

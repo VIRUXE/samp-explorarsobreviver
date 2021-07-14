@@ -140,7 +140,7 @@ stock SetItemToExplode(Item:itemid)
 
 	if(!isnull(parenttype))
 	{
-		if(!strcmp(parenttype, "containerid"))
+		if(!strcmp(parenttype, "containerid") && IsValidContainer(Container:parent))
 		{
 			DestroyContainer(Container:parent);
 		}

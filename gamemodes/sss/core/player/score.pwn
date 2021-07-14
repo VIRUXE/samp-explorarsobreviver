@@ -27,6 +27,9 @@ ptask UpdatePlayerScore[60000](playerid)
 	if(IsPlayerUnfocused(playerid))
 		return;
 
+	if(IsPlayerRaidBlock(playerid))
+		return;
+
 	SetPlayerScore(playerid, GetPlayerScore(playerid) + 1);
 }
 

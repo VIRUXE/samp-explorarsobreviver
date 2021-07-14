@@ -3,9 +3,8 @@
 hook OnGameModeInit(){
 	// 19801
 	new tmp;
-	tmp = DefineMaskItem(item_Balaclava);
+	tmp = DefineMaskItem(item_BalaclavaMask);
 
-	SetMaskOffsetsForSkin(tmp, 60, 0.070000, 0.013000, -0.001999, -179.200012, 90.999984, 0.000000, 1.138000, 1.235000, 1.190999);
 	SetMaskOffsetsForSkin(tmp, 60, 0.075999, 0.013000, -0.003999, 84.000038, 95.300003, 95.200004, 1.156000, 1.262000, 1.180999);
 	SetMaskOffsetsForSkin(tmp, 170, 0.075999, 0.013000, -0.003999, 84.000038, 95.300003, 95.200004, 1.156000, 1.262000, 1.180999);
 	SetMaskOffsetsForSkin(tmp, 250, 0.075999, 0.013000, -0.003999, 84.000038, 95.300003, 95.200004, 1.156000, 1.262000, 1.180999);

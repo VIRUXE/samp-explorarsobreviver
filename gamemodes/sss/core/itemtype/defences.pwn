@@ -323,6 +323,16 @@ DeconstructDefence(Item:itemid, playerid)
 
 ==============================================================================*/
 
+hook OnPlayerDroppedItem(playerid, Item:itemid)
+{
+	new ItemType:itemtype = GetItemType(itemid);
+	if(def_ItemTypeDefenceType[itemtype] != INVALID_DEFENCE_TYPE)
+	{
+		new Float:x, Float:y, Float:z;
+		GetPlayerPos(playerid, x, y, z);
+		SetItemPos(itemid, x, y, z - ITEM_FLOOR_OFFSET);
+	}
+}
 
 hook OnPlayerPickUpItem(playerid, Item:itemid)
 {
@@ -838,6 +848,8 @@ ConvertItemToDefenceItem(Item:itemid, pose, playerid)
 	SetItemArrayDataAtCell(itemid, _:z, def_buttonz);
 	SetButtonPos(buttonid, x, y, z);
 
+	_UpdateDefenceTweakArrow(playerid, itemid);
+	
 	return CallLocalFunction("OnDefenceCreate", "d", _:itemid);
 }
 
@@ -869,6 +881,8 @@ _UpdateDefenceTweakArrow(playerid, Item:itemid)
 		def_TweakArrow[playerid] = CreateDynamicObject(19133, x, y, z, 0.0, 0.0, 0.0, world, interior);
 		SetDynamicObjectMaterial(def_TweakArrow[playerid], 0, 10765, "airportgnd_sfse", "desgreengrass", 0xFF00FF00);
 		SetDynamicObjectMaterial(def_TweakArrow[playerid], 1, -1, "none", "none", 0xFF00FF00);
+		PlayerTextDrawShow(playerid, def_MoveTD[playerid][0]);
+		PlayerTextDrawShow(playerid, def_MoveTD[playerid][1]);
 	}
 		
 	new pose;
@@ -895,9 +909,6 @@ hook OnItemTweakUpdate(playerid, Item:itemid)
 {
 	if(def_TweakArrow[playerid] != INVALID_OBJECT_ID)
 	{
-		PlayerTextDrawShow(playerid, def_MoveTD[playerid][0]);
-		PlayerTextDrawShow(playerid, def_MoveTD[playerid][1]);
-		
 		_UpdateDefenceTweakArrow(playerid, itemid);
 		ShowActionText(playerid, "Movendo..", 1000);
 	}
@@ -1283,28 +1294,4 @@ stock GetDefenceType(Item:itemid)
 		return 0;
 
 	return def_ItemTypeDefenceType[GetItemType(itemid)];
-}
-
-// def_pose
-stock GetDefencePose(Item:itemid)
-{
-	return GetItemArrayDataAtCell(itemid, def_pose);
-}
-
-// def_motor
-stock GetDefenceMotor(Item:itemid)
-{
-	return GetItemArrayDataAtCell(itemid, def_motor);
-}
-
-// def_keypad
-stock GetDefenceKeypad(Item:itemid)
-{
-	return GetItemArrayDataAtCell(itemid, def_keypad);
-}
-
-// def_pass
-stock GetDefencePass(Item:itemid)
-{
-	return GetItemArrayDataAtCell(itemid, def_pass);
 }

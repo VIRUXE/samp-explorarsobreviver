@@ -568,9 +568,7 @@ Logout(playerid, docombatlogcheck = 1)
 
 	if(IsItemTypeBag(itemtype))
 	{
-		new Container:containerid;
-		GetItemArrayDataAtCell(itemid, _:containerid, 1);
-		if(!IsContainerEmpty(containerid))
+		if(!IsContainerEmpty(GetBagItemContainerID(itemid)))
 		{
 			if(IsValidItem(GetPlayerBagItem(playerid)))
 			{
@@ -679,7 +677,7 @@ SavePlayerData(playerid)
 	if(IsPlayerAlive(playerid) && !IsPlayerInTutorial(playerid))
 	{
 		dbg("accounts", 2, "[SavePlayerData] Player is alive");
-		if(IsAtDefaultPos(x, y, z))
+		if(IsAtConnectionPos(x, y, z))
 		{
 			dbg("accounts", 2, "[SavePlayerData] ERROR: Player at default position");
 			return 0;

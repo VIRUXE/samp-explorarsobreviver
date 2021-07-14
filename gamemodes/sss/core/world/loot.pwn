@@ -113,7 +113,7 @@ stock CreateStaticLootSpawn(Float:x, Float:y, Float:z, lootindex, Float:weight, 
 
 	loot_SpawnData[lootspawnid][loot_posX] = x;
 	loot_SpawnData[lootspawnid][loot_posY] = y;
-	loot_SpawnData[lootspawnid][loot_posZ] = z;
+	loot_SpawnData[lootspawnid][loot_posZ] = z + 0.1;
 	loot_SpawnData[lootspawnid][loot_world] = worldid;
 	loot_SpawnData[lootspawnid][loot_interior] = interiorid;
 	loot_SpawnData[lootspawnid][loot_weight] = weight;
@@ -172,9 +172,6 @@ stock CreateStaticLootSpawn(Float:x, Float:y, Float:z, lootindex, Float:weight, 
 			y,
 			z + 0.1, .rz = frandom(360.0), .world = worldid, .interior = interiorid);
 
-		
-		defer RespawnItem(_:itemid, x, y, z, lootindex, worldid, interiorid);
-
 		loot_SpawnData[lootspawnid][loot_items][loot_SpawnData[lootspawnid][loot_total]] = itemid;
 		loot_SpawnData[lootspawnid][loot_total]++;
 	}
@@ -182,83 +179,91 @@ stock CreateStaticLootSpawn(Float:x, Float:y, Float:z, lootindex, Float:weight, 
 	return loot_SpawnTotal++;
 }
 
-timer RespawnItem[ITEM_RESPAWN_DELAY](itemid, Float:x, Float:y, Float:z, lootindex, worldid, interiorid){
-	if(!IsValidItem(Item:itemid) || !IsItemInWorld(Item:itemid))
-		itemid = _:CreateLootItem(lootindex, x, y, z, worldid, interiorid);
+/*==============================================================================
 
-	else {
-		new Float:tx, Float:ty, Float:tz;
-		GetItemPos(Item:itemid, tx, ty, tz);
+	Automatic item respawn
 
-		if(Distance(x, y, z, tx, ty, tz) < 2.5)
-			DestroyItem(Item:itemid);
-
-		itemid = _:CreateLootItem(lootindex, x, y, z, worldid, interiorid);
-	}
-
-	defer RespawnItem(_:itemid, x, y, z, lootindex, worldid, interiorid);
-}
+==============================================================================*/
 
 new Timer:DestroyUItem[MAX_ITEM];
 
 hook OnPlayerDroppedItem(playerid, Item:itemid)
 {	
-	new Float:tx, Float:ty, Float:tz;
-	GetItemPos(Item:itemid, tx, ty, tz);
 	stop DestroyUItem[itemid];
-	DestroyUItem[itemid] = defer DestroyUntilItem(_:itemid, tx, ty, tz);
+	DestroyUItem[itemid] = defer DestroyUntilItem(_:itemid);
 	return Y_HOOKS_CONTINUE_RETURN_0;
 }
 
+hook OnItemAddToContainer(Container:containerid, Item:itemid, playerid)
+	loot_ItemLootIndex[itemid] = -1;
+
 hook OnItemRemoveFromWorld(Item:itemid)
 {
+	if(loot_ItemLootIndex[itemid] != -1){
+		new 
+			Float:x, Float:y, Float:z,
+			world, interior;
+
+		GetItemPos(itemid, x, y, z);
+		GetItemWorld(itemid, world);
+		GetItemInterior(itemid, interior);
+
+		defer RespawnItem(loot_ItemLootIndex[itemid], x, y, z, world, interior);
+	}
+
 	loot_ItemLootIndex[itemid] = -1;
 	stop DestroyUItem[itemid];
 }
 
+timer RespawnItem[ITEM_RESPAWN_DELAY](lootindex, Float:x, Float:y, Float:z, worldid, interiorid)
+	CreateLootItem(lootindex, x, y, z, worldid, interiorid);
+
 hook OnItemDestroyed(Item:itemid)
 	stop DestroyUItem[itemid];
 
-timer DestroyUntilItem[ITEM_RESPAWN_DELAY - 3600000](itemid, Float:x, Float:y, Float:z)
+timer DestroyUntilItem[ITEM_RESPAWN_DELAY % 80](_itemid)
 {
-	if(!IsValidItem(Item:itemid) || !IsItemInWorld(Item:itemid))
+	new Item:itemid = Item:_itemid;
+
+	if(!IsValidItem(itemid) || !IsItemInWorld(itemid))
 		return;
 
+	new Float:x, Float:y, Float:z;
+	GetItemPos(itemid, x, y, z);
+	
 	foreach(new i : Player)
 	{
 		if(IsPlayerInRangeOfPoint(i, 20.0, x, y, z))
 		{
-			DestroyUItem[Item:itemid] = defer DestroyUntilItem(_:itemid, x, y, z);
+			DestroyUItem[itemid] = defer DestroyUntilItem(_:itemid);
 			return;
 		}
 	}
 
-	if(IsItemTypeSafebox(GetItemType(Item:itemid)))
-	{
+	new ItemType:type = GetItemType(itemid);
+
+	if(IsItemTypeSafebox(type)){
 		new Container:containerid;
-		GetItemArrayDataAtCell(Item:itemid, _:containerid, 0);
+		GetItemArrayDataAtCell(itemid, _:containerid, 0);
 		if(!IsContainerEmpty(containerid))
 			return;
 	}
 
-	if(IsItemTypeDefence(GetItemType(Item:itemid))){
+	if(IsItemTypeDefence(type)){
 		new bool:active;
-		GetItemArrayDataAtCell(Item:itemid, active, 0);
+		GetItemArrayDataAtCell(itemid, active, 0);
 		if(active)
 			return;
 	}
 
-	if(GetItemType(Item:itemid) == item_TentPack){
+	if(type == item_TentPack){
 		new tentid;
-		GetItemExtraData(Item:itemid, tentid);
+		GetItemExtraData(itemid, tentid);
 		if(IsValidTent(tentid))
 			return;
 	}
 
-	new Float:tx, Float:ty, Float:tz;
-	GetItemPos(Item:itemid, tx, ty, tz);
-	if(tx == x && ty == y && tz == z)
-		DestroyItem(Item:itemid);
+	DestroyItem(itemid);
 
 	return;
 }
@@ -314,9 +319,6 @@ stock FillContainerWithLoot(Container:containerid, slots, lootindex)
 		return -1;
 	}
 
-	if(!IsValidContainer(containerid))
-		return -1;
-
 	new containersize;
 	GetContainerSize(containerid, containersize);
 
@@ -343,7 +345,6 @@ stock FillContainerWithLoot(Container:containerid, slots, lootindex)
 	while(items < slots && samplelistsize > 0 && freeslots > 0)
 	{
 		// Generate an item from the sample list
-
 		if(!_loot_PickFromSampleList(samplelist, samplelistsize, itemtype))
 			continue;
 
@@ -360,13 +361,21 @@ stock FillContainerWithLoot(Container:containerid, slots, lootindex)
 		}
 
 		// Create the item
-		itemid = CreateLootItem(lootindex);
-		if(IsValidItem(itemid))
+		itemid = GetNextItemID();
+
+		if(!(Item:0 <= itemid < MAX_ITEM))
 		{
-			loot_ItemLootIndex[itemid] = lootindex;
-			AddItemToContainer(containerid, itemid, .call = false);
-			items++;
+			err("Item limit reached while generating loot.");
+			return -1;
 		}
+
+		loot_ItemLootIndex[itemid] = lootindex;
+
+		itemid = AllocNextItemID(itemtype);
+		AddItemToContainer(containerid, itemid);
+		CreateItem_ExplicitID(itemid);
+
+		items++;
 	}
 
 	return 1;

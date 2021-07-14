@@ -201,7 +201,7 @@ _LightBBQ(Item:itemid)
 
 timer bbq_FinishCooking[30000](itemid)
 {
-	if(!IsValidItem(Item:itemid))
+	if(!IsValidItem(Item:itemid) || !IsItemInWorld(Item:itemid))
 		return;
 
 	new data[e_BBQ_DATA];
@@ -214,6 +214,9 @@ timer bbq_FinishCooking[30000](itemid)
 	SetItemExtraData(data[bbq_grillItem1], 1);
 	SetItemExtraData(data[bbq_grillItem2], 1);
 
+	if(!IsValidItem(Item:itemid))
+		return;
+		
 	SetItemArrayDataAtCell(Item:itemid, data[bbq_fuel] - 1, bbq_fuel);
 	SetItemArrayDataAtCell(Item:itemid, COOKER_STATE_NONE, bbq_state);
 	return;

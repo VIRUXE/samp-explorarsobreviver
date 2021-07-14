@@ -106,9 +106,11 @@ world_civilian, 1.0
 5.0,    BandanaPat
 7.0,    GasMask
 3.0,    HockeyMask
+1.0,    RHockeyMask
+1.0,    GHockeyMask
 1.0,    DevilMask
-5.0,    CluckinBellHat1
-5.0,    Balaclava
+5.0,    CluBellMask
+1.0,    BalaclavaMask
 8.0,    TruckCap
 7.0,    BoaterHat
 7.0,    BowlerHat
@@ -116,7 +118,7 @@ world_civilian, 1.0
 0.5,    XmasHat
 6.0,    PizzaHat
 4.0,    WitchesHat
-8.0,    StrawHat
+2.0,    StrawHat
 8.0,    FireHelmet
 8.0,    FireHelmet1
 7.0,    HeadPhones
@@ -124,7 +126,7 @@ world_civilian, 1.0
 # crafting, construction and base stuff
 10.0,	Motor
 12.0,	SeedBag
-23.0,	TentPack
+8.0,	TentPack
 35.0,	PlantPot
 47.0,	Battery
 40.0,	MobilePhone
@@ -153,9 +155,9 @@ world_civilian, 1.0
 0.1,	CakeSlice
 1.0,	Boot
 1.0,	Cross
-0.5,	WoodLog
+3.0,	WoodLog
 1.0,	Flashlight
-0.65,	LaserPointR
+1.65,	LaserPointR
 0.2,	LaserPointB
 0.2,	LaserPointY
 0.2,	LaserPointG
@@ -163,3 +165,4 @@ world_civilian, 1.0
 0.1,	HerpDerp
 1.0,	Flag
 0.1,	EasterEgg
+2.0,    Dice

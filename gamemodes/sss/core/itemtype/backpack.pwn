@@ -118,8 +118,7 @@ stock GivePlayerBag(playerid, Item:itemid)
 		GetItemArrayDataSize(itemid, size);
 
 		if(size < 2)
-			return 0;
-
+			SetItemArrayDataSize(itemid, 2);
 
 		new Container:containerid;
 		GetItemArrayDataAtCell(itemid, _:containerid, 1);
@@ -583,9 +582,9 @@ hook OnPlayerSelectInvOpt(playerid, option)
 		{
 			new
 				slot,
-				Item:itemid;
-			
-			new size;
+				Item:itemid,
+				size;
+
 			GetItemArrayDataSize(bag_PlayerBagID[playerid], size);
 
 			if(size < 2)
@@ -605,7 +604,7 @@ hook OnPlayerSelectInvOpt(playerid, option)
 
 			if(required > 0)
 				ShowActionText(playerid, sprintf(ls(playerid, "BAGEXTRASLO", true), required), 3000, 150);
-				
+
 			DisplayPlayerInventory(playerid);
 		}
 	}
@@ -664,8 +663,8 @@ hook OnPlayerSelectCntOpt(playerid, Container:containerid, option)
 
 						if(required > 0)
 							ShowActionText(playerid, sprintf(ls(playerid, "BAGEXTRASLO", true), required), 3000, 150);
-						//else
-							//RemoveItemFromContainer(containerid, slot, playerid, true);
+						else
+							RemoveItemFromContainer(containerid, slot, playerid, true);
 
 						DisplayContainerInventory(playerid, containerid);
 						return Y_HOOKS_BREAK_RETURN_1;

@@ -38,6 +38,7 @@ Item:	cons_DeconstructingItem[MAX_PLAYERS] = {INVALID_ITEM_ID, ...},
 
 forward OnPlayerConstruct(playerid, consset);
 forward OnPlayerConstructed(playerid, consset, result);
+forward OnPlayerDeconstruct(playerid, Item:itemid);
 forward OnPlayerDeconstructed(playerid, Item:itemid);
 
 
@@ -215,16 +216,23 @@ hook OnPlayerUseItemWithItem(playerid, Item:itemid, Item:withitemid)
 
 StartRemovingConstructedItem(playerid, Item:itemid, CraftSet:craftset)
 {
-	new
-		ItemType:result,
-		uniqueid[MAX_ITEM_NAME];
-	GetCraftSetResult(craftset, result);
-	GetItemTypeName(result, uniqueid);
-	StartHoldAction(playerid, GetPlayerSkillTimeModifier(playerid, cons_Data[cons_CraftsetConstructSet[craftset]][cons_removalTime], uniqueid));
-	ApplyAnimation(playerid, "BOMBER", "BOM_Plant_Loop", 4.0, 1, 0, 0, 0, 0, 1);
-	ShowActionText(playerid, ls(playerid, "DECONSTRUCT", true));
-	cons_Deconstructing[playerid] = craftset;
-	cons_DeconstructingItem[playerid] = itemid;
+	if(cons_Deconstructing[playerid] != INVALID_CRAFTSET)
+	{
+		StopRemovingConstructedItem(playerid);
+	} 
+	else if(!CallLocalFunction("OnPlayerDeconstruct", "dd", playerid, _:itemid))
+	{
+		new
+			ItemType:result,
+			uniqueid[MAX_ITEM_NAME];
+		GetCraftSetResult(craftset, result);
+		GetItemTypeName(result, uniqueid);
+		StartHoldAction(playerid, GetPlayerSkillTimeModifier(playerid, cons_Data[cons_CraftsetConstructSet[craftset]][cons_removalTime], uniqueid));
+		ApplyAnimation(playerid, "BOMBER", "BOM_Plant_Loop", 4.0, 1, 0, 0, 0, 0, 1);
+		ShowActionText(playerid, ls(playerid, "DECONSTRUCT", true));
+		cons_Deconstructing[playerid] = craftset;
+		cons_DeconstructingItem[playerid] = itemid;
+	}
 }
 
 StopRemovingConstructedItem(playerid)
@@ -321,13 +329,11 @@ hook OnHoldActionFinish(playerid)
 			dbg("craft-construct", 2, "[OnHoldActionFinish] OnPlayerDeconstructed returned zero, destroying item and returning ingredients");
 
 			new
-				Float:x,
-				Float:y,
-				Float:z,
+				Float:x, Float:y, Float:z,
 				recipedata[CRAFT_MAX_CRAFT_SET_ITEMS][e_craft_item_data],
 				recipeitems;
 
-			GetItemPos(cons_DeconstructingItem[playerid], x, y, z);
+			GetPlayerPos(playerid, x, y, z);
 
 			DestroyItem(cons_DeconstructingItem[playerid]);
 
@@ -344,7 +350,7 @@ hook OnHoldActionFinish(playerid)
 				new world, interior;
 				GetItemWorld(cons_DeconstructingItem[playerid], world);
 				GetItemInterior(cons_DeconstructingItem[playerid], interior);
-				CreateItem(recipedata[i][craft_itemType], x + frandom(0.6), y + frandom(0.6), z, 0.0, 0.0, frandom(360.0), world, interior);
+				CreateItem(recipedata[i][craft_itemType], x + frandom(0.6), y + frandom(0.6), z - ITEM_FLOOR_OFFSET, 0.0, 0.0, frandom(360.0), world, interior);
 			}
 
 			StopRemovingConstructedItem(playerid);

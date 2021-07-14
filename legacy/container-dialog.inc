@@ -311,9 +311,7 @@ _container_displayOptions(playerid, slotid) {
 					format(str, sizeof(str), "Requer %d slots no inventario", required);
 					ShowActionText(playerid, str, 3000, 150);
 				} else if(required == 0) {
-					new slot;
-					GetItemContainerSlot(itemid, slot);
-					RemoveItemFromContainer(cnt_CurrentContainer[playerid], slot, playerid);
+					RemoveItemFromContainer(cnt_CurrentContainer[playerid], cnt_SelectedSlot[playerid], playerid);
 				}
 
 				DisplayContainerInventory(playerid, cnt_CurrentContainer[playerid]);
@@ -323,8 +321,8 @@ _container_displayOptions(playerid, slotid) {
 			case 2: {
 				if(GetPlayerItem(playerid) == INVALID_ITEM_ID) {
 					new
-					Item:itemid,
-					ret;
+						Item:itemid,
+						ret;
 
 					ret = GetContainerSlotItem(cnt_CurrentContainer[playerid], cnt_SelectedSlot[playerid], itemid);
 					if(ret) {
@@ -335,16 +333,12 @@ _container_displayOptions(playerid, slotid) {
 						return 1;
 					}
 
-					if(!IsValidItem(itemid)) {
-						DisplayContainerInventory(playerid, cnt_CurrentContainer[playerid]);
-						return 0;
-					}
-
+					RemoveItemFromContainer(cnt_CurrentContainer[playerid], cnt_SelectedSlot[playerid], playerid);
 					GiveWorldItemToPlayer(playerid, itemid);
 					PlayerDropItem(playerid);
 					DisplayContainerInventory(playerid, cnt_CurrentContainer[playerid]);
 				} else {
-					ShowActionText(playerid, "Ja esta segurando algo", 3000, 200);
+					ShowActionText(playerid, "Voce ja esta segurando um item", 3000, 200);
 					DisplayContainerInventory(playerid, cnt_CurrentContainer[playerid]);
 				}
 			}
@@ -414,7 +408,8 @@ hook OnPlayerViewInvOpt(playerid) {
 
 		str = "Mover para ";
 		strcat(str, containerName);
-		cnt_InventoryOptionID[playerid] = AddInventoryOption(playerid, str);
+		// Temporary disable
+		//cnt_InventoryOptionID[playerid] = AddInventoryOption(playerid, str);
 	}
 
 	return Y_HOOKS_CONTINUE_RETURN_0;

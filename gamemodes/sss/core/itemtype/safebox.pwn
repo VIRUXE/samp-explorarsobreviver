@@ -3,9 +3,7 @@
 #include <YSI_Coding\y_hooks>
 
 
-#define MAX_SAFEBOX_TYPE	(13)
-#define MAX_SAFEBOX_NAME	(32)
-
+#define MAX_SAFEBOX_TYPE	(14)
 
 enum E_SAFEBOX_TYPE_DATA
 {
@@ -79,7 +77,7 @@ hook OnItemCreate(Item:itemid)
 		if(itemtype == box_TypeData[box_ItemTypeBoxType[itemtype]][box_itemtype])
 		{
 			new
-				name[MAX_ITEM_NAME],
+				name[MAX_ITEM_NAME + 2],
 				Container:containerid;
 
 			GetItemTypeName(itemtype, name);
@@ -127,8 +125,11 @@ hook OnItemDestroy(Item:itemid)
 			new Container:containerid;
 			GetItemArrayDataAtCell(itemid, _:containerid, 0);
 
-			DestroyContainer(containerid);
-			box_ContainerSafebox[containerid] = INVALID_ITEM_ID;
+			if(IsValidContainer(containerid))
+			{
+				DestroyContainer(containerid);
+				box_ContainerSafebox[containerid] = INVALID_ITEM_ID;
+			}
 		}
 	}
 
@@ -238,11 +239,9 @@ hook OnPlayerCloseContainer(playerid, Container:containerid)
 
 hook OnPlayerPickUpItem(playerid, Item:itemid)
 {
-	if(GetItemType(itemid) == ItemType:item_Torso)
-	{
+	if(GetItemType(itemid) == item_Torso)
 		return Y_HOOKS_BREAK_RETURN_1;
-	}
-	
+
 	return Y_HOOKS_CONTINUE_RETURN_1;
 }
 
@@ -284,13 +283,7 @@ stock IsItemTypeExtraDataDependent(ItemType:itemtype)
 	if(box_ItemTypeBoxType[itemtype] != -1)
 		return 1;
 
-	if(itemtype == item_Workbench)
-		return 1;
-
 	if(itemtype == item_Bed)
-		return 1;
-
-	if(itemtype == item_Torso)
 		return 1;
 
 	if(itemtype == item_Campfire)

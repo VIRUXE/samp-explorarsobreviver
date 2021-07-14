@@ -73,7 +73,7 @@ ReportBug(playerid, bug[])
 {
 	new bugStr[MAX_BUG_LENGTH+6];
 
-	format(bugStr, sizeof(bugStr), "**%P** reportou:\n```%s```", playerid, bug);
+	format(bugStr, sizeof(bugStr), "**%p** reportou:\n```%s```", playerid, bug);
 	DCC_SendChannelMessage(bug_DiscordChannel, bugStr);
 
 	stmt_bind_value(stmt_BugInsert, 0, DB::TYPE_PLAYER_NAME, playerid);

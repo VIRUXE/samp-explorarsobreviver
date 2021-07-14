@@ -153,11 +153,39 @@ hook OnPlayerGiveItem(playerid, targetid, Item:itemid){
 
 /*==============================================================================
 
-	Until function
+	Move itens
 	
 ==============================================================================*/
 
-/*hook OnMoveItemToInventory(playerid, Item:itemid, Container:containerid)
-	return Y_HOOKS_BREAK_RETURN_0;*/
+hook OnMoveItemToInventory(playerid, Item:itemid, Container:containerid){
+	return Y_HOOKS_BREAK_RETURN_0;
+}
 
+hook OnMoveItemToContainer(playerid, Item:itemid, Container:containerid){
+	return Y_HOOKS_BREAK_RETURN_0;
+}
 
+/*==============================================================================
+
+	View inventory in Vehicle
+	
+==============================================================================*/
+
+hook OnPlayerKeyStateChange(playerid, newkeys, oldkeys)
+	if( (newkeys == 2) && IsPlayerInAnyVehicle(playerid))
+			HideVehicleUI(playerid), DisplayPlayerInventory(playerid);
+
+hook OnPlayerCloseContainer(playerid, Container:containerid)
+	if(IsPlayerInAnyVehicle(playerid))
+		ShowVehicleUI(playerid, GetPlayerLastVehicle(playerid));
+
+hook OnPlayerCloseInventory(playerid)
+	if(IsPlayerInAnyVehicle(playerid))
+		ShowVehicleUI(playerid, GetPlayerLastVehicle(playerid));
+
+hook OnPlayerDropItem(playerid, Item:itemid){
+	if(IsPlayerInAnyVehicle(playerid))
+		return Y_HOOKS_BREAK_RETURN_1;
+		
+	return Y_HOOKS_CONTINUE_RETURN_0;
+}

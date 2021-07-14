@@ -21,7 +21,7 @@ Float:		hat_scaleZ
 
 new
 ItemType:	hat_ItemType[MAX_HAT_ITEMS],
-			hat_Data[MAX_HAT_ITEMS][312][E_HAT_SKIN_DATA],
+			hat_Data[MAX_HAT_ITEMS][313][E_HAT_SKIN_DATA],
 			hat_Total,
 			hat_ItemTypeHat[MAX_ITEM_TYPE] = {-1, ...},
 Item:		hat_CurrentHatItem[MAX_PLAYERS] = {INVALID_ITEM_ID, ...};

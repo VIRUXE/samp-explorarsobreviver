@@ -322,13 +322,7 @@ hook OnItemRemovedFromPlayer(playerid, Item:itemid)
 	return Y_HOOKS_CONTINUE_RETURN_0;
 }
 
-hook OnPlayerUnHolsterItem(playerid, Item:itemid)
-{
-	if(inv_GearActive[playerid])
-		UpdatePlayerGear(playerid);
-}
-
-hook OnPlayerUnHolsteredItem(playerid, Item:itemid)
+hook OnPlayerHolsteredItem(playerid, Item:itemid)
 {
 	if(inv_GearActive[playerid])
 		UpdatePlayerGear(playerid);
@@ -759,6 +753,7 @@ hook OnPlayerSelectCntOpt(playerid, Container:containerid, option)
 				}
 				else
 				{
+					RemoveItemFromContainer(containerid, slot, playerid);
 					DisplayContainerInventory(playerid, containerid);
 				}
 			}

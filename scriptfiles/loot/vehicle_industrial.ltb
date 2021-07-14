@@ -57,7 +57,7 @@ vehicle_industrial,	1.0
 1.1,	LaserPointP
 12.0,	Broom
 2.0,	Canister
-3.0,	WoodLog
+5.0,	WoodLog
 3.0,	Sledgehammer
 32.0,	Note
 5.0,	Boot

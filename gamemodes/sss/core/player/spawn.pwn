@@ -196,6 +196,8 @@ PlayerSpawnExistingCharacter(playerid)
 
 	CallLocalFunction("OnPlayerSpawnChar", "d", playerid);
 
+	Streamer_Update(playerid);
+
 	return 0;
 }
 
@@ -232,7 +234,6 @@ hook OnPlayerClickPlayerTD(playerid, PlayerText:playertextid)
 	else if(playertextid == ClassButtonFemale[playerid])
 		PlayerSpawnNewCharacter(playerid, GENDER_FEMALE);
 }
-
 
 
 hook OnPlayerClickTextDraw(playerid, Text:clickedid)
@@ -439,20 +440,4 @@ stock SetPlayerSpawnRot(playerid, Float:r)
 	spawn_RotZ[playerid] = r;
 
 	return 1;
-}
-
-IsAtDefaultPos(Float:x, Float:y, Float:z)
-{
-	if(-5.0 < (x - DEFAULT_POS_X) < 5.0 && -5.0 < (y - DEFAULT_POS_Y) < 5.0 && -5.0 < (z - DEFAULT_POS_Z) < 5.0)
-		return 1;
-
-	return 0;
-}
-
-IsAtConnectionPos(Float:x, Float:y, Float:z)
-{
-	if(1133.05 < x < 1133.059999 && -2038.40 < y < -2038.409999 && 69.09 < z < 69.099999)
-		return 1;
-
-	return 0;
 }
