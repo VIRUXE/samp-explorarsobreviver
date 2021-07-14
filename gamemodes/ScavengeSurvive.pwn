@@ -342,7 +342,6 @@ new stock
 #include "sss/utils/time.pwn"
 #include "sss/utils/camera.pwn"
 #include "sss/utils/chat.pwn"
-#include "sss/utils/discord.pwn"
 #include "sss/utils/vehicle.pwn"
 #include "sss/utils/vehicle-data.pwn"
 #include "sss/utils/vehicle-parts.pwn"
@@ -356,6 +355,7 @@ new stock
 
 // SERVER CORE
 #include "sss/core/server/settings.pwn"
+#include "sss/core/server/discord.pwn"
 #include "sss/core/server/text-tags.pwn"
 #include "sss/core/server/weather.pwn"
 #include "sss/core/server/save-block.pwn"

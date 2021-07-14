@@ -202,7 +202,7 @@ ShowFrequencyDialog(playerid)
 				if(MIN_RADIO_FREQ <= frequency <= MAX_RADIO_FREQ)
 				{
 					SetPlayerRadioFrequency(playerid, frequency);
-					log("%p updated frequency to %.2f", playerid, frequency);
+					log(false, "%p updated frequency to %.2f", playerid, frequency);
 					UpdateRadioUI(playerid);
 					UpdateRadioMarker(playerid);
 					rad_ChangeTick[playerid] = gettime() + 30;

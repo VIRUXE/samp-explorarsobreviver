@@ -82,7 +82,7 @@ stock DefineVehicleSpawnGroup(const name[])
 	if(veh_GroupTotal == MAX_VEHICLE_GROUP - 1)
 		return -1;
 
-	// log("Defining new vehicle spawn group %d: '%s'.", veh_GroupTotal, name);
+	// log(false, "Defining new vehicle spawn group %d: '%s'.", veh_GroupTotal, name);
 
 	strcat(veh_GroupName[veh_GroupTotal], name, MAX_VEHICLE_GROUP_NAME);
 
@@ -94,7 +94,7 @@ stock DefineVehicleType(modelid, const name[], group, category, size, Float:maxf
 	if(veh_TypeTotal == MAX_VEHICLE_TYPE - 1)
 		return -1;
 
-	// log("Defining new vehicle type %d: model %d, name '%s', group %d, category %d, size %d, maxfuel %f, fuelcons %f, lootindex %s, trunksize %d, spawnchance %f, flags %d",
+	// log(false, "Defining new vehicle type %d: model %d, name '%s', group %d, category %d, size %d, maxfuel %f, fuelcons %f, lootindex %s, trunksize %d, spawnchance %f, flags %d",
 	// 	veh_TypeTotal, modelid, name, group, category, size, maxfuel, fuelcons, lootindex, trunksize, spawnchance, flags);
 
 	veh_TypeData[veh_TypeTotal][veh_modelId] = modelid;
@@ -114,7 +114,7 @@ stock DefineVehicleType(modelid, const name[], group, category, size, Float:maxf
 
 stock PickRandomVehicleTypeFromGroup(group, const categories[], maxcategories, const sizes[], maxsizes)
 {
-	// log("[PickRandomVehicleTypeFromGroup] group: %d categories: %d sizes: %d", group, maxcategories, maxsizes);
+	// log(false, "[PickRandomVehicleTypeFromGroup] group: %d categories: %d sizes: %d", group, maxcategories, maxsizes);
 	new
 		idx,
 		cell,
@@ -133,7 +133,7 @@ stock PickRandomVehicleTypeFromGroup(group, const categories[], maxcategories, c
 
 		if(frandom(100.0) < veh_TypeData[i][veh_spawnChance])
 		{
-			// log("[PickRandomVehicleTypeFromGroup] Adding '%s' to list", veh_TypeData[i][veh_name]);
+			// log(false, "[PickRandomVehicleTypeFromGroup] Adding '%s' to list", veh_TypeData[i][veh_name]);
 			list[idx++] = i;
 		}
 	}

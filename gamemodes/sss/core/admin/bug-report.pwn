@@ -41,7 +41,7 @@ hook OnGameModeInit()
 	stmt_BugTotal	= db_prepare(gAccounts, "SELECT COUNT(*) FROM "ACCOUNTS_TABLE_BUGS"");
 	stmt_BugInfo	= db_prepare(gAccounts, "SELECT * FROM "ACCOUNTS_TABLE_BUGS" WHERE rowid = ? LIMIT 1");
 
-	bug_DiscordChannel = DCC_FindChannelByName("bugs");
+	bug_DiscordChannel = DCC_FindChannelById("861041187233464340");
 }
 
 
@@ -60,28 +60,21 @@ CMD:bug(playerid, params[])
 
 		if(response)
 		{
-			ReportBug(playerid, inputtext);
 			ChatMsgLang(playerid, YELLOW, "BUGREPORTSU");
+			ChatMsgAdmins(1, YELLOW, " » %P"C_YELLOW" reportou Bug: %s", playerid, inputtext);
+			SendDiscordMessage(bug_DiscordChannel, "**%p** reportou:\n```%s```", playerid, inputtext);
+
+			stmt_bind_value(stmt_BugInsert, 0, DB::TYPE_PLAYER_NAME, playerid);
+			stmt_bind_value(stmt_BugInsert, 1, DB::TYPE_STRING, inputtext, MAX_BUG_LENGTH);
+			stmt_bind_value(stmt_BugInsert, 2, DB::TYPE_INTEGER, gettime());
+			
+			if(!stmt_execute(stmt_BugInsert))
+				err("erro ao reportar bug: %p reportou %s", playerid, inputtext);
 		}
 	}
 	Dialog_ShowCallback(playerid, using inline Response, DIALOG_STYLE_INPUT, "Relatório de Bug", ls(playerid, "BUGREPORTDI"), "Submeter", "Cancelar");
 
 	return 1;
-}
-
-ReportBug(playerid, bug[])
-{
-	new bugStr[MAX_BUG_LENGTH+6];
-
-	format(bugStr, sizeof(bugStr), "**%p** reportou:\n```%s```", playerid, bug);
-	DCC_SendChannelMessage(bug_DiscordChannel, bugStr);
-
-	stmt_bind_value(stmt_BugInsert, 0, DB::TYPE_PLAYER_NAME, playerid);
-	stmt_bind_value(stmt_BugInsert, 1, DB::TYPE_STRING, bug, MAX_BUG_LENGTH);
-	stmt_bind_value(stmt_BugInsert, 2, DB::TYPE_INTEGER, gettime());
-
-	if(stmt_execute(stmt_BugInsert))
-		ChatMsgAdmins(1, YELLOW, " » %P"C_YELLOW" reportou Bug: %s", playerid, bug);
 }
 
 

@@ -1,18 +1,3 @@
-/*==============================================================================
-
-
-	Southclaws' Scavenge and Survive
-
-		Copyright (C) 2020 Barnaby "Southclaws" Keene
-
-		This Source Code Form is subject to the terms of the Mozilla Public
-		License, v. 2.0. If a copy of the MPL was not distributed with this
-		file, You can obtain one at http://mozilla.org/MPL/2.0/.
-
-
-==============================================================================*/
-
-
 #include <YSI_Coding\y_hooks>
 
 
@@ -56,9 +41,7 @@ FormatBanReasonDialog(playerid)
 			FormatBanDurationDialog(playerid);
 		}
 		else
-		{
 			ResetBanVariables(playerid);
-		}
 	}
 	Dialog_ShowCallback(playerid, using inline Response, DIALOG_STYLE_INPUT, "Please enter ban reason", "Enter the ban reason below. The character limit is 128. After this screen you can choose the ban duration.", "Continue", "Cancel");
 }
@@ -81,9 +64,7 @@ FormatBanDurationDialog(playerid)
 			new duration = GetDurationFromString(inputtext);
 
 			if(duration == -1)
-			{
 				FormatBanDurationDialog(playerid);
-			}
 			else
 			{
 				ban_CurrentDuration[playerid] = duration;
@@ -91,9 +72,7 @@ FormatBanDurationDialog(playerid)
 			}
 		}
 		else
-		{
 			FormatBanReasonDialog(playerid);
-		}
 	}
 	Dialog_ShowCallback(playerid, using inline Response, DIALOG_STYLE_INPUT, "Please enter ban duration", "Enter the ban duration below. You can type a number then one of either: 'days', 'weeks' or 'months'. Type 'forever' for perma-ban.", "Continue", "Back");
 
@@ -116,7 +95,7 @@ FinaliseBan(playerid)
 
 	ChatMsg(playerid, YELLOW, " » Banned "C_BLUE"%s", ban_CurrentName[playerid]);
 
-	log("[BAN] %p banned %s reason: %s", playerid, ban_CurrentName[playerid], ban_CurrentReason[playerid]);
+	log(true, "[BAN] %p banned %s reason: %s", playerid, ban_CurrentName[playerid], ban_CurrentReason[playerid]);
 
 	return 1;
 }

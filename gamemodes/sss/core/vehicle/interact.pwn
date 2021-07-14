@@ -93,33 +93,23 @@ hook OnPlayerLeaveDynArea(playerid, areaid)
 _vint_EnterArea(playerid, areaid)
 {
 	if(IsPlayerInAnyVehicle(playerid))
-	{
 		return;
-	}
 
 	if(!IsValidDynamicArea(areaid))
-	{
 		return;
-	}
 
 	if(Iter_Count(varea_NearIndex[playerid]) == MAX_VEHICLES_IN_RANGE)
-	{
 		return;
-	}
 
 	new data[2];
 
 	Streamer_GetArrayData(STREAMER_TYPE_AREA, areaid, E_STREAMER_EXTRA_ID, data, 2);
 
 	if(data[0] != VEH_STREAMER_AREA_IDENTIFIER)
-	{
 		return;
-	}
 
 	if(!IsValidVehicle(data[1]))
-	{
 		return;
-	}
 
 	new bool:exists = false;
 
@@ -147,7 +137,7 @@ _vint_EnterArea(playerid, areaid)
 	}
 	else
 	{
-		log("Vehicle %d already in NearList for player %d", data[1], playerid);
+		log(true, "Vehicle %d already in NearList for player %d", data[1], playerid);
 	}
 
 	CallLocalFunction("OnPlayerEnterVehArea", "dd", playerid, data[1]);
@@ -158,33 +148,23 @@ _vint_EnterArea(playerid, areaid)
 _vint_LeaveArea(playerid, areaid)
 {
 	if(IsPlayerInAnyVehicle(playerid))
-	{
 		return;
-	}
 
 	if(!IsValidDynamicArea(areaid))
-	{
 		return;
-	}
 
 	if(Iter_Count(varea_NearIndex[playerid]) == 0)
-	{
 		return;
-	}
 
 	new data[2];
 
 	Streamer_GetArrayData(STREAMER_TYPE_AREA, areaid, E_STREAMER_EXTRA_ID, data, 2);
 
 	if(data[0] != VEH_STREAMER_AREA_IDENTIFIER)
-	{
 		return;
-	}
 
 	if(!IsValidVehicle(data[1]))
-	{
 		return;
-	}
 
 	HideActionText(playerid);
 	CallLocalFunction("OnPlayerLeaveVehArea", "dd", playerid, data[1]);
@@ -212,9 +192,7 @@ hook OnPlayerKeyStateChange(playerid, newkeys, oldkeys)
 _varea_Interact(playerid)
 {
 	if(IsPlayerInAnyVehicle(playerid))
-	{
 		return;
-	}
 
 	if(!IsPlayerInAnyDynamicArea(playerid))
 	{

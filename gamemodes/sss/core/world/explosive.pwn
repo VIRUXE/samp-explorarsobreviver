@@ -136,24 +136,18 @@ stock SetItemToExplode(Item:itemid)
 	itemtype = GetItemType(itemid);
 	GetItemAbsolutePos(itemid, x, y, z, parent, parenttype);
 
-	log("[EXPLOSIVE] Item %d Type %d detonated at %f, %f, %f", _:itemid, _:exp_Data[exp_ItemTypeExplosive[itemtype]][exp_trigger], x, y, z);
+	log(true, "[EXPLOSIVE] Item %d Type %d detonated at %f, %f, %f", _:itemid, _:exp_Data[exp_ItemTypeExplosive[itemtype]][exp_trigger], x, y, z);
 
 	if(!isnull(parenttype))
 	{
 		if(!strcmp(parenttype, "containerid") && IsValidContainer(Container:parent))
-		{
 			DestroyContainer(Container:parent);
-		}
 
 		if(!strcmp(parenttype, "vehicleid"))
-		{
 			SetVehicleHealth(parent, 0.0);
-		}
 
 		if(!strcmp(parenttype, "playerid"))
-		{
 			SetPlayerHP(parent, 0.0);
-		}
 	}
 
 	DestroyItem(itemid);
@@ -275,7 +269,7 @@ hook OnPlayerUseItem(playerid, Item:itemid)
 			return Y_HOOKS_CONTINUE_RETURN_0;
 		}
 
-		log("[EXPLOSIVE] Player %p triggering remote explosive item %d", playerid, _:itemid);
+		log(true, "[EXPLOSIVE] Player %p triggering remote explosive item %d", playerid, _:itemid);
 		SetItemToExplode(bombitem);
 		SetItemExtraData(itemid, _:INVALID_ITEM_ID);
 
@@ -326,7 +320,7 @@ hook OnHoldActionFinish(playerid)
 		{
 			if(exp_Data[exp_ItemTypeExplosive[itemtype]][exp_trigger] == TIMED)
 			{
-				log("[EXPLOSIVE] Time bomb %d placed by %p", _:exp_ArmingItem[playerid], playerid);
+				log(true, "[EXPLOSIVE] Time bomb %d placed by %p", _:exp_ArmingItem[playerid], playerid);
 
 				exp_ArmTick[playerid] = GetTickCount();
 				defer SetItemToExplodeDelay(_:exp_ArmingItem[playerid], 5000);
@@ -337,7 +331,7 @@ hook OnHoldActionFinish(playerid)
 			}
 			else if(exp_Data[exp_ItemTypeExplosive[itemtype]][exp_trigger] == PROXIMITY)
 			{
-				log("[EXPLOSIVE] Prox bomb %d placed by %p", _:exp_ArmingItem[playerid], playerid);
+				log(true, "[EXPLOSIVE] Prox bomb %d placed by %p", _:exp_ArmingItem[playerid], playerid);
 
 				defer CreateTntMineProx(_:exp_ArmingItem[playerid]);
 				ChatMsgLang(playerid, YELLOW, "PROXMIARMED");
@@ -346,7 +340,7 @@ hook OnHoldActionFinish(playerid)
 			}
 			else if(exp_Data[exp_ItemTypeExplosive[itemtype]][exp_trigger] == MOTION)
 			{
-				log("[EXPLOSIVE] Trip bomb %d placed by %p", _:exp_ArmingItem[playerid], playerid);
+				log(true, "[EXPLOSIVE] Trip bomb %d placed by %p", _:exp_ArmingItem[playerid], playerid);
 
 				SetItemExtraData(exp_ArmingItem[playerid], 1);
 				ClearAnimations(playerid);
@@ -407,7 +401,7 @@ hook OnPlayerEnterDynArea(playerid, areaid)
 		return Y_HOOKS_CONTINUE_RETURN_0;
 	}
 
-	log("[EXPLOSIVE] Prox bomb %d triggered by %p", data[1], playerid);
+	log(true, "[EXPLOSIVE] Prox bomb %d triggered by %p", data[1], playerid);
 	_exp_ProxTrigger(Item:data[1]);
 	DestroyDynamicArea(areaid);
 
@@ -510,7 +504,7 @@ hook OnPlayerPickUpItem(playerid, Item:itemid)
 			GetItemExtraData(itemid, armed);
 			if(armed == 1)
 			{
-				log("[EXPLOSIVE] Trip bomb %d triggered by %p", _:itemid, playerid);
+				log(true, "[EXPLOSIVE] Trip bomb %d triggered by %p", _:itemid, playerid);
 				SetItemToExplode(itemid);
 				return Y_HOOKS_BREAK_RETURN_1;
 			}

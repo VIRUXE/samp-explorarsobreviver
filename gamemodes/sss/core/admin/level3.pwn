@@ -817,7 +817,7 @@ ACMD:additem[3](playerid, params[])
 
 			new itemname[MAX_ITEM_NAME];
 			GetItemTypeName(type, itemname);
-			log("[ADDITEM] %p added item %s (d:%d) reason: %s", pid, itemname, _:type, inputtext);
+			log(true, "[ADDITEM] %p added item %s (d:%d) reason: %s", pid, itemname, _:type, inputtext);
 		}
 		Dialog_ShowCallback(playerid, using inline Response, DIALOG_STYLE_INPUT, "Justification", "Type a reason for adding this item:", "Enter", "");
 	}
@@ -868,7 +868,7 @@ ACMD:addvehicle[3](playerid, params[])
 		{
 			#pragma unused pid, dialogid, response, listitem
 
-			log("[ADDVEHICLE] %p added vehicle %d reason: %s", pid, type, inputtext);
+			log(true, "[ADDVEHICLE] %p added vehicle %d reason: %s", pid, type, inputtext);
 		}
 		Dialog_ShowCallback(playerid, using inline Response, DIALOG_STYLE_INPUT, "Justificação", "Introduz a Motivo para ter adicionado esse veículo:", "OK", "");
 	}

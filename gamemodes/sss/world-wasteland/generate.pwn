@@ -10,7 +10,7 @@
 
 GenerateTerrain(seed)
 {
-	log("\n\n\nGenerating terrain from seed: %d", seed);
+	log(false, "\n\n\nGenerating terrain from seed: %d", seed);
 
 	new
 		Float:x = ORIGIN_X,
@@ -35,14 +35,14 @@ GenerateTerrain(seed)
 	}
 
 	print("Terrain generation complete");
-	log("%d Total Tiles", GetTotalTiles());
+	log(false, "%d Total Tiles", GetTotalTiles());
 
 	new name[24];
 
 	for(new i; i < GetTotalTileTypes(); i++)
 	{
 		GetTileName(i, name);
-	 	log("Tile '%s' uses: %d", name, GetTileUses(i));
+	 	log(false, "Tile '%s' uses: %d", name, GetTileUses(i));
 	}
 
 	print("\n\n\n");

@@ -132,7 +132,7 @@ public OnLookupResponse(sessionid, response, data[])
 
 	PlayerCountryData[playerid][cntr_Proxy] = strval(proxy);
 
-	log("[COUNTRY] Player country: '%s' (host: '%s' proxy: %d)",
+	log(true, "[COUNTRY] Player country: '%s' (host: '%s' proxy: %d)",
 		PlayerCountryData[playerid][cntr_Country],
 		PlayerCountryData[playerid][cntr_Hostname],
 		PlayerCountryData[playerid][cntr_Proxy]);

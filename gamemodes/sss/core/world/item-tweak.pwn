@@ -66,7 +66,7 @@ stock TweakItem(playerid, Item:itemid)
 	if(twk_Item[playerid] != INVALID_ITEM_ID)
 		err("twk_Item already set to %d", _:twk_Item[playerid]);
 
-	log("[TWEAK] %p Tweaked item %d (%s)", playerid, _:itemid, uuid);
+	log(true, "[TWEAK] %p Tweaked item %d (%s)", playerid, _:itemid, uuid);
 
 	GetItemWorld(itemid, world);
 	GetItemInterior(itemid, interior);
@@ -139,7 +139,7 @@ _twk_Commit(playerid)
 	GetItemRot(twk_Item[playerid], rx, ry, rz);
 	GetItemTypeModel(GetItemType(twk_Item[playerid]), model);
 
-	log("[TWEAK] %p Tweaked item %d (%s) %d (%f, %f, %f, %f, %f, %f)",
+	log(true, "[TWEAK] %p Tweaked item %d (%s) %d (%f, %f, %f, %f, %f, %f)",
 		playerid, _:twk_Item[playerid], uuid, model,
 		x, y, z, rx, ry, rz);
 

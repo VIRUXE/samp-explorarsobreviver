@@ -106,7 +106,7 @@ EnterSpectateMode(playerid, targetid)
 	stop spectate_Timer[playerid];
 	spectate_Timer[playerid] = repeat UpdateSpectateMode(playerid);
 
-	log("[SPECTATE] %p watches %p", playerid, targetid);
+	log(true, "[SPECTATE] %p watches %p", playerid, targetid);
 
 	return 1;
 }
