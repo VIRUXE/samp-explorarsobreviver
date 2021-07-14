@@ -517,14 +517,14 @@ LoadPlayerChar(playerid)
 
 CloseSaveSessions()
 {
-	log("[OnScriptExit] Shutting down 'SaveLoad'...");
+	log(false, "[OnScriptExit] Shutting down 'SaveLoad'...");
 
 	new
 		name[MAX_PLAYER_NAME],
 		filename[64],
 		session;
 
-	log("Closing open modio sessions for player data.");
+	log(false, "Closing open modio sessions for player data.");
 
 	foreach(new i : Player)
 	{
@@ -533,7 +533,7 @@ CloseSaveSessions()
 
 		session = modio_getsession_write(filename);
 
-		log("- Closing file '%s' for playerid: %d (session: %d)", filename, i, session);
+		log(false, "- Closing file '%s' for playerid: %d (session: %d)", filename, i, session);
 
 		if(session != -1)
 			modio_finalise_write(session, true);

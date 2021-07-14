@@ -267,7 +267,7 @@ TimeoutPlayer(playerid, const reason[])
 	BlockIpAddress(ip, 11500);
 	admin_PlayerKicked[playerid] = true;
 
-	log("[PART] %p (timeout: %s)", playerid, reason);
+	log(true, "[PART] %p (timeout: %s)",playerid, reason);
 
 	ChatMsgAdmins(1, GREY, " » %P"C_GREY" foi timeout. Motivo: "C_BLUE"%s", playerid, reason);
 
@@ -285,7 +285,7 @@ KickPlayer(playerid, const reason[], bool:tellplayer = true)
 	defer KickPlayerDelay(playerid);
 	admin_PlayerKicked[playerid] = true;
 
-	log("[PART] %p (kick: %s)", playerid, reason);
+	log(true, "[PART] %p (kick: %s)",playerid, reason);
 
 	ChatMsgAdmins(1, GREY, " » %P"C_GREY" foi Kickado. Motivo: "C_BLUE"%s", playerid, reason);
 

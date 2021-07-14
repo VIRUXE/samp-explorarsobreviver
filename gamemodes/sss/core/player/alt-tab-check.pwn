@@ -59,7 +59,7 @@ ptask AfkCheckUpdate[100](playerid)
 		{
 			CallLocalFunction("OnPlayerFocusChange", "dd", playerid, 0);
 
-			log("[FOCUS] %p unfocused game", playerid);
+			log(true, "[FOCUS] %p unfocused game", playerid);
 
 			if(gMaxTaboutTime == 0)
 			{
@@ -79,7 +79,7 @@ ptask AfkCheckUpdate[100](playerid)
 		{
 			CallLocalFunction("OnPlayerFocusChange", "dd", playerid, 1);
 
-			log("[FOCUS] %p focused back to game", playerid);
+			log(true, "[FOCUS] %p focused back to game", playerid);
 
 			tab_IsTabbed[playerid] = false;
 		}

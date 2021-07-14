@@ -188,7 +188,7 @@ BanCheck(playerid)
 					UnBanPlayer(name);
 
 					ChatMsgLang(playerid, YELLOW, "BANLIFMESSG", TimestampToDateTime(timestamp));
-					log("[UNBAN] Ban lifted automatically for %s", name);
+					log(true, "[UNBAN] Ban lifted automatically for %s", name);
 
 					return 0;
 				}

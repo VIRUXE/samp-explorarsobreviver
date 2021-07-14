@@ -60,7 +60,7 @@ LoadTiles()
 
 	dir_close(direc);
 
-	log("Total Tile Types: %d", tiletype_Total);
+	log(false, "Total Tile Types: %d", tiletype_Total);
 }
 
 LoadTile(filename[])
@@ -135,7 +135,7 @@ AddTerrainTile(name[24], objects[MAX_OBJECTS_PER_TILE][E_TILE_OBJECT_DATA], rari
 		tiletype_Objects[tiletype_Total][i][tileobj_rotZ]	= objects[i][tileobj_rotZ];
 	}
 
-	log("Added Terrain Tile '%s' (%d objects)", tiletype_Data[tiletype_Total][tiletype_name], total);
+	log(false, "Added Terrain Tile '%s' (%d objects)", tiletype_Data[tiletype_Total][tiletype_name], total);
 
 	tiletype_Total++;
 
@@ -167,7 +167,7 @@ GenerateTile(&seed1, &seed2, &tiletype)
 
 	tiletype = list[seed2];
 
-	log("PICKED %d FROM CELL %d OF TOTAL %d", tiletype, seed2, total);
+	log(false, "PICKED %d FROM CELL %d OF TOTAL %d", tiletype, seed2, total);
 }
 
 CreateTile(tiletype, Float:x, Float:y)
@@ -181,17 +181,17 @@ CreateTile(tiletype, Float:x, Float:y)
 	{
 		tiletype_Uses[tiletype]++;
 
-		log("Creating tile with %d objs", tiletype_Data[tiletype][tiletype_totalObj]);
+		log(false, "Creating tile with %d objs", tiletype_Data[tiletype][tiletype_totalObj]);
 
 		for(new i; i < tiletype_Data[tiletype][tiletype_totalObj]; i++)
 		{
-			log("    obj %d type %d", i, tiletype_Objects[tiletype][i][tileobj_type]);
+			log(false, "    obj %d type %d", i, tiletype_Objects[tiletype][i][tileobj_type]);
 
 			switch(tiletype_Objects[tiletype][i][tileobj_type])
 			{
 				case TILE_OBJECT_TYPE_MODEL:
 				{
-					log("creating %d", tiletype_Objects[tiletype][i][tileobj_id]);
+					log(false, "creating %d", tiletype_Objects[tiletype][i][tileobj_id]);
 					CreateDynamicObject(
 						tiletype_Objects[tiletype][i][tileobj_id],
 						x + tiletype_Objects[tiletype][i][tileobj_posX],

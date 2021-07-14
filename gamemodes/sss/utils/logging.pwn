@@ -11,12 +11,21 @@ enum
 	LOOP
 }
 
+static DCC_Channel:log_DiscordChannel;
 
-stock log(const text[], va_args<>)
+hook OnGameModeInit()
+{
+	log_DiscordChannel = DCC_Channel:DCC_Channel:DCC_FindChannelById("864931954516295690");
+}
+
+stock log(bool:discord, const text[], va_args<>)
 {
 	new log_Buffer[256];
-	formatex(log_Buffer, sizeof(log_Buffer), text, va_start<1>);
+	formatex(log_Buffer, sizeof(log_Buffer), text, va_start<2>);
 	print(log_Buffer);
+
+	if(discord)
+		SendDiscordMessage(log_DiscordChannel, log_Buffer);
 }
 
 stock dbg(const handler[], level, const text[], va_args<>)

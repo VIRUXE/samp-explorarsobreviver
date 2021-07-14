@@ -105,7 +105,7 @@ PlayerSendChat(playerid, chat[], Float:frequency)
 
 	if(frequency == 0.0)
 	{
-		log("[CHAT] [LOCAL] [%p]: %s", playerid, chat);
+		log(false, "[CHAT][LOCAL] [%p]: %s", playerid, chat);
 
 		new
 			Float:x,
@@ -138,7 +138,7 @@ PlayerSendChat(playerid, chat[], Float:frequency)
 	}
 	else if(frequency == 1.0)
 	{
-		log("[CHAT] [GLOBAL] [%p]: %s", playerid, chat);
+		log(false, "[CHAT][GLOBAL] [%p]: %s", playerid, chat);
 
 		format(line1, 256, "[Global] (%d) %P"C_WHITE": %s",
 			playerid,
@@ -164,7 +164,7 @@ PlayerSendChat(playerid, chat[], Float:frequency)
 	}
 	else if(frequency == 2.0)
 	{
-		log("[CHAT] [LOCALME] [%p]: %s", playerid, chat);
+		log(false, "[CHAT][LOCALME] [%p]: %s", playerid, chat);
 
 		new
 			Float:x,
@@ -196,7 +196,7 @@ PlayerSendChat(playerid, chat[], Float:frequency)
 	}
 	else if(frequency == 3.0)
 	{
-		log("[CHAT] [ADMIN] [%p]: %s", playerid, chat);
+		log(false, "[CHAT][ADMIN] [%p]: %s", playerid, chat);
 
 		format(line1, 256, "%C[Admin] (%d) %P"C_WHITE": %s",
 			GetAdminRankColour(GetPlayerAdminLevel(playerid)),
@@ -221,7 +221,7 @@ PlayerSendChat(playerid, chat[], Float:frequency)
 	}
 	else
 	{
-		log("[CHAT] [RADIO] [%.2f] [%p]: %s", frequency, playerid, chat);
+		log(false, "[CHAT][RADIO] [%.2f] [%p]: %s", frequency, playerid, chat);
 
 		format(line1, 256, "[%.2f] (%d) %P"C_WHITE": %s",
 			frequency,

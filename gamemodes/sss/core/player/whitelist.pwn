@@ -35,7 +35,7 @@ hook OnScriptInit()
 	GetSettingInt("server/whitelist", 0, wl_Active);
 	GetSettingInt("server/whitelist-auto-toggle", 0, wl_Auto);
 
-	wl_DiscordChannel = DCC_FindChannelByName("whitelist");
+	wl_DiscordChannel = DCC_FindChannelById("847902208343015484");
 }
 
 hook OnPlayerConnect(playerid)
@@ -82,7 +82,6 @@ public DCC_OnMessageCreate(DCC_Message:message)
     if(channel == wl_DiscordChannel)
     {
         new 
-            result[84+MAX_PLAYER_NAME],
             nickname[MAX_PLAYER_NAME],
             userid[DCC_ID_SIZE];
 
@@ -90,28 +89,29 @@ public DCC_OnMessageCreate(DCC_Message:message)
         DCC_GetMessageContent(message, nickname);
 
         if(strlen(nickname) > MAX_PLAYER_NAME - 1)
-            format(result, sizeof(result),      "> Nome `%s` muito grande (maximo de 24 caracteres).", nickname);
+            SendDiscordMessage(channel, "> Esse nick é muito grande (maximo de 24 caracteres).");
         else if(!strfind(nickname, "."))
-            result =                            "> Seu Nome não pode ter ponto (.) no inicio."; 
-        else if(IsNameInWhitelist(nickname))
-            format(result, sizeof(result),      "> O nome `%s` ja esta registrado.", nickname); 
+            SendDiscordMessage(channel, "> O seu nick não pode ter ponto (.) no inicio."); 
         else if(!IsValidUsername(nickname))
-            format(result, sizeof(result),      "> Nome `%s` invalido, tente outro.", nickname); 
+            SendDiscordMessage(channel, "> Nick com formato invalido, tente outro."); 
+        else if(IsNameInWhitelist(nickname))
+            SendDiscordMessage(channel, "> Esse nick ja esta registrado."); 
         else if(IsNameInWhitelist(userid))
-            result =							"> Voce ja tem a conta vinculada...";
+            SendDiscordMessage(channel, "> Voce ja tem essa conta vinculada...");
         else
         {
             new DCC_Guild: guild;
 
+			// Adicionar na base de dados
             AddNameToWhitelist(nickname, true);
             AddNameToWhitelist(userid);
 
+			// Alterar o nick do Discord para o nick que foi autorizado
             DCC_GetChannelGuild(channel, guild);
-            DCC_SetGuildMemberNickname(guild, author, nickname);
+            DCC_SetGuildMemberNickname(guild, author, nickname); 
 
-            format(result, sizeof(result), "> Sua conta de Jogo `%s` foi vinculada com sua conta de Discord. Bom jogo!", nickname);
+            SendDiscordMessage(channel, "> Sua conta de Jogo `%s` foi vinculada com sua conta de Discord. Bom jogo!", nickname);
         }
-        DCC_SendChannelMessage(channel, result);
     }
     return 1;
 }
@@ -374,7 +374,7 @@ timer _WhitelistConnect[100](playerid)
 {
 	if(!IsPlayerConnected(playerid))
 	{
-		log("[_WhitelistConnect] Player %d not connected any more.", playerid);
+		log(true, "[_WhitelistConnect] Player %d not connected any more.", playerid);
 		return;
 	}
 
@@ -382,11 +382,7 @@ timer _WhitelistConnect[100](playerid)
 
 	GetPlayerName(playerid, name, MAX_PLAYER_NAME);
 
-	if(IsNameInWhitelist(name) == 1)
-		wl_Whitelisted[playerid] = true;
-
-	else
-		wl_Whitelisted[playerid] = false;
+	wl_Whitelisted[playerid] = IsNameInWhitelist(name) ? true: false;
 }
 
 hook OnPlayerLogin(playerid)
@@ -397,7 +393,7 @@ hook OnPlayerLogin(playerid)
 		{
 			ChatMsg(playerid, YELLOW, " » Auto-whitelist: Deactivated the whitelist.");
 			ToggleWhitelist(false);
-			log("[AUTOWHITELIST] Whitelist turned off by %p joining", playerid);
+			log(true, "[AUTOWHITELIST] Whitelist turned off by %p joining", playerid);
 		}
 	}
 
@@ -411,7 +407,7 @@ timer _WhitelistDisconnect[100](playerid)
 		if(GetAdminsOnline(2) == 0) // turn on if whitelist is off and no admins remain online
 		{
 			ToggleWhitelist(true);
-			log("[AUTOWHITELIST] Whitelist turned on by %d quitting.", playerid);
+			log(true, "[AUTOWHITELIST] Whitelist turned on by %d quitting.", playerid);
 		}
 	}
 }

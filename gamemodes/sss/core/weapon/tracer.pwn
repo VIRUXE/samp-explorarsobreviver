@@ -46,7 +46,7 @@ stock CreateTracer(Float:originx, Float:originy, Float:originz, Float:targetx, F
 
 	MoveDynamicObject(tracer_ObjectID[id], targetx, targety, targetz, 600.0);
 
-	log("Created tracer: %f, %f, %f > %f, %f, %f",
+	log(false, "Created tracer: %f, %f, %f > %f, %f, %f",
 		originx + (2.0 * floatsin(rotation, degrees) * floatcos(elevation, degrees)),
 		originy + (2.0 * floatcos(rotation, degrees) * floatcos(elevation, degrees)),
 		originz + (2.0 * floatsin(elevation, degrees)),

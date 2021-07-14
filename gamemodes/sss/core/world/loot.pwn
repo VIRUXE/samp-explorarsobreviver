@@ -132,7 +132,7 @@ stock CreateStaticLootSpawn(Float:x, Float:y, Float:z, lootindex, Float:weight, 
 	if(samplelistsize == 0)
 		return -1;
 
-	// log("[CreateStaticLootSpawn] index %d size %d: %s", lootindex, samplelistsize, atosr(_:samplelist, samplelistsize));
+	// log(false, "[CreateStaticLootSpawn] index %d size %d: %s", lootindex, samplelistsize, atosr(_:samplelist, samplelistsize));
 
 	for(new i; i < size; i++)
 	{
@@ -400,14 +400,14 @@ _loot_GenerateSampleList(ItemType:list[MAX_LOOT_INDEX_ITEMS], lootindex)
 
 		if(loot_IndexItems[lootindex][i][lootitem_type] == item_NULL)
 		{
-			// log("[_loot_GenerateSampleList] Prevented entering NULL ITEM into samplelist");
+			// log(false, "[_loot_GenerateSampleList] Prevented entering NULL ITEM into samplelist");
 			continue;
 		}
 
 		list[size++] = loot_IndexItems[lootindex][i][lootitem_type];
 	}
 
-	// log("[_loot_GenerateSampleList] Generated: %s", atosr(_:list, size));
+	// log(false, "[_loot_GenerateSampleList] Generated: %s", atosr(_:list, size));
 
 	return size;
 }
@@ -438,7 +438,7 @@ _loot_LootSpawnItemsOfType(lootspawnid, ItemType:itemtype)
 		if(GetItemType(loot_SpawnData[lootspawnid][loot_items][i]) == itemtype)
 			count++;
 	}
-	// log("[_loot_LootSpawnItemsOfType] loot spawn %d contains %d of %d", lootspawnid, count, _:itemtype);
+	// log(false, "[_loot_LootSpawnItemsOfType] loot spawn %d contains %d of %d", lootspawnid, count, _:itemtype);
 	return count;
 }
 
@@ -451,7 +451,7 @@ _loot_ContainerItemsOfType(containerid, ItemType:itemtype)
 		if(GetItemType(GetContainerSlotItem(containerid, i)) == itemtype)
 			count++;
 	}
-	// log("[_loot_ContainerItemsOfType] container %d contains %d of %d", containerid, count, _:itemtype);
+	// log(false, "[_loot_ContainerItemsOfType] container %d contains %d of %d", containerid, count, _:itemtype);
 	return count;
 }
 */

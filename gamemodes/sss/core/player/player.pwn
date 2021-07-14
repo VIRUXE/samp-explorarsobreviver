@@ -393,10 +393,15 @@ public OnPlayerUpdate(playerid)
 	{
 		if(IsPlayerOnAdminDuty(playerid))
 			SetPlayerHealth(playerid, 99999);
+		else
+			SetPlayerHealth(playerid, ply_Data[playerid][ply_HitPoints]);
 
 		SetPlayerArmour(playerid, ply_Data[playerid][ply_ArmourPoints]);
-	}	
-
+	}
+	else
+	{
+		SetPlayerHealth(playerid, 99.9);		
+	}
 	return 1;
 }
 
@@ -622,12 +627,10 @@ stock SetPlayerHP(playerid, Float:hp)
 	if(!IsPlayerConnected(playerid))
 		return 0;
 
-	if(hp > 100.0)
-		hp = 100.0;
+	if(hp > 99.9)
+		hp = 99.9;
 
 	ply_Data[playerid][ply_HitPoints] = hp;
-
-	SetPlayerHealth(playerid, hp);
 
 	return 1;
 }

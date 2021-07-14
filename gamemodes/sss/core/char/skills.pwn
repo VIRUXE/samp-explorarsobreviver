@@ -154,7 +154,7 @@ hook OnPlayerSave(playerid, filename[])
 		while(skl_PlayerSkills[playerid][i][skl_name][tmp++] != EOS);
 
 		data[ptr++] = _:skl_PlayerSkills[playerid][i][skl_amount];
-		log("skill value for '%s': %f", skl_PlayerSkills[playerid][i][skl_name], skl_PlayerSkills[playerid][i][skl_amount]);
+		log(false, "skill value for '%s': %f", skl_PlayerSkills[playerid][i][skl_name], skl_PlayerSkills[playerid][i][skl_amount]);
 	}
 
 	modio_push(filename, _T<S,K,I,L>, ptr, data);
@@ -199,7 +199,7 @@ hook OnPlayerLoad(playerid, filename[])
 
 	for(new i; i < skl_PlayerSkillCount[playerid]; i++)
 	{
-		log("skill '%s' value: %f", skl_PlayerSkills[playerid][i][skl_name], skl_PlayerSkills[playerid][i][skl_amount]);
+		log(false, "skill '%s' value: %f", skl_PlayerSkills[playerid][i][skl_name], skl_PlayerSkills[playerid][i][skl_amount]);
 	}
 
 	return Y_HOOKS_CONTINUE_RETURN_1;

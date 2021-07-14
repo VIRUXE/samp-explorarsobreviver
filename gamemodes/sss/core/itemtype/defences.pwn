@@ -719,7 +719,7 @@ hook OnHoldActionFinish(playerid)
 
 			DeconstructDefence(def_CurrentDefenceEdit[playerid], playerid);
 
-			log("[CROWBAR] %p broke defence %d (%s) (%d, %f, %f, %f, %f, %f, %f)",
+			log(true, "[CROWBAR] %p broke defence %d (%s) (%d, %f, %f, %f, %f, %f, %f)",
 				playerid, _:def_CurrentDefenceEdit[playerid], uuid,
 				model, x, y, z, rx, ry, rz);
 
@@ -788,7 +788,7 @@ hook OnPlayerKeypadEnter(playerid, keypadid, code, match)
 
 				GetItemUUID(def_CurrentDefenceOpen[playerid], uuid);
 
-				log("[DEFFAIL] Player %p failed defence %d (%s) keypad code %d", playerid, _:def_CurrentDefenceOpen[playerid], uuid, code);
+				log(true, "[DEFFAIL] Player %p failed defence %d (%s) keypad code %d", playerid, _:def_CurrentDefenceOpen[playerid], uuid, code);
 				ShowEnterPassDialog_Keypad(playerid, 1);
 				def_LastPassEntry[playerid] = GetTickCount();
 				def_Cooldown[playerid] = 2000;
@@ -1071,7 +1071,7 @@ ShowEnterPassDialog_KeypadAdv(playerid, msg = 0)
 
 				GetItemUUID(def_CurrentDefenceOpen[playerid], uuid);
 
-				log("[DEFFAIL] Player %p failed defence %d (%s) keypad code %d", playerid, _:def_CurrentDefenceOpen[playerid], uuid, pass);
+				log(true, "[DEFFAIL] Player %p failed defence %d (%s) keypad code %d", playerid, _:def_CurrentDefenceOpen[playerid], uuid, pass);
 				ShowEnterPassDialog_KeypadAdv(playerid, 1);
 				def_LastPassEntry[playerid] = GetTickCount();
 				def_Cooldown[playerid] = 2000;

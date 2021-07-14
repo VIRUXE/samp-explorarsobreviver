@@ -17,6 +17,14 @@ hook OnPlayerDeath(playerid, killerid, reason)
 
 hook OnPlayerUpdate(playerid)
 {
+	new Float:health;
+	GetPlayerHealth(playerid, health);
+
+	if(!IsPlayerOnAdminDuty(playerid) && IsPlayerSpawned(playerid) && health > 99.9)
+	{
+		ChatMsgAdmins(3, RED, "[Anti-Health Hack Test] %p(%d) detected. Health: %f", playerid, playerid, health);
+	}
+
 	if(GetPlayerAnimationIndex(playerid) == 1266)
 	{
 		stop IsPlayerRunning[playerid];
@@ -268,19 +276,22 @@ public OnCheatDetected(playerid, const ip_address[], type, code)
 		
 		if(gServerInitialising || GetTickCountDifference(GetTickCount(), gServerInitialiseTick) < 5000)
 			return 1;
-			
+
+		new Float:x, Float:y, Float:z;
+		GetPlayerPos(playerid, x, y, z);
+
+		if(code < 7 && IsAtConnectionPos(x, y, z))
+			return 1;
+
 		switch(code)
 		{
 			case 40: SendClientMessage(playerid, AC_DEFAULT_COLOR, MAX_CONNECTS_MSG);
 			case 41: SendClientMessage(playerid, AC_DEFAULT_COLOR, UNKNOWN_CLIENT_MSG);
 			default:
 			{
-				new name[24], Float:Pos[3];
-
+				new name[24];
 				GetPlayerName(playerid, name, 24);
-				GetPlayerPos(playerid, Pos[0], Pos[1], Pos[2]);
-
-				ReportPlayer(name, NexCheatName[code], -1, "NEX-AC", Pos[0], Pos[1], Pos[2], GetPlayerVirtualWorld(playerid), GetPlayerInterior(playerid), sprintf("%.1f, %.1f, %.1f", Pos[0], Pos[1], Pos[2]) );
+				ReportPlayer(name, NexCheatName[code], -1, "NEX-AC", x, y, z, GetPlayerVirtualWorld(playerid), GetPlayerInterior(playerid), sprintf("%.1f, %.1f, %.1f", x, y, z) );
 			}
 		}
 
@@ -879,7 +890,9 @@ AccuracyWarning(playerid, total)
 }
 
 /*==============================================================================
+
 	Vehicle Health
+
 ==============================================================================*/
 
 

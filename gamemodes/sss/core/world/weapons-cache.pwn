@@ -181,7 +181,7 @@ timer WeaponsCacheSignal[WEPCACHE_SIGNAL_INTERVAL](count, Float:x, Float:y, Floa
 		ChatMsgAll(YELLOW, " » "C_GREEN"[Exército]: "C_YELLOW"Caixa de Armas caindo no mapa... (Icone '"C_WHITE"Arma"C_YELLOW"')");
 	else
 	{
-		log("No reference point found.");
+		log(true, "No reference point found for Weapons Cache.");
 		return;
 	}
 
