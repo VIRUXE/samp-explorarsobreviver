@@ -89,8 +89,8 @@ ACMD:setadmin[4](playerid, params[])
 		if(!SetPlayerAdminLevel(id, level))
 			return ChatMsg(playerid, RED, " » Admin level must be equal to or between 0 and 3");
 
-		ChatMsg(playerid, YELLOW, " » You made %P"C_YELLOW" a Level %d Admin", id, level);
-		ChatMsg(id, YELLOW, " » %P"C_YELLOW" Made you a Level %d Admin", playerid, level);
+		ChatMsg(playerid, YELLOW, " » You made %P a Level %d Admin", id, level);
+		ChatMsg(id, YELLOW, " » %P Made you a Level %d Admin", playerid, level);
 	}
 	else if(!sscanf(params, "s[24]d", name, level))
 	{
@@ -106,21 +106,26 @@ ACMD:setadmin[4](playerid, params[])
 		ChatMsg(playerid, YELLOW, " » You set %s to admin level %d.", name, level);
 	}
 	else
-	{
 		ChatMsg(playerid, YELLOW, " » Usage: /setadmin [playerid] [level]");
-		return 1;
-	}
 
 	return 1;
 }
 
+ACMD:setscore[4](playerid, params[])
+{
+	new targetid, score;
 
-/*==============================================================================
+	if(!sscanf(params, "dd", targetid, score))
+		return ChatMsg(playerid, YELLOW, " » Usage: /setscore [playerid] [score]");
 
-	Set the server's ping limit
+	if(!IsPlayerConnected(targetid))
+		return 4;
 
-==============================================================================*/
+	SetPlayerScore(targetid, score);
+	ChatMsg(playerid, YELLOW, " » Definiu o score de %P para %d", targetid, score);
 
+	return 1;
+}
 
 ACMD:setpinglimit[3](playerid, params[])
 {
@@ -180,7 +185,7 @@ ACMD:weather[4](playerid, params[])
 ==============================================================================*/
 
 
-CMD:debug(playerid, params[])
+ACMD:debug[4](playerid, params[])
 {
 	new
 		handlername[32],
