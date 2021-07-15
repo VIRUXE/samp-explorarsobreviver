@@ -58,6 +58,7 @@ ACMD:goto[2](playerid, params[])
 
 	if(TeleportPlayerToPlayer(playerid, targetid))
 	{
+		SetPlayerChatMode(playerid, CHAT_MODE_LOCAL);
 		ChatMsg(playerid, YELLOW, " » Você teleportou para %P", targetid);
 		ChatMsgLang(targetid, YELLOW, "TELEPORTEDT", playerid);
 	}
