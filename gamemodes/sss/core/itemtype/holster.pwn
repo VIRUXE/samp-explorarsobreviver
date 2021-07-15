@@ -45,6 +45,7 @@ forward OnPlayerUnHolsteredItem(playerid, Item:itemid);
 hook OnPlayerConnect(playerid)
 {
 	hols_Item[playerid] = INVALID_ITEM_ID;
+	hols_LastHolster[playerid] = GetTickCount();
 }
 
 
@@ -175,14 +176,12 @@ hook OnItemAddToInventory(playerid, Item:itemid, slot)
 	{
 		if(IsValidHolsterItem(GetItemType(itemid)))
 			return Y_HOOKS_BREAK_RETURN_1;
+
 	}
 
-	if(IsPlayerConnected(playerid))
-	{
-		if(!IsPlayerViewingInventory(playerid) && !IsValidContainer(containerid))
-			hols_LastHolster[playerid] = GetTickCount();
-	}
-	
+	if(IsValidItem(GetPlayerHolsterItem(playerid)))
+		hols_LastHolster[playerid] = GetTickCount();
+
 	return Y_HOOKS_CONTINUE_RETURN_0;
 }
 
