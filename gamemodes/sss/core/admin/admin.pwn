@@ -373,7 +373,7 @@ TogglePlayerAdminDuty(playerid, toggle, goback = true)
 		if(IsItemTypeSafebox(itemtype) || IsItemTypeBag(itemtype))
 			CreateItemInWorld(itemid, x, y, z - ITEM_FLOOR_OFFSET);
 
-		Logout(playerid, 1); // docombatlogcheck = 1
+		Logout(playerid, (GetPlayerAdminLevel(playerid) < STAFF_LEVEL_DEVELOPER) ); // docombatlogcheck for admins level < 5
 
 		RemovePlayerArmourItem(playerid);
 
