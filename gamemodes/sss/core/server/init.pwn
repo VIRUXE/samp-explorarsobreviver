@@ -1176,7 +1176,6 @@ public OnScriptInit()
 	DefineItemTypeWeapon(item_Spatula,			0,							-1,				0.001,			0,		0,		anim_Blunt);
 	DefineItemTypeWeapon(item_StunGun,			0,							-1,				0.0,			0,		0,		anim_Stab);
 	DefineItemTypeWeapon(item_Wrench,			0,							-1,				0.01,			_:1.20,	0,		anim_Blunt);
-
 	//					itemtype				baseweapon					calibre			bleedrate		koprob	n/a		animset
 	DefineItemTypeWeapon(item_Bat,				WEAPON_BAT,					-1,				0.09,			35,		0);
 	DefineItemTypeWeapon(item_Baton,			WEAPON_NITESTICK,			-1,				0.03,			24,		0);
