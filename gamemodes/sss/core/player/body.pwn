@@ -385,7 +385,7 @@ hook OnPlayerLogin(playerid)
 		if(IsValidItem(GetPlayerMaskItem(playerid)))
 			RemovePlayerMaskItem(playerid);
 
-		SetPlayerHP(playerid, 0.0);
+		SetPlayerHP(playerid, -1.0);
 		ChatMsg(playerid, RED, " » Você foi morto enquanto esteve ausente. :(");
 		KillPlayerBody[playerid] = false;
 	}
