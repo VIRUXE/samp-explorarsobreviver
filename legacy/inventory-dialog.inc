@@ -289,7 +289,7 @@ stock bool:IsPlayerViewingInventory(playerid)
 	if(!IsPlayerConnected(playerid))
 		return false;
 
-	return !!inv_ViewingInventory[playerid];
+	return inv_ViewingInventory[playerid];
 }
 
 
@@ -309,6 +309,8 @@ hook OnPlayerConnect(playerid)
 {
 	for(new j; j < MAX_INVENTORY_SLOTS; j++)
 		inv_SelectedSlot[playerid] = -1;
+
+	inv_ViewingInventory[playerid] = false;
 }
 
 _inv_displaySlotOptions(playerid, slotid)
@@ -532,6 +534,9 @@ _inv_putAway(playerid) {
 	return;
 }
 
+hook OnPlayerDisconnect(playerid)
+	stop inv_PutAwayTimer[playerid];
+	
 timer PlayerPutItemInInventory[300](playerid, itemid) {
 	AddItemToInventory(playerid, Item:itemid);
 	CallLocalFunction("OnPlayerAddedToInv", "dd", playerid, itemid);
