@@ -21,14 +21,11 @@ ptask UpdatePlayerPSU[500](playerid)
             continue;
             
         if(!IsPlayerStreamedIn(i, playerid))
-        {
-			if(GetPlayerRadioFrequency(playerid) > 20.0 &&
-				GetPlayerRadioFrequency(playerid) == GetPlayerRadioFrequency(i))
-					continue;
-					
+        {			
             new BitStream:bs = BS_New();
             
-			if(random(2) == 1 && psu_View[i][playerid])
+			if(random(2) == 1 && psu_View[i][playerid] && GetPlayerRadioFrequency(playerid) > 20.0 &&
+				GetPlayerRadioFrequency(playerid) == GetPlayerRadioFrequency(i))
 			{
 			    BS_WriteValue(bs, PR_UINT16, i);
 			    PR_SendRPC(bs, playerid, 163); // WorldPlayerRemove
