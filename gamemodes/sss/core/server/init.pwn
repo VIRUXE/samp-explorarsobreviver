@@ -1408,7 +1408,7 @@ public OnScriptInit()
 
 	SetCraftSetConstructible(20000, item_Sledgehammer, 	DefineItemCraftSet(item_Bed, item_MetPanel, false, item_WoodLog, false, item_WoodLog, false, item_RefinedMetal, false), item_Crowbar, 25000);
 	SetCraftSetConstructible(30000, item_Sledgehammer, 	DefineItemCraftSet(item_Cuntainer, item_CrateDoor, false, item_CrateDoor, false, item_CrateDoor, false, item_CrateDoor, false, item_CrateDoor, false), item_Crowbar, 25000, true, true);
-	SetCraftSetConstructible(30000, item_Sledgehammer, 	DefineItemCraftSet(item_MetalGate1, item_MetalGate, false, item_MetalGate, false), item_Crowbar, 25000, true, true);
+	SetCraftSetConstructible(30000, item_Sledgehammer, 	DefineItemCraftSet(item_MetalGate1, item_MetalGate, false, item_MetalGate, false), .tweak = true, .defence = true);
 	SetCraftSetConstructible(30000, item_Sledgehammer, 	DefineItemCraftSet(item_RedCrate, item_MilitaryGate, false, item_MilitaryGate, false, item_MetalGate, false), item_Crowbar, 25000, true, true);
 
 	// items created with a workbench
