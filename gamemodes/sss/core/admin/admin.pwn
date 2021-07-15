@@ -284,6 +284,8 @@ KickPlayer(playerid, const reason[], bool:tellplayer = true)
 	if(admin_PlayerKicked[playerid])
 		return 0;
 
+	SetPlayerBrightness(playerid, 255);
+	
 	defer KickPlayerDelay(playerid);
 	admin_PlayerKicked[playerid] = true;
 
