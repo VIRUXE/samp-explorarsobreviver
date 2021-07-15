@@ -194,9 +194,6 @@ hook OnPlayerDroppedItem(playerid, Item:itemid)
 	return Y_HOOKS_CONTINUE_RETURN_0;
 }
 
-hook OnItemAddToContainer(Container:containerid, Item:itemid, playerid)
-	loot_ItemLootIndex[itemid] = -1;
-
 hook OnItemRemoveFromWorld(Item:itemid)
 {
 	if(loot_ItemLootIndex[itemid] != -1){
@@ -221,7 +218,7 @@ timer RespawnItem[ITEM_RESPAWN_DELAY](lootindex, Float:x, Float:y, Float:z, worl
 hook OnItemDestroyed(Item:itemid)
 	stop DestroyUItem[itemid];
 
-timer DestroyUntilItem[ITEM_RESPAWN_DELAY % 80](_itemid)
+timer DestroyUntilItem[ITEM_RESPAWN_DELAY - HOUR(1)](_itemid)
 {
 	new Item:itemid = Item:_itemid;
 
