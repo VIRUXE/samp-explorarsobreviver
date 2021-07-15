@@ -115,7 +115,7 @@ ACMD:setscore[4](playerid, params[])
 {
 	new targetid, score;
 
-	if(!sscanf(params, "dd", targetid, score))
+	if(sscanf(params, "dd", targetid, score))
 		return ChatMsg(playerid, YELLOW, " » Usage: /setscore [playerid] [score]");
 
 	if(!IsPlayerConnected(targetid))
