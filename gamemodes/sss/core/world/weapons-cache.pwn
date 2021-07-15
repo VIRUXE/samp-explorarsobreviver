@@ -129,9 +129,10 @@ WeaponsCacheDrop(Float:x, Float:y, Float:z)
 		DestroyButton(webc_Button);
 
 	webc_Containerid = CreateContainer("Caixa de Armamento", 32);
+	
 	webc_Button = CreateButton(x, y - 0.5, z + 1.0, "Caixa de Armamento", .label = 1, .labeltext = "Cache de Armamento");
 
-	FillContainerWithLoot(Container:webc_Containerid, 22 + random(11), GetLootIndexFromName("airdrop_military_weapons"));
+	FillContainerWithLoot(webc_Containerid, 22 + random(11), GetLootIndexFromName("airdrop_military_weapons"));
 	
 	defer WeaponsCacheSignal(1, x, y, z);
 
@@ -140,8 +141,8 @@ WeaponsCacheDrop(Float:x, Float:y, Float:z)
 
 hook OnButtonPress(playerid, Button:id)
 {
-	if(id == webc_Button)
-		DisplayContainerInventory(playerid, Container:webc_Containerid);
+	if(id == webc_Button && IsValidContainer(webc_Containerid))
+		DisplayContainerInventory(playerid, webc_Containerid);
 }
 
 stock GetLastWeaponCachePos(&Float:x, &Float:y, &Float:z)

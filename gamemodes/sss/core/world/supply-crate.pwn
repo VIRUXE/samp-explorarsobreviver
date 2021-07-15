@@ -315,8 +315,8 @@ SupplyCrateLand()
 
 	lootindex = GetLootIndexFromName(sup_TypeData[sup_CurrentType][supt_loot]);
 	
-	FillContainerWithLoot(Container:sup_Containerid, 4 + random(16), lootindex);
-	GetContainerFreeSlots(Container:sup_Containerid, freeslots);
+	FillContainerWithLoot(sup_Containerid, 4 + random(16), lootindex);
+	GetContainerFreeSlots(sup_Containerid, freeslots);
 	dbg("supply-crate", 2, "[SupplyCrateLand] Spawned %d items in supply crate container %d", 32 - freeslots, _:sup_Containerid);
 
 	sup_CurrentType = -1;
@@ -328,8 +328,8 @@ SupplyCrateLand()
 
 hook OnButtonPress(playerid, Button:id)
 {
-	if(id == sup_Button && IsValidContainer(Container:sup_Containerid))
-		DisplayContainerInventory(playerid, Container:sup_Containerid);
+	if(id == sup_Button && IsValidContainer(sup_Containerid))
+		DisplayContainerInventory(playerid, sup_Containerid);
 }
 
 hook OnDynamicObjectMoved(objectid)
