@@ -6,7 +6,6 @@ import (
 	"strings"
 	"time"
 
-	sampquery "github.com/Southclaws/go-samp-query"
 	"github.com/bwmarrin/discordgo"
 	"github.com/cenkalti/backoff/v4"
 	"github.com/cskr/pubsub"
@@ -51,7 +50,7 @@ func runDiscord(ctx context.Context, ps *pubsub.PubSub, cfg Config) {
 
 	discord.ChannelMessageSend(cfg.DiscordChannelInfo, "Servidor iniciando!") //nolint:errcheck
 
-	discord.AddHandler(func(s *discordgo.Session, m *discordgo.MessageCreate) {
+	/* discord.AddHandler(func(s *discordgo.Session, m *discordgo.MessageCreate) {
 		switch m.Message.Content {
 		case "/estado":
 			server, err := sampquery.GetServerInfo(ctx, "sv.explorarsobreviver.com:7777", false)
@@ -71,7 +70,7 @@ func runDiscord(ctx context.Context, ps *pubsub.PubSub, cfg Config) {
 				})
 			}
 		}
-	})
+	}) */
 
 	go func() {
 		if err := discord.Open(); err != nil {
