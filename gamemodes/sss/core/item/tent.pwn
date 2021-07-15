@@ -125,6 +125,7 @@ stock CreateTentFromItem(Item:itemid)
 
 	tnt_Data[id][tnt_itemId] = itemid;
 	tnt_Data[id][tnt_containerId] = CreateContainer("Tenda", MAX_TENT_ITEMS);
+
 	tnt_ContainerTent[tnt_Data[id][tnt_containerId]] = id;
 
 	SetItemExtraData(itemid, id);
@@ -203,7 +204,14 @@ stock DestroyTent(tentid)
 	CallLocalFunction("OnTentDestroy", "d", tentid);
 	_tent_Remove(tentid);
 
+	if(GetItemType(tnt_Data[tentid][tnt_itemId]) != item_TentPack)
+		return 0;
+
 	SetItemExtraData(tnt_Data[tentid][tnt_itemId], INVALID_TENT_ID);
+
+	if(!IsValidContainer(tnt_Data[tentid][tnt_containerId]))
+		return 0;
+
 	DestroyContainer(tnt_Data[tentid][tnt_containerId]);
 
 	DestroyDynamicObject(tnt_ObjData[tentid][tnt_objSideR1]);
@@ -216,6 +224,7 @@ stock DestroyTent(tentid)
 	DestroyDynamicObject(tnt_ObjData[tentid][tnt_objDownL2]);
 	DestroyDynamicObject(tnt_ObjData[tentid][tnt_objPoleF]);
 	DestroyDynamicObject(tnt_ObjData[tentid][tnt_objPoleB]);
+
 	tnt_ObjData[tentid][tnt_objSideR1] = INVALID_OBJECT_ID;
 	tnt_ObjData[tentid][tnt_objSideR2] = INVALID_OBJECT_ID;
 	tnt_ObjData[tentid][tnt_objSideL1] = INVALID_OBJECT_ID;
@@ -381,7 +390,7 @@ hook OnPlayerPickUpItem(playerid, Item:itemid)
 		new tentid;
 		GetItemExtraData(itemid, tentid);
 
-		if(IsValidTent(tentid))
+		if(IsValidTent(tentid) && GetItemType(tnt_Data[tentid][tnt_itemId]) == item_TentPack)
 		{
 			DisplayContainerInventory(playerid, tnt_Data[tentid][tnt_containerId]);
 			SaveTent(tentid);
