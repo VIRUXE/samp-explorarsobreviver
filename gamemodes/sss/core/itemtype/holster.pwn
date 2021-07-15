@@ -200,10 +200,6 @@ _HolsterChecks(playerid)
 	if(GetPlayerSpecialAction(playerid) == SPECIAL_ACTION_CUFFED)
 		return 0;
 
-	// Doing this animation (whatever it is)
-	if(GetPlayerAnimationIndex(playerid) == 1381)
-		return 0;
-
 	// Within 1 second of previously holstering/unholstering
 	if(GetTickCountDifference(GetTickCount(), hols_LastHolster[playerid]) < 1000)
 		return 0;
