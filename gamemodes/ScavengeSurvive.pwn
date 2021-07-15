@@ -287,7 +287,6 @@ new
 
 		// server
 bool:	gAutoLoginWithIP,
-bool:	gPauseMap,
 bool:	gPlayerAnimations,
 bool:	gVehicleSurfing,
 Float:	gNameTagDistance,
@@ -530,7 +529,7 @@ new stock
 #include "sss/core/apparel/hats/headphones.pwn"
 #include "sss/core/apparel/hats/2armyhelmet.pwn"
 #include "sss/core/apparel/hats/cowboyhat.pwn"
-#include "sss/core/apparel/hats/policehelm.pwn"
+#include "sss/core/apparel/hats/2policehelm.pwn"
 
 // BAGS
 #include "sss/core/apparel/bags/backpack.pwn"
