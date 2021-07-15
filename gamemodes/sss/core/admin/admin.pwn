@@ -110,11 +110,12 @@ hook OnPlayerClickPlayer(playerid, clickedplayerid, source)
 		{
 			TeleportPlayerToPlayer(playerid, clickedplayerid);
 
-			SetPlayerChatMode(playerid, CHAT_MODE_LOCAL);
+			SetPlayerChatMode(playerid, 0);
 			ChatMsg(playerid, YELLOW, " » Você teleportou para %P", clickedplayerid);
 			ChatMsgLang(clickedplayerid, YELLOW, "TELEPORTEDT", playerid);
 		}
-		else ChatMsg(playerid, RED, " » Aguarde para teleportar novamente.");
+		else
+			ChatMsg(playerid, RED, " » Aguarde para teleportar novamente.");
 	}
 
     return 0;
