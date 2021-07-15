@@ -143,7 +143,7 @@ _OnDeath(playerid, killerid)
 	//DestroyDynamic3DTextLabel(STREAMER_TAG_3D_TEXT_LABEL:label);
 
 timer DestroyTorso[10 * 60000](itemid)
-	if(IsValidItem(Item:itemid))
+	if(IsValidItem(Item:itemid) && GetItemType(Item:itemid) == item_Torso)
 		DestroyItem(Item:itemid);
 
 DropItems(playerid, Float:x, Float:y, Float:z)
