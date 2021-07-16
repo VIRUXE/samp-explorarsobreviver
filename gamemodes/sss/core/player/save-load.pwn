@@ -123,6 +123,10 @@ SavePlayerChar(playerid)
 	player_data[PLY_CELL_TOOLTIPS] = IsPlayerToolTipsOn(playerid);
 
 	GetPlayerPos(playerid, Float:player_data[PLY_CELL_SPAWN_X], Float:player_data[PLY_CELL_SPAWN_Y], Float:player_data[PLY_CELL_SPAWN_Z]);
+	
+	if(Float:player_data[PLY_CELL_SPAWN_Z] < 0.0)
+		player_data[PLY_CELL_SPAWN_Z] = _:0.0;
+
 	GetPlayerFacingAngle(playerid, Float:player_data[PLY_CELL_SPAWN_R]);
 
 	player_data[PLY_CELL_MASK] = _:GetItemType(GetPlayerMaskItem(playerid));
