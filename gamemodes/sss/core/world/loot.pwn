@@ -218,6 +218,9 @@ timer RespawnItem[ITEM_RESPAWN_DELAY](lootindex, Float:x, Float:y, Float:z, worl
 hook OnItemDestroyed(Item:itemid)
 	stop DestroyUItem[itemid];
 
+hook OnPlayerConstructed(playerid, consset, result)
+	stop DestroyUItem[Item:result];
+
 timer DestroyUntilItem[ITEM_RESPAWN_DELAY - HOUR(1)](_itemid)
 {
 	new Item:itemid = Item:_itemid;
