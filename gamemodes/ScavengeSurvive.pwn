@@ -388,6 +388,17 @@ new stock
 */
 #include "sss/core/server/init.pwn"
 
+// BAGS
+#include "sss/core/apparel/bags/backpack.pwn"
+#include "sss/core/apparel/bags/daypack.pwn"
+#include "sss/core/apparel/bags/heartshapedbox.pwn"
+#include "sss/core/apparel/bags/largebackpack.pwn"
+#include "sss/core/apparel/bags/mediumbag.pwn"
+#include "sss/core/apparel/bags/parabag.pwn"
+#include "sss/core/apparel/bags/rucksack.pwn"
+#include "sss/core/apparel/bags/satchel.pwn"
+
+
 // ITEM IO
 #include "sss/core/io/loot.pwn"
 #include "sss/core/io/item.pwn"
@@ -530,16 +541,6 @@ new stock
 #include "sss/core/apparel/hats/2armyhelmet.pwn"
 #include "sss/core/apparel/hats/cowboyhat.pwn"
 #include "sss/core/apparel/hats/2policehelm.pwn"
-
-// BAGS
-#include "sss/core/apparel/bags/backpack.pwn"
-#include "sss/core/apparel/bags/daypack.pwn"
-#include "sss/core/apparel/bags/heartshapedbox.pwn"
-#include "sss/core/apparel/bags/largebackpack.pwn"
-#include "sss/core/apparel/bags/mediumbag.pwn"
-#include "sss/core/apparel/bags/parabag.pwn"
-#include "sss/core/apparel/bags/rucksack.pwn"
-#include "sss/core/apparel/bags/satchel.pwn"
 
 // ITEMS
 #include "sss/core/item/food.pwn"
