@@ -735,6 +735,9 @@ public OnUnoccupiedVehicleUpdate(vehicleid, playerid, passenger_seat, Float:new_
     return IsPlayerInVehicleArea(playerid, vehicleid);
 }
 
+public OnVehicleStreamIn(vehicleid, forplayerid)
+	UpdateVehPos(forplayerid, vehicleid);
+	
 hook OnPlayerEnterVehArea(playerid, vehicleid)
 	UpdateVehPos(playerid, vehicleid);
 
