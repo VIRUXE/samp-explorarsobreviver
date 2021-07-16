@@ -26,6 +26,11 @@ Item:	wb_DefaultWorkbench[MAX_WORK_BENCH];
 
 hook OnGameModeInit()
 {
+	defer CreateDefaultWk();
+}
+
+timer CreateDefaultWk[10000]()
+{
 	// BC
 	wb_DefaultWorkbench[0] = CreateItem(item_Workbench, 585.17377, 873.72583, -43.51944, 0.0, 0.0, 94.26003);
 	wb_DefaultWorkbench[1] = CreateItem(item_Workbench, -371.56595, 2235.98975, 41.43906, 0.0, 0.0, 12.84000);
