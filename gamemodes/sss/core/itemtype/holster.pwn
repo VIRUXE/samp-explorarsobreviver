@@ -45,6 +45,7 @@ forward OnPlayerUnHolsteredItem(playerid, Item:itemid);
 hook OnPlayerConnect(playerid)
 {
 	hols_Item[playerid] = INVALID_ITEM_ID;
+	hols_LastHolster[playerid] = GetTickCount();
 }
 
 
@@ -175,14 +176,12 @@ hook OnItemAddToInventory(playerid, Item:itemid, slot)
 	{
 		if(IsValidHolsterItem(GetItemType(itemid)))
 			return Y_HOOKS_BREAK_RETURN_1;
+
 	}
 
-	if(IsPlayerConnected(playerid))
-	{
-		if(!IsPlayerViewingInventory(playerid) && !IsValidContainer(containerid))
-			hols_LastHolster[playerid] = GetTickCount();
-	}
-	
+	if(IsValidItem(GetPlayerHolsterItem(playerid)))
+		hols_LastHolster[playerid] = GetTickCount();
+
 	return Y_HOOKS_CONTINUE_RETURN_0;
 }
 
@@ -199,10 +198,6 @@ _HolsterChecks(playerid)
 
 	// Cuffed
 	if(GetPlayerSpecialAction(playerid) == SPECIAL_ACTION_CUFFED)
-		return 0;
-
-	// Doing this animation (whatever it is)
-	if(GetPlayerAnimationIndex(playerid) == 1381)
 		return 0;
 
 	// Within 1 second of previously holstering/unholstering
@@ -274,7 +269,7 @@ timer HolsterItemDelay[time](playerid, itemid, time)
 
 	if(Item:itemid == currentitem)
 	{
-		err("Player %p (%d) attempting to holster item (%d) that's already holstered!", playerid, playerid, itemid);
+		err(true, true, "Player %p (%d) attempting to holster item (%d) that's already holstered!", playerid, playerid, itemid);
 		RemoveCurrentItem(playerid);
 		return 0;
 	}

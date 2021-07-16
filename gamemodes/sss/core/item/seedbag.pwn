@@ -36,7 +36,7 @@ stock DefineSeedType(const name[], ItemType:itemtype, growthtime, plantmodel, Fl
 {
 	if(seed_Total >= MAX_SEED_TYPES)
 	{
-		err("Seed type limit reached.");
+		err(false, false, "Seed type limit reached.");
 		return -1;
 	}
 

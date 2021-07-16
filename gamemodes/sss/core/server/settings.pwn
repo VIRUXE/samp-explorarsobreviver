@@ -17,7 +17,6 @@ LoadSettings()
 
 	GetSettingInt("server/max-uptime", 18000, gServerMaxUptime);
 	GetSettingInt("player/auto-ip-login", 0, gAutoLoginWithIP);
-	GetSettingInt("player/allow-pause-map", 0, gPauseMap);
 	GetSettingInt("player/player-animations", 1, gPlayerAnimations);
 	GetSettingInt("player/vehicle-surfing", 0, gVehicleSurfing);
 	GetSettingFloat("player/nametag-distance", 15.0, gNameTagDistance);

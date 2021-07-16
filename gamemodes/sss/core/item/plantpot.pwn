@@ -131,7 +131,7 @@ _pot_Load(Item:itemid)
 {
 	if(GetItemType(itemid) != item_PlantPot)
 	{
-		err("Attempted to _pot_Load an item that wasn't a pot (%d type %d).", _:itemid, _:GetItemType(itemid));
+		err(true, true, "Attempted to _pot_Load an item that wasn't a pot (%d type %d).", _:itemid, _:GetItemType(itemid));
 		return;
 	}
 

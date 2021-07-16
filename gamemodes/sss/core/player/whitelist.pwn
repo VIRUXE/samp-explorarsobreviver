@@ -144,7 +144,7 @@ stock AddNameToWhitelist(name[], doplayeridcheck = true)
 
 	if(!stmt_execute(stmt_WhitelistInsert))
 	{
-		err("Executing statement 'stmt_WhitelistInsert'.");
+		err(false, false, "Executing statement 'stmt_WhitelistInsert'.");
 		return -1;
 	}
 
@@ -195,7 +195,7 @@ stock RemoveNameFromWhitelist(name[], doplayeridcheck = true)
 
 	if(!stmt_execute(stmt_WhitelistDelete))
 	{
-		err("Executing statement 'stmt_WhitelistDelete'.");
+		err(false, false, "Executing statement 'stmt_WhitelistDelete'.");
 		return -1;
 	}
 
@@ -247,7 +247,7 @@ stock IsNameInWhitelist(name[])
 
 	if(!stmt_execute(stmt_WhitelistExists))
 	{
-		err("Executing statement 'stmt_WhitelistExists'.");
+		err(false, false, "Executing statement 'stmt_WhitelistExists'.");
 		return -1;
 	}
 

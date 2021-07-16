@@ -207,7 +207,7 @@ stock CreateDetectionField(const name[MAX_DETFIELD_NAME], const Float:points[10]
 
 	if(id == ITER_NONE)
 	{
-		err("MAX_DETFIELD limit reached.");
+		err(false, true, "MAX_DETFIELD limit reached.");
 		return -1;
 	}
 

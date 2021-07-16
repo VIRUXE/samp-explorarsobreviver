@@ -22,12 +22,8 @@ ptask UpdatePlayerPSU[500](playerid)
             
         if(!IsPlayerStreamedIn(i, playerid))
         {
-			if(GetPlayerRadioFrequency(playerid) > 20.0 &&
-				GetPlayerRadioFrequency(playerid) == GetPlayerRadioFrequency(i))
-					continue;
-					
-            new BitStream:bs = BS_New();
-            
+			new BitStream:bs = BS_New();
+			  
 			if(random(2) == 1 && psu_View[i][playerid])
 			{
 			    BS_WriteValue(bs, PR_UINT16, i);

@@ -58,7 +58,7 @@ LoadPlayerBodys()
 	direc = OpenDir(path);
 	if(direc == Directory:-1)
 	{
-		err("failed to open bodys directory '%s': %d", path, _:direc);
+		err(false, false, "failed to open bodys directory '%s': %d", path, _:direc);
 		return 1;
 	}
 
@@ -68,7 +68,7 @@ LoadPlayerBodys()
 		{
 			if(strfind(entry, ".dat", false, 3) == -1)
 			{
-				err("File with invalid extension: '%s'", entry);
+				err(false, false, "File with invalid extension: '%s'", entry);
 				continue;
 			}
 
@@ -101,7 +101,7 @@ LoadPlayerBody(const filepath[])
 	PathBase(filepath, filename);
 	if(!(6 < strlen(filename) < MAX_PLAYER_NAME + 4))
 	{
-		err("File with a bad filename length: '%s' len: %d", filename, strlen(filename));
+		err(true, false, "File with a bad filename length: '%s' len: %d", filename, strlen(filename));
 		return 0;
 	}
 
@@ -110,7 +110,7 @@ LoadPlayerBody(const filepath[])
 	if(length == 0)
 	{
 		modio_finalise_read(modio_getsession_read(filepath));
-		err("modio_read returned length of 0.");
+		err(true, false, "modio_read returned length of 0.");
 		return 0;
 	}
 
@@ -385,7 +385,7 @@ hook OnPlayerLogin(playerid)
 		if(IsValidItem(GetPlayerMaskItem(playerid)))
 			RemovePlayerMaskItem(playerid);
 
-		SetPlayerHP(playerid, 0.0);
+		SetPlayerHP(playerid, -1.0);
 		ChatMsg(playerid, RED, " » Você foi morto enquanto esteve ausente. :(");
 		KillPlayerBody[playerid] = false;
 	}

@@ -195,10 +195,26 @@ _DisplaySafeboxDialog(playerid, Item:itemid, animation)
 	new Container:containerid;
 	GetItemArrayDataAtCell(itemid, _:containerid, 0);
 
-	//if(box_ContainerSafebox[containerid] != itemid)
-		//return 0;
+	if(box_ContainerSafebox[containerid] != itemid) 
+	{
+		err(true, true, "Safebox (%d) container ID (%d) was invalid container.", _:itemid, _:containerid);
+
+		new
+			name[MAX_ITEM_NAME + 2];
+
+		GetItemTypeName(GetItemType(itemid), name);
+
+		containerid = CreateContainer(name, box_TypeData[box_ItemTypeBoxType[GetItemType(itemid)]][box_size]);
+
+		box_ContainerSafebox[containerid] = itemid;
+
+		SetItemArrayDataSize(itemid, 1);
+		SetItemArrayDataAtCell(itemid, _:containerid, 0);
+	}
 		
-	DisplayContainerInventory(playerid, containerid);
+	if(IsValidContainer(containerid))
+		DisplayContainerInventory(playerid, containerid);
+		
 	box_CurrentBoxItem[playerid] = itemid;
 
 	if(animation)

@@ -83,7 +83,7 @@ stock IsValidWorkbenchConstructionSet(consset)
 {
 	if(!IsValidConstructionSet(consset))
 	{
-		err("Tried to assign workbench properties to invalid construction set ID.");
+		err(true, true, "Tried to assign workbench properties to invalid construction set ID.");
 		return 0;
 	}
 
@@ -132,7 +132,7 @@ hook OnPlayerUseItemWithItem(playerid, Item:itemid, Item:withitemid)
 
 		if(!IsValidContainer(containerid))
 		{
-			err("Workbench (%d) has invalid container ID (%d)", _:withitemid, _:containerid);
+			err(true, true, "Workbench (%d) has invalid container ID (%d)", _:withitemid, _:containerid);
 			return Y_HOOKS_CONTINUE_RETURN_0;
 		}
 

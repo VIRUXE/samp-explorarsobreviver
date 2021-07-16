@@ -38,7 +38,7 @@ DefineWeaponsCachePos(Float:x, Float:y, Float:z)
 
 	if(id == ITER_NONE)
 	{
-		err("Weapons cache pos definition limit reached.");
+		err(false, false, "Weapons cache pos definition limit reached.");
 		return -1;
 	}
 
@@ -59,7 +59,7 @@ timer WeaponsCacheTimer[WEPCACHE_INTERVAL]()
 	// There are no more locations available, kill the timer.
 	if(Iter_Count(wepc_Index) == 0)
 	{
-		err("Weapons caches run out, stopping weapons cache timer.");
+		err(false, false, "Weapons caches run out, stopping weapons cache timer.");
 		return;
 	}
 
@@ -129,9 +129,10 @@ WeaponsCacheDrop(Float:x, Float:y, Float:z)
 		DestroyButton(webc_Button);
 
 	webc_Containerid = CreateContainer("Caixa de Armamento", 32);
+	
 	webc_Button = CreateButton(x, y - 0.5, z + 1.0, "Caixa de Armamento", .label = 1, .labeltext = "Cache de Armamento");
 
-	FillContainerWithLoot(Container:webc_Containerid, 22 + random(11), GetLootIndexFromName("airdrop_military_weapons"));
+	FillContainerWithLoot(webc_Containerid, 22 + random(11), GetLootIndexFromName("airdrop_military_weapons"));
 	
 	defer WeaponsCacheSignal(1, x, y, z);
 
@@ -140,8 +141,8 @@ WeaponsCacheDrop(Float:x, Float:y, Float:z)
 
 hook OnButtonPress(playerid, Button:id)
 {
-	if(id == webc_Button)
-		DisplayContainerInventory(playerid, Container:webc_Containerid);
+	if(id == webc_Button && IsValidContainer(webc_Containerid))
+		DisplayContainerInventory(playerid, webc_Containerid);
 }
 
 stock GetLastWeaponCachePos(&Float:x, &Float:y, &Float:z)

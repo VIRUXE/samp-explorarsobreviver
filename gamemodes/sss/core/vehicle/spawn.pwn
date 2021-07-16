@@ -81,7 +81,7 @@ LoadVehiclesFromFolder(const directory_with_root[])
 
 	if(direc == Directory:-1)
 	{
-		err("[LoadVehiclesFromFolder] Reading directory '%s'.", directory_with_root);
+		err(false, false, "[LoadVehiclesFromFolder] Reading directory '%s'.", directory_with_root);
 		return 0;
 	}
 
@@ -109,7 +109,7 @@ LoadVehiclesFromFile(file[])
 {
 	if(!fexist(file))
 	{
-		err("[LoadVehiclesFromFile] File '%s' not found.", file);
+		err(false, false, "[LoadVehiclesFromFile] File '%s' not found.", file);
 		return 0;
 	}
 
@@ -140,7 +140,7 @@ LoadVehiclesFromFile(file[])
 
 	if(!f)
 	{
-		err("Reading file '%s'.", file);
+		err(false, false, "Reading file '%s'.", file);
 		return 0;
 	}
 
@@ -160,7 +160,7 @@ LoadVehiclesFromFile(file[])
 
 			if(sscanf(args, "P<,>ffffS()[32]S()[9]S()[4]", posX, posY, posZ, rotZ, group, categories, sizes))
 			{
-				err("[LoadVehiclesFromFile] reading 'Vehicle' in '%s':%d.", file, linenum);
+				err(false, false, "[LoadVehiclesFromFile] reading 'Vehicle' in '%s':%d.", file, linenum);
 				continue;
 			}
 
@@ -178,7 +178,7 @@ LoadVehiclesFromFile(file[])
 			{
 				if(default_group == -2)
 				{
-					err("Default group is invalid (%d) in '%s':%d", default_group, file, linenum);
+					err(false, false, "Default group is invalid (%d) in '%s':%d", default_group, file, linenum);
 					continue;
 				}
 				else
@@ -200,7 +200,7 @@ LoadVehiclesFromFile(file[])
 				{
 					if(default_maxcategories == 0)
 					{
-						err("Default categories are empty in '%s':%d", file, linenum);
+						err(false, false, "Default categories are empty in '%s':%d", file, linenum);
 						continue;
 					}
 
@@ -212,7 +212,7 @@ LoadVehiclesFromFile(file[])
 				else
 				{
 					if(!_CatStringToInts(categories, veh_SpawnData[count][vspawn_categories], strlen(categories)))
-						err("[Vehicle] Invalid category character in '%s':%d", file, linenum);
+						err(false, false, "[Vehicle] Invalid category character in '%s':%d", file, linenum);
 				}
 
 				/*
@@ -222,7 +222,7 @@ LoadVehiclesFromFile(file[])
 				{
 					if(default_maxsizes == 0)
 					{
-						err("Default sizes are empty in '%s':%d", file, linenum);
+						err(false, false, "Default sizes are empty in '%s':%d", file, linenum);
 						continue;
 					}
 
@@ -234,7 +234,7 @@ LoadVehiclesFromFile(file[])
 				else
 				{
 					if(!_SizeStringToInts(sizes, veh_SpawnData[count][vspawn_sizes], strlen(sizes)))
-						err("[Vehicle] Invalid size character in '%s':%d", file, linenum);
+						err(false, false, "[Vehicle] Invalid size character in '%s':%d", file, linenum);
 				}
 
 				type = PickRandomVehicleTypeFromGroup(veh_SpawnData[count][vspawn_group], veh_SpawnData[count][vspawn_categories], maxcategories, veh_SpawnData[count][vspawn_sizes], maxsizes);
@@ -245,7 +245,7 @@ LoadVehiclesFromFile(file[])
 
 				if(!IsValidVehicleType(type))
 				{
-					err("Explicit vehicle type '%s' is invalid in '%s':%d", group, file, linenum);
+					err(false, false, "Explicit vehicle type '%s' is invalid in '%s':%d", group, file, linenum);
 					continue;
 				}
 
@@ -277,7 +277,7 @@ LoadVehiclesFromFile(file[])
 
 			if(vehicleid == MAX_VEHICLES - 1)
 			{
-				err("MAX_VEHICLES limit reached at '%s':%d", file, linenum);
+				err(false, false, "MAX_VEHICLES limit reached at '%s':%d", file, linenum);
 				break;
 			}
 
@@ -291,7 +291,7 @@ LoadVehiclesFromFile(file[])
 		{
 			if(sscanf(args, "p<,>s[32]s[9]s[4]", group, categories, sizes))
 			{
-				err("[LoadVehiclesFromFile] reading 'Defaults' in '%s'%d.", file, linenum);
+				err(false, false, "[LoadVehiclesFromFile] reading 'Defaults' in '%s'%d.", file, linenum);
 				continue;
 			}
 
@@ -300,10 +300,10 @@ LoadVehiclesFromFile(file[])
 			default_maxsizes = strlen(sizes);
 
 			if(!_CatStringToInts(categories, default_categories, strlen(categories)))
-				err("[Defaults] Invalid category character in '%s':%d", file, linenum);
+				err(false, false, "[Defaults] Invalid category character in '%s':%d", file, linenum);
 
 			if(!_SizeStringToInts(sizes, default_sizes, strlen(sizes)))
-				err("[Defaults] Invalid size character in '%s':%d", file, linenum);
+				err(false, false, "[Defaults] Invalid size character in '%s':%d", file, linenum);
 		}
 	}
 

@@ -358,6 +358,8 @@ public OnPlayerSpawn(playerid)
 	PlayerPlaySound(playerid, 1186, 0.0, 0.0, 0.0);
 	PreloadPlayerAnims(playerid);
 
+	SetPlayerHealth(playerid, 99.9);
+	
 	Streamer_Update(playerid);
 
 	return 1;

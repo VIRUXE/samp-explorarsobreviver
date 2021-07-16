@@ -93,7 +93,7 @@ stock CreateTentFromItem(Item:itemid)
 {
 	if(GetItemType(itemid) != item_TentPack)
 	{
-		err("Attempted to create tent from non-tentpack item %d type: %d", _:itemid, _:GetItemType(itemid));
+		err(true, true, "Attempted to create tent from non-tentpack item %d type: %d", _:itemid, _:GetItemType(itemid));
 		return -1;
 	}
 
@@ -101,7 +101,7 @@ stock CreateTentFromItem(Item:itemid)
 
 	if(id == -1)
 	{
-		err("MAX_TENT limit reached.");
+		err(false, true, "MAX_TENT limit reached.");
 		return -1;
 	}
 
@@ -125,6 +125,7 @@ stock CreateTentFromItem(Item:itemid)
 
 	tnt_Data[id][tnt_itemId] = itemid;
 	tnt_Data[id][tnt_containerId] = CreateContainer("Tenda", MAX_TENT_ITEMS);
+
 	tnt_ContainerTent[tnt_Data[id][tnt_containerId]] = id;
 
 	SetItemExtraData(itemid, id);
@@ -203,7 +204,14 @@ stock DestroyTent(tentid)
 	CallLocalFunction("OnTentDestroy", "d", tentid);
 	_tent_Remove(tentid);
 
+	if(GetItemType(tnt_Data[tentid][tnt_itemId]) != item_TentPack)
+		return 0;
+
 	SetItemExtraData(tnt_Data[tentid][tnt_itemId], INVALID_TENT_ID);
+
+	if(!IsValidContainer(tnt_Data[tentid][tnt_containerId]))
+		return 0;
+
 	DestroyContainer(tnt_Data[tentid][tnt_containerId]);
 
 	DestroyDynamicObject(tnt_ObjData[tentid][tnt_objSideR1]);
@@ -216,6 +224,7 @@ stock DestroyTent(tentid)
 	DestroyDynamicObject(tnt_ObjData[tentid][tnt_objDownL2]);
 	DestroyDynamicObject(tnt_ObjData[tentid][tnt_objPoleF]);
 	DestroyDynamicObject(tnt_ObjData[tentid][tnt_objPoleB]);
+
 	tnt_ObjData[tentid][tnt_objSideR1] = INVALID_OBJECT_ID;
 	tnt_ObjData[tentid][tnt_objSideR2] = INVALID_OBJECT_ID;
 	tnt_ObjData[tentid][tnt_objSideL1] = INVALID_OBJECT_ID;
@@ -236,7 +245,7 @@ SaveTent(tentid, bool:active = true)
 {
 	if(!Iter_Contains(tnt_Index, tentid))
 	{
-		err("tent", 2, "[SaveTent] ERROR: Attempted to save tent ID %d active: %d that was not found in index.", tentid, active);
+		err(true, true, "tent", 2, "[SaveTent] ERROR: Attempted to save tent ID %d active: %d that was not found in index.", tentid, active);
 		return 1;
 	}
 
@@ -249,7 +258,7 @@ SaveTent(tentid, bool:active = true)
 
 	if(!IsValidContainer(containerid))
 	{
-		err("Can't save tent %d (%s): Not valid container (%d).", _:itemid, uuid, _:containerid);
+		err(true, true, "Can't save tent %d (%s): Not valid container (%d).", _:itemid, uuid, _:containerid);
 		return 2;
 	}
 
@@ -381,7 +390,7 @@ hook OnPlayerPickUpItem(playerid, Item:itemid)
 		new tentid;
 		GetItemExtraData(itemid, tentid);
 
-		if(IsValidTent(tentid))
+		if(IsValidTent(tentid) && GetItemType(tnt_Data[tentid][tnt_itemId]) == item_TentPack)
 		{
 			DisplayContainerInventory(playerid, tnt_Data[tentid][tnt_containerId]);
 			SaveTent(tentid);
@@ -585,7 +594,7 @@ hook OnHoldActionFinish(playerid)
 
 			if(!IsValidTent(tentid))
 			{
-				err("Player %d attempted to destroy invalid tent %d from item %d", playerid, tentid, _:tnt_CurrentTentItem[playerid]);
+				err(true, true, "Player %d attempted to destroy invalid tent %d from item %d", playerid, tentid, _:tnt_CurrentTentItem[playerid]);
 				return Y_HOOKS_CONTINUE_RETURN_0;
 			}
 

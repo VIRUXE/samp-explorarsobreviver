@@ -22,7 +22,11 @@ hook OnPlayerUpdate(playerid)
 
 	if(!IsPlayerOnAdminDuty(playerid) && IsPlayerSpawned(playerid) && health > 99.9)
 	{
-		ChatMsgAdmins(3, RED, "[Anti-Health Hack Test] %p(%d) detected. Health: %f", playerid, playerid, health);
+		if(GetTickCountDifference(GetTickCount(), GetPlayerSpawnTick(playerid)) > 3000)
+		{
+			ChatMsgAdmins(3, RED,
+				"[Anti-Health Hack Test] %p(%d) detected. Health: %f", playerid, playerid, health);
+		}
 	}
 
 	if(GetPlayerAnimationIndex(playerid) == 1266)

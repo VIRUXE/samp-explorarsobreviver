@@ -99,7 +99,7 @@ stock DefineExplosiveItem(ItemType:itemtype, EXP_TRIGGER:trigger, EXP_PRESET:pre
 {
 	if(0 <= exp_Total >= MAX_EXPLOSIVE_ITEM - 1)
 	{
-		err("Explosive item definition limit reached!");
+		err(false, false, "Explosive item definition limit reached!");
 		return -1;
 	}
 
@@ -389,7 +389,7 @@ hook OnPlayerEnterDynArea(playerid, areaid)
 
 	if(!IsValidItem(Item:data[1]))
 	{
-		err("Proximity mine streamer area contains invalid item id (%d)", data[1]);
+		err(false, false, "Proximity mine streamer area contains invalid item id (%d)", data[1]);
 		return Y_HOOKS_CONTINUE_RETURN_0;
 	}
 
@@ -397,7 +397,7 @@ hook OnPlayerEnterDynArea(playerid, areaid)
 	GetItemExtraData(Item:data[1], itemarea);
 	if(itemarea != areaid)
 	{
-		err("Proximity mine item area (%d) does not match triggered area (%d)", itemarea, areaid);
+		err(false, false, "Proximity mine item area (%d) does not match triggered area (%d)", itemarea, areaid);
 		return Y_HOOKS_CONTINUE_RETURN_0;
 	}
 
@@ -562,7 +562,7 @@ stock CreateExplosionOfPreset(Float:x, Float:y, Float:z, EXP_PRESET:preset)
 			CreateIncenExplosion(x, y, z, exp_Presets[preset][exp_size]);
 
 		case EXP_THERM:
-			err("EXP_THERM not implemented");
+			err(false, false, "EXP_THERM not implemented");
 
 		case EXP_EMP:
 			CreateEmpExplosion(x, y, z, exp_Presets[preset][exp_size]);

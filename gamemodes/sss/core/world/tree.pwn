@@ -88,7 +88,7 @@ DefineTreeCategory(const name[])
 {
 	if(treeCategory_Total >= MAX_TREE_CATEGORIES)
 	{
-		err("Tree category index limit reached at name: %i", name);
+		err(false, false, "Tree category index limit reached at name: %i", name);
 		return -1;
 	}
 
@@ -102,7 +102,7 @@ DefineTreeSpecies(modelid, Float:diameter, Float:health, Float:chop_damage, piec
 {
 	if(treeSpecies_Total >= MAX_TREE_SPECIES - 1)
 	{
-		err("Tree species limit reached at modelid: %i", modelid);
+		err(false, false, "Tree species limit reached at modelid: %i", modelid);
 		return -1;
 	}
 
@@ -111,7 +111,7 @@ DefineTreeSpecies(modelid, Float:diameter, Float:health, Float:chop_damage, piec
 
 	if(!treeCategory_Data[categoryid][0])
 	{
-		err("DefineTreeSpecies() undefined \"categoryid\" parameter: %i", categoryid);
+		err(false, false, "DefineTreeSpecies() undefined \"categoryid\" parameter: %i", categoryid);
 		return -1;
 	}
 
@@ -136,13 +136,13 @@ CreateTree(speciesid, Float:x, Float:y, Float:z)
 {
 	if(!(0 <= speciesid < MAX_TREE_SPECIES))
 	{
-		err("Invalid tree species ID: %d", speciesid);
+		err(false, false, "Invalid tree species ID: %d", speciesid);
 		return -1;
 	}
 
 	if(treeSpecies_Data[speciesid][tree_model] == 0)
 	{
-		err("CreateTree() undefined \"speciesid\" parameter: %i", speciesid);
+		err(false, false, "CreateTree() undefined \"speciesid\" parameter: %i", speciesid);
 		return -1;
 	}
 
@@ -153,7 +153,7 @@ CreateTree(speciesid, Float:x, Float:y, Float:z)
 
 	if(id == ITER_NONE)
 	{
-		err("CreateTree() limit reached at [%i, %f, %f, %f]", speciesid, x, y, z);
+		err(false, false, "CreateTree() limit reached at [%i, %f, %f, %f]", speciesid, x, y, z);
 		return -1;
 	}
 

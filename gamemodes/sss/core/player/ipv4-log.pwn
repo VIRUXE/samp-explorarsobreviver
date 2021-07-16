@@ -69,7 +69,7 @@ hook OnPlayerConnect(playerid)
 		stmt_bind_value(stmt_Ipv4Insert, 2, DB::TYPE_INTEGER, gettime());
 
 		if(!stmt_execute(stmt_Ipv4Insert))
-			err("Failed to execute statement 'stmt_Ipv4Insert'.");
+			err(false, false, "Failed to execute statement 'stmt_Ipv4Insert'.");
 	}
 
 	return 1;

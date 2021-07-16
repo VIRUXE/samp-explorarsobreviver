@@ -66,7 +66,7 @@ DefineSupplyDropType(const name[], const lootindex[], interval, rand, required)
 {
 	if(sup_TypeTotal == MAX_SUPPLY_DROP_TYPE)
 	{
-		err("Supply drop type limit reached.");
+		err(false, false, "Supply drop type limit reached.");
 		return -1;
 	}
 
@@ -88,7 +88,7 @@ DefineSupplyDropPos(const name[MAX_SUPPLY_DROP_LOCATION_NAME], Float:x, Float:y,
 
 	if(id == ITER_NONE)
 	{
-		err("Supply drop pos definition limit reached.");
+		err(false, false, "Supply drop pos definition limit reached.");
 		return -1;
 	}
 
@@ -118,7 +118,7 @@ timer SupplyDropTimer[SUPPLY_DROP_TICK_INTERVAL]()
 	// there are no more locations so stop the timer.
 	if(Iter_Count(sup_Index) == 0)
 	{
-		err("Supply drops run out, stopping supply drop timer.");
+		err(false, false, "Supply drops run out, stopping supply drop timer.");
 		stop sup_UpdateTimer;
 		return;
 	}
@@ -202,7 +202,7 @@ timer SupplyDropTimer[SUPPLY_DROP_TICK_INTERVAL]()
 	// This would be a red flag for memory corruption!
 	if(!ret)
 	{
-		err("Supply crate already active (type: %d)", sup_CurrentType);
+		err(false, false, "Supply crate already active (type: %d)", sup_CurrentType);
 		return;
 	}
 
@@ -219,8 +219,12 @@ timer SupplyDropTimer[SUPPLY_DROP_TICK_INTERVAL]()
 	else
 		supplyType = "Desconhecido";
 
-	ChatMsgAll(YELLOW, " » "C_GREEN"[Exército]"C_YELLOW" Suprimentos caindo em "C_BLUE"\"%s\""C_YELLOW".", sup_DropLocationData[id][supl_name]);
-	ChatMsgAll(YELLOW, " » Tipo "C_BLUE"\"%s\" "C_YELLOW"(Icone '"C_WHITE"S"C_YELLOW"' no Radar)", supplyType);
+
+	SendClientMessageToAll(YELLOW, sprintf(
+		" » [Exército] Suprimentos caindo em "C_BLUE"\"%s\""C_YELLOW".\
+		Tipo "C_BLUE"\"%s\" "C_YELLOW"(Icone '"C_WHITE"S"C_YELLOW"' no Radar)",
+	sup_DropLocationData[id][supl_name], supplyType));
+
 
 	Iter_Remove(sup_Index, id);
 
@@ -279,7 +283,7 @@ SupplyCrateLand()
 
 	if(sup_CurrentType == -1)
 	{
-		err("sup_CurrentType == -1");
+		err(false, false, "sup_CurrentType == -1");
 		return;
 	}
 
@@ -315,8 +319,8 @@ SupplyCrateLand()
 
 	lootindex = GetLootIndexFromName(sup_TypeData[sup_CurrentType][supt_loot]);
 	
-	FillContainerWithLoot(Container:sup_Containerid, 4 + random(16), lootindex);
-	GetContainerFreeSlots(Container:sup_Containerid, freeslots);
+	FillContainerWithLoot(sup_Containerid, 4 + random(16), lootindex);
+	GetContainerFreeSlots(sup_Containerid, freeslots);
 	dbg("supply-crate", 2, "[SupplyCrateLand] Spawned %d items in supply crate container %d", 32 - freeslots, _:sup_Containerid);
 
 	sup_CurrentType = -1;
@@ -328,8 +332,8 @@ SupplyCrateLand()
 
 hook OnButtonPress(playerid, Button:id)
 {
-	if(id == sup_Button && IsValidContainer(Container:sup_Containerid))
-		DisplayContainerInventory(playerid, Container:sup_Containerid);
+	if(id == sup_Button && IsValidContainer(sup_Containerid))
+		DisplayContainerInventory(playerid, sup_Containerid);
 }
 
 hook OnDynamicObjectMoved(objectid)

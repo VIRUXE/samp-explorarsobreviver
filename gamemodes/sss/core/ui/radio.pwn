@@ -16,7 +16,8 @@ static
 	PlayerText:RadioUI_Mode[MAX_PLAYERS],
 	PlayerText:RadioUI_Freq[MAX_PLAYERS],
 	PlayerText:RadioUI_Power[MAX_PLAYERS],
-	PlayerText:RadioUI_Back[MAX_PLAYERS];
+	PlayerText:RadioUI_Back[MAX_PLAYERS],
+	Radio_Icon[MAX_PLAYERS][MAX_PLAYERS];
 
 ShowRadioUI(playerid)
 {
@@ -37,49 +38,47 @@ ShowRadioUI(playerid)
 	rad_ViewingRadio[playerid] = true;
 }
 
-hook OnScriptInit()
-{
-    ShowPlayerMarkers(PLAYER_MARKERS_MODE_GLOBAL);
-	LimitPlayerMarkerRadius(9999.0);
-}
-
 hook OnPlayerLoad(playerid, filename[])
 {
 	UpdateRadioMarker(playerid);
 }
 
-hook OnPlayerStreamIn(playerid, forplayerid)
+ptask UpdateRadioIcon[5000](playerid)
 {
-	if(GetPlayerRadioFrequency(playerid) > MIN_RADIO_FREQ)
-	{
-		if(GetPlayerRadioFrequency(playerid) == GetPlayerRadioFrequency(forplayerid))
-			UpdateRadioMarker(playerid, 0);
-	}
+	UpdateRadioMarker(playerid, 0);
 }
 
 UpdateRadioMarker(playerid, info = 1)
 {
 	if(GetPlayerRadioFrequency(playerid) > MIN_RADIO_FREQ)
 	{
-		new playersInFreq;
-		
-		//if(!PlayerHasMap(playerid)) return 0;
-
+		new 
+			playersInFreq,
+			Float:x, Float:y, Float:z;
+			
 		foreach(new i : Player)
 		{
 			if(i == playerid)
 				continue;
-			
+
+			if(IsValidDynamicMapIcon(Radio_Icon[playerid][i]) && !PlayerHasMap(playerid))
+				DestroyDynamicMapIcon(Radio_Icon[playerid][i]);
+
 			if(GetPlayerRadioFrequency(playerid) == GetPlayerRadioFrequency(i) && !IsPlayerOnAdminDuty(i))
 			{
-				SetPlayerMarkerForPlayer(playerid, i, CHAT_RADIO);
-				SetPlayerMarkerForPlayer(i, playerid, CHAT_RADIO);
+				if(PlayerHasMap(playerid))
+				{
+					GetPlayerPos(i, x, y, z);
+
+					if(!IsValidDynamicMapIcon(Radio_Icon[playerid][i]))
+						Radio_Icon[playerid][i] = CreateDynamicMapIcon(x, y, z, 62, 0, .playerid = playerid, .streamdistance = 9999.0, .style = MAPICON_GLOBAL);
+
+					Streamer_SetFloatData(STREAMER_TYPE_MAP_ICON, Radio_Icon[playerid][i], E_STREAMER_X, x);
+					Streamer_SetFloatData(STREAMER_TYPE_MAP_ICON, Radio_Icon[playerid][i], E_STREAMER_Y, y);
+					Streamer_SetFloatData(STREAMER_TYPE_MAP_ICON, Radio_Icon[playerid][i], E_STREAMER_Z, z);
+				}
+				
 				playersInFreq++;
-			}
-			else
-			{
-				SetPlayerMarkerForPlayer(playerid, i, GetPlayerColor(i));
-				SetPlayerMarkerForPlayer(i, playerid, GetPlayerColor(playerid));
 			}
 		}
 

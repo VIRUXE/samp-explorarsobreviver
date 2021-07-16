@@ -1176,7 +1176,6 @@ public OnScriptInit()
 	DefineItemTypeWeapon(item_Spatula,			0,							-1,				0.001,			0,		0,		anim_Blunt);
 	DefineItemTypeWeapon(item_StunGun,			0,							-1,				0.0,			0,		0,		anim_Stab);
 	DefineItemTypeWeapon(item_Wrench,			0,							-1,				0.01,			_:1.20,	0,		anim_Blunt);
-
 	//					itemtype				baseweapon					calibre			bleedrate		koprob	n/a		animset
 	DefineItemTypeWeapon(item_Bat,				WEAPON_BAT,					-1,				0.09,			35,		0);
 	DefineItemTypeWeapon(item_Baton,			WEAPON_NITESTICK,			-1,				0.03,			24,		0);
@@ -1408,7 +1407,7 @@ public OnScriptInit()
 
 	SetCraftSetConstructible(20000, item_Sledgehammer, 	DefineItemCraftSet(item_Bed, item_MetPanel, false, item_WoodLog, false, item_WoodLog, false, item_RefinedMetal, false), item_Crowbar, 25000);
 	SetCraftSetConstructible(30000, item_Sledgehammer, 	DefineItemCraftSet(item_Cuntainer, item_CrateDoor, false, item_CrateDoor, false, item_CrateDoor, false, item_CrateDoor, false, item_CrateDoor, false), item_Crowbar, 25000, true, true);
-	SetCraftSetConstructible(30000, item_Sledgehammer, 	DefineItemCraftSet(item_MetalGate1, item_MetalGate, false, item_MetalGate, false), item_Crowbar, 25000, true, true);
+	SetCraftSetConstructible(30000, item_Sledgehammer, 	DefineItemCraftSet(item_MetalGate1, item_MetalGate, false, item_MetalGate, false), .tweak = true, .defence = true);
 	SetCraftSetConstructible(30000, item_Sledgehammer, 	DefineItemCraftSet(item_RedCrate, item_MilitaryGate, false, item_MilitaryGate, false, item_MetalGate, false), item_Crowbar, 25000, true, true);
 
 	// items created with a workbench

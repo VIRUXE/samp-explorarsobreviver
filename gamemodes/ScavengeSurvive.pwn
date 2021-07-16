@@ -258,11 +258,6 @@ enum
 	ATTACHSLOT_ARMOUR		// 6 - Armour model slot
 }
 
-// Redefine Item Extra Data API with the Array Data API
-#define SetItemExtraData(%0,%1) SetItemArrayDataAtCell(%0,%1,0,true)
-#define GetItemExtraData(%0) GetItemArrayDataAtCell(%0,0)
-
-
 /*==============================================================================
 
 	Global values
@@ -292,7 +287,6 @@ new
 
 		// server
 bool:	gAutoLoginWithIP,
-bool:	gPauseMap,
 bool:	gPlayerAnimations,
 bool:	gVehicleSurfing,
 Float:	gNameTagDistance,
@@ -535,7 +529,7 @@ new stock
 #include "sss/core/apparel/hats/headphones.pwn"
 #include "sss/core/apparel/hats/2armyhelmet.pwn"
 #include "sss/core/apparel/hats/cowboyhat.pwn"
-#include "sss/core/apparel/hats/policehelm.pwn"
+#include "sss/core/apparel/hats/2policehelm.pwn"
 
 // BAGS
 #include "sss/core/apparel/bags/backpack.pwn"
@@ -822,7 +816,7 @@ DatabaseTableCheck(DB:database, const tablename[], expectedcolumns)
 
 	if(dbcolumns != expectedcolumns)
 	{
-		err("Table '%s' has %d columns, expected %d:", tablename, dbcolumns, expectedcolumns);
+		err(false, false, "Table '%s' has %d columns, expected %d:", tablename, dbcolumns, expectedcolumns);
 
 		// Put the server into a loop to stop it so the user can read the message.
 		// It won't function correctly with bad databases anyway.
@@ -832,5 +826,5 @@ DatabaseTableCheck(DB:database, const tablename[], expectedcolumns)
 
 public Streamer_OnPluginError(const error[])
 {
-	err(error);
+	err(true, true, error);
 }

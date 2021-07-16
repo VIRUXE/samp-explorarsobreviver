@@ -25,6 +25,10 @@ hook OnPlayerDisconnect(playerid, reason)
 	DestroyPlayerProgressBar(playerid, ActionBar);
 }
 
+hook OnPlayerMeleePlayer(playerid, targetid, Float:bleedrate, Float:knockmult)
+	StopHoldAction(playerid);
+
+
 hook OnPlayerOpenInventory(playerid)
 {
 	defer t_StopHoldAction(playerid);
@@ -37,7 +41,7 @@ hook OnPlayerOpenContainer(playerid, containerid)
 	return Y_HOOKS_CONTINUE_RETURN_0;
 }
 
-timer t_StopHoldAction[50](playerid)
+timer t_StopHoldAction[100](playerid)
 	StopHoldAction(playerid);
 
 StartHoldAction(playerid, duration, startvalue = 0)

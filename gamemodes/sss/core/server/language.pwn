@@ -98,13 +98,13 @@ stock LoadAllLanguages()
 
 	if(direc == Directory:-1)
 	{
-		err("Reading directory '%s'.", DIRECTORY_SCRIPTFILES DIRECTORY_LANGUAGES);
+		err(false, false, "Reading directory '%s'.", DIRECTORY_SCRIPTFILES DIRECTORY_LANGUAGES);
 		return 0;
 	}
 
 	if(default_entries == 0)
 	{
-		err("No default entries loaded! Please add the 'Portugues (100%)' langfile to '%s'.", DIRECTORY_SCRIPTFILES DIRECTORY_LANGUAGES);
+		err(false, false, "No default entries loaded! Please add the 'Portugues (100%)' langfile to '%s'.", DIRECTORY_SCRIPTFILES DIRECTORY_LANGUAGES);
 		for(;;) {}
 	}
 
