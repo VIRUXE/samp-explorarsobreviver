@@ -87,6 +87,21 @@ UpdateRadioMarker(playerid, info = 1)
 	return 1;
 }
 
+hook OnPlayerDisconnect(playerid, reason)
+{
+	foreach(new i : Player)
+	{
+		if(i == playerid)
+			continue;
+
+		if(IsValidDynamicMapIcon(Radio_Icon[playerid][i]))
+			DestroyDynamicMapIcon(Radio_Icon[playerid][i]);
+
+		if(IsValidDynamicMapIcon(Radio_Icon[i][playerid]))
+			DestroyDynamicMapIcon(Radio_Icon[i][playerid]);
+	}
+}
+
 HideRadioUI(playerid)
 {
 	PlayerTextDrawHide(playerid, RadioUI_Main[playerid]);
