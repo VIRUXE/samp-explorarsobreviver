@@ -159,7 +159,7 @@ SaveSafeboxItem(Item:itemid, bool:active = true)
 
 	if(!IsItemTypeSafebox(GetItemType(itemid)))
 	{
-		err("Can't save safebox %d (%s): Item isn't a safebox, type: %d", _:itemid, uuid, _:GetItemType(itemid));
+		err(true, true, "Can't save safebox %d (%s): Item isn't a safebox, type: %d", _:itemid, uuid, _:GetItemType(itemid));
 		return 2;
 	}
 
@@ -174,7 +174,7 @@ SaveSafeboxItem(Item:itemid, bool:active = true)
 
 	if(!IsValidContainer(containerid))
 	{
-		err("Can't save safebox %d (%s): Not valid container (%d).", _:itemid, uuid, _:containerid);
+		err(true, true, "Can't save safebox %d (%s): Not valid container (%d).", _:itemid, uuid, _:containerid);
 		return 5;
 	}
 
@@ -207,7 +207,7 @@ public OnSafeboxLoad(Item:itemid, active, uuid[], data[], length)
 {
 	if(!IsItemTypeSafebox(GetItemType(itemid)))
 	{
-		err("Loaded item %d (%s) is not a safebox (type: %d)", _:itemid, uuid, _:GetItemType(itemid));
+		err(true, true, "Loaded item %d (%s) is not a safebox (type: %d)", _:itemid, uuid, _:GetItemType(itemid));
 		return 0;
 	}
 

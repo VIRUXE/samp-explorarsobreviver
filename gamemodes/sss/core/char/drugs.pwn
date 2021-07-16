@@ -63,7 +63,7 @@ stock DefineDrugType(const name[], duration)
 {
 	if(drug_TypeTotal == MAX_DRUG_TYPE)
 	{
-		err("Max drug types (%d) reached.", MAX_DRUG_TYPE);
+		err(false, false, "Max drug types (%d) reached.", MAX_DRUG_TYPE);
 		return -1;
 	}
 
@@ -223,13 +223,13 @@ stock SetPlayerDrugsFromArray(playerid, input[], length)
 
 	if(input[0] < 0 || input[0] >= MAX_DRUG_TYPE)
 	{
-		err("Drug count out of bounds (%d)", input[0]);
+		err(true, true, "Drug count out of bounds (%d)", input[0]);
 		return 0;
 	}
 
 	if(length != 1 + (input[0] * 2))
 	{
-		err("(Drug count * 2) + 1 != data length (%d != %d)", 1 + (input[0] * 2), length);
+		err(true, true, "(Drug count * 2) + 1 != data length (%d != %d)", 1 + (input[0] * 2), length);
 		return 0;
 	}
 

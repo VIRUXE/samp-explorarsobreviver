@@ -71,7 +71,7 @@ LoadTrees(filename[])
 
 	if(!fexist(filename))
 	{
-		err("file: \"%s\" NOT FOUND", filename);
+		err(true, false, "file: \"%s\" NOT FOUND", filename);
 		return 0;
 	}
 
@@ -79,7 +79,7 @@ LoadTrees(filename[])
 
 	if(!file)
 	{
-		err("file: \"%s\" NOT LOADED", filename);
+		err(true, false, "file: \"%s\" NOT LOADED", filename);
 		return 0;
 	}
 
@@ -101,7 +101,7 @@ LoadTrees(filename[])
 		{
 			if(sscanf(funcargs, "p<,>s[32]fff", category_name, x, y, z))
 			{
-				err("[LoadTrees] Malformed parameters on line %d", linenumber);
+				err(true, false, "[LoadTrees] Malformed parameters on line %d", linenumber);
 				linenumber++;
 				continue;
 			}

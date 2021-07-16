@@ -309,7 +309,7 @@ ChatMsgAdminsFlat(level, colour, const message[])
 {
 	if(level == 0)
 	{
-		err("MsgAdmins parameter 'level' cannot be 0");
+		err(false, false, "MsgAdmins parameter 'level' cannot be 0");
 		return 0;
 	}
 
@@ -505,7 +505,7 @@ stock RegisterAdminCommand(level, const string[])
 {
 	if(!(STAFF_LEVEL_GAME_MASTER <= level <= STAFF_LEVEL_LEAD))
 	{
-		err("Cannot register admin command for level %d", level);
+		err(false, false, "Cannot register admin command for level %d", level);
 		return 0;
 	}
 

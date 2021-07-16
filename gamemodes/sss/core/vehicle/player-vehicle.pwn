@@ -104,7 +104,7 @@ LoadPlayerVehicles()
 	direc = OpenDir(path);
 	if(direc == Directory:-1)
 	{
-		err("failed to open vehicles directory '%s': %d", path, _:direc);
+		err(false, false, "failed to open vehicles directory '%s': %d", path, _:direc);
 		return 1;
 	}
 
@@ -114,7 +114,7 @@ LoadPlayerVehicles()
 		{
 			if(strfind(entry, ".dat", false, 3) == -1)
 			{
-				err("File with invalid extension: '%s'", entry);
+				err(false, false, "File with invalid extension: '%s'", entry);
 				continue;
 			}
 
@@ -148,7 +148,7 @@ LoadPlayerVehicle(const filepath[])
 	PathBase(filepath, filename);
 	if(!(6 < strlen(filename) < MAX_PLAYER_NAME + 4))
 	{
-		err("File with a bad filename length: '%s' len: %d", filename, strlen(filename));
+		err(false, false, "File with a bad filename length: '%s' len: %d", filename, strlen(filename));
 		return 0;
 	}
 
@@ -156,7 +156,7 @@ LoadPlayerVehicle(const filepath[])
 
 	if(length < 0)
 	{
-		err("modio error %d in '%s'.", length, filename);
+		err(false, false, "modio error %d in '%s'.", length, filename);
 		modio_finalise_read(modio_getsession_read(filepath));
 		return 0;
 	}
@@ -176,13 +176,13 @@ LoadPlayerVehicle(const filepath[])
 	if(length == 0)
 	{
 		modio_finalise_read(modio_getsession_read(filepath));
-		err("modio_read returned length of 0.");
+		err(false, false, "modio_read returned length of 0.");
 		return 0;
 	}
 
 	if(!IsValidVehicleType(data[VEH_CELL_TYPE]))
 	{
-		err("Removing vehicle file '%s' invalid vehicle type '%d'.", filename, data[VEH_CELL_TYPE]);
+		err(false, false, "Removing vehicle file '%s' invalid vehicle type '%d'.", filename, data[VEH_CELL_TYPE]);
 		fremove(filepath);
 		modio_finalise_read(modio_getsession_read(filepath));
 		return 0;
@@ -193,7 +193,7 @@ LoadPlayerVehicle(const filepath[])
 
 	if(Float:data[VEH_CELL_HEALTH] < 255.5)
 	{
-		err("Removing vehicle file: '%s' (%s) due to low health.", filename, vehiclename);
+		err(false, false, "Removing vehicle file: '%s' (%s) due to low health.", filename, vehiclename);
 		fremove(filepath);
 		modio_finalise_read(modio_getsession_read(filepath));
 		return 0;
@@ -209,7 +209,7 @@ LoadPlayerVehicle(const filepath[])
 				data[VEH_CELL_POSZ] = _:(Float:data[VEH_CELL_POSZ] + 10.0);
 			else
 			{
-				err("Removing vehicle file: %s (%s) because it's out of the map bounds.", filename, vehiclename);
+				err(false, false, "Removing vehicle file: %s (%s) because it's out of the map bounds.", filename, vehiclename);
 				fremove(filepath);
 				modio_finalise_read(modio_getsession_read(filepath));
 				return 0;
@@ -238,7 +238,7 @@ LoadPlayerVehicle(const filepath[])
 
 	if(!IsValidVehicle(vehicleid))
 	{
-		err("Created vehicle returned invalid ID (%d)", vehicleid);
+		err(false, false, "Created vehicle returned invalid ID (%d)", vehicleid);
 		modio_finalise_read(modio_getsession_read(filepath));
 		return 0;
 	}

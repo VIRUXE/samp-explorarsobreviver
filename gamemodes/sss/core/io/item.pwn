@@ -30,25 +30,19 @@ SaveWorldItem(Item:itemid, const subdir[], bool:active, savearray = true, const 
 	GetItemUUID(itemid, uuid);
 
 	if(gServerInitialising)
-	{
 		return 1;
-	}
 
 	if(!IsValidItem(itemid))
 	{
-		err("Can't save item %d (%s) Not valid item.", _:itemid, uuid);
+		err(true, true, "Can't save item %d (%s) Not valid item.", _:itemid, uuid);
 		return 2;
 	}
 
 	if(!IsItemInWorld(itemid))
-	{
 		return 3;
-	}
 
 	if(isnull(uuid))
-	{
 		return 4;
-	}
 
 	new
 		filename[256],
@@ -171,21 +165,21 @@ Item:LoadItem(const filename[], const uuid[], const callback[])
 
 	if(length < 0)
 	{
-		err("modio error %d in '%s'.", length, filename);
+		err(true, true, "modio error %d in '%s'.", length, filename);
 		modio_finalise_read(modio_getsession_read(filename));
 		return INVALID_ITEM_ID;
 	}
 
 	if(length == 0)
 	{
-		err("Item %s data length is 0", filename);
+		err(true, true, "Item %s data length is 0", filename);
 		modio_finalise_read(modio_getsession_read(filename));
 		return INVALID_ITEM_ID;
 	}
 
 	if(info[SAVED_ITEM_POS_X] == 0.0 && info[SAVED_ITEM_POS_Y] == 0.0 && info[SAVED_ITEM_POS_Z] == 0.0)
 	{
-		err("Item %s position is %f %f %f", filename, info[SAVED_ITEM_POS_X], info[SAVED_ITEM_POS_Y], info[SAVED_ITEM_POS_Z]);
+		err(true, true, "Item %s position is %f %f %f", filename, info[SAVED_ITEM_POS_X], info[SAVED_ITEM_POS_Y], info[SAVED_ITEM_POS_Z]);
 		modio_finalise_read(modio_getsession_read(filename));
 		return INVALID_ITEM_ID;
 	}

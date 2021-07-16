@@ -817,7 +817,7 @@ DatabaseTableCheck(DB:database, const tablename[], expectedcolumns)
 
 	if(dbcolumns != expectedcolumns)
 	{
-		err("Table '%s' has %d columns, expected %d:", tablename, dbcolumns, expectedcolumns);
+		err(false, false, "Table '%s' has %d columns, expected %d:", tablename, dbcolumns, expectedcolumns);
 
 		// Put the server into a loop to stop it so the user can read the message.
 		// It won't function correctly with bad databases anyway.
@@ -827,5 +827,5 @@ DatabaseTableCheck(DB:database, const tablename[], expectedcolumns)
 
 public Streamer_OnPluginError(const error[])
 {
-	err(error);
+	err(true, true, error);
 }

@@ -306,7 +306,7 @@ hook OnPlayerConstructed(playerid, consset, Item:result)
 		}
 		else
 		{
-			err("Key duplicated attempt failed %d %d %d %d", consset, _:craftset, _:result, _:tmp);
+			err(false, false, "Key duplicated attempt failed %d %d %d %d", consset, _:craftset, _:result, _:tmp);
 		}
 	}
 

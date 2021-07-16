@@ -64,7 +64,7 @@ stock TweakItem(playerid, Item:itemid)
 	GetItemUUID(itemid, uuid);
 
 	if(twk_Item[playerid] != INVALID_ITEM_ID)
-		err("twk_Item already set to %d", _:twk_Item[playerid]);
+		err(false, false, "twk_Item already set to %d", _:twk_Item[playerid]);
 
 	log(true, "[TWEAK] %p Tweaked item %d (%s)", playerid, _:itemid, uuid);
 
@@ -269,13 +269,13 @@ _twk_AdjustItemPos(playerid, Float:distance, Float:direction, Float:rotation)
 {
 	if(!IsPlayerConnected(playerid))
 	{
-		err("Called on invalid player %d", playerid);
+		err(false, false, "Called on invalid player %d", playerid);
 		return 1;
 	}
 
 	if(!IsValidItem(twk_Item[playerid]))
 	{
-		err("Called on invalid item %d", _:twk_Item[playerid]);
+		err(false, false, "Called on invalid item %d", _:twk_Item[playerid]);
 		_twk_Reset(playerid);
 		return 2;
 	}
@@ -336,7 +336,7 @@ hook OnPlayerEnterDynArea(playerid, areaid)
 
 	if(!IsPlayerConnected(twk_Tweaker[Item:data[1]]))
 	{
-		err("Player entered area of tweaked item %d item has no connected player.", data[1]);
+		err(false, false, "Player entered area of tweaked item %d item has no connected player.", data[1]);
 		return Y_HOOKS_CONTINUE_RETURN_0;
 	}
 
@@ -362,7 +362,7 @@ hook OnPlayerLeaveDynArea(playerid, areaid)
 
 	if(!IsPlayerConnected(twk_Tweaker[Item:data[1]]))
 	{
-		err("Player left area of tweaked item %d item has no connected player.", data[1]);
+		err(false, false, "Player left area of tweaked item %d item has no connected player.", data[1]);
 		return Y_HOOKS_CONTINUE_RETURN_0;
 	}
 

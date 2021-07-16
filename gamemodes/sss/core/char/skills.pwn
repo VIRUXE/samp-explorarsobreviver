@@ -188,7 +188,7 @@ hook OnPlayerLoad(playerid, filename[])
 
 			if(_skl_SkillNameToID(playerid, skl_PlayerSkills[playerid][skl_PlayerSkillCount[playerid]][skl_name]) != -1)
 			{
-				err("Skill '%s' duplicated in player data", skl_PlayerSkills[playerid][skl_PlayerSkillCount[playerid]][skl_name]);
+				err(false, false, "Skill '%s' duplicated in player data", skl_PlayerSkills[playerid][skl_PlayerSkillCount[playerid]][skl_name]);
 				continue;
 			}
 

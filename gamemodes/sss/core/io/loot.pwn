@@ -16,8 +16,7 @@ hook OnGameModeInit()
 	new count = LoadLootTableDir(DIRECTORY_SCRIPTFILES DIRECTORY_LOOT_TABLES);
 
 	if(count == 0)
-		err("No loot table entries loaded!");
-
+		err(false, false, "No loot table entries loaded!");
 	else
 		Logger_Log("loaded loot table entries", Logger_I("count", count));
 }
@@ -38,7 +37,7 @@ LoadLootTableDir(const directory_with_root[])
 
 	if(direc == Directory:-1)
 	{
-		err("[LoadLootTableDir] Reading directory '%s'.", directory_with_root);
+		err(false, false, "[LoadLootTableDir] Reading directory '%s'.", directory_with_root);
 		return 0;
 	}
 
@@ -70,7 +69,7 @@ LoadLootTableFromFile(file[])
 
 	if(!fexist(file))
 	{
-		err("[LoadLootTableFromFile] File '%s' not found.", file);
+		err(false, false, "[LoadLootTableFromFile] File '%s' not found.", file);
 		return 0;
 	}
 
@@ -97,7 +96,7 @@ LoadLootTableFromFile(file[])
 
 	if(sscanf(line, "p<,>s[32]F(1.0)", indexname, mult))
 	{
-		err("[LoadLootTableFromFile] ltb (loot-table) file %s has bad header (must be <indexname>, <weight multiplier>", file);
+		err(false, false, "[LoadLootTableFromFile] ltb (loot-table) file %s has bad header (must be <indexname>, <weight multiplier>", file);
 		return 0;
 	}
 
@@ -116,7 +115,7 @@ LoadLootTableFromFile(file[])
 
 		if(!IsValidItemType(itemtype))
 		{
-			err("[LoadLootTableFromFile] Invalid item uname '%s' at %s:%d", uname, file, linenum);
+			err(false, false, "[LoadLootTableFromFile] Invalid item uname '%s' at %s:%d", uname, file, linenum);
 			continue;
 		}
 

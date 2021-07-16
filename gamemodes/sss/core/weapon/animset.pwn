@@ -20,7 +20,7 @@ DefineAnimSet()
 {
 	if(anm_TotalAnimSets == MAX_ANIMSET)
 	{
-		err("MAX_ANIMSET limit reached.");
+		err(false, false, "MAX_ANIMSET limit reached.");
 		return -1;
 	}
 

@@ -22,7 +22,7 @@ stock DefineLiquidType(const name[], Float:foodvalue, ...)
 {
 	if(liq_Total >= MAX_LIQUID_TYPES - 1)
 	{
-		err("MAX_LIQUID_TYPES limit reached!");
+		err(false, false, "MAX_LIQUID_TYPES limit reached!");
 		return -1;
 	}
 

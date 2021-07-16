@@ -82,7 +82,7 @@ _cntr_UseWeb(playerid)
 
 	if(cell == ITER_NONE)
 	{
-		err("[_cntr_UseWeb] cell == ITER_NONE");
+		err(false, false, "[_cntr_UseWeb] cell == ITER_NONE");
 		return 0;
 	}
 
@@ -98,7 +98,7 @@ public OnLookupResponse(sessionid, response, data[])
 {
 	if(!(0 <= sessionid < MAX_PLAYERS))
 	{
-		err("OnLookupResponse sessionid out of bounds (%d)", sessionid);
+		err(false, false, "OnLookupResponse sessionid out of bounds (%d)", sessionid);
 		return;
 	}
 

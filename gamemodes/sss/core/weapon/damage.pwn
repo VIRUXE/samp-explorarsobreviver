@@ -354,12 +354,12 @@ stock GetPlayerWoundDataAsArray(playerid, output[])
 
 		if(sourcelen > MAX_WOUND_SRCLEN)
 		{
-			err("Wound %d sourcelen:%d > %d dump: t:%d b:%f c:%d d:%d p:%d", i, sourcelen, MAX_WOUND_SRCLEN, _:wnd_Data[playerid][i][wnd_type], _:wnd_Data[playerid][i][wnd_bleedrate], wnd_Data[playerid][i][wnd_calibre], wnd_Data[playerid][i][wnd_timestamp], wnd_Data[playerid][i][wnd_bodypart]);
+			err(false, false, "Wound %d sourcelen:%d > %d dump: t:%d b:%f c:%d d:%d p:%d", i, sourcelen, MAX_WOUND_SRCLEN, _:wnd_Data[playerid][i][wnd_type], _:wnd_Data[playerid][i][wnd_bleedrate], wnd_Data[playerid][i][wnd_calibre], wnd_Data[playerid][i][wnd_timestamp], wnd_Data[playerid][i][wnd_bodypart]);
 			sourcelen = MAX_WOUND_SRCLEN;
 		}
 		else if(sourcelen == 0)
 		{
-			err("Wound %d sourcelen:%d <= 0 dump: t:%d b:%f c:%d d:%d p:%d", i, sourcelen, _:wnd_Data[playerid][i][wnd_type], _:wnd_Data[playerid][i][wnd_bleedrate], wnd_Data[playerid][i][wnd_calibre], wnd_Data[playerid][i][wnd_timestamp], wnd_Data[playerid][i][wnd_bodypart]);
+			err(false, false, "Wound %d sourcelen:%d <= 0 dump: t:%d b:%f c:%d d:%d p:%d", i, sourcelen, _:wnd_Data[playerid][i][wnd_type], _:wnd_Data[playerid][i][wnd_bleedrate], wnd_Data[playerid][i][wnd_calibre], wnd_Data[playerid][i][wnd_timestamp], wnd_Data[playerid][i][wnd_bodypart]);
 		}
 
 		//memcpy(output[idx++], wnd_Data[playerid][i][wnd_source], 0, 32 * 4, 32);
@@ -381,7 +381,7 @@ stock SetPlayerWoundDataFromArray(playerid, input[])
 
 	if(!(0 < input[0] < MAX_WOUNDS))
 	{
-		err("Wound count (%d) is invalid.", input[0]);
+		err(false, false, "Wound count (%d) is invalid.", input[0]);
 		return 0;
 	}
 
@@ -396,7 +396,7 @@ stock SetPlayerWoundDataFromArray(playerid, input[])
 
 		if(woundid == ITER_NONE)
 		{
-			err("Ran out of wound slots on wound %d cell: %d", (idx - 1) / _:E_WOUND_DATA, idx);
+			err(false, false, "Ran out of wound slots on wound %d cell: %d", (idx - 1) / _:E_WOUND_DATA, idx);
 			break;
 		}
 
@@ -409,11 +409,11 @@ stock SetPlayerWoundDataFromArray(playerid, input[])
 
 		if(sourcelen > MAX_WOUND_SRCLEN)
 		{
-			err("sourcelen:%d > %d, truncating.", sourcelen, MAX_WOUND_SRCLEN);
+			err(false, false, "sourcelen:%d > %d, truncating.", sourcelen, MAX_WOUND_SRCLEN);
 			sourcelen = MAX_WOUND_SRCLEN;
 		}
 		else if(sourcelen == 0)
-			err("sourcelen:%d <= 0, truncating.", sourcelen);
+			err(false, false, "sourcelen:%d <= 0, truncating.", sourcelen);
 
 		// memcpy(wnd_Data[playerid][woundid][wnd_source], input[idx], 0, 32 * 4); // no idx++
 		// idx += sourcelen; // jump over the string

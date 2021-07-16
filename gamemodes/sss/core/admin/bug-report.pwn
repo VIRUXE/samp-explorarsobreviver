@@ -69,7 +69,7 @@ CMD:bug(playerid, params[])
 			stmt_bind_value(stmt_BugInsert, 2, DB::TYPE_INTEGER, gettime());
 			
 			if(!stmt_execute(stmt_BugInsert))
-				err("erro ao reportar bug: %p reportou %s", playerid, inputtext);
+				err(false, true, "erro ao reportar bug: %p reportou %s", playerid, inputtext);
 		}
 	}
 	Dialog_ShowCallback(playerid, using inline Response, DIALOG_STYLE_INPUT, "Relatório de Bug", ls(playerid, "BUGREPORTDI"), "Submeter", "Cancelar");

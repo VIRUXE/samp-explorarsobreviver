@@ -197,7 +197,7 @@ _DisplaySafeboxDialog(playerid, Item:itemid, animation)
 
 	if(box_ContainerSafebox[containerid] != itemid) 
 	{
-		err("Safebox (%d) container ID (%d) was invalid container.", _:itemid, _:containerid);
+		err(true, true, "Safebox (%d) container ID (%d) was invalid container.", _:itemid, _:containerid);
 
 		new
 			name[MAX_ITEM_NAME + 2];
