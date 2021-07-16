@@ -221,8 +221,8 @@ timer SupplyDropTimer[SUPPLY_DROP_TICK_INTERVAL]()
 
 
 	SendClientMessageToAll(YELLOW, sprintf(
-		" » [Exército] Suprimentos caindo em "C_BLUE"\"%s\""C_YELLOW".\
-		Tipo "C_BLUE"\"%s\" "C_YELLOW"(Icone '"C_WHITE"S"C_YELLOW"' no Radar)",
+		" » [Exército] Suprimentos caindo em "C_BLUE"\"%s\""C_YELLOW". Tipo "C_BLUE"\
+		\"%s\" "C_YELLOW"(Icone '"C_WHITE"S"C_YELLOW"' no Radar)",
 	sup_DropLocationData[id][supl_name], supplyType));
 
 
