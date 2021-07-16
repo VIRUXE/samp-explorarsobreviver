@@ -118,7 +118,7 @@ stock GivePlayerBag(playerid, Item:itemid)
 
 		if(!IsValidContainer(containerid))
 		{
-			err("Bag (%d) container ID (%d) was invalid container has to be recreated.", _:itemid, _:containerid);
+			err(true, true, "Bag (%d) container ID (%d) was invalid container has to be recreated.", _:itemid, _:containerid);
 
 			containerid = CreateContainer(bag_TypeData[bagtype][bag_name], bag_TypeData[bagtype][bag_size]);
 			SetItemExtraData(itemid, _:containerid);
@@ -172,11 +172,11 @@ stock RemovePlayerBag(playerid)
 
 		if(bagtype == -1)
 		{
-			err("Player (%d) bag item type (%d) is not a valid bag type.", playerid, bagtype);
+			err(true, true, "Player (%d) bag item type (%d) is not a valid bag type.", playerid, bagtype);
 			return 0;
 		}
 
-		err("Bag (%d) container ID (%d) was invalid container has to be recreated.", _:bag_PlayerBagID[playerid], _:containerid);
+		err(true, true, "Bag (%d) container ID (%d) was invalid container has to be recreated.", _:bag_PlayerBagID[playerid], _:containerid);
 
 		containerid = CreateContainer(bag_TypeData[bagtype][bag_name], bag_TypeData[bagtype][bag_size]);
 		SetItemExtraData(bag_PlayerBagID[playerid], _:containerid);

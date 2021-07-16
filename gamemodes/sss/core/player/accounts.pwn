@@ -698,9 +698,7 @@ SavePlayerData(playerid)
 		stmt_bind_value(stmt_AccountUpdate, 2, DB::TYPE_PLAYER_NAME, playerid);
 
 		if(!stmt_execute(stmt_AccountUpdate))
-		{
-			err("Statement 'stmt_AccountUpdate' failed to execute.");
-		}
+			err(true, true, "Statement 'stmt_AccountUpdate' failed to execute.");
 
 		dbg("accounts", 2, "[SavePlayerData] Saving character data");
 		SavePlayerChar(playerid);
@@ -713,9 +711,7 @@ SavePlayerData(playerid)
 		stmt_bind_value(stmt_AccountUpdate, 2, DB::TYPE_PLAYER_NAME, playerid);
 
 		if(!stmt_execute(stmt_AccountUpdate))
-		{
-			err("Statement 'stmt_AccountUpdate' failed to execute.");
-		}
+			err(true, true, "Statement 'stmt_AccountUpdate' failed to execute.");
 	}
 
 	return 1;
@@ -745,7 +741,7 @@ stock GetAccountData(name[], pass[], &ipv4, &alive, &regdate, &lastlog, &spawnti
 
 	if(!stmt_execute(stmt_AccountLoad))
 	{
-		err("[GetAccountData] executing statement 'stmt_AccountLoad'.");
+		err(true, true, "[GetAccountData] executing statement 'stmt_AccountLoad'.");
 		return 0;
 	}
 

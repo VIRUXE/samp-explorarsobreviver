@@ -89,7 +89,7 @@ LoadTile(filename[])
 			}
 			else
 			{
-				err("in file '%s': tile rarity must be defined on line 1", filename);
+				err(false, false, "in file '%s': tile rarity must be defined on line 1", filename);
 			}
 		}
 
@@ -115,7 +115,7 @@ AddTerrainTile(name[24], objects[MAX_OBJECTS_PER_TILE][E_TILE_OBJECT_DATA], rari
 {
 	if(tiletype_Total == MAX_TILE_TYPE)
 	{
-		err("MAX_TILE_TYPE limit reached.");
+		err(false, false, "MAX_TILE_TYPE limit reached.");
 		return;
 	}
 

@@ -48,7 +48,7 @@ stock DefineLiquidContainerItem(ItemType:itemtype, Float:capacity, bool:reusable
 {
 	if(liq_Total >= MAX_LIQUID_TYPES - 1)
 	{
-		err("MAX_LIQUID_TYPES limit reached!");
+		err(false, false, "MAX_LIQUID_TYPES limit reached!");
 		return -1;
 	}
 

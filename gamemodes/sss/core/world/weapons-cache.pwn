@@ -38,7 +38,7 @@ DefineWeaponsCachePos(Float:x, Float:y, Float:z)
 
 	if(id == ITER_NONE)
 	{
-		err("Weapons cache pos definition limit reached.");
+		err(false, false, "Weapons cache pos definition limit reached.");
 		return -1;
 	}
 
@@ -59,7 +59,7 @@ timer WeaponsCacheTimer[WEPCACHE_INTERVAL]()
 	// There are no more locations available, kill the timer.
 	if(Iter_Count(wepc_Index) == 0)
 	{
-		err("Weapons caches run out, stopping weapons cache timer.");
+		err(false, false, "Weapons caches run out, stopping weapons cache timer.");
 		return;
 	}
 

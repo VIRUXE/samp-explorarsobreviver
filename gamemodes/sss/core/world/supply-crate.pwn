@@ -66,7 +66,7 @@ DefineSupplyDropType(const name[], const lootindex[], interval, rand, required)
 {
 	if(sup_TypeTotal == MAX_SUPPLY_DROP_TYPE)
 	{
-		err("Supply drop type limit reached.");
+		err(false, false, "Supply drop type limit reached.");
 		return -1;
 	}
 
@@ -88,7 +88,7 @@ DefineSupplyDropPos(const name[MAX_SUPPLY_DROP_LOCATION_NAME], Float:x, Float:y,
 
 	if(id == ITER_NONE)
 	{
-		err("Supply drop pos definition limit reached.");
+		err(false, false, "Supply drop pos definition limit reached.");
 		return -1;
 	}
 
@@ -118,7 +118,7 @@ timer SupplyDropTimer[SUPPLY_DROP_TICK_INTERVAL]()
 	// there are no more locations so stop the timer.
 	if(Iter_Count(sup_Index) == 0)
 	{
-		err("Supply drops run out, stopping supply drop timer.");
+		err(false, false, "Supply drops run out, stopping supply drop timer.");
 		stop sup_UpdateTimer;
 		return;
 	}
@@ -202,7 +202,7 @@ timer SupplyDropTimer[SUPPLY_DROP_TICK_INTERVAL]()
 	// This would be a red flag for memory corruption!
 	if(!ret)
 	{
-		err("Supply crate already active (type: %d)", sup_CurrentType);
+		err(false, false, "Supply crate already active (type: %d)", sup_CurrentType);
 		return;
 	}
 
@@ -283,7 +283,7 @@ SupplyCrateLand()
 
 	if(sup_CurrentType == -1)
 	{
-		err("sup_CurrentType == -1");
+		err(false, false, "sup_CurrentType == -1");
 		return;
 	}
 

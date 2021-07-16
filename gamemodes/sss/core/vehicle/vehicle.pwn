@@ -157,7 +157,7 @@ stock CreateWorldVehicle(type, Float:x, Float:y, Float:z, Float:r, colour1, colo
 {
 	if(!(0 <= type < veh_TypeTotal))
 	{
-		err("Tried to create invalid vehicle type (%d).", type);
+		err(false, false, "Tried to create invalid vehicle type (%d).", type);
 		return 0;
 	}
 
@@ -603,7 +603,7 @@ hook OnPlayerStateChange(playerid, newstate, oldstate)
 	{
 		if(!IsValidVehicle(veh_Current[playerid]))
 		{
-			err("player state changed from vehicle but veh_Current is invalid", veh_Current[playerid]);
+			err(true, true, "player state changed from vehicle but veh_Current is invalid", veh_Current[playerid]);
 			return 0;
 		}
 
@@ -643,7 +643,7 @@ hook OnPlayerStateChange(playerid, newstate, oldstate)
 	{
 		if(!IsValidVehicle(veh_Current[playerid]))
 		{
-			err("player state changed from vehicle but veh_Current is invalid", veh_Current[playerid]);
+			err(true, true, "player state changed from vehicle but veh_Current is invalid", veh_Current[playerid]);
 			return 0;
 		}
 
@@ -826,7 +826,7 @@ public OnVehicleSpawn(vehicleid)
 stock vti_CreateVehicle(vehicletype, Float:x, Float:y, Float:z, Float:rotation, color1, color2, respawn_delay)
 {
 	#pragma unused vehicletype, x, y, z, rotation, color1, color2, respawn_delay
-	err("Cannot create vehicle by model ID.");
+	err(true, true, "Cannot create vehicle by model ID.");
 
 	return 0;
 }

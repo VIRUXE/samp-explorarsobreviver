@@ -67,7 +67,7 @@ hook OnGameModeInit()
 		spawn_NewItems[i][e_itmobj_type] = GetItemTypeFromUniqueName(newitems[i], true);
 
 		if(newitems[i][0] != EOS && !IsValidItemType(spawn_NewItems[i][e_itmobj_type]))
-			err("item '%s' from spawn/new-items/%d is invalid type %d.", newitems[i], i, _:spawn_NewItems[i][e_itmobj_type]);
+			err(false, false, "item '%s' from spawn/new-items/%d is invalid type %d.", newitems[i], i, _:spawn_NewItems[i][e_itmobj_type]);
 	}
 
 	GetSettingFloat("spawn/res-blood", 100.0, spawn_ResBlood);
@@ -80,7 +80,7 @@ hook OnGameModeInit()
 		spawn_ResItems[i][e_itmobj_type] = GetItemTypeFromUniqueName(resitems[i], true);
 
 		if(resitems[i][0] != EOS && !IsValidItemType(spawn_ResItems[i][e_itmobj_type]))
-			err("item '%s' from spawn/res-items/%d is invalid type %d.", resitems[i], i, _:spawn_ResItems[i][e_itmobj_type]);
+			err(false, false, "item '%s' from spawn/res-items/%d is invalid type %d.", resitems[i], i, _:spawn_ResItems[i][e_itmobj_type]);
 	}
 }
 
@@ -134,7 +134,7 @@ SpawnLoggedInPlayer(playerid)
 			return 1;
 		}
 		else
-			err("PlayerSpawnExistingCharacter returned %d", ret);
+			err(false, false, "PlayerSpawnExistingCharacter returned %d", ret);
 	}
 	
 	PlayerCreateNewCharacter(playerid);

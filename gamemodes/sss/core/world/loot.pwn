@@ -63,7 +63,7 @@ hook OnScriptInit()
 stock DefineLootIndex(name[MAX_LOOT_INDEX_NAME])
 {
 	if(loot_IndexTotal >= MAX_LOOT_INDEX)
-		err("Loot index limit reached at '%s'.", name);
+		err(false, false, "Loot index limit reached at '%s'.", name);
 
 	loot_IndexName[loot_IndexTotal] = name;
 
@@ -76,7 +76,7 @@ stock AddItemToLootIndex(index, ItemType:itemtype, Float:weight, perspawnlimit =
 		return 0;
 
 	if(loot_IndexSize[index] >= MAX_LOOT_INDEX_ITEMS)
-		err("Loot index item limit reached.");
+		err(false, false, "Loot index item limit reached.");
 
 	loot_IndexItems[index][loot_IndexSize[index]][lootitem_type] = itemtype;
 	loot_IndexItems[index][loot_IndexSize[index]][lootitem_weight] = weight;
@@ -93,13 +93,13 @@ stock CreateStaticLootSpawn(Float:x, Float:y, Float:z, lootindex, Float:weight, 
 {
 	if(loot_SpawnTotal >= MAX_LOOT_SPAWN - 1)
 	{
-		err("Loot spawn limit reached.");
+		err(false, false, "Loot spawn limit reached.");
 		return -1;
 	}
 
 	if(!(0 <= lootindex < loot_IndexTotal))
 	{
-		err("Loot index (%d) is invalid.", lootindex);
+		err(false, false, "Loot index (%d) is invalid.", lootindex);
 		return -1;
 	}
 
@@ -145,7 +145,7 @@ stock CreateStaticLootSpawn(Float:x, Float:y, Float:z, lootindex, Float:weight, 
 
 		if(itemtype == item_NULL)
 		{
-			err("Chosen cell contained itemtype 0, index %d size %d: %s", lootindex, samplelistsize, atosr(_:samplelist, samplelistsize));
+			err(false, false, "Chosen cell contained itemtype 0, index %d size %d: %s", lootindex, samplelistsize, atosr(_:samplelist, samplelistsize));
 			continue;
 		}
 
@@ -158,7 +158,7 @@ stock CreateStaticLootSpawn(Float:x, Float:y, Float:z, lootindex, Float:weight, 
 
 		if(!(Item:0 <= itemid < MAX_ITEM))
 		{
-			err("Item limit reached while generating loot.");
+			err(false, false, "Item limit reached while generating loot.");
 			return -1;
 		}
 
@@ -269,7 +269,7 @@ stock Item:CreateLootItem(lootindex, Float:x = 0.0, Float:y = 0.0, Float:z = 0.0
 {
 	if(!(0 <= lootindex < loot_IndexTotal))
 	{
-		err("Loot index (%d) is invalid.", lootindex);
+		err(false, false, "Loot index (%d) is invalid.", lootindex);
 		return INVALID_ITEM_ID;
 	}
 
@@ -289,7 +289,7 @@ stock Item:CreateLootItem(lootindex, Float:x = 0.0, Float:y = 0.0, Float:z = 0.0
 
 	if(itemtype == item_NULL)
 	{
-		err("Chosen cell contained itemtype 0, index %d size %d: %s", lootindex, samplelistsize, atosr(_:samplelist, samplelistsize));
+		err(false, false, "Chosen cell contained itemtype 0, index %d size %d: %s", lootindex, samplelistsize, atosr(_:samplelist, samplelistsize));
 		return INVALID_ITEM_ID;
 	}
 
@@ -312,7 +312,7 @@ stock FillContainerWithLoot(Container:containerid, slots, lootindex)
 {
 	if(!(0 <= lootindex < loot_IndexTotal))
 	{
-		err("Loot index (%d) is invalid.", lootindex);
+		err(false, false, "Loot index (%d) is invalid.", lootindex);
 		return -1;
 	}
 
@@ -347,7 +347,7 @@ stock FillContainerWithLoot(Container:containerid, slots, lootindex)
 
 		if(itemtype == item_NULL)
 		{
-			err("Chosen cell contained itemtype 0, index %d size %d: %s", lootindex, samplelistsize, atosr(_:samplelist, samplelistsize));
+			err(false, false, "Chosen cell contained itemtype 0, index %d size %d: %s", lootindex, samplelistsize, atosr(_:samplelist, samplelistsize));
 			continue;
 		}
 
@@ -362,7 +362,7 @@ stock FillContainerWithLoot(Container:containerid, slots, lootindex)
 
 		if(!(Item:0 <= itemid < MAX_ITEM))
 		{
-			err("Item limit reached while generating loot.");
+			err(false, false, "Item limit reached while generating loot.");
 			return -1;
 		}
 
@@ -542,7 +542,7 @@ stock GetLootIndexFromName(const name[])
 			return i;
 	}
 
-	err("specified index name is invalid ('%s')", name);
+	err(false, false, "specified index name is invalid ('%s')", name);
 	PrintAmxBacktrace();
 
 	return -1;

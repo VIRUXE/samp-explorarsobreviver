@@ -35,7 +35,7 @@ stock IsGpciInWhitelist(hash[])
 
 	if(!stmt_execute(stmt_WhitelistExists))
 	{
-		err("Executing statement 'stmt_WhitelistExists'.");
+		err(false, false, "Executing statement 'stmt_WhitelistExists'.");
 		return 0;
 	}
 
@@ -53,7 +53,7 @@ stock AddGpciToWhitelist(hash[])
 
 	if(!stmt_execute(stmt_WhitelistInsert))
 	{
-		err("Executing statement 'stmt_WhitelistInsert'.");
+		err(false, false, "Executing statement 'stmt_WhitelistInsert'.");
 		return 0;
 	}
 
@@ -66,7 +66,7 @@ stock RemoveGpciFromWhitelist(hash[])
 
 	if(!stmt_execute(stmt_WhitelistDelete))
 	{
-		err("Executing statement 'stmt_WhitelistDelete'.");
+		err(false, false, "Executing statement 'stmt_WhitelistDelete'.");
 		return -1;
 	}
 
@@ -85,7 +85,7 @@ stock GetGpciWhitelist(output[][])
 
 	if(!stmt_execute(stmt_WhitelistGetAll))
 	{
-		err("Executing statement 'stmt_WhitelistGetAll'.");
+		err(false, false, "Executing statement 'stmt_WhitelistGetAll'.");
 		return 0;
 	}
 

@@ -93,7 +93,7 @@ stock CreateTentFromItem(Item:itemid)
 {
 	if(GetItemType(itemid) != item_TentPack)
 	{
-		err("Attempted to create tent from non-tentpack item %d type: %d", _:itemid, _:GetItemType(itemid));
+		err(true, true, "Attempted to create tent from non-tentpack item %d type: %d", _:itemid, _:GetItemType(itemid));
 		return -1;
 	}
 
@@ -101,7 +101,7 @@ stock CreateTentFromItem(Item:itemid)
 
 	if(id == -1)
 	{
-		err("MAX_TENT limit reached.");
+		err(false, true, "MAX_TENT limit reached.");
 		return -1;
 	}
 
@@ -245,7 +245,7 @@ SaveTent(tentid, bool:active = true)
 {
 	if(!Iter_Contains(tnt_Index, tentid))
 	{
-		err("tent", 2, "[SaveTent] ERROR: Attempted to save tent ID %d active: %d that was not found in index.", tentid, active);
+		err(true, true, "tent", 2, "[SaveTent] ERROR: Attempted to save tent ID %d active: %d that was not found in index.", tentid, active);
 		return 1;
 	}
 
@@ -258,7 +258,7 @@ SaveTent(tentid, bool:active = true)
 
 	if(!IsValidContainer(containerid))
 	{
-		err("Can't save tent %d (%s): Not valid container (%d).", _:itemid, uuid, _:containerid);
+		err(true, true, "Can't save tent %d (%s): Not valid container (%d).", _:itemid, uuid, _:containerid);
 		return 2;
 	}
 
@@ -594,7 +594,7 @@ hook OnHoldActionFinish(playerid)
 
 			if(!IsValidTent(tentid))
 			{
-				err("Player %d attempted to destroy invalid tent %d from item %d", playerid, tentid, _:tnt_CurrentTentItem[playerid]);
+				err(true, true, "Player %d attempted to destroy invalid tent %d from item %d", playerid, tentid, _:tnt_CurrentTentItem[playerid]);
 				return Y_HOOKS_CONTINUE_RETURN_0;
 			}
 

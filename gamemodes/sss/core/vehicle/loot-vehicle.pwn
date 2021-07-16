@@ -28,7 +28,7 @@ CreateLootVehicle(type, Float:x, Float:y, Float:z, Float:r)
 
 	if(vehicleid >= MAX_VEHICLES)
 	{
-		err("Vehicle limit reached.");
+		err(false, false, "Vehicle limit reached.");
 		DestroyVehicle(vehicleid);
 		return 0;
 	}

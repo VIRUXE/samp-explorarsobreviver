@@ -190,7 +190,7 @@ public OnReverseDNS(ip[], host[], extra)
 			stmt_bind_value(stmt_HostInsert, 2, DB::TYPE_INTEGER, gettime());
 
 			if(!stmt_execute(stmt_HostInsert))
-				err("Failed to execute statement 'stmt_HostInsert'.");
+				err(false, false, "Failed to execute statement 'stmt_HostInsert'.");
 		}
 	}
 

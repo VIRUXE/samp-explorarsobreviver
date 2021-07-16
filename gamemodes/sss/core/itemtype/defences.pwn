@@ -204,7 +204,7 @@ ActivateDefenceItem(Item:itemid)
 
 	if(!IsValidItemType(itemtype))
 	{
-		err("Attempted to create defence from item with invalid type (%d)", _:itemtype);
+		err(true, true, "Attempted to create defence from item with invalid type (%d)", _:itemtype);
 		return 1;
 	}
 
@@ -212,7 +212,7 @@ ActivateDefenceItem(Item:itemid)
 
 	if(defencetype == INVALID_DEFENCE_TYPE)
 	{
-		err("Attempted to create defence from item that is not a defence type (%d)", _:itemtype);
+		err(true, true, "Attempted to create defence from item that is not a defence type (%d)", _:itemtype);
 		return 2;
 	}
 

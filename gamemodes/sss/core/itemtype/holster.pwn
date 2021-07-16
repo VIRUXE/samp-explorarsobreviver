@@ -269,7 +269,7 @@ timer HolsterItemDelay[time](playerid, itemid, time)
 
 	if(Item:itemid == currentitem)
 	{
-		err("Player %p (%d) attempting to holster item (%d) that's already holstered!", playerid, playerid, itemid);
+		err(true, true, "Player %p (%d) attempting to holster item (%d) that's already holstered!", playerid, playerid, itemid);
 		RemoveCurrentItem(playerid);
 		return 0;
 	}

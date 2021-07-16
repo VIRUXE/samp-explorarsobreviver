@@ -16,7 +16,7 @@ stock SetItemTypeScrapValue(ItemType:itemtype, value)
 {
 	if(!IsValidItemType(itemtype))
 	{
-		err("Tried to assign scrap value to invalid item type.");
+		err(true, true, "Tried to assign scrap value to invalid item type.");
 		return;
 	}
 

@@ -64,7 +64,7 @@ LoadCarmour()
 
 	if(direc == Directory:-1)
 	{
-		err("Reading directory '%s'.", directory_with_root);
+		err(false, false, "Reading directory '%s'.", directory_with_root);
 		return 0;
 	}
 
@@ -88,7 +88,7 @@ LoadOffsetsFromFile(filename[], name[])
 
 	if(!IsValidVehicleType(vehicletype))
 	{
-		err("Vehicle type from name '%s' is invalid", name);
+		err(false, false, "Vehicle type from name '%s' is invalid", name);
 		return -1;
 	}
 
@@ -107,13 +107,13 @@ LoadOffsetsFromFile(filename[], name[])
 
 	if(id == ITER_NONE)
 	{
-		err("[LoadOffsetsFromFile] id == ITER_NONE");
+		err(false, false, "[LoadOffsetsFromFile] id == ITER_NONE");
 		return 0;
 	}
 
 	if(!fexist(filename))
 	{
-		err("[LoadOffsetsFromFile] File not found: '%s'", filename);
+		err(false, false, "[LoadOffsetsFromFile] File not found: '%s'", filename);
 		return 0;
 	}
 
@@ -125,7 +125,7 @@ LoadOffsetsFromFile(filename[], name[])
 		{
 			if(listindex >= MAX_CARMOUR_PARTS - 1)
 			{
-				err("Object limit reached while loading '%s'", filename);
+				err(false, false, "Object limit reached while loading '%s'", filename);
 				break;
 			}
 
@@ -161,7 +161,7 @@ ApplyArmourToVehicle(vehicleid, armourid)
 {
 	if(!IsValidVehicle(vehicleid))
 	{
-		err("Invalid vehicle ID (%d) passed to function.", vehicleid);
+		err(false, false, "Invalid vehicle ID (%d) passed to function.", vehicleid);
 		return 0;
 	}
 
@@ -169,7 +169,7 @@ ApplyArmourToVehicle(vehicleid, armourid)
 
 	if(vehicletype != arm_Data[armourid][arm_vehicleType])
 	{
-		err("Vehicle type (%d) does not match carmour vehicle type (%d).", vehicletype, arm_Data[armourid][arm_vehicleType]);
+		err(false, false, "Vehicle type (%d) does not match carmour vehicle type (%d).", vehicletype, arm_Data[armourid][arm_vehicleType]);
 		return 0;
 	}
 

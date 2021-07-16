@@ -128,7 +128,7 @@ _vint_EnterArea(playerid, areaid)
 
 		if(cell == ITER_NONE)
 		{
-			err("[_vint_EnterArea] cell == ITER_NONE");
+			err(false, false, "[_vint_EnterArea] cell == ITER_NONE");
 			return;
 		}
 
@@ -196,7 +196,7 @@ _varea_Interact(playerid)
 
 	if(!IsPlayerInAnyDynamicArea(playerid))
 	{
-		err("Player %d is not in areas but list isn't empty. Purging list.", playerid);
+		err(false, false, "Player %d is not in areas but list isn't empty. Purging list.", playerid);
 		Iter_Clear(varea_NearIndex[playerid]);
 	}
 
@@ -221,7 +221,7 @@ _varea_Interact(playerid)
 	{
 		if(index >= MAX_VEHICLES_IN_RANGE - 1)
 		{
-			err("[_varea_Interact] varea_NearIndex tried to iterate %d times! Iterator size is %d", index, Iter_Count(varea_NearIndex));
+			err(false, false, "[_varea_Interact] varea_NearIndex tried to iterate %d times! Iterator size is %d", index, Iter_Count(varea_NearIndex));
 			break;
 		}
 
