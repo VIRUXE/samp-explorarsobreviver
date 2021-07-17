@@ -223,14 +223,14 @@ _UpdateKeyActions(playerid)
 	{
 		ClearPlayerKeyActionUI(playerid);
 
-		AddToolTipText(playerid, KEYTEXT_RELOAD, "Abrir inventario");
-
 		if(GetPlayerState(playerid) == PLAYER_STATE_DRIVER)
 		{
 			AddToolTipText(playerid, KEYTEXT_ENGINE, "Motor");
 			AddToolTipText(playerid, KEYTEXT_LIGHTS, "Luzes");
 			AddToolTipText(playerid, KEYTEXT_DOORS, "Fechadura");
 		}
+
+		AddToolTipText(playerid, KEYTEXT_RELOAD, "Abrir inventario");
 
 		ShowPlayerKeyActionUI(playerid);
 		return;
