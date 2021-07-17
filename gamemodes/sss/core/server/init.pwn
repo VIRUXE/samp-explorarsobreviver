@@ -1445,11 +1445,11 @@ public OnScriptInit()
 
 
     // SUPPLY DROP TYPE DEFINITIONS
-	DefineSupplyDropType("Suprimentos de Comida e Hospitalar",	"airdrop_food_medical",		900,	600,	3);
-	DefineSupplyDropType("Suprimentos Industriais",				"airdrop_industrial",		2000,	900,	5);
-	DefineSupplyDropType("Armas de Baixo Calibre",				"airdrop_low_weapons",		2400,	1200,	4);
-	DefineSupplyDropType("Armas Militares",						"airdrop_military_weapons",	4200,	1800,	6);
-	DefineSupplyDropType("Suprimentos de Artilharia",			"airdrop_ordnance",			10800,	10800,	8);
+	DefineSupplyDropType("Comida e Hospitalar",		"airdrop_food_medical",		900,	600,	3);
+	DefineSupplyDropType("Industriais",				"airdrop_industrial",		2000,	900,	5);
+	DefineSupplyDropType("Armas de Baixo Calibre",	"airdrop_low_weapons",		2400,	1200,	4);
+	DefineSupplyDropType("Armas Militares",			"airdrop_military_weapons",	4200,	1800,	6);
+	DefineSupplyDropType("Artilharia",				"airdrop_ordnance",			10800,	10800,	8);
 
 
 	// SKIN DEFINITIONS
