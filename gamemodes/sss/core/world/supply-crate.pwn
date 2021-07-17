@@ -308,6 +308,9 @@ SupplyCrateLand()
 		UpdatePlayerMap(i);
 	}
 
+	if(IsValidDynamicObject(sup_ObjSignal))
+		DestroyDynamicObject(sup_ObjSignal);
+		
 	if(IsValidContainer(sup_Containerid))
 		DestroyContainer(sup_Containerid);
 
