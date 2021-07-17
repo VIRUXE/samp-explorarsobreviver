@@ -94,7 +94,7 @@ UpdateRadioMarker(playerid, info = 1)
 			if(playersInFreq > 1)
 				ChatMsgLang(playerid, CHAT_RADIO, "RADIOINFO", playersInFreq, GetPlayerRadioFrequency(playerid));
 			else if(playersInFreq == 1)
-				ChatMsgLang(playerid, CHAT_RADIO, "RADIOINFOS", playersInFreq, GetPlayerRadioFrequency(playerid));
+				ChatMsgLang(playerid, CHAT_RADIO, "RADIOINFOS", GetPlayerRadioFrequency(playerid));
 		}
 	}
 	return 1;
