@@ -89,27 +89,27 @@ _OnDeath(playerid, killerid)
 		switch(deathreason)
 		{
 			case 0..3, 5..7, 10..15:
-				deathreasonstring = "They were beaten to death.";
+				deathreasonstring = "Espancado ate a morte.";
 			case 4:
-				deathreasonstring = "They suffered small lacerations on the torso, possibly from a knife.";
+				deathreasonstring = "Sofreu ferimentos no corpo, possivelmente por causa de uma faca.";
 			case 8:
-				deathreasonstring = "Large lacerations cover the torso and head, looks like a finely sharpened sword.";
+				deathreasonstring = "Sofreu grandes cortes no corpo, parece que foi uma espada bem afiada.";
 			case 9:
-				deathreasonstring = "There's bits everywhere, probably suffered a chainsaw to the torso.";
+				deathreasonstring = "Foi todo despedaçado, provavelmente foi atacado por uma motosserra no corpo.";
 			case 16, 39, 35, 36, 255:
-				deathreasonstring = "They suffered massive concussion due to an explosion.";
+				deathreasonstring = "Sofreu uma concussão massiva devido a uma explosao.";
 			case 18, 37:
-				deathreasonstring = "The entire body is charred and burnt.";
+				deathreasonstring = "O corpo inteiro foi carbonizado e queimado.";
 			case 22..34, 38:
-				deathreasonstring = "They died of blood loss caused by what looks like bullets.";
+				deathreasonstring = "Morreu de perda de sangue causada pelo que parece ser balas.";
 			case 41, 42:
-				deathreasonstring = "They were sprayed and suffocated by a high pressure substance.";
+				deathreasonstring = "Foi pulverizado e sufocado por uma substancia de alta pressao.";
 			case 44, 45:
-				deathreasonstring = "Somehow, they were killed by goggles.";
+				deathreasonstring = "De alguma forma, morto por óculos de protecao.";
 			case 43:
-				deathreasonstring = "Somehow, they were killed by a camera.";
+				deathreasonstring = "De alguma forma, morto por uma Camera.";
 			default:
-				deathreasonstring = "They bled to death.";
+				deathreasonstring = "Sangrou ate a morte.";
 		}
 	}
 	else
@@ -122,25 +122,21 @@ _OnDeath(playerid, killerid)
 		switch(deathreason)
 		{
 			case 53:
-				deathreasonstring = "They drowned.";
+				deathreasonstring = "Se afogou.";
 			case 54:
-				deathreasonstring = "Most bones are broken, looks like they fell from a great height.";
+				deathreasonstring = "A maioria dos ossos foram quebrados, parece que caiu de uma grande altura.";
 			case 255:
-				deathreasonstring = "They suffered massive concussion due to an explosion.";
+				deathreasonstring = "Sofreu uma concussão massiva devido a uma explosao.";
 			default:
-				deathreasonstring = "They died for an unknown reason.";
+				deathreasonstring = "Morreu por motivo desconhecido. Provavelmente de queda, fome ou sangramento.";
 		}
 	}
 
-	//TODO: Translate the reason and activate
-	//defer DestroyReason(:_CreateDynamic3DTextLabel(sprintf("Alguem morreu aqui, motivo:\n%s", deathreasonstring),
-		//-1, death_PosX[playerid], death_PosY[playerid], death_PosZ[playerid] - 0.1, 2.0));
+	ShowPlayerDialog(playerid, 90, DIALOG_STYLE_MSGBOX, "{fc0303}Causa da morte:", sprintf("{910000}%s", deathreasonstring), "Sair", "");
 
 	return 1;
 }
 
-//timer DestroyReason[10 * 60000](label)
-	//DestroyDynamic3DTextLabel(STREAMER_TAG_3D_TEXT_LABEL:label);
 
 timer DestroyTorso[10 * 60000](itemid)
 	if(IsValidItem(Item:itemid) && GetItemType(Item:itemid) == item_Torso)
