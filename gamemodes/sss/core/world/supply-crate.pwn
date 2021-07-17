@@ -314,8 +314,8 @@ SupplyCrateLand()
 	if(IsValidButton(sup_Button))
 		DestroyButton(sup_Button);
 		
-	sup_Containerid = CreateContainer("Supply Crate", 32);
-	sup_Button = CreateButton(sup_DropX + 1.5, sup_DropY, sup_DropZ + 1.0, "Supply Crate", .label = 1, .labeltext = "Supply Crate");
+	sup_Containerid = CreateContainer("Caixa de Suprimentos", 32);
+	sup_Button = CreateButton(sup_DropX + 1.5, sup_DropY, sup_DropZ + 1.0, "Caixa de Suprimentos", .label = 1, .labeltext = "Caixa de Suprimentos");
 
 	lootindex = GetLootIndexFromName(sup_TypeData[sup_CurrentType][supt_loot]);
 	
