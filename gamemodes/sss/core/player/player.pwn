@@ -92,8 +92,7 @@ public OnPlayerConnect(playerid)
 
 	if(!isnull(gMessageOfTheDay))
 	{
-		ChatMsg(playerid, YELLOW, " » Mensagem do Dia:");
-		ChatMsg(playerid, YELLOW, " » "C_BLUE"%s", gMessageOfTheDay);
+		ChatMsg(playerid, BLUE, ""C_YELLOW" » Mensagem do Dia: "C_BLUE"%s", gMessageOfTheDay);
 	}
 
 	ply_Data[playerid][ply_ShowHUD] = true;
