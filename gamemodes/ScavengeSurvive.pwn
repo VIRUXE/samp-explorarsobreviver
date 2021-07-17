@@ -581,7 +581,7 @@ new stock
 #include "sss/core/item/map.pwn"
 #include "sss/core/item/barrel.pwn"
 #include "sss/core/item/wooddoor.pwn"
-#include "sss/core/item/clock.pwn"
+//#include "sss/core/item/clock.pwn"
 
 // ADMINISTRATION TOOLS
 #include "sss/core/admin/report.pwn"
