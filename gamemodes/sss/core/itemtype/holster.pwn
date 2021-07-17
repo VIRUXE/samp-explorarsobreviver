@@ -213,8 +213,8 @@ _HolsterChecks(playerid)
 		return 0;
 
 	// Interacting with a valid item
-	if(IsValidItem(GetPlayerInteractingItem(playerid)))
-		return 0;
+	//if(IsValidItem(GetPlayerInteractingItem(playerid)))
+		//return 0;
 
 	new Container:containerid;
 	GetPlayerCurrentContainer(playerid, containerid);
@@ -337,17 +337,6 @@ timer UnholsterItemDelay[time](playerid, time)
 hook OnPlayerPickUpItem(playerid, Item:itemid)
 {
 	if(GetTickCountDifference(GetTickCount(), hols_LastHolster[playerid]) < 1000)
-		return Y_HOOKS_BREAK_RETURN_1;
-
-	return Y_HOOKS_CONTINUE_RETURN_0;
-}
-
-hook OnPlayerGiveItem(playerid, targetid, Item:itemid)
-{
-	if(GetTickCountDifference(GetTickCount(), hols_LastHolster[playerid]) < 1000)
-		return Y_HOOKS_BREAK_RETURN_1;
-
-	if(GetTickCountDifference(GetTickCount(), hols_LastHolster[targetid]) < 1000)
 		return Y_HOOKS_BREAK_RETURN_1;
 
 	return Y_HOOKS_CONTINUE_RETURN_0;
