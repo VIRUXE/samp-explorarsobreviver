@@ -609,10 +609,8 @@ hook OnHoldActionUpdate(playerid, progress)
 {
 	if(def_CurrentDefenceItem[playerid] != INVALID_ITEM_ID)
 	{
-		stop def_MoveTime[playerid];
-		
 		if(!IsItemInWorld(def_CurrentDefenceItem[playerid]) || GetPlayerTotalVelocity(playerid) > 1.0)
-			StopHoldAction(playerid);
+			StopBuildingDefence(playerid), StopHoldAction(playerid);
 	}
 
 	return Y_HOOKS_CONTINUE_RETURN_0;
