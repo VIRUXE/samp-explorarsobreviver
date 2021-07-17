@@ -192,8 +192,7 @@ ACMD:spec[2](playerid, params[])
 
 ACMD:free[2](playerid)
 {
-	if(!IsPlayerOnAdminDuty(playerid))
-		return 6;
+	TogglePlayerAdminDuty(!IsPlayerOnAdminDuty(playerid));
 
 	if(GetPlayerSpectateType(playerid) == SPECTATE_TYPE_FREE)
 		ExitFreeMode(playerid);
