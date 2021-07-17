@@ -781,16 +781,16 @@ stock GetPlayerSpawnTick(playerid)
 	return ply_Data[playerid][ply_SpawnTick];
 }
 
-IsAtConnectionPos(Float:x, Float:y, Float:z)
+stock bool:IsAtConnectionPos(Float:x, Float:y, Float:z)
 {
-	if(1133.05 < x < 1133.059999 && -2038.40 < y < -2038.409999 && 69.09 < z < 69.099999)
-		return 1;
+	if(Distance(x, y, z, 1133.05, -2038.40, 69.09) < 7.0)
+		return true;
 
-	if(-5.0 < (x - DEFAULT_POS_X) < 5.0 && -5.0 < (y - DEFAULT_POS_Y) < 5.0 && -5.0 < (z - DEFAULT_POS_Z) < 5.0)
-		return 1;
+	if(Distance(x, y, z, DEFAULT_POS_X, DEFAULT_POS_Y, DEFAULT_POS_Z) < 7.0)
+		return true;
 
-	if(-5.0 < (x - 0.0) < 5.0 && -5.0 < (y - 0.0) < 5.0 && -5.0 < (z - 0.0) < 5.0)
-		return 1;
+	if(Distance(x, y, z, 0.0, 0.0, 0.0) < 7.0)
+		return true;
 
-	return 0;
+	return false;
 }
