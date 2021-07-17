@@ -124,7 +124,11 @@ static Float:Trash_Pos[MAX_TRASH][3] =
 	Player_Trash		[MAX_PLAYERS];
 
 hook OnGameModeInit(){
-    for(new i = 0; i < MAX_TRASH; i++){
+	defer CreateServerTrash();
+}
+
+timer CreateServerTrash[10000]() {
+	for(new i = 0; i < MAX_TRASH; i++){
         Trash_Button[i] = CreateButton(Trash_Pos[i][0], Trash_Pos[i][1], Trash_Pos[i][2] + 0.5,
 			"Pressione F para vasculhar", 0, 0, 2.1, 1, "Lixeira", .testlos = false);
 
@@ -132,7 +136,6 @@ hook OnGameModeInit(){
         disable_Trash[i] = 0;
 	}
 }
-
 hook OnPlayerConnect(playerid)
     Player_Trash[playerid] = -1;
 
