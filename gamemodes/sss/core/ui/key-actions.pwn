@@ -59,7 +59,6 @@ stock AddToolTipText(playerid, const key[], const use[])
 		else if(!strcmp(key, KEYTEXT_ENGINE)) 		strcat(tmp, "Y");
 		else if(!strcmp(key, KEYTEXT_LIGHTS)) 		strcat(tmp, "N");
 		else if(!strcmp(key, KEYTEXT_DOORS)) 		strcat(tmp, "2");
-		else if(!strcmp(key, KEYTEXT_RADIO)) 		strcat(tmp, "R");
 
 		format(tmp, sizeof(tmp), "~y~%s ~w~%s~n~", tmp, use);
 	}
@@ -231,7 +230,6 @@ _UpdateKeyActions(playerid)
 			AddToolTipText(playerid, KEYTEXT_ENGINE, "Motor");
 			AddToolTipText(playerid, KEYTEXT_LIGHTS, "Luzes");
 			AddToolTipText(playerid, KEYTEXT_DOORS, "Fechadura");
-			AddToolTipText(playerid, KEYTEXT_RADIO, "Mostrar Radio");
 		}
 
 		ShowPlayerKeyActionUI(playerid);

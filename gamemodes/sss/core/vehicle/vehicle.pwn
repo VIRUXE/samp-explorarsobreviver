@@ -354,8 +354,8 @@ hook OnPlayerKeyStateChange(playerid, newkeys, oldkeys)
 		if(newkeys & KEY_NO)
 			VehicleLightsState(vehicleid, !VehicleLightsState(vehicleid));
 
-		if(newkeys & KEY_CTRL_BACK)//262144)
-			ShowRadioUI(playerid);
+		//if(newkeys & KEY_CTRL_BACK)//262144)
+			//ShowRadioUI(playerid);
 
 		return 1;
 	}
