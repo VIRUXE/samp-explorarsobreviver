@@ -137,11 +137,19 @@ StopUsingClothes(playerid)
 	if(skin_CurrentlyUsing[playerid] != INVALID_ITEM_ID)
 	{
 		StopHoldAction(playerid);
-		ClearAnimations(playerid);
+		ClearAnimations(playerid, 1);
 		skin_CurrentlyUsing[playerid] = INVALID_ITEM_ID;
 	}
 }
 
+hook OnHoldActionUpdate(playerid, progress)
+{
+	if(skin_CurrentlyUsing[playerid] != INVALID_ITEM_ID)
+	{
+	 	if(GetPlayerTotalVelocity(playerid) > 1.0)
+		 	StopUsingClothes(playerid);
+	}
+}
 hook OnHoldActionFinish(playerid)
 {
 	if(skin_CurrentlyUsing[playerid] != INVALID_ITEM_ID)

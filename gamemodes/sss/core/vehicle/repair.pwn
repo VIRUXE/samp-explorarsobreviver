@@ -129,6 +129,11 @@ hook OnHoldActionUpdate(playerid, progress)
 {
 	if(fix_TargetVehicle[playerid] != INVALID_VEHICLE_ID)
 	{
+		if(GetPlayerTotalVelocity(playerid) > 1.0){
+			StopRepairingVehicle(playerid);
+			return Y_HOOKS_BREAK_RETURN_1;
+		}
+
 		new ItemType:itemtype = GetItemType(GetPlayerItem(playerid));
 
 		if(!IsValidItemType(itemtype))

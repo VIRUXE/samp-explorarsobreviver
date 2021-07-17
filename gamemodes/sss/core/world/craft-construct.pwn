@@ -244,6 +244,16 @@ StopRemovingConstructedItem(playerid)
 	cons_DeconstructingItem[playerid] = INVALID_ITEM_ID;
 }
 
+hook OnHoldActionUpdate(playerid, progress) {
+	if(cons_Constructing[playerid] != INVALID_CRAFTSET || cons_DeconstructingItem[playerid] != INVALID_ITEM_ID) {
+		if(GetPlayerTotalVelocity(playerid) > 1.0) {
+			_ResetSelectedItems(playerid);
+			cons_Constructing[playerid] = INVALID_CRAFTSET;
+			StopRemovingConstructedItem(playerid);
+		}
+	}
+}
+
 // TODO: Check if items are still there
 // if a player picked one up during construction, it could be duplicated maybe.
 hook OnHoldActionFinish(playerid)

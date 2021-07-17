@@ -158,10 +158,15 @@ hook OnButtonPress(playerid, Button:buttonid){
 }
 
 hook OnHoldActionUpdate(playerid, progress){
-    if(Player_Trash[playerid] != -1)
+    if(Player_Trash[playerid] != -1){
+		if(GetPlayerTotalVelocity(playerid) > 1.0){
+			Player_Trash[playerid] = -1;
+			StopHoldAction(playerid);
+			ClearAnimations(playerid);
+		}
 		if(random(5) == 1)
 	    	PlayerPlaySound(playerid, 1131, 0.0, 0.0, 0.0);
-
+	}
 	return Y_HOOKS_CONTINUE_RETURN_0;
 }
 

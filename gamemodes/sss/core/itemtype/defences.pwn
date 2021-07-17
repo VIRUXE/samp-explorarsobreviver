@@ -611,7 +611,7 @@ hook OnHoldActionUpdate(playerid, progress)
 	{
 		stop def_MoveTime[playerid];
 		
-		if(!IsItemInWorld(def_CurrentDefenceItem[playerid]))
+		if(!IsItemInWorld(def_CurrentDefenceItem[playerid]) || GetPlayerTotalVelocity(playerid) > 1.0)
 			StopHoldAction(playerid);
 	}
 

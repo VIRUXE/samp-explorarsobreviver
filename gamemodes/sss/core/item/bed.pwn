@@ -94,6 +94,14 @@ BedCheck(playerid, Item:itemid, bool:spawn = false){
 
 hook OnHoldActionUpdate(playerid, progress){
 	if(IsValidItem(Bed_Item[playerid])) {
+		if(GetPlayerTotalVelocity(playerid) > 1.0){
+			StopHoldAction(playerid);
+			ClearAnimations(playerid, 1);
+			SetPlayerBrightness(playerid, 0);
+			Bed_Item[playerid] = INVALID_ITEM_ID;
+			return Y_HOOKS_BREAK_RETURN_1;
+		}
+
 		if(GetPlayerAnimationIndex(playerid) != 386 && GetPlayerAnimationIndex(playerid) != 0 &&
 			GetPlayerAnimationIndex(playerid) != 1183){
 			new Float:rz;
