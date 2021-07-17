@@ -41,7 +41,7 @@ stock err(bool:backtrace, bool:discord, const text[], va_args<>)
 			new traceBuffer[2000];
 
 			GetBacktrace(traceBuffer);
-			SendDiscordMessage(log_DiscordChannelErrors, "Backtrace de Erro: %s\n\rTamanho: %d", traceBuffer, sizeof(traceBuffer));
+			SendDiscordMessage(log_DiscordChannelErrors, "```%s```", traceBuffer);
 		}
 	}
 }
