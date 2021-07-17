@@ -24,13 +24,16 @@ _WheelRepair(playerid, vehicleid)
 	new
 		wheel = GetPlayerVehicleTire(playerid, vehicleid),
 		vehicletype = GetVehicleType(vehicleid),
-		panels,
-		doors,
-		lights,
-		tires;
+		panels, doors, lights, tires,
+		Float:x, Float:y, Float:z,
+		Float:px, Float:py;
 
 	GetVehicleDamageStatus(vehicleid, panels, doors, lights, tires);
-	
+	GetVehicleWheelPos(vehicleid, wheel, x, y, z);
+	GetPlayerPos(playerid, px, py, z);
+
+	SetPlayerFacingAngle(playerid, GetAngleToPoint(px, py, x, y));
+
 	if(GetVehicleTypeCategory(vehicletype) == VEHICLE_CATEGORY_MOTORBIKE && GetVehicleTypeModel(vehicletype) != 471)
 	{
 		switch(wheel)
@@ -200,6 +203,10 @@ StopInstallWheel(playerid) {
 
 hook OnHoldActionUpdate(playerid, progress){
 	if(PlayerUpdateWheel[playerid] != INVALID_VEHICLE_ID) {
+		if(GetPlayerTotalVelocity(playerid) > 1.0){
+			StopInstallWheel(playerid);
+			return Y_HOOKS_BREAK_RETURN_1;
+		}
 		ApplyAnimation(playerid, "COP_AMBIENT", "COPBROWSE_LOOP", 4.0, 1, 0, 0, 0, 0);
 		return Y_HOOKS_BREAK_RETURN_1;
 	}
