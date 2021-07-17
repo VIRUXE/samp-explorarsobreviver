@@ -220,15 +220,21 @@ _UpdateKeyActions(playerid)
 		return;		
 	}
 
-	if(GetPlayerState(playerid) == PLAYER_STATE_DRIVER)
+	if(IsPlayerInAnyVehicle(playerid))
 	{
 		ClearPlayerKeyActionUI(playerid);
-		AddToolTipText(playerid, KEYTEXT_ENGINE, "Motor");
-		AddToolTipText(playerid, KEYTEXT_LIGHTS, "Luzes");
-		AddToolTipText(playerid, KEYTEXT_DOORS, "Fechadura");
-		AddToolTipText(playerid, KEYTEXT_RADIO, "Mostrar Radio");
-		ShowPlayerKeyActionUI(playerid);
 
+		AddToolTipText(playerid, KEYTEXT_RELOAD, "Abrir inventario");
+
+		if(GetPlayerState(playerid) == PLAYER_STATE_DRIVER)
+		{
+			AddToolTipText(playerid, KEYTEXT_ENGINE, "Motor");
+			AddToolTipText(playerid, KEYTEXT_LIGHTS, "Luzes");
+			AddToolTipText(playerid, KEYTEXT_DOORS, "Fechadura");
+			AddToolTipText(playerid, KEYTEXT_RADIO, "Mostrar Radio");
+		}
+
+		ShowPlayerKeyActionUI(playerid);
 		return;
 	}
 
