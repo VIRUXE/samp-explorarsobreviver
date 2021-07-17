@@ -272,7 +272,12 @@ hook OnPlayerUseItem(playerid, Item:itemid)
 		if(IsValidContainer(containerid))
 			return Y_HOOKS_CONTINUE_RETURN_0;
 
-		if(!IsItemInWorld(itemid))
+		if(IsItemInWorld(itemid))
+			GiveWorldItemToPlayer(playerid, itemid),
+			_DisplayBagDialog(playerid, itemid, true);
+
+		else
+		
 			_DisplayBagDialog(playerid, itemid, false);
 
 		return Y_HOOKS_BREAK_RETURN_1;
@@ -280,7 +285,6 @@ hook OnPlayerUseItem(playerid, Item:itemid)
 
 	return Y_HOOKS_CONTINUE_RETURN_0;
 }
-
 hook OnPlayerUseItemWithItem(playerid, Item:itemid, Item:withitemid)
 {
 	if(bag_ItemTypeBagType[GetItemType(withitemid)] != -1)
