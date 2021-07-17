@@ -30,9 +30,7 @@ hook OnVehicleCreated(vehicleid)
 
 	if(trunksize > 0)
 	{
-		new vehicletypename[MAX_VEHICLE_TYPE_NAME];
-		GetVehicleTypeName(vehicletype, vehicletypename);
-		trunk_ContainerID[vehicleid] = CreateContainer(sprintf("%s porta-malas", vehicletypename), trunksize);
+		trunk_ContainerID[vehicleid] = CreateContainer("porta-malas", trunksize);
 		trunk_ContainerVehicle[trunk_ContainerID[vehicleid]] = vehicleid;
 		trunk_Locked[vehicleid] = false;
 	}
