@@ -44,6 +44,7 @@ DefineClothesType(modelid, const name[MAX_SKIN_NAME], gender, Float:spawnchance,
 	skin_Data[skin_Total][skin_lootSpawnChance] = spawnchance;
 	skin_Data[skin_Total][skin_canWearHats] = wearhats;
 	skin_Data[skin_Total][skin_canWearMasks] = wearmasks;
+	
 	return skin_Total++;
 }
 
@@ -59,9 +60,7 @@ hook OnItemCreate(Item:itemid)
 		for(new i; i < skin_Total; i++)
 		{
 			if(frandom(1.0) < skin_Data[i][skin_lootSpawnChance])
-			{
 				list[idx++] = i;
-			}
 		}
 
 		skinid = list[random(idx)];
@@ -83,12 +82,7 @@ hook OnItemNameRender(Item:itemid, ItemType:itemtype)
 
 		GetItemExtraData(itemid, data);
 
-		if(skin_Data[data][skin_gender] == GENDER_MALE)
-			strcat(exname, "Homem ");
-
-		else
-			strcat(exname, "Mulher ");
-
+		strcat(exname, skin_Data[data][skin_gender] == GENDER_MALE ? "Homem " : "Mulher ");
 		strcat(exname, skin_Data[data][skin_name]);
 
 		SetItemNameExtra(itemid, exname);
@@ -97,14 +91,14 @@ hook OnItemNameRender(Item:itemid, ItemType:itemtype)
 	//return Y_HOOKS_CONTINUE_RETURN_0;
 }
 
-hook OnPlayerKeyStateChange(playerid, newkeys, oldkeys)
+hook OnPlayerKeyStateChange(playerid, newkeys, oldkeys) // Quando tenta vestir roupa
 {
 	if(newkeys & 16)
 	{
 		if(skin_CurrentlyUsing[playerid] != INVALID_ITEM_ID)
-		{
 			StopUsingClothes(playerid);
-		} else {
+		else 
+		{
 			new Item:itemid = GetPlayerItem(playerid);
 
 			if(GetItemType(itemid) == item_Clothes)
@@ -114,7 +108,6 @@ hook OnPlayerKeyStateChange(playerid, newkeys, oldkeys)
 
 				if(skin_Data[skinid][skin_gender] == GetPlayerGender(playerid))
 					StartUsingClothes(playerid, itemid);
-
 				else
 					ShowActionText(playerid, ls(playerid, "CLOTHESWRGE", true), 3000, 130);
 			}
