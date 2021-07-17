@@ -140,7 +140,8 @@ _OnDeath(playerid, killerid, deathreason)
 		}
 	}
 
-	ShowActionText(playerid, sprintf("%s", deathreasonstring), .color = 0xfc0303FF);
+	ShowPlayerDialog(playerid, 101,
+		DIALOG_STYLE_MSGBOX, "{fc0303}Causa da Morte:", sprintf("{fc0303}%s", deathreasonstring), "X", " ");
 
 	return 1;
 }
