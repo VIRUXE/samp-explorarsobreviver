@@ -319,28 +319,32 @@ _container_displayOptions(playerid, slotid) {
 				return 1;
 			}
 			case 2: {
-				if(GetPlayerItem(playerid) == INVALID_ITEM_ID) {
-					new
-						Item:itemid,
-						ret;
+				new
+					Item:itemid,
+					ret;
 
-					ret = GetContainerSlotItem(cnt_CurrentContainer[playerid], cnt_SelectedSlot[playerid], itemid);
-					if(ret) {
-						Logger_Err("current container invalid in dialog call",
-							Logger_I("containerid", _:cnt_CurrentContainer[playerid]),
-							Logger_I("playerid", playerid));
-						ShowActionText(playerid, "Erro", 3000, 200);
-						return 1;
-					}
-
-					RemoveItemFromContainer(cnt_CurrentContainer[playerid], cnt_SelectedSlot[playerid], playerid);
-					GiveWorldItemToPlayer(playerid, itemid);
-					PlayerDropItem(playerid);
-					DisplayContainerInventory(playerid, cnt_CurrentContainer[playerid]);
-				} else {
-					ShowActionText(playerid, "Voce ja esta segurando um item", 3000, 200);
-					DisplayContainerInventory(playerid, cnt_CurrentContainer[playerid]);
+				ret = GetContainerSlotItem(cnt_CurrentContainer[playerid], cnt_SelectedSlot[playerid], itemid);
+				if(ret) {
+					Logger_Err("current container invalid in dialog call",
+						Logger_I("containerid", _:cnt_CurrentContainer[playerid]),
+						Logger_I("playerid", playerid));
+					ShowActionText(playerid, "Erro", 3000, 200);
+					return 1;
 				}
+
+				RemoveItemFromContainer(cnt_CurrentContainer[playerid], cnt_SelectedSlot[playerid], playerid);
+
+				if(IsItemTypeCarry(GetItemType(itemid))) {
+					ApplyAnimation(playerid, "CARRY", "putdwn", 5.0, 0, 0, 0, 0, 0);
+				} else {
+					ApplyAnimation(playerid, "BOMBER", "BOM_PLANT_IN", 5.0, 1, 0, 0, 0, 450);
+				}
+
+				new Float:x, Float:y, Float:z;
+				GetPlayerPos(playerid, x, y, z);
+				CreateItemInWorld(itemid, x, y, z - ITEM_FLOOR_OFFSET, .world = GetPlayerVirtualWorld(playerid), .interior = GetPlayerInterior(playerid));
+
+				DisplayContainerInventory(playerid, cnt_CurrentContainer[playerid]);
 			}
 			default: {
 				if(!CallLocalFunction("OnPlayerSelectContainerOpt", "ddd", playerid, _:cnt_CurrentContainer[playerid], listitem - 3)) {

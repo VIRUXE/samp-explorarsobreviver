@@ -394,27 +394,29 @@ _inv_displaySlotOptions(playerid, slotid)
 				}
 			}
 			case 2: {
-				if(GetPlayerItem(playerid) == INVALID_ITEM_ID) {
-					new
-						Item:itemid2,
-						ret;
-					
-					ret = GetInventorySlotItem(playerid, inv_SelectedSlot[playerid], itemid2);
-					if(ret) {
-						Logger_Err("failed to get inventory slot item", Logger_I("playerid", playerid), Logger_I("slotid", inv_SelectedSlot[playerid]), Logger_I("ret", ret));
-						return 1;
-					}
-
-					RemoveItemFromInventory(playerid, inv_SelectedSlot[playerid]);
-					GiveWorldItemToPlayer(playerid, itemid2, 1);
-
-					PlayerDropItem(playerid);
-
-					ClosePlayerInventory(playerid, true);
-				} else {
-					ShowActionText(playerid, "Voce ja esta segurando um item", 3000, 200);
-					DisplayPlayerInventory(playerid);
+				new
+					Item:itemid2,
+					ret;
+				
+				ret = GetInventorySlotItem(playerid, inv_SelectedSlot[playerid], itemid2);
+				if(ret) {
+					Logger_Err("failed to get inventory slot item", Logger_I("playerid", playerid), Logger_I("slotid", inv_SelectedSlot[playerid]), Logger_I("ret", ret));
+					return 1;
 				}
+
+				RemoveItemFromInventory(playerid, inv_SelectedSlot[playerid]);
+
+				if(IsItemTypeCarry(GetItemType(itemid2))) {
+					ApplyAnimation(playerid, "CARRY", "putdwn", 5.0, 0, 0, 0, 0, 0);
+				} else {
+					ApplyAnimation(playerid, "BOMBER", "BOM_PLANT_IN", 5.0, 1, 0, 0, 0, 450);
+				}
+
+				new Float:x, Float:y, Float:z;
+				GetPlayerPos(playerid, x, y, z);
+				CreateItemInWorld(itemid2, x, y, z - ITEM_FLOOR_OFFSET, .world = GetPlayerVirtualWorld(playerid), .interior = GetPlayerInterior(playerid));
+
+				ClosePlayerInventory(playerid, true);
 			}
 			default: {
 				if(!CallLocalFunction("OnPlayerSelectInventoryOpt", "dd", playerid, listitem - 3)) {
