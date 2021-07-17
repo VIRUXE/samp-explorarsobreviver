@@ -12,9 +12,6 @@ hook OnPlayerConnect(playerid)
 {
 	BrightnessLevel[playerid] = 255;
 
-	PlayerTextDrawBoxColor(playerid, BrightnessUI[playerid], BrightnessLevel[playerid]);
-	PlayerTextDrawShow(playerid, BrightnessUI[playerid]);
-
 	BrightnessUI[playerid]			=CreatePlayerTextDraw(playerid, 0.000000, 0.000000, "_");
 	PlayerTextDrawBackgroundColor	(playerid, BrightnessUI[playerid], 255);
 	PlayerTextDrawFont				(playerid, BrightnessUI[playerid], 1);
@@ -26,6 +23,9 @@ hook OnPlayerConnect(playerid)
 	PlayerTextDrawUseBox			(playerid, BrightnessUI[playerid], 1);
 	PlayerTextDrawBoxColor			(playerid, BrightnessUI[playerid], 255);
 	PlayerTextDrawTextSize			(playerid, BrightnessUI[playerid], 640.000000, 0.000000);
+
+	PlayerTextDrawBoxColor(playerid, BrightnessUI[playerid], BrightnessLevel[playerid]);
+	PlayerTextDrawShow(playerid, BrightnessUI[playerid]);
 }
 
 ptask BrightnessUpdate[100](playerid)

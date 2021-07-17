@@ -81,8 +81,6 @@ public OnPlayerConnect(playerid)
 	LoadDelay[playerid] = defer LoadAccountDelay(playerid, 5000 + (LoadCount * 2000) );
 	LoadCount ++;
 
-	SetPlayerBrightness(playerid, 255);
-
 	TogglePlayerControllable(playerid, false);
 	Streamer_ToggleIdleUpdate(playerid, true);
 	SetSpawnInfo(playerid, 0, 0, DEFAULT_POS_X, DEFAULT_POS_Y, DEFAULT_POS_Z, 0.0, 0, 0, 0, 0, 0, 0);
