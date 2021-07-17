@@ -284,7 +284,7 @@ _UpdateKeyActions(playerid)
 	// Single items
 
 	if(itemtype == item_Note)
-		AddToolTipText(playerid, KEYTEXT_INTERACT, "Ler");
+		AddToolTipText(playerid, KEYTEXT_INTERACT, "Ler/Escrever");
 	if(itemtype == item_Sign)
 		AddToolTipText(playerid, KEYTEXT_INTERACT, "Colocar Placa");
 	else if(itemtype == item_Armour)
