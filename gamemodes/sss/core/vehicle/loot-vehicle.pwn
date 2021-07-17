@@ -51,8 +51,7 @@ GenerateVehicleData(vehicleid)
 		Float:maxfuel,
 		lootindexname[32],
 		lootindex,
-		trunksize,
-		chance;
+		trunksize;
 
 	type = GetVehicleType(vehicleid);
 	category = GetVehicleTypeCategory(type);
@@ -62,33 +61,10 @@ GenerateVehicleData(vehicleid)
 	trunksize = GetVehicleTypeTrunkSize(type);
 
 // Health
-
-	chance = random(100);
-
-	if(chance < 1)
-		SetVehicleHP(vehicleid, 500 + random(200));
-
-	else if(chance < 5)
-		SetVehicleHP(vehicleid, 400 + random(200));
-
-	else
-		SetVehicleHP(vehicleid, 300 + random(200));
+	SetVehicleHP(vehicleid, 300 + random(200));
 
 // Fuel
-
-	chance = random(100);
-
-	if(chance < 1)
-		SetVehicleFuel(vehicleid, maxfuel / 2 + frandom(maxfuel / 2));
-
-	else if(chance < 5)
-		SetVehicleFuel(vehicleid, maxfuel / 4 + frandom(maxfuel / 3));
-
-	else if(chance < 10)
-		SetVehicleFuel(vehicleid, maxfuel / 8 + frandom(maxfuel / 4));
-
-	else
-		SetVehicleFuel(vehicleid, frandom(1.0));
+	SetVehicleFuel(vehicleid, frandom(10.0) );
 
 // Visual Damage
 
