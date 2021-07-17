@@ -157,6 +157,7 @@ RADIOADMINC= » Chat Predefinido trocado para Chat de Administração.
 RADIOFREQUN= » Mudou a Frequência do seu Rádio para %.2f.
 RADIOGLOBAL= » Chat Predefinido trocado para Chat Global.
 RADIOINFO= » Encontram-se %d Sobreviventes na frequência %0.2f.
+RADIOINFOS= » Encontram-se 1 Sobrevivente na frequência %0.2f.
 RADIOLOCAL= » Chat Predefinido trocado para Chat Local.
 RADIONOSYNC=Celular não está sincronizado. ???????????
 RADIOQUIET0= » Voltou a ver o seu Chat Global.

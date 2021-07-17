@@ -53,7 +53,7 @@ UpdateRadioMarker(playerid, info = 1)
 	if(GetPlayerRadioFrequency(playerid) > MIN_RADIO_FREQ)
 	{
 		new 
-			playersInFreq,
+			playersInFreq, BitStream:bs = BS_New(),
 			Float:x, Float:y, Float:z;
 			
 		foreach(new i : Player)
@@ -77,12 +77,23 @@ UpdateRadioMarker(playerid, info = 1)
 					Streamer_SetFloatData(STREAMER_TYPE_MAP_ICON, Radio_Icon[playerid][i], E_STREAMER_Y, y);
 					Streamer_SetFloatData(STREAMER_TYPE_MAP_ICON, Radio_Icon[playerid][i], E_STREAMER_Z, z);
 				}
+
+				BS_WriteValue(bs, PR_UINT16, playerid, PR_UINT32, CHAT_RADIO);
 				
 				playersInFreq++;
 			}
+			else BS_WriteValue(bs, PR_UINT16, playerid, PR_UINT32, GetPlayerColor(playerid));
+
+			PR_SendRPC(bs, i, 72);
+	    	BS_Delete(bs);
 		}
 
-		if(info && playersInFreq) ChatMsgLang(playerid, CHAT_RADIO, "RADIOINFO", playersInFreq, GetPlayerRadioFrequency(playerid));
+		if(info) {
+			if(playersInFreq > 1)
+				ChatMsgLang(playerid, CHAT_RADIO, "RADIOINFO", playersInFreq, GetPlayerRadioFrequency(playerid));
+			else if(playersInFreq == 1)
+				ChatMsgLang(playerid, CHAT_RADIO, "RADIOINFOS", playersInFreq, GetPlayerRadioFrequency(playerid));
+		}
 	}
 	return 1;
 }
