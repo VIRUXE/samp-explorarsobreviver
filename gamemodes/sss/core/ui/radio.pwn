@@ -53,7 +53,7 @@ UpdateRadioMarker(playerid, info = 1)
 	if(GetPlayerRadioFrequency(playerid) > MIN_RADIO_FREQ)
 	{
 		new 
-			playersInFreq, BitStream:bs = BS_New(),
+			playersInFreq,
 			Float:x, Float:y, Float:z;
 			
 		foreach(new i : Player)
@@ -61,6 +61,8 @@ UpdateRadioMarker(playerid, info = 1)
 			if(i == playerid)
 				continue;
 
+			new BitStream:bs = BS_New();
+			
 			if(IsValidDynamicMapIcon(Radio_Icon[playerid][i]) && !PlayerHasMap(playerid))
 				DestroyDynamicMapIcon(Radio_Icon[playerid][i]);
 
