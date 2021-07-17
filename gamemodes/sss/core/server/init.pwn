@@ -661,7 +661,7 @@ public OnScriptInit()
 	item_ArmyHelmet2	= DefineItemType("Capacete Militar",			"ArmyHelmet2",		19102,	1,	0.0, 0.0, 0.0,			0.0,	0.062216, 0.055396, 0.001138, 90.000000, 0.000000, 0.000000, .maxhitpoints = 1);
 	item_AutoInjec		= DefineItemType("Seringa",						"AutoInjec",		2711,	1,	90.0, 0.0, 0.0,			0.028,	0.145485, 0.020127, 0.034870, 0.000000, 260.512817, 349.967254, .maxhitpoints = 1);
 	item_Backpack		= DefineItemType("Mochila",						"Backpack",			3026,	4,	270.0, 0.0, 90.0,		0.0,	0.470918, 0.150153, 0.055384, 181.319580, 7.513789, 163.436065, .maxhitpoints = 4);
-    item_BalaclavaMask		= DefineItemType("Mascara de Ladrao",			"BalaclavaMask",		19801,	1,	0.0, 0.0, 0.0,			0.0,	0.062216, 0.055396, 0.001138, 90.000000, 0.000000, 0.000000, .maxhitpoints = 1);
+    item_BalaclavaMask	= DefineItemType("Mascara de Ladrao",			"BalaclavaMask",		19801,	1,	0.0, 0.0, 0.0,			0.0,	0.062216, 0.055396, 0.001138, 90.000000, 0.000000, 0.000000, .maxhitpoints = 1);
 	item_Banana			= DefineItemType("Banana",						"Banana",			19578,	1,	0.0, 0.0, 0.0,			0.000,	0.059000, 0.017998, 0.026000,  86.399932, -161.300003, 83.699714, .maxhitpoints = 1);
 	item_Bandage		= DefineItemType("Bandagem Suja",				"Bandage",			11747,	2,	90.0, 0.0, 0.0,			0.0,	0.076999, 0.059000, 0.000000,  2.799999, -5.600000, 0.000000, .maxhitpoints = 2);
 	item_BandanaBlue	= DefineItemType("Bandana",						"BandanaBl",		18917,	1,	0.0, 0.0, 0.0,			0.0,	0.095999, 0.064999, 0.000000, -1.300025, -67.899948, -92.999908);
