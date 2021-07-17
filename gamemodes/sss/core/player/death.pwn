@@ -43,19 +43,17 @@ public OnPlayerDeath(playerid, killerid, reason)
 			killerid = INVALID_PLAYER_ID;
 	}
 
-	_OnDeath(playerid, killerid);
+	_OnDeath(playerid, killerid, reason);
 
 	return 1;
 }
 
-_OnDeath(playerid, killerid)
+_OnDeath(playerid, killerid, deathreason)
 {
 	if(!IsPlayerAlive(playerid) || IsPlayerOnAdminDuty(playerid))
 		return 0;
 
-	new
-		Item:deathreason = GetLastHitByWeapon(playerid),
-		deathreasonstring[256];
+	new deathreasonstring[256];
 
 	death_Dying[playerid] = true;
 	SetPlayerSpawnedState(playerid, false);
@@ -77,7 +75,7 @@ _OnDeath(playerid, killerid)
 	RemoveAllDrugs(playerid);
 	SpawnPlayer(playerid);
 
-	KillPlayer(playerid, killerid, _:deathreason);
+	KillPlayer(playerid, killerid, deathreason);
 
 	if(IsPlayerConnected(killerid))
 	{
@@ -86,30 +84,40 @@ _OnDeath(playerid, killerid)
 		GetPlayerName(killerid, death_LastKilledBy[playerid], MAX_PLAYER_NAME);
 		death_LastKilledById[playerid] = killerid;
 
-		switch(deathreason)
+		if(IsValidItemType(GetItemType(GetLastHitByWeapon(playerid))))
 		{
-			case 0..3, 5..7, 10..15:
-				deathreasonstring = "Espancado ate a morte.";
-			case 4:
-				deathreasonstring = "Sofreu ferimentos no corpo, possivelmente por causa de uma faca.";
-			case 8:
-				deathreasonstring = "Sofreu grandes cortes no corpo, parece que foi uma espada bem afiada.";
-			case 9:
-				deathreasonstring = "Foi todo despedaçado, provavelmente foi atacado por uma motosserra no corpo.";
-			case 16, 39, 35, 36, 255:
-				deathreasonstring = "Sofreu uma concussão massiva devido a uma explosao.";
-			case 18, 37:
-				deathreasonstring = "O corpo inteiro foi carbonizado e queimado.";
-			case 22..34, 38:
-				deathreasonstring = "Morreu de perda de sangue causada pelo que parece ser balas.";
-			case 41, 42:
-				deathreasonstring = "Foi pulverizado e sufocado por uma substancia de alta pressao.";
-			case 44, 45:
-				deathreasonstring = "De alguma forma, morto por óculos de protecao.";
-			case 43:
-				deathreasonstring = "De alguma forma, morto por uma Camera.";
-			default:
-				deathreasonstring = "Sangrou ate a morte.";
+			new name[MAX_ITEM_NAME];
+			GetItemTypeName(GetItemType(GetLastHitByWeapon(playerid)), name);
+
+			format(deathreasonstring, 256, "Morreu atacado com %s", name);
+		}
+		else 
+		{
+			switch(deathreason)
+			{
+				case 0..3, 5..7, 10..15:
+					deathreasonstring = "Espancado ate a morte.";
+				case 4:
+					deathreasonstring = "Sofreu ferimentos no corpo, possivelmente por causa de uma faca.";
+				case 8:
+					deathreasonstring = "Sofreu grandes cortes no corpo, parece que foi uma espada bem afiada.";
+				case 9:
+					deathreasonstring = "Foi todo despedaçado, provavelmente foi atacado por uma motosserra no corpo.";
+				case 16, 39, 35, 36, 255:
+					deathreasonstring = "Sofreu uma concussão massiva devido a uma explosao.";
+				case 18, 37:
+					deathreasonstring = "O corpo inteiro foi carbonizado e queimado.";
+				case 22..34, 38:
+					deathreasonstring = "Morreu de perda de sangue causada pelo que parece ser balas.";
+				case 41, 42:
+					deathreasonstring = "Foi pulverizado e sufocado por uma substancia de alta pressao.";
+				case 44, 45:
+					deathreasonstring = "De alguma forma, morto por óculos de protecao.";
+				case 43:
+					deathreasonstring = "De alguma forma, morto por uma Camera.";
+				default:
+					deathreasonstring = "Sangrou ate a morte.";
+			}
 		}
 	}
 	else
@@ -132,7 +140,7 @@ _OnDeath(playerid, killerid)
 		}
 	}
 
-	ShowPlayerDialog(playerid, 90, DIALOG_STYLE_MSGBOX, "{fc0303}Causa da morte:", sprintf("{910000}%s", deathreasonstring), "Sair", "");
+	ShowActionText(playerid, sprintf("%s", deathreasonstring), .color = 0xfc0303FF);
 
 	return 1;
 }
