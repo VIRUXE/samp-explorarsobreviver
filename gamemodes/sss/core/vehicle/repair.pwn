@@ -32,12 +32,12 @@ hook OnPlayerInteractVehicle(playerid, vehicleid, Float:angle)
 			}
 			else
 			{
-				ShowActionText(playerid, ls(playerid, "NEEDASCREW", true), 3000, 100);
+				ShowActionText(playerid, ls(playerid, "NEEDANOTOOL", true), 3000, 100);
 			}
 		}	
 		else if(itemtype == item_Screwdriver)
 		{
-			if(VEHICLE_HEALTH_CHUNK_2 <= vehiclehealth <= VEHICLE_HEALTH_CHUNK_3)
+			if(VEHICLE_HEALTH_CHUNK_2 - 2.0 <= vehiclehealth <= VEHICLE_HEALTH_CHUNK_3)
 			{
 				CancelPlayerMovement(playerid);
 				StartRepairingVehicle(playerid, vehicleid);
@@ -45,12 +45,12 @@ hook OnPlayerInteractVehicle(playerid, vehicleid, Float:angle)
 			}
 			else
 			{
-				ShowActionText(playerid, ls(playerid, "NEEDAHAMMER", true), 3000, 100);
+				ShowActionText(playerid, ls(playerid, "NEEDANOTOOL", true), 3000, 100);
 			}
 		}	
 		else if(itemtype == item_Hammer)
 		{
-			if(VEHICLE_HEALTH_CHUNK_3 <= vehiclehealth <= VEHICLE_HEALTH_CHUNK_4)
+			if(VEHICLE_HEALTH_CHUNK_3 - 2.0 <= vehiclehealth <= VEHICLE_HEALTH_CHUNK_4)
 			{
 				CancelPlayerMovement(playerid);
 				StartRepairingVehicle(playerid, vehicleid);
@@ -58,12 +58,12 @@ hook OnPlayerInteractVehicle(playerid, vehicleid, Float:angle)
 			}
 			else
 			{
-				ShowActionText(playerid, ls(playerid, "NEEDASPANN", true), 3000, 100);
+				ShowActionText(playerid, ls(playerid, "NEEDANOTOOL", true), 3000, 100);
 			}
 		}
 		else if(itemtype == item_Spanner)
 		{
-			if(VEHICLE_HEALTH_CHUNK_4 <= vehiclehealth <= VEHICLE_HEALTH_MAX)
+			if(VEHICLE_HEALTH_CHUNK_4 - 2.0 <= vehiclehealth <= VEHICLE_HEALTH_MAX)
 			{
 				CancelPlayerMovement(playerid);
 				StartRepairingVehicle(playerid, vehicleid);
@@ -159,9 +159,11 @@ hook OnHoldActionUpdate(playerid, progress)
 
 			SetVehicleHealth(fix_TargetVehicle[playerid], fix_Progress[playerid]);
 			SetPlayerToFaceVehicle(playerid, fix_TargetVehicle[playerid]);	
+			ShowActionText(playerid, ls(playerid, "REPAIRVEH", true), 3000, 100);
 		}
 		else
 		{
+			ShowActionText(playerid, ls(playerid, "NEEDANOTOOL", true), 3000, 100);
 			PlayerGainSkillExperience(playerid, "Repair");
 			StopRepairingVehicle(playerid);
 		}
@@ -172,22 +174,22 @@ hook OnHoldActionUpdate(playerid, progress)
 
 CompToolHealth(ItemType:itemtype, Float:health)
 {
-	if(health <= VEHICLE_HEALTH_CHUNK_2)
+	if(health <= VEHICLE_HEALTH_CHUNK_2 - 2.0)
 	{
 		if(itemtype == item_Wrench)
 			return 1;
 	}
-	else if(VEHICLE_HEALTH_CHUNK_2 <= health <= VEHICLE_HEALTH_CHUNK_3)
+	else if(VEHICLE_HEALTH_CHUNK_2 - 2.0 <= health <= VEHICLE_HEALTH_CHUNK_3 - 2.0)
 	{
 		if(itemtype == item_Screwdriver)
 			return 1;
 	}
-	else if(VEHICLE_HEALTH_CHUNK_3 <= health <= VEHICLE_HEALTH_CHUNK_4)
+	else if(VEHICLE_HEALTH_CHUNK_3 - 2.0 <= health <= VEHICLE_HEALTH_CHUNK_4 - 2.0)
 	{
 		if(itemtype == item_Hammer)
 			return 1;
 	}
-	else if(VEHICLE_HEALTH_CHUNK_4 <= health <= VEHICLE_HEALTH_MAX)
+	else if(VEHICLE_HEALTH_CHUNK_4 - 2.0 <= health <= VEHICLE_HEALTH_MAX - 2.0)
 	{
 		if(itemtype == item_Spanner)
 			return 1;
