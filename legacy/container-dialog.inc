@@ -140,10 +140,10 @@ stock DisplayContainerInventory(playerid, Container:containerid) {
 
 	GetContainerFreeSlots(containerid, freeSlots);
 
-	for(new i; i < freeSlots; i++) {
+	/*for(new i; i < freeSlots; i++) {
 		strcat(cnt_InventoryString[playerid], "19300\t<Vazio>\n");
 		cnt_ItemListTotal[playerid]++;
-	}
+	}*/
 
 	format(cnt_InventoryString[playerid], sizeof(cnt_InventoryString[]), "%s%d\tInventario >\n",
 		cnt_InventoryString[playerid], GetPlayerSkin(playerid));
@@ -163,7 +163,7 @@ stock DisplayContainerInventory(playerid, Container:containerid) {
 			Logger_I("length", strlen(cnt_InventoryString[playerid])));
 	}
 
-	ShowPlayerDialog(playerid, 35, DIALOG_STYLE_PREVIEW_MODEL, title, cnt_InventoryString[playerid], "Opcoes", "Sair");
+	ShowPlayerDialog(playerid, 35, DIALOG_STYLE_PREVIEW_MODEL, title, cnt_InventoryString[playerid], "Enter", "Esc");
 
 	return 0;
 }

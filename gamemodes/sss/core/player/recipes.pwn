@@ -30,7 +30,7 @@ Dialog_ShowCraftTypes(playerid)
 			}
 		}
 	}
-	Dialog_ShowCallback(playerid, using inline Response, DIALOG_STYLE_LIST, "Receitas", "Receitas de Combinação\nReceitas de Construção\nReceitas de Mesa de Trabalho\n"C_GREEN"Ajuda", "Selecionar", "Sair");
+	Dialog_ShowCallback(playerid, using inline Response, DIALOG_STYLE_LIST, "Receitas", "Receitas de Combinação\nReceitas de Construção\nReceitas de Mesa de Trabalho\n"C_GREEN"Ajuda", "Enter", "Esc");
 }
 
 new CraftSet:PlayerListCraft[MAX_PLAYERS][MAX_CONSTRUCT_SET];
@@ -91,7 +91,7 @@ Dialog_ShowCraftList(playerid, type)
 		format(LCraft, sizeof(LCraft), "%s%d\t%s\n", LCraft, model, itemname);
 	}
 
-	ShowPlayerDialog(playerid, CRAFT_DIALOG, DIALOG_STYLE_PREVIEW_MODEL, "Receitas", LCraft, ">", "~R~X");
+	ShowPlayerDialog(playerid, CRAFT_DIALOG, DIALOG_STYLE_PREVIEW_MODEL, "Receitas", LCraft, "Enter", "Esc");
 }
 
 hook OnDialogModelResponse(playerid, dialogid, response, listitem){

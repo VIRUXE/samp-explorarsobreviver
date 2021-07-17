@@ -158,11 +158,11 @@ stock DisplayPlayerInventory(playerid)
 	if(ret_outer) 
 		return 3;
 
-	for(new i; i < slots; i++)
+	/*for(new i; i < slots; i++)
 	{
 		strcat(list, "19300\t<Vazio>\n");
 		inv_ItemListTotal[playerid]++;
-	}
+	}*/
 
 	inv_ExtraItemList[playerid][0] = EOS;
 	inv_ExtraItemCount[playerid] = 0;
@@ -175,7 +175,7 @@ stock DisplayPlayerInventory(playerid)
 
 	format(title, sizeof(title), "Inventario (%d/%d)", size - slots, size);
 
-	ShowPlayerDialog(playerid, 33, DIALOG_STYLE_PREVIEW_MODEL, title, list, "Opcoes", "Sair");
+	ShowPlayerDialog(playerid, 33, DIALOG_STYLE_PREVIEW_MODEL, title, list, "Enter", "Esc");
 
 	inv_ViewingInventory[playerid] = true;
 
