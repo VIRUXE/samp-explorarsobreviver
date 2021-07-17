@@ -174,13 +174,17 @@ ACMD:spec[2](playerid, params[])
 
 				targetid = random(highestid);
 			}
+			TogglePlayerAdminDuty(true),
 			EnterSpectateMode(playerid, targetid);
 		}
 	}
 	else // No player id provided
 	{
 		if(GetPlayerState(playerid) == PLAYER_STATE_SPECTATING)
+		{
 			ExitSpectateMode(playerid);
+			TogglePlayerAdminDuty(false);
+		}
 	}
 
 	return 1;
