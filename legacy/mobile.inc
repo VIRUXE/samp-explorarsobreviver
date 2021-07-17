@@ -125,3 +125,19 @@ stock m_GetPlayerAnimationIndex(playerid)
 #endif
  
 #define GetPlayerAnimationIndex m_GetPlayerAnimationIndex
+
+stock m_ClearAnimations(playerid, forcesync = 0)
+{
+    if(PlayerMobileInfo[playerid][isMobile])
+		forcesync = 1;
+
+    return ClearAnimations(playerid, forcesync);
+}
+
+#if defined _ALS_ClearAnimations
+#undef ClearAnimations
+#else
+#define _ALS_ClearAnimations
+#endif
+ 
+#define ClearAnimations m_ClearAnimations
