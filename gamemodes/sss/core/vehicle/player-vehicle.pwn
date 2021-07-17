@@ -51,9 +51,11 @@ hook OnGameModeInit()
 hook OnPlayerConnect(playerid)
 {
 	new name[MAX_PLAYER_NAME];
-
 	GetPlayerName(playerid, name, MAX_PLAYER_NAME);
 
+	pveh_PlayerVehicle[playerid] = INVALID_VEHICLE_ID;
+	pveh_SaveAnyVehicle[playerid] = 1;
+	
 	foreach(new i : veh_Index)
 	{
 		if(isnull(pveh_Owner[i]))
@@ -66,9 +68,6 @@ hook OnPlayerConnect(playerid)
 			return 1;
 		}
 	}
-
-	pveh_PlayerVehicle[playerid] = INVALID_VEHICLE_ID;
-	pveh_SaveAnyVehicle[playerid] = 1;
 
 	return 1;
 }
