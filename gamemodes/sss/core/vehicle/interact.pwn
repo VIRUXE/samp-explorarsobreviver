@@ -194,7 +194,7 @@ _varea_Interact(playerid)
 	if(IsPlayerInAnyVehicle(playerid))
 		return;
 
-	if(!IsPlayerInAnyDynamicArea(playerid))
+	if(!IsPlayerInAnyDynamicArea(playerid, 1))
 	{
 		err(false, false, "Player %d is not in areas but list isn't empty. Purging list.", playerid);
 		Iter_Clear(varea_NearIndex[playerid]);
@@ -340,7 +340,7 @@ stock IsPlayerInVehicleArea(playerid, vehicleid)
 	if(!IsValidVehicle(vehicleid))
 		return 0;
 
-	return IsPlayerInDynamicArea(playerid, varea_AreaID[vehicleid]);
+	return IsPlayerInDynamicArea(playerid, varea_AreaID[vehicleid], 1);
 }
 
 stock GetPlayerVehicleArea(playerid)
@@ -350,7 +350,7 @@ stock GetPlayerVehicleArea(playerid)
 
 	foreach(new i : varea_NearIndex[playerid])
 	{
-		if(IsPlayerInDynamicArea(playerid, varea_AreaID[varea_NearList[playerid][i]]))
+		if(IsPlayerInDynamicArea(playerid, varea_AreaID[varea_NearList[playerid][i]], 1))
 			return varea_NearList[playerid][i];
 	}
 
@@ -373,7 +373,7 @@ stock IsPlayerAtVehicleTrunk(playerid, vehicleid)
 	if(!IsValidVehicle(vehicleid))
 		return 0;
 
-	if(!IsPlayerInDynamicArea(playerid, GetVehicleArea(vehicleid)))
+	if(!IsPlayerInDynamicArea(playerid, GetVehicleArea(vehicleid), 1))
 		return 0;
 
 	new
@@ -409,7 +409,7 @@ stock IsPlayerAtVehicleBonnet(playerid, vehicleid)
 	if(!IsValidVehicle(vehicleid))
 		return 0;
 
-	if(!IsPlayerInDynamicArea(playerid, GetVehicleArea(vehicleid)))
+	if(!IsPlayerInDynamicArea(playerid, GetVehicleArea(vehicleid), 1))
 		return 0;
 
 	new
@@ -445,7 +445,7 @@ stock GetPlayerVehicleTire(playerid, vehicleid)
 	if(!IsValidVehicle(vehicleid))
 		return -1;
 
-	if(!IsPlayerInDynamicArea(playerid, GetVehicleArea(vehicleid)))
+	if(!IsPlayerInDynamicArea(playerid, GetVehicleArea(vehicleid), 1))
 		return -1;
 
 	new
