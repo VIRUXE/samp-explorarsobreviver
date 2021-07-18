@@ -230,20 +230,18 @@ public OnGameModeInit()
 	Definitions
 
 ==============================================================================*/
-
-
 // Limits
-#define MAX_MOTD_LEN				(128)
-#define MAX_WEBSITE_NAME			(64)
-#define MAX_RULE					(24)
-#define MAX_RULE_LEN				(128)
-#define MAX_STAFF					(24)
-#define MAX_STAFF_LEN				(24)
-#define MAX_PLAYER_FILE				(MAX_PLAYER_NAME+16)
-#define MAX_ADMIN					(48)
-#define MAX_PASSWORD_LEN			(129)
-#define MAX_GPCI_LEN				(41)
-#define MAX_HOST_LEN				(256)
+#define MAX_MOTD_LEN				128
+#define MAX_WEBSITE_NAME			64
+#define MAX_RULE					24
+#define MAX_RULE_LEN				128
+#define MAX_STAFF					2
+#define MAX_STAFF_LEN				2
+#define MAX_PLAYER_FILE				MAX_PLAYER_NAME+16
+#define MAX_ADMIN					48
+#define MAX_PASSWORD_LEN			129
+#define MAX_GPCI_LEN				41
+#define MAX_HOST_LEN				256
 
 
 // Directories
@@ -427,8 +425,7 @@ new stock
 
 ==============================================================================*/
 
-// API Pre
-#tryinclude "sss/extensions/ext_pre.pwn"
+#include "config.pwn"
 
 // UTILITIES
 #include "sss/utils/logging.pwn"
@@ -450,6 +447,7 @@ new stock
 
 // SERVER CORE
 #include "sss/core/server/settings.pwn"
+#include "sss/core/server/database.pwn"
 #include "sss/core/server/discord.pwn"
 #include "sss/core/server/text-tags.pwn"
 #include "sss/core/server/weather.pwn"
