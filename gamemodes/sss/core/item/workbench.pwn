@@ -78,6 +78,15 @@ hook OnPlayerDisconnect(playerid, reason)
 
 ==============================================================================*/
 
+hook OnItemCreateInWorld(Item:itemid)
+{
+	if(GetItemType(itemid) == item_Workbench)
+	{
+		new Button:buttonid;
+		GetItemButtonID(itemid, buttonid);
+		SetButtonSize(buttonid, 1.5);
+	}
+}
 
 stock SetConstructionSetWorkbench(consset)
 {
