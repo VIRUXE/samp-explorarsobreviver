@@ -817,7 +817,7 @@ public OnScriptInit()
 	item_LenKnocksRifle	= DefineItemType("Espingarda Len-Knocks",		"LenKnocksRifle",	358,	5,	90.0,							.maxhitpoints = 5);
 	item_Locator		= DefineItemType("Localizador",					"Locator",			2967,	1,	0.0, 0.0, 0.0,			0.0,	0.095999, 0.064999, 0.000000, -1.300025, -67.899948, -92.999908, .maxhitpoints = 1);
 	item_LockBreaker	= DefineItemType("Electronic Lockpick",			"LockBreaker",		1952,	2,	0.0, 0.0, 0.0,			0.001,	0.098000, 0.039999, 0.085000,  -94.900032, -177.600021, 18.499980, .maxhitpoints = 2);
-	item_Locker			= DefineItemType("Locker",						"Locker",			11729,	12,	0.0, 0.0, 0.0,			0.0,	.longpickup = true,	.maxhitpoints = 10);
+	item_Locker			= DefineItemType("Armario",						"Locker",			11729,	12,	0.0, 0.0, 0.0,			0.0,	.longpickup = true,	.maxhitpoints = 10);
 	item_LocksmithKit	= DefineItemType("Kit de Chaveiro",				"LocksmithKit",		1210,	3,	0.0, 0.0, 90.0,			0.0,	0.285915, 0.078406, -0.009429, 0.000000, 270.000000, 0.000000, false, 0xFFF4A460, .maxhitpoints = 3);
 	item_LongPlank		= DefineItemType("Madeira",						"LongPlank",		2937,	9,	0.0, 0.0, 0.0,			0.0,	0.141491, 0.002142, -0.190920, 248.561920, 350.667724, 175.203552, true, .maxhitpoints = 9);
 	item_M16Rifle		= DefineItemType("M16",							"M16Rifle",			356,	5,	90.0, .maxhitpoints = 5);
@@ -832,7 +832,7 @@ public OnScriptInit()
 	item_MediumBag		= DefineItemType("Mochila Media",				"MediumBag",		3026,	4,	270.0, 0.0, 90.0,		0.0,	0.470918, 0.150153, 0.055384, 181.319580, 7.513789, 163.436065, false, 0xFFFFFF00, .maxhitpoints = 4);
 	item_MediumBox		= DefineItemType("Caixa Media",					"MediumBox",		3014,	5,	0.0, 0.0, 0.0,			0.1844,	-0.027872, 0.145617, -0.246524, 243.789840, 347.397491, 349.931610, true, .longpickup = true, .maxhitpoints = 5);
 	item_Medkit			= DefineItemType("Kit Medico",					"Medkit",			11736,	1,	0.0, 0.0, 0.0,			0.004,	0.197999, 0.038000, 0.021000,  79.700012, 0.000000, 90.899978, .maxhitpoints = 1);
-	item_MetalFrame		= DefineItemType("Painel de Metal",				"MetalFrame",		19843,	10,	0.0, 0.0, 0.0,			0.0,	-0.093000, 0.414000, -0.347999,  77.500022, 105.500022, 80.100013, true, .maxhitpoints = 16);
+	item_MetalFrame		= DefineItemType("Fragmento de Metal",			"MetalFrame",		19843,	10,	0.0, 0.0, 0.0,			0.0,	-0.093000, 0.414000, -0.347999,  77.500022, 105.500022, 80.100013, true, .maxhitpoints = 16);
 	item_MetalGate		= DefineItemType("Grade",						"MetalGate",		19303,	10,	90.0, 0.0, 0.0,			0.0,	-0.128823,0.758761,-0.508013,-19.839876,-10.353648,105.119079, true,  .maxhitpoints = 4);
 	item_MetalGate1		= DefineItemType("Grade Grande",				"MetalGate1",		19870,	15,	90.0, 0.0, 0.0,			0.0,	0.0, 0.0, 0.0, 0.0, 0.0, 0.0, false, .maxhitpoints = 15);
 	item_MetPanel		= DefineItemType("Painel de Metal",				"MetPanel",			2911,	10,	90.0, 0.0, 0.0,			0.0,	0.334049,-0.414559,-1.151276,338.515014,349.801025,104.950340, true,  .maxhitpoints = 3);
@@ -1348,7 +1348,7 @@ public OnScriptInit()
 	DefineSafeboxType(item_GunCase,			5, false, false);
 	DefineSafeboxType(item_Sandbag,			6);
 	DefineSafeboxType(item_LargeBox,		12);
-	DefineSafeboxType(item_Locker,			32, .animateonuse = false);
+	DefineSafeboxType(item_Locker,			40, .animateonuse = false);
 	DefineSafeboxType(item_MediumBox,		10);
 	DefineSafeboxType(item_SmallBox,		8);
 	DefineSafeboxType(item_Suitcase,		6);
