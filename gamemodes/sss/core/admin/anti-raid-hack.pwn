@@ -138,17 +138,30 @@ IRPC:131(playerid, BitStream:bs){
 
 // EnterVehicle
 IRPC:26(playerid, BitStream:bs){
-	if(atr_Check[playerid])
+	if(atr_Check[playerid]) {
+		ClearAnimations(playerid);
+		new BitStream:bss = BS_New();
+		BS_WriteValue(bss,
+			PR_FLOAT, atr_SetX[playerid],
+			PR_FLOAT, atr_SetY[playerid],
+			PR_FLOAT, atr_SetZ[playerid]
+		);
+		PR_SendRPC(bss, playerid, 12);
+		BS_Delete(bss);
 		return 0;
+	}
 	return 1;
 }
 
 AntiRaidWarn(playerid){
+	if(GetTickCountDifference(GetTickCount(), GetPlayerServerJoinTick(playerid)) < 10000)
+		return 0;
+
 	inline Response(pid, dialogid, response, listitem, string:inputtext[]){
 		#pragma unused pid, dialogid, listitem, inputtext
 		if(response)
 		{
-			if(!IsAtConnectionPos(atr_SetX[playerid], atr_SetY[playerid], atr_SetZ[playerid]))
+			/*if(!IsAtConnectionPos(atr_SetX[playerid], atr_SetY[playerid], atr_SetZ[playerid]))
 			{
 				new BitStream:bs = BS_New();
 				BS_WriteValue(bs,
@@ -158,11 +171,13 @@ AntiRaidWarn(playerid){
 				);
 				PR_SendRPC(bs, playerid, 12);
 				BS_Delete(bs);
-			} else GetPlayerPos(playerid, atr_SetX[playerid], atr_SetY[playerid], atr_SetZ[playerid]);
+			} else GetPlayerPos(playerid, atr_SetX[playerid], atr_SetY[playerid], atr_SetZ[playerid]);*/
 		}
 	}
 	Dialog_ShowCallback(playerid, using inline Response, DIALOG_STYLE_MSGBOX,
 		"Anti-Raid Protection", ls(playerid, "ANTRAIDP"), ""C_RED"Voltar", "Sair");
+
+	return 1;
 }
 
 hook OnPlayerUseItemWithItem(playerid, Item:itemid, Item:withitemid){
