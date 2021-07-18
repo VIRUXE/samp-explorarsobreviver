@@ -223,6 +223,7 @@ public OnGameModeInit()
 #include <rapid-fire>
 #include <optud>
 #include <discord-connector>
+#include <a_mysql>
 
 /*==============================================================================
 
