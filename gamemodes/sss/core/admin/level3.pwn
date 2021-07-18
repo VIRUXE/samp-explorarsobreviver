@@ -152,6 +152,9 @@ ACMD:spec[2](playerid, params[])
 
 	if(targetid > -1) // Valid player id 
 	{
+		if(targetid == playerid)
+			return ChatMsg(playerid, RED, " » Esse ID é seu viado.");
+
 		if(GetPlayerAdminLevel(playerid) == STAFF_LEVEL_GAME_MASTER)
 		{
 			new name[MAX_PLAYER_NAME];
@@ -159,23 +162,14 @@ ACMD:spec[2](playerid, params[])
 			GetPlayerName(targetid, name, MAX_PLAYER_NAME);
 
 			if(!IsPlayerReported(name))
-				return ChatMsg(playerid, YELLOW, " » Apenas pode spectar Jogadores Reportados.");
+				return ChatMsg(playerid, RED, " » Apenas pode spectar Jogadores Reportados.");
 		}
 		else
 		{
 			// Check if target player id is valid or not. If not, select a random valid one
 			while(targetid == playerid || !IsPlayerConnected(targetid))
-			{
-				new highestid;
+				targetid = random(GetPlayerPoolSize());
 
-				foreach(new i : Player)
-					if(i > highestid)
-						highestid = i;
-
-				targetid = random(highestid);
-
-				log(false, false, "spec - targetid: %d", targetid);
-			}
 			TogglePlayerAdminDuty(playerid, true);
 			EnterSpectateMode(playerid, targetid);
 		}
