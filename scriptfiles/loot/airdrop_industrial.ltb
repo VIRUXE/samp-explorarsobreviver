@@ -15,6 +15,7 @@ airdrop_industrial, 1.0
 25.0,	Motor
 
 # construction
+5.0,    MetalFrame
 25.0,	WoodDoor
 35.0,	MetPanel
 30.0,	MetalGate
