@@ -188,7 +188,7 @@ public OnGameModeInit()
 #define BLACK						0x000000FF
 #define WHITE						0xFFFFFFFF
 #define CHAT_LOCAL					0xADABD1FF
-#define CHAT_RADIO					0x00FF00FF
+#define CHAT_RADIO					0x00FF0000
 
 #define COLOR_PLAYER_NORMAL			0xB8B8B800
 #define COLOR_PLAYER_MOBILE			0x85858500
@@ -483,10 +483,8 @@ new stock
 #include "sss/core/ui/radio.pwn"
 #include "sss/core/ui/tool-tip.pwn"
 #include "sss/core/ui/key-actions.pwn"
-//#include "sss/core/ui/watch.pwn"
 #include "sss/core/ui/keypad.pwn"
 #include "sss/core/ui/body-preview.pwn"
-//#include "sss/core/ui/status.pwn"
 
 // WORLD ENTITIES
 #include "sss/core/world/fuel.pwn"
