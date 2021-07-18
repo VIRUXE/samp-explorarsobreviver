@@ -97,6 +97,9 @@ hook OnItemDestroy(Item:itemid){
 hook OnItemRemovedFromPlayer(playerid, Item:itemid){
 	PlayerTextDrawHide(playerid, item_TD[playerid]);
 	TextDrawHideForPlayer(playerid, item_Prev);
+
+	if(IsItemTypeCarry(GetItemType(itemid)))
+		SetPlayerSpecialAction(playerid, SPECIAL_ACTION_NONE);
 }
 
 hook OnPlayerDisconnect(playerid, reason){
