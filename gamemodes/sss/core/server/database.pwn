@@ -25,3 +25,8 @@ hook OnGameModeExit()
     log(true, "[DATABASE] MySQL connection closed.");
 	return 1;
 }
+
+public OnQueryError(errorid, const error[], const callback[], const query[], MySQL:handle)
+{
+    log(true, "[DATABASE] Erro.");
+}
