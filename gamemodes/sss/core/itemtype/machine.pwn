@@ -110,7 +110,7 @@ hook OnItemCreateInWorld(Item:itemid)
 
 	new Button:buttonid;
 	GetItemButtonID(itemid, buttonid);
-	SetButtonText(buttonid, "Pressione "KEYTEXT_INTERACT" para acessar a máquina~n~Aperta "KEYTEXT_INTERACT" para abrir o menu~n~Utilize um Galão de Combustível para adicionar Gasolina");
+	SetButtonText(buttonid, "Pressione "KEYTEXT_INTERACT" para acessar a maquina~n~Aperta "KEYTEXT_INTERACT" para abrir o menu~n~Utilize um Galao de Combustível para adicionar Gasolina");
 
 	return Y_HOOKS_CONTINUE_RETURN_0;
 }
