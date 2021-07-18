@@ -174,7 +174,7 @@ ACMD:spec[2](playerid, params[])
 
 				targetid = random(highestid);
 			}
-			TogglePlayerAdminDuty(true),
+			TogglePlayerAdminDuty(true);
 			EnterSpectateMode(playerid, targetid);
 		}
 	}
