@@ -173,8 +173,10 @@ ACMD:spec[2](playerid, params[])
 						highestid = i;
 
 				targetid = random(highestid);
+
+				log(false, false, "spec - targetid: %d", targetid);
 			}
-			TogglePlayerAdminDuty(true),
+			TogglePlayerAdminDuty(playerid, true);
 			EnterSpectateMode(playerid, targetid);
 		}
 	}
@@ -182,8 +184,8 @@ ACMD:spec[2](playerid, params[])
 	{
 		if(GetPlayerState(playerid) == PLAYER_STATE_SPECTATING)
 		{
+			TogglePlayerAdminDuty(playerid, false);
 			ExitSpectateMode(playerid);
-			TogglePlayerAdminDuty(false);
 		}
 	}
 
@@ -192,7 +194,7 @@ ACMD:spec[2](playerid, params[])
 
 ACMD:free[2](playerid)
 {
-	TogglePlayerAdminDuty(!IsPlayerOnAdminDuty(playerid));
+	TogglePlayerAdminDuty(playerid, !IsPlayerOnAdminDuty(playerid));
 
 	if(GetPlayerSpectateType(playerid) == SPECTATE_TYPE_FREE)
 		ExitFreeMode(playerid);
