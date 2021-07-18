@@ -4,98 +4,146 @@
 
 #define MAX_BODY_LABEL (15)
 
-
-enum E_BODY_LABEL_DATA
-{
-bool:		bl_valid,
-PlayerText:	bl_textdraw,
-Float:		bl_posY
-}
-
-
 static
-Float:		bod_UIPositionX	[MAX_PLAYERS] = {110.0, ...},
-Float:		bod_UIPositionY	[MAX_PLAYERS] = {190.0, ...},
-Float:		bod_UIFontSizeX	[MAX_PLAYERS] = {0.25, ...},
-Float:		bod_UIFontSizeY	[MAX_PLAYERS] = {0.93, ...},
-			bod_LabelData0	[MAX_PLAYERS][MAX_BODY_LABEL][E_BODY_LABEL_DATA],
-			bod_LabelData1	[MAX_PLAYERS][MAX_BODY_LABEL][E_BODY_LABEL_DATA],
-			bod_LabelIndex0	[MAX_PLAYERS],
-			bod_LabelIndex1	[MAX_PLAYERS];
+PlayerText:	bod_LabelDraw	[MAX_PLAYERS][MAX_BODY_LABEL] = { PlayerText:INVALID_TEXT_DRAW, ...},
+			bod_LabelIndex	[MAX_PLAYERS];
 
+/*==============================================================================
 
-hook OnPlayerConnect(playerid)
+	Functions
+
+==============================================================================*/
+
+timer ShowPlayerHealthInfo[10](playerid)
 {
-	bod_LabelIndex0[playerid] = 0;
-	bod_LabelIndex1[playerid] = 0;
+	HideBodyPreviewUI(playerid);
 
-	for(new i; i < MAX_BODY_LABEL; i++)
+	new Container:containerid;
+	GetPlayerCurrentContainer(playerid, containerid);
+
+	if(!IsValidContainer(containerid) && !IsPlayerViewingInventory(playerid))
+		return;
+
+	new
+		drugslist[MAX_DRUG_TYPE],
+		drugs,
+		drugname[MAX_DRUG_NAME],
+		Float:bleedrate,
+		Float:hunger = GetPlayerFP(playerid),
+		infected1 = GetPlayerInfectionIntensity(playerid, 0),
+		infected2 = GetPlayerInfectionIntensity(playerid, 1);
+
+	drugs = GetPlayerDrugsList(playerid, drugslist);
+	GetPlayerBleedRate(playerid, bleedrate);
+
+	SetBodyPreviewLabel(playerid, sprintf("Feridas: %d", GetPlayerWounds(playerid)),
+		GetPlayerWounds(playerid) ? RGBAToHex(max(GetPlayerWounds(playerid) * 50, 255), 0, 0, 255) : 0xFFFFFFFF);
+
+	if(bleedrate > 0)
+		SetBodyPreviewLabel(playerid, sprintf("Sangramento: %0.1f%", bleedrate * 3200.0), RGBAToHex(truncateforbyte(floatround(bleedrate * 3200.0)), truncateforbyte(255 - floatround(bleedrate * 3200.0)), 0, 255));
+
+	if(hunger < 90.0)
+		SetBodyPreviewLabel(playerid, sprintf("Energia: %0.1f%", hunger), RGBAToHex(truncateforbyte(floatround((66.6 - hunger) * 4.8)), truncateforbyte(255 - floatround((66.6 - hunger) * 4.8)), 0, 255));
+
+	if(infected1)
+		SetBodyPreviewLabel(playerid, "Infecao alimentar", 0xFF0000FF);
+
+	if(infected2)
+		SetBodyPreviewLabel(playerid, "Infecao de Ferida", 0xFF0000FF);
+
+	for(new i; i < drugs; i++)
 	{
-		bod_LabelData0[playerid][i][bl_valid] = false;
-		bod_LabelData1[playerid][i][bl_valid] = false;
-		bod_LabelData0[playerid][i][bl_textdraw] = PlayerText:INVALID_TEXT_DRAW;
-		bod_LabelData1[playerid][i][bl_textdraw] = PlayerText:INVALID_TEXT_DRAW;
+		GetDrugName(drugslist[i], drugname);
+		SetBodyPreviewLabel(playerid, drugname, RED);
 	}
+
+	SetBodyPreviewLabel(playerid, sprintf("Chance de Desmaio: %.1f%%", (GetPlayerKnockoutChance(playerid, 5.7) + GetPlayerKnockoutChance(playerid, 22.6) / 2) ), 0xFFFFFFFF);
+
+	return;
 }
 
 stock HideBodyPreviewUI(playerid)
 {
-	for(new i; i <= bod_LabelIndex0[playerid]; i++)
+	for(new i; i <= bod_LabelIndex[playerid]; i++)
 	{
-		PlayerTextDrawDestroy(playerid, bod_LabelData0[playerid][i][bl_textdraw]);
-		bod_LabelData0[playerid][i][bl_valid] = false;
-		bod_LabelData0[playerid][i][bl_textdraw] = PlayerText:INVALID_TEXT_DRAW;
+		if(bod_LabelDraw[playerid][i] != PlayerText:INVALID_TEXT_DRAW)
+		{
+			PlayerTextDrawDestroy(playerid, bod_LabelDraw[playerid][i]);
+			bod_LabelDraw[playerid][i] = PlayerText:INVALID_TEXT_DRAW;
+		}
 	}
 
-	for(new i; i <= bod_LabelIndex1[playerid]; i++)
-	{
-		PlayerTextDrawDestroy(playerid, bod_LabelData1[playerid][i][bl_textdraw]);
-		bod_LabelData1[playerid][i][bl_valid] = false;
-		bod_LabelData1[playerid][i][bl_textdraw] = PlayerText:INVALID_TEXT_DRAW;
-	}
-
-	bod_LabelIndex0[playerid] = 0;
-	bod_LabelIndex1[playerid] = 0;
+	bod_LabelIndex[playerid] = 0;
 }
 
-stock SetBodyPreviewLabel(playerid, index, const string[], textcolour)
+stock SetBodyPreviewLabel(playerid, const string[], textcolour)
 {
-	new Float:ypos;
-
-	if(bod_LabelData0[playerid][index][bl_valid])
-	{
-		PlayerTextDrawSetString(playerid, bod_LabelData0[playerid][index][bl_textdraw], string);
-		PlayerTextDrawColor(playerid, bod_LabelData0[playerid][index][bl_textdraw], textcolour);
-		PlayerTextDrawShow(playerid, bod_LabelData0[playerid][index][bl_textdraw]);
+	if(bod_LabelIndex[playerid] >= MAX_BODY_LABEL - 1){
+		err(true, true, "Numero de bodypreview excedido, index: %d/%d", bod_LabelIndex[playerid], MAX_BODY_LABEL);
+		return bod_LabelIndex[playerid];
 	}
-	else
+
+	bod_LabelDraw[playerid][bod_LabelIndex[playerid]] = CreatePlayerTextDraw(playerid, 2.000000, GEAR_POS_Y + (bod_LabelIndex[playerid] * 22.0), string);
+	PlayerTextDrawFont(playerid, bod_LabelDraw[playerid][bod_LabelIndex[playerid]], 2);
+	PlayerTextDrawLetterSize(playerid, bod_LabelDraw[playerid][bod_LabelIndex[playerid]], 0.229166, 1.049999);
+	PlayerTextDrawTextSize(playerid, bod_LabelDraw[playerid][bod_LabelIndex[playerid]], 131.500000, 17.000000);
+	PlayerTextDrawSetOutline(playerid, bod_LabelDraw[playerid][bod_LabelIndex[playerid]], 1);
+	PlayerTextDrawAlignment(playerid, bod_LabelDraw[playerid][bod_LabelIndex[playerid]], 1);
+	PlayerTextDrawColor(playerid, bod_LabelDraw[playerid][bod_LabelIndex[playerid]], textcolour);
+	PlayerTextDrawBackgroundColor(playerid, bod_LabelDraw[playerid][bod_LabelIndex[playerid]], 255);
+	PlayerTextDrawBoxColor(playerid, bod_LabelDraw[playerid][bod_LabelIndex[playerid]], 50);
+	PlayerTextDrawUseBox(playerid, bod_LabelDraw[playerid][bod_LabelIndex[playerid]], 1);
+	PlayerTextDrawSetProportional(playerid, bod_LabelDraw[playerid][bod_LabelIndex[playerid]], 1);
+
+	PlayerTextDrawShow(playerid, bod_LabelDraw[playerid][bod_LabelIndex[playerid]]);
+
+	bod_LabelIndex[playerid] ++;
+
+	return bod_LabelIndex[playerid];
+}
+
+/*==============================================================================
+
+	Callbacks
+
+==============================================================================*/
+
+hook OnPlayerConnect(playerid)
+{
+	bod_LabelIndex[playerid] = 0;
+
+	for(new i; i < MAX_BODY_LABEL; i++)
 	{
-		bod_LabelData0[playerid][index][bl_valid] = true;
-
-		if(index > bod_LabelIndex0[playerid])
-			bod_LabelIndex0[playerid] = index;
-
-		if(index == 0)
-			ypos = bod_UIPositionY[playerid] + 15.0;
-
-		else
-			ypos = bod_LabelData0[playerid][index - 1][bl_posY] + 15.0;
-
-		bod_LabelData0[playerid][index][bl_posY] = ypos;
-
-		bod_LabelData0[playerid][index][bl_textdraw]=CreatePlayerTextDraw(playerid, bod_UIPositionX[playerid] - 105.0, ypos, string);
-		PlayerTextDrawAlignment			(playerid, bod_LabelData0[playerid][index][bl_textdraw], 1);
-		PlayerTextDrawBackgroundColor	(playerid, bod_LabelData0[playerid][index][bl_textdraw], 175);
-		PlayerTextDrawFont				(playerid, bod_LabelData0[playerid][index][bl_textdraw], 1);
-		PlayerTextDrawLetterSize		(playerid, bod_LabelData0[playerid][index][bl_textdraw], bod_UIFontSizeX[playerid], bod_UIFontSizeY[playerid]);
-		PlayerTextDrawColor				(playerid, bod_LabelData0[playerid][index][bl_textdraw], textcolour);
-		PlayerTextDrawSetOutline		(playerid, bod_LabelData0[playerid][index][bl_textdraw], 1);
-		PlayerTextDrawSetProportional	(playerid, bod_LabelData0[playerid][index][bl_textdraw], 1);
-		PlayerTextDrawSetShadow			(playerid, bod_LabelData0[playerid][index][bl_textdraw], 0);
-		PlayerTextDrawTextSize			(playerid, bod_LabelData0[playerid][index][bl_textdraw], bod_UIPositionX[playerid], 10.0);
-		PlayerTextDrawSetSelectable		(playerid, bod_LabelData0[playerid][index][bl_textdraw], true);
-
-		PlayerTextDrawShow(playerid, bod_LabelData0[playerid][index][bl_textdraw]);
+		bod_LabelDraw[playerid][i] = PlayerText:INVALID_TEXT_DRAW;
 	}
-	return index;
+}
+
+hook OnPlayerOpenInventory(playerid)
+{
+	defer ShowPlayerHealthInfo(playerid);
+	return Y_HOOKS_CONTINUE_RETURN_0;
+}
+
+hook OnPlayerOpenContainer(playerid, Container:containerid)
+{
+	defer ShowPlayerHealthInfo(playerid);
+	return Y_HOOKS_CONTINUE_RETURN_0;
+}
+
+hook OnPlayerCloseInventory(playerid)
+{
+	HideBodyPreviewUI(playerid);
+	return Y_HOOKS_CONTINUE_RETURN_0;
+}
+
+hook OnPlayerDeath(playerid, killerid, reason)
+{
+	HideBodyPreviewUI(playerid);
+	return Y_HOOKS_CONTINUE_RETURN_0;
+}
+
+hook OnPlayerCloseContainer(playerid, Container:containerid)
+{
+	HideBodyPreviewUI(playerid);
+	return Y_HOOKS_CONTINUE_RETURN_0;
 }
