@@ -245,7 +245,7 @@ SaveTent(tentid, bool:active = true)
 {
 	if(!Iter_Contains(tnt_Index, tentid))
 	{
-		err(true, true, "tent", 2, "[SaveTent] ERROR: Attempted to save tent ID %d active: %d that was not found in index.", tentid, active);
+		err(true, true, "[SaveTent] ERROR: Attempted to save tent ID %d active: %d that was not found in index.", tentid, active);
 		return 1;
 	}
 
@@ -348,17 +348,6 @@ public OnTentLoad(Item:itemid, active, uuid[], data[], length)
 _tent_Remove(tentid)
 {
 	RemoveSavedItem(GetTentItem(tentid), DIRECTORY_TENT);
-}
-
-hook OnItemAddedToContainer(Container:containerid, Item:itemid, playerid)
-{
-	if(gServerInitialising || !IsPlayerConnected(playerid))
-		return Y_HOOKS_CONTINUE_RETURN_0;
-
-	if(GetContainerTent(containerid) != -1 && !IsPlayerInTutorial(playerid))
-		SaveTent(GetContainerTent(containerid));
-
-	return Y_HOOKS_CONTINUE_RETURN_0;
 }
 
 hook OnItemRemovedFromCnt(Container:containerid, slotid, playerid)
