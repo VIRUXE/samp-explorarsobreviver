@@ -1391,7 +1391,7 @@ public OnScriptInit()
 	DefineItemCraftSet(item_WheelLock, item_WheelLock, false, item_LocksmithKit, false);
 
 	// items created by using a tool item on them in the world
-	SetCraftSetConstructible(18500, item_Screwdriver, 	DefineItemCraftSet(item_Key, item_Key, false, item_Key, true, item_Motor, false), .tweak = false);
+	//SetCraftSetConstructible(18500, item_Screwdriver, 	DefineItemCraftSet(item_Key, item_Key, false, item_Key, true, item_Motor, false), .tweak = false);
 	SetCraftSetConstructible(20000, item_Screwdriver, 	DefineItemCraftSet(item_PlotPole, item_Canister, false, item_RadioPole, false, item_Fluctuator, false, item_PowerSupply, false), item_Crowbar, 30000, false);
 	SetCraftSetConstructible(22500, item_Screwdriver, 	DefineItemCraftSet(item_Barstool, item_RefinedMetal, false, item_WoodLog, false, item_WoodLog, false, item_Clothes, false), item_Crowbar, 22000);
 	SetCraftSetConstructible(22500, item_Screwdriver, 	DefineItemCraftSet(item_SmallTable, item_WoodLog, false, item_WoodLog, false, item_WoodLog, false, item_WoodLog, false), item_Crowbar, 22000);
