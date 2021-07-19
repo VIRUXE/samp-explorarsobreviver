@@ -127,7 +127,7 @@ ACMD:gotoitem[4](playerid, params[])
 		Float:z;
 
 	GetItemPos(itemid, x, y, z);
-	SetPlayerPos(playerid, x, y, z);
+	SetPlayerPos(playerid, x, y, z + ITEM_FLOOR_OFFSET);
 
 	return 1;
 }
