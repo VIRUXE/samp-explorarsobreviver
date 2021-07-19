@@ -392,6 +392,15 @@ hook OnPlayerHolsteredItem(playerid, Item:itemid)
 		defer UpdatePlayerGear(playerid);
 }
 
+hook OnItemRemovedFromPlayer(playerid, Item:itemid){
+	defer UpdatePlayerGear(playerid);
+}
+
+hook OnPlayerGetItem(playerid, Item:itemid){
+	defer UpdatePlayerGear(playerid);
+}
+
+
 hook OnPlayerClickPlayerTD(playerid, PlayerText:playertextid)
 {
 	if(playertextid == GearSlot_Head[playerid])
