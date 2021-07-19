@@ -9,7 +9,7 @@ PlayerText:	KeyActions[MAX_PLAYERS] = {PlayerText:INVALID_TEXT_DRAW, ...},
 
 hook OnPlayerConnect(playerid)
 {
-	KeyActions[playerid]			=CreatePlayerTextDraw(playerid, 618.000000, 120.000000, "fixed it");
+	KeyActions[playerid]			=CreatePlayerTextDraw(playerid, 618.000000, 122.000000, "fixed it");
 	PlayerTextDrawAlignment			(playerid, KeyActions[playerid], 3);
 	PlayerTextDrawBackgroundColor	(playerid, KeyActions[playerid], 255);
 	PlayerTextDrawFont				(playerid, KeyActions[playerid], 1);
