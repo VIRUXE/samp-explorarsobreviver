@@ -10,7 +10,7 @@ static
 hook OnPlayerDisconnect(playerid)
 {
 	CollisionVehicle[playerid] = INVALID_VEHICLE_ID;
-	DestroyObject(CollisionObject[playerid]);
+	DestroyDynamicObject(CollisionObject[playerid]);
 }
 
 hook OnPlayerStateChange(playerid, newstate, oldstate)
@@ -27,8 +27,8 @@ hook OnPlayerStateChange(playerid, newstate, oldstate)
 		if(vehicletypecategory == VEHICLE_CATEGORY_PUSHBIKE || vehicletypecategory == VEHICLE_CATEGORY_MOTORBIKE)
 		{
 			CollisionVehicle[playerid] = vehicleid;
-			CollisionObject[playerid] = CreateObject(0, 0.0, 0.0, 3.0, 0.0, 0.0, 0.0);
-			AttachObjectToVehicle(CollisionObject[playerid], CollisionVehicle[playerid], 0.0, 0.6, 1.2, 0.0, 0.0, 0.0);
+			CollisionObject[playerid] = CreateDynamicObject(0, 0.0, 0.0, 3.0, 0.0, 0.0, 0.0);
+			AttachDynamicObjectToVehicle(CollisionObject[playerid], CollisionVehicle[playerid], 0.0, 0.6, 1.2, 0.0, 0.0, 0.0);
 		}
 
 		return 1;
@@ -42,7 +42,7 @@ hook OnPlayerStateChange(playerid, newstate, oldstate)
 
 			if(vehicletypecategory == VEHICLE_CATEGORY_PUSHBIKE || vehicletypecategory == VEHICLE_CATEGORY_MOTORBIKE)
 			{
-				DestroyObject(CollisionObject[playerid]);
+				DestroyDynamicObject(CollisionObject[playerid]);
 				CollisionVehicle[playerid] = INVALID_VEHICLE_ID;
 				CollisionObject[playerid] = INVALID_OBJECT_ID;
 			}
