@@ -9,14 +9,19 @@ PlayerText:	KeyActions[MAX_PLAYERS] = {PlayerText:INVALID_TEXT_DRAW, ...},
 
 hook OnPlayerConnect(playerid)
 {
-	KeyActions[playerid]			=CreatePlayerTextDraw(playerid, 618.000000, 122.000000, "fixed it");
-	PlayerTextDrawAlignment			(playerid, KeyActions[playerid], 3);
-	PlayerTextDrawBackgroundColor	(playerid, KeyActions[playerid], 255);
-	PlayerTextDrawFont				(playerid, KeyActions[playerid], 1);
-	PlayerTextDrawLetterSize		(playerid, KeyActions[playerid], 0.300000, 1.499999);
-	PlayerTextDrawColor				(playerid, KeyActions[playerid], -1);
-	PlayerTextDrawSetOutline		(playerid, KeyActions[playerid], 1);
-	PlayerTextDrawSetProportional	(playerid, KeyActions[playerid], 1);
+	KeyActions[playerid] = CreatePlayerTextDraw(playerid, 5.000000, 211.000000, "~y~H~W~ Abrir inventario~n~~y~N ~W~Dropar item");
+	PlayerTextDrawFont(playerid, KeyActions[playerid], 1);
+	PlayerTextDrawLetterSize(playerid, KeyActions[playerid], 0.304165, 1.250000);
+	PlayerTextDrawTextSize(playerid, KeyActions[playerid], 215.000000, 464.500000);
+	PlayerTextDrawSetOutline(playerid, KeyActions[playerid], 1);
+	PlayerTextDrawSetShadow(playerid, KeyActions[playerid], 1);
+	PlayerTextDrawAlignment(playerid, KeyActions[playerid], 1);
+	PlayerTextDrawColor(playerid, KeyActions[playerid], -65281);
+	PlayerTextDrawBackgroundColor(playerid, KeyActions[playerid], 255);
+	PlayerTextDrawBoxColor(playerid, KeyActions[playerid], 50);
+	PlayerTextDrawUseBox(playerid, KeyActions[playerid], 0);
+	PlayerTextDrawSetProportional(playerid, KeyActions[playerid], 1);
+	PlayerTextDrawSetSelectable(playerid, KeyActions[playerid], 0);
 }
 
 
