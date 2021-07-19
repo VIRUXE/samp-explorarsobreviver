@@ -383,53 +383,6 @@ public OnAntiCheatTurnUpsideDown(playerid, Float:angle)
 	ReportPlayer(name, "Parkour Mod", -1, "Parkour", px, py, pz, GetPlayerVirtualWorld(playerid), GetPlayerInterior(playerid), "");
 }
 
-const ONFOOT_SYNC = 207; // 0.3.7
-
-IPacket:ONFOOT_SYNC(playerid, BitStream:bs) // incoming packet
-{
-    new onFootData[PR_OnFootSync];
-	BS_IgnoreBits(bs, 8);
-	BS_ReadOnFootSync(bs, onFootData);
-
-	// Anti Fly
-	switch (onFootData[PR_animationId])
-    {
-        case 157, 159, 161:
-        {
-            if (!IsPlayerInAnyVehicle(playerid))
-            {
-                onFootData[PR_animationId] = 1189;
-                onFootData[PR_velocity][0] = onFootData[PR_velocity][1] = onFootData[PR_velocity][2] = 0.0;
-
-                BS_SetWriteOffset(bs, 8);
-                BS_WriteOnFootSync(bs, onFootData);
-            }
-        }
-    }
-    
-    //Anti Speed
-    
-    if(	IsValidVehicle(GetPlayerSurfingVehicleID(playerid)) ||
-		IsValidObject(GetPlayerSurfingObjectID(playerid)) ||
-		//IsAutoSaving() ||
-		IsPlayerDead(playerid) ||
-		IsPlayerUnfocused(playerid) ||
-		IsPlayerOnZipline(playerid) ||
-		!IsPlayerSpawned(playerid) ||
-		onFootData[PR_animationId] == 1129 ||
-		onFootData[PR_animationId] == 1130 ||
-		onFootData[PR_animationId] == 1132)
-		return 1;
-    
-	if(GetPlayerTotalVelocity(playerid) > 50.0)
-	{
-        //SetPlayerVelocity(playerid, onFootData[PR_velocity][0] / 2, onFootData[PR_velocity][1] / 2, onFootData[PR_velocity][2]);
-        return 0;
-	}
-	
-	return 1;
-}
-
 public OnPlayerSuspectedForAimbot(playerid,hitid,weaponid,warnings)
 {
     new
@@ -449,7 +402,6 @@ public OnPlayerSuspectedForAimbot(playerid,hitid,weaponid,warnings)
 
 		ReportPlayer(name, "Aimbot", -1, "AimBot", px, py, pz, GetPlayerVirtualWorld(playerid), GetPlayerInterior(playerid), "");
 		
-
     	//KickPlayer(playerid, "Aimbot");
 	}	
 	return 1;
