@@ -412,8 +412,7 @@ hook OnPlayerViewInvOpt(playerid) {
 
 		str = "Mover para ";
 		strcat(str, containerName);
-		// Temporary disable
-		//cnt_InventoryOptionID[playerid] = AddInventoryOption(playerid, str);
+		cnt_InventoryOptionID[playerid] = AddInventoryOption(playerid, str);
 	}
 
 	return Y_HOOKS_CONTINUE_RETURN_0;
@@ -443,21 +442,15 @@ hook OnPlayerSelectInvOpt(playerid, option) {
 			new required = AddItemToContainer(cnt_CurrentContainer[playerid], itemid, playerid);
 
 			if(required == 0) {
+				RemoveItemFromInventory(playerid, slot);
 				if(CallLocalFunction("OnMoveItemToContainer", "ddd", playerid, _:itemid, _:cnt_CurrentContainer[playerid]))
 					return Y_HOOKS_CONTINUE_RETURN_0;
 			}
-
-			defer _container_showInv(playerid);
-
-			return Y_HOOKS_CONTINUE_RETURN_0;
+			return Y_HOOKS_BREAK_RETURN_0;
 		}
 	}
 
 	return Y_HOOKS_CONTINUE_RETURN_0;
-}
-
-timer _container_showInv[0](playerid) {
-	DisplayPlayerInventory(playerid);
 }
 
 hook OnPlayerOpenInventory(playerid) {
