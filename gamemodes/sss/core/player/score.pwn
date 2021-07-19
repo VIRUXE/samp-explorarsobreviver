@@ -5,13 +5,13 @@ hook OnPlayerSave(playerid, filename[])
 	new data[2];
 	data[0] = GetPlayerScore(playerid);
 	data[1] = GetPlayerWantedLevel(playerid);
-	modio_push(filename, _T<S,C,O,R>, 1, data);
+	modio_push(filename, _T<S,C,O,R>, 2, data);
 }
 
 hook OnPlayerLoad(playerid, filename[])
 {
 	new data[2];
-	modio_read(filename, _T<S,C,O,R>, 1, data);
+	modio_read(filename, _T<S,C,O,R>, 2, data);
 	SetPlayerScore(playerid, data[0]);
 	SetPlayerWantedLevel(playerid, data[1]);
 }
