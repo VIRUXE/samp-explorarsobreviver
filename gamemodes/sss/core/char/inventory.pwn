@@ -309,9 +309,33 @@ timer UpdatePlayerGear[10](playerid)
 	return 1;
 }
 
+
+static bag_InventoryItem[MAX_PLAYERS];
+
 hook OnPlayerOpenInventory(playerid)
 {
+	if(IsValidItem(GetPlayerBagItem(playerid)))
+	{
+		new modelid;
+		GetItemTypeModel(GetItemType(GetPlayerBagItem(playerid)), modelid);
+		bag_InventoryItem[playerid] = AddInventoryListItem(playerid, "Abrir Mochila >", modelid);
+	}
+
 	defer UpdatePlayerGear(playerid);
+
+	return Y_HOOKS_CONTINUE_RETURN_0;
+}
+
+hook OnPlayerSelectExtraItem(playerid, item)
+{
+	if(item == bag_InventoryItem[playerid])
+	{
+		if(IsValidItem(GetPlayerBagItem(playerid)))
+		{
+			_inv_HandleGearSlotClick_Back(playerid);
+			return Y_HOOKS_BREAK_RETURN_1;
+		}
+	}
 	return Y_HOOKS_CONTINUE_RETURN_0;
 }
 
