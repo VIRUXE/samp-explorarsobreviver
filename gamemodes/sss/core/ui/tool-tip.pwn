@@ -39,18 +39,19 @@ HideHelpTip(playerid)
 
 hook OnPlayerConnect(playerid)
 {
-	ToolTipText[playerid] = CreatePlayerTextDraw(playerid, 3.0, 190.0, "Tip: You can access the trunks of cars by pressing F at the back");
-	PlayerTextDrawLetterSize(playerid, ToolTipText[playerid], 0.35, 1.10);
-	PlayerTextDrawTextSize(playerid, ToolTipText[playerid], 145.0, 35.0);
+	ToolTipText[playerid] = CreatePlayerTextDraw(playerid, 500.000000, 122.000000, "As Setas indicam a 'Frente', ou seja, o lado 'vulneravel' da Defesa~n~Afaste da frente, para a conseguir mover~n~Segure para mos");
+	PlayerTextDrawFont(playerid, ToolTipText[playerid], 1);
+	PlayerTextDrawLetterSize(playerid, ToolTipText[playerid], 0.312499, 1.199999);
+	PlayerTextDrawTextSize(playerid, ToolTipText[playerid], 635.000000, -158.000000);
+	PlayerTextDrawSetOutline(playerid, ToolTipText[playerid], 1);
+	PlayerTextDrawSetShadow(playerid, ToolTipText[playerid], 0);
 	PlayerTextDrawAlignment(playerid, ToolTipText[playerid], 1);
 	PlayerTextDrawColor(playerid, ToolTipText[playerid], -1);
-	PlayerTextDrawUseBox(playerid, ToolTipText[playerid], true);
-	PlayerTextDrawBoxColor(playerid, ToolTipText[playerid], 100);
-	PlayerTextDrawSetShadow(playerid, ToolTipText[playerid], 1);
-	PlayerTextDrawSetOutline(playerid, ToolTipText[playerid], 0);
 	PlayerTextDrawBackgroundColor(playerid, ToolTipText[playerid], 255);
-	PlayerTextDrawFont(playerid, ToolTipText[playerid], 1);
+	PlayerTextDrawBoxColor(playerid, ToolTipText[playerid], 50);
+	PlayerTextDrawUseBox(playerid, ToolTipText[playerid], 1);
 	PlayerTextDrawSetProportional(playerid, ToolTipText[playerid], 1);
+	PlayerTextDrawSetSelectable(playerid, ToolTipText[playerid], 0);
 }
 
 hook OnPlayerPickedUpItem(playerid, Item:itemid)
