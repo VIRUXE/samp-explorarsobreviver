@@ -14,10 +14,7 @@ hook OnGameModeInit(){
 	TextDrawSetShadow(item_Prev, 0);
 	TextDrawAlignment(item_Prev, 1);
 	TextDrawColor(item_Prev, -1);
-	TextDrawUseBox(item_Prev, true);
-	TextDrawBoxColor(item_Prev, 2);
 	TextDrawBackgroundColor(item_Prev, 0);
-	TextDrawSetProportional(item_Prev, 1);
 	TextDrawSetPreviewRot(item_Prev, -10.000000, 0.100000, -20.000000, 1.0);
 	TextDrawSetPreviewModel(item_Prev, 19300);
 }
