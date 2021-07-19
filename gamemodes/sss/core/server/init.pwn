@@ -1752,11 +1752,11 @@ public OnScriptInit()
 	veht_MountBike	= DefineVehicleType(510, "Mountain Bike",	vgroup_Civilian,	VEHICLE_CATEGORY_PUSHBIKE,		VEHICLE_SIZE_SMALL,		0.0,		0.0,	"vehicle_civilian",			2,		8.0,	VEHICLE_FLAG_NOT_LOCKABLE | VEHICLE_FLAG_NO_ENGINE);
 	veht_MrWhoopee	= DefineVehicleType(423, "Mr. Whoopee",		vgroup_Industrial,	VEHICLE_CATEGORY_TRUCK,			VEHICLE_SIZE_LARGE,		100.0,		20.0,	"vehicle_industrial",		70,	    30.0);
 	veht_Mule	    = DefineVehicleType(414, "Mule",		    vgroup_Industrial,	VEHICLE_CATEGORY_TRUCK,			VEHICLE_SIZE_MEDIUM,	65.0,		25.0,	"vehicle_industrial",		85,	    40.0);
-	veht_NRG 		= DefineVehicleType(522, "NRG",		        vgroup_Industrial,	VEHICLE_CATEGORY_MOTORBIKE,	    VEHICLE_SIZE_SMALL,		30.0,		15.0,	"vehicle_industrial",		14,	    30.0);
+	veht_NRG 		= DefineVehicleType(522, "NRG",		        vgroup_Industrial,	VEHICLE_CATEGORY_MOTORBIKE,	    VEHICLE_SIZE_SMALL,		30.0,		15.0,	"vehicle_industrial",		10,	    30.0);
 	veht_Patriot	= DefineVehicleType(470, "Patriot",			vgroup_Military,	VEHICLE_CATEGORY_TRUCK,			VEHICLE_SIZE_MEDIUM,	94.0,		26.0,	"vehicle_military",			50,		22.0);
 	veht_PCJ	    = DefineVehicleType(461, "PCJ-600",		    vgroup_Industrial,	VEHICLE_CATEGORY_MOTORBIKE,	    VEHICLE_SIZE_SMALL,		30.0,		15.0,	"vehicle_industrial",		14,	    30.0);
 	veht_Perennial	= DefineVehicleType(404, "Perennial",		vgroup_Industrial,	VEHICLE_CATEGORY_CAR,			VEHICLE_SIZE_MEDIUM,	65.0,		20.0,	"vehicle_industrial",		65,	    40.0);
-	veht_Phoenix 	= DefineVehicleType(603, "Phoenix", 		vgroup_Industrial,	VEHICLE_CATEGORY_CAR, 		    VEHICLE_SIZE_LARGE,  	50.0,  		7.0, 	"vehicle_industrial", 		70, 	13.0);
+	veht_Phoenix 	= DefineVehicleType(603, "Phoenix", 		vgroup_Industrial,	VEHICLE_CATEGORY_CAR, 		    VEHICLE_SIZE_LARGE,  	50.0,  		7.0, 	"vehicle_industrial", 		30, 	13.0);
 	veht_Pizzaboy	= DefineVehicleType(448, "Pizzaboy",		vgroup_Industrial,	VEHICLE_CATEGORY_MOTORBIKE,	    VEHICLE_SIZE_SMALL,		30.0,		10.0,	"vehicle_industrial",		14,	    60.0);
 	veht_Police	    = DefineVehicleType(497, "Police Maverick",	vgroup_Police,	    VEHICLE_CATEGORY_HELICOPTER,	VEHICLE_SIZE_LARGE,		100.0,		20.0,	"vehicle_police",		    100,	15.0);
 	veht_Police1	= DefineVehicleType(596, "Police Car",		vgroup_Police,		VEHICLE_CATEGORY_CAR,			VEHICLE_SIZE_MEDIUM,	78.0,		12.5,	"vehicle_police",			42,		80.0);
