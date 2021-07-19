@@ -35,7 +35,8 @@ bool:		def_active,
 			def_pass,
 			def_mod,
 			def_hit,
-Float:		def_buttonz
+Float:		def_buttonz,
+			def_owner[MAX_PLAYER_NAME]
 }
 
 static
@@ -43,7 +44,6 @@ static
 			def_TypeTotal,
 			def_ItemTypeDefenceType[MAX_ITEM_TYPE] = {INVALID_DEFENCE_TYPE, ...},
 			def_TweakArrow[MAX_PLAYERS] = {INVALID_OBJECT_ID, ...},
-
 Item:		def_CurrentDefenceItem[MAX_PLAYERS],
 Item:		def_CurrentDefenceEdit[MAX_PLAYERS],
 Item:		def_CurrentDefenceOpen[MAX_PLAYERS],
@@ -269,38 +269,6 @@ DeconstructDefence(Item:itemid, playerid)
 	CA_DestroyObject(def_Col[itemid]);
 	def_Col[itemid] = -1;
 
-	/*if(itemdata[def_pose] == DEFENCE_POSE_VERTICAL)
-	{
-		new
-			Item:list[MAX_CONSTRUCT_SET_ITEMS] = {INVALID_ITEM_ID, ...},
-			size, ItemType:itemtype2, active, pose, Float:x2, Float:y2, Float:z2;
-
-		size = GetItemsInRange(x, y, z + ( 2 * def_TypeData[def_ItemTypeDefenceType[itemtype]][def_placeOffsetZ]), 1.5, list);
-
-		if(size > 0){
-			for(new i; i < size; i++){
-				if(list[i] == itemid)
-					continue;
-
-				itemtype2 = GetItemType(list[i]);
-				if(def_ItemTypeDefenceType[itemtype2] != -1){
-					GetItemArrayDataAtCell(list[i], active, def_active);
-					if(active){
-						GetItemArrayDataAtCell(list[i], pose, def_pose);
-						if(pose == DEFENCE_POSE_VERTICAL){
-							GetItemPos(list[i], x2, y2, z2);
-							if( z2 > z){
-								z -= def_TypeData[def_ItemTypeDefenceType[itemtype]][def_placeOffsetZ];
-								SetItemPos(list[i], x2, y2, z + def_TypeData[def_ItemTypeDefenceType[itemtype2]][def_placeOffsetZ]);
-								CallLocalFunction("OnDefenceModified", "d", _:list[i]);
-							}
-						}
-					}
-				}
-			}
-		}
-	}*/
-
 	GetPlayerPos(playerid, x, y, z);
 	SetItemLabel(itemid, name);
 	SetItemPos(itemid, x, y, z - ITEM_FLOOR_OFFSET);
@@ -519,7 +487,17 @@ _InteractDefenceWithItem(playerid, Item:itemid, Item:tool)
 
 	// ensures the player can only perform these actions on the back-side.
 	if(!(90.0 < angle < 270.0))
-		return 0;
+	{
+		new name[MAX_PLAYER_NAME], itemdata[e_DEFENCE_DATA];
+
+		GetItemArrayData(itemid, itemdata);
+		GetPlayerName(playerid, name);
+
+		if(!strcmp(name, itemdata[def_owner]))
+			ShowActionText(playerid, "Essa defesa é sua, por isso poderá modificá-la.", 5000);
+		else 	
+			return 0;
+	}
 
 	if(tooltype == item_Crowbar)
 	{
@@ -807,21 +785,24 @@ ConvertItemToDefenceItem(Item:itemid, pose, playerid)
 	new ret = ActivateDefenceItem(itemid);
 	if(ret)
 		return ret;
-
-	SetItemArrayDataAtCell(itemid, pose, def_pose);
-
+		
 	new
+		itemdata[e_DEFENCE_DATA],
 		ItemType:itemtype = GetItemType(itemid),
 		Float:x, Float:y, Float:z,
 		Float:ix, Float:iy, Float:iz,
 		Float:rx, Float:ry, Float:rz,
-		Float:a, Button:buttonid;
+		Float:a, Button:buttonid, name[MAX_PLAYER_NAME];
 
+	GetItemArrayData(itemid, itemdata);
 	GetPlayerPos(playerid, x, y, z);
 	GetItemPos(itemid, ix, iy, iz);
 	GetItemRot(itemid, rx, ry, rz);
 	a = GetAngleToPoint(x, y, ix, iy);
 	GetItemButtonID(itemid, buttonid);
+	GetPlayerName(playerid, name, sizeof(name));
+
+	itemdata[def_pose] = pose;
 
 	if(pose == DEFENCE_POSE_HORIZONTAL)
 	{
@@ -843,7 +824,10 @@ ConvertItemToDefenceItem(Item:itemid, pose, playerid)
 	SetItemPos(itemid, x, y, iz);
 	SetItemRot(itemid, rx, ry, rz);
 
-	SetItemArrayDataAtCell(itemid, _:z, def_buttonz);
+	itemdata[def_buttonz] = z;
+	GetPlayerName(playerid, itemdata[def_owner]);
+	SetItemArrayData(itemid, itemdata, e_DEFENCE_DATA);
+
 	SetButtonPos(buttonid, x, y, z);
 
 	_UpdateDefenceTweakArrow(playerid, itemid);
