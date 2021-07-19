@@ -481,7 +481,7 @@ ItemType:		item_BandanaWhite	= INVALID_ITEM_TYPE,
 ItemType:		item_BandanaPat		= INVALID_ITEM_TYPE,
 ItemType:		item_Cuntainer		= INVALID_ITEM_TYPE,
 ItemType:		item_RedCrate		= INVALID_ITEM_TYPE,
-ItemType:		item_MetalGate1		= INVALID_ITEM_TYPE,
+ItemType:		item_LargeGate		= INVALID_ITEM_TYPE,
 ItemType:		item_LaserPointB	= INVALID_ITEM_TYPE,
 ItemType:		item_LaserPointY	= INVALID_ITEM_TYPE,
 ItemType:		item_LaserPointP	= INVALID_ITEM_TYPE,
@@ -834,7 +834,7 @@ public OnScriptInit()
 	item_Medkit			= DefineItemType("Kit Medico",					"Medkit",			11736,	1,	0.0, 0.0, 0.0,			0.004,	0.197999, 0.038000, 0.021000,  79.700012, 0.000000, 90.899978, .maxhitpoints = 1);
 	item_MetalFrame		= DefineItemType("Fragmento de Metal",			"MetalFrame",		19843,	10,	0.0, 0.0, 0.0,			0.0,	-0.093000, 0.414000, -0.347999,  77.500022, 105.500022, 80.100013, true, .maxhitpoints = 16);
 	item_MetalGate		= DefineItemType("Grade",						"MetalGate",		19303,	10,	90.0, 0.0, 0.0,			0.0,	-0.128823,0.758761,-0.508013,-19.839876,-10.353648,105.119079, true,  .maxhitpoints = 4);
-	item_MetalGate1		= DefineItemType("Grade Grande",				"MetalGate1",		19870,	15,	90.0, 0.0, 0.0,			0.0,	0.0, 0.0, 0.0, 0.0, 0.0, 0.0, false, .maxhitpoints = 15);
+	item_LargeGate		= DefineItemType("Grade Grande",				"LargeGate",		19870,	15,	90.0, 0.0, 0.0,			0.0,	0.000000,0.054999,0.000000,-23.000013,0.300001,100.599967, true, .maxhitpoints = 15);
 	item_MetPanel		= DefineItemType("Painel de Metal",				"MetPanel",			2911,	10,	90.0, 0.0, 0.0,			0.0,	0.334049,-0.414559,-1.151276,338.515014,349.801025,104.950340, true,  .maxhitpoints = 3);
 	item_Microphone		= DefineItemType("Microfone",					"Microphone",		19610,	1,	0.0, 0.0, 0.0,			0.000,	0.078000, 0.030999, 0.012000,  53.499919, -99.100090, -46.300144, .maxhitpoints = 1);
 	item_MilitaryGate	= DefineItemType("Portao Militar",				"MilitaryGate",		2929,	12, 90.0, 0.0, 0.0,			0.0,	-0.564093,1.766212,-0.924849,337.887634,172.861953,68.495330, true,  .maxhitpoints = 15);
@@ -1334,7 +1334,7 @@ public OnScriptInit()
 	DefineDefenceItem(item_InsulPanel,	0.0, 0.0, 90.0,		0.0, 90.0, -90.0,	1.700000, 	true);
 	DefineDefenceItem(item_LargeFrame,	0.0, 0.0, 0.0,		0.0, 0.0, 0.0,		1.500000, 	false);
 	DefineDefenceItem(item_MetalGate,	0.0, 0.0, 0.0,		90.0, 0.0, 0.0,		1.242187, 	true);
-	DefineDefenceItem(item_MetalGate1,	0.0, 0.0, 0.0,		90.0, 0.0, 0.0,		1.765625, 	true);
+	DefineDefenceItem(item_LargeGate,	0.0, 0.0, 0.0,		90.0, 0.0, 0.0,		1.765625, 	true);
 	DefineDefenceItem(item_MetPanel,	0.0, 0.0, 0.0,		90.0, 0.0, 0.0,     0.009655, 	true);
 	DefineDefenceItem(item_MilitaryGate,0.0, 0.0, 0.0,		90.0, 0.0, 0.0,		1.792033, 	true);
 	DefineDefenceItem(item_RedCrate,	0.0, 0.0, 0.0,		0.0, 0.0, 0.0,		1.210272, 	false);
@@ -1407,7 +1407,7 @@ public OnScriptInit()
 
 	SetCraftSetConstructible(20000, item_Sledgehammer, 	DefineItemCraftSet(item_Bed, item_MetalGate, false, item_WoodLog, false, item_WoodLog, false, item_RefinedMetal, false), item_Crowbar, 25000);
 	SetCraftSetConstructible(30000, item_Sledgehammer, 	DefineItemCraftSet(item_Cuntainer, item_CrateDoor, false, item_CrateDoor, false, item_CrateDoor, false, item_CrateDoor, false, item_CrateDoor, false), item_Crowbar, 25000, true, true);
-	SetCraftSetConstructible(30000, item_Sledgehammer, 	DefineItemCraftSet(item_MetalGate1, item_MetalGate, false, item_MetalGate, false), .tweak = true, .defence = true);
+	SetCraftSetConstructible(30000, item_Sledgehammer, 	DefineItemCraftSet(item_LargeGate, item_MetalGate, false, item_MetalGate, false), .tweak = true, .defence = true);
 	SetCraftSetConstructible(30000, item_Sledgehammer, 	DefineItemCraftSet(item_RedCrate, item_MilitaryGate, false, item_MilitaryGate, false, item_MetalGate, false), item_Crowbar, 25000, true, true);
 
 	// items created with a workbench
