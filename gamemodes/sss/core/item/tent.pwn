@@ -209,10 +209,11 @@ stock DestroyTent(tentid)
 
 	SetItemExtraData(tnt_Data[tentid][tnt_itemId], INVALID_TENT_ID);
 
-	if(!IsValidContainer(tnt_Data[tentid][tnt_containerId]))
-		return 0;
-
-	DestroyContainer(tnt_Data[tentid][tnt_containerId]);
+	if(IsValidContainer(tnt_Data[tentid][tnt_containerId]))
+	{
+		tnt_ContainerTent[tnt_Data[tentid][tnt_containerId]] = -1;
+		DestroyContainer(tnt_Data[tentid][tnt_containerId]);
+	}
 
 	DestroyDynamicObject(tnt_ObjData[tentid][tnt_objSideR1]);
 	DestroyDynamicObject(tnt_ObjData[tentid][tnt_objSideR2]);
@@ -348,6 +349,17 @@ public OnTentLoad(Item:itemid, active, uuid[], data[], length)
 _tent_Remove(tentid)
 {
 	RemoveSavedItem(GetTentItem(tentid), DIRECTORY_TENT);
+}
+
+hook OnItemAddedToContainer(Container:containerid, Item:itemid, playerid)
+{
+	if(gServerInitialising || !IsPlayerConnected(playerid))
+		return Y_HOOKS_CONTINUE_RETURN_0;
+
+	if(GetContainerTent(containerid) != -1 && !IsPlayerInTutorial(playerid))
+		SaveTent(GetContainerTent(containerid));
+
+	return Y_HOOKS_CONTINUE_RETURN_0;
 }
 
 hook OnItemRemovedFromCnt(Container:containerid, slotid, playerid)
