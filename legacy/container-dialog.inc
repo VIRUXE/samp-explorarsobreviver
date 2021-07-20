@@ -460,7 +460,7 @@ hook OnPlayerOpenInventory(playerid) {
 		GetContainerName(cnt_CurrentContainer[playerid], str);
 		strcat(str, " >");
 
-		cnt_InventoryContainerItem[playerid] = AddInventoryListItem(playerid, str);
+		cnt_InventoryContainerItem[playerid] = AddInventoryListItem(playerid, str, 1239);
 	}
 
 	return Y_HOOKS_CONTINUE_RETURN_0;
@@ -469,9 +469,8 @@ hook OnPlayerOpenInventory(playerid) {
 hook OnPlayerSelectExtraItem(playerid, item) {
 	if(IsValidContainer(cnt_CurrentContainer[playerid])) {
 		if(item == cnt_InventoryContainerItem[playerid]) {
-			ClosePlayerInventory(playerid);
 			DisplayContainerInventory(playerid, cnt_CurrentContainer[playerid]);
-			return Y_HOOKS_CONTINUE_RETURN_0;
+			return Y_HOOKS_BREAK_RETURN_1;
 		}
 	}
 
