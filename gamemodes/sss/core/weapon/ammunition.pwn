@@ -89,18 +89,6 @@ hook OnItemNameRender(Item:itemid, ItemType:itemtype)
 	if(ammotype == -1)
 		return Y_HOOKS_CONTINUE_RETURN_0;
 
-	new size;
-	GetItemArrayDataSize(itemid, size);
-
-	if(size < 1)
-		return Y_HOOKS_CONTINUE_RETURN_0;
-
-	if(isnull(clbr_Data[ammo_Data[ammotype][ammo_calibre]][clbr_name]))
-		return Y_HOOKS_CONTINUE_RETURN_0;
-
-	if(isnull(ammo_Data[ammotype][ammo_name]))
-		return Y_HOOKS_CONTINUE_RETURN_0;
-
 	new
 		amount,
 		str[MAX_ITEM_TEXT + MAX_ITEM_NAME];
