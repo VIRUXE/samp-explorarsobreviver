@@ -580,6 +580,7 @@ new stock
 #include "sss/core/item/barrel.pwn"
 #include "sss/core/item/wooddoor.pwn"
 #include "sss/core/item/largegate.pwn"
+#include "sss/core/item/toolbox.pwn"
 //#include "sss/core/item/clock.pwn"
 
 // ADMINISTRATION TOOLS

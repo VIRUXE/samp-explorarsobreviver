@@ -30,7 +30,7 @@ vehicle_industrial,	1.0
 4.0,	LargeBox
 4.0,	Sandbag
 9.0,	GearBox
-8.0,	ToolBox
+3.0,	ToolBox
 4.0,	RadioPole
 
 # defences
