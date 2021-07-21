@@ -386,6 +386,7 @@ hook OnPlayerLogin(playerid)
 			RemovePlayerMaskItem(playerid);
 
 		SetPlayerHP(playerid, -1.0);
+		defer SetPlayerDeath(playerid);
 		ChatMsg(playerid, RED, " » Você foi morto enquanto esteve ausente. :(");
 		KillPlayerBody[playerid] = false;
 	}
@@ -402,6 +403,9 @@ hook OnPlayerLogin(playerid)
 	}
 	return Y_HOOKS_CONTINUE_RETURN_0;
 }
+
+timer SetPlayerDeath[3000](playerid)
+	SetPlayerHP(playerid, -1.0);
 
 CreateBody(const name[], Float:x, Float:y, Float:z, Float:a, w, i, s)
 {
