@@ -156,12 +156,17 @@ ACMD:addloot[5](playerid, params[])
 	new
 		Float:x,
 		Float:y,
-		Float:z;
+		Float:z,
+		str[900];
 
 	GetPlayerPos(playerid, x, y, z);
+	
+	format(str, 900, "CreateStaticLootSpawn(%f, %f, %f, GetLootIndexFromName(\"%s\"), 25.0, %d);", x, y, z - ITEM_FLOOR_OFFSET, lootindexname, size);
 
-	CreateLootItem(lootindex, x, y, z, GetPlayerVirtualWorld(playerid), GetPlayerInterior(playerid));
-	//CreateStaticLootSpawn(x, y, z - 0.8568, lootindex, 100, size, GetPlayerVirtualWorld(playerid), GetPlayerInterior(playerid));
+	CreateStaticLootSpawn(x, y, z - ITEM_FLOOR_OFFSET, lootindex, 25.0, size);
+
+	ChatMsg(playerid, YELLOW, str);
+	printf(str);
 
 	return 1;
 }
