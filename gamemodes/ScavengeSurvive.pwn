@@ -293,7 +293,6 @@ Float:	gNameTagDistance,
 		gCombatLogWindow,
 		gLoginFreezeTime,
 		gMaxTaboutTime,
-		gPingLimit,
 		gCrashOnExit;
 
 // INTERNAL

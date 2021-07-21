@@ -29,7 +29,6 @@ Float:	ply_Velocity,
 
 		// Internal Data
 		ply_ShowHUD,
-		ply_PingLimitStrikes,
 		ply_stance,
 		ply_JoinTick,
 		ply_SpawnTick
@@ -223,7 +222,6 @@ ResetVariables(playerid)
 	ply_Data[playerid][ply_Gender]				= 0;
 	ply_Data[playerid][ply_Velocity]			= 0.0;
 
-	ply_Data[playerid][ply_PingLimitStrikes]	= 0;
 	ply_Data[playerid][ply_stance]				= 0;
 	ply_Data[playerid][ply_JoinTick]			= 0;
 	ply_Data[playerid][ply_SpawnTick]			= 0;
@@ -238,27 +236,6 @@ ResetVariables(playerid)
 
 ptask PlayerUpdateFast[100](playerid)
 {
-	new pinglimit = (Iter_Count(Player) > 10) ? (gPingLimit) : (gPingLimit + 100);
-
-	if(GetPlayerPing(playerid) > pinglimit)
-	{
-		if(GetTickCountDifference(GetTickCount(), ply_Data[playerid][ply_JoinTick]) > 10000)
-		{
-			ply_Data[playerid][ply_PingLimitStrikes]++;
-
-			if(ply_Data[playerid][ply_PingLimitStrikes] == 30)
-			{
-				KickPlayer(playerid, sprintf("Ping muito alto! (%d/%d)", GetPlayerPing(playerid), pinglimit));
-
-				ply_Data[playerid][ply_PingLimitStrikes] = 0;
-
-				return;
-			}
-		}
-	}
-	else
-		ply_Data[playerid][ply_PingLimitStrikes] = 0;
-
 	if(NetStats_MessagesRecvPerSecond(playerid) > 200)
 	{
 		ChatMsgAdmins(3, YELLOW, " » %p sending %d messages per second.", playerid, NetStats_MessagesRecvPerSecond(playerid));
@@ -740,7 +717,6 @@ stock SetPlayerCreationTimestamp(playerid, timestamp)
 	return 1;
 }
 
-// ply_PingLimitStrikes
 // ply_stance
 stock GetPlayerStance(playerid)
 {

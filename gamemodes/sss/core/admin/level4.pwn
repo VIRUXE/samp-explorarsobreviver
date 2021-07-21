@@ -5,7 +5,6 @@ hook OnGameModeInit()
 {
 	RegisterAdminCommand(STAFF_LEVEL_LEAD, "/restart - restart the server\n");
 	RegisterAdminCommand(STAFF_LEVEL_LEAD, "/setadmin - set a player's staff level\n");
-	RegisterAdminCommand(STAFF_LEVEL_LEAD, "/setpinglimit - set ping limit\n");
 	RegisterAdminCommand(STAFF_LEVEL_LEAD, "/weather - set weather\n");
 	RegisterAdminCommand(STAFF_LEVEL_LEAD, "/debug - activate a debug handler\n");
 	RegisterAdminCommand(STAFF_LEVEL_LEAD, "/sifdebug - activate SIF debug\n");
@@ -123,22 +122,6 @@ ACMD:setscore[4](playerid, params[])
 
 	SetPlayerScore(targetid, score);
 	ChatMsg(playerid, YELLOW, " » Definiu o score de %P para %d", targetid, score);
-
-	return 1;
-}
-
-ACMD:setpinglimit[3](playerid, params[])
-{
-	new val = strval(params);
-
-	if(!(100 < val < 1000))
-	{
-		ChatMsg(playerid, YELLOW, " » Ping limit must be between 100 and 1000");
-		return 1;
-	}
-
-	gPingLimit = strval(params);
-	ChatMsg(playerid, YELLOW, " » Ping limit has been updated to %d.", gPingLimit);
 
 	return 1;
 }
