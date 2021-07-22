@@ -10,7 +10,6 @@ Float:	fix_Progress[MAX_PLAYERS];
 hook OnPlayerConnect(playerid)
 	fix_TargetVehicle[playerid] = INVALID_VEHICLE_ID;
 
-
 hook OnPlayerInteractVehicle(playerid, vehicleid, Float:angle)
 {
 	if(angle < 25.0 || angle > 335.0)
@@ -24,57 +23,58 @@ hook OnPlayerInteractVehicle(playerid, vehicleid, Float:angle)
 
 		if(itemtype == item_Wrench)
 		{
+			CancelPlayerMovement(playerid);
+
 			if(vehiclehealth <= VEHICLE_HEALTH_CHUNK_2)
-			{
-				CancelPlayerMovement(playerid);
 				StartRepairingVehicle(playerid, vehicleid);
-				return Y_HOOKS_BREAK_RETURN_1;
-			}
 			else
-			{
-				ShowActionText(playerid, ls(playerid, "NEEDANOTOOL", true), 3000, 100);
-			}
-		}	
+				NeedAToolInfo(playerid, vehiclehealth);
+
+			return Y_HOOKS_BREAK_RETURN_1;
+		}
+
 		else if(itemtype == item_Screwdriver)
 		{
+			CancelPlayerMovement(playerid);
+
 			if(VEHICLE_HEALTH_CHUNK_2 - 2.0 <= vehiclehealth <= VEHICLE_HEALTH_CHUNK_3)
-			{
-				CancelPlayerMovement(playerid);
 				StartRepairingVehicle(playerid, vehicleid);
-				return Y_HOOKS_BREAK_RETURN_1;
-			}
 			else
-			{
-				ShowActionText(playerid, ls(playerid, "NEEDANOTOOL", true), 3000, 100);
-			}
+				NeedAToolInfo(playerid, vehiclehealth);
+
+			return Y_HOOKS_BREAK_RETURN_1;
 		}	
+
 		else if(itemtype == item_Hammer)
 		{
+			CancelPlayerMovement(playerid);
+
 			if(VEHICLE_HEALTH_CHUNK_3 - 2.0 <= vehiclehealth <= VEHICLE_HEALTH_CHUNK_4)
-			{
-				CancelPlayerMovement(playerid);
 				StartRepairingVehicle(playerid, vehicleid);
-				return Y_HOOKS_BREAK_RETURN_1;
-			}
 			else
-			{
-				ShowActionText(playerid, ls(playerid, "NEEDANOTOOL", true), 3000, 100);
-			}
+				NeedAToolInfo(playerid, vehiclehealth);
+
+			return Y_HOOKS_BREAK_RETURN_1;
 		}
+
 		else if(itemtype == item_Spanner)
 		{
+			CancelPlayerMovement(playerid);
+
 			if(VEHICLE_HEALTH_CHUNK_4 - 2.0 <= vehiclehealth <= VEHICLE_HEALTH_MAX)
-			{
-				CancelPlayerMovement(playerid);
 				StartRepairingVehicle(playerid, vehicleid);
-				return Y_HOOKS_BREAK_RETURN_1;
-			}
+			else
+				NeedAToolInfo(playerid, vehiclehealth);
+
+			return Y_HOOKS_BREAK_RETURN_1;
 		}
+
 		else if(itemtype == item_Wheel)
 		{
 			CancelPlayerMovement(playerid);
-			ShowActionText(playerid, ls(playerid, "INTERACTWHE", true), 5000);
+			ShowActionText(playerid, ls(playerid, "INTERACTWHE"), 5000);
 		}
+
 		else if(itemtype == item_Headlight)
 		{
 			CancelPlayerMovement(playerid);
@@ -93,9 +93,7 @@ StartRepairingVehicle(playerid, vehicleid)
 		GetVehicleHealth(vehicleid, fix_Progress[playerid]);
 
 		if(fix_Progress[playerid] >= 990.0)
-		{
 			return 0;
-		}
 
 		ApplyAnimation(playerid, "INT_SHOP", "SHOP_CASHIER", 4.0, 1, 0, 0, 0, 0, 1);
 		VehicleBonnetState(fix_TargetVehicle[playerid], 1);
@@ -154,42 +152,57 @@ hook OnHoldActionUpdate(playerid, progress)
 			mult = GetPlayerSkillTimeModifier(playerid, mult, "Repair");
 			fix_Progress[playerid] += (float(mult) / 1000.0);
 
-			if(fix_Progress[playerid] > 990.0)
+			if(fix_Progress[playerid] > 990.0){
+				PlayerGainSkillExperience(playerid, "Repair");
+				StopRepairingVehicle(playerid);
 				fix_Progress[playerid] = 990.0;
+				NeedAToolInfo(playerid, fix_Progress[playerid]);
+			}
+			else ShowActionText(playerid, ls(playerid, "REPAIRVEH"), 3000, 100);
 
 			SetVehicleHealth(fix_TargetVehicle[playerid], fix_Progress[playerid]);
 			SetPlayerToFaceVehicle(playerid, fix_TargetVehicle[playerid]);	
-			ShowActionText(playerid, ls(playerid, "REPAIRVEH", true), 3000, 100);
 		}
 		else
 		{
-			ShowActionText(playerid, ls(playerid, "NEEDANOTOOL", true), 3000, 100);
 			PlayerGainSkillExperience(playerid, "Repair");
 			StopRepairingVehicle(playerid);
+			NeedAToolInfo(playerid, fix_Progress[playerid]);
 		}
 	}
 
 	return Y_HOOKS_CONTINUE_RETURN_0;
 }
 
+NeedAToolInfo(playerid, Float:vehiclehealth){
+	if(vehiclehealth <= VEHICLE_HEALTH_CHUNK_2)
+		ShowActionText(playerid, ls(playerid, "NEEDAWRENC"), 3000, 100);
+	else if(vehiclehealth <= VEHICLE_HEALTH_CHUNK_3)
+		ShowActionText(playerid, ls(playerid, "NEEDASCREW"), 3000, 100);
+	else if(vehiclehealth <= VEHICLE_HEALTH_CHUNK_4)
+		ShowActionText(playerid, ls(playerid, "NEEDAHAMER"), 3000, 100);
+	else if(vehiclehealth <= VEHICLE_HEALTH_MAX - 2.0)
+		ShowActionText(playerid, ls(playerid, "NEEDSPANER"), 3000, 100);
+}
+
 CompToolHealth(ItemType:itemtype, Float:health)
 {
-	if(health <= VEHICLE_HEALTH_CHUNK_2 - 2.0)
+	if(health <= VEHICLE_HEALTH_CHUNK_2)
 	{
 		if(itemtype == item_Wrench)
 			return 1;
 	}
-	else if(VEHICLE_HEALTH_CHUNK_2 - 2.0 <= health <= VEHICLE_HEALTH_CHUNK_3 - 2.0)
+	else if(health <= VEHICLE_HEALTH_CHUNK_3)
 	{
 		if(itemtype == item_Screwdriver)
 			return 1;
 	}
-	else if(VEHICLE_HEALTH_CHUNK_3 - 2.0 <= health <= VEHICLE_HEALTH_CHUNK_4 - 2.0)
+	else if(health <= VEHICLE_HEALTH_CHUNK_4)
 	{
 		if(itemtype == item_Hammer)
 			return 1;
 	}
-	else if(VEHICLE_HEALTH_CHUNK_4 - 2.0 <= health <= VEHICLE_HEALTH_MAX - 2.0)
+	else if(health <= VEHICLE_HEALTH_MAX)
 	{
 		if(itemtype == item_Spanner)
 			return 1;
