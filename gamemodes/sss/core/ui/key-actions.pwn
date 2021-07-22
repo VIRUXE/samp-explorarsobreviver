@@ -34,10 +34,8 @@ hook OnPlayerConnect(playerid)
 
 stock ShowPlayerKeyActionUI(playerid)
 {
-	if(!IsValidItem(GetPlayerTweakItem(playerid))) {
-		PlayerTextDrawSetString(playerid, KeyActions[playerid], KeyActionsText[playerid]);
-		PlayerTextDrawShow(playerid, KeyActions[playerid]);
-	}
+	PlayerTextDrawSetString(playerid, KeyActions[playerid], KeyActionsText[playerid]);
+	PlayerTextDrawShow(playerid, KeyActions[playerid]);
 }
 
 stock HidePlayerKeyActionUI(playerid)

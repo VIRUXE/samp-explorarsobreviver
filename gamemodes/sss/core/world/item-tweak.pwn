@@ -84,7 +84,7 @@ stock TweakItem(playerid, Item:itemid)
 
 	AttachDynamicAreaToObject(twk_NoGoZone[playerid], objectid);
 
-	HidePlayerKeyActionUI(playerid);
+	HideHelpTip(playerid);
 
 	_twk_ShowUI(playerid);
 	_twk_ToggleMouse(playerid, false);

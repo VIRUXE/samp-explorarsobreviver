@@ -13,6 +13,9 @@ ShowHelpTip(playerid, const text[], time = 0)
 
 	if(strlen(text) < 3)
 		return 0;
+
+	if(IsValidItem(GetPlayerTweakItem(playerid)))
+		return 0;
 		
 	new str[270];
 	format(str, sizeof(str),  "~r~!~w~ %s~n~~y~(/dicas para desativar)", text);
