@@ -152,6 +152,9 @@ PlayerSendChat(playerid, chat[], Float:frequency)
 			if(chat_Quiet[i])
 				continue;
 
+			if(IsPlayerInTutorial(i))
+				continue;
+				
 			SendClientMessage(i, WHITE, line1);
 
 			if(!isnull(line2))
