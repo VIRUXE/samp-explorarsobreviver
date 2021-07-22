@@ -110,6 +110,9 @@ public DCC_OnMessageCreate(DCC_Message:message)
             DCC_GetChannelGuild(channel, guild);
             DCC_SetGuildMemberNickname(guild, author, nickname); 
 
+			// Colocar jogador no cargo
+			//DCC_AddGuildMemberRole(DCC_FindGuildById("867774790189973514"), author, DCC_FindRoleById("867774790189973514"));
+
             SendDiscordMessage(channel, "> Sua Conta de Jogo `%s` foi vinculada com sua Conta de Discord. Bom jogo!", nickname);
         }
     }
@@ -275,7 +278,18 @@ stock WhitelistWarn(playerid)
 		"C_YELLOW"Aviso:"C_WHITE" Isso serve como proteção para o servidor.\nPedimos sua compreensão.",
 		gWebsiteURL, playerid);
 		
-	Dialog_Show(playerid, DIALOG_STYLE_MSGBOX, "WhiteList", str, "Jogar", "Sair");
+	inline Response(pid, dialogid, response, listitem, string:inputtext[])
+	{
+		#pragma unused pid, dialogid, listitem, inputtext
+
+		if(response)
+			WhitelistWarn(playerid);
+		else
+			KickPlayer(playerid, "Decidiu sair");
+	}
+		
+
+	Dialog_ShowCallback(playerid, using inline Response, DIALOG_STYLE_MSGBOX, "WhiteList", str, "Jogar", "Sair");
 }
 
 stock ToggleWhitelist(bool:toggle)
