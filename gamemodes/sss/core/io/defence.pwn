@@ -68,11 +68,17 @@ hook OnDefenceMove(Item:itemid)
 SaveDefenceItem(Item:itemid, bool:active = true)
 {
 	if(!IsValidItem(itemid))
-		return 1;
+		return 0;
 
+	new vw;
+	GetItemWorld(itemid, vw);
+
+	if(vw != 0)
+		return 0;
+		
 	SaveWorldItem(itemid, DIRECTORY_DEFENCE, active, true);
 
-	return 0;
+	return 1;
 }
 
 public OnDefenceLoad(Item:itemid, active, geid[], data[], length)
