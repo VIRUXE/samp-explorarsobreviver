@@ -72,14 +72,14 @@ static Prev_CreateTextDraws() {
 	*/
     Prev@FrameTD[0] = TextDrawCreate(144.0000, 183.0000, "CONTENT_BOX");
 	TextDrawFont(Prev@FrameTD[0], 2);
-	TextDrawLetterSize(Prev@FrameTD[0], 0.0000, 16.0000);
+	TextDrawLetterSize(Prev@FrameTD[0], 0.0000, 18.0000);
 	TextDrawColor(Prev@FrameTD[0], -1);
 	TextDrawSetShadow(Prev@FrameTD[0], 0);
 	TextDrawSetOutline(Prev@FrameTD[0], 0);
 	TextDrawBackgroundColor(Prev@FrameTD[0], 0);
 	TextDrawSetProportional(Prev@FrameTD[0], 1);
 	TextDrawUseBox(Prev@FrameTD[0], 1);
-	TextDrawBoxColor(Prev@FrameTD[0], 50);
+	TextDrawBoxColor(Prev@FrameTD[0], 842150655); //1296911871);
 	TextDrawTextSize(Prev@FrameTD[0], 501.0000, 0.0000);
 
 	// button for scrolling up
@@ -118,10 +118,8 @@ static Prev_CreateTextDraws() {
 		    textdrawid = ((a * MAX_DIALOG_PREVIEW_COLUMNS) + b);
 			Prev@ModelTD[textdrawid] = TextDrawCreate((148.0000 + (b * DIALOG_PREVIEW_HORIZONTAL_GAP)), (197.0000 + (a * DIALOG_PREVIEW_VERTICAL_GAP)), "MODEL");
 			TextDrawFont(Prev@ModelTD[textdrawid], TEXT_DRAW_FONT_MODEL_PREVIEW);
-			TextDrawBackgroundColor(Prev@ModelTD[textdrawid], 0);
+			TextDrawBackgroundColor(Prev@ModelTD[textdrawid], 50);
 			TextDrawColor(Prev@ModelTD[textdrawid], -1);
-			TextDrawBoxColor(Prev@ModelTD[textdrawid], 0);
-			TextDrawUseBox(Prev@ModelTD[textdrawid], true);
 			TextDrawTextSize(Prev@ModelTD[textdrawid], 55.5000, 62.5000);
 			TextDrawSetPreviewRot(Prev@ModelTD[textdrawid], -10.000000, 0.000000, -20.000000, 1.000000);
 			TextDrawSetSelectable(Prev@ModelTD[textdrawid], 1);
