@@ -145,7 +145,8 @@ timer LoadAccountDelay[timer](playerid, timer)
 	{
 		if(!IsPlayerInWhitelist(playerid))
 		{
-			WhitelistWarn(playerid);
+			if(!IsPlayerInTutorial(playerid)) EnterTutorial(playerid);
+
 			LoadDelay[playerid] = defer LoadAccountDelay(playerid, 5000 + (LoadCount * 2000) );
 			return;
 		}
