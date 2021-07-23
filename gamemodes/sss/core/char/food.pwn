@@ -24,9 +24,7 @@ hook OnPlayerScriptUpdate(playerid)
 		food = 100.0;
 
 	if(intensity)
-	{
 		food -= IDLE_FOOD_RATE;
-	}
 
 	GetPlayerMovementState(playerid, movementstate);
 
@@ -58,9 +56,7 @@ hook OnPlayerScriptUpdate(playerid)
 					SetPlayerDrunkLevel(playerid, 0);
 			}
 			else
-			{
 				SetPlayerDrunkLevel(playerid, 2000 + floatround((31.0 - food) * 300.0));
-			}
 		}
 		else
 		{

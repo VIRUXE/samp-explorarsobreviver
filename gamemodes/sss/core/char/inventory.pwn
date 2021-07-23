@@ -340,7 +340,7 @@ hook OnPlayerSelectExtraItem(playerid, item)
 
 hook OnPlayerCloseInventory(playerid)
 {
-	HidePlayerGear(playerid);
+	defer UpdatePlayerGear(playerid);
 	return Y_HOOKS_CONTINUE_RETURN_0;
 }
 
@@ -352,7 +352,7 @@ hook OnPlayerOpenContainer(playerid, Container:containerid)
 
 hook OnPlayerCloseContainer(playerid, Container:containerid)
 {
-	HidePlayerGear(playerid);
+	defer UpdatePlayerGear(playerid);
 	return Y_HOOKS_CONTINUE_RETURN_0;
 }
 

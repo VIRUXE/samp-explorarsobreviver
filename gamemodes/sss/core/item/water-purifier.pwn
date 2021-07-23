@@ -10,6 +10,16 @@ hook OnItemTypeDefined(uname[])
 		MachineType = DefineMachineType(GetItemTypeFromUniqueName("WaterMachine"), 12);
 }
 
+hook OnItemCreateInWorld(Item:itemid)
+{
+	if(GetItemType(itemid) == item_WaterMachine)
+	{
+		new Button:buttonid;
+		GetItemButtonID(itemid, buttonid);
+		SetButtonSize(buttonid, 2.0);
+	}
+}
+
 hook OnItemAddToContainer(Container:containerid, Item:itemid, playerid)
 {
 	if(playerid == INVALID_PLAYER_ID)

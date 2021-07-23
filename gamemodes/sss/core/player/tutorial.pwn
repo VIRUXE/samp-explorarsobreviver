@@ -491,9 +491,12 @@ CMD:sair(playerid, params[])
 			if(!IsPlayerInWhitelist(playerid))
 			{
 				WhitelistWarn(playerid);
+				return 1;
 			}
 			else ExitTutorial(playerid);
 		}
+		
+		ExitTutorial(playerid);
 
 	} else ShowActionText(playerid, "~R~Voce precisa fazer as tarefas para sair");
 	return 1;
