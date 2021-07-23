@@ -486,14 +486,13 @@ CMD:sair(playerid, params[])
 {
 	if(PlayerTutorialProgress[playerid] == 6)
 	{
-		ExitTutorial(playerid);
-
 		if(IsWhitelistActive() && !IsWhitelistAuto())
 		{
 			if(!IsPlayerInWhitelist(playerid))
 			{
 				WhitelistWarn(playerid);
 			}
+			else ExitTutorial(playerid);
 		}
 
 	} else ShowActionText(playerid, "~R~Voce precisa fazer as tarefas para sair");
