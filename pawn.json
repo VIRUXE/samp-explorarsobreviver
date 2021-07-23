@@ -14,7 +14,6 @@
 		"urShadow/Pawn.RakNet:1.4.1",
 		"Pottus/ColAndreas:1.5.0",
 		"maddinat0r/samp-discord-connector:v0.3.5",
-		"Southclaws/samp-nolog:0.2.1",
 		"Southclaws/samp-stdlib:0.3.7-R2-2-1",
 		"Southclaws/samp-logger",
 		"Southclaws/pawn-errors",
@@ -49,7 +48,8 @@
 		"samp-anti-cheat/OnPlayerTurnUpsideDown",
 		"samp-anti-cheat/no-reload",
 		"samp-anti-cheat/rapid-fire",
-		"YashasSamaga/BA-AntiAimbot"
+		"YashasSamaga/BA-AntiAimbot",
+		"pBlueG/SA-MP-MySQL:R41-4"
 	],
 	"build": {
 		"compiler":
@@ -71,7 +71,7 @@
 		"port": 7777,
 		"announce": false,
 		"maxplayers": 100,
-		"hostname": "Explorar e Sobreviver (PC/Mobile)",
+		"hostname": "Explorar e Sobreviver (Desenvolvimento)",
 		"weburl": "discord.explorarsobreviver.com",
 		"language": "Portugues",
 		"extra": {
