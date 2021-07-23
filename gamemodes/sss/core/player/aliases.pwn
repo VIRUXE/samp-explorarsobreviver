@@ -215,7 +215,7 @@ CheckForExtraAccounts(playerid)
 
 			if(IsPlayerBanned(list[i]) && !donewarning)
 			{
-				ChatMsgAdmins(1, RED, " » Warning: One or more of those aliases is banned!");
+				ChatMsgAdmins(1, RED, " » Atenção: Jogador tem aliases banidos!");
 				donewarning = true;
 			}
 		}
@@ -223,7 +223,7 @@ CheckForExtraAccounts(playerid)
 
 	if(donewarning && GetAdminsOnline() == 0)
 	{
-		KickPlayer(playerid, "One of your previously used accounts is banned.");
+		KickPlayer(playerid, "Umas das suas contas está banida.");
 		return 0;
 	}
 
