@@ -449,6 +449,7 @@ new stock
 #include "sss/core/server/settings.pwn"
 #include "sss/core/server/database.pwn"
 #include "sss/core/server/discord.pwn"
+#include "sss/core/server/changelog.pwn"
 #include "sss/core/server/text-tags.pwn"
 #include "sss/core/server/weather.pwn"
 #include "sss/core/server/save-block.pwn"
