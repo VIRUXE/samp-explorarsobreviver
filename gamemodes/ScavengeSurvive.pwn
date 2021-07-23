@@ -71,15 +71,15 @@
 #define ITEM_RESPAWN_DELAY				HOUR(4)
 
 // Optidraw
-#define OD_METHOD METHOD_BOX
+#define OD_METHOD						METHOD_BOX
 
 // Nex Anti-cheat
 #define AC_USE_AMMUNATIONS  			false
 #define AC_USE_PICKUP_WEAPONS  			false
 #define AC_USE_RESTAURANTS  			false
 #define AC_USE_VENDING_MACHINES  		false
-#define AC_USE_TUNING_GARAGES  			true
-#define AC_USE_PAYNSPRAY  				true
+#define AC_USE_TUNING_GARAGES  			false
+#define AC_USE_PAYNSPRAY  				false
 #define AC_USE_CASINOS  				false
 #define AC_USE_NPC  					false
 #define AC_USE_QUERY  					true
@@ -89,12 +89,12 @@
 #define AC_MAX_CONNECTS_FROM_IP  		5
 #define AC_MAX_RCON_LOGIN_ATTEMPT  		2
 #define AC_MAX_MSGS_REC_DIFF  			800
-#define AC_MAX_PING              		800
+#define AC_MAX_PING              		600
 #define AC_MIN_TIME_RECONNECT  			12
 #define AC_SPEEDHACK_VEH_RESET_DELAY	4
 #define AC_MAX_NOP_WARNINGS				9
 #define AC_MAX_NOP_TIMER_WARNINGS		4
-#define AC_MAX_PING_WARNINGS			9
+#define AC_MAX_PING_WARNINGS			8
 #define AC_MAX_MONEY_WARNINGS			2
 #define AC_MAX_AIR_WARNINGS				5
 #define AC_MAX_AIR_VEH_WARNINGS			4
@@ -114,9 +114,6 @@
 #define AC_MAX_AUTO_C_WARNINGS			9
 #define AC_MAX_TELEPORT_GLITCH_WARNINGS	2
 #define AC_MAX_CJ_RUN_WARNINGS			3
-
-// Item Respawning 
-
 
 // pawn-errors
 #pragma warning disable 208 // TODO: Fix reparse issues and remove!
