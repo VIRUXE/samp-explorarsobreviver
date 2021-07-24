@@ -271,6 +271,17 @@ ACMD:removewounds[5](playerid, params[])
 	return 1;
 }
 
+ACMD:heal[5](playerid, params[])
+{
+	SetPlayerFP(playerid, 100.0);
+	SetPlayerBleedRate(playerid, 0.0);
+	RemovePlayerWounds(playerid, MAX_WOUNDS);
+	SetPlayerHP(playerid, 100.0);
+
+	ChatMsg(playerid, YELLOW, "Você foi curado.");
+	return 1;
+}
+
 ACMD:wc[5](playerid, params[])
 {
 	new Float:x, Float:y, Float:z;
