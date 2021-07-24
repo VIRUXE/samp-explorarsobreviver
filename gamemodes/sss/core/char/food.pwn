@@ -11,9 +11,6 @@ hook OnPlayerScriptUpdate(playerid)
 
 	if(!IsPlayerSpawned(playerid))
 		return;
-
-	if(IsPlayerUnfocused(playerid))
-		return;
 		
 	new
 		intensity = GetPlayerInfectionIntensity(playerid, 0),
