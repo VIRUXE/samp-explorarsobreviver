@@ -99,6 +99,8 @@ StartRepairingVehicle(playerid, vehicleid)
 		VehicleBonnetState(fix_TargetVehicle[playerid], 1);
 		StartHoldAction(playerid, 50000, floatround(fix_Progress[playerid] * 50));
 
+		ShowActionText(playerid, ls(playerid, "REPAIRVEH"), 7000, 100);
+		
 		fix_TargetVehicle[playerid] = vehicleid;
 	}
 	return 1;
@@ -158,7 +160,6 @@ hook OnHoldActionUpdate(playerid, progress)
 				fix_Progress[playerid] = 990.0;
 				NeedAToolInfo(playerid, fix_Progress[playerid]);
 			}
-			else ShowActionText(playerid, ls(playerid, "REPAIRVEH"), 3000, 100);
 
 			SetVehicleHealth(fix_TargetVehicle[playerid], fix_Progress[playerid]);
 			SetPlayerToFaceVehicle(playerid, fix_TargetVehicle[playerid]);	
