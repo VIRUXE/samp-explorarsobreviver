@@ -91,8 +91,6 @@ hook OnPlayerConnect(playerid)
 	PlayerTextDrawAlignment(playerid, def_MoveTD[playerid][0], 1);
 	PlayerTextDrawColor(playerid, def_MoveTD[playerid][0], 0xFFFFFFFF);
 	PlayerTextDrawBackgroundColor(playerid, def_MoveTD[playerid][0], 125);
-	PlayerTextDrawBoxColor(playerid, def_MoveTD[playerid][0], 100);
-	PlayerTextDrawUseBox(playerid, def_MoveTD[playerid][0], 1);
 	PlayerTextDrawSetProportional(playerid, def_MoveTD[playerid][0], 1);
 	PlayerTextDrawSetSelectable(playerid, def_MoveTD[playerid][0], 1);
 	PlayerTextDrawSetPreviewModel(playerid, def_MoveTD[playerid][0], 19133);
@@ -108,8 +106,6 @@ hook OnPlayerConnect(playerid)
 	PlayerTextDrawAlignment(playerid, def_MoveTD[playerid][1], 1);
 	PlayerTextDrawColor(playerid, def_MoveTD[playerid][1], 0xFFFFFFFF);
 	PlayerTextDrawBackgroundColor(playerid, def_MoveTD[playerid][1], 125);
-	PlayerTextDrawBoxColor(playerid, def_MoveTD[playerid][1], 100);
-	PlayerTextDrawUseBox(playerid, def_MoveTD[playerid][1], 1);
 	PlayerTextDrawSetProportional(playerid, def_MoveTD[playerid][1], 1);
 	PlayerTextDrawSetSelectable(playerid, def_MoveTD[playerid][1], 1);
 	PlayerTextDrawSetPreviewModel(playerid, def_MoveTD[playerid][1], 19133);
