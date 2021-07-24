@@ -150,6 +150,9 @@ hook OnPlayerSpawn(playerid)
 hook OnPlayerDisconnect(playerid, reason)
 	ExitTutorial(playerid);
 
+hook OnPlayerRegister(playerid)
+	ExitTutorial(playerid);
+
 hook OnPlayerSave(playerid, filename[])
 {
 	new data[1];
@@ -494,9 +497,8 @@ CMD:sair(playerid, params[])
 				return 1;
 			}
 		}
-		
-		ExitTutorial(playerid);
 
+		ExitTutorial(playerid);
 	} else ShowActionText(playerid, "~R~Voce precisa fazer as tarefas para sair");
 	return 1;
 }
