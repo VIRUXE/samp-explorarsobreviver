@@ -206,9 +206,8 @@ _mach_TapInteract(playerid)
 	new ret = CallLocalFunction("OnPlayerUseMachine", "ddd", playerid, _:mach_CurrentMachine[playerid], 0);
 	if(!ret)
 	{
-		// TODO: Crowbar to deconstruct machine.
-		// if(GetItemType(itemid) != item_Crowbar)
-		DisplayContainerInventory(playerid, containerid);
+		if(GetItemType(GetPlayerItem(playerid)) != item_Crowbar)
+			DisplayContainerInventory(playerid, containerid);
 	}
 
 	mach_CurrentMachine[playerid] = INVALID_ITEM_ID;
