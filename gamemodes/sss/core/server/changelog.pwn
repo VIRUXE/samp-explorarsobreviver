@@ -26,7 +26,7 @@ public OnChangelogLoaded(playerid)
 		cache_get_value(row, "title", title);
 		cache_get_value(row, "description", description);
 
-		format(rowBuffer, sizeof(rowBuffer), "Dia %s - %s(%s) %s\n", date, type, title, !isequal(description, "NULL", true) ? description : "Sem descrição.");
+		format(rowBuffer, sizeof(rowBuffer), C_WHITE"Dia %s - %s(%s): %s\n", date, type, title, !isequal(description, "NULL", true) ? description : "Sem descrição.");
 	
 		strcat(changelogBuffer, rowBuffer);
 	}

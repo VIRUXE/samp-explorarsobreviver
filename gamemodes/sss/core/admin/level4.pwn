@@ -121,7 +121,7 @@ ACMD:setscore[4](playerid, params[])
 		return 4;
 
 	SetPlayerScore(targetid, score);
-	ChatMsg(playerid, YELLOW, " » Definiu o score de %P para %d", targetid, score);
+	ChatMsg(playerid, YELLOW, " » Definiu o score de %p para %d", targetid, score);
 
 	return 1;
 }

@@ -85,7 +85,7 @@ IsValidUsername(const name[])
 	return 1;
 }
 
-stock GetPlayerIDFromName(const name[], bool:ignorecase = false, bool:partialname = false)
+stock GetPlayerIdByName(const name[], bool:ignorecase = false, bool:partialname = false)
 {
 	new
 		playerid = INVALID_PLAYER_ID,
