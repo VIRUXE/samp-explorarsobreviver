@@ -150,7 +150,7 @@ stock WhitelistWarn(playerid)
 	new str[999];
 
 	format(str, sizeof(str), ""C_WHITE"Você precisa registrar na WhiteList para jogar no servidor.\n\n\
-		"C_WHITE"\t1. Entre em: "C_BLUE"%s"C_WHITE". (Enquanto mantém o jogo aberto! "C_WHITE"Nota: necessita de vincular seu celular no Discord"C_WHITE")\n\
+		"C_WHITE"\t1. Entre em: "C_BLUE"%s"C_WHITE". "C_WHITE"Nota: necessita de vincular seu celular no Discord"C_WHITE")\n\
 		"C_WHITE"\t2. Digite %P"C_WHITE" em #whitelist\n\
 		"C_WHITE"\t3. Volte aqui, clique em \"Jogar\" e pronto, você ja pode se divertir! :) \n\n\
 		"C_YELLOW"Aviso:"C_WHITE" Isso serve como proteção para o servidor.\nPedimos sua compreensão.",

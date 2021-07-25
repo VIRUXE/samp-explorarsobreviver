@@ -164,17 +164,20 @@ hook OnPlayerClickPlayerTD(playerid, PlayerText:playertextid)
 {
 	if(playertextid == RadioUI_KnobL[playerid])
 	{
-		SetPlayerRadioFrequency(playerid, GetPlayerRadioFrequency(playerid) - 0.5 <= MIN_RADIO_FREQ ? MIN_RADIO_FREQ : GetPlayerRadioFrequency(playerid) - 0.5);
+		if(rad_ChangeTick[playerid] > gettime())
+			ShowActionText(playerid, "_~n~_~n~_~r~Aguarde para trocar a frequencia novamente", 5000);
+		else 
+			SetPlayerRadioFrequency(playerid, GetPlayerRadioFrequency(playerid) - 0.5 <= MIN_RADIO_FREQ ? MIN_RADIO_FREQ : GetPlayerRadioFrequency(playerid) - 0.5);
 
 		UpdateRadioUI(playerid);
 		UpdateRadioMarker(playerid);
 	}
 	if(playertextid == RadioUI_KnobR[playerid])
 	{
-		if(GetPlayerRadioFrequency(playerid) + 0.5 >= MAX_RADIO_FREQ)
-			SetPlayerRadioFrequency(playerid, MAX_RADIO_FREQ);
-		else
-			SetPlayerRadioFrequency(playerid, GetPlayerRadioFrequency(playerid) + 0.5);
+		if(rad_ChangeTick[playerid] > gettime())
+			ShowActionText(playerid, "_~n~_~n~_~r~Aguarde para trocar a frequencia novamente", 5000);
+		else 
+			SetPlayerRadioFrequency(playerid, GetPlayerRadioFrequency(playerid) + 0.5 >= MAX_RADIO_FREQ ? MAX_RADIO_FREQ : GetPlayerRadioFrequency(playerid) + 0.5);
 
 		UpdateRadioUI(playerid);
 		UpdateRadioMarker(playerid);

@@ -283,6 +283,8 @@ public OnPlayerRequestClass(playerid, classid)
 
 	SetSpawnInfo(playerid, 0, 0, DEFAULT_POS_X, DEFAULT_POS_Y, DEFAULT_POS_Z, 0.0, 0, 0, 0, 0, 0, 0);
 
+	SetPlayerHealth(playerid, 99.9);
+
 	return 0;
 }
 
@@ -291,6 +293,8 @@ public OnPlayerRequestSpawn(playerid)
 	if(IsPlayerNPC(playerid))return 1;
 
 	SetSpawnInfo(playerid, 0, 0, DEFAULT_POS_X, DEFAULT_POS_Y, DEFAULT_POS_Z, 0.0, 0, 0, 0, 0, 0, 0);
+
+	SetPlayerHealth(playerid, 99.9);
 
 	return 0;
 }
