@@ -145,6 +145,8 @@ stock AskPlayerToWhitelist(playerid)
 		{
 			if(!wl_Whitelisted[playerid]) 
 				AskPlayerToWhitelist(playerid);
+			else
+				ExitTutorial(playerid);
 		}
 		else
 			KickPlayer(playerid, "Decidiu sair");
