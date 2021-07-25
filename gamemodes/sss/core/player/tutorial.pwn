@@ -172,7 +172,7 @@ hook OnPlayerLoad(playerid, filename[])
 		EnterTutorial(playerid);
 }
 	
-EnterTutorial(playerid)
+stock EnterTutorial(playerid)
 {
 	SetPlayerPos(playerid, 928.8049,2072.3174,10.8203);
 	SetPlayerFacingAngle(playerid, 269.3244);
@@ -273,7 +273,7 @@ EnterTutorial(playerid)
 	defer UpdateTutorialProgress(playerid);
 }
 
-ExitTutorial(playerid)
+stock ExitTutorial(playerid)
 {
 	if(!IsPlayerConnected(playerid))
 		return 0;
@@ -305,9 +305,6 @@ ExitTutorial(playerid)
 
 	for(new i = 0; i < 20; i++)
 		SendClientMessage(playerid, GREEN, "");
-
-	if(IsWhitelistActive() && !IsWhitelistAuto())
-		WhitelistWarn(playerid), log(true, "[TUTORIAL] %p foi avisado para fazer whitelist.", playerid);
 
 	return 1;
 }
@@ -494,10 +491,11 @@ CMD:sair(playerid, params[])
 {
 	if(PlayerTutorialProgress[playerid] == 6)
 	{
-
-
 		ExitTutorial(playerid);
-	} else ShowActionText(playerid, "~R~Voce precisa fazer as tarefas para sair");
+		DisplayRegisterPrompt(playerid);
+	}
+	else ShowActionText(playerid, "~R~Voce precisa fazer as tarefas para sair");
+	
 	return 1;
 }
 CMD:exit(playerid, params[]) return cmd_sair(playerid, params);

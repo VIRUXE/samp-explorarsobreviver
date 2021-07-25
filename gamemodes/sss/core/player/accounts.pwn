@@ -333,8 +333,14 @@ DisplayRegisterPrompt(playerid)
 				Handled();
 				return 1;
 			}
-
 			Logger_Log("account created", Logger_P(playerid));
+
+			// Account created so we can now ask for whitelist if necessary
+			if(IsWhitelistActive() && !IsWhitelistAuto())
+			{
+				WhitelistWarn(playerid);
+				log(true, "[TUTORIAL] %p foi avisado para fazer whitelist.", playerid);
+			}
 		}
 		else
 		{
