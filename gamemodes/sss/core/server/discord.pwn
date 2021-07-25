@@ -11,11 +11,11 @@ stock SendDiscordMessage(DCC_Channel:channel, const fmat[], va_args<>)
 	return 1;
 }
 
-stock bool:DoesDiscordIdExist(const discordId[DCC_ID_SIZE])
+stock DoesDiscordIdExist(const discordId[DCC_ID_SIZE])
 {
 	new
 		DBStatement:stmt_IdExists = db_prepare(gAccounts, "SELECT COUNT(*) FROM Player WHERE discord_id=? COLLATE NOCASE"),
-		bool:exists;
+		exists;
 
 	stmt_bind_value(stmt_IdExists, 0, DB::TYPE_INTEGER, strval(discordId));
 	stmt_bind_result_field(stmt_IdExists, 0, DB::TYPE_INTEGER, exists);
