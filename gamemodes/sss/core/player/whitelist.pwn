@@ -71,7 +71,7 @@ public DCC_OnMessageCreate(DCC_Message:message)
 		DCC_GetUserId(discordUser, discordUserId);
 
 		// Verificar se o jogador já tem o id vinculado em alguma conta
-		if(DoesDiscordIdExist(discordUserId))
+		if(!DoesDiscordIdExist(discordUserId))
 		{
             new nameProvided[MAX_PLAYER_NAME];
 
