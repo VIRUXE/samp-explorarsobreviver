@@ -43,17 +43,20 @@ ptask UpdatePlayerScore[MIN(1)](playerid)
 
 	SetPlayerScore(playerid, score++);
 
-	switch(horasVivo)
+	if(horasVivo >= 1)
 	{
-		case 1: msg = "Tome cuidado.";
-		case 2: msg = "Deve estar trancado na base...";
-		case 3:	msg = "Acho que esqueceram de mata-lo..";
-		case 4: msg = "Deve estar isolado nas montanhas";
-		case 5: msg = "Deve valer apenas ser amigo deste :)";
-		case 6: msg = "Alguem precisa resolver isso *-*";
-		case 7: msg = "Mate ele e consiga muitos itens! xD";
-		case 8, 9: msg = "Com certeza esta escondido dentro da base! Mate-o e ganhe muita coisa!";
-		case 10: msg = "Uauu, este definitivamente é um especialista em sobrevivência!";
+		switch(horasVivo)
+		{
+			case 1: msg = "Tome cuidado.";
+			case 2: msg = "Deve estar trancado na base...";
+			case 3:	msg = "Acho que esqueceram de mata-lo..";
+			case 4: msg = "Deve estar isolado nas montanhas";
+			case 5: msg = "Deve valer apenas ser amigo deste :)";
+			case 6: msg = "Alguem precisa resolver isso *-*";
+			case 7: msg = "Mate ele e consiga muitos itens! xD";
+			case 8, 9: msg = "Com certeza esta escondido dentro da base! Mate-o e ganhe muita coisa!";
+			case 10: msg = "Uauu, este definitivamente é um especialista em sobrevivência!";
+		}
+		ChatMsgAll(RED, " » %P"C_YELLOW" ja esta vivo a "C_RED"%d"C_YELLOW" %s. %s", playerid, horasVivo, horasVivo > 1 ? "horas" : "hora", msg);
 	}
-	ChatMsgAll(RED, " » %P"C_YELLOW" ja esta vivo a "C_RED"%d"C_YELLOW" %s. %s", playerid, horasVivo, horasVivo > 1 ? "horas" : "hora", msg);
 }
