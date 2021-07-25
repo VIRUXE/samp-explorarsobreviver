@@ -101,7 +101,7 @@ hook OnGameModeInit()
 
 	db_query(gAccounts, "CREATE INDEX IF NOT EXISTS "ACCOUNTS_TABLE_PLAYER"_index ON "ACCOUNTS_TABLE_PLAYER"("FIELD_PLAYER_NAME")");
 
-	DatabaseTableCheck(gAccounts, ACCOUNTS_TABLE_PLAYER, 11);
+	// DatabaseTableCheck(gAccounts, ACCOUNTS_TABLE_PLAYER, 11);
 
 	stmt_AccountExists			= db_prepare(gAccounts, "SELECT COUNT(*) FROM "ACCOUNTS_TABLE_PLAYER" WHERE "FIELD_PLAYER_NAME"=? COLLATE NOCASE");
 	stmt_AccountCreate			= db_prepare(gAccounts, "INSERT INTO "ACCOUNTS_TABLE_PLAYER" (name, pass, ipv4, alive, regdate, lastlog, spawntime, spawns, VIP, gpci, active) VALUES(?,?,?,1,?,?,0,0,0,?,1)");
