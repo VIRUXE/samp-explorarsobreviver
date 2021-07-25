@@ -489,7 +489,7 @@ hook OnItemTweakFinish(playerid, Item:itemid)
 
 CMD:sair(playerid, params[])
 {
-	if(PlayerTutorialProgress[playerid] == 6)
+	if(PlayerTutorialProgress[playerid] == 6 || !IsPlayerAdmin(playerid))
 	{
 		ExitTutorial(playerid);
 		DisplayRegisterPrompt(playerid);
