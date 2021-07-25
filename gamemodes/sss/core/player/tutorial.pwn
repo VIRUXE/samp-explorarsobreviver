@@ -477,8 +477,7 @@ hook OnItemTweakFinish(playerid, Item:itemid)
 	{
 		if(IsItemTypeDefence(GetItemType(itemid)))
 		{
-			for(new i = 0; i < 20; i++)
-				SendClientMessage(playerid, GREEN, "");
+			ClearChatForPlayer(playerid, 20);
 
 			ChatMsg(playerid, WHITE, ""C_GREEN" » "C_WHITE" %s", ls(playerid, "TUTORIDEF"));
 		}
@@ -489,7 +488,7 @@ hook OnItemTweakFinish(playerid, Item:itemid)
 
 CMD:sair(playerid, params[])
 {
-	if(PlayerTutorialProgress[playerid] == 6 || !IsPlayerAdmin(playerid))
+	if(!IsPlayerAdmin(playerid) || GetPlayerAdminLevel(playerid) || PlayerTutorialProgress[playerid] == 6)
 	{
 		ExitTutorial(playerid);
 		DisplayRegisterPrompt(playerid);
