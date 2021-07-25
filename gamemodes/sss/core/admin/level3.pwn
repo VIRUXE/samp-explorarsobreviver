@@ -58,7 +58,7 @@ ACMD:whitelist[3](playerid, params[])
 		return 1;
 	}
 
-	if(!strcmp(command, "add", true))
+	/* if(!strcmp(command, "add", true))
 	{
 		if(isnull(name))
 		{
@@ -96,7 +96,8 @@ ACMD:whitelist[3](playerid, params[])
 		if(result == -1)
 			ChatMsg(playerid, RED, " » An error occurred.");
 	}
-	else if(!strcmp(command, "on", true))
+	else  */
+	if(!strcmp(command, "on", true))
 	{
 		ChatMsgAdmins(1, YELLOW, " » Whitelist activated, only whitelisted players may join.");
 		ToggleWhitelist(true);
@@ -123,9 +124,9 @@ ACMD:whitelist[3](playerid, params[])
 			// UpdateSetting("whitelist-auto-toggle", 0);
 		}
 	}
-	else if(!strcmp(command, "?", true))
+/* 	else if(!strcmp(command, "?", true))
 		ChatMsg(playerid, YELLOW, IsNameInWhitelist(name) ? " » That name "C_BLUE"is "C_YELLOW"in the whitelist." : " » That name "C_ORANGE"is not "C_YELLOW"in the whitelist");
-	else if(!strcmp(command, "list", true))
+ */	else if(!strcmp(command, "list", true))
 	{
 		new list[(MAX_PLAYER_NAME + 1) * MAX_PLAYERS];
 
@@ -231,7 +232,7 @@ ACMD:ip[3](playerid, params[])
 	}
 	else
 	{
-		if(!AccountExists(params))
+		if(!DoesAccountExist(params))
 		{
 			ChatMsg(playerid, YELLOW, " » The account '%s' does not exist.", params);
 			return 1;
@@ -920,7 +921,7 @@ ACMD:setactive[3](playerid, params[])
 		return 1;
 	}
 
-	if(!AccountExists(name))
+	if(!DoesAccountExist(name))
 	{
 		ChatMsg(playerid, RED, " » That account doesn't exist.");
 		return 1;
