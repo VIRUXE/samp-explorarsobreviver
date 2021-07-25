@@ -240,8 +240,7 @@ ACMD:allcountry[1](playerid, params[])
 
 ACMD:clearchat[1](playerid, params[])
 {
-	for(new i;i<100;i++)
-		ChatMsgAll(WHITE, " ");
+	ClearChatForAllPlayers(100);
 
 	return 1;
 }

@@ -133,7 +133,7 @@ ACMD:whitelist[3](playerid, params[])
 		foreach(new i : Player)
 		{
 			GetPlayerName(i, name, MAX_PLAYER_NAME);
-			format(list, sizeof(list), "%s%C%s\n", list, IsPlayerInWhitelist(i) ? (GREEN) : (RED), name);
+			format(list, sizeof(list), "%s%C%s\n", list, IsPlayerWhitelisted(i) ? (GREEN) : (RED), name);
 		}
 
 		Dialog_Show(playerid, DIALOG_STYLE_MSGBOX, "Whitelisted players", list, "Sair");

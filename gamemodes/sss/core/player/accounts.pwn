@@ -337,12 +337,9 @@ DisplayRegisterPrompt(playerid)
 			}
 			Logger_Log("account created", Logger_P(playerid));
 
-			// Account created so we can now ask for whitelist if necessary
+			// Account created so we can now ask the player to whitelist if necessary
 			if(IsWhitelistActive() && !IsWhitelistAuto())
-			{
-				AskForWhitelist(playerid);
-				log(true, "[TUTORIAL] %p foi avisado para fazer whitelist.", playerid);
-			}
+				AskPlayerToWhitelist(playerid);
 		}
 		else
 		{
@@ -989,6 +986,8 @@ stock DoesAccountHaveDiscord(playerid)
 		stmt_fetch_row(stmt_AccountHaveDiscord);
 	else
 		err(false, true, ("[ACCOUNTS] Impossível executar stmt_AccountHaveDiscord"));
+
+	log(true, "[ACCOUNTS] DoesAccountHaveDiscord - Player %p: %d", playerid, does);
 
 	return does;
 }
