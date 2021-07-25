@@ -1,16 +1,13 @@
-
 #include <YSI_Coding\y_hooks>
-
 
 // Chat modes
 enum
 {
-		CHAT_MODE_LOCAL,		// 0 - Speak to players within chatbubble distance
-		CHAT_MODE_GLOBAL,		// 1 - Speak to all players
-		CHAT_MODE_RADIO,		// 2 - Speak to players on the same radio frequency
-		CHAT_MODE_ADMIN			// 3 - Speak to admins
+	CHAT_MODE_LOCAL,		// 0 - Speak to players within chatbubble distance
+	CHAT_MODE_GLOBAL,		// 1 - Speak to all players
+	CHAT_MODE_RADIO,		// 2 - Speak to players on the same radio frequency
+	CHAT_MODE_ADMIN			// 3 - Speak to admins
 }
-
 
 new
 		chat_Mode[MAX_PLAYERS],
@@ -49,7 +46,19 @@ hook OnPlayerText(playerid, text[])
 	return 0;
 }
 
-PlayerSendChat(playerid, chat[], Float:frequency)
+stock ClearChatForPlayer(playerid, lines)
+{
+	for(new i; i < lines; i++)
+		SendClientMessage(playerid, -1, "");
+}
+
+stock ClearChatForAllPlayers(lines)
+{
+	for(new i; i < lines; i++)
+		SendClientMessageToAll(-1, "");
+}
+
+stock PlayerSendChat(playerid, chat[], Float:frequency)
 {
 	if(isnull(chat))
 		return 0;
