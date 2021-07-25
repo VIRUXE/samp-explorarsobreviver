@@ -241,6 +241,7 @@ timer DisableUntilAC[1000]()
 	EnableAntiCheat(11, false); // Anti-Health hack (in vehicle)
 	EnableAntiCheat(5, false); // Anti-Teleport (vehicle to player)
 	EnableAntiCheat(15, false); // Anti-Weapon hack
+	EnableAntiCheat(32, false); // Anti-Carjack hack
 }
 
 hook OnPlayerSpawn(playerid)
