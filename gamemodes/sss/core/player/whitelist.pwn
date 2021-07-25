@@ -76,7 +76,7 @@ public DCC_OnMessageCreate(DCC_Message:message)
 			if(DoesAccountExist(nameProvided))
 			{
 				new	
-					playerid = GetPlayerIdByName(nameProvided, .ignorecase=true),
+					playerid = GetPlayerIdByName(nameProvided),
 					discordUsername[DCC_USERNAME_SIZE],
 					DCC_Guild:guild;
 
