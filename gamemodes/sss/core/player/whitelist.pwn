@@ -143,7 +143,7 @@ stock IsPlayerInWhitelist(playerid)
 	return wl_Whitelisted[playerid];
 }
 
-stock WhitelistWarn(playerid)
+stock AskForWhitelist(playerid)
 {
 	// Clear Chat
 	for(new i = 0; i < 10; i++)
@@ -163,7 +163,12 @@ stock WhitelistWarn(playerid)
 		#pragma unused pid, dialogid, listitem, inputtext
 
 		if(response)
-			WhitelistWarn(playerid);
+		{
+			if(!DoesAccountHaveDiscord(playerid)) 
+				AskForWhitelist(playerid); // TODO: Um cooldown para não spammarem a base de dados
+			else
+				wl_Whitelisted[playerid] = true;
+		}
 		else
 			KickPlayer(playerid, "Decidiu sair");
 	}
@@ -240,7 +245,7 @@ timer _UpdateWhitelistCountdown[1000](playerid)
 
 	if(wl_Countdown[playerid] == 0)
 	{
-		WhitelistWarn(playerid);
+		AskForWhitelist(playerid);
 		KickPlayer(playerid, "Whitelist");
 		stop wl_CountdownTimer[playerid];
 		return;
@@ -270,14 +275,10 @@ timer _WhitelistConnect[100](playerid)
 		return;
 	}
 
-	new 
-		playerName[MAX_PLAYER_NAME],
-		discordId[DCC_ID_SIZE];
-
-	GetPlayerName(playerid, playerName, MAX_PLAYER_NAME);
-	discordId = GetAccountDiscordId(playerName);
-
-	wl_Whitelisted[playerid] = !isnull(discordId) ? true : false;
+	if(!DoesAccountHaveDiscord(playerid)) 
+		AskForWhitelist(playerid);
+	else
+		wl_Whitelisted[playerid] = true;
 }
 
 hook OnPlayerLogin(playerid)

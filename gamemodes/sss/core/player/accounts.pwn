@@ -69,6 +69,7 @@ DBStatement:	stmt_AccountSetVIP,
 
 DBStatement:	stmt_AccountGetDiscordId,
 DBStatement:	stmt_AccountSetDiscordId,
+DBStatement:	stmt_AccountHaveDiscord,
 
 DBStatement:	stmt_AccountGetGpci,
 DBStatement:	stmt_AccountSetGpci,
@@ -134,6 +135,7 @@ hook OnGameModeInit()
 
 	stmt_AccountGetDiscordId	= db_prepare(gAccounts, "SELECT "FIELD_PLAYER_DISCORDID" FROM "ACCOUNTS_TABLE_PLAYER" WHERE "FIELD_PLAYER_NAME"=? COLLATE NOCASE");
 	stmt_AccountSetDiscordId	= db_prepare(gAccounts, "UPDATE "ACCOUNTS_TABLE_PLAYER" SET "FIELD_PLAYER_DISCORDID"=? WHERE "FIELD_PLAYER_NAME"=? COLLATE NOCASE");
+	stmt_AccountHaveDiscord		= db_prepare(gAccounts, "SELECT count(*) FROM Player WHERE name=? AND discord_id NOTNULL COLLATE NOCASE;");
 
 	stmt_AccountGetGpci			= db_prepare(gAccounts, "SELECT "FIELD_PLAYER_GPCI" FROM "ACCOUNTS_TABLE_PLAYER" WHERE "FIELD_PLAYER_NAME"=? COLLATE NOCASE");
 	stmt_AccountSetGpci			= db_prepare(gAccounts, "UPDATE "ACCOUNTS_TABLE_PLAYER" SET "FIELD_PLAYER_GPCI"=? WHERE "FIELD_PLAYER_NAME"=? COLLATE NOCASE");
@@ -338,7 +340,7 @@ DisplayRegisterPrompt(playerid)
 			// Account created so we can now ask for whitelist if necessary
 			if(IsWhitelistActive() && !IsWhitelistAuto())
 			{
-				WhitelistWarn(playerid);
+				AskForWhitelist(playerid);
 				log(true, "[TUTORIAL] %p foi avisado para fazer whitelist.", playerid);
 			}
 		}
@@ -942,12 +944,19 @@ stock SetAccountVIP(const name[], VIP)
 }
 
 // Get/Set Discord ID
-stock GetAccountDiscordId(const name[])
+stock GetAccountDiscordId(playerid)
 {
-	new discordId[DCC_ID_SIZE];
+	if(!IsPlayerConnected(playerid))
+		return 0;
+
+	new 
+		playerName[MAX_PLAYER_NAME],
+		discordId[DCC_ID_SIZE];
+
+	GetPlayerName(playerid, playerName);
 
 	stmt_bind_result_field(stmt_AccountGetDiscordId, 0, DB::TYPE_STRING, discordId, DCC_ID_SIZE);
-	stmt_bind_value(stmt_AccountGetDiscordId, 0, DB::TYPE_STRING, name, MAX_PLAYER_NAME);
+	stmt_bind_value(stmt_AccountGetDiscordId, 0, DB::TYPE_STRING, playerName, MAX_PLAYER_NAME);
 
 	if(stmt_execute(stmt_AccountGetDiscordId))
 		stmt_fetch_row(stmt_AccountGetDiscordId);
@@ -963,6 +972,25 @@ stock SetAccountDiscordId(const name[], const discordid[DCC_ID_SIZE])
 	stmt_bind_value(stmt_AccountSetDiscordId, 1, DB::TYPE_STRING, name, MAX_PLAYER_NAME);
 
 	return stmt_execute(stmt_AccountSetDiscordId);
+}
+
+stock DoesAccountHaveDiscord(playerid)
+{
+	new
+		does = -1,
+		playerName[MAX_PLAYER_NAME];
+
+	GetPlayerName(playerid, playerName);
+
+	stmt_bind_result_field(stmt_AccountHaveDiscord, 0, DB::TYPE_INTEGER, does);
+	stmt_bind_value(stmt_AccountHaveDiscord, 0, DB::TYPE_STRING, playerName, MAX_PLAYER_NAME);
+
+	if(stmt_execute(stmt_AccountHaveDiscord))
+		stmt_fetch_row(stmt_AccountHaveDiscord);
+	else
+		err(false, true, ("[ACCOUNTS] Impossível executar stmt_AccountHaveDiscord"));
+
+	return does;
 }
 
 // FIELD_ID_PLAYER_GPCI
