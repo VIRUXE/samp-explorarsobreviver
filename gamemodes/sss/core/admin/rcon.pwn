@@ -22,7 +22,7 @@ public OnRconCommand(cmd[])
 		return 1;
 	}
 
-	if(!strcmp(command, "whitelist"))
+/* 	if(!strcmp(command, "whitelist"))
 	{
 		if(params[0] == EOS)
 			print("\tUsage: 'whitelist (<add/remove> <name>) / (on/off/?)'.");
@@ -104,6 +104,6 @@ public OnRconCommand(cmd[])
 
 		return 1;
 	}
-
+ */
 	return 0;
 }

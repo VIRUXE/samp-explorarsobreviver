@@ -1,9 +1,9 @@
 #include <YSI_Coding\y_hooks>
 
-hook OnPlayerSpawn(playerid)
+hook OnPlayerLogin(playerid)
 {
 	// Query the database for the latest changelogs
-	if(!mysql_tquery(gDatabase, "SELECT DAY(date) as date, type, title, description FROM changelog WHERE date >= date(NOW())-7;", "OnChangelogLoaded", "d", playerid))
+	if(!mysql_tquery(gDatabase, "SELECT DAY(date) as date, type, title, description FROM changelog ORDER BY date DESC LIMIT 25;", "OnChangelogLoaded", "d", playerid))
 		err(false, true, "Couldn't download changelog.");
 }
 
@@ -26,7 +26,7 @@ public OnChangelogLoaded(playerid)
 		cache_get_value(row, "title", title);
 		cache_get_value(row, "description", description);
 
-		format(rowBuffer, sizeof(rowBuffer), "Dia %s - %s(%s)\t %s\n", date, type, title, !isequal(description, "NULL", true) ? description : "Sem descrição.");
+		format(rowBuffer, sizeof(rowBuffer), "Dia %s - %s(%s) %s\n", date, type, title, !isequal(description, "NULL", true) ? description : "Sem descrição.");
 	
 		strcat(changelogBuffer, rowBuffer);
 	}

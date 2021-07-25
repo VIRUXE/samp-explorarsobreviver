@@ -325,6 +325,9 @@ hook OnPlayerDrink(playerid, Item:itemid)
 	if(GetLiquidItemLiquidType(itemid) == liquid_Oil)
 		return Y_HOOKS_BREAK_RETURN_1;
 
+	if(GetItemType(itemid) == item_GasCan)
+		return Y_HOOKS_BREAK_RETURN_1;
+		
 	return Y_HOOKS_CONTINUE_RETURN_0;
 }
 

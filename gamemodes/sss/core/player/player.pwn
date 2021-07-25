@@ -141,17 +141,6 @@ timer LoadAccountDelay[timer](playerid, timer)
 		return;
 	}
 
-	if(IsWhitelistActive() && !IsWhitelistAuto())
-	{
-		if(!IsPlayerInWhitelist(playerid))
-		{
-			if(!IsPlayerInTutorial(playerid)) EnterTutorial(playerid);
-
-			LoadDelay[playerid] = defer LoadAccountDelay(playerid, 5000 + (LoadCount * 2000) );
-			return;
-		}
-	}
-
 	LoadCount --;
 
 	new Error:e = LoadAccount(playerid);
@@ -167,13 +156,13 @@ timer LoadAccountDelay[timer](playerid, timer)
 		return;
 	}
 
-	if(e == Error:0) // Account does not exist
+	if(e == Error:0) // Account does not exist, so load the player on the tutorial first
 	{
 		Logger_Log("account does not exist, prompting registration",
 			Logger_P(playerid),
 			Logger_I("result", _:e)
 		);
-		DisplayRegisterPrompt(playerid);
+		EnterTutorial(playerid);
 	}
 
 	if(e == Error:1) // Account does exist, prompt login
@@ -283,6 +272,8 @@ public OnPlayerRequestClass(playerid, classid)
 
 	SetSpawnInfo(playerid, 0, 0, DEFAULT_POS_X, DEFAULT_POS_Y, DEFAULT_POS_Z, 0.0, 0, 0, 0, 0, 0, 0);
 
+	SetPlayerHealth(playerid, 99.9);
+
 	return 0;
 }
 
@@ -291,6 +282,8 @@ public OnPlayerRequestSpawn(playerid)
 	if(IsPlayerNPC(playerid))return 1;
 
 	SetSpawnInfo(playerid, 0, 0, DEFAULT_POS_X, DEFAULT_POS_Y, DEFAULT_POS_Z, 0.0, 0, 0, 0, 0, 0, 0);
+
+	SetPlayerHealth(playerid, 99.9);
 
 	return 0;
 }

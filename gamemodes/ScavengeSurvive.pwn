@@ -527,7 +527,6 @@ new stock
 #include "sss/core/player/aliases.pwn"
 #include "sss/core/player/ipv4-log.pwn"
 #include "sss/core/player/gpci-log.pwn"
-#include "sss/core/player/gpci-whitelist.pwn"
 #include "sss/core/player/brightness.pwn"
 #include "sss/core/player/spawn.pwn"
 #include "sss/core/player/damage.pwn"

@@ -787,8 +787,8 @@ public OnScriptInit()
 	item_HockeyMask		= DefineItemType("Mascara de Hoquei",			"HockeyMask",		19036,	1,	0.0, 0.0, 0.0,			0.082,	0.221075, 0.067746, 0.037494, 87.375968, 305.182189, 5.691741, .maxhitpoints = 1);
 	item_Sandbag		= DefineItemType("Saco",						"Sandbag",			2060,	4,	0.0, 0.0, 0.0,			0.113,	0.069000,0.111000,-0.236999,71.899986,178.399810,84.899848, true, .longpickup = true, .maxhitpoints = 4);
 	item_HotDog			= DefineItemType("Cachorro Quente",				"HotDog",			19346,	1,	0.0, 0.0, 0.0,			0.0,	0.088718, 0.035828, 0.008570, 272.851745, 354.704772, 9.342185, .maxhitpoints = 1);
-	item_IceCream		= DefineItemType("Gelado",						"IceCream",			19568,	1,	0.0, 0.0, 0.0,			0.0308,	0.233000, 0.152999, 0.056999,  95.200012, -3.199998, 11.200000, .maxhitpoints = 1);
-	item_IceCreamBars	= DefineItemType("Barra de Gelado",				"IceCreamBars",		19565,	1,	-90.0, 0.0, 0.0,		-0.01,	0.272000, 0.000999, 0.180999,  -161.999969, 8.400005, -1.699998, .maxhitpoints = 1);
+	item_IceCream		= DefineItemType("Sorvete",						"IceCream",			19568,	1,	0.0, 0.0, 0.0,			0.0308,	0.233000, 0.152999, 0.056999,  95.200012, -3.199998, 11.200000, .maxhitpoints = 1);
+	item_IceCreamBars	= DefineItemType("Caixa de Sorvete",			"IceCreamBars",		19565,	1,	-90.0, 0.0, 0.0,		-0.01,	0.272000, 0.000999, 0.180999,  -161.999969, 8.400005, -1.699998, .maxhitpoints = 1);
 	item_IedBomb		= DefineItemType("Explosivo Improvisado",		"IedBomb",			2033,	2,	0.0, 0.0, 0.0,			0.0,	0.100000, 0.055999, 0.000000,  -86.099967, -112.099975, 100.099891, .maxhitpoints = 2);
 	item_IedPhoneBomb	= DefineItemType("DEI com Celular",				"IedPhoneBomb",		2033,	2,	0.0, 0.0, 0.0,			0.0,	0.100000, 0.055999, 0.000000,  -86.099967, -112.099975, 100.099891, .maxhitpoints = 1);
 	item_IedProxMine	= DefineItemType("DEI de Proximidade",			"IedProxMine",		2033,	2,	0.0, 0.0, 0.0,			0.0,	0.100000, 0.055999, 0.000000,  -86.099967, -112.099975, 100.099891, .maxhitpoints = 1);

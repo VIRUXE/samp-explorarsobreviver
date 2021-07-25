@@ -2,10 +2,6 @@
 #include <YSI_Coding\y_hooks>
 
 
-#define ACCOUNTS_TABLE_WHITELIST	"Whitelist"
-#define FIELD_WHITELIST_NAME		"name"		// 00
-
-
 static
 bool:			wl_Active,
 bool:			wl_Auto,
@@ -14,24 +10,11 @@ bool:			wl_Whitelisted[MAX_PLAYERS],
 DCC_Channel:	wl_DiscordChannel,
 				wl_Countdown[MAX_PLAYERS],
 PlayerText:		wl_CountdownUI[MAX_PLAYERS] = {PlayerText:INVALID_TEXT_DRAW, ...},
-Timer:			wl_CountdownTimer[MAX_PLAYERS],
-// ACCOUNTS_TABLE_WHITELIST
-DBStatement:	stmt_WhitelistExists,
-DBStatement:	stmt_WhitelistInsert,
-DBStatement:	stmt_WhitelistDelete;
+Timer:			wl_CountdownTimer[MAX_PLAYERS];
 
 
 hook OnScriptInit()
 {
-	db_free_result(db_query(gAccounts, "CREATE TABLE IF NOT EXISTS "ACCOUNTS_TABLE_WHITELIST" (\
-		"FIELD_WHITELIST_NAME" TEXT)"));
-
-	DatabaseTableCheck(gAccounts, ACCOUNTS_TABLE_WHITELIST, 1);
-
-	stmt_WhitelistExists = db_prepare(gAccounts, "SELECT COUNT(*) FROM "ACCOUNTS_TABLE_WHITELIST" WHERE "FIELD_WHITELIST_NAME" = ? COLLATE NOCASE");
-	stmt_WhitelistInsert = db_prepare(gAccounts, "INSERT INTO "ACCOUNTS_TABLE_WHITELIST" ("FIELD_WHITELIST_NAME") VALUES(?)");
-	stmt_WhitelistDelete = db_prepare(gAccounts, "DELETE FROM "ACCOUNTS_TABLE_WHITELIST" WHERE "FIELD_WHITELIST_NAME" = ?");
-
 	GetSettingInt("server/whitelist", 0, wl_Active);
 	GetSettingInt("server/whitelist-auto-toggle", 0, wl_Auto);
 
@@ -68,53 +51,52 @@ public DCC_OnMessageCreate(DCC_Message:message)
 {
     new
         DCC_Channel:    channel,
-        DCC_User:       author,
+        DCC_User:       discordUser,
         bool:           is_bot;
 
     DCC_GetMessageChannel(message, channel);
-    DCC_GetMessageAuthor(message, author);
+    DCC_GetMessageAuthor(message, discordUser);
 
-    DCC_IsUserBot(author, is_bot);
+    DCC_IsUserBot(discordUser, is_bot);
     
     if(is_bot)
         return 0;
 
     if(channel == wl_DiscordChannel)
     {
-        new 
-            nickname[MAX_PLAYER_NAME],
-            userid[DCC_ID_SIZE];
+		new
+			discordUserId[DCC_ID_SIZE];
 
-        DCC_GetUserId(author, userid);
-        DCC_GetMessageContent(message, nickname);
+		DCC_GetMessageAuthor(message, discordUser);
+		DCC_GetUserId(discordUser, discordUserId);
 
-        if(strlen(nickname) > MAX_PLAYER_NAME - 1)
-            SendDiscordMessage(channel, "> Esse nick é muito grande (maximo de 24 caracteres).");
-        else if(!strfind(nickname, "."))
-            SendDiscordMessage(channel, "> O seu nick não pode ter ponto (.) no inicio."); 
-        else if(!IsValidUsername(nickname))
-            SendDiscordMessage(channel, "> Nick com formato invalido, tente outro."); 
-        else if(IsNameInWhitelist(nickname))
-            SendDiscordMessage(channel, "> Esse nick ja se encontra vinculado com outra Conta de Discord."); 
-        else if(IsNameInWhitelist(userid))
-            SendDiscordMessage(channel, "> Voce ja tem uma Conta de Jogo vinculada...");
-        else
-        {
-            new DCC_Guild: guild;
+		// Verificar se o jogador já tem o id vinculado em alguma conta
+		if(!DoesDiscordIdExist(discordUserId))
+		{
+            new nameProvided[MAX_PLAYER_NAME];
 
-			// Adicionar na base de dados
-            AddNameToWhitelist(nickname, true);
-            AddNameToWhitelist(userid);
+        	DCC_GetMessageContent(message, nameProvided);
 
-			// Alterar o nick do Discord para o nick que foi autorizado
-            DCC_GetChannelGuild(channel, guild);
-            DCC_SetGuildMemberNickname(guild, author, nickname); 
+			if(DoesAccountExist(nameProvided))
+			{
+				new
+					DCC_Guild:guild;
 
-			// Colocar jogador no cargo
-			//DCC_AddGuildMemberRole(DCC_FindGuildById("867774790189973514"), author, DCC_FindRoleById("867774790189973514"));
+				DCC_GetChannelGuild(channel, guild);
 
-            SendDiscordMessage(channel, "> Sua Conta de Jogo `%s` foi vinculada com sua Conta de Discord. Bom jogo!", nickname);
-        }
+				// Colocar jogador no cargo
+				DCC_AddGuildMemberRole(guild, discordUser, DCC_FindRoleById("867774790189973514")); // Role "Sobrevivente"
+
+				// Guardar discord id na conta
+				SetAccountDiscordId(nameProvided, discordUserId);
+
+				SendDiscordMessage(channel, "> Sua Conta de Jogo `%s` foi vinculada com sua Conta de Discord. Bom jogo!", nameProvided);
+			}
+			else
+				SendDiscordMessage(channel, "> Nao existe uma Conta de Jogo com esse nick!");
+		}
+		else
+			SendDiscordMessage(channel, "> Voce ja tem uma Conta de Jogo associada nessa Conta de Discord...");
     }
     return 1;
 }
@@ -138,42 +120,6 @@ stock AddPlayerToWhitelist(playerid)
 	return 1;
 }
 
-stock AddNameToWhitelist(name[], doplayeridcheck = true)
-{
-	if(IsNameInWhitelist(name) == 1)
-		return 0;
-
-	stmt_bind_value(stmt_WhitelistInsert, 0, DB::TYPE_STRING, name, MAX_PLAYER_NAME);
-
-	if(!stmt_execute(stmt_WhitelistInsert))
-	{
-		err(false, false, "Executing statement 'stmt_WhitelistInsert'.");
-		return -1;
-	}
-
-	stmt_free_result(stmt_WhitelistInsert);
-
-	if(doplayeridcheck)
-	{
-		new tmpname[MAX_PLAYER_NAME];
-
-		foreach(new i : Player)
-		{
-			GetPlayerName(i, tmpname, MAX_PLAYER_NAME);
-
-			if(!strcmp(name, tmpname))
-			{
-				wl_Whitelisted[i] = true;
-				stop wl_CountdownTimer[i];
-				PlayerTextDrawHide(i, wl_CountdownUI[i]);
-				break;
-			}
-		}
-	}
-
-	return 1;
-}
-
 stock RemovePlayerFromWhitelist(playerid)
 {
 	if(!IsPlayerConnected(playerid))
@@ -189,47 +135,6 @@ stock RemovePlayerFromWhitelist(playerid)
 	return 1;
 }
 
-stock RemoveNameFromWhitelist(name[], doplayeridcheck = true)
-{
-	if(IsNameInWhitelist(name) == 0)
-		return 0;
-
-	stmt_bind_value(stmt_WhitelistDelete, 0, DB::TYPE_STRING, name, MAX_PLAYER_NAME);
-
-	if(!stmt_execute(stmt_WhitelistDelete))
-	{
-		err(false, false, "Executing statement 'stmt_WhitelistDelete'.");
-		return -1;
-	}
-
-	stmt_free_result(stmt_WhitelistDelete);
-
-	if(doplayeridcheck)
-	{
-		new tmpname[MAX_PLAYER_NAME];
-
-		foreach(new i : Player)
-		{
-			GetPlayerName(i, tmpname, MAX_PLAYER_NAME);
-
-			if(!strcmp(name, tmpname))
-			{
-				wl_Whitelisted[i] = false;
-
-				if(wl_Active)
-				{
-					stop wl_CountdownTimer[i];
-					wl_CountdownTimer[i] = repeat _UpdateWhitelistCountdown(i);
-				}
-
-				break;
-			}
-		}
-	}
-
-	return 1;
-}
-
 stock IsPlayerInWhitelist(playerid)
 {
 	if(!IsPlayerConnected(playerid))
@@ -238,32 +143,7 @@ stock IsPlayerInWhitelist(playerid)
 	return wl_Whitelisted[playerid];
 }
 
-stock IsNameInWhitelist(name[])
-{
-	if(isnull(name))
-		return 2;
-
-	new count;
-
-	stmt_bind_value(stmt_WhitelistExists, 0, DB::TYPE_STRING, name, MAX_PLAYER_NAME);
-	stmt_bind_result_field(stmt_WhitelistExists, 0, DB::TYPE_INTEGER, count);
-
-	if(!stmt_execute(stmt_WhitelistExists))
-	{
-		err(false, false, "Executing statement 'stmt_WhitelistExists'.");
-		return -1;
-	}
-
-	stmt_fetch_row(stmt_WhitelistExists);
-	stmt_free_result(stmt_WhitelistExists);
-
-	if(count > 0)
-		return 1;
-
-	return 0;
-}
-
-stock WhitelistWarn(playerid)
+stock AskForWhitelist(playerid)
 {
 	// Clear Chat
 	for(new i = 0; i < 10; i++)
@@ -272,7 +152,7 @@ stock WhitelistWarn(playerid)
 	new str[999];
 
 	format(str, sizeof(str), ""C_WHITE"Você precisa registrar na WhiteList para jogar no servidor.\n\n\
-		"C_WHITE"\t1. Entre em: "C_BLUE"%s"C_WHITE". (Enquanto mantém o jogo aberto! "C_WHITE"Nota: necessita de vincular seu celular no Discord"C_WHITE")\n\
+		"C_WHITE"\t1. Entre em: "C_BLUE"%s"C_WHITE". "C_WHITE"(Nota: necessita de vincular seu celular no Discord)\n\
 		"C_WHITE"\t2. Digite %P"C_WHITE" em #whitelist\n\
 		"C_WHITE"\t3. Volte aqui, clique em \"Jogar\" e pronto, você ja pode se divertir! :) \n\n\
 		"C_YELLOW"Aviso:"C_WHITE" Isso serve como proteção para o servidor.\nPedimos sua compreensão.",
@@ -283,12 +163,15 @@ stock WhitelistWarn(playerid)
 		#pragma unused pid, dialogid, listitem, inputtext
 
 		if(response)
-			WhitelistWarn(playerid);
+		{
+			if(!DoesAccountHaveDiscord(playerid)) 
+				AskForWhitelist(playerid); // TODO: Um cooldown para não spammarem a base de dados
+			else
+				wl_Whitelisted[playerid] = true;
+		}
 		else
 			KickPlayer(playerid, "Decidiu sair");
 	}
-		
-
 	Dialog_ShowCallback(playerid, using inline Response, DIALOG_STYLE_MSGBOX, "WhiteList", str, "Jogar", "Sair");
 }
 
@@ -303,7 +186,7 @@ stock ToggleWhitelist(bool:toggle)
 			if(!wl_Whitelisted[i])
 			{
 				wl_Countdown[i] = wl_NonWhitelistTime;
-				PlayerTextDrawSetString(i, wl_CountdownUI[i], sprintf("Não se encontr na Whitelist~n~Tempo restante: %02d:%02d", wl_Countdown[i] / 60, wl_Countdown[i] % 60));
+				PlayerTextDrawSetString(i, wl_CountdownUI[i], sprintf("Não se encontra na Whitelist~n~Tempo restante: %02d:%02d", wl_Countdown[i] / 60, wl_Countdown[i] % 60));
 				PlayerTextDrawShow(i, wl_CountdownUI[i]);
 				stop wl_CountdownTimer[i];
 				wl_CountdownTimer[i] = repeat _UpdateWhitelistCountdown(i);
@@ -362,7 +245,7 @@ timer _UpdateWhitelistCountdown[1000](playerid)
 
 	if(wl_Countdown[playerid] == 0)
 	{
-		WhitelistWarn(playerid);
+		AskForWhitelist(playerid);
 		KickPlayer(playerid, "Whitelist");
 		stop wl_CountdownTimer[playerid];
 		return;
@@ -392,11 +275,10 @@ timer _WhitelistConnect[100](playerid)
 		return;
 	}
 
-	new name[MAX_PLAYER_NAME];
-
-	GetPlayerName(playerid, name, MAX_PLAYER_NAME);
-
-	wl_Whitelisted[playerid] = IsNameInWhitelist(name) ? true: false;
+	if(!DoesAccountHaveDiscord(playerid)) 
+		AskForWhitelist(playerid);
+	else
+		wl_Whitelisted[playerid] = true;
 }
 
 hook OnPlayerLogin(playerid)

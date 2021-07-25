@@ -9,7 +9,8 @@
 #define FIELD_PLAYER_LASTLOG		"lastlog"	// 05
 #define FIELD_PLAYER_SPAWNTIME		"spawntime"	// 06
 #define FIELD_PLAYER_TOTALSPAWNS	"spawns"	// 07
-#define FIELD_PLAYER_VIP			"VIP"	// 08
+#define FIELD_PLAYER_VIP			"VIP"		// 08
+#define FIELD_PLAYER_DISCORDID		"discord_id"
 #define FIELD_PLAYER_GPCI			"gpci"		// 19
 #define FIELD_PLAYER_ACTIVE			"active"	// 10
 
@@ -24,6 +25,7 @@ enum
 	FIELD_ID_PLAYER_SPAWNTIME,
 	FIELD_ID_PLAYER_TOTALSPAWNS,
 	FIELD_ID_PLAYER_VIP,
+	FIELD_ID_PLAYER_DISCORDID,
 	FIELD_ID_PLAYER_GPCI,
 	FIELD_ID_PLAYER_ACTIVE
 }
@@ -65,6 +67,10 @@ DBStatement:	stmt_AccountSetTotalSpawns,
 DBStatement:	stmt_AccountGetVIP,
 DBStatement:	stmt_AccountSetVIP,
 
+DBStatement:	stmt_AccountGetDiscordId,
+DBStatement:	stmt_AccountSetDiscordId,
+DBStatement:	stmt_AccountHaveDiscord,
+
 DBStatement:	stmt_AccountGetGpci,
 DBStatement:	stmt_AccountSetGpci,
 
@@ -90,15 +96,16 @@ hook OnGameModeInit()
 		"FIELD_PLAYER_SPAWNTIME" INTEGER,\
 		"FIELD_PLAYER_TOTALSPAWNS" INTEGER,\
 		"FIELD_PLAYER_VIP" INTEGER,\
+		"FIELD_PLAYER_DISCORDID" TEXT,\
 		"FIELD_PLAYER_GPCI" TEXT,\
 		"FIELD_PLAYER_ACTIVE")");
 
 	db_query(gAccounts, "CREATE INDEX IF NOT EXISTS "ACCOUNTS_TABLE_PLAYER"_index ON "ACCOUNTS_TABLE_PLAYER"("FIELD_PLAYER_NAME")");
 
-	DatabaseTableCheck(gAccounts, ACCOUNTS_TABLE_PLAYER, 11);
+	DatabaseTableCheck(gAccounts, ACCOUNTS_TABLE_PLAYER, 12);
 
 	stmt_AccountExists			= db_prepare(gAccounts, "SELECT COUNT(*) FROM "ACCOUNTS_TABLE_PLAYER" WHERE "FIELD_PLAYER_NAME"=? COLLATE NOCASE");
-	stmt_AccountCreate			= db_prepare(gAccounts, "INSERT INTO "ACCOUNTS_TABLE_PLAYER" VALUES(?,?,?,1,?,?,0,0,0,?,1)");
+	stmt_AccountCreate			= db_prepare(gAccounts, "INSERT INTO "ACCOUNTS_TABLE_PLAYER" (name, pass, ipv4, alive, regdate, lastlog, spawntime, spawns, VIP, gpci, active) VALUES(?,?,?,1,?,?,0,0,0,?,1)");
 	stmt_AccountLoad			= db_prepare(gAccounts, "SELECT * FROM "ACCOUNTS_TABLE_PLAYER" WHERE "FIELD_PLAYER_NAME"=? COLLATE NOCASE");
 	stmt_AccountUpdate			= db_prepare(gAccounts, "UPDATE "ACCOUNTS_TABLE_PLAYER" SET "FIELD_PLAYER_ALIVE"=?, "FIELD_PLAYER_VIP"=? WHERE "FIELD_PLAYER_NAME"=? COLLATE NOCASE");
 
@@ -125,6 +132,10 @@ hook OnGameModeInit()
 
 	stmt_AccountGetVIP			= db_prepare(gAccounts, "SELECT "FIELD_PLAYER_VIP" FROM "ACCOUNTS_TABLE_PLAYER" WHERE "FIELD_PLAYER_NAME"=? COLLATE NOCASE");
 	stmt_AccountSetVIP			= db_prepare(gAccounts, "UPDATE "ACCOUNTS_TABLE_PLAYER" SET "FIELD_PLAYER_VIP"=? WHERE "FIELD_PLAYER_NAME"=? COLLATE NOCASE");
+
+	stmt_AccountGetDiscordId	= db_prepare(gAccounts, "SELECT "FIELD_PLAYER_DISCORDID" FROM "ACCOUNTS_TABLE_PLAYER" WHERE "FIELD_PLAYER_NAME"=? COLLATE NOCASE");
+	stmt_AccountSetDiscordId	= db_prepare(gAccounts, "UPDATE "ACCOUNTS_TABLE_PLAYER" SET "FIELD_PLAYER_DISCORDID"=? WHERE "FIELD_PLAYER_NAME"=? COLLATE NOCASE");
+	stmt_AccountHaveDiscord		= db_prepare(gAccounts, "SELECT count(*) FROM Player WHERE name=? AND discord_id NOTNULL COLLATE NOCASE;");
 
 	stmt_AccountGetGpci			= db_prepare(gAccounts, "SELECT "FIELD_PLAYER_GPCI" FROM "ACCOUNTS_TABLE_PLAYER" WHERE "FIELD_PLAYER_NAME"=? COLLATE NOCASE");
 	stmt_AccountSetGpci			= db_prepare(gAccounts, "UPDATE "ACCOUNTS_TABLE_PLAYER" SET "FIELD_PLAYER_GPCI"=? WHERE "FIELD_PLAYER_NAME"=? COLLATE NOCASE");
@@ -154,9 +165,7 @@ hook OnPlayerConnect(playerid)
 Error:LoadAccount(playerid)
 {
 	if(CallLocalFunction("OnPlayerLoadAccount", "d", playerid))
-	{
 		return NoError(-1);
-	}
 
 	new
 		name[MAX_PLAYER_NAME],
@@ -177,14 +186,10 @@ Error:LoadAccount(playerid)
 	stmt_bind_result_field(stmt_AccountExists, 0, DB::TYPE_INTEGER, exists);
 
 	if(!stmt_execute(stmt_AccountExists))
-	{
 		return Error(-1, "failed to execute statement stmt_AccountExists");
-	}
 
 	if(!stmt_fetch_row(stmt_AccountExists))
-	{
 		return Error(-1, "failed to fetch statement result stmt_AccountExists");
-	}
 
 	if(exists == 0)
 	{
@@ -194,31 +199,25 @@ Error:LoadAccount(playerid)
 		return NoError(0);
 	}
 
-	stmt_bind_value(stmt_AccountLoad, 0, DB::TYPE_STRING, name, MAX_PLAYER_NAME);
-	stmt_bind_result_field(stmt_AccountLoad, FIELD_ID_PLAYER_PASS, DB::TYPE_STRING, password, MAX_PASSWORD_LEN);
-	stmt_bind_result_field(stmt_AccountLoad, FIELD_ID_PLAYER_IPV4, DB::TYPE_INTEGER, ipv4);
-	stmt_bind_result_field(stmt_AccountLoad, FIELD_ID_PLAYER_ALIVE, DB::TYPE_INTEGER, alive);
-	stmt_bind_result_field(stmt_AccountLoad, FIELD_ID_PLAYER_REGDATE, DB::TYPE_INTEGER, regdate);
-	stmt_bind_result_field(stmt_AccountLoad, FIELD_ID_PLAYER_LASTLOG, DB::TYPE_INTEGER, lastlog);
-	stmt_bind_result_field(stmt_AccountLoad, FIELD_ID_PLAYER_SPAWNTIME, DB::TYPE_INTEGER, spawntime);
-	stmt_bind_result_field(stmt_AccountLoad, FIELD_ID_PLAYER_TOTALSPAWNS, DB::TYPE_INTEGER, spawns);
-	stmt_bind_result_field(stmt_AccountLoad, FIELD_ID_PLAYER_VIP, DB::TYPE_INTEGER, VIP);
-	stmt_bind_result_field(stmt_AccountLoad, FIELD_ID_PLAYER_ACTIVE, DB::TYPE_INTEGER, active);
+	stmt_bind_value(stmt_AccountLoad, 0, 									DB::TYPE_STRING, 	name, MAX_PLAYER_NAME);
+	stmt_bind_result_field(stmt_AccountLoad, FIELD_ID_PLAYER_PASS, 			DB::TYPE_STRING, 	password, MAX_PASSWORD_LEN);
+	stmt_bind_result_field(stmt_AccountLoad, FIELD_ID_PLAYER_IPV4, 			DB::TYPE_INTEGER, 	ipv4);
+	stmt_bind_result_field(stmt_AccountLoad, FIELD_ID_PLAYER_ALIVE, 		DB::TYPE_INTEGER, 	alive);
+	stmt_bind_result_field(stmt_AccountLoad, FIELD_ID_PLAYER_REGDATE, 		DB::TYPE_INTEGER, 	regdate);
+	stmt_bind_result_field(stmt_AccountLoad, FIELD_ID_PLAYER_LASTLOG, 		DB::TYPE_INTEGER, 	lastlog);
+	stmt_bind_result_field(stmt_AccountLoad, FIELD_ID_PLAYER_SPAWNTIME, 	DB::TYPE_INTEGER, 	spawntime);
+	stmt_bind_result_field(stmt_AccountLoad, FIELD_ID_PLAYER_TOTALSPAWNS,	DB::TYPE_INTEGER, 	spawns);
+	stmt_bind_result_field(stmt_AccountLoad, FIELD_ID_PLAYER_VIP, 			DB::TYPE_INTEGER, 	VIP);
+	stmt_bind_result_field(stmt_AccountLoad, FIELD_ID_PLAYER_ACTIVE, 		DB::TYPE_INTEGER, 	active);
 
 	if(!stmt_execute(stmt_AccountLoad))
-	{
 		return Error(-1, "failed to execute statement stmt_AccountLoad");
-	}
 
 	if(!stmt_fetch_row(stmt_AccountLoad))
-	{
 		return Error(-1, "failed to fetch statement result stmt_AccountLoad");
-	}
 
 	if(!active)
-	{
 		return NoError(4);
-	}
 
 	SetPlayerAliveState(playerid, alive);
 	acc_IsNewPlayer[playerid] = false;
@@ -232,9 +231,7 @@ Error:LoadAccount(playerid)
 	SetPlayerVIP(playerid, VIP);
 
 	if(gAutoLoginWithIP && GetPlayerIpAsInt(playerid) == ipv4)
-	{
 		return NoError(2);
-	}
 
 	return NoError(1);
 }
@@ -338,8 +335,14 @@ DisplayRegisterPrompt(playerid)
 				Handled();
 				return 1;
 			}
-
 			Logger_Log("account created", Logger_P(playerid));
+
+			// Account created so we can now ask for whitelist if necessary
+			if(IsWhitelistActive() && !IsWhitelistAuto())
+			{
+				AskForWhitelist(playerid);
+				log(true, "[TUTORIAL] %p foi avisado para fazer whitelist.", playerid);
+			}
 		}
 		else
 		{
@@ -751,7 +754,7 @@ stock GetAccountData(name[], pass[], &ipv4, &alive, &regdate, &lastlog, &spawnti
 }
 
 // FIELD_ID_PLAYER_NAME
-stock AccountExists(name[])
+stock DoesAccountExist(name[])
 {
 	new exists;
 
@@ -759,14 +762,9 @@ stock AccountExists(name[])
 	stmt_bind_result_field(stmt_AccountExists, 0, DB::TYPE_INTEGER, exists);
 
 	if(stmt_execute(stmt_AccountExists))
-	{
 		stmt_fetch_row(stmt_AccountExists);
 
-		if(exists)
-			return 1;
-	}
-
-	return 0;
+	return exists;
 }
 
 // FIELD_ID_PLAYER_PASS
@@ -943,6 +941,56 @@ stock SetAccountVIP(const name[], VIP)
 	stmt_bind_value(stmt_AccountSetVIP, 1, DB::TYPE_STRING, name, MAX_PLAYER_NAME);
 
 	return stmt_execute(stmt_AccountSetVIP);
+}
+
+// Get/Set Discord ID
+stock GetAccountDiscordId(playerid)
+{
+	if(!IsPlayerConnected(playerid))
+		return 0;
+
+	new 
+		playerName[MAX_PLAYER_NAME],
+		discordId[DCC_ID_SIZE];
+
+	GetPlayerName(playerid, playerName);
+
+	stmt_bind_result_field(stmt_AccountGetDiscordId, 0, DB::TYPE_STRING, discordId, DCC_ID_SIZE);
+	stmt_bind_value(stmt_AccountGetDiscordId, 0, DB::TYPE_STRING, playerName, MAX_PLAYER_NAME);
+
+	if(stmt_execute(stmt_AccountGetDiscordId))
+		stmt_fetch_row(stmt_AccountGetDiscordId);
+
+	log(true, "GetAccountDiscordId - DiscordId: %s", discordId);
+
+	return discordId;
+}
+
+stock SetAccountDiscordId(const name[], const discordid[DCC_ID_SIZE])
+{
+	stmt_bind_value(stmt_AccountSetDiscordId, 0, DB::TYPE_STRING, discordid, DCC_ID_SIZE);
+	stmt_bind_value(stmt_AccountSetDiscordId, 1, DB::TYPE_STRING, name, MAX_PLAYER_NAME);
+
+	return stmt_execute(stmt_AccountSetDiscordId);
+}
+
+stock DoesAccountHaveDiscord(playerid)
+{
+	new
+		does = -1,
+		playerName[MAX_PLAYER_NAME];
+
+	GetPlayerName(playerid, playerName);
+
+	stmt_bind_result_field(stmt_AccountHaveDiscord, 0, DB::TYPE_INTEGER, does);
+	stmt_bind_value(stmt_AccountHaveDiscord, 0, DB::TYPE_STRING, playerName, MAX_PLAYER_NAME);
+
+	if(stmt_execute(stmt_AccountHaveDiscord))
+		stmt_fetch_row(stmt_AccountHaveDiscord);
+	else
+		err(false, true, ("[ACCOUNTS] Impossível executar stmt_AccountHaveDiscord"));
+
+	return does;
 }
 
 // FIELD_ID_PLAYER_GPCI

@@ -150,6 +150,9 @@ hook OnPlayerSpawn(playerid)
 hook OnPlayerDisconnect(playerid, reason)
 	ExitTutorial(playerid);
 
+hook OnPlayerRegister(playerid)
+	ExitTutorial(playerid);
+
 hook OnPlayerSave(playerid, filename[])
 {
 	new data[1];
@@ -169,7 +172,7 @@ hook OnPlayerLoad(playerid, filename[])
 		EnterTutorial(playerid);
 }
 	
-EnterTutorial(playerid)
+stock EnterTutorial(playerid)
 {
 	SetPlayerPos(playerid, 928.8049,2072.3174,10.8203);
 	SetPlayerFacingAngle(playerid, 269.3244);
@@ -270,7 +273,7 @@ EnterTutorial(playerid)
 	defer UpdateTutorialProgress(playerid);
 }
 
-ExitTutorial(playerid)
+stock ExitTutorial(playerid)
 {
 	if(!IsPlayerConnected(playerid))
 		return 0;
@@ -280,6 +283,9 @@ ExitTutorial(playerid)
 		
 	for(new i = MAX_INVENTORY_SLOTS - 1; i >= 0; i--)
 		RemoveItemFromInventory(playerid, i);
+
+	ChatMsg(playerid, WHITE, ""C_GREEN" » "C_WHITE" %s", ls(playerid, "TUTORIEXIT"));
+	log(true, "[TUTORIAL] %p saiu do tutorial.", playerid);
 	
 	RemovePlayerBag(playerid);
 	RemovePlayerHolsterItem(playerid);
@@ -300,7 +306,6 @@ ExitTutorial(playerid)
 	for(new i = 0; i < 20; i++)
 		SendClientMessage(playerid, GREEN, "");
 
-	ChatMsg(playerid, WHITE, ""C_GREEN" » "C_WHITE" %s", ls(playerid, "TUTORIEXIT"));
 	return 1;
 }
 
@@ -484,21 +489,14 @@ hook OnItemTweakFinish(playerid, Item:itemid)
 
 CMD:sair(playerid, params[])
 {
-	if(PlayerTutorialProgress[playerid] == 6)
+	if(PlayerTutorialProgress[playerid] == 6 || !IsPlayerAdmin(playerid))
 	{
-		if(IsWhitelistActive() && !IsWhitelistAuto())
-		{
-			if(!IsPlayerInWhitelist(playerid))
-			{
-				WhitelistWarn(playerid);
-				return 1;
-			}
-			else ExitTutorial(playerid);
-		}
-		
 		ExitTutorial(playerid);
-
-	} else ShowActionText(playerid, "~R~Voce precisa fazer as tarefas para sair");
+		DisplayRegisterPrompt(playerid);
+	}
+	else
+		ShowActionText(playerid, "~R~Voce precisa fazer as tarefas para sair");
+	
 	return 1;
 }
 CMD:exit(playerid, params[]) return cmd_sair(playerid, params);

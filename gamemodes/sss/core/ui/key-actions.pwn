@@ -233,7 +233,7 @@ _UpdateKeyActions(playerid)
 			AddToolTipText(playerid, KEYTEXT_DOORS, "Fechadura");
 		}
 
-		AddToolTipText(playerid, KEYTEXT_RELOAD, "Abrir inventario");
+		AddToolTipText(playerid, KEYTEXT_PUT_AWAY, "Abrir inventario");
 
 		ShowPlayerKeyActionUI(playerid);
 		return;
@@ -308,7 +308,7 @@ _UpdateKeyActions(playerid)
 		if(invehiclearea != INVALID_VEHICLE_ID)
 		{
 			if(IsPlayerAtVehicleBonnet(playerid, invehiclearea))
-				AddToolTipText(playerid, KEYTEXT_INTERACT, "Refuel vehicle");
+				AddToolTipText(playerid, KEYTEXT_INTERACT, "Reabastecer veiculo");
 		}
 		else
 			AddToolTipText(playerid, KEYTEXT_INTERACT, "Encher na Bomba");
