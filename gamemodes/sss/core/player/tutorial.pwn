@@ -26,9 +26,12 @@ hook OnPlayerConnect(playerid)
 	PlayerTextDrawSetSelectable		(playerid, TutorialDraw[playerid], true);
 
 	PlayerTextDrawHide(playerid, TutorialDraw[playerid]);
-	PlayerInTutorial[playerid] = false;
+
 	PlayerTutorialProgress[playerid] = 0;
 }
+
+hook OnPlayerDisconnect(playerid, reason)
+	PlayerInTutorial[playerid] = false;
 
 hook OnPlayerSpawnChar(playerid)
 {
@@ -64,7 +67,7 @@ timer UpdateTutorialProgress[500](playerid)
 
 
 	if(IsValidItem(GetPlayerBagItem(playerid)))
-		strcat(str, "~g~V Vestir Mochila~n~"), progress ++;
+		strcat(str, "~g~V Vestir Mochila~n~"), progress++;
 	else
 		strcat(str, "~r~X~w~ Vestir Mochila~n~");
 
@@ -72,7 +75,7 @@ timer UpdateTutorialProgress[500](playerid)
 	GetVehicleHealth(PlayerTutorialVehicle[playerid], health);
 
 	if(health > 800.0)
-		strcat(str, "~g~V Reparar Veiculo~n~"), progress ++;
+		strcat(str, "~g~V Reparar Veiculo~n~"), progress++;
 	else
 		strcat(str, "~r~X~w~ Reparar Veiculo~n~");
 
@@ -80,14 +83,14 @@ timer UpdateTutorialProgress[500](playerid)
 	GetItemExtraData(PlayerTutorial_Item[9][playerid], tentid);
 
 	if(IsValidTent(tentid))
-		strcat(str, "~g~V Montar Tenda~n~"), progress ++;
+		strcat(str, "~g~V Montar Tenda~n~"), progress++;
 	else
 		strcat(str, "~r~X~w~ Montar Tenda~n~");
 	
 
 	GetItemArrayDataAtCell(PlayerTutorial_Item[0][playerid], active, 0);
 	if(active)
-		strcat(str, "~g~V Montar Entrada~n~"), progress ++;
+		strcat(str, "~g~V Montar Entrada~n~"), progress++;
 	else
 		strcat(str, "~r~X~w~ Montar Entrada~n~");
 
@@ -96,13 +99,13 @@ timer UpdateTutorialProgress[500](playerid)
 
 	GetItemArrayDataAtCell(PlayerTutorial_Item[1][playerid], active, 0);
 	if(active)
-		strcat(str, "~g~V Montar Porta~n~"), progress ++;
+		strcat(str, "~g~V Montar Porta~n~"), progress++;
 	else
 		strcat(str, "~r~X~w~ Montar Porta~n~");
 
 
 	if(IsValidItem(GetPlayerHolsterItem(playerid)))
-		strcat(str, "~g~V Colocar arma no Coldre"), progress ++;
+		strcat(str, "~g~V Colocar arma no Coldre"), progress++;
 	else
 		strcat(str, "~r~X~w~ Colocar arma no Coldre");
 
@@ -125,18 +128,14 @@ timer UpdateTutorialProgress[500](playerid)
 hook OnPlayerClickPlayerTD(playerid, PlayerText:playertextid)
 {
 	if(playertextid == TutorialDraw[playerid])
-	{
 		EnterTutorial(playerid);
-	}
 }
 
 hook OnVehicleSave(vehicleid)
 {
 	foreach(new i : Player)
-	{
 		if(vehicleid == PlayerTutorialVehicle[i])
 			return Y_HOOKS_BREAK_RETURN_1;
-	}
 
 	return Y_HOOKS_CONTINUE_RETURN_0;
 }
@@ -146,12 +145,6 @@ hook OnPlayerSpawn(playerid)
 	if(PlayerInTutorial[playerid])
 		EnterTutorial(playerid);
 }
-
-hook OnPlayerDisconnect(playerid, reason)
-	ExitTutorial(playerid);
-
-hook OnPlayerRegister(playerid)
-	ExitTutorial(playerid);
 
 hook OnPlayerSave(playerid, filename[])
 {
@@ -168,33 +161,45 @@ hook OnPlayerLoad(playerid, filename[])
 	modio_read(filename, _T<T,U,T,R>, 1, _:data);
 
 	PlayerInTutorial[playerid] = bool:data[0];
+
 	if(PlayerInTutorial[playerid])
 		EnterTutorial(playerid);
 }
 	
 stock EnterTutorial(playerid)
 {
+	new skin;
+
+	log(true, "[TUTORIAL] %p entered the tutorial.", playerid);
+	ClearChatForPlayer(playerid, 20);
+
+	ChatMsg(playerid, WHITE, ""C_GREEN" » "C_WHITE" %s", ls(playerid, "TUTORINTROD"));
+	ChatMsg(playerid, WHITE, ""C_GREEN" » "C_WHITE" %s", ls(playerid, "TUTOREXITCM"));
+
+	PlayerInTutorial[playerid] = true;
+
 	SetPlayerPos(playerid, 928.8049,2072.3174,10.8203);
 	SetPlayerFacingAngle(playerid, 269.3244);
 	SetPlayerVirtualWorld(playerid, playerid + 1);
 
 	switch(random(14))
 	{
-		case 0: SetPlayerClothesID(playerid, skin_Civ0M);
-		case 1: SetPlayerClothesID(playerid, skin_Civ1M);
-		case 2: SetPlayerClothesID(playerid, skin_Civ2M);
-		case 3: SetPlayerClothesID(playerid, skin_Civ3M);
-		case 4: SetPlayerClothesID(playerid, skin_Civ4M);
-		case 5: SetPlayerClothesID(playerid, skin_MechM);
-		case 6: SetPlayerClothesID(playerid, skin_BikeM);
-		case 7: SetPlayerClothesID(playerid, skin_Civ0F);
-		case 8: SetPlayerClothesID(playerid, skin_Civ1F);
-		case 9: SetPlayerClothesID(playerid, skin_Civ2F);
-		case 10: SetPlayerClothesID(playerid, skin_Civ3F);
-		case 11: SetPlayerClothesID(playerid, skin_Civ4F);
-		case 12: SetPlayerClothesID(playerid, skin_ArmyF);
-		case 13: SetPlayerClothesID(playerid, skin_IndiF);
+		case 0: 	skin = skin_Civ0M;
+		case 1: 	skin = skin_Civ1M;
+		case 2: 	skin = skin_Civ2M;
+		case 3: 	skin = skin_Civ3M;
+		case 4: 	skin = skin_Civ4M;
+		case 5: 	skin = skin_MechM;
+		case 6: 	skin = skin_BikeM;
+		case 7: 	skin = skin_Civ0F;
+		case 8: 	skin = skin_Civ1F;
+		case 9: 	skin = skin_Civ2F;
+		case 10: 	skin = skin_Civ3F;
+		case 11: 	skin = skin_Civ4F;
+		case 12: 	skin = skin_ArmyF;
+		case 13: 	skin = skin_IndiF;
 	}
+	SetPlayerClothesID(playerid, skin);
 
 	SetPlayerClothes(playerid, GetPlayerClothesID(playerid));
 	SetPlayerGender(playerid, GetClothesGender(GetPlayerClothesID(playerid)));
@@ -215,8 +220,6 @@ stock EnterTutorial(playerid)
 	PlayerTextDrawHide(playerid, TutorialDraw[playerid]);
 
 	SetPlayerBrightness(playerid, 255);
-
-	PlayerInTutorial[playerid] = true;
 
 	if(PlayerTutorialVehicle[playerid] != INVALID_VEHICLE_ID)
 		DestroyWorldVehicle(PlayerTutorialVehicle[playerid], true);
@@ -263,13 +266,6 @@ stock EnterTutorial(playerid)
 	SetLiquidItemLiquidType(PlayerTutorial_Item[21][playerid], liquid_Petrol);
 	SetLiquidItemLiquidAmount(PlayerTutorial_Item[21][playerid], 15);
 
-	// Message
-	for(new i = 0; i < 20; i++)
-		SendClientMessage(playerid, GREEN, "");
-
-	ChatMsg(playerid, WHITE, ""C_GREEN" » "C_WHITE" %s", ls(playerid, "TUTORINTROD"));
-	ChatMsg(playerid, WHITE, ""C_GREEN" » "C_WHITE" %s", ls(playerid, "TUTOREXITCM"));
-
 	defer UpdateTutorialProgress(playerid);
 }
 
@@ -280,31 +276,31 @@ stock ExitTutorial(playerid)
 
 	if(!PlayerInTutorial[playerid])
 		return 0;
-		
-	for(new i = MAX_INVENTORY_SLOTS - 1; i >= 0; i--)
-		RemoveItemFromInventory(playerid, i);
+	
+	PlayerInTutorial[playerid] = false;
 
+	ClearChatForPlayer(playerid, 20);
 	ChatMsg(playerid, WHITE, ""C_GREEN" » "C_WHITE" %s", ls(playerid, "TUTORIEXIT"));
 	log(true, "[TUTORIAL] %p saiu do tutorial.", playerid);
+
+	// Reset Inventory
+	for(new i = MAX_INVENTORY_SLOTS - 1; i >= 0; i--)
+		RemoveItemFromInventory(playerid, i);
 	
 	RemovePlayerBag(playerid);
 	RemovePlayerHolsterItem(playerid);
 	
 	SetPlayerPos(playerid, DEFAULT_POS_X, DEFAULT_POS_Y, DEFAULT_POS_Z);
-
-	PlayerInTutorial[playerid] = false;
 	SetPlayerSpawnedState(playerid, false);
 	SetPlayerAliveState(playerid, false);
 	SetPlayerVirtualWorld(playerid, 0);
 	PlayerCreateNewCharacter(playerid);
 	SetPlayerBrightness(playerid, 255);
 
+	// Destruir os itens do Tutorial
 	for(new i = 0; i < MAX_TUTORIAL_ITEMS; i++)
 		if(IsValidItem(PlayerTutorial_Item[i][playerid]))
 			DestroyItem(PlayerTutorial_Item[i][playerid]);
-
-	for(new i = 0; i < 20; i++)
-		SendClientMessage(playerid, GREEN, "");
 
 	return 1;
 }
@@ -313,9 +309,7 @@ hook OnPlayerWearBag(playerid, Item:itemid)
 {
 	if(PlayerInTutorial[playerid])
 	{
-  		for(new i = 0; i < 20; i++)
-			SendClientMessage(playerid, GREEN, "");
-		
+  		ClearChatForPlayer(playerid, 20);		
 		ChatMsg(playerid, WHITE, ""C_GREEN" » "C_WHITE" %s", ls(playerid, "TUTORACCBAG"));
 
 		defer UpdateTutorialProgress(playerid);
@@ -328,9 +322,7 @@ hook OnPlayerOpenInventory(playerid)
 {
 	if(PlayerInTutorial[playerid])
 	{
-  		for(new i = 0; i < 20; i++)
-			SendClientMessage(playerid, GREEN, "");
-			
+  		ClearChatForPlayer(playerid, 20);			
 		ChatMsg(playerid, WHITE, ""C_GREEN" » "C_WHITE" %s", ls(playerid, "TUTORINTINV"));
 	}
 
@@ -345,8 +337,7 @@ hook OnPlayerOpenContainer(playerid, Container:containerid)
 		{
 			if(containerid == GetBagItemContainerID(GetPlayerBagItem(playerid)))
 			{
-				for(new i = 0; i < 20; i++)
-					SendClientMessage(playerid, GREEN, "");
+				ClearChatForPlayer(playerid, 20);
 				
 				ChatMsg(playerid, WHITE, ""C_GREEN" » "C_WHITE" %s", ls(playerid, "TUTORINTBAG"));
 			}
@@ -367,9 +358,7 @@ hook OnPlayerViewCntOpt(playerid, Container:containerid)
 
 		if(GetItemType(itemid) == item_Wrench)
 		{
-  			for(new i = 0; i < 20; i++)
-				SendClientMessage(playerid, GREEN, "");
-
+  			ClearChatForPlayer(playerid, 20);
 			ChatMsg(playerid, WHITE, ""C_GREEN" » "C_WHITE" %s", ls(playerid, "TUTORITMOPT"));
 		}
 	}
@@ -381,9 +370,7 @@ hook OnPlayerDroppedItem(playerid, Item:itemid)
 {
 	if(PlayerInTutorial[playerid])
 	{
-		for(new i = 0; i < 20; i++)
-			SendClientMessage(playerid, GREEN, "");
-
+		ClearChatForPlayer(playerid, 20);
 		ChatMsg(playerid, WHITE, ""C_GREEN" » "C_WHITE" %s", ls(playerid, "TUTORDROITM"));
 	}
 
@@ -394,9 +381,7 @@ hook OnItemAddedToInventory(playerid, Item:itemid, slot)
 {
 	if(PlayerInTutorial[playerid])
 	{
-		for(new i = 0; i < 20; i++)
-			SendClientMessage(playerid, GREEN, "");
-
+		ClearChatForPlayer(playerid, 20);
 		ChatMsg(playerid, WHITE, ""C_GREEN" » "C_WHITE" %s", ls(playerid, "TUTORINVADD"));
 	}
 
@@ -407,9 +392,7 @@ hook OnPlayerViewInvOpt(playerid)
 {
 	if(PlayerInTutorial[playerid])
 	{
-		for(new i = 0; i < 20; i++)
-			SendClientMessage(playerid, GREEN, "");
-
+		ClearChatForPlayer(playerid, 20);
 		ChatMsg(playerid, WHITE, ""C_GREEN" » "C_WHITE" %s", ls(playerid, "TUTORITMOPT"));
 	}
 
@@ -426,17 +409,13 @@ hook OnItemAddedToContainer(Container:containerid, Item:itemid, playerid)
 			{
 				if(containerid == GetBagItemContainerID(GetPlayerBagItem(playerid)))
 				{
-					for(new i = 0; i < 20; i++)
-						SendClientMessage(playerid, GREEN, "");
-
+					ClearChatForPlayer(playerid, 20);
 					ChatMsg(playerid, WHITE, ""C_GREEN" » "C_WHITE" %s", ls(playerid, "TUTORADDBAG"));
 				}
 			}
 			else
 			{
-				for(new i = 0; i < 20; i++)
-					SendClientMessage(playerid, GREEN, "");
-
+				ClearChatForPlayer(playerid, 20);
 				ChatMsg(playerid, WHITE, ""C_GREEN" » "C_WHITE" %s", ls(playerid, "TUTORADDCNT"));
 			}
 		}
@@ -449,9 +428,7 @@ hook OnPlayerHolsteredItem(playerid, Item:itemid)
 {
 	if(PlayerInTutorial[playerid])
 	{
-		for(new i = 0; i < 20; i++)
-			SendClientMessage(playerid, GREEN, "");
-
+		ClearChatForPlayer(playerid, 20);
 		ChatMsg(playerid, WHITE, ""C_GREEN" » "C_WHITE" %s", ls(playerid, "TUTORITMHOL"));
 
 		defer UpdateTutorialProgress(playerid);
@@ -464,9 +441,7 @@ hook OnPlayerUseItemWithItem(playerid, Item:itemid, Item:withitemid)
 {
 	if(PlayerInTutorial[playerid])
 	{
-		for(new i = 0; i < 20; i++)
-			SendClientMessage(playerid, GREEN, "");
-
+		ClearChatForPlayer(playerid, 20);
 		ChatMsg(playerid, WHITE, ""C_GREEN" » "C_WHITE" %s", ls(playerid, "TUTORITMUSE"));
 	}
 }
@@ -478,7 +453,6 @@ hook OnItemTweakFinish(playerid, Item:itemid)
 		if(IsItemTypeDefence(GetItemType(itemid)))
 		{
 			ClearChatForPlayer(playerid, 20);
-
 			ChatMsg(playerid, WHITE, ""C_GREEN" » "C_WHITE" %s", ls(playerid, "TUTORIDEF"));
 		}
 		
@@ -486,12 +460,26 @@ hook OnItemTweakFinish(playerid, Item:itemid)
 	}
 }
 
+stock IsPlayerInTutorial(playerid)
+{
+	if(!IsPlayerConnected(playerid))
+		return 0;
+		
+	log(true, "[TUTORIAL] IsPlayerInTutorial - %p: %d", playerid, PlayerInTutorial[playerid]);
+
+	PrintBacktrace();
+
+	return PlayerInTutorial[playerid];
+}
+
 CMD:sair(playerid, params[])
 {
 	if(!IsPlayerAdmin(playerid) || GetPlayerAdminLevel(playerid) || PlayerTutorialProgress[playerid] == 6)
 	{
+		if(!IsPlayerRegistered(playerid))
+			DisplayRegisterPrompt(playerid);
+
 		ExitTutorial(playerid);
-		DisplayRegisterPrompt(playerid);
 	}
 	else
 		ShowActionText(playerid, "~R~Voce precisa fazer as tarefas para sair");
@@ -499,14 +487,3 @@ CMD:sair(playerid, params[])
 	return 1;
 }
 CMD:exit(playerid, params[]) return cmd_sair(playerid, params);
-
-stock IsPlayerInTutorial(playerid)
-{
-	if(!IsPlayerConnected(playerid))
-		return 0;
-		
-	if(PlayerInTutorial[playerid])
-		return 1;
-
-	return 0;
-}

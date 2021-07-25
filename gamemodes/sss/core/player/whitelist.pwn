@@ -244,7 +244,7 @@ timer _UpdateWhitelistCountdown[1000](playerid)
 	anti-hack tools at disposal.
 */
 
-timer _WhitelistConnect[100](playerid)
+timer _WhitelistConnect[SEC(5)](playerid)
 {
 	if(!IsPlayerConnected(playerid))
 	{
@@ -252,10 +252,21 @@ timer _WhitelistConnect[100](playerid)
 		return;
 	}
 
-	if(DoesAccountHaveDiscord(playerid)) 
-		wl_Whitelisted[playerid] = true;
+	if(!IsPlayerInTutorial(playerid))
+	{
+		if(DoesAccountHaveDiscord(playerid))
+		{
+			wl_Whitelisted[playerid] = true;
+			log(true, "[_WhitelistConnect] Player %d is whitelisted.", playerid);
+		}
+		else
+		{
+			AskPlayerToWhitelist(playerid);
+			log(true, "[_WhitelistConnect] Player %d was asked to whitelist.", playerid);
+		}
+	}
 	else
-		AskPlayerToWhitelist(playerid);
+		log(true, "[_WhitelistConnect] Player %d is in the tutorial. Not doing anything.", playerid);
 }
 
 hook OnPlayerLogin(playerid)

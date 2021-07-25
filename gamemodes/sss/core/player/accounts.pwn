@@ -299,7 +299,7 @@ Error:CreateAccount(playerid, const password[])
 	return NoError(1);
 }
 
-DisplayRegisterPrompt(playerid)
+stock DisplayRegisterPrompt(playerid)
 {
 	new str[150];
 	format(str, 150, ls(playerid, "ACCREGIBODY"), playerid);
@@ -354,7 +354,7 @@ DisplayRegisterPrompt(playerid)
 	return 1;
 }
 
-DisplayLoginPrompt(playerid, badpass = 0)
+stock DisplayLoginPrompt(playerid, badpass = 0)
 {
 	new str[150];
 
@@ -429,7 +429,7 @@ DisplayLoginPrompt(playerid, badpass = 0)
 ==============================================================================*/
 
 
-Login(playerid)
+stock Login(playerid)
 {
 	new serial[MAX_GPCI_LEN];
 	gpci(playerid, serial, MAX_GPCI_LEN);
@@ -488,7 +488,7 @@ Login(playerid)
 
 ==============================================================================*/
 
-Logout(playerid, docombatlogcheck = 1)
+stock Logout(playerid, docombatlogcheck = 1)
 {
 	if(!acc_LoggedIn[playerid])
 	{
@@ -638,7 +638,7 @@ Logout(playerid, docombatlogcheck = 1)
 
 ==============================================================================*/
 
-SavePlayerData(playerid)
+stock SavePlayerData(playerid)
 {
 	dbg("accounts", 1, "[SavePlayerData] Saving '%p'", playerid);
 
