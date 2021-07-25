@@ -575,7 +575,7 @@ ACMD:adminlist[3](playerid, params[])
 			admin_Data[i][admin_Rank],
 			admin_Names[admin_Data[i][admin_Rank]]);
 
-		if(GetPlayerIDFromName(admin_Data[i][admin_Name]) != INVALID_PLAYER_ID)
+		if(GetPlayerIdByName(admin_Data[i][admin_Name]) != INVALID_PLAYER_ID)
 			strcat(gBigString[playerid], " » ");
 
 		strcat(gBigString[playerid], line);
