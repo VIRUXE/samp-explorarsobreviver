@@ -95,13 +95,13 @@ hook OnGameModeInit()
 		"FIELD_PLAYER_SPAWNTIME" INTEGER,\
 		"FIELD_PLAYER_TOTALSPAWNS" INTEGER,\
 		"FIELD_PLAYER_VIP" INTEGER,\
-		"FIELD_PLAYER_DISCORDID" INTEGER,\
+		"FIELD_PLAYER_DISCORDID" TEXT,\
 		"FIELD_PLAYER_GPCI" TEXT,\
 		"FIELD_PLAYER_ACTIVE")");
 
 	db_query(gAccounts, "CREATE INDEX IF NOT EXISTS "ACCOUNTS_TABLE_PLAYER"_index ON "ACCOUNTS_TABLE_PLAYER"("FIELD_PLAYER_NAME")");
 
-	// DatabaseTableCheck(gAccounts, ACCOUNTS_TABLE_PLAYER, 11);
+	DatabaseTableCheck(gAccounts, ACCOUNTS_TABLE_PLAYER, 12);
 
 	stmt_AccountExists			= db_prepare(gAccounts, "SELECT COUNT(*) FROM "ACCOUNTS_TABLE_PLAYER" WHERE "FIELD_PLAYER_NAME"=? COLLATE NOCASE");
 	stmt_AccountCreate			= db_prepare(gAccounts, "INSERT INTO "ACCOUNTS_TABLE_PLAYER" (name, pass, ipv4, alive, regdate, lastlog, spawntime, spawns, VIP, gpci, active) VALUES(?,?,?,1,?,?,0,0,0,?,1)");
@@ -938,20 +938,22 @@ stock SetAccountVIP(const name[], VIP)
 // Get/Set Discord ID
 stock GetAccountDiscordId(const name[])
 {
-	new id;
+	new discordId[DCC_ID_SIZE];
 
-	stmt_bind_result_field(stmt_AccountGetDiscordId, 0, DB::TYPE_INTEGER, id);
+	stmt_bind_result_field(stmt_AccountGetDiscordId, 0, DB::TYPE_STRING, discordId, DCC_ID_SIZE);
 	stmt_bind_value(stmt_AccountGetDiscordId, 0, DB::TYPE_STRING, name, MAX_PLAYER_NAME);
 
 	if(stmt_execute(stmt_AccountGetDiscordId))
 		stmt_fetch_row(stmt_AccountGetDiscordId);
 
-	return id;
+	log(true, "GetAccountDiscordId - DiscordId: %s", discordId);
+
+	return discordId;
 }
 
-stock SetAccountDiscordId(const name[], discordid[DCC_ID_SIZE])
+stock SetAccountDiscordId(const name[], const discordid[DCC_ID_SIZE])
 {
-	stmt_bind_value(stmt_AccountSetDiscordId, 0, DB::TYPE_INTEGER, strval(discordid));
+	stmt_bind_value(stmt_AccountSetDiscordId, 0, DB::TYPE_STRING, discordid, DCC_ID_SIZE);
 	stmt_bind_value(stmt_AccountSetDiscordId, 1, DB::TYPE_STRING, name, MAX_PLAYER_NAME);
 
 	return stmt_execute(stmt_AccountSetDiscordId);

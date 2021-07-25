@@ -79,7 +79,9 @@ public DCC_OnMessageCreate(DCC_Message:message)
 
 			if(DoesAccountExist(nameProvided))
 			{
-				new DCC_Guild:guild;
+				new
+					DCC_Guild:guild;
+
 				DCC_GetChannelGuild(channel, guild);
 
 				// Colocar jogador no cargo
@@ -150,7 +152,7 @@ stock WhitelistWarn(playerid)
 	new str[999];
 
 	format(str, sizeof(str), ""C_WHITE"Você precisa registrar na WhiteList para jogar no servidor.\n\n\
-		"C_WHITE"\t1. Entre em: "C_BLUE"%s"C_WHITE". "C_WHITE"Nota: necessita de vincular seu celular no Discord"C_WHITE")\n\
+		"C_WHITE"\t1. Entre em: "C_BLUE"%s"C_WHITE". "C_WHITE"(Nota: necessita de vincular seu celular no Discord)\n\
 		"C_WHITE"\t2. Digite %P"C_WHITE" em #whitelist\n\
 		"C_WHITE"\t3. Volte aqui, clique em \"Jogar\" e pronto, você ja pode se divertir! :) \n\n\
 		"C_YELLOW"Aviso:"C_WHITE" Isso serve como proteção para o servidor.\nPedimos sua compreensão.",
@@ -269,11 +271,13 @@ timer _WhitelistConnect[100](playerid)
 	}
 
 	new 
-		playerName[MAX_PLAYER_NAME];
+		playerName[MAX_PLAYER_NAME],
+		discordId[DCC_ID_SIZE];
 
 	GetPlayerName(playerid, playerName, MAX_PLAYER_NAME);
+	discordId = GetAccountDiscordId(playerName);
 
-	wl_Whitelisted[playerid] = GetAccountDiscordId(playerName) ? true : false;
+	wl_Whitelisted[playerid] = !isnull(discordId) ? true : false;
 }
 
 hook OnPlayerLogin(playerid)

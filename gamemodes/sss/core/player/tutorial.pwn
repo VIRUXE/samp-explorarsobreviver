@@ -283,6 +283,9 @@ ExitTutorial(playerid)
 		
 	for(new i = MAX_INVENTORY_SLOTS - 1; i >= 0; i--)
 		RemoveItemFromInventory(playerid, i);
+
+	ChatMsg(playerid, WHITE, ""C_GREEN" » "C_WHITE" %s", ls(playerid, "TUTORIEXIT"));
+	log(true, "[TUTORIAL] %p saiu do tutorial.", playerid);
 	
 	RemovePlayerBag(playerid);
 	RemovePlayerHolsterItem(playerid);
@@ -303,7 +306,9 @@ ExitTutorial(playerid)
 	for(new i = 0; i < 20; i++)
 		SendClientMessage(playerid, GREEN, "");
 
-	ChatMsg(playerid, WHITE, ""C_GREEN" » "C_WHITE" %s", ls(playerid, "TUTORIEXIT"));
+	if(IsWhitelistActive() && !IsWhitelistAuto())
+		WhitelistWarn(playerid), log(true, "[TUTORIAL] %p foi avisado para fazer whitelist.", playerid);
+
 	return 1;
 }
 
@@ -489,14 +494,7 @@ CMD:sair(playerid, params[])
 {
 	if(PlayerTutorialProgress[playerid] == 6)
 	{
-		if(IsWhitelistActive() && !IsWhitelistAuto())
-		{
-			if(!IsPlayerInWhitelist(playerid))
-			{
-				WhitelistWarn(playerid);
-				return 1;
-			}
-		}
+
 
 		ExitTutorial(playerid);
 	} else ShowActionText(playerid, "~R~Voce precisa fazer as tarefas para sair");
