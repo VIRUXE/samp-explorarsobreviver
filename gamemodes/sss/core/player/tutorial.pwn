@@ -11,7 +11,7 @@ Item:		PlayerTutorial_Item     [MAX_TUTORIAL_ITEMS][MAX_PLAYERS];
 
 hook OnPlayerConnect(playerid)
 {
-	TutorialDraw[playerid] = CreatePlayerTextDraw(playerid, 4.000000, 325.000000, ls(playerid, "TUTORPROMPT"));
+	TutorialDraw[playerid] = CreatePlayerTextDraw(playerid, 4.000000, 327.000000, ls(playerid, "TUTORPROMPT"));
 	PlayerTextDrawFont(playerid, TutorialDraw[playerid], 1);
 	PlayerTextDrawLetterSize(playerid, TutorialDraw[playerid], 0.375000, 1.600000);
 	PlayerTextDrawTextSize(playerid, TutorialDraw[playerid], 187.000000, 17.000000);
@@ -87,22 +87,11 @@ timer UpdateTutorialProgress[500](playerid)
 	else
 		strcat(str, "~r~X~w~ Montar Tenda~n~");
 	
-
-	GetItemArrayDataAtCell(PlayerTutorial_Item[0][playerid], active, 0);
-	if(active)
-		strcat(str, "~g~V Montar Entrada~n~"), progress++;
-	else
-		strcat(str, "~r~X~w~ Montar Entrada~n~");
-
-	active = false;
-
-
 	GetItemArrayDataAtCell(PlayerTutorial_Item[1][playerid], active, 0);
 	if(active)
-		strcat(str, "~g~V Montar Porta~n~"), progress++;
+		strcat(str, "~g~V Montar Porta com Chave~n~"), progress ++;
 	else
-		strcat(str, "~r~X~w~ Montar Porta~n~");
-
+		strcat(str, "~r~X~w~ Montar Porta com Chave~n~");
 
 	if(IsValidItem(GetPlayerHolsterItem(playerid)))
 		strcat(str, "~g~V Colocar arma no Coldre"), progress++;
@@ -112,7 +101,7 @@ timer UpdateTutorialProgress[500](playerid)
 	PlayerTextDrawBackgroundColor(playerid, TutorialDraw[playerid], 255);
 	PlayerTextDrawBoxColor(playerid, TutorialDraw[playerid], 842150655);
 	
-	if(progress == 6) 
+	if(progress == 5) 
 		PlayerTextDrawSetString(playerid, TutorialDraw[playerid],
 			"~g~Tarefas concluidas, parabens!~n~Para sair do tutorial use ~w~/sair~n~\
 			~g~Caso tenha alguma duvida, envie um ~w~/relatorio~g~ que tentaremos responder o mais rapido possivel!");	
@@ -225,7 +214,9 @@ stock EnterTutorial(playerid)
 		DestroyWorldVehicle(PlayerTutorialVehicle[playerid], true);
 
 	//	Vehicle
-	PlayerTutorialVehicle[playerid] = CreateWorldVehicle(veht_Bobcat, 949.1641,2060.3074,10.8203, 272.1444, random(100), random(100), .world = playerid + 1);
+	PlayerTutorialVehicle[playerid] = CreateWorldVehicle(veht_Bobcat, 945.0064,2060.8013,10.7444,358.8053, random(100), random(100), .world = playerid + 1);
+	SetVehiclePos(PlayerTutorialVehicle[playerid], 945.0064,2060.8013,10.7444);
+	SetVehicleZAngle(PlayerTutorialVehicle[playerid], 358.8053);
 	SetVehicleHealth(PlayerTutorialVehicle[playerid], 321.9);
 	SetVehicleFuel(PlayerTutorialVehicle[playerid], frandom(1.0));
 	FillContainerWithLoot(GetVehicleContainer(PlayerTutorialVehicle[playerid]), 5, GetLootIndexFromName("world_civilian"));
@@ -236,10 +227,8 @@ stock EnterTutorial(playerid)
 		encode_tires(1, 1, 1, 0) );
 
 	//	Items
-	PlayerTutorial_Item[0][playerid] = CreateItem(item_InsulDoor, 975.1069,2071.6677,9.8603, .rz = frandom(360.0), .world = playerid + 1);
-	SetItemLabel(PlayerTutorial_Item[0][playerid], "Entrada Isolada - Monte com Chave de Fenda", .range = 15.0);
+	PlayerTutorial_Item[0][playerid] = CreateItem(item_Screwdriver, 975.1069,2071.6677,9.8603, .rz = frandom(360.0), .world = playerid + 1);
 	PlayerTutorial_Item[1][playerid] = CreateItem(item_WoodDoor, 974.1069,2070.6677,9.8603, .rz = frandom(360.0), .world = playerid + 1);
-	SetItemLabel(PlayerTutorial_Item[1][playerid], "Porta de Madeira - Monte com Chave de Fenda", .range = 15.0);
 	PlayerTutorial_Item[2][playerid] = CreateItem(item_Spanner, 945.02, 2069.25,9.8603, .rz = frandom(360.0), .world = playerid + 1);
 	PlayerTutorial_Item[3][playerid] = CreateItem(item_Wheel, 951.7727,2068.0540,9.8603, .rz = frandom(360.0), .world = playerid + 1);
 	PlayerTutorial_Item[4][playerid] = CreateItem(item_Wheel, 954.4612,2068.2312,9.8603, .rz = frandom(360.0), .world = playerid + 1);
@@ -474,7 +463,7 @@ stock IsPlayerInTutorial(playerid)
 
 CMD:sair(playerid, params[])
 {
-	if(!IsPlayerAdmin(playerid) || GetPlayerAdminLevel(playerid) || PlayerTutorialProgress[playerid] == 6)
+	if(!IsPlayerAdmin(playerid) || GetPlayerAdminLevel(playerid) || PlayerTutorialProgress[playerid] == 5)
 	{
 		if(!IsPlayerRegistered(playerid))
 			DisplayRegisterPrompt(playerid);

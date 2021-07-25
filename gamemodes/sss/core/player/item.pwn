@@ -172,7 +172,7 @@ hook OnMoveItemToContainer(playerid, Item:itemid, Container:containerid){
 ==============================================================================*/
 
 hook OnPlayerKeyStateChange(playerid, newkeys, oldkeys)
-	if( (newkeys == KEY_YES) && IsPlayerInAnyVehicle(playerid))
+	if( (newkeys == KEY_ACTION) && IsPlayerInAnyVehicle(playerid))
 			HideVehicleUI(playerid), DisplayPlayerInventory(playerid);
 
 hook OnPlayerCloseContainer(playerid, Container:containerid)

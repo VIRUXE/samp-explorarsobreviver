@@ -247,15 +247,20 @@ SaveTent(tentid, bool:active = true)
 	if(!Iter_Contains(tnt_Index, tentid))
 	{
 		err(true, true, "[SaveTent] ERROR: Attempted to save tent ID %d active: %d that was not found in index.", tentid, active);
-		return 1;
+		return 0;
 	}
 
 	new
 		Item:itemid = GetTentItem(tentid),
 		Container:containerid = GetTentContainer(tentid),
-		uuid[UUID_LEN];
+		uuid[UUID_LEN],
+		world;
 
 	GetItemUUID(itemid, uuid);
+	GetItemWorld(itemid, world);
+
+	if(world != 0)
+		return 1;
 
 	if(!IsValidContainer(containerid))
 	{

@@ -17,18 +17,6 @@ hook OnPlayerDeath(playerid, killerid, reason)
 
 hook OnPlayerUpdate(playerid)
 {
-	new Float:health;
-	GetPlayerHealth(playerid, health);
-
-	if(!IsPlayerOnAdminDuty(playerid) && IsPlayerSpawned(playerid) && health > 99.9)
-	{
-		if(GetTickCountDifference(GetTickCount(), GetPlayerSpawnTick(playerid)) > 3000)
-		{
-			ChatMsgAdmins(3, RED,
-				"[Anti-Health Hack Test] %p(%d) detected. Health: %f", playerid, playerid, health);
-		}
-	}
-
 	if(GetPlayerAnimationIndex(playerid) == 1266)
 	{
 		stop IsPlayerRunning[playerid];
@@ -253,6 +241,7 @@ timer DisableUntilAC[1000]()
 	EnableAntiCheat(11, false); // Anti-Health hack (in vehicle)
 	EnableAntiCheat(5, false); // Anti-Teleport (vehicle to player)
 	EnableAntiCheat(15, false); // Anti-Weapon hack
+	EnableAntiCheat(32, false); // Anti-Carjack hack
 }
 
 hook OnPlayerSpawn(playerid)
@@ -847,19 +836,27 @@ AccuracyWarning(playerid, total)
 
 /*==============================================================================
 
-	Vehicle Health
+ 	Health Hack - Onfoot and vehicle
 
 ==============================================================================*/
 
 
-ptask VehicleHealthCheck[1000](playerid)
+ptask HealthHackCheck[1000](playerid)
 {
-	if(!IsPlayerInAnyVehicle(playerid))
-		return;
-
 	if(IsPlayerOnAdminDuty(playerid))
 		return;
 
+	new Float:health;
+	GetPlayerHealth(playerid, health);
+
+	// Onfoot 
+	if(IsPlayerSpawned(playerid) && health > 99.9)
+		ChatMsgAdmins(3, RED, "[Anti-Health Hack] %p(%d) detected. Health: %f", playerid, playerid, health);
+
+	if(!IsPlayerInAnyVehicle(playerid))
+		return;
+
+	// In vehicle
 	new
 		Float:vehiclehp,
 		vehicleid = GetPlayerVehicleID(playerid);

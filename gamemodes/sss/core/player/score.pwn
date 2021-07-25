@@ -33,6 +33,9 @@ ptask UpdatePlayerScore[MIN(1)](playerid)
 	if(IsPlayerRaidBlock(playerid))
 		return;
 
+	if(IsPlayerInTutorial(playerid))
+		return;
+
 	new
 		score = GetPlayerScore(playerid),
 		horasVivo = score / 60,
