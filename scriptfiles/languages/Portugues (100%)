@@ -206,7 +206,6 @@ TUTORINVADD=Adicionou um Item ao seu Inventário. Se o seu Inventário ficar che
 TUTORITMHOL=Colocou a Arma no Coldre. Armas no Coldre podem ser acessadas rápidamente apertando a tecla Y novamente.
 TUTORITMOPT=Estas são as suas opções para o Item selecionado. Equipar coloca o Item na sua mão. A opção Combinar pode ser selecionada em vários Itens para os tentar combinar.
 TUTORITMUSE=Tentou utilizar um Item com outro Item, pois já está segurando um. Isto pode ser efetuado em certas situações, por exemplo, utilizar um Isqueiro para acender uma Fogueira ou para Carregar uma Arma com Munição e vice-versa.
-TUTORPROMPT=Jogar Tutorial >
 TUTORVEHBIT=Este veiculo esta um pouco quebrado!~n~Para reparar, equipe um Martelo e segure F na frente do veiculo.
 TUTORVEHBRO=Este veiculo esta quebrado!~n~Para corrigir, equipe uma Chave de Fenda e segure F na frente do veiculo.
 TUTORVEHSLI=Este veiculo esta ligeiramente quebrado!~n~Para reparar, equipe uma Chave Inglesa e segure F na frente do veiculo.

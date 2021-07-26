@@ -202,7 +202,6 @@ TUTORINVADD=You added an item to your inventory. If your inventory is full, the 
 TUTORITMHOL=You have holstered an item. Holstered items can be quickly accessed by pressing Y again.
 TUTORITMOPT=These are your options for the selected item. Equip puts it in your hand. Combine can be selected on multiple items to attempt to combine them.
 TUTORITMUSE=You tried to use an item with another item because you're holding one already. This can be used sometimes, for example use a lighter with a campfire to light it or use a weapon with ammo to load it.
-TUTORPROMPT=Play tutorial >
 TUTORVEHBIT=This vehicle is a bit broken! To fix, equip a hammer and hold F while at the front of the vehicle.
 TUTORVEHBRO=This vehicle is broken! To fix, equip a screwdriver and hold F while at the front of the vehicle.
 TUTORVEHSLI=This vehicle is slightly broken! To fix, equip a wrench and hold F while at the front of the vehicle.

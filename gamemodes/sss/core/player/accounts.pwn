@@ -280,7 +280,7 @@ Error:CreateAccount(playerid, const password[])
 
 	SetPlayerRadioFrequency(playerid, 1.0); // Global chat by default
 	
-	//PlayerCreateNewCharacter(playerid);
+	PlayerCreateNewCharacter(playerid);
 	DisplayLoginPrompt(playerid);
 
 	// This can be removed in the future
@@ -394,7 +394,7 @@ stock DisplayLoginPrompt(playerid, badpass = 0)
 			GetPlayerPassHash(playerid, storedhash);
 
 			if(!strcmp(inputhash, storedhash))
-				Login(playerid);
+				LoginPlayer(playerid);
 			else
 			{
 				acc_LoginAttempts[playerid]++;
@@ -429,7 +429,7 @@ stock DisplayLoginPrompt(playerid, badpass = 0)
 ==============================================================================*/
 
 
-stock Login(playerid)
+stock LoginPlayer(playerid)
 {
 	new serial[MAX_GPCI_LEN];
 	gpci(playerid, serial, MAX_GPCI_LEN);
