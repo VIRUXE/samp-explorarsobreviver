@@ -489,7 +489,7 @@ ItemType:		item_LaserPointG	= INVALID_ITEM_TYPE,
 ItemType:		item_Barrel			= INVALID_ITEM_TYPE,
 // 310
 ItemType:		item_CluBellMask 	= INVALID_ITEM_TYPE,
-ItemType:		item_BalaclavaMask		= INVALID_ITEM_TYPE,
+ItemType:		item_BalaclavaMask	= INVALID_ITEM_TYPE,
 ItemType:		item_FireHelmet		= INVALID_ITEM_TYPE,
 ItemType:		item_FireHelmet1	= INVALID_ITEM_TYPE,
 ItemType:		item_HeadPhones		= INVALID_ITEM_TYPE,
