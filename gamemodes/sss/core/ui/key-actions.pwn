@@ -233,7 +233,7 @@ _UpdateKeyActions(playerid)
 			AddToolTipText(playerid, KEYTEXT_DOORS, "Fechadura");
 		}
 
-		AddToolTipText(playerid, KEYTEXT_PUT_AWAY, "Abrir inventario");
+		AddToolTipText(playerid, "~k~~VEHICLE_FIREWEAPON_ALT~", "Abrir inventario");
 
 		ShowPlayerKeyActionUI(playerid);
 		return;
