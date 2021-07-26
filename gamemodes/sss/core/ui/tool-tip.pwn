@@ -51,7 +51,7 @@ ShowHelpTip(playerid, const text[], time = 0)
 	return 1;
 }
 
-hook OnPlayerGetItem(playerid, Item:itemid)
+hook OnPlayerPickedUpItem(playerid, Item:itemid)
 {
 	if(ToolTips[playerid])
 	{
