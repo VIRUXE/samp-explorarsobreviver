@@ -190,22 +190,22 @@ NeedAToolInfo(playerid, Float:vehiclehealth){
 
 CompToolHealth(ItemType:itemtype, Float:health)
 {
-	if(health <= VEHICLE_HEALTH_CHUNK_2)
+	if(health - 2.0 <= VEHICLE_HEALTH_CHUNK_2)
 	{
 		if(itemtype == item_Wrench)
 			return 1;
 	}
-	else if(health <= VEHICLE_HEALTH_CHUNK_3)
+	else if(health - 2.0 <= VEHICLE_HEALTH_CHUNK_3)
 	{
 		if(itemtype == item_Screwdriver)
 			return 1;
 	}
-	else if(health <= VEHICLE_HEALTH_CHUNK_4)
+	else if(health - 2.0 <= VEHICLE_HEALTH_CHUNK_4)
 	{
 		if(itemtype == item_Hammer)
 			return 1;
 	}
-	else if(health <= VEHICLE_HEALTH_MAX)
+	else if(health - 2.0 <= VEHICLE_HEALTH_MAX)
 	{
 		if(itemtype == item_Spanner)
 			return 1;
