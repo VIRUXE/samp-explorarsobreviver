@@ -189,3 +189,14 @@ hook OnPlayerDropItem(playerid, Item:itemid){
 		
 	return Y_HOOKS_CONTINUE_RETURN_0;
 }
+
+/*==============================================================================
+
+	Fast update area to fast pickup item
+	
+==============================================================================*/
+
+hook OnPlayerUpdate(playerid){
+	Streamer_Update(playerid, STREAMER_TYPE_AREA);
+	return 1;
+}
