@@ -93,6 +93,7 @@ public DCC_OnMessageCreate(DCC_Message:message)
 				DCC_GetChannelGuild(channel, guild);
 				DCC_AddGuildMemberRole(guild, discordUser, DCC_FindRoleById("867774790189973514")); // Colocar jogador no cargo "Sobrevivente"
 
+				SendDiscordMessage(channel, "> Conta de Discord `%s` foi vinculada com a Conta de Jogo `%s`", discordUsername, nameProvided);
 				DCC_CreatePrivateChannel(discordUser, "OnWhitelistSuccess", "s", nameProvided); // Enviar Mensagem privada. Pois ao colocar no cargo, o canal whitelist desaparece, logo não dá para ver se enviar mensagem para o canal
 
 				log(true, "[WHITELIST] Discord ID %s (%s) foi atribuido para a conta %s", discordUserId, discordUsername, nameProvided);
