@@ -29,6 +29,9 @@
 #undef MAX_PLAYERS
 #define MAX_PLAYERS						100
 
+#undef MAX_VEHICLES
+#define MAX_VEHICLES					1000 // Default is 2000
+
 // YSI
 #define _DEBUG							0
 #define CGEN_MEMORY						71000//69420
