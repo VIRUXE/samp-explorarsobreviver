@@ -146,6 +146,8 @@ stock AskPlayerToWhitelist(playerid)
 		{
 			if(!wl_Whitelisted[playerid]) 
 				AskPlayerToWhitelist(playerid);
+			else
+				PlayerCreateNewCharacter(playerid);
 		}
 		else
 			KickPlayer(playerid, "Decidiu sair");
