@@ -148,18 +148,29 @@ hook OnButtonPress(playerid, Button:buttonid){
 		new trashid;
 		GetButtonExtraData(buttonid, trashid);
 		if(trashid >= MAX_TRASH){
-			Player_Trash[playerid] = trashid - MAX_TRASH;
-			StartHoldAction(playerid, 6000);
-			ApplyAnimation(playerid, "BOMBER", "BOM_Plant_Loop", 4.0, 1, 0, 0, 0, 0);
-			PlayerPlaySound(playerid,1131,0.0,0.0,0.0);
-			ShowActionText(playerid, "Revistando Lixo...", 6000);
+			if(disable_Trash[trashid - MAX_TRASH]) {
+				ShowActionText(playerid, "~r~Vazio.", 2000);
+			} else {
+				Player_Trash[playerid] = trashid - MAX_TRASH;
+
+				new Float:x, Float:y, Float:z;
+				GetPlayerPos(playerid, x, y, z);
+
+				SetPlayerFacingAngle(playerid,
+					GetAngleToPoint(x, y, Trash_Pos[trashid - MAX_TRASH][0], Trash_Pos[trashid - MAX_TRASH][1]));
+
+				ApplyAnimation(playerid, "COP_AMBIENT", "COPBROWSE_LOOP", 4.0, 1, 0, 0, 0, 0);
+
+				ShowActionText(playerid, "Revistando Lixo...", 6000);
+				StartHoldAction(playerid, 6000);
+			}
 		}
 	}
 }
 
 hook OnHoldActionUpdate(playerid, progress){
     if(Player_Trash[playerid] != -1){
-		if(GetPlayerTotalVelocity(playerid) > 1.0){
+		if(GetPlayerTotalVelocity(playerid) > 1.5){
 			Player_Trash[playerid] = -1;
 			StopHoldAction(playerid);
 			ClearAnimations(playerid);
@@ -172,7 +183,7 @@ hook OnHoldActionUpdate(playerid, progress){
 
 hook OnHoldActionFinish(playerid){
 	if(Player_Trash[playerid] != -1) {
-	    if(disable_Trash[Player_Trash[playerid]] || random(5) == 2) {
+	    if(random(5) == 2) {
 	        ShowActionText(playerid, "~r~Nada encontrado.");
 	    } else {
 			new Float:x, Float:y, Float:z;
