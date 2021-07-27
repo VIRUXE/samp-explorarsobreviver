@@ -1,5 +1,13 @@
+stock DisconnectPlayer(playerid)
+{
+	if(IsPlayerConnected(playerid))
+	{
+		ChatMsg(playerid, WHITE, "Desconectado...");
+		OnPlayerDisconnect(playerid, 1);
+	}
+}
 
-TeleportPlayerToPlayer(playerid, targetid)
+stock TeleportPlayerToPlayer(playerid, targetid)
 {
 	if(targetid == playerid)
 		return 0;
@@ -61,7 +69,7 @@ TeleportPlayerToPlayer(playerid, targetid)
 	return 1;
 }
 
-IsValidUsername(const name[])
+stock IsValidNickname(const name[])
 {
 	new
 		i,
