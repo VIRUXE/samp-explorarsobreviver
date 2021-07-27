@@ -416,7 +416,7 @@ _inv_displaySlotOptions(playerid, slotid)
 				GetPlayerPos(playerid, x, y, z);
 				CreateItemInWorld(itemid2, x, y, z - ITEM_FLOOR_OFFSET, .world = GetPlayerVirtualWorld(playerid), .interior = GetPlayerInterior(playerid));
 
-				ClosePlayerInventory(playerid);
+				DisplayPlayerInventory(playerid);
 			}
 			default: {
 				if(!CallLocalFunction("OnPlayerSelectInventoryOpt", "dd", playerid, listitem - 3)) {

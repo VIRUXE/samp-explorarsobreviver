@@ -345,7 +345,7 @@ _container_displayOptions(playerid, slotid) {
 				GetPlayerPos(playerid, x, y, z);
 				CreateItemInWorld(itemid, x, y, z - ITEM_FLOOR_OFFSET, .world = GetPlayerVirtualWorld(playerid), .interior = GetPlayerInterior(playerid));
 
-				ClosePlayerContainer(playerid);
+				DisplayContainerInventory(playerid, cnt_CurrentContainer[playerid]);
 			}
 			default: {
 				if(!CallLocalFunction("OnPlayerSelectContainerOpt", "ddd", playerid, _:cnt_CurrentContainer[playerid], listitem - 3)) {
