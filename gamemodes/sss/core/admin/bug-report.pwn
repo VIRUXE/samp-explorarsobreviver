@@ -2,18 +2,6 @@
 
 #define MAX_BUG_LENGTH				(128)
 #define MAX_BUGS_PER_PAGE			(32)
-#define ACCOUNTS_TABLE_BUGS			"Bugs"
-#define FIELD_BUGS_NAME				"name"		// 00
-#define FIELD_BUGS_REASON			"reason"	// 01
-#define FIELD_BUGS_DATE				"date"		// 02
-
-enum
-{
-	FIELD_ID_BUGS_NAME,
-	FIELD_ID_BUGS_REASON,
-	FIELD_ID_BUGS_DATE
-}
-
 
 static
 DCC_Channel:	bug_DiscordChannel,
@@ -28,18 +16,15 @@ DBStatement:	stmt_BugInfo;
 
 hook OnGameModeInit()
 {
-	db_free_result(db_query(gAccounts, "CREATE TABLE IF NOT EXISTS "ACCOUNTS_TABLE_BUGS" (\
-		"FIELD_BUGS_NAME" TEXT,\
-		"FIELD_BUGS_REASON" TEXT,\
-		"FIELD_BUGS_DATE" INTEGER)"));
+	db_free_result(db_query(gAccountsDatabase, "CREATE TABLE IF NOT EXISTS Bugs (name TEXT,reason TEXT,date INTEGER)"));
 
-	DatabaseTableCheck(gAccounts, ACCOUNTS_TABLE_BUGS, 3);
+	DatabaseTableCheck(gAccountsDatabase, "Bugs", 3);
 
-	stmt_BugInsert	= db_prepare(gAccounts, "INSERT INTO "ACCOUNTS_TABLE_BUGS" VALUES(?, ?, ?)");
-	stmt_BugDelete	= db_prepare(gAccounts, "DELETE FROM "ACCOUNTS_TABLE_BUGS" WHERE rowid = ?");
-	stmt_BugList	= db_prepare(gAccounts, "SELECT "FIELD_BUGS_NAME", "FIELD_BUGS_REASON", rowid FROM "ACCOUNTS_TABLE_BUGS"");
-	stmt_BugTotal	= db_prepare(gAccounts, "SELECT COUNT(*) FROM "ACCOUNTS_TABLE_BUGS"");
-	stmt_BugInfo	= db_prepare(gAccounts, "SELECT * FROM "ACCOUNTS_TABLE_BUGS" WHERE rowid = ? LIMIT 1");
+	stmt_BugInsert	= db_prepare(gAccountsDatabase, "INSERT INTO Bugs VALUES(?, ?, ?)");
+	stmt_BugDelete	= db_prepare(gAccountsDatabase, "DELETE FROM Bugs WHERE rowid = ?");
+	stmt_BugList	= db_prepare(gAccountsDatabase, "SELECT name, reason, rowid FROM Bugs");
+	stmt_BugTotal	= db_prepare(gAccountsDatabase, "SELECT COUNT(*) FROM Bugs");
+	stmt_BugInfo	= db_prepare(gAccountsDatabase, "SELECT * FROM Bugs WHERE rowid = ? LIMIT 1");
 
 	bug_DiscordChannel = DCC_FindChannelById("861041187233464340");
 }

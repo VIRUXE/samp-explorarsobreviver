@@ -4,19 +4,11 @@
 
 #define MAX_GPCI_LOG_RESULTS	(32)
 
-#define ACCOUNTS_TABLE_GPCI		"gpci_log"
-#define FIELD_GPCI_NAME			"name"		// 00
-#define FIELD_GPCI_GPCI			"hash"		// 01
-#define FIELD_GPCI_DATE			"date"		// 02
-
 enum e_gpci_list_output_structure
 {
 	gpci_name[MAX_PLAYER_NAME],
 	gpci_gpci[MAX_GPCI_LEN],
-	gpci_date
-}
-
-
+	gpci_dat 
 static
 DBStatement:	stmt_GpciInsert,
 DBStatement:	stmt_GpciCheckName,
@@ -26,17 +18,14 @@ DBStatement:	stmt_GpciGetRecordsFromName;
 
 hook OnGameModeInit()
 {
-	db_query(gAccounts, "CREATE TABLE IF NOT EXISTS "ACCOUNTS_TABLE_GPCI" (\
-		"FIELD_GPCI_NAME" TEXT,\
-		"FIELD_GPCI_GPCI" TEXT,\
-		"FIELD_GPCI_DATE" INTEGER)");
+	db_query(gAccountsDatabase, "CREATE TABLE IF NOT EXISTS gpci_log (name TEXT, hash TEXT, date INTEGER)");
 
-	DatabaseTableCheck(gAccounts, ACCOUNTS_TABLE_GPCI, 3);
+	DatabaseTableCheck(gAccountsDatabase, "gpci_log", 3);
 
-	stmt_GpciInsert				= db_prepare(gAccounts, "INSERT INTO "ACCOUNTS_TABLE_GPCI" VALUES(?,?,?)");
-	stmt_GpciCheckName			= db_prepare(gAccounts, "SELECT COUNT(*) FROM "ACCOUNTS_TABLE_GPCI" WHERE "FIELD_GPCI_NAME"=? AND "FIELD_GPCI_GPCI"=?");
-	stmt_GpciGetRecordsFromGpci	= db_prepare(gAccounts, "SELECT * FROM "ACCOUNTS_TABLE_GPCI" WHERE "FIELD_GPCI_GPCI"=? ORDER BY "FIELD_GPCI_DATE" DESC");
-	stmt_GpciGetRecordsFromName	= db_prepare(gAccounts, "SELECT * FROM "ACCOUNTS_TABLE_GPCI" WHERE "FIELD_GPCI_NAME"=? COLLATE NOCASE ORDER BY "FIELD_GPCI_DATE" DESC");
+	stmt_GpciInsert				= db_prepare(gAccountsDatabase, "INSERT INTO gpci_log VALUES(?,?,?)");
+	stmt_GpciCheckName			= db_prepare(gAccountsDatabase, "SELECT COUNT(*) FROM gpci_log WHERE name=? AND hash=?");
+	stmt_GpciGetRecordsFromGpci	= db_prepare(gAccountsDatabase, "SELECT * FROM gpci_log WHERE hash=? ORDER BY date DESC");
+	stmt_GpciGetRecordsFromName	= db_prepare(gAccountsDatabase, "SELECT * FROM gpci_log WHERE name=? COLLATE NOCASE ORDER BY date DESC");
 }
 
 hook OnPlayerConnect(playerid)
@@ -57,7 +46,7 @@ hook OnPlayerConnect(playerid)
 
 	stmt_fetch_row(stmt_GpciCheckName);
 
-	if(count == 0)
+	if(!count)
 	{
 		stmt_bind_value(stmt_GpciInsert, 0, DB::TYPE_STRING, name, MAX_PLAYER_NAME);
 		stmt_bind_value(stmt_GpciInsert, 1, DB::TYPE_STRING, hash, MAX_GPCI_LEN);
@@ -132,21 +121,13 @@ ShowAccountGpciHistoryFromGpci(playerid, hash[MAX_GPCI_LEN])
 		count;
 
 	if(!GetAccountGpciHistoryFromGpci(hash, list, MAX_GPCI_LOG_RESULTS, count))
-	{
-		ChatMsg(playerid, YELLOW, " » Failed");
-		return 1;
-	}
+		return ChatMsg(playerid, YELLOW, " » Failed");
 
-	if(count == 0)
-	{
-		ChatMsg(playerid, YELLOW, " » No results");
-		return 1;
-	}
+	if(!count)
+		return ChatMsg(playerid, YELLOW, " » No results");
 
 	for(new i; i < count; i++)
-	{
 		strcat(newlist[i], list[i][gpci_name], MAX_PLAYER_NAME);
-	}
 
 	ShowPlayerList(playerid, newlist, count, true);
 
@@ -161,23 +142,15 @@ ShowAccountGpciHistoryFromName(playerid, name[])
 		count;
 
 	if(!GetAccountGpciHistoryFromName(name, list, MAX_GPCI_LOG_RESULTS, count))
-	{
-		ChatMsg(playerid, YELLOW, " » Failed");
-		return 1;
-	}
+		return ChatMsg(playerid, YELLOW, " » Failed");
 
-	if(count == 0)
-	{
-		ChatMsg(playerid, YELLOW, " » No results");
-		return 1;
-	}
+	if(!count)
+		return ChatMsg(playerid, YELLOW, " » No results");
 
 	gBigString[playerid][0] = EOS;
 
 	for(new i; i < count; i++)
-	{
 		strcat(newlist[i], list[i][gpci_name], MAX_PLAYER_NAME);
-	}
 
 	ShowPlayerList(playerid, newlist, count, true);
 

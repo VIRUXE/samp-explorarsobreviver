@@ -11,10 +11,10 @@ DBStatement:	stmt_AliasesFromAll;
 
 hook OnGameModeInit()
 {
-	stmt_AliasesFromIp = db_prepare(gAccounts, "SELECT "FIELD_PLAYER_NAME" FROM "ACCOUNTS_TABLE_PLAYER" WHERE "FIELD_PLAYER_IPV4"=? AND "FIELD_PLAYER_ACTIVE"=1 AND "FIELD_PLAYER_NAME"!=? COLLATE NOCASE");
-	stmt_AliasesFromPass = db_prepare(gAccounts, "SELECT "FIELD_PLAYER_NAME" FROM "ACCOUNTS_TABLE_PLAYER" WHERE "FIELD_PLAYER_PASS"=? AND "FIELD_PLAYER_ACTIVE"=1 AND "FIELD_PLAYER_NAME"!=? COLLATE NOCASE");
-	stmt_AliasesFromHash = db_prepare(gAccounts, "SELECT "FIELD_PLAYER_NAME" FROM "ACCOUNTS_TABLE_PLAYER" WHERE "FIELD_PLAYER_GPCI"=? AND "FIELD_PLAYER_ACTIVE"=1 AND "FIELD_PLAYER_NAME"!=? COLLATE NOCASE");
-	stmt_AliasesFromAll = db_prepare(gAccounts, "SELECT "FIELD_PLAYER_NAME" FROM "ACCOUNTS_TABLE_PLAYER" WHERE ("FIELD_PLAYER_PASS"=? OR "FIELD_PLAYER_IPV4"=? OR "FIELD_PLAYER_GPCI" = ?) AND "FIELD_PLAYER_ACTIVE"=1 AND "FIELD_PLAYER_NAME"!=? COLLATE NOCASE");
+	stmt_AliasesFromIp 		= db_prepare(gAccountsDatabase, "SELECT name FROM Player WHERE ipv4=? AND active=1 AND name!=? COLLATE NOCASE");
+	stmt_AliasesFromPass 	= db_prepare(gAccountsDatabase, "SELECT name FROM Player WHERE pass=? AND active=1 AND name!=? COLLATE NOCASE");
+	stmt_AliasesFromHash 	= db_prepare(gAccountsDatabase, "SELECT name FROM Player WHERE gpci=? AND active=1 AND name!=? COLLATE NOCASE");
+	stmt_AliasesFromAll 	= db_prepare(gAccountsDatabase, "SELECT name FROM Player WHERE (pass=? OR ipv4=? OR gpci = ?) AND active=1 AND name!=? COLLATE NOCASE");
 }
 
 stock GetAccountAliasesByIP(name[], list[][MAX_PLAYER_NAME], &count, max, &adminlevel)

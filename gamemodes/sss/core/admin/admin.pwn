@@ -2,10 +2,6 @@
 
 
 #define MAX_ADMIN_LEVELS			(7)
-#define ACCOUNTS_TABLE_ADMINS		"Admins"
-#define FIELD_ADMINS_NAME			"name"		// 00
-#define FIELD_ADMINS_LEVEL			"level"		// 01
-
 
 enum
 {
@@ -65,18 +61,16 @@ static
 
 hook OnScriptInit()
 {
-	db_free_result(db_query(gAccounts, "CREATE TABLE IF NOT EXISTS "ACCOUNTS_TABLE_ADMINS" (\
-		"FIELD_ADMINS_NAME" TEXT,\
-		"FIELD_ADMINS_LEVEL" INTEGER)"));
+	db_free_result(db_query(gAccountsDatabase, "CREATE TABLE IF NOT EXISTS Admins (name TEXT, level INTEGER)"));
 
-	DatabaseTableCheck(gAccounts, ACCOUNTS_TABLE_ADMINS, 2);
+	DatabaseTableCheck(gAccountsDatabase, "Admins", 2);
 
-	stmt_AdminLoadAll	= db_prepare(gAccounts, "SELECT * FROM "ACCOUNTS_TABLE_ADMINS" ORDER BY "FIELD_ADMINS_LEVEL" DESC");
-	stmt_AdminExists	= db_prepare(gAccounts, "SELECT COUNT(*) FROM "ACCOUNTS_TABLE_ADMINS" WHERE "FIELD_ADMINS_NAME" = ?");
-	stmt_AdminInsert	= db_prepare(gAccounts, "INSERT INTO "ACCOUNTS_TABLE_ADMINS" VALUES(?, ?)");
-	stmt_AdminUpdate	= db_prepare(gAccounts, "UPDATE "ACCOUNTS_TABLE_ADMINS" SET "FIELD_ADMINS_LEVEL" = ? WHERE "FIELD_ADMINS_NAME" = ?");
-	stmt_AdminDelete	= db_prepare(gAccounts, "DELETE FROM "ACCOUNTS_TABLE_ADMINS" WHERE "FIELD_ADMINS_NAME" = ?");
-	stmt_AdminGetLevel	= db_prepare(gAccounts, "SELECT * FROM "ACCOUNTS_TABLE_ADMINS" WHERE "FIELD_ADMINS_NAME" = ?");
+	stmt_AdminLoadAll	= db_prepare(gAccountsDatabase, "SELECT * FROM Admins ORDER BY level DESC");
+	stmt_AdminExists	= db_prepare(gAccountsDatabase, "SELECT COUNT(*) FROM Admins WHERE name = ?");
+	stmt_AdminInsert	= db_prepare(gAccountsDatabase, "INSERT INTO Admins VALUES(?, ?)");
+	stmt_AdminUpdate	= db_prepare(gAccountsDatabase, "UPDATE Admins SET level = ? WHERE name = ?");
+	stmt_AdminDelete	= db_prepare(gAccountsDatabase, "DELETE FROM Admins WHERE name = ?");
+	stmt_AdminGetLevel	= db_prepare(gAccountsDatabase, "SELECT * FROM Admins WHERE name = ?");
 
 	LoadAdminData();
 }

@@ -14,7 +14,7 @@ stock SendDiscordMessage(DCC_Channel:channel, const fmat[], va_args<>)
 stock bool:DoesDiscordIdExist(const discordId[DCC_ID_SIZE])
 {
 	new
-		DBStatement:stmt_IdExists = db_prepare(gAccounts, "SELECT COUNT(*) FROM Player WHERE discord_id=? COLLATE NOCASE"),
+		DBStatement:stmt_IdExists = db_prepare(gAccountsDatabase, "SELECT COUNT(*) FROM Player WHERE discord_id=? COLLATE NOCASE"),
 		count;
 
 	log(true, "DoesDiscordIdExist - DiscordId: %s", discordId);

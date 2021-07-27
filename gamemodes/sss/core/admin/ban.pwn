@@ -1,27 +1,6 @@
 #include <YSI_Coding\y_hooks>
 
-
 #define MAX_BAN_REASON (128)
-#define ACCOUNTS_TABLE_BANS			"Bans"
-#define FIELD_BANS_NAME				"name"		// 00
-#define FIELD_BANS_IPV4				"ipv4"		// 01
-#define FIELD_BANS_DATE				"date"		// 02
-#define FIELD_BANS_REASON			"reason"	// 03
-#define FIELD_BANS_BY				"by"		// 04
-#define FIELD_BANS_DURATION			"duration"	// 05
-#define FIELD_BANS_ACTIVE			"active"	// 06
-
-enum
-{
-	FIELD_ID_BANS_NAME,
-	FIELD_ID_BANS_IPV4,
-	FIELD_ID_BANS_DATE,
-	FIELD_ID_BANS_REASON,
-	FIELD_ID_BANS_BY,
-	FIELD_ID_BANS_DURATION,
-	FIELD_ID_BANS_ACTIVE
-}
-
 
 static
 DBStatement:	stmt_BanInsert,
@@ -39,31 +18,24 @@ DBStatement:	stmt_BanSetDuration;
 
 hook OnGameModeInit()
 {
-	db_free_result(db_query(gAccounts, "CREATE TABLE IF NOT EXISTS "ACCOUNTS_TABLE_BANS" (\
-		"FIELD_BANS_NAME" TEXT,\
-		"FIELD_BANS_IPV4" INTEGER,\
-		"FIELD_BANS_DATE" INTEGER,\
-		"FIELD_BANS_REASON" TEXT,\
-		"FIELD_BANS_BY" TEXT,\
-		"FIELD_BANS_DURATION" INTEGER,\
-		"FIELD_BANS_ACTIVE" INTEGER)"));
+	db_free_result(db_query(gAccountsDatabase, "CREATE TABLE IF NOT EXISTS Player (name TEXT, ipv4 INTEGER, date INTEGER, reason TEXT, by TEXT, duration INTEGER, active INTEGER)"));
 
-	DatabaseTableCheck(gAccounts, ACCOUNTS_TABLE_BANS, 7);
+	DatabaseTableCheck(gAccountsDatabase, "Bans", 7);
 
-	stmt_BanInsert				= db_prepare(gAccounts, "INSERT INTO "ACCOUNTS_TABLE_BANS" VALUES(?, ?, ?, ?, ?, ?, 1)");
-	stmt_BanUnban				= db_prepare(gAccounts, "UPDATE "ACCOUNTS_TABLE_BANS" SET "FIELD_BANS_ACTIVE"=0 WHERE "FIELD_BANS_NAME" = ? COLLATE NOCASE");
-	stmt_BanGetFromNameIp		= db_prepare(gAccounts, "SELECT COUNT(*), "FIELD_BANS_DATE", "FIELD_BANS_REASON", "FIELD_BANS_DURATION" FROM "ACCOUNTS_TABLE_BANS" WHERE ("FIELD_BANS_NAME" = ? COLLATE NOCASE OR "FIELD_BANS_IPV4" = ?) AND "FIELD_BANS_ACTIVE"=1 ORDER BY "FIELD_BANS_DATE" DESC");
-	stmt_BanNameCheck			= db_prepare(gAccounts, "SELECT COUNT(*) FROM "ACCOUNTS_TABLE_BANS" WHERE "FIELD_BANS_ACTIVE"=1 AND "FIELD_BANS_NAME" = ? COLLATE NOCASE ORDER BY "FIELD_BANS_DATE" DESC");
-	stmt_BanGetList				= db_prepare(gAccounts, "SELECT * FROM "ACCOUNTS_TABLE_BANS" WHERE "FIELD_BANS_ACTIVE"=1 ORDER BY "FIELD_BANS_DATE" DESC LIMIT ?, ? COLLATE NOCASE");
-	stmt_BanGetTotal			= db_prepare(gAccounts, "SELECT COUNT(*) FROM "ACCOUNTS_TABLE_BANS" WHERE "FIELD_BANS_ACTIVE"=1");
-	stmt_BanGetInfo				= db_prepare(gAccounts, "SELECT * FROM "ACCOUNTS_TABLE_BANS" WHERE "FIELD_BANS_NAME" = ? COLLATE NOCASE ORDER BY "FIELD_BANS_DATE" DESC");
-	stmt_BanUpdateInfo			= db_prepare(gAccounts, "UPDATE "ACCOUNTS_TABLE_BANS" SET "FIELD_BANS_REASON" = ?, "FIELD_BANS_DURATION" = ? WHERE "FIELD_BANS_NAME" = ? COLLATE NOCASE");
-	stmt_BanSetIpv4				= db_prepare(gAccounts, "UPDATE "ACCOUNTS_TABLE_BANS" SET "FIELD_BANS_IPV4" = ? WHERE "FIELD_BANS_NAME" = ? COLLATE NOCASE");
-	stmt_BanSetReason			= db_prepare(gAccounts, "UPDATE "ACCOUNTS_TABLE_BANS" SET "FIELD_BANS_REASON" = ? WHERE "FIELD_BANS_NAME" = ? COLLATE NOCASE");
-	stmt_BanSetDuration			= db_prepare(gAccounts, "UPDATE "ACCOUNTS_TABLE_BANS" SET "FIELD_BANS_DURATION" = ? WHERE "FIELD_BANS_NAME" = ? COLLATE NOCASE");
+	stmt_BanInsert				= db_prepare(gAccountsDatabase, "INSERT INTO Player VALUES(?, ?, ?, ?, ?, ?, 1)");
+	stmt_BanUnban				= db_prepare(gAccountsDatabase, "UPDATE Player SET active=0 WHERE name = ? COLLATE NOCASE");
+	stmt_BanGetFromNameIp		= db_prepare(gAccountsDatabase, "SELECT COUNT(*), date, reason, duration FROM Player WHERE (name = ? COLLATE NOCASE OR ipv4 = ?) AND active=1 ORDER BY date DESC");
+	stmt_BanNameCheck			= db_prepare(gAccountsDatabase, "SELECT COUNT(*) FROM Player WHERE active=1 AND name = ? COLLATE NOCASE ORDER BY date DESC");
+	stmt_BanGetList				= db_prepare(gAccountsDatabase, "SELECT * FROM Player WHERE active=1 ORDER BY date DESC LIMIT ?, ? COLLATE NOCASE");
+	stmt_BanGetTotal			= db_prepare(gAccountsDatabase, "SELECT COUNT(*) FROM Player WHERE active=1");
+	stmt_BanGetInfo				= db_prepare(gAccountsDatabase, "SELECT * FROM Player WHERE name = ? COLLATE NOCASE ORDER BY date DESC");
+	stmt_BanUpdateInfo			= db_prepare(gAccountsDatabase, "UPDATE Player SET reason = ?, duration = ? WHERE name = ? COLLATE NOCASE");
+	stmt_BanSetIpv4				= db_prepare(gAccountsDatabase, "UPDATE Player SET ipv4 = ? WHERE name = ? COLLATE NOCASE");
+	stmt_BanSetReason			= db_prepare(gAccountsDatabase, "UPDATE Player SET reason = ? WHERE name = ? COLLATE NOCASE");
+	stmt_BanSetDuration			= db_prepare(gAccountsDatabase, "UPDATE Player SET duration = ? WHERE name = ? COLLATE NOCASE");
 }
 
-BanPlayer(playerid, const reason[], byid, duration)
+BanPlayer(playerid, const reason[MAX_BAN_REASON], byid, duration)
 {
 	new name[MAX_PLAYER_NAME];
 
@@ -81,8 +53,11 @@ BanPlayer(playerid, const reason[], byid, duration)
 
 	if(stmt_execute(stmt_BanInsert))
 	{
+		new formattedReason[16+MAX_BAN_REASON];
+
+		format(formattedReason, sizeof(formattedReason), "Banido. Razão: %s", reason);
 		ChatMsgLang(playerid, YELLOW, "BANNEDMESSG", reason);
-		KickPlayer(playerid, reason);
+		KickPlayer(playerid, formattedReason);
 
 		return 1;
 	}
@@ -90,7 +65,7 @@ BanPlayer(playerid, const reason[], byid, duration)
 	return 0;
 }
 
-BanPlayerByName(const name[], const reason[], byid, duration)
+BanPlayerByName(const name[MAX_PLAYER_NAME], const reason[MAX_BAN_REASON], byid, duration)
 {
 	new
 		forname[MAX_PLAYER_NAME],
@@ -115,8 +90,11 @@ BanPlayerByName(const name[], const reason[], byid, duration)
 		GetAccountIP(name, ip);
 	else
 	{
+		new formattedReason[16+MAX_BAN_REASON];
+
 		ip = GetPlayerIpAsInt(id);
-		KickPlayer(id, "Banido");
+		format(formattedReason, sizeof(formattedReason), "Banido. Razão: %s", reason);
+		KickPlayer(id, formattedReason);
 	}
 
 	stmt_bind_value(stmt_BanInsert, 0, DB::TYPE_STRING, name, MAX_PLAYER_NAME);

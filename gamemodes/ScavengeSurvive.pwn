@@ -371,7 +371,7 @@ bool:	gServerRestarting = false,
 
 // DATABASES
 new
-DB:		gAccounts;
+DB:		gAccountsDatabase;
 
 // GLOBAL SERVER SETTINGS (Todo: modularise)
 new
@@ -763,7 +763,7 @@ OnGameModeInit_Setup()
 		CreateDir(DIRECTORY_SCRIPTFILES DIRECTORY_MAIN);
 	}
 
-	gAccounts = db_open_persistent(ACCOUNT_DATABASE);
+	gAccountsDatabase = db_open_persistent(ACCOUNT_DATABASE);
 
 	LoadSettings();
 

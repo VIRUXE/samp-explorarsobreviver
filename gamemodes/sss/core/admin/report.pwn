@@ -2,25 +2,11 @@
 #include <YSI_Coding\y_hooks>
 
 
-#define MAX_REPORT_REASON_LENGTH	(128)
-#define MAX_REPORT_TYPE_LENGTH		(10)
-#define MAX_REPORT_INFO_LENGTH		(128)
-#define MAX_REPORTS_PER_PAGE		(32)
-#define MAX_REPORT_TYPES			(5)
-#define ACCOUNTS_TABLE_REPORTS		"Reports"
-#define FIELD_REPORTS_NAME			"name"		// 00
-#define FIELD_REPORTS_REASON		"reason"	// 01
-#define FIELD_REPORTS_DATE			"date"		// 02
-#define FIELD_REPORTS_READ			"read"		// 03
-#define FIELD_REPORTS_TYPE			"type"		// 04
-#define FIELD_REPORTS_POSX			"posx"		// 05
-#define FIELD_REPORTS_POSY			"posy"		// 06
-#define FIELD_REPORTS_POSZ			"posz"		// 07
-#define FIELD_REPORTS_POSW			"world"		// 08
-#define FIELD_REPORTS_POSI			"interior"	// 09
-#define FIELD_REPORTS_INFO			"info"		// 10
-#define FIELD_REPORTS_BY			"by"		// 11
-#define FIELD_REPORTS_ACTIVE		"active"	// 12
+#define MAX_REPORT_REASON_LENGTH	128
+#define MAX_REPORT_TYPE_LENGTH		10
+#define MAX_REPORT_INFO_LENGTH		128
+#define MAX_REPORTS_PER_PAGE		32
+#define MAX_REPORT_TYPES			5
 
 // Report types
 #define REPORT_TYPE_PLAYER_ID		"PLY ID"
@@ -41,23 +27,6 @@
 #define REPORT_TYPE_BADHITOFFSET	"BHIT"
 #define REPORT_TYPE_BAD_SHOT_WEAP	"BSHT"
 
-enum
-{
-	FIELD_ID_REPORTS_NAME,
-	FIELD_ID_REPORTS_REASON,
-	FIELD_ID_REPORTS_DATE,
-	FIELD_ID_REPORTS_READ,
-	FIELD_ID_REPORTS_TYPE,
-	FIELD_ID_REPORTS_POSX,
-	FIELD_ID_REPORTS_POSY,
-	FIELD_ID_REPORTS_POSZ,
-	FIELD_ID_REPORTS_POSW,
-	FIELD_ID_REPORTS_POSI,
-	FIELD_ID_REPORTS_INFO,
-	FIELD_ID_REPORTS_BY,
-	FIELD_ID_REPORTS_ACTIVE
-}
-
 enum e_report_list_struct
 {
 	report_name[MAX_PLAYER_NAME],
@@ -65,6 +34,7 @@ enum e_report_list_struct
 	report_read,
 	report_rowid
 }
+
 static
 DBStatement:	stmt_ReportInsert,
 DBStatement:	stmt_ReportDelete,
@@ -86,32 +56,19 @@ DBStatement:	stmt_ReportGetUnread;
 
 hook OnGameModeInit()
 {
-	db_query(gAccounts, "CREATE TABLE IF NOT EXISTS "ACCOUNTS_TABLE_REPORTS" (\
-		"FIELD_REPORTS_NAME" TEXT,\
-		"FIELD_REPORTS_REASON" TEXT,\
-		"FIELD_REPORTS_DATE" INTEGER,\
-		"FIELD_REPORTS_READ" INTEGER,\
-		"FIELD_REPORTS_TYPE" TEXT,\
-		"FIELD_REPORTS_POSX" REAL,\
-		"FIELD_REPORTS_POSY" REAL,\
-		"FIELD_REPORTS_POSZ" REAL,\
-		"FIELD_REPORTS_POSW" INTEGER,\
-		"FIELD_REPORTS_POSI" INTEGER,\
-		"FIELD_REPORTS_INFO" TEXT,\
-		"FIELD_REPORTS_BY" TEXT,\
-		"FIELD_REPORTS_ACTIVE" INTEGER)");
+	db_query(gAccountsDatabase, "CREATE TABLE IF NOT EXISTS Reports (name TEXT, reason TEXT, date INTEGER, read INTEGER, type TEXT, posx REAL, posy REAL, posz REAL, world INTEGER, interior INTEGER, info TEXT, by TEXT, active INTEGER)");
 
-	DatabaseTableCheck(gAccounts, ACCOUNTS_TABLE_REPORTS, 13);
+	DatabaseTableCheck(gAccountsDatabase, "Reports", 13);
 
-	stmt_ReportInsert		= db_prepare(gAccounts, "INSERT INTO "ACCOUNTS_TABLE_REPORTS" VALUES(?, ?, ?, '0', ?, ?, ?, ?, ?, ?, ?, ?, 1)");
-	stmt_ReportDelete		= db_prepare(gAccounts, "UPDATE "ACCOUNTS_TABLE_REPORTS" SET "FIELD_REPORTS_ACTIVE"=0, "FIELD_REPORTS_READ"=1 WHERE rowid = ?");
-	stmt_ReportDeleteName	= db_prepare(gAccounts, "UPDATE "ACCOUNTS_TABLE_REPORTS" SET "FIELD_REPORTS_ACTIVE"=0, "FIELD_REPORTS_READ"=1 WHERE "FIELD_REPORTS_NAME" = ?");
-	stmt_ReportDeleteRead	= db_prepare(gAccounts, "UPDATE "ACCOUNTS_TABLE_REPORTS" SET "FIELD_REPORTS_ACTIVE"=0, "FIELD_REPORTS_READ"=1 WHERE "FIELD_REPORTS_READ" = 1");
-	stmt_ReportNameExists	= db_prepare(gAccounts, "SELECT COUNT(*) FROM "ACCOUNTS_TABLE_REPORTS" WHERE "FIELD_REPORTS_NAME" = ?");
-	stmt_ReportList			= db_prepare(gAccounts, "SELECT "FIELD_REPORTS_NAME", "FIELD_REPORTS_READ", "FIELD_REPORTS_TYPE", rowid FROM "ACCOUNTS_TABLE_REPORTS" WHERE "FIELD_REPORTS_ACTIVE"=1");
-	stmt_ReportInfo			= db_prepare(gAccounts, "SELECT * FROM "ACCOUNTS_TABLE_REPORTS" WHERE rowid = ?");
-	stmt_ReportSetRead		= db_prepare(gAccounts, "UPDATE "ACCOUNTS_TABLE_REPORTS" SET "FIELD_REPORTS_READ" = ? WHERE rowid = ?");
-	stmt_ReportGetUnread	= db_prepare(gAccounts, "SELECT COUNT(*) FROM "ACCOUNTS_TABLE_REPORTS" WHERE "FIELD_REPORTS_READ" = 0");
+	stmt_ReportInsert		= db_prepare(gAccountsDatabase, "INSERT INTO Reports VALUES(?, ?, ?, '0', ?, ?, ?, ?, ?, ?, ?, ?, 1)");
+	stmt_ReportDelete		= db_prepare(gAccountsDatabase, "UPDATE Reports SET active=0, read=1 WHERE rowid = ?");
+	stmt_ReportDeleteName	= db_prepare(gAccountsDatabase, "UPDATE Reports SET active=0, read=1 WHERE name = ?");
+	stmt_ReportDeleteRead	= db_prepare(gAccountsDatabase, "UPDATE Reports SET active=0, read=1 WHERE read = 1");
+	stmt_ReportNameExists	= db_prepare(gAccountsDatabase, "SELECT COUNT(*) FROM Reports WHERE name = ?");
+	stmt_ReportList			= db_prepare(gAccountsDatabase, "SELECT name, read, type, rowid FROM Reports WHERE active=1");
+	stmt_ReportInfo			= db_prepare(gAccountsDatabase, "SELECT * FROM Reports WHERE rowid = ?");
+	stmt_ReportSetRead		= db_prepare(gAccountsDatabase, "UPDATE Reports SET read = ? WHERE rowid = ?");
+	stmt_ReportGetUnread	= db_prepare(gAccountsDatabase, "SELECT COUNT(*) FROM Reports WHERE read = 0");
 }
 
 

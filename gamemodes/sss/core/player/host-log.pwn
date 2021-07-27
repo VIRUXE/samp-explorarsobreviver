@@ -1,11 +1,6 @@
 #include <YSI_Coding\y_hooks>
 
 
-#define ACCOUNTS_TABLE_HOST		"host_log"
-#define FIELD_HOST_NAME			"name"		// 00
-#define FIELD_HOST_HOST			"host"		// 01
-#define FIELD_HOST_DATE			"date"		// 02
-
 enum e_host_list_output_structure
 {
 	host_name[MAX_PLAYER_NAME],
@@ -26,17 +21,14 @@ DBStatement:	stmt_HostGetRecordsFromName;
 
 hook OnGameModeInit()
 {
-	db_query(gAccounts, "CREATE TABLE IF NOT EXISTS "ACCOUNTS_TABLE_HOST" (\
-		"FIELD_HOST_NAME" TEXT,\
-		"FIELD_HOST_HOST" TEXT,\
-		"FIELD_HOST_DATE" INTEGER)");
+	db_query(gAccountsDatabase, "CREATE TABLE IF NOT EXISTS host_log (name TEXT, host TEXT, date INTEGER)");
 
-	DatabaseTableCheck(gAccounts, ACCOUNTS_TABLE_HOST, 3);
+	DatabaseTableCheck(gAccountsDatabase, "host_log", 3);
 
-	stmt_HostInsert				= db_prepare(gAccounts, "INSERT INTO "ACCOUNTS_TABLE_HOST" VALUES(?,?,?)");
-	stmt_HostCheckName			= db_prepare(gAccounts, "SELECT COUNT(*) FROM "ACCOUNTS_TABLE_HOST" WHERE "FIELD_HOST_NAME"=? AND "FIELD_HOST_HOST"=?");
-	stmt_HostGetRecordsFromHost	= db_prepare(gAccounts, "SELECT * FROM "ACCOUNTS_TABLE_HOST" WHERE "FIELD_HOST_HOST"=?");
-	stmt_HostGetRecordsFromName	= db_prepare(gAccounts, "SELECT * FROM "ACCOUNTS_TABLE_HOST" WHERE "FIELD_HOST_NAME"=? COLLATE NOCASE");
+	stmt_HostInsert				= db_prepare(gAccountsDatabase, "INSERT INTO host_log VALUES(?,?,?)");
+	stmt_HostCheckName			= db_prepare(gAccountsDatabase, "SELECT COUNT(*) FROM host_log WHERE name=? AND host=?");
+	stmt_HostGetRecordsFromHost	= db_prepare(gAccountsDatabase, "SELECT * FROM host_log WHERE host=?");
+	stmt_HostGetRecordsFromName	= db_prepare(gAccountsDatabase, "SELECT * FROM host_log WHERE name=? COLLATE NOCASE");
 }
 
 hook OnPlayerConnect(playerid)
@@ -138,7 +130,7 @@ ACMD:hhname[4](playerid, params[])
 		return 1;
 	}
 
-	if(count == 0)
+	if(!count)
 	{
 		Msg(playerid, YELLOW, " » No results");
 		return 1;
@@ -183,7 +175,7 @@ public OnReverseDNS(ip[], host[], extra)
 
 		stmt_fetch_row(stmt_HostCheckName);
 
-		if(count == 0)
+		if(!count)
 		{
 			stmt_bind_value(stmt_HostInsert, 0, DB::TYPE_STRING, name, MAX_PLAYER_NAME);
 			stmt_bind_value(stmt_HostInsert, 1, DB::TYPE_STRING, host, MAX_HOST_LEN);
@@ -208,7 +200,7 @@ public OnReverseDNS(ip[], host[], extra)
 			return 1;
 		}
 
-		if(count == 0)
+		if(!count)
 		{
 			Msg(extra, YELLOW, " » No results");
 			return 1;

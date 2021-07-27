@@ -4,11 +4,6 @@
 
 #define MAX_IPV4_LOG_RESULTS	(32)
 
-#define ACCOUNTS_TABLE_IPV4		"ipv4_log"
-#define FIELD_IPV4_NAME			"name"		// 00
-#define FIELD_IPV4_IPV4			"ipv4"		// 01
-#define FIELD_IPV4_DATE			"date"		// 02
-
 enum e_ipv4_list_output_structure
 {
 	ipv4_name[MAX_PLAYER_NAME],
@@ -26,17 +21,14 @@ DBStatement:	stmt_Ipv4GetRecordsFromName;
 
 hook OnGameModeInit()
 {
-	db_query(gAccounts, "CREATE TABLE IF NOT EXISTS "ACCOUNTS_TABLE_IPV4" (\
-		"FIELD_IPV4_NAME" TEXT,\
-		"FIELD_IPV4_IPV4" INTEGER,\
-		"FIELD_IPV4_DATE" INTEGER)");
+	db_query(gAccountsDatabase, "CREATE TABLE IF NOT EXISTS ipv4_log (name TEXT, ipv4 INTEGER, date INTEGER)");
 
-	DatabaseTableCheck(gAccounts, ACCOUNTS_TABLE_IPV4, 3);
+	DatabaseTableCheck(gAccountsDatabase, "ipv4_log", 3);
 
-	stmt_Ipv4Insert				= db_prepare(gAccounts, "INSERT INTO "ACCOUNTS_TABLE_IPV4" VALUES(?,?,?)");
-	stmt_Ipv4CheckName			= db_prepare(gAccounts, "SELECT COUNT(*) FROM "ACCOUNTS_TABLE_IPV4" WHERE "FIELD_IPV4_NAME"=? AND "FIELD_IPV4_IPV4"=?");
-	stmt_Ipv4GetRecordsFromIP	= db_prepare(gAccounts, "SELECT * FROM "ACCOUNTS_TABLE_IPV4" WHERE "FIELD_IPV4_IPV4"=? ORDER BY "FIELD_IPV4_DATE" DESC");
-	stmt_Ipv4GetRecordsFromName	= db_prepare(gAccounts, "SELECT * FROM "ACCOUNTS_TABLE_IPV4" WHERE "FIELD_IPV4_NAME"=? COLLATE NOCASE ORDER BY "FIELD_IPV4_DATE" DESC");
+	stmt_Ipv4Insert				= db_prepare(gAccountsDatabase, "INSERT INTO ipv4_log VALUES(?,?,?)");
+	stmt_Ipv4CheckName			= db_prepare(gAccountsDatabase, "SELECT COUNT(*) FROM ipv4_log WHERE name=? AND ipv4=?");
+	stmt_Ipv4GetRecordsFromIP	= db_prepare(gAccountsDatabase, "SELECT * FROM ipv4_log WHERE ipv4=? ORDER BY date DESC");
+	stmt_Ipv4GetRecordsFromName	= db_prepare(gAccountsDatabase, "SELECT * FROM ipv4_log WHERE name=? COLLATE NOCASE ORDER BY date DESC");
 }
 
 hook OnPlayerConnect(playerid)
@@ -62,7 +54,7 @@ hook OnPlayerConnect(playerid)
 
 	stmt_fetch_row(stmt_Ipv4CheckName);
 
-	if(count == 0)
+	if(!count)
 	{
 		stmt_bind_value(stmt_Ipv4Insert, 0, DB::TYPE_STRING, name, MAX_PLAYER_NAME);
 		stmt_bind_value(stmt_Ipv4Insert, 1, DB::TYPE_INTEGER, ip);
@@ -137,21 +129,13 @@ ShowAccountIPHistoryFromIP(playerid, ip)
 		count;
 
 	if(!GetAccountIPHistoryFromIP(ip, list, MAX_IPV4_LOG_RESULTS, count))
-	{
-		ChatMsg(playerid, YELLOW, " » Failed");
-		return 1;
-	}
+		return ChatMsg(playerid, YELLOW, " » Failed");
 
-	if(count == 0)
-	{
-		ChatMsg(playerid, YELLOW, " » No results");
-		return 1;
-	}
+	if(!count)
+		return ChatMsg(playerid, YELLOW, " » No results");
 
 	for(new i; i < count; i++)
-	{
 		strcat(newlist[i], list[i][ipv4_name], MAX_PLAYER_NAME);
-	}
 
 	ShowPlayerList(playerid, newlist, count, true);
 
@@ -166,21 +150,13 @@ ShowAccountIPHistoryFromName(playerid, name[])
 		count;
 
 	if(!GetAccountIPHistoryFromName(name, list, MAX_IPV4_LOG_RESULTS, count))
-	{
-		ChatMsg(playerid, YELLOW, " » Failed");
-		return 1;
-	}
+		return ChatMsg(playerid, YELLOW, " » Failed");
 
-	if(count == 0)
-	{
-		ChatMsg(playerid, YELLOW, " » No results");
-		return 1;
-	}
+	if(!count)
+		return ChatMsg(playerid, YELLOW, " » No results");
 
 	for(new i; i < count; i++)
-	{
 		strcat(newlist[i], list[i][ipv4_name], MAX_PLAYER_NAME);
-	}
 
 	ShowPlayerList(playerid, newlist, count, true);
 
