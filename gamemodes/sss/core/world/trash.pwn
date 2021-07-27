@@ -119,23 +119,21 @@ static Float:Trash_Pos[MAX_TRASH][3] =
 	{ 1370.98, 1916.29, 11.0156 }
 },
 
-	Button:Trash_Button	[MAX_TRASH],
+	Button:Trash_Button	[MAX_TRASH] = {INVALID_BUTTON_ID, ...},
 	disable_Trash		[MAX_TRASH],
 	Player_Trash		[MAX_PLAYERS];
 
 hook OnGameModeInit(){
-	defer CreateServerTrash();
-}
-
-timer CreateServerTrash[10000]() {
 	for(new i = 0; i < MAX_TRASH; i++){
         Trash_Button[i] = CreateButton(Trash_Pos[i][0], Trash_Pos[i][1], Trash_Pos[i][2] + 0.5,
 			"Pressione F para vasculhar", 0, 0, 2.1, 1, "Lixeira", .testlos = false);
 
 		SetButtonExtraData(Trash_Button[i], i + MAX_TRASH);
+
         disable_Trash[i] = 0;
 	}
 }
+
 hook OnPlayerConnect(playerid)
     Player_Trash[playerid] = -1;
 
@@ -164,8 +162,10 @@ hook OnButtonPress(playerid, Button:buttonid){
 				ShowActionText(playerid, "Revistando Lixo...", 6000);
 				StartHoldAction(playerid, 6000);
 			}
+			return Y_HOOKS_BREAK_RETURN_1;
 		}
 	}
+	return Y_HOOKS_CONTINUE_RETURN_0;
 }
 
 hook OnHoldActionUpdate(playerid, progress){
