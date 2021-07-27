@@ -8,7 +8,9 @@ enum e_gpci_list_output_structure
 {
 	gpci_name[MAX_PLAYER_NAME],
 	gpci_gpci[MAX_GPCI_LEN],
-	gpci_dat 
+	gpci_date
+}
+
 static
 DBStatement:	stmt_GpciInsert,
 DBStatement:	stmt_GpciCheckName,

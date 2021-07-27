@@ -143,7 +143,7 @@ timer LoadAccountDelay[timer](playerid, timer)
 
 	LoadCount --;
 
-	new Error:e = LoadAccount(playerid);
+	new Error:e = LoadPlayerAccount(playerid);
 	if(IsError(e)) // LoadAccount aborted, kick player.
 	{
 		new cause[128];
@@ -162,7 +162,7 @@ timer LoadAccountDelay[timer](playerid, timer)
 			Logger_P(playerid),
 			Logger_I("result", _:e)
 		);
-		EnterTutorial(playerid);
+		// EnterTutorial(playerid);
 	}
 
 	if(e == Error:1) // Account does exist, prompt login
@@ -179,7 +179,7 @@ timer LoadAccountDelay[timer](playerid, timer)
 		Logger_Log("LoadAccount: auto login",
 			Logger_P(playerid)
 		);
-		Login(playerid);
+		LoginPlayer(playerid);
 	}
 
 	if(e == Error:4) // Account does exists, but is disabled

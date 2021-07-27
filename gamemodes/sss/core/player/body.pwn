@@ -8,14 +8,14 @@
 
 enum
 {
-		SAVED_BODY_POSX,
-		SAVED_BODY_POSY,
-		SAVED_BODY_POSZ,
-		SAVED_BODY_ANGLE,
-		SAVED_BODY_WORLD,
-		SAVED_BODY_INTERIOR,
-		SAVED_BODY_SKINID,
-		SAVED_BODY_END
+	SAVED_BODY_POSX,
+	SAVED_BODY_POSY,
+	SAVED_BODY_POSZ,
+	SAVED_BODY_ANGLE,
+	SAVED_BODY_WORLD,
+	SAVED_BODY_INTERIOR,
+	SAVED_BODY_SKINID,
+	SAVED_BODY_END
 }
 
 static
@@ -24,8 +24,6 @@ static
 	
 new
    Iterator:body_Count<MAX_BODY>;
-
-forward OnBodySave(bodyid);
 
 hook OnScriptInit()
 {
@@ -342,7 +340,7 @@ hook OnPlayerDisconnect(playerid, reason)
 
 static bool:KillPlayerBody[MAX_PLAYERS];
 
-hook OnPlayerLoadAccount(playerid)
+hook OnPlayerAccountLoaded(playerid)
 {
 	KillPlayerBody[playerid] = false;
 	new name[MAX_PLAYER_NAME];
