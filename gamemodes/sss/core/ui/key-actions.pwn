@@ -88,6 +88,7 @@ hook OnPlayerOpenInventory(playerid)
 hook OnPlayerCloseInventory(playerid)
 {
 	defer t_UpdateKeyActions(playerid);
+	return Y_HOOKS_CONTINUE_RETURN_0;
 }
 
 hook OnPlayerOpenContainer(playerid, Container:containerid)
@@ -98,6 +99,7 @@ hook OnPlayerOpenContainer(playerid, Container:containerid)
 hook OnPlayerCloseContainer(playerid, Container:containerid)
 {
 	defer t_UpdateKeyActions(playerid);
+	return Y_HOOKS_CONTINUE_RETURN_0;
 }
 
 hook OnPlayerAddToInventory(playerid, Item:itemid)

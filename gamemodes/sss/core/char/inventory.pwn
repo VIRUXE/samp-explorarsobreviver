@@ -1,33 +1,237 @@
 
 #include <YSI_Coding\y_hooks>
 
+new
+	Text:GearSlot_Head[2],
+	Text:GearSlot_Hand[2],
+	Text:GearSlot_Tors[2],
 
-#define GEAR_POS_Y			(183.000000)
+	Text:GearSlot_Face[2],
+	Text:GearSlot_Hols[2],
+	Text:GearSlot_Back[2],
 
-
-static
-	inv_GearCount[MAX_PLAYERS],
-	PlayerText:GearSlot_Head[MAX_PLAYERS] = { PlayerText:INVALID_TEXT_DRAW, ...},
-	PlayerText:GearSlot_Face[MAX_PLAYERS] = { PlayerText:INVALID_TEXT_DRAW, ...},
-	PlayerText:GearSlot_Hand[MAX_PLAYERS] = { PlayerText:INVALID_TEXT_DRAW, ...},
-	PlayerText:GearSlot_Hols[MAX_PLAYERS] = { PlayerText:INVALID_TEXT_DRAW, ...},
-	PlayerText:GearSlot_Tors[MAX_PLAYERS] = { PlayerText:INVALID_TEXT_DRAW, ...},
-	PlayerText:GearSlot_Back[MAX_PLAYERS] = { PlayerText:INVALID_TEXT_DRAW, ...},
 	Container:inv_TempContainerID[MAX_PLAYERS],
 	inv_InventoryOptionID[MAX_PLAYERS];
+
+hook OnGameModeInit()
+{
+	/*
+		Head
+	*/
+
+	GearSlot_Head[0] = TextDrawCreate(512.000000, 183.000000, "Cabeca~n~~n~~n~~n~~n~~n~~n~~n~");
+	TextDrawFont(GearSlot_Head[0], 2);
+	TextDrawLetterSize(GearSlot_Head[0], 0.220833, 0.850000);
+	TextDrawTextSize(GearSlot_Head[0], 568.500000, 50.000000);
+	TextDrawSetOutline(GearSlot_Head[0], 1);
+	TextDrawSetShadow(GearSlot_Head[0], 0);
+	TextDrawAlignment(GearSlot_Head[0], 1);
+	TextDrawColor(GearSlot_Head[0], -1);
+	TextDrawBackgroundColor(GearSlot_Head[0], 255);
+	TextDrawBoxColor(GearSlot_Head[0], 164);
+	TextDrawUseBox(GearSlot_Head[0], 1);
+	TextDrawSetProportional(GearSlot_Head[0], 1);
+	TextDrawSetSelectable(GearSlot_Head[0], 1);
+
+	GearSlot_Head[1] = TextDrawCreate(508.000000, 190.000000, "Preview_Model");
+	TextDrawFont(GearSlot_Head[1], 5);
+	TextDrawLetterSize(GearSlot_Head[1], 0.600000, 2.000000);
+	TextDrawTextSize(GearSlot_Head[1], 63.500000, 57.500000);
+	TextDrawSetOutline(GearSlot_Head[1], 0);
+	TextDrawSetShadow(GearSlot_Head[1], 0);
+	TextDrawAlignment(GearSlot_Head[1], 1);
+	TextDrawColor(GearSlot_Head[1], -1);
+	TextDrawBackgroundColor(GearSlot_Head[1], 0);
+	TextDrawBoxColor(GearSlot_Head[1], 255);
+	TextDrawUseBox(GearSlot_Head[1], 0);
+	TextDrawSetProportional(GearSlot_Head[1], 1);
+	TextDrawSetSelectable(GearSlot_Head[1], 0);
+	TextDrawSetPreviewModel(GearSlot_Head[1], 0);
+	TextDrawSetPreviewRot(GearSlot_Head[1], -10.000000, 0.000000, -20.000000, 1.000000);
+	TextDrawSetPreviewVehCol(GearSlot_Head[1], 1, 1);
+
+	/*
+		Hand
+	*/
+
+	GearSlot_Hand[0] = TextDrawCreate(512.000000, 253.000000, "Mao~n~~n~~n~~n~~n~~n~~n~~n~");
+	TextDrawFont(GearSlot_Hand[0], 2);
+	TextDrawLetterSize(GearSlot_Hand[0], 0.220833, 0.850000);
+	TextDrawTextSize(GearSlot_Hand[0], 568.500000, 50.000000);
+	TextDrawSetOutline(GearSlot_Hand[0], 1);
+	TextDrawSetShadow(GearSlot_Hand[0], 0);
+	TextDrawAlignment(GearSlot_Hand[0], 1);
+	TextDrawColor(GearSlot_Hand[0], -1);
+	TextDrawBackgroundColor(GearSlot_Hand[0], 255);
+	TextDrawBoxColor(GearSlot_Hand[0], 164);
+	TextDrawUseBox(GearSlot_Hand[0], 1);
+	TextDrawSetProportional(GearSlot_Hand[0], 1);
+	TextDrawSetSelectable(GearSlot_Hand[0], 1);
+
+	GearSlot_Hand[1] = TextDrawCreate(508.000000, 259.000000, "Preview_Model");
+	TextDrawFont(GearSlot_Hand[1], 5);
+	TextDrawLetterSize(GearSlot_Hand[1], 0.600000, 2.000000);
+	TextDrawTextSize(GearSlot_Hand[1], 63.500000, 57.500000);
+	TextDrawSetOutline(GearSlot_Hand[1], 0);
+	TextDrawSetShadow(GearSlot_Hand[1], 0);
+	TextDrawAlignment(GearSlot_Hand[1], 1);
+	TextDrawColor(GearSlot_Hand[1], -1);
+	TextDrawBackgroundColor(GearSlot_Hand[1], 0);
+	TextDrawBoxColor(GearSlot_Hand[1], 255);
+	TextDrawUseBox(GearSlot_Hand[1], 0);
+	TextDrawSetProportional(GearSlot_Hand[1], 1);
+	TextDrawSetSelectable(GearSlot_Hand[1], 0);
+	TextDrawSetPreviewModel(GearSlot_Hand[1], 0);
+	TextDrawSetPreviewRot(GearSlot_Hand[1], -10.000000, 0.000000, -20.000000, 1.000000);
+	TextDrawSetPreviewVehCol(GearSlot_Hand[1], 1, 1);
+
+	/*
+		Torso
+	*/
+	
+	GearSlot_Tors[0] = TextDrawCreate(512.000000, 323.000000, "Colete~n~~n~~n~~n~~n~~n~~n~~n~");
+	TextDrawFont(GearSlot_Tors[0], 2);
+	TextDrawLetterSize(GearSlot_Tors[0], 0.220833, 0.850000);
+	TextDrawTextSize(GearSlot_Tors[0], 568.500000, 50.000000);
+	TextDrawSetOutline(GearSlot_Tors[0], 1);
+	TextDrawSetShadow(GearSlot_Tors[0], 0);
+	TextDrawAlignment(GearSlot_Tors[0], 1);
+	TextDrawColor(GearSlot_Tors[0], -1);
+	TextDrawBackgroundColor(GearSlot_Tors[0], 255);
+	TextDrawBoxColor(GearSlot_Tors[0], 164);
+	TextDrawUseBox(GearSlot_Tors[0], 1);
+	TextDrawSetProportional(GearSlot_Tors[0], 1);
+	TextDrawSetSelectable(GearSlot_Tors[0], 1);
+
+	GearSlot_Tors[1] = TextDrawCreate(508.000000, 330.000000, "Preview_Model");
+	TextDrawFont(GearSlot_Tors[1], 5);
+	TextDrawLetterSize(GearSlot_Tors[1], 0.600000, 2.000000);
+	TextDrawTextSize(GearSlot_Tors[1], 63.500000, 57.500000);
+	TextDrawSetOutline(GearSlot_Tors[1], 0);
+	TextDrawSetShadow(GearSlot_Tors[1], 0);
+	TextDrawAlignment(GearSlot_Tors[1], 1);
+	TextDrawColor(GearSlot_Tors[1], -1);
+	TextDrawBackgroundColor(GearSlot_Tors[1], 0);
+	TextDrawBoxColor(GearSlot_Tors[1], 255);
+	TextDrawUseBox(GearSlot_Tors[1], 0);
+	TextDrawSetProportional(GearSlot_Tors[1], 1);
+	TextDrawSetSelectable(GearSlot_Tors[1], 0);
+	TextDrawSetPreviewModel(GearSlot_Tors[1], 0);
+	TextDrawSetPreviewRot(GearSlot_Tors[1], -10.000000, 0.000000, -20.000000, 1.000000);
+	TextDrawSetPreviewVehCol(GearSlot_Tors[1], 1, 1);
+
+	/*
+		Face
+	*/
+
+	GearSlot_Face[0] = TextDrawCreate(578.000000, 183.000000, "Rosto~n~~n~~n~~n~~n~~n~~n~~n~");
+	TextDrawFont(GearSlot_Face[0], 2);
+	TextDrawLetterSize(GearSlot_Face[0], 0.220833, 0.850000);
+	TextDrawTextSize(GearSlot_Face[0], 635.000000, 50.000000);
+	TextDrawSetOutline(GearSlot_Face[0], 1);
+	TextDrawSetShadow(GearSlot_Face[0], 0);
+	TextDrawAlignment(GearSlot_Face[0], 1);
+	TextDrawColor(GearSlot_Face[0], -1);
+	TextDrawBackgroundColor(GearSlot_Face[0], 255);
+	TextDrawBoxColor(GearSlot_Face[0], 164);
+	TextDrawUseBox(GearSlot_Face[0], 1);
+	TextDrawSetProportional(GearSlot_Face[0], 1);
+	TextDrawSetSelectable(GearSlot_Face[0], 1);
+
+	GearSlot_Face[1] = TextDrawCreate(575.000000, 190.000000, "Preview_Model");
+	TextDrawFont(GearSlot_Face[1], 5);
+	TextDrawLetterSize(GearSlot_Face[1], 0.600000, 2.000000);
+	TextDrawTextSize(GearSlot_Face[1], 63.500000, 57.500000);
+	TextDrawSetOutline(GearSlot_Face[1], 0);
+	TextDrawSetShadow(GearSlot_Face[1], 0);
+	TextDrawAlignment(GearSlot_Face[1], 1);
+	TextDrawColor(GearSlot_Face[1], -1);
+	TextDrawBackgroundColor(GearSlot_Face[1], 0);
+	TextDrawBoxColor(GearSlot_Face[1], 255);
+	TextDrawUseBox(GearSlot_Face[1], 0);
+	TextDrawSetProportional(GearSlot_Face[1], 1);
+	TextDrawSetSelectable(GearSlot_Face[1], 0);
+	TextDrawSetPreviewModel(GearSlot_Face[1], 0);
+	TextDrawSetPreviewRot(GearSlot_Face[1], -10.000000, 0.000000, -20.000000, 1.000000);
+	TextDrawSetPreviewVehCol(GearSlot_Face[1], 1, 1);
+
+	/*
+		Hols
+	*/
+
+	GearSlot_Hols[0] = TextDrawCreate(578.000000, 253.000000, "Coldre~n~~n~~n~~n~~n~~n~~n~~n~");
+	TextDrawFont(GearSlot_Hols[0], 2);
+	TextDrawLetterSize(GearSlot_Hols[0], 0.220833, 0.850000);
+	TextDrawTextSize(GearSlot_Hols[0], 635.000000, 50.000000);
+	TextDrawSetOutline(GearSlot_Hols[0], 1);
+	TextDrawSetShadow(GearSlot_Hols[0], 0);
+	TextDrawAlignment(GearSlot_Hols[0], 1);
+	TextDrawColor(GearSlot_Hols[0], -1);
+	TextDrawBackgroundColor(GearSlot_Hols[0], 255);
+	TextDrawBoxColor(GearSlot_Hols[0], 164);
+	TextDrawUseBox(GearSlot_Hols[0], 1);
+	TextDrawSetProportional(GearSlot_Hols[0], 1);
+	TextDrawSetSelectable(GearSlot_Hols[0], 1);
+
+	GearSlot_Hols[1] = TextDrawCreate(575.000000, 259.000000, "Preview_Model");
+	TextDrawFont(GearSlot_Hols[1], 5);
+	TextDrawLetterSize(GearSlot_Hols[1], 0.600000, 2.000000);
+	TextDrawTextSize(GearSlot_Hols[1], 63.500000, 57.500000);
+	TextDrawSetOutline(GearSlot_Hols[1], 0);
+	TextDrawSetShadow(GearSlot_Hols[1], 0);
+	TextDrawAlignment(GearSlot_Hols[1], 1);
+	TextDrawColor(GearSlot_Hols[1], -1);
+	TextDrawBackgroundColor(GearSlot_Hols[1], 0);
+	TextDrawBoxColor(GearSlot_Hols[1], 255);
+	TextDrawUseBox(GearSlot_Hols[1], 0);
+	TextDrawSetProportional(GearSlot_Hols[1], 1);
+	TextDrawSetSelectable(GearSlot_Hols[1], 0);
+	TextDrawSetPreviewModel(GearSlot_Hols[1], 0);
+	TextDrawSetPreviewRot(GearSlot_Hols[1], -10.000000, 0.000000, -20.000000, 1.000000);
+	TextDrawSetPreviewVehCol(GearSlot_Hols[1], 1, 1);
+
+	/*
+		Back
+	*/
+
+	GearSlot_Back[0] = TextDrawCreate(578.000000, 323.000000, "Costas~n~~n~~n~~n~~n~~n~~n~~n~");
+	TextDrawFont(GearSlot_Back[0], 2);
+	TextDrawLetterSize(GearSlot_Back[0], 0.220833, 0.850000);
+	TextDrawTextSize(GearSlot_Back[0], 635.000000, 50.000000);
+	TextDrawSetOutline(GearSlot_Back[0], 1);
+	TextDrawSetShadow(GearSlot_Back[0], 0);
+	TextDrawAlignment(GearSlot_Back[0], 1);
+	TextDrawColor(GearSlot_Back[0], -1);
+	TextDrawBackgroundColor(GearSlot_Back[0], 255);
+	TextDrawBoxColor(GearSlot_Back[0], 164);
+	TextDrawUseBox(GearSlot_Back[0], 1);
+	TextDrawSetProportional(GearSlot_Back[0], 1);
+	TextDrawSetSelectable(GearSlot_Back[0], 1);
+
+
+	GearSlot_Back[1] = TextDrawCreate(575.000000, 330.000000, "Preview_Model");
+	TextDrawFont(GearSlot_Back[1], 5);
+	TextDrawLetterSize(GearSlot_Back[1], 0.600000, 2.000000);
+	TextDrawTextSize(GearSlot_Back[1], 63.500000, 57.500000);
+	TextDrawSetOutline(GearSlot_Back[1], 0);
+	TextDrawSetShadow(GearSlot_Back[1], 0);
+	TextDrawAlignment(GearSlot_Back[1], 1);
+	TextDrawColor(GearSlot_Back[1], -1);
+	TextDrawBackgroundColor(GearSlot_Back[1], 0);
+	TextDrawBoxColor(GearSlot_Back[1], 255);
+	TextDrawUseBox(GearSlot_Back[1], 0);
+	TextDrawSetProportional(GearSlot_Back[1], 1);
+	TextDrawSetSelectable(GearSlot_Back[1], 0);
+	TextDrawSetPreviewModel(GearSlot_Back[1], 0);
+	TextDrawSetPreviewRot(GearSlot_Back[1], -10.000000, 0.000000, -20.000000, 1.000000);
+	TextDrawSetPreviewVehCol(GearSlot_Back[1], 1, 1);
+}
 
 
 hook OnPlayerConnect(playerid)
 {
 	inv_TempContainerID[playerid] = INVALID_CONTAINER_ID;
 	inv_InventoryOptionID[playerid] = -1;
-	inv_GearCount[playerid] = 0;
-	GearSlot_Head[playerid] = PlayerText:INVALID_TEXT_DRAW;
-	GearSlot_Face[playerid] = PlayerText:INVALID_TEXT_DRAW;
-	GearSlot_Hand[playerid] = PlayerText:INVALID_TEXT_DRAW;
-	GearSlot_Hols[playerid] = PlayerText:INVALID_TEXT_DRAW;
-	GearSlot_Tors[playerid] = PlayerText:INVALID_TEXT_DRAW;
-	GearSlot_Back[playerid] = PlayerText:INVALID_TEXT_DRAW;
 }
 
 hook OnPlayerViewCntOpt(playerid, Container:containerid)
@@ -90,339 +294,221 @@ hook OnPlayerSelectCntOpt(playerid, Container:containerid, option)
 
 HidePlayerGear(playerid)
 {
-	inv_GearCount[playerid] = 0;
+	TextDrawHideForPlayer(playerid, GearSlot_Head[0]);
+	TextDrawHideForPlayer(playerid, GearSlot_Head[1]);
 
-	if(GearSlot_Head[playerid] != PlayerText:INVALID_TEXT_DRAW)
-		PlayerTextDrawDestroy(playerid, GearSlot_Head[playerid] );
+	TextDrawHideForPlayer(playerid, GearSlot_Hand[0]);
+	TextDrawHideForPlayer(playerid, GearSlot_Hand[1]);
 
-	if(GearSlot_Face[playerid] != PlayerText:INVALID_TEXT_DRAW)
-		PlayerTextDrawDestroy(playerid, GearSlot_Face[playerid] );
+	TextDrawHideForPlayer(playerid, GearSlot_Tors[0]);
+	TextDrawHideForPlayer(playerid, GearSlot_Tors[1]);
 
-	if(GearSlot_Hand[playerid] != PlayerText:INVALID_TEXT_DRAW)
-		PlayerTextDrawDestroy(playerid, GearSlot_Hand[playerid] );
+	TextDrawHideForPlayer(playerid, GearSlot_Face[0]);
+	TextDrawHideForPlayer(playerid, GearSlot_Face[1]);
 
-	if(GearSlot_Hols[playerid] != PlayerText:INVALID_TEXT_DRAW)
-		PlayerTextDrawDestroy(playerid, GearSlot_Hols[playerid] );
+	TextDrawHideForPlayer(playerid, GearSlot_Hols[0]);
+	TextDrawHideForPlayer(playerid, GearSlot_Hols[1]);
 
-	if(GearSlot_Tors[playerid] != PlayerText:INVALID_TEXT_DRAW)
-		PlayerTextDrawDestroy(playerid, GearSlot_Tors[playerid] );
-
-	if(GearSlot_Back[playerid] != PlayerText:INVALID_TEXT_DRAW)
-		PlayerTextDrawDestroy(playerid, GearSlot_Back[playerid] );
-
-	GearSlot_Head[playerid] = PlayerText:INVALID_TEXT_DRAW;
-	GearSlot_Face[playerid] = PlayerText:INVALID_TEXT_DRAW;
-	GearSlot_Hand[playerid] = PlayerText:INVALID_TEXT_DRAW;
-	GearSlot_Hols[playerid] = PlayerText:INVALID_TEXT_DRAW;
-	GearSlot_Tors[playerid] = PlayerText:INVALID_TEXT_DRAW;
-	GearSlot_Back[playerid] = PlayerText:INVALID_TEXT_DRAW;
+	TextDrawHideForPlayer(playerid, GearSlot_Back[0]);
+	TextDrawHideForPlayer(playerid, GearSlot_Back[1]);
 }
 
-timer UpdatePlayerGear[10](playerid)
+ShowPlayerGear(playerid)
 {
-	HidePlayerGear(playerid);
-
-	new Container:containerid;
-	GetPlayerCurrentContainer(playerid, containerid);
-
-	if(!IsValidContainer(containerid) && !IsPlayerViewingInventory(playerid))
-		return 0;
-
 	new
-		tmp[5 + MAX_ITEM_NAME + MAX_ITEM_TEXT],
-		Item:itemid;
+		Item:itemid = INVALID_ITEM_ID,
+		modelid;
 	
-	/*
-		Hand
-	*/
-
-	itemid = GetPlayerItem(playerid);
-
-	if(IsValidItem(itemid))
-	{
-		GetItemName(itemid, tmp);
-		format(tmp, sizeof(tmp), "Mao:~w~ %s",tmp);
-
-		GearSlot_Hand[playerid] = CreatePlayerTextDraw(playerid, 508.000000, GEAR_POS_Y + (inv_GearCount[playerid] * 38.0), tmp);
-		PlayerTextDrawFont(playerid, GearSlot_Hand[playerid], 2);
-		PlayerTextDrawLetterSize(playerid, GearSlot_Hand[playerid], 0.229166, 1.049999);
-		PlayerTextDrawTextSize(playerid, GearSlot_Hand[playerid], 638.000000, 17.000000);
-		PlayerTextDrawSetOutline(playerid, GearSlot_Hand[playerid], 1);
-		PlayerTextDrawAlignment(playerid, GearSlot_Hand[playerid], 1);
-		PlayerTextDrawColor(playerid, GearSlot_Hand[playerid], 0xFFFF00FF);
-		PlayerTextDrawBackgroundColor(playerid, GearSlot_Hand[playerid], 255);
-		PlayerTextDrawBoxColor(playerid, GearSlot_Hand[playerid], 50);
-		PlayerTextDrawUseBox(playerid, GearSlot_Hand[playerid], 1);
-		PlayerTextDrawSetProportional(playerid, GearSlot_Hand[playerid], 1);
-		PlayerTextDrawSetSelectable(playerid, GearSlot_Hand[playerid], 1);
-
-		PlayerTextDrawShow(playerid, GearSlot_Hand[playerid]);
-
-		inv_GearCount[playerid] ++;
-	}
-
-	/*
-		Back
-	*/
-
-	itemid = GetPlayerBagItem(playerid);
-
-	if(IsValidItem(itemid))
-	{
-		GetItemName(itemid, tmp);
-		
-		format(tmp, sizeof(tmp), "Costas:~w~ %s", tmp);
-
-		GearSlot_Back[playerid] = CreatePlayerTextDraw(playerid, 508.000000, GEAR_POS_Y + (inv_GearCount[playerid] * 38.0), tmp);
-		PlayerTextDrawFont(playerid, GearSlot_Back[playerid], 2);
-		PlayerTextDrawLetterSize(playerid, GearSlot_Back[playerid], 0.229166, 1.049999);
-		PlayerTextDrawTextSize(playerid, GearSlot_Back[playerid], 638.000000, 17.000000);
-		PlayerTextDrawSetOutline(playerid, GearSlot_Back[playerid], 1);
-		PlayerTextDrawAlignment(playerid, GearSlot_Back[playerid], 1);
-		PlayerTextDrawColor(playerid, GearSlot_Back[playerid], 0xFFFF00FF);
-		PlayerTextDrawBackgroundColor(playerid, GearSlot_Back[playerid], 255);
-		PlayerTextDrawBoxColor(playerid, GearSlot_Back[playerid], 50);
-		PlayerTextDrawUseBox(playerid, GearSlot_Back[playerid], 1);
-		PlayerTextDrawSetProportional(playerid, GearSlot_Back[playerid], 1);
-		PlayerTextDrawSetSelectable(playerid, GearSlot_Back[playerid], 1);
-
-		PlayerTextDrawShow(playerid, GearSlot_Back[playerid]);
-
-		inv_GearCount[playerid] ++;
-	}
-
-	/*
-		Hols
-	*/
-
-	itemid = GetPlayerHolsterItem(playerid);
-
-	if(IsValidItem(itemid))
-	{
-		GetItemName(itemid, tmp);
-		format(tmp, sizeof(tmp), "Coldre:~w~ %s", tmp);
-		
-		GearSlot_Hols[playerid] = CreatePlayerTextDraw(playerid, 508.000000, GEAR_POS_Y + (inv_GearCount[playerid] * 38.0), tmp);
-		PlayerTextDrawFont(playerid, GearSlot_Hols[playerid], 2);
-		PlayerTextDrawLetterSize(playerid, GearSlot_Hols[playerid], 0.229166, 1.049999);
-		PlayerTextDrawTextSize(playerid, GearSlot_Hols[playerid], 638.000000, 17.000000);
-		PlayerTextDrawSetOutline(playerid, GearSlot_Hols[playerid], 1);
-		PlayerTextDrawAlignment(playerid, GearSlot_Hols[playerid], 1);
-		PlayerTextDrawColor(playerid, GearSlot_Hols[playerid], 0xFFFF00FF);
-		PlayerTextDrawBackgroundColor(playerid, GearSlot_Hols[playerid], 255);
-		PlayerTextDrawBoxColor(playerid, GearSlot_Hols[playerid], 50);
-		PlayerTextDrawUseBox(playerid, GearSlot_Hols[playerid], 1);
-		PlayerTextDrawSetProportional(playerid, GearSlot_Hols[playerid], 1);
-		PlayerTextDrawSetSelectable(playerid, GearSlot_Hols[playerid], 1);
-
-		PlayerTextDrawShow(playerid, GearSlot_Hols[playerid]);
-
-		inv_GearCount[playerid] ++;
-	}
-
 	/*
 		Head
 	*/
+
+	TextDrawShowForPlayer(playerid, GearSlot_Head[0]);
 
 	itemid = GetPlayerHatItem(playerid);
 
 	if(IsValidItem(itemid))
 	{
-		GetItemTypeName(GetItemType(itemid), tmp);
-		format(tmp, sizeof(tmp), "Cabeca:~w~ %s", tmp);
-
-		GearSlot_Head[playerid] = CreatePlayerTextDraw(playerid, 508.000000, GEAR_POS_Y + (inv_GearCount[playerid] * 38.0), tmp);
-		PlayerTextDrawFont(playerid, GearSlot_Head[playerid], 2);
-		PlayerTextDrawLetterSize(playerid, GearSlot_Head[playerid], 0.229166, 1.049999);
-		PlayerTextDrawTextSize(playerid, GearSlot_Head[playerid], 638.000000, 17.000000);
-		PlayerTextDrawSetOutline(playerid, GearSlot_Head[playerid], 1);
-		PlayerTextDrawAlignment(playerid, GearSlot_Head[playerid], 1);
-		PlayerTextDrawColor(playerid, GearSlot_Head[playerid], 0xFFFF00FF);
-		PlayerTextDrawBackgroundColor(playerid, GearSlot_Head[playerid], 255);
-		PlayerTextDrawBoxColor(playerid, GearSlot_Head[playerid], 50);
-		PlayerTextDrawUseBox(playerid, GearSlot_Head[playerid], 1);
-		PlayerTextDrawSetProportional(playerid, GearSlot_Head[playerid], 1);
-		PlayerTextDrawSetSelectable(playerid, GearSlot_Head[playerid], 1);
-
-		PlayerTextDrawShow(playerid, GearSlot_Head[playerid]);
-
-		inv_GearCount[playerid] ++;
+		GetItemTypeModel(GetItemType(itemid), modelid);
+		TextDrawSetPreviewModel(GearSlot_Head[1], modelid);
+		TextDrawShowForPlayer(playerid, GearSlot_Head[1]);
 	}
+	else TextDrawHideForPlayer(playerid, GearSlot_Head[1]);
 
 	/*
-		Face
+		Hand
 	*/
 
-	itemid = GetPlayerMaskItem(playerid);
+	TextDrawShowForPlayer(playerid, GearSlot_Hand[0]);
+
+	itemid = GetPlayerItem(playerid);
 
 	if(IsValidItem(itemid))
 	{
-		GetItemTypeName(GetItemType(itemid), tmp);
-		format(tmp, sizeof(tmp), "Rosto:~w~ %s", tmp);
-
-		GearSlot_Face[playerid] = CreatePlayerTextDraw(playerid, 508.000000, GEAR_POS_Y + (inv_GearCount[playerid] * 38.0), tmp);
-		PlayerTextDrawFont(playerid, GearSlot_Face[playerid], 2);
-		PlayerTextDrawLetterSize(playerid, GearSlot_Face[playerid], 0.229166, 1.049999);
-		PlayerTextDrawTextSize(playerid, GearSlot_Face[playerid], 638.000000, 17.000000);
-		PlayerTextDrawSetOutline(playerid, GearSlot_Face[playerid], 1);
-		PlayerTextDrawAlignment(playerid, GearSlot_Face[playerid], 1);
-		PlayerTextDrawColor(playerid, GearSlot_Face[playerid], 0xFFFF00FF);
-		PlayerTextDrawBackgroundColor(playerid, GearSlot_Face[playerid], 255);
-		PlayerTextDrawBoxColor(playerid, GearSlot_Face[playerid], 50);
-		PlayerTextDrawUseBox(playerid, GearSlot_Face[playerid], 1);
-		PlayerTextDrawSetProportional(playerid, GearSlot_Face[playerid], 1);
-		PlayerTextDrawSetSelectable(playerid, GearSlot_Face[playerid], 1);
-
-		PlayerTextDrawShow(playerid, GearSlot_Face[playerid]);
-
-		inv_GearCount[playerid] ++;
+		GetItemTypeModel(GetItemType(itemid), modelid);
+		TextDrawSetPreviewModel(GearSlot_Hand[1], modelid);
+		TextDrawShowForPlayer(playerid, GearSlot_Hand[1]);
 	}
-
+	else TextDrawHideForPlayer(playerid, GearSlot_Hand[1]);
 
 	/*
 		Torso
 	*/
 
-	if(GetPlayerAP(playerid) > 0.0)
+	TextDrawShowForPlayer(playerid, GearSlot_Tors[0]);
+
+	itemid = GetPlayerArmourItem(playerid);
+
+	if(IsValidItem(itemid))
 	{
-		format(tmp, sizeof(tmp), "Colete:~w~ %0.1f", GetPlayerAP(playerid));
-
-		GearSlot_Tors[playerid] = CreatePlayerTextDraw(playerid, 508.000000, GEAR_POS_Y + (inv_GearCount[playerid] * 38.0), tmp);
-		PlayerTextDrawFont(playerid, GearSlot_Tors[playerid], 2);
-		PlayerTextDrawLetterSize(playerid, GearSlot_Tors[playerid], 0.229166, 1.049999);
-		PlayerTextDrawTextSize(playerid, GearSlot_Tors[playerid], 638.000000, 17.000000);
-		PlayerTextDrawSetOutline(playerid, GearSlot_Tors[playerid], 1);
-		PlayerTextDrawAlignment(playerid, GearSlot_Tors[playerid], 1);
-		PlayerTextDrawColor(playerid, GearSlot_Tors[playerid], 0xFFFF00FF);
-		PlayerTextDrawBackgroundColor(playerid, GearSlot_Tors[playerid], 255);
-		PlayerTextDrawBoxColor(playerid, GearSlot_Tors[playerid], 50);
-		PlayerTextDrawUseBox(playerid, GearSlot_Tors[playerid], 1);
-		PlayerTextDrawSetProportional(playerid, GearSlot_Tors[playerid], 1);
-		PlayerTextDrawSetSelectable(playerid, GearSlot_Tors[playerid], 1);
-
-		PlayerTextDrawShow(playerid, GearSlot_Tors[playerid]);
-
-		inv_GearCount[playerid] ++;
+		GetItemTypeModel(GetItemType(itemid), modelid);
+		TextDrawSetPreviewModel(GearSlot_Tors[1], modelid);
+		TextDrawShowForPlayer(playerid, GearSlot_Tors[1]);
 	}
+	else TextDrawHideForPlayer(playerid, GearSlot_Tors[1]);
 
-	return 1;
+	/*
+		Face
+	*/
+
+	TextDrawShowForPlayer(playerid, GearSlot_Face[0]);
+
+	itemid = GetPlayerMaskItem(playerid);
+
+	if(IsValidItem(itemid))
+	{
+		GetItemTypeModel(GetItemType(itemid), modelid);
+		TextDrawSetPreviewModel(GearSlot_Face[1], modelid);
+		TextDrawShowForPlayer(playerid, GearSlot_Face[1]);
+	}
+	else TextDrawHideForPlayer(playerid, GearSlot_Face[1]);
+
+	/*
+		Hols
+	*/
+
+	TextDrawShowForPlayer(playerid, GearSlot_Hols[0]);
+
+	itemid = GetPlayerHolsterItem(playerid);
+
+	if(IsValidItem(itemid))
+	{
+		GetItemTypeModel(GetItemType(itemid), modelid);
+		TextDrawSetPreviewModel(GearSlot_Hols[1], modelid);
+		TextDrawShowForPlayer(playerid, GearSlot_Hols[1]);
+	}
+	else TextDrawHideForPlayer(playerid, GearSlot_Hols[1]);
+	
+	/*
+		Back
+	*/
+
+	TextDrawShowForPlayer(playerid, GearSlot_Back[0]);
+
+	itemid = GetPlayerBagItem(playerid);
+
+	if(IsValidItem(itemid))
+	{
+		GetItemTypeModel(GetItemType(itemid), modelid);
+		TextDrawSetPreviewModel(GearSlot_Back[1], modelid);
+		TextDrawShowForPlayer(playerid, GearSlot_Back[1]);
+	}
+	else TextDrawHideForPlayer(playerid, GearSlot_Back[1]);
 }
-
-
-static bag_InventoryItem[MAX_PLAYERS];
 
 hook OnPlayerOpenInventory(playerid)
 {
-	if(IsValidItem(GetPlayerBagItem(playerid)))
-	{
-		new modelid;
-		GetItemTypeModel(GetItemType(GetPlayerBagItem(playerid)), modelid);
-		bag_InventoryItem[playerid] = AddInventoryListItem(playerid, "Abrir Mochila >", modelid);
-	}
+	ShowPlayerGear(playerid);
+	return Y_HOOKS_CONTINUE_RETURN_0;
+}
 
-	defer UpdatePlayerGear(playerid);
+hook OnPlayerOpenContainer(playerid, Container:containerid)
+{
+	ShowPlayerGear(playerid);
+	return Y_HOOKS_CONTINUE_RETURN_0;
+}
+
+hook OnPlayerHolsterItem(playerid, Item:itemid)
+{
+	new Container:containerid;
+	GetPlayerCurrentContainer(playerid, containerid);
+
+	if(IsValidContainer(containerid) || IsPlayerViewingInventory(playerid))
+	{
+		ShowPlayerGear(playerid);
+	}
 
 	return Y_HOOKS_CONTINUE_RETURN_0;
 }
 
-hook OnPlayerSelectExtraItem(playerid, item)
+hook OnPlayerHolsteredItem(playerid, Item:itemid)
 {
-	if(item == bag_InventoryItem[playerid])
+	new Container:containerid;
+	GetPlayerCurrentContainer(playerid, containerid);
+
+	if(IsValidContainer(containerid) || IsPlayerViewingInventory(playerid))
 	{
-		if(IsValidItem(GetPlayerBagItem(playerid)))
-		{
-			_inv_HandleGearSlotClick_Back(playerid);
-			return Y_HOOKS_BREAK_RETURN_1;
-		}
+		ShowPlayerGear(playerid);
+	}
+	return Y_HOOKS_CONTINUE_RETURN_0;
+}
+
+hook OnPlayerUnHolsterItem(playerid, Item:itemid)
+{
+	new Container:containerid;
+	GetPlayerCurrentContainer(playerid, containerid);
+
+	if(IsValidContainer(containerid) || IsPlayerViewingInventory(playerid))
+	{
+		ShowPlayerGear(playerid);
+	}
+	return Y_HOOKS_CONTINUE_RETURN_0;
+}
+
+hook OnPlayerUnHolsteredItem(playerid, Item:itemid)
+{
+	new Container:containerid;
+	GetPlayerCurrentContainer(playerid, containerid);
+
+	if(IsValidContainer(containerid) || IsPlayerViewingInventory(playerid))
+	{
+		ShowPlayerGear(playerid);
 	}
 	return Y_HOOKS_CONTINUE_RETURN_0;
 }
 
 hook OnPlayerCloseInventory(playerid)
 {
-	defer UpdatePlayerGear(playerid);
-	return Y_HOOKS_CONTINUE_RETURN_0;
-}
-
-hook OnPlayerOpenContainer(playerid, Container:containerid)
-{
-	defer UpdatePlayerGear(playerid);
+	HidePlayerGear(playerid);
 	return Y_HOOKS_CONTINUE_RETURN_0;
 }
 
 hook OnPlayerCloseContainer(playerid, Container:containerid)
 {
-	defer UpdatePlayerGear(playerid);
+	HidePlayerGear(playerid);
 	return Y_HOOKS_CONTINUE_RETURN_0;
 }
 
-hook OnItemRemoveFromCnt(Container:containerid, slotid, playerid)
+hook OnPlayerClickTextDraw(playerid, Text:clickedid)
 {
-	if(IsPlayerConnected(playerid))
-	{
-		if(containerid == GetBagItemContainerID(GetPlayerBagItem(playerid)))
-			defer UpdatePlayerGear(playerid);
-	}
-
-	return Y_HOOKS_CONTINUE_RETURN_0;
-}
-
-hook OnItemRemoveFromInv(playerid, Item:itemid, slot)
-{
-	defer UpdatePlayerGear(playerid);
-
-	return Y_HOOKS_CONTINUE_RETURN_0;
-}
-
-hook OnItemAddToInventory(playerid, Item:itemid, slot)
-{
-	if(IsItemTypeCarry(GetItemType(itemid)))
-		return 1;
-
-	defer UpdatePlayerGear(playerid);
-
-	return Y_HOOKS_CONTINUE_RETURN_0;
-}
-
-
-hook OnPlayerHolsteredItem(playerid, Item:itemid)
-{
-	if(inv_GearCount[playerid])
-		defer UpdatePlayerGear(playerid);
-}
-
-hook OnItemRemovedFromPlayer(playerid, Item:itemid){
-	defer UpdatePlayerGear(playerid);
-}
-
-hook OnPlayerGetItem(playerid, Item:itemid){
-	defer UpdatePlayerGear(playerid);
-}
-
-
-hook OnPlayerClickPlayerTD(playerid, PlayerText:playertextid)
-{
-	if(playertextid == GearSlot_Head[playerid])
+	if(clickedid == GearSlot_Head[0])
 		_inv_HandleGearSlotClick_Head(playerid);
 
-	if(playertextid == GearSlot_Face[playerid])
-		_inv_HandleGearSlotClick_Face(playerid);
-
-	if(playertextid == GearSlot_Hand[playerid])
+	if(clickedid == GearSlot_Hand[0])
 		_inv_HandleGearSlotClick_Hand(playerid);
 
-	if(playertextid == GearSlot_Hols[playerid])
-		_inv_HandleGearSlotClick_Hols(playerid);
-
-	if(playertextid == GearSlot_Tors[playerid])
+	if(clickedid == GearSlot_Tors[0])
 		_inv_HandleGearSlotClick_Tors(playerid);
 
-	if(playertextid == GearSlot_Back[playerid])
+	if(clickedid == GearSlot_Face[0])
+		_inv_HandleGearSlotClick_Face(playerid);
+
+	if(clickedid == GearSlot_Hols[0])
+		_inv_HandleGearSlotClick_Hols(playerid);
+
+	if(clickedid == GearSlot_Back[0])
 		_inv_HandleGearSlotClick_Back(playerid);
-
-	return 1;
 }
-
 
 _inv_HandleGearSlotClick_Head(playerid)
 {
@@ -493,7 +579,7 @@ _inv_HandleGearSlotClick_Head(playerid)
 		DisplayPlayerInventory(playerid);
 	}
 
-	defer UpdatePlayerGear(playerid);
+	ShowPlayerGear(playerid);
 
 	return 1;
 }
@@ -565,7 +651,7 @@ _inv_HandleGearSlotClick_Face(playerid)
 		DisplayPlayerInventory(playerid);
 	}
 
-	defer UpdatePlayerGear(playerid);
+	ShowPlayerGear(playerid);
 
 	return 1;
 }
@@ -617,7 +703,7 @@ _inv_HandleGearSlotClick_Hand(playerid)
 		DisplayPlayerInventory(playerid);
 	}
 
-	defer UpdatePlayerGear(playerid);
+	ShowPlayerGear(playerid);
 
 	return 1;
 }
@@ -661,7 +747,7 @@ _inv_HandleGearSlotClick_Hols(playerid)
 		DisplayPlayerInventory(playerid);
 	}
 
-	defer UpdatePlayerGear(playerid);
+	ShowPlayerGear(playerid);
 
 	return 1;
 }
@@ -734,7 +820,7 @@ _inv_HandleGearSlotClick_Tors(playerid)
 		DisplayPlayerInventory(playerid);
 	}
 
-	defer UpdatePlayerGear(playerid);
+	ShowPlayerGear(playerid);
 
 	return 1;
 }
@@ -771,7 +857,7 @@ _inv_HandleGearSlotClick_Back(playerid)
 		DisplayContainerInventory(playerid, GetBagItemContainerID(itemid));
 	}
 
-	defer UpdatePlayerGear(playerid);
+	ShowPlayerGear(playerid);
 
 	return 1;
 }

@@ -29,7 +29,7 @@ forward DisplayPlayerInventory(playerid);
 
 // ClosePlayerInventory closes the inventory dialog, optionally calls
 // `OnPlayerCloseInventory`.
-forward ClosePlayerInventory(playerid, call = false);
+forward ClosePlayerInventory(playerid, call = true);
 
 // GetPlayerSelectedInventorySlot returns the selected inventory slot.
 forward GetPlayerSelectedInventorySlot(playerid);
@@ -182,7 +182,7 @@ stock DisplayPlayerInventory(playerid)
 	return 0;
 }
 
-stock ClosePlayerInventory(playerid, call = false)
+stock ClosePlayerInventory(playerid, call = true)
 {
 	if(!inv_ViewingInventory[playerid])
 		return 1;
@@ -387,7 +387,7 @@ _inv_displaySlotOptions(playerid, slotid)
 
 					PlayerUseItem(playerid);
 
-					ClosePlayerInventory(playerid, true);
+					ClosePlayerInventory(playerid);
 				} else {
 					ShowActionText(playerid, "Voce ja esta segurando um item", 3000, 200);
 					DisplayPlayerInventory(playerid);
@@ -416,7 +416,7 @@ _inv_displaySlotOptions(playerid, slotid)
 				GetPlayerPos(playerid, x, y, z);
 				CreateItemInWorld(itemid2, x, y, z - ITEM_FLOOR_OFFSET, .world = GetPlayerVirtualWorld(playerid), .interior = GetPlayerInterior(playerid));
 
-				ClosePlayerInventory(playerid, true);
+				ClosePlayerInventory(playerid);
 			}
 			default: {
 				if(!CallLocalFunction("OnPlayerSelectInventoryOpt", "dd", playerid, listitem - 3)) {
@@ -445,7 +445,7 @@ hook OnDialogModelResponse(playerid, dialogid, response, listitem)
 			Logger_I("listitem", listitem));
 
 		if(!response) {
-			ClosePlayerInventory(playerid, true);
+			ClosePlayerInventory(playerid);
 			return 1;
 		}
 

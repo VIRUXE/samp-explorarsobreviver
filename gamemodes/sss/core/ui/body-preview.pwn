@@ -14,16 +14,8 @@ PlayerText:	bod_LabelDraw	[MAX_PLAYERS][MAX_BODY_LABEL] = { PlayerText:INVALID_T
 
 ==============================================================================*/
 
-timer ShowPlayerHealthInfo[10](playerid)
+ShowPlayerHealthInfo(playerid)
 {
-	HideBodyPreviewUI(playerid);
-
-	new Container:containerid;
-	GetPlayerCurrentContainer(playerid, containerid);
-
-	if(!IsValidContainer(containerid) && !IsPlayerViewingInventory(playerid))
-		return;
-
 	new
 		drugslist[MAX_DRUG_TYPE],
 		drugs,
@@ -32,13 +24,14 @@ timer ShowPlayerHealthInfo[10](playerid)
 		Float:hunger = GetPlayerFP(playerid),
 		infected1 = GetPlayerInfectionIntensity(playerid, 0),
 		infected2 = GetPlayerInfectionIntensity(playerid, 1),
-		boxcolor = 50;
+		boxcolor = 164;
 
 	drugs = GetPlayerDrugsList(playerid, drugslist);
 	GetPlayerBleedRate(playerid, bleedrate);
-
+	bod_LabelIndex[playerid] = 0;
+	
 	if(GetPlayerWounds(playerid) < 2)
-		boxcolor = 50;
+		boxcolor = 164;
 	else if(GetPlayerWounds(playerid) < 3)
 		boxcolor = 0xd6cb0055;
 	else 
@@ -50,7 +43,7 @@ timer ShowPlayerHealthInfo[10](playerid)
 	if(bleedrate * 3200.0 > 10.0)
 		boxcolor = 0xb3000055;
 	else if(bleedrate * 3200.0 < 3.0)
-		boxcolor = 50;
+		boxcolor = 164;
 	else 
 		boxcolor = 0xd6cb0055;
 
@@ -60,7 +53,7 @@ timer ShowPlayerHealthInfo[10](playerid)
 
 
 	if(hunger >= 40.0)
-		boxcolor = 50;
+		boxcolor = 164;
 	else if(hunger < 30.0)
 		boxcolor = 0xb3000055;
 	else 
@@ -82,11 +75,9 @@ timer ShowPlayerHealthInfo[10](playerid)
 	}
 
 	SetBodyPreviewLabel(playerid, sprintf("Chance de Desmaio: %d%", floatround((GetPlayerKnockoutChance(playerid, 5.7) + GetPlayerKnockoutChance(playerid, 22.6) / 2)) ), 0xFFFFFFFF);
-
-	return;
 }
 
-stock HideBodyPreviewUI(playerid)
+HideBodyPreviewUI(playerid)
 {
 	for(new i; i <= bod_LabelIndex[playerid]; i++)
 	{
@@ -100,14 +91,20 @@ stock HideBodyPreviewUI(playerid)
 	bod_LabelIndex[playerid] = 0;
 }
 
-stock SetBodyPreviewLabel(playerid, const string[], textcolour, boxcolor = 50)
+SetBodyPreviewLabel(playerid, const string[], textcolour, boxcolor = 164)
 {
 	if(bod_LabelIndex[playerid] >= MAX_BODY_LABEL - 1){
 		err(true, true, "Numero de bodypreview excedido, index: %d/%d", bod_LabelIndex[playerid], MAX_BODY_LABEL);
 		return bod_LabelIndex[playerid];
 	}
 
-	bod_LabelDraw[playerid][bod_LabelIndex[playerid]] = CreatePlayerTextDraw(playerid, 3.000000, GEAR_POS_Y + (bod_LabelIndex[playerid] * 22.0), string);
+	if(bod_LabelDraw[playerid][bod_LabelIndex[playerid]] != PlayerText:INVALID_TEXT_DRAW)
+	{
+		PlayerTextDrawDestroy(playerid, bod_LabelDraw[playerid][bod_LabelIndex[playerid]]);
+		bod_LabelDraw[playerid][bod_LabelIndex[playerid]] = PlayerText:INVALID_TEXT_DRAW;
+	}
+
+	bod_LabelDraw[playerid][bod_LabelIndex[playerid]] = CreatePlayerTextDraw(playerid, 3.000000, 183 + (bod_LabelIndex[playerid] * 22.0), string);
 	PlayerTextDrawFont(playerid, bod_LabelDraw[playerid][bod_LabelIndex[playerid]], 2);
 	PlayerTextDrawLetterSize(playerid, bod_LabelDraw[playerid][bod_LabelIndex[playerid]], 0.229100, 1.049999);
 	PlayerTextDrawTextSize(playerid, bod_LabelDraw[playerid][bod_LabelIndex[playerid]], 133.500000, 17.000000);
@@ -144,13 +141,13 @@ hook OnPlayerConnect(playerid)
 
 hook OnPlayerOpenInventory(playerid)
 {
-	defer ShowPlayerHealthInfo(playerid);
+	ShowPlayerHealthInfo(playerid);
 	return Y_HOOKS_CONTINUE_RETURN_0;
 }
 
 hook OnPlayerOpenContainer(playerid, Container:containerid)
 {
-	defer ShowPlayerHealthInfo(playerid);
+	ShowPlayerHealthInfo(playerid);
 	return Y_HOOKS_CONTINUE_RETURN_0;
 }
 

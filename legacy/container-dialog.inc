@@ -26,7 +26,7 @@
 forward DisplayContainerInventory(playerid, Container:containerid);
 
 // ClosePlayerContainer closes an open container dialog if any.
-forward ClosePlayerContainer(playerid, call = false);
+forward ClosePlayerContainer(playerid, call = true);
 
 // GetPlayerCurrentContainer returns the container that a player is viewing.
 forward GetPlayerCurrentContainer(playerid, &Container:containerid);
@@ -168,7 +168,7 @@ stock DisplayContainerInventory(playerid, Container:containerid) {
 	return 0;
 }
 
-stock ClosePlayerContainer(playerid, call = false) {
+stock ClosePlayerContainer(playerid, call = true) {
 	if(!IsPlayerConnected(playerid)) {
 		return 1;
 	}
@@ -344,7 +344,7 @@ _container_displayOptions(playerid, slotid) {
 				GetPlayerPos(playerid, x, y, z);
 				CreateItemInWorld(itemid, x, y, z - ITEM_FLOOR_OFFSET, .world = GetPlayerVirtualWorld(playerid), .interior = GetPlayerInterior(playerid));
 
-				DisplayContainerInventory(playerid, cnt_CurrentContainer[playerid]);
+				ClosePlayerContainer(playerid);
 			}
 			default: {
 				if(!CallLocalFunction("OnPlayerSelectContainerOpt", "ddd", playerid, _:cnt_CurrentContainer[playerid], listitem - 3)) {
@@ -396,7 +396,7 @@ hook OnDialogModelResponse(playerid, dialogid, response, listitem)
 				}
 			}
 		} else {
-			ClosePlayerContainer(playerid, true);
+			ClosePlayerContainer(playerid);
 		}
 	}
 	return 1;

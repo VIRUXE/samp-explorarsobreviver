@@ -175,13 +175,20 @@ hook OnPlayerKeyStateChange(playerid, newkeys, oldkeys)
 	if( (newkeys == KEY_ACTION) && IsPlayerInAnyVehicle(playerid))
 			HideVehicleUI(playerid), DisplayPlayerInventory(playerid);
 
-hook OnPlayerCloseContainer(playerid, Container:containerid)
+hook OnPlayerCloseContainer(playerid, Container:containerid){
 	if(IsPlayerInAnyVehicle(playerid))
 		ShowVehicleUI(playerid, GetPlayerLastVehicle(playerid));
+	
+	return Y_HOOKS_CONTINUE_RETURN_0;
+}
 
 hook OnPlayerCloseInventory(playerid)
+{
 	if(IsPlayerInAnyVehicle(playerid))
 		ShowVehicleUI(playerid, GetPlayerLastVehicle(playerid));
+		
+	return Y_HOOKS_CONTINUE_RETURN_0;
+}
 
 hook OnPlayerDropItem(playerid, Item:itemid){
 	if(IsPlayerInAnyVehicle(playerid))

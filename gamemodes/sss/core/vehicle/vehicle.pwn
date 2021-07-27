@@ -511,14 +511,12 @@ PlayerVehicleUpdate(playerid)
 	else
 		PlayerTextDrawHide(playerid, veh_DoorsUI[playerid]);
 
-	if(!IsPlayerViewingInventory(playerid))
-	{
-		PlayerTextDrawShow(playerid, veh_FuelUI[playerid]);
-		PlayerTextDrawShow(playerid, veh_DoorsUI[playerid]);
-		PlayerTextDrawShow(playerid, veh_DamageUI[playerid]);
-		PlayerTextDrawShow(playerid, veh_EngineUI[playerid]);
-	}
-	
+
+	PlayerTextDrawShow(playerid, veh_FuelUI[playerid]);
+	PlayerTextDrawShow(playerid, veh_DoorsUI[playerid]);
+	PlayerTextDrawShow(playerid, veh_DamageUI[playerid]);
+	PlayerTextDrawShow(playerid, veh_EngineUI[playerid]);
+
 	if(IsBaseWeaponDriveby(GetPlayerWeapon(playerid)))
 	{
 		if(GetTickCountDifference(GetTickCount(), GetPlayerVehicleExitTick(playerid)) > 3000 && playerstate == PLAYER_STATE_DRIVER)
