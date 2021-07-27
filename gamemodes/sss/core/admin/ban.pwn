@@ -65,7 +65,7 @@ BanPlayer(playerid, const reason[MAX_BAN_REASON], byid, duration)
 	return 0;
 }
 
-BanPlayerByName(const name[MAX_PLAYER_NAME], const reason[MAX_BAN_REASON], byid, duration)
+BanPlayerByName(const name[], const reason[], byid, duration)
 {
 	new
 		forname[MAX_PLAYER_NAME],
@@ -265,11 +265,10 @@ stock GetTotalBans()
 stock GetBanInfo(const name[], &timestamp, reason[], bannedby[], &duration)
 {
 	stmt_bind_value(stmt_BanGetInfo, 0, DB::TYPE_STRING, name, MAX_PLAYER_NAME);
-
-	stmt_bind_result_field(stmt_BanGetInfo, FIELD_ID_BANS_DATE, DB::TYPE_INTEGER, timestamp);
-	stmt_bind_result_field(stmt_BanGetInfo, FIELD_ID_BANS_REASON, DB::TYPE_STRING, reason, MAX_BAN_REASON);
-	stmt_bind_result_field(stmt_BanGetInfo, FIELD_ID_BANS_BY, DB::TYPE_STRING, bannedby, MAX_PLAYER_NAME);
-	stmt_bind_result_field(stmt_BanGetInfo, FIELD_ID_BANS_DURATION, DB::TYPE_INTEGER, duration);
+	stmt_bind_result_field(stmt_BanGetInfo, 1, DB::TYPE_INTEGER, 	timestamp);
+	stmt_bind_result_field(stmt_BanGetInfo, 2, DB::TYPE_STRING, 	reason, MAX_BAN_REASON);
+	stmt_bind_result_field(stmt_BanGetInfo, 3, DB::TYPE_STRING, 	bannedby, MAX_PLAYER_NAME);
+	stmt_bind_result_field(stmt_BanGetInfo, 4, DB::TYPE_INTEGER, 	duration);
 
 	if(!stmt_execute(stmt_BanGetInfo))
 		return 0;

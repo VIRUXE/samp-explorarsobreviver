@@ -172,18 +172,17 @@ stock GetReportList(list[][e_report_list_struct])
 
 stock GetReportInfo(rowid, reason[], &date, type[], &Float:posx, &Float:posy, &Float:posz, &world, &interior, info[], reporter[])
 {
-	stmt_bind_value(stmt_ReportInfo, 0, DB::TYPE_INTEGER, rowid);
-
-	stmt_bind_result_field(stmt_ReportInfo, FIELD_ID_REPORTS_REASON, DB::TYPE_STRING, reason, MAX_REPORT_REASON_LENGTH);
-	stmt_bind_result_field(stmt_ReportInfo, FIELD_ID_REPORTS_DATE, DB::TYPE_INTEGER, date);
-	stmt_bind_result_field(stmt_ReportInfo, FIELD_ID_REPORTS_TYPE, DB::TYPE_STRING, type, MAX_REPORT_TYPE_LENGTH);
-	stmt_bind_result_field(stmt_ReportInfo, FIELD_ID_REPORTS_POSX, DB::TYPE_FLOAT, posx);
-	stmt_bind_result_field(stmt_ReportInfo, FIELD_ID_REPORTS_POSY, DB::TYPE_FLOAT, posy);
-	stmt_bind_result_field(stmt_ReportInfo, FIELD_ID_REPORTS_POSZ, DB::TYPE_FLOAT, posz);
-	stmt_bind_result_field(stmt_ReportInfo, FIELD_ID_REPORTS_POSW, DB::TYPE_INTEGER, world);
-	stmt_bind_result_field(stmt_ReportInfo, FIELD_ID_REPORTS_POSI, DB::TYPE_INTEGER, interior);
-	stmt_bind_result_field(stmt_ReportInfo, FIELD_ID_REPORTS_INFO, DB::TYPE_STRING, info, MAX_REPORT_INFO_LENGTH);
-	stmt_bind_result_field(stmt_ReportInfo, FIELD_ID_REPORTS_BY, DB::TYPE_STRING, reporter, MAX_PLAYER_NAME);
+	stmt_bind_value(stmt_ReportInfo, 		0, 	DB::TYPE_INTEGER, rowid);
+	stmt_bind_result_field(stmt_ReportInfo, 1, 	DB::TYPE_STRING, reason, MAX_REPORT_REASON_LENGTH);
+	stmt_bind_result_field(stmt_ReportInfo, 2, 	DB::TYPE_INTEGER, date);
+	stmt_bind_result_field(stmt_ReportInfo, 3, 	DB::TYPE_STRING, type, MAX_REPORT_TYPE_LENGTH);
+	stmt_bind_result_field(stmt_ReportInfo, 4, 	DB::TYPE_FLOAT, posx);
+	stmt_bind_result_field(stmt_ReportInfo, 5, 	DB::TYPE_FLOAT, posy);
+	stmt_bind_result_field(stmt_ReportInfo, 6, 	DB::TYPE_FLOAT, posz);
+	stmt_bind_result_field(stmt_ReportInfo, 7, 	DB::TYPE_INTEGER, world);
+	stmt_bind_result_field(stmt_ReportInfo, 8, 	DB::TYPE_INTEGER, interior);
+	stmt_bind_result_field(stmt_ReportInfo, 9, 	DB::TYPE_STRING, info, MAX_REPORT_INFO_LENGTH);
+	stmt_bind_result_field(stmt_ReportInfo, 10, DB::TYPE_STRING, reporter, MAX_PLAYER_NAME);
 
 	if(!stmt_execute(stmt_ReportInfo))
 		return 0;
