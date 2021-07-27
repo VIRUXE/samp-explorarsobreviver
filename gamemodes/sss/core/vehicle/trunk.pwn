@@ -66,6 +66,9 @@ hook OnPlayerInteractVehicle(playerid, vehicleid, Float:angle)
 				return Y_HOOKS_CONTINUE_RETURN_0;
 			}
 
+			if(IsValidItem(GetPlayerInteractingItem(playerid)))
+				return Y_HOOKS_CONTINUE_RETURN_0;
+
 			new Float:vehicleangle;
 
 			GetVehicleZAngle(vehicleid, vehicleangle);
@@ -75,6 +78,7 @@ hook OnPlayerInteractVehicle(playerid, vehicleid, Float:angle)
 			SetPlayerFacingAngle(playerid, (vehicleangle-angle)-180.0);
 
 			trunk_CurrentVehicle[playerid] = vehicleid;
+
 			DisplayContainerInventory(playerid, GetVehicleContainer(vehicleid));
 
 			HideActionText(playerid);
@@ -109,6 +113,7 @@ hook OnPlayerCloseContainer(playerid, Container:containerid)
 		VehicleTrunkUpdateSave(playerid);
 		trunk_CurrentVehicle[playerid] = INVALID_VEHICLE_ID;
 	}
+	return Y_HOOKS_CONTINUE_RETURN_0;
 }
 
 hook OnPlayerCloseInventory(playerid)
@@ -119,6 +124,7 @@ hook OnPlayerCloseInventory(playerid)
 		VehicleTrunkUpdateSave(playerid);
 		trunk_CurrentVehicle[playerid] = INVALID_VEHICLE_ID;
 	}
+	return Y_HOOKS_CONTINUE_RETURN_0;
 }
 
 hook OnPlayerUseItem(playerid, Item:itemid)
