@@ -524,6 +524,8 @@ new stock
 
 // PLAYER INTERNAL SCRIPTS
 #include "sss/core/player/accounts.pwn"
+#include "sss/core/player/discord-linking.pwn"
+#include "sss/core/player/discord.pwn"
 #include "sss/core/player/aliases.pwn"
 #include "sss/core/player/ipv4-log.pwn"
 #include "sss/core/player/gpci-log.pwn"
@@ -537,7 +539,6 @@ new stock
 #include "sss/core/player/commands.pwn"
 #include "sss/core/player/alt-tab-check.pwn"
 #include "sss/core/player/disallow-actions.pwn"
-#include "sss/core/player/whitelist.pwn"
 #include "sss/core/player/country.pwn"
 #include "sss/core/player/recipes.pwn"
 #include "sss/core/player/score.pwn"
