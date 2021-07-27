@@ -143,6 +143,10 @@ hook OnButtonPress(playerid, Button:buttonid){
 		ClearAnimations(playerid);
 		Player_Trash[playerid] = -1;
 	} else {
+		
+		if(IsValidItem(GetPlayerInteractingItem(playerid)))
+			return Y_HOOKS_CONTINUE_RETURN_0;
+
 		new trashid;
 		GetButtonExtraData(buttonid, trashid);
 		if(trashid >= MAX_TRASH){
