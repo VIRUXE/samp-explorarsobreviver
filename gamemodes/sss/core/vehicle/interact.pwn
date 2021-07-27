@@ -1,7 +1,7 @@
 #include <YSI_Coding\y_hooks>
 
 
-#define MAX_VEHICLES_IN_RANGE			(15)
+#define MAX_VEHICLES_IN_RANGE			(8)
 #define VEH_STREAMER_AREA_IDENTIFIER	(500)
 
 
@@ -98,7 +98,7 @@ _vint_EnterArea(playerid, areaid)
 	if(!IsValidDynamicArea(areaid))
 		return;
 
-	if(Iter_Count(varea_NearIndex[playerid]) == MAX_VEHICLES_IN_RANGE)
+	if(Iter_Count(varea_NearIndex[playerid]) == MAX_VEHICLES_IN_RANGE - 1)
 		return;
 
 	new data[2];
@@ -137,7 +137,9 @@ _vint_EnterArea(playerid, areaid)
 	}
 	else
 	{
-		log(true, "Vehicle %d already in NearList for player %d", data[1], playerid);
+		log(true, 
+			"Vehicle %d already in NearList for player %d - NearIndex %d",
+				data[1], playerid, Iter_Count(varea_NearIndex[playerid]));
 	}
 
 	CallLocalFunction("OnPlayerEnterVehArea", "dd", playerid, data[1]);
