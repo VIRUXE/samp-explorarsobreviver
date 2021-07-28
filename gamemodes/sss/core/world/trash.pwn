@@ -137,11 +137,13 @@ hook OnGameModeInit(){
 hook OnPlayerConnect(playerid)
     Player_Trash[playerid] = -1;
 
+
 hook OnButtonPress(playerid, Button:buttonid){
 	if(Player_Trash[playerid] != -1){
 		StopHoldAction(playerid);
 		ClearAnimations(playerid);
 		Player_Trash[playerid] = -1;
+		return Y_HOOKS_BREAK_RETURN_1;
 	} else {
 		
 		if(IsValidItem(GetPlayerInteractingItem(playerid)))

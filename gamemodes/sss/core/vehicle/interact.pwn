@@ -81,6 +81,7 @@ hook OnVehicleCreated(vehicleid)
 hook OnPlayerEnterDynArea(playerid, areaid)
 {
 	_vint_EnterArea(playerid, areaid);
+	return Y_HOOKS_CONTINUE_RETURN_0;
 }
 
 hook OnPlayerLeaveDynArea(playerid, areaid)

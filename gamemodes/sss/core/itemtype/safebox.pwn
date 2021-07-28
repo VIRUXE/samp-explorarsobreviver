@@ -258,7 +258,7 @@ hook OnPlayerPickUpItem(playerid, Item:itemid)
 	if(GetItemType(itemid) == item_Torso)
 		return Y_HOOKS_BREAK_RETURN_1;
 
-	return Y_HOOKS_CONTINUE_RETURN_1;
+	return Y_HOOKS_CONTINUE_RETURN_0;
 }
 
 

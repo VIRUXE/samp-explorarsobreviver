@@ -151,7 +151,7 @@ hook OnPlayerPickUpItem(playerid, Item:itemid)
 		BedCheck(playerid, itemid);
 		return Y_HOOKS_BREAK_RETURN_1;
 	}
-	return 1;
+	return Y_HOOKS_CONTINUE_RETURN_0;
 }
 
 hook OnPlayerUseItemWithItem(playerid, Item:itemid, Item:withitemid)
