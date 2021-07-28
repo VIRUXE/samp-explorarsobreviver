@@ -3,23 +3,15 @@
 
 static 
 	Text:item_Prev,
-	PlayerText:item_TD[MAX_PLAYERS] = {PlayerText:INVALID_TEXT_DRAW, ...},
-	Button:DefaultButton;
+	PlayerText:item_TD[MAX_PLAYERS] = {PlayerText:INVALID_TEXT_DRAW, ...};
 	
 hook OnGameModeInit(){
-	item_Prev = TextDrawCreate(291.000000, 400.000000, "Preview_Model");
-	TextDrawFont(item_Prev, 5);
-	TextDrawLetterSize(item_Prev, 0.600000, 2.000000);
-	TextDrawTextSize(item_Prev, 53.000000, 41.000000);		
-	TextDrawSetOutline(item_Prev, 0);
-	TextDrawSetShadow(item_Prev, 0);
-	TextDrawAlignment(item_Prev, 1);
-	TextDrawColor(item_Prev, -1);
-	TextDrawBackgroundColor(item_Prev, 0);
-	TextDrawSetPreviewRot(item_Prev, -10.000000, 0.100000, -20.000000, 1.0);
-	TextDrawSetPreviewModel(item_Prev, 19300);
-
-	DefaultButton = CreateButton(0.0, 0.0, 0.0, "Null");
+	item_Prev = TextDrawCreate	(291.000000, 400.000000, "Preview_Model");
+	TextDrawFont				(item_Prev, 5);
+	TextDrawLetterSize			(item_Prev,	0.600000, 2.000000);
+	TextDrawTextSize			(item_Prev, 53.000000, 41.000000);		
+	TextDrawBackgroundColor		(item_Prev, 0);
+	TextDrawSetPreviewRot		(item_Prev, -10.000000, 0.100000, -20.000000, 1.0);
 }
 
 hook OnGameModeExit()
@@ -195,25 +187,21 @@ hook OnPlayerDropItem(playerid, Item:itemid){
 
 /*==============================================================================
 
-	Fast update area to fast pickup item
-	
-==============================================================================*/
-
-hook OnPlayerUpdate(playerid){
-	Streamer_Update(playerid, STREAMER_TYPE_AREA);
-	return 1;
-}
-
-/*==============================================================================
-
 	Fix Button press
 	
 ==============================================================================*/
 
 hook OnButtonPress(playerid, Button:buttonid) 
 {
-	if(buttonid == DefaultButton)
+	// Por algum motivo, o botão 0 é chamado quando é criado em cima do jogador
+	// Correção temporária, provavelmente algo na include button ou streamer plugin.
+	if(buttonid == Button:0 || !IsValidButton(buttonid))
 	{
-		CancelPlayerMovement(playerid);
+		new Float:x, Float:y, Float:z;
+		GetPlayerPos(playerid, x, y, z);
+		Streamer_UpdateEx(playerid, x, y, z);
+		return Y_HOOKS_BREAK_RETURN_0;
 	}
+
+	return Y_HOOKS_CONTINUE_RETURN_0;
 }
