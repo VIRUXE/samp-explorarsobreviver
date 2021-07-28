@@ -9,13 +9,13 @@
 ==============================================================================*/
 
 
-#define MAX_WORK_BENCH			(14)
+#define MAX_WORK_BENCH			(13)
 
 static
 bool:	wb_ConstructionSetWorkbench[MAX_CONSTRUCT_SET],
 		wb_CurrentConstructSet[MAX_PLAYERS],
-Item:	wb_CurrentWorkbench[MAX_PLAYERS],
-Item:	wb_DefaultWorkbench[MAX_WORK_BENCH];
+Item:	wb_CurrentWorkbench[MAX_PLAYERS] = {INVALID_ITEM_ID, ...},
+Item:	wb_DefaultWorkbench[MAX_WORK_BENCH] = {INVALID_ITEM_ID, ...};
 
 
 /*==============================================================================
@@ -25,11 +25,6 @@ Item:	wb_DefaultWorkbench[MAX_WORK_BENCH];
 ==============================================================================*/
 
 hook OnGameModeInit()
-{
-	defer CreateDefaultWk();
-}
-
-timer CreateDefaultWk[10000]()
 {
 	// BC
 	wb_DefaultWorkbench[0] = CreateItem(item_Workbench, 585.17377, 873.72583, -43.51944, 0.0, 0.0, 94.26003);
@@ -115,16 +110,6 @@ hook OnPlayerPickUpItem(playerid, Item:itemid)
 	}
 
 	return Y_HOOKS_CONTINUE_RETURN_0;
-}
-
-hook OnPlayerUseItem(playerid, Item:itemid)
-{
-	if(GetItemType(itemid) == item_Workbench)
-	{
-		new Container:containerid;
-		GetItemArrayDataAtCell(itemid, _:containerid, 0);
-		DisplayContainerInventory(playerid, containerid);
-	}
 }
 
 hook OnPlayerUseItemWithItem(playerid, Item:itemid, Item:withitemid)
