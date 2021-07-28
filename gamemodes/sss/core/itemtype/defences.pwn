@@ -291,7 +291,8 @@ hook OnPlayerDroppedItem(playerid, Item:itemid)
 	{
 		new Float:x, Float:y, Float:z;
 		GetPlayerPos(playerid, x, y, z);
-		SetItemPos(itemid, x, y, z - ITEM_FLOOR_OFFSET);
+		CA_RayCastLine(x, y, z, x, y, z - 2.0, z, z, z);
+		SetItemPos(itemid, x, y, z + 0.15);
 	}
 }
 

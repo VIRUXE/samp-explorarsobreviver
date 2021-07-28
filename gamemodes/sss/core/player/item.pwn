@@ -3,7 +3,8 @@
 
 static 
 	Text:item_Prev,
-	PlayerText:item_TD[MAX_PLAYERS] = {PlayerText:INVALID_TEXT_DRAW, ...};
+	PlayerText:item_TD[MAX_PLAYERS] = {PlayerText:INVALID_TEXT_DRAW, ...},
+	Button:DefaultButton;
 	
 hook OnGameModeInit(){
 	item_Prev = TextDrawCreate(291.000000, 400.000000, "Preview_Model");
@@ -17,6 +18,8 @@ hook OnGameModeInit(){
 	TextDrawBackgroundColor(item_Prev, 0);
 	TextDrawSetPreviewRot(item_Prev, -10.000000, 0.100000, -20.000000, 1.0);
 	TextDrawSetPreviewModel(item_Prev, 19300);
+
+	DefaultButton = CreateButton(0.0, 0.0, 0.0, "Null");
 }
 
 hook OnGameModeExit()
@@ -74,21 +77,24 @@ hook OnPlayerGetItem(playerid, Item:itemid){
 		RemovePlayerAttachedObject(playerid, ITEM_ATTACH_INDEX);
 }
 
-hook OnItemArrayDataChanged(Item:itemid){
-	foreach(new i : Player){
-		if(GetPlayerItem(i) == itemid){
-			UpdatePlayerPreviewItem(i);
-		}
-	}
+hook OnPlayerUseItem(playerid, Item:itemid)
+	UpdatePlayerPreviewItem(playerid);
+
+hook OnPlayerWeaponShot(playerid, weaponid, hittype, hitid, Float:fX, Float:fY, Float:fZ)
+{
+	UpdatePlayerPreviewItem(playerid);
+	return 1;
 }
 
-hook OnItemDestroy(Item:itemid){
-	foreach(new i : Player){
-		if(GetPlayerItem(i) == itemid){
-			PlayerTextDrawHide(i, item_TD[i]);
-			TextDrawHideForPlayer(i, item_Prev);
-		}
-	}
+hook OnHoldActionFinish(playerid)
+	UpdatePlayerPreviewItem(playerid);
+
+hook OnHoldActionUpdate(playerid, progress)
+	UpdatePlayerPreviewItem(playerid);
+
+hook OnPlayerUseItemWithItem(playerid, Item:itemid, Item:withitemid){
+	UpdatePlayerPreviewItem(playerid);
+	return Y_HOOKS_CONTINUE_RETURN_0;
 }
 
 hook OnItemRemovedFromPlayer(playerid, Item:itemid){
@@ -99,24 +105,14 @@ hook OnItemRemovedFromPlayer(playerid, Item:itemid){
 		SetPlayerSpecialAction(playerid, SPECIAL_ACTION_NONE);
 }
 
-hook OnPlayerDisconnect(playerid, reason){
-	PlayerTextDrawDestroy(playerid, item_TD[playerid]);
+hook OnPlayerDroppedItem(playerid, Item:itemid){
+	PlayerTextDrawHide(playerid, item_TD[playerid]);
 	TextDrawHideForPlayer(playerid, item_Prev);
 }
 
-/*==============================================================================
-
-	Anti Drop item bug
-	
-==============================================================================*/
-
-hook OnPlayerDroppedItem(playerid, Item:itemid){
-	if(IsItemTypeDefence(GetItemType(itemid))){
-		new Float:x, Float:y, Float:z;
-		GetItemPos(itemid, x, y, z);
-		CA_RayCastLine(x, y, z, x, y, z - 3.0, z, z, z);
-		SetItemPos(itemid, x, y, z + 0.15);
-	}
+hook OnPlayerDisconnect(playerid, reason){
+	PlayerTextDrawDestroy(playerid, item_TD[playerid]);
+	TextDrawHideForPlayer(playerid, item_Prev);
 }
 
 /*==============================================================================
@@ -206,4 +202,19 @@ hook OnPlayerDropItem(playerid, Item:itemid){
 hook OnPlayerUpdate(playerid){
 	Streamer_Update(playerid, STREAMER_TYPE_AREA);
 	return 1;
+}
+
+/*==============================================================================
+
+	Fix Button press
+	
+==============================================================================*/
+
+hook OnButtonPress(playerid, Button:buttonid) 
+{
+	if(buttonid == DefaultButton)
+	{
+		CancelPlayerMovement(playerid);
+		return Y_HOOKS_BREAK_RETURN_1;
+	}
 }
