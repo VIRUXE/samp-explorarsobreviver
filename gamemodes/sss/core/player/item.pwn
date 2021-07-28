@@ -215,6 +215,5 @@ hook OnButtonPress(playerid, Button:buttonid)
 	if(buttonid == DefaultButton)
 	{
 		CancelPlayerMovement(playerid);
-		return Y_HOOKS_BREAK_RETURN_1;
 	}
 }
