@@ -13,7 +13,7 @@ Float:		E_VEHICLE_AREA_DISTANCE
 
 static
 			varea_AreaID[MAX_VEHICLES],
-			varea_NearList[MAX_PLAYERS][MAX_VEHICLES_IN_RANGE],
+			varea_NearList[MAX_PLAYERS][MAX_VEHICLES_IN_RANGE] = {INVALID_VEHICLE_ID, ...},
    Iterator:varea_NearIndex[MAX_PLAYERS]<MAX_VEHICLES_IN_RANGE>;
 
 
@@ -87,7 +87,6 @@ hook OnPlayerEnterDynArea(playerid, areaid)
 hook OnPlayerLeaveDynArea(playerid, areaid)
 {
 	_vint_LeaveArea(playerid, areaid);
-
 	return Y_HOOKS_CONTINUE_RETURN_0;
 }
 
@@ -177,6 +176,7 @@ _vint_LeaveArea(playerid, areaid)
 		if(varea_NearList[playerid][i] == data[1])
 		{
 			Iter_Remove(varea_NearIndex[playerid], i);
+			varea_NearList[playerid][i] = INVALID_VEHICLE_ID;
 			break;
 		}
 	}
