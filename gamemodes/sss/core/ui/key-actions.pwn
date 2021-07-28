@@ -9,7 +9,7 @@ PlayerText:	KeyActions[MAX_PLAYERS] = {PlayerText:INVALID_TEXT_DRAW, ...},
 
 hook OnPlayerConnect(playerid)
 {
-	KeyActions[playerid] = CreatePlayerTextDraw(playerid, 5.000000, 211.000000, "~y~H~W~ Abrir inventario~n~~y~N ~W~Dropar item");
+	KeyActions[playerid] = CreatePlayerTextDraw(playerid, 5.000000, 211.000000, "~y~H~W~ Abrir bolsos~n~~y~N ~W~Dropar item");
 	PlayerTextDrawFont(playerid, KeyActions[playerid], 1);
 	PlayerTextDrawLetterSize(playerid, KeyActions[playerid], 0.304165, 1.250000);
 	PlayerTextDrawTextSize(playerid, KeyActions[playerid], 215.000000, 464.500000);
@@ -235,7 +235,7 @@ _UpdateKeyActions(playerid)
 			AddToolTipText(playerid, KEYTEXT_DOORS, "Fechadura");
 		}
 
-		AddToolTipText(playerid, "~k~~VEHICLE_FIREWEAPON_ALT~", "Abrir inventario");
+		AddToolTipText(playerid, "~k~~VEHICLE_FIREWEAPON_ALT~", "Abrir bolso");
 
 		ShowPlayerKeyActionUI(playerid);
 		return;
@@ -274,7 +274,7 @@ _UpdateKeyActions(playerid)
 			ShowPlayerKeyActionUI(playerid);
 		}
 
-		AddToolTipText(playerid, KEYTEXT_INVENTORY, "Abrir Inventario");
+		AddToolTipText(playerid, KEYTEXT_INVENTORY, "Abrir bolso");
 
 		if(IsValidItem(GetPlayerBagItem(playerid)))
 			AddToolTipText(playerid, KEYTEXT_DROP_ITEM, "Remover Mochila");
@@ -394,7 +394,7 @@ _UpdateKeyActions(playerid)
 		AddToolTipText(playerid, KEYTEXT_DROP_ITEM, "Soltar");
 	}
 	
-	AddToolTipText(playerid, KEYTEXT_INVENTORY, "Abrir Inventario");
+	AddToolTipText(playerid, KEYTEXT_INVENTORY, "Abrir bolso");
 	ShowPlayerKeyActionUI(playerid);
 
 	return;

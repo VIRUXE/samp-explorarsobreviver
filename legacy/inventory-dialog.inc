@@ -173,9 +173,9 @@ stock DisplayPlayerInventory(playerid)
 	if(!isnull(inv_ExtraItemList[playerid]))
 		strcat(list, inv_ExtraItemList[playerid]);
 
-	format(title, sizeof(title), "Inventario (%d/%d)", size - slots, size);
+	format(title, sizeof(title), "~g~Bolsos (%d/%d)", size - slots, size);
 
-	ShowPlayerDialog(playerid, 33, DIALOG_STYLE_PREVIEW_MODEL, title, list, "Enter", "Esc");
+	ShowPlayerDialog(playerid, 33, DIALOG_STYLE_PREVIEW_MODEL, title, list, "Enter", "Sair");
 
 	inv_ViewingInventory[playerid] = true;
 
@@ -415,7 +415,6 @@ _inv_displaySlotOptions(playerid, slotid)
 				new Float:x, Float:y, Float:z;
 				GetPlayerPos(playerid, x, y, z);
 				CreateItemInWorld(itemid2, x, y, z - ITEM_FLOOR_OFFSET, .world = GetPlayerVirtualWorld(playerid), .interior = GetPlayerInterior(playerid));
-
 				DisplayPlayerInventory(playerid);
 			}
 			default: {

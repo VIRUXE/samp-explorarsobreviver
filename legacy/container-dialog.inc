@@ -145,7 +145,7 @@ stock DisplayContainerInventory(playerid, Container:containerid) {
 		cnt_ItemListTotal[playerid]++;
 	}*/
 
-	format(cnt_InventoryString[playerid], sizeof(cnt_InventoryString[]), "%s%d\tInventario >\n",
+	format(cnt_InventoryString[playerid], sizeof(cnt_InventoryString[]), "%s%d\tBolsos >\n",
 		cnt_InventoryString[playerid], GetPlayerSkin(playerid));
 
 
@@ -164,7 +164,7 @@ stock DisplayContainerInventory(playerid, Container:containerid) {
 			Logger_I("length", strlen(cnt_InventoryString[playerid])));
 	}
 
-	ShowPlayerDialog(playerid, 35, DIALOG_STYLE_PREVIEW_MODEL, title, cnt_InventoryString[playerid], "Enter", "Esc");
+	ShowPlayerDialog(playerid, 35, DIALOG_STYLE_PREVIEW_MODEL, title, cnt_InventoryString[playerid], "Enter", "Sair");
 
 	return 0;
 }
@@ -309,7 +309,7 @@ _container_displayOptions(playerid, slotid) {
 
 				if(required > 0) {
 					new str[32];
-					format(str, sizeof(str), "Requer %d slots no inventario", required);
+					format(str, sizeof(str), "Requer %d slots nos bolsos", required);
 					ShowActionText(playerid, str, 3000, 150);
 				} else if(required == 0) {
 					RemoveItemFromContainer(cnt_CurrentContainer[playerid], cnt_SelectedSlot[playerid], playerid);
