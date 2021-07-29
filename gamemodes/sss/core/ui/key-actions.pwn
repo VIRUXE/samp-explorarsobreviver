@@ -279,8 +279,30 @@ _UpdateKeyActions(playerid)
 		if(IsValidItem(GetPlayerBagItem(playerid)))
 			AddToolTipText(playerid, KEYTEXT_DROP_ITEM, "Remover Mochila");
 
-		ShowPlayerKeyActionUI(playerid);
+		new 
+			Button:list[BTN_MAX_INRANGE],
+			size,
+			text[3];
 
+		GetPlayerButtonList(playerid, list, size);
+
+		for(new i; i < size; ++i) 
+		{
+			if(IsValidItem(GetItemFromButtonID(list[i])))
+			{
+				GetButtonText(list[i], text);
+
+				if(!strfind(text, "~y~")) // Is default item button text
+					AddToolTipText(playerid, KEYTEXT_INTERACT, "Pegar item");
+				else
+					AddToolTipText(playerid, KEYTEXT_INTERACT, "Interagir com item");
+
+				break;
+			}
+		}
+		
+		ShowPlayerKeyActionUI(playerid);
+		
 		return;
 	}
 
@@ -290,12 +312,16 @@ _UpdateKeyActions(playerid)
 
 	if(itemtype == item_Note)
 		AddToolTipText(playerid, KEYTEXT_INTERACT, "Ler/Escrever");
+
 	if(itemtype == item_Sign)
 		AddToolTipText(playerid, KEYTEXT_INTERACT, "Colocar Placa");
+
 	else if(itemtype == item_Armour)
 		AddToolTipText(playerid, KEYTEXT_INTERACT, "Vestir");
+
 	else if(itemtype == item_Crowbar)
 		AddToolTipText(playerid, KEYTEXT_INTERACT, "Desmontar");
+
 	else if(itemtype == item_Shield)
 		AddToolTipText(playerid, KEYTEXT_INTERACT, "Colocar Barreira");
 	else if(itemtype == item_HandCuffs)
@@ -305,6 +331,7 @@ _UpdateKeyActions(playerid)
 	}
 	else if(itemtype == item_Wheel)
 		AddToolTipText(playerid, KEYTEXT_INTERACT, "Reparar Roda");
+
 	else if(itemtype == item_GasCan)
 	{
 		if(invehiclearea != INVALID_VEHICLE_ID)
@@ -345,7 +372,7 @@ _UpdateKeyActions(playerid)
 		if(inplayerarea != -1)
 			AddToolTipText(playerid, KEYTEXT_INTERACT, "Curar Jogador");
 		else
-			AddToolTipText(playerid, KEYTEXT_INTERACT, "Curar a Si Proprio");
+			AddToolTipText(playerid, KEYTEXT_INTERACT, "Curar a Si mesmo");
 	}
 	else if(itemtype == item_Wrench || itemtype == item_Screwdriver || itemtype == item_Hammer || itemtype == item_Spanner)
 	{
@@ -365,11 +392,14 @@ _UpdateKeyActions(playerid)
 			AddToolTipText(playerid, KEYTEXT_PUT_AWAY, "Vestir");
 		}
 		else if(GetHatFromItem(itemtype) != -1)
-			AddToolTipText(playerid, KEYTEXT_INTERACT, "Usar Chapeu");
+			AddToolTipText(playerid, KEYTEXT_INTERACT, "Vestir");
+
 		else if(GetMaskFromItem(itemtype) != -1)
-			AddToolTipText(playerid, KEYTEXT_INTERACT, "Usar Chapeu");
+			AddToolTipText(playerid, KEYTEXT_INTERACT, "Vestir");
+
 		else if(GetItemTypeExplosiveType(itemtype) != -1)
 			AddToolTipText(playerid, KEYTEXT_INTERACT, "Armar Explosivo");
+
 		else if(GetItemTypeLiquidContainerType(itemtype) != -1 && itemtype != item_GasCan)
 			AddToolTipText(playerid, KEYTEXT_INTERACT, "Beber");
 	}
@@ -383,6 +413,7 @@ _UpdateKeyActions(playerid)
 
 		if(GetItemWeaponCalibre(GetItemTypeWeapon(itemtype)) != NO_CALIBRE){
 			AddToolTipText(playerid, KEYTEXT_RELOAD, "Recarregar");
+
 			if(GetItemTypeAmmoType(GetItemWeaponItemAmmoItem(itemid)) != -1 && GetItemWeaponItemMagAmmo(itemid) + GetItemWeaponItemReserve(itemid) != 0)
 				AddToolTipText(playerid, KEYTEXT_DROP_ITEM, "Soltar/Descarregar");
 			else
