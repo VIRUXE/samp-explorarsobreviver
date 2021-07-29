@@ -82,10 +82,27 @@ stock PlayerInflictWound(playerid, targetid, E_WND_TYPE:type, Float:bleedrate, F
 		return 0;
 	}
 
+	// Não atacar jogadores em atendimento
+	foreach(new i : StreamedPlayer[targetid])
+	{
+		if(IsPlayerOnAdminDuty(i) && !IsPlayerUnfocused(i))
+		{
+			new Float:x, Float:y, Float:z;
+			GetPlayerPos(i, x, y, z);
+
+			if(GetPlayerDistanceFromPoint(targetid, x, y, z) <= 64.0)
+			{
+				Dialog_Show(playerid, DIALOG_STYLE_MSGBOX, "Aviso", "Nao ataque, jogador em atendimento pela Staff", "Sair", "");
+				return 0;
+			}
+		}
+	}
+
 	new
 		woundid = Iter_Free(wnd_Index[targetid]),
 		woundcount,
 		Float:totalbleedrate;
+
 	GetPlayerBleedRate(targetid, totalbleedrate);
 
 	if(woundid == ITER_NONE)
