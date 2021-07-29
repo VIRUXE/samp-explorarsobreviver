@@ -134,7 +134,7 @@ hook OnPlayerOpenInventory(playerid)
 	if(ToolTips[playerid])
 		ToolTipTimer[playerid] = defer HideHelpTip_Delay(playerid, 100);
 
-hook OnPlayerOpenedContainer(playerid, containerid)
+hook OnPlayerOpenedContainer(playerid, Container:containerid)
 	if(ToolTips[playerid])
 		ToolTipTimer[playerid] = defer HideHelpTip_Delay(playerid, 100);
 

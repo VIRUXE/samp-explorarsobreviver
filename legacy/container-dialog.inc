@@ -166,6 +166,8 @@ stock DisplayContainerInventory(playerid, Container:containerid) {
 
 	ShowPlayerDialog(playerid, 35, DIALOG_STYLE_PREVIEW_MODEL, title, cnt_InventoryString[playerid], "Enter", "Sair");
 
+	CallLocalFunction("OnPlayerOpenedContainer", "dd", playerid, _:containerid);
+
 	return 0;
 }
 

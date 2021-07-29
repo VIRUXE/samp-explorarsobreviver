@@ -127,16 +127,14 @@ hook OnPlayerConnect(playerid)
 	}
 }
 
-hook OnPlayerOpenInventory(playerid)
+hook OnPlayerOpenedInventory(playerid)
 {
 	ShowPlayerHealthInfo(playerid);
-	return Y_HOOKS_CONTINUE_RETURN_0;
 }
 
-hook OnPlayerOpenContainer(playerid, Container:containerid)
+hook OnPlayerOpenedContainer(playerid, Container:containerid)
 {
 	ShowPlayerHealthInfo(playerid);
-	return Y_HOOKS_CONTINUE_RETURN_0;
 }
 
 /*==============================================================================

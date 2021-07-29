@@ -67,6 +67,11 @@ forward bool:IsPlayerViewingInventory(playerid);
 // 1 to cancel.
 forward OnPlayerOpenInventory(playerid);
 
+// OnPlayerOpenedInventory is called after a inventory dialog has been shown to
+// the player, there are no return controls.
+
+forward OnPlayerOpenedInventory(playerid);
+
 // OnPlayerCloseInventory is called when a player closes their inventory via
 // close button or if `call` is set on `ClosePlayerInventory`.
 forward OnPlayerCloseInventory(playerid);
@@ -179,6 +184,7 @@ stock DisplayPlayerInventory(playerid)
 
 	inv_ViewingInventory[playerid] = true;
 
+	CallLocalFunction("OnPlayerOpenedInventory", "d", playerid);
 	return 0;
 }
 

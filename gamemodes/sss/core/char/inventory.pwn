@@ -416,16 +416,14 @@ ShowPlayerGear(playerid)
 	else TextDrawHideForPlayer(playerid, GearSlot_Back[1]);
 }
 
-hook OnPlayerOpenInventory(playerid)
+hook OnPlayerOpenedInventory(playerid)
 {
 	ShowPlayerGear(playerid);
-	return Y_HOOKS_CONTINUE_RETURN_0;
 }
 
-hook OnPlayerOpenContainer(playerid, Container:containerid)
+hook OnPlayerOpenedContainer(playerid, Container:containerid)
 {
 	ShowPlayerGear(playerid);
-	return Y_HOOKS_CONTINUE_RETURN_0;
 }
 
 hook OnPlayerHolsterItem(playerid, Item:itemid)
