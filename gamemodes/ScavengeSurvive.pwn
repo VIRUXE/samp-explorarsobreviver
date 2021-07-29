@@ -176,6 +176,7 @@ public OnGameModeInit()
 #include <crashdetect>
 #include <sscanf2>
 #include <mathutil>
+#include <SKY>
 #include <YSI_Core\y_utils>
 #include <YSI_Coding\y_va>
 #include <YSI_Coding\y_timers>

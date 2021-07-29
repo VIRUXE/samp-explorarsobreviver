@@ -4,13 +4,14 @@
 	"contributors": [
 		"Southclaws",
 		"VIRUXE",
-		"kolorado"
+		"kolor4do"
 	  ],
 	"entry": "gamemodes/ScavengeSurvive.pwn",
 	"output": "gamemodes/ScavengeSurvive.amx",
 	"local": true,
 	"dependencies": [
 		"sampctl/samp-stdlib",
+		"oscar-broman/SKY:2.3.0",
 		"urShadow/Pawn.RakNet:1.4.1",
 		"Pottus/ColAndreas:1.5.0",
 		"maddinat0r/samp-discord-connector:v0.3.5",
@@ -71,6 +72,7 @@
 		"port": 7777,
 		"announce": false,
 		"maxplayers": 100,
+		"rcon_password": "scavengeesobreviver",
 		"hostname": "Explorar e Sobreviver (Desenvolvimento)",
 		"weburl": "discord.explorarsobreviver.com",
 		"language": "Portugues",
