@@ -113,10 +113,20 @@ hook OnPlayerDisconnect(playerid, reason){
 	
 ==============================================================================*/
 
-hook OnItemCreateInWorld(Item:itemid){
-	new Button:buttonid;
+hook OnItemCreateInWorld(Item:itemid) {
+	new 
+		Button:buttonid,
+		Float:x, Float:y, Float:z,
+		str[3 + MAX_ITEM_NAME];
+
 	GetItemButtonID(itemid, buttonid);
-	SetButtonText(buttonid, "Pressione F para pegar");
+	GetButtonPos(buttonid, x, y, z);
+	GetItemTypeName(GetItemType(itemid), str);
+
+	format(str, sizeof(str), "~y~%s", str);
+
+	SetButtonText(buttonid, str);
+	SetButtonPos(buttonid, x, y, z);
 }
 
 /*==============================================================================
@@ -187,20 +197,18 @@ hook OnPlayerDropItem(playerid, Item:itemid){
 
 /*==============================================================================
 
-	Fix Button press
+	Adicional use item
 	
 ==============================================================================*/
 
-hook OnButtonPress(playerid, Button:buttonid) 
-{
-	// Por algum motivo, o botão 0 é chamado quando é criado em cima do jogador
-	// Correção temporária, provavelmente algo na include button ou streamer plugin.
-	if(buttonid == Button:0 || !IsValidButton(buttonid))
-	{
-		new Float:x, Float:y, Float:z;
-		GetPlayerPos(playerid, x, y, z);
-		Streamer_UpdateEx(playerid, x, y, z);
-		return Y_HOOKS_BREAK_RETURN_0;
+hook OnPlayerUseItemWithBtn(playerid, Button:buttonid, Item:itemid) {
+
+	new Item:withitem = GetItemFromButtonID(Button:buttonid);
+	if(IsValidItem(withitem)) {
+		new Button:item_button;
+		GetItemButtonID(withitem, item_button);
+
+		CallLocalFunction("OnButtonPress", "dd", playerid, _:item_button);
 	}
 
 	return Y_HOOKS_CONTINUE_RETURN_0;

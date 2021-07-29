@@ -247,7 +247,7 @@ _container_displayOptions(playerid, slotid) {
 
 	GetItemName(itemid_outer, tmp);
 
-	cnt_OptionsList[playerid] = "Equipar\nMover para inventario\nSoltar item\n";
+	cnt_OptionsList[playerid] = "Equipar\nUsar\nMover para inventario\nSoltar item\n";
 	cnt_OptionsCount[playerid] = 0;
 
 	CallLocalFunction("OnPlayerViewContainerOpt", "dd", playerid, _:cnt_CurrentContainer[playerid]);
@@ -283,8 +283,33 @@ _container_displayOptions(playerid, slotid) {
 					DisplayContainerInventory(playerid, cnt_CurrentContainer[playerid]);
 				}
 			}
-
 			case 1: {
+				if(GetPlayerItem(playerid) == INVALID_ITEM_ID) {
+					new
+						Item:itemid,
+						ret;
+
+					ret = GetContainerSlotItem(cnt_CurrentContainer[playerid], cnt_SelectedSlot[playerid], itemid);
+					if(ret) {
+						Logger_Err("current container invalid in dialog call",
+							Logger_I("containerid", _:cnt_CurrentContainer[playerid]),
+							Logger_I("playerid", playerid));
+						ShowActionText(playerid, "Erro", 3000, 200);
+						return 1;
+					}
+
+					RemoveItemFromContainer(cnt_CurrentContainer[playerid], cnt_SelectedSlot[playerid], playerid);
+					GiveWorldItemToPlayer(playerid, itemid);
+
+					ClosePlayerContainer(playerid);
+					
+					PlayerUseItem(playerid);
+				} else {
+					ShowActionText(playerid, "Voce ja esta segurando um item", 3000, 200);
+					DisplayContainerInventory(playerid, cnt_CurrentContainer[playerid]);
+				}
+			}
+			case 2: {
 				new
 					Item:itemid,
 					ret;
@@ -321,7 +346,7 @@ _container_displayOptions(playerid, slotid) {
 
 				return 1;
 			}
-			case 2: {
+			case 3: {
 				new
 					Item:itemid,
 					ret;
@@ -345,12 +370,17 @@ _container_displayOptions(playerid, slotid) {
 
 				new Float:x, Float:y, Float:z;
 				GetPlayerPos(playerid, x, y, z);
-				CreateItemInWorld(itemid, x, y, z - ITEM_FLOOR_OFFSET, .world = GetPlayerVirtualWorld(playerid), .interior = GetPlayerInterior(playerid));
+
+				CreateItemInWorld(itemid, 
+					x, y, z - ITEM_FLOOR_OFFSET,
+					.world = GetPlayerVirtualWorld(playerid),
+					.interior = GetPlayerInterior(playerid),
+					.label = 0);
 
 				DisplayContainerInventory(playerid, cnt_CurrentContainer[playerid]);
 			}
 			default: {
-				if(!CallLocalFunction("OnPlayerSelectContainerOpt", "ddd", playerid, _:cnt_CurrentContainer[playerid], listitem - 3)) {
+				if(!CallLocalFunction("OnPlayerSelectContainerOpt", "ddd", playerid, _:cnt_CurrentContainer[playerid], listitem - 4)) {
 					DisplayContainerInventory(playerid, cnt_CurrentContainer[playerid]);
 				} else {
 					Logger_Dbg("container-dialog", "closing container via option response");

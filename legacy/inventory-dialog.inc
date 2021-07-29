@@ -389,11 +389,12 @@ _inv_displaySlotOptions(playerid, slotid)
 					}
 
 					RemoveItemFromInventory(playerid, inv_SelectedSlot[playerid]);
-					GiveWorldItemToPlayer(playerid, itemid2, 1);
-
-					PlayerUseItem(playerid);
 
 					ClosePlayerInventory(playerid);
+
+					GiveWorldItemToPlayer(playerid, itemid2, 1);
+					
+					PlayerUseItem(playerid);
 				} else {
 					ShowActionText(playerid, "Voce ja esta segurando um item", 3000, 200);
 					DisplayPlayerInventory(playerid);
@@ -419,8 +420,15 @@ _inv_displaySlotOptions(playerid, slotid)
 				}
 
 				new Float:x, Float:y, Float:z;
+
 				GetPlayerPos(playerid, x, y, z);
-				CreateItemInWorld(itemid2, x, y, z - ITEM_FLOOR_OFFSET, .world = GetPlayerVirtualWorld(playerid), .interior = GetPlayerInterior(playerid));
+
+				CreateItemInWorld(itemid2,
+					x, y, z - ITEM_FLOOR_OFFSET,
+					.world = GetPlayerVirtualWorld(playerid),
+					.interior = GetPlayerInterior(playerid),
+					.label = 0);
+
 				DisplayPlayerInventory(playerid);
 			}
 			default: {
@@ -468,6 +476,7 @@ hook OnDialogModelResponse(playerid, dialogid, response, listitem)
 		new
 			Item:itemid2,
 			ret;
+			
 		ret = GetInventorySlotItem(playerid, listitem, itemid2);
 		if(ret || !IsValidItem(itemid2)) {
 			DisplayPlayerInventory(playerid);
