@@ -205,7 +205,7 @@ ResetVariables(playerid)
 	ply_Data[playerid][ply_VIP]					= 0;
 
 	ply_Data[playerid][ply_Alive]				= false;
-	ply_Data[playerid][ply_HitPoints]			= 100.0;
+	ply_Data[playerid][ply_HitPoints]			= 99.0;
 	ply_Data[playerid][ply_ArmourPoints]		= 0.0;
 	ply_Data[playerid][ply_FoodPoints]			= 80.0;
 	ply_Data[playerid][ply_Clothes]				= 0;

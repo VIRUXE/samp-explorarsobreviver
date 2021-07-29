@@ -239,6 +239,7 @@ timer DisableUntilAC[1000]()
 {
 	EnableAntiCheat(4, false); // Anti-teleport hack (into/between vehicles)
 	EnableAntiCheat(11, false); // Anti-Health hack (in vehicle)
+	EnableAntiCheat(12, false); // Anti-Health hack (on foot)
 	EnableAntiCheat(5, false); // Anti-Teleport (vehicle to player)
 	EnableAntiCheat(15, false); // Anti-Weapon hack
 	EnableAntiCheat(32, false); // Anti-Carjack hack
@@ -851,7 +852,19 @@ ptask HealthHackCheck[1000](playerid)
 
 	// Onfoot 
 	if(IsPlayerSpawned(playerid) && health > 99.9)
-		ChatMsgAdmins(3, RED, "[Anti-Health Hack] %p(%d) detected. Health: %f", playerid, playerid, health);
+	{
+		new
+			Float:x,
+			Float:y,
+			Float:z,
+			name[MAX_PLAYER_NAME];
+
+		GetPlayerPos(playerid, x, y, z);
+		GetPlayerName(playerid, name, MAX_PLAYER_NAME);
+
+		ReportPlayer(name, "Hack de vida andando", -1, "HP", x, y, z, GetPlayerVirtualWorld(playerid), GetPlayerInterior(playerid), "");
+		KickPlayer(playerid, "Hack de vida andando");
+	}
 
 	if(!IsPlayerInAnyVehicle(playerid))
 		return;
@@ -869,14 +882,13 @@ ptask HealthHackCheck[1000](playerid)
 			Float:x,
 			Float:y,
 			Float:z,
-			name[MAX_PLAYER_NAME],
-			reason[64];
+			name[MAX_PLAYER_NAME];
 
 		GetPlayerPos(playerid, x, y, z);
 		GetPlayerName(playerid, name, MAX_PLAYER_NAME);
-		format(reason, sizeof(reason), "Veículo com %.2f de Vida (Impossível pelo Servidor)", vehiclehp);
-		ReportPlayer(name, reason, -1, REPORT_TYPE_VHEALTH, x, y, z, GetPlayerVirtualWorld(playerid), GetPlayerInterior(playerid), "");
-		KickPlayer(playerid, reason);
+
+		ReportPlayer(name, "Hack de vida no veiculo", -1, REPORT_TYPE_VHEALTH, x, y, z, GetPlayerVirtualWorld(playerid), GetPlayerInterior(playerid), "");
+		KickPlayer(playerid, "Hack de vida no veiculo");
 
 		SetVehicleHealth(vehicleid, 300.0);
 		defer vh_ResetVehiclePosition(vehicleid);
