@@ -591,7 +591,7 @@ new stock
 #include "sss/core/world/weapons-cache.pwn"
 #include "sss/core/world/loot.pwn"
 #include "sss/core/world/item-tweak.pwn"
-#include "sss/core/world/trash.pwn"
+#include "sss/core/world/bin.pwn"
 
 // ITEM TYPE CATEGORIES
 #include "sss/core/itemtype/defences.pwn"
@@ -679,7 +679,7 @@ new stock
 #include "sss/core/item/wooddoor.pwn"
 #include "sss/core/item/largegate.pwn"
 #include "sss/core/item/toolbox.pwn"
-//#include "sss/core/item/clock.pwn"
+#include "sss/core/item/clock.pwn"
 
 // ADMINISTRATION TOOLS
 #include "sss/core/admin/report.pwn"

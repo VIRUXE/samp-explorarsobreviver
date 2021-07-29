@@ -1,9 +1,9 @@
 
 #include <YSI_Coding\y_hooks>
 
-#define MAX_TRASH   (106)
+#define MAX_BIN   (106)
 
-static Float:Trash_Pos[MAX_TRASH][3] =
+static Float:Bin_Pos[MAX_BIN][3] =
 {
 // 1372
 	{776.828002, 	1866.160034, 	3.890630},
@@ -119,49 +119,49 @@ static Float:Trash_Pos[MAX_TRASH][3] =
 	{ 1370.98, 1916.29, 11.0156 }
 },
 
-	Button:Trash_Button	[MAX_TRASH] = {INVALID_BUTTON_ID, ...},
-	disable_Trash		[MAX_TRASH],
-	Player_Trash		[MAX_PLAYERS];
+	Button:BIN_Button	[MAX_BIN] = {INVALID_BUTTON_ID, ...},
+	disable_BIN		[MAX_BIN],
+	Player_BIN		[MAX_PLAYERS];
 
 hook OnGameModeInit(){
-	for(new i = 0; i < MAX_TRASH; i++){
-        Trash_Button[i] = CreateButton(Trash_Pos[i][0], Trash_Pos[i][1], Trash_Pos[i][2] + 0.5,
+	for(new i = 0; i < MAX_BIN; i++){
+        BIN_Button[i] = CreateButton(Bin_Pos[i][0], Bin_Pos[i][1], Bin_Pos[i][2] + 0.5,
 			"Pressione F para vasculhar", 0, 0, 2.1, 1, "Lixeira", .testlos = false);
 
-		SetButtonExtraData(Trash_Button[i], i + MAX_TRASH);
+		SetButtonExtraData(BIN_Button[i], i + MAX_BIN);
 
-        disable_Trash[i] = 0;
+        disable_BIN[i] = 0;
 	}
 }
 
 hook OnPlayerConnect(playerid)
-    Player_Trash[playerid] = -1;
+    Player_BIN[playerid] = -1;
 
 
 hook OnButtonPress(playerid, Button:buttonid){
-	if(Player_Trash[playerid] != -1){
+	if(Player_BIN[playerid] != -1){
 		StopHoldAction(playerid);
 		ClearAnimations(playerid);
-		Player_Trash[playerid] = -1;
+		Player_BIN[playerid] = -1;
 		return Y_HOOKS_BREAK_RETURN_1;
 	} else {
 		
 		if(IsValidItem(GetPlayerInteractingItem(playerid)))
 			return Y_HOOKS_CONTINUE_RETURN_0;
 
-		new trashid;
-		GetButtonExtraData(buttonid, trashid);
-		if(trashid >= MAX_TRASH){
-			if(disable_Trash[trashid - MAX_TRASH]) {
+		new binid;
+		GetButtonExtraData(buttonid, binid);
+		if(binid >= MAX_BIN){
+			if(disable_BIN[binid - MAX_BIN]) {
 				ShowActionText(playerid, "~r~Vazio.", 2000);
 			} else {
-				Player_Trash[playerid] = trashid - MAX_TRASH;
+				Player_BIN[playerid] = binid - MAX_BIN;
 
 				new Float:x, Float:y, Float:z;
 				GetPlayerPos(playerid, x, y, z);
 
 				SetPlayerFacingAngle(playerid,
-					GetAngleToPoint(x, y, Trash_Pos[trashid - MAX_TRASH][0], Trash_Pos[trashid - MAX_TRASH][1]));
+					GetAngleToPoint(x, y, Bin_Pos[binid - MAX_BIN][0], Bin_Pos[binid - MAX_BIN][1]));
 
 				ApplyAnimation(playerid, "COP_AMBIENT", "COPBROWSE_LOOP", 4.0, 1, 0, 0, 0, 0);
 
@@ -175,9 +175,9 @@ hook OnButtonPress(playerid, Button:buttonid){
 }
 
 hook OnHoldActionUpdate(playerid, progress){
-    if(Player_Trash[playerid] != -1){
+    if(Player_BIN[playerid] != -1){
 		if(GetPlayerTotalVelocity(playerid) > 1.5){
-			Player_Trash[playerid] = -1;
+			Player_BIN[playerid] = -1;
 			StopHoldAction(playerid);
 			ClearAnimations(playerid);
 		}
@@ -188,23 +188,23 @@ hook OnHoldActionUpdate(playerid, progress){
 }
 
 hook OnHoldActionFinish(playerid){
-	if(Player_Trash[playerid] != -1) {
+	if(Player_BIN[playerid] != -1) {
 	    if(random(5) == 2) {
 	        ShowActionText(playerid, "~r~Nada encontrado.");
 	    } else {
 			new Float:x, Float:y, Float:z;
 			GetPlayerPos(playerid, x, y, z);
 			CreateLootItem(GetLootIndexFromName("world_survivor"), x, y, z - ITEM_FLOOR_OFFSET);
-			defer RestartTrash(Player_Trash[playerid]);
+			defer RestartBIN(Player_BIN[playerid]);
 	    }
 
 	    ClearAnimations(playerid);
-		disable_Trash[Player_Trash[playerid]] = 1;
-	    Player_Trash[playerid] = -1;
+		disable_BIN[Player_BIN[playerid]] = 1;
+	    Player_BIN[playerid] = -1;
 	}
 	return Y_HOOKS_CONTINUE_RETURN_0;
 }
 
-timer RestartTrash[ITEM_RESPAWN_DELAY](trashid)
-	disable_Trash[trashid] = 0;
+timer RestartBIN[ITEM_RESPAWN_DELAY](binid)
+	disable_BIN[binid] = 0;
 
