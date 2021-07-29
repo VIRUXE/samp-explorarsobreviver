@@ -37,7 +37,7 @@ Item:	cons_DeconstructingItem[MAX_PLAYERS] = {INVALID_ITEM_ID, ...},
 
 
 forward OnPlayerConstruct(playerid, consset);
-forward OnPlayerConstructed(playerid, consset, result);
+forward OnPlayerConstructed(playerid, consset, Item:result);
 forward OnPlayerDeconstruct(playerid, Item:itemid);
 forward OnPlayerDeconstructed(playerid, Item:itemid);
 
