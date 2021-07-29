@@ -418,11 +418,14 @@ ShowPlayerGear(playerid)
 
 hook OnPlayerOpenedInventory(playerid)
 {
+	ClosePlayerContainer(playerid);
 	ShowPlayerGear(playerid);
+	
 }
 
 hook OnPlayerOpenedContainer(playerid, Container:containerid)
 {
+	ClosePlayerInventory(playerid);
 	ShowPlayerGear(playerid);
 }
 
