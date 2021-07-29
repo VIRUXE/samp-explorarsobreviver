@@ -302,9 +302,9 @@ hook OnPlayerPickUpItem(playerid, Item:itemid)
 
 	if(def_ItemTypeDefenceType[itemtype] != INVALID_DEFENCE_TYPE)
 	{
-		new active;
-		GetItemArrayDataAtCell(itemid, active, def_active);
-		if(active)
+		new itemdata[e_DEFENCE_DATA];
+		GetItemArrayData(itemid, itemdata);
+		if(itemdata[def_active])
 		{
 			_InteractDefence(playerid, itemid);
 			return Y_HOOKS_BREAK_RETURN_1;
@@ -320,9 +320,9 @@ hook OnPlayerUseItemWithItem(playerid, Item:itemid, Item:withitemid)
 
 	if(def_ItemTypeDefenceType[withitemtype] != INVALID_DEFENCE_TYPE)
 	{
-		new active;
-		GetItemArrayDataAtCell(withitemid, active, def_active);
-		if(active)
+		new itemdata[e_DEFENCE_DATA];
+		GetItemArrayData(withitemid, itemdata);
+		if(itemdata[def_active])
 		{
 			if(IsValidItem(def_CurrentDefenceEdit[playerid]))
 			{
@@ -1170,9 +1170,9 @@ hook OnItemDestroy(Item:itemid)
 		if(def_Col[itemid] != -1)
 			CA_DestroyObject(def_Col[itemid]), def_Col[itemid] = -1;
 		
-		new active;
-		GetItemArrayDataAtCell(itemid, active, def_active);
-		if(active)
+		new itemdata[e_DEFENCE_DATA];
+		GetItemArrayData(itemid, itemdata);
+		if(itemdata[def_active])
 		{
 			CallLocalFunction("OnDefenceDestroy", "d", _:itemid);
 		}
