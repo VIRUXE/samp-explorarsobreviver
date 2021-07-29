@@ -18,8 +18,8 @@ CreateLootVehicle(type, Float:x, Float:y, Float:z, Float:r)
 		}
 		default:
 		{
-			colour1 = 128 + random(128);
-			colour2 = 128 + random(128);
+			colour1 = GetVehicleRandomColour();
+			colour2 = GetVehicleRandomColour();
 		}
 	}
 	
