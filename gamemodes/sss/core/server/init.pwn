@@ -899,8 +899,8 @@ public OnScriptInit()
 	item_Rucksack       = DefineItemType("Mochila de Viagem",			"Rucksack",			19559,	5,	91.0, -4.0, 0.0,		0.16,	0.350542, 0.017385, 0.060469, 0.000000, 260.845062, 0.000000, .maxhitpoints = 5);
 	item_Satchel        = DefineItemType("Mochila Pequena",				"Satchel",			363,	2,	270.0, 0.0, 0.0,		0.0,	0.052853, 0.034967, -0.177413, 0.000000, 261.397491, 349.759826, .maxhitpoints = 2);
 	item_Sawnoff        = DefineItemType("Sawnoff",						"Sawnoff",			350,	2,	90.0, .maxhitpoints = 2);
-	item_ScrapMachine	= DefineItemType("Scrap Machine",				"ScrapMachine",		920,	12,	0.0, 0.0, 0.0,			0.4344,	.maxhitpoints = 12);
-	item_ScrapMetal		= DefineItemType("Scrap Metal",					"ScrapMetal",		19941,	1,	0.0, 0.0, 0.0,			0.218,	0.110999, 0.031000, 0.031999,  -101.400001, 3.700001, -97.499969, false, 0xFF4D2525, .maxhitpoints = 1);
+	item_ScrapMachine	= DefineItemType("Maquina de Sucata",			"ScrapMachine",		920,	12,	0.0, 0.0, 0.0,			0.4344,	.maxhitpoints = 12);
+	item_ScrapMetal		= DefineItemType("Sucata",						"ScrapMetal",		19941,	1,	0.0, 0.0, 0.0,			0.218,	0.110999, 0.031000, 0.031999,  -101.400001, 3.700001, -97.499969, false, 0xFF4D2525, .maxhitpoints = 1);
 	item_Screwdriver	= DefineItemType("Chave de Fenda",				"Screwdriver",		18644,	1,	90.0, 0.0, 0.0,			0.0,	0.099341, 0.021018, 0.009145, 193.644195, 0.000000, 0.000000, .maxhitpoints = 1);
 	item_SeedBag		= DefineItemType("Sementes",					"SeedBag",			2663,	2,	0.0, 0.0, 0.0,			0.205,	0.320356, 0.042146, 0.049817, 0.000000, 260.512817, 349.967254, false, 0xFFF4A460, .maxhitpoints = 2);
 	item_SemiAutoRifle	= DefineItemType("Espingarda",					"SemiAutoRifle",	357,	5,	90.0, .maxhitpoints = 5);
