@@ -167,9 +167,7 @@ stock CreateStaticLootSpawn(Float:x, Float:y, Float:z, lootindex, Float:weight, 
 		x = (x + (frandom(1.0) * floatsin(((360 / size) * i) + rot, degrees)));
 		y = (y + (frandom(1.0) * floatcos(((360 / size) * i) + rot, degrees)));
 
-		CreateItem(itemtype,
-			x,
-			y,
+		CreateItem(itemtype, x, y,
 			z + 0.1, .rz = frandom(360.0), .world = worldid, .interior = interiorid);
 
 		loot_SpawnData[lootspawnid][loot_items][loot_SpawnData[lootspawnid][loot_total]] = itemid;
@@ -177,95 +175,6 @@ stock CreateStaticLootSpawn(Float:x, Float:y, Float:z, lootindex, Float:weight, 
 	}
 
 	return loot_SpawnTotal++;
-}
-
-/*==============================================================================
-
-	Automatic item respawn
-
-==============================================================================*/
-
-new Timer:DestroyUItem[MAX_ITEM];
-
-hook OnPlayerDroppedItem(playerid, Item:itemid)
-{	
-	stop DestroyUItem[itemid];
-	DestroyUItem[itemid] = defer DestroyUntilItem(_:itemid);
-	return Y_HOOKS_CONTINUE_RETURN_0;
-}
-
-hook OnItemRemoveFromWorld(Item:itemid)
-{
-	if(loot_ItemLootIndex[itemid] != -1){
-		new 
-			Float:x, Float:y, Float:z,
-			world, interior;
-
-		GetItemPos(itemid, x, y, z);
-		GetItemWorld(itemid, world);
-		GetItemInterior(itemid, interior);
-
-		defer RespawnItem(loot_ItemLootIndex[itemid], x, y, z, world, interior);
-	}
-
-	loot_ItemLootIndex[itemid] = -1;
-	stop DestroyUItem[itemid];
-}
-
-timer RespawnItem[ITEM_RESPAWN_DELAY](lootindex, Float:x, Float:y, Float:z, worldid, interiorid)
-	CreateLootItem(lootindex, x, y, z, worldid, interiorid);
-
-hook OnItemDestroyed(Item:itemid)
-	stop DestroyUItem[itemid];
-
-hook OnPlayerConstructed(playerid, consset, result)
-	stop DestroyUItem[Item:result];
-
-timer DestroyUntilItem[ITEM_RESPAWN_DELAY - HOUR(1)](_itemid)
-{
-	new Item:itemid = Item:_itemid;
-
-	if(!IsValidItem(itemid) || !IsItemInWorld(itemid))
-		return;
-
-	new Float:x, Float:y, Float:z;
-	GetItemPos(itemid, x, y, z);
-	
-	foreach(new i : Player)
-	{
-		if(IsPlayerInRangeOfPoint(i, 20.0, x, y, z))
-		{
-			DestroyUItem[itemid] = defer DestroyUntilItem(_:itemid);
-			return;
-		}
-	}
-
-	new ItemType:type = GetItemType(itemid);
-
-	if(IsItemTypeSafebox(type)){
-		new Container:containerid;
-		GetItemArrayDataAtCell(itemid, _:containerid, 0);
-		if(!IsContainerEmpty(containerid))
-			return;
-	}
-
-	if(IsItemTypeDefence(type)){
-		new bool:active;
-		GetItemArrayDataAtCell(itemid, active, 0);
-		if(active)
-			return;
-	}
-
-	if(type == item_TentPack){
-		new tentid;
-		GetItemExtraData(itemid, tentid);
-		if(IsValidTent(tentid))
-			return;
-	}
-
-	DestroyItem(itemid);
-
-	return;
 }
 
 stock Item:CreateLootItem(lootindex, Float:x = 0.0, Float:y = 0.0, Float:z = 0.0, worldid = 0, interiorid = 0)
@@ -380,6 +289,73 @@ stock FillContainerWithLoot(Container:containerid, slots, lootindex)
 
 	return 1;
 }
+
+
+/*==============================================================================
+
+	Automatic item respawn
+
+==============================================================================*/
+
+
+new Timer:DestroyUItem[MAX_ITEM];
+
+hook OnItemCreateInWorld(Item:itemid) {	
+	stop DestroyUItem[itemid];
+	DestroyUItem[itemid] = defer DestroyUntilItem(_:itemid, _:GetItemType(Item:itemid));
+
+	if(loot_ItemLootIndex[itemid] != -1) {
+		new 
+			Float:x, Float:y, Float:z,
+			world, interior;
+
+		GetItemPos(itemid, x, y, z);
+		GetItemWorld(itemid, world);
+		GetItemInterior(itemid, interior);
+
+		defer RespawnItem(ITEM_RESPAWN_DELAY, loot_ItemLootIndex[itemid], x, y, z, world, interior);
+	}
+}
+
+timer DestroyUntilItem[ITEM_RESPAWN_DELAY - HOUR(1)](itemid, itemtype) {
+	if(!IsValidItem(Item:itemid))
+		return;
+
+	if(!IsItemInWorld(Item:itemid))
+		return;
+
+	if(GetItemType(Item:itemid) != ItemType:itemtype)
+		return;
+
+	DestroyItem(Item:itemid);
+	return;
+}
+
+timer RespawnItem[timer](timer, lootindex, Float:x, Float:y, Float:z, world, interior) {
+	#pragma unused timer
+
+	if(Iter_Count(Player) < 10 && random(2) == 1)
+		defer RespawnItem(MIN(5 + random(5)), lootindex, x, y, z, world, interior);
+
+	else if(Iter_Count(Player) < 20 && random(4) == 1)
+		defer RespawnItem(MIN(5 + random(5)), lootindex, x, y, z, world, interior);
+
+	else CreateLootItem(lootindex, x, y, z, world, interior);
+}
+
+hook OnItemRemoveFromWorld(Item:itemid) {
+	loot_ItemLootIndex[itemid] = -1;
+	stop DestroyUItem[itemid];
+}
+
+hook OnItemDestroyed(Item:itemid)
+	stop DestroyUItem[itemid];
+
+hook OnPlayerConstructed(playerid, consset, Item:result)
+	stop DestroyUItem[result];
+
+hook OnItemSave(Item:itemid)
+	stop DestroyUItem[itemid];
 
 
 /*==============================================================================
