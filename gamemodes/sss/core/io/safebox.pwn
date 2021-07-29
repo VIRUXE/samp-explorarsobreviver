@@ -41,7 +41,7 @@ hook OnPlayerPickUpItem(playerid, Item:itemid)
 		RemoveSafeboxItem(itemid);
 	}
 
-	return Y_HOOKS_CONTINUE_RETURN_1;
+	return Y_HOOKS_CONTINUE_RETURN_0;
 }
 
 hook OnPlayerDroppedItem(playerid, Item:itemid)
