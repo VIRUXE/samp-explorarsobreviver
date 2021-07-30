@@ -384,7 +384,7 @@ _container_displayOptions(playerid, slotid) {
 					DisplayContainerInventory(playerid, cnt_CurrentContainer[playerid]);
 				} else {
 					Logger_Dbg("container-dialog", "closing container via option response");
-					ClosePlayerInventory(playerid);
+					ClosePlayerContainer(playerid);
 				}
 			}
 		}
