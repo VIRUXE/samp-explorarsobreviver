@@ -955,7 +955,7 @@ public OnScriptInit()
 	item_WitchesHat		= DefineItemType("Chapeu de Bruxa",				"WitchesHat",		19528,	1,	0.0, -84.0, 0.0,		0.0,	0.290000, 0.018000, 0.053999,  -107.600021, 102.500000, 0.000000, .maxhitpoints = 1);
 	item_WoodLog		= DefineItemType("Madeira",						"WoodLog",			19793,	1,	0.0, 0.0, 0.0,			0.000,	0.034999, 0.018998, -0.150000,  -74.199989, -110.000022, -54.900020, .maxhitpoints = 1);
 	item_WoodPanel		= DefineItemType("Rampa de Madeira",			"WoodPanel",		5153,	11,	0.0, 23.537, 0.0,		0.0,	-0.342762, 0.908910, -0.453703, 296.326019, 46.126548, 226.118209,  true, .maxhitpoints = 7);
-	item_Workbench		= DefineItemType("Mesa de Trabalho",			"Workbench",		936,	12,	0.0, 0.0, 0.0,			0.4434,	.longpickup = true, .maxhitpoints = 12);
+	item_Workbench		= DefineItemType("Mesa de Trabalho",			"Workbench",		936,	12,	0.0, 0.0, 0.0,			0.4434, .maxhitpoints = 12);
 	item_WrappedMeat	= DefineItemType("Carne Embrulhada",			"WrappedMeat",		19560,	1,	0.0, 0.0, 0.0,			0.0,	0.223000, 0.052999, 0.064999,  -70.300064, 165.600082, 10.500000, .maxhitpoints = 1);
 	item_Wrench			= DefineItemType("Chave de Roda",				"Wrench",			18633,	2,	0.0, 90.0, 0.0,			0.0,	0.084695, -0.009181, 0.152275, 98.865089, 270.085449, 0.000000, .maxhitpoints = 2);
 	item_XmasHat		= DefineItemType("Chapeu de Natal",				"XmasHat",			19066,	1,	0.0, 0.0, 0.0,			0.0,	0.135000, -0.018001, -0.002000,  90.000000, 174.500061, 9.600001, .maxhitpoints = 1);
