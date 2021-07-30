@@ -282,7 +282,7 @@ _UpdateKeyActions(playerid)
 		new 
 			Button:list[BTN_MAX_INRANGE],
 			size,
-			text[3];
+			text[BTN_MAX_TEXT];
 
 		GetPlayerButtonList(playerid, list, size);
 
