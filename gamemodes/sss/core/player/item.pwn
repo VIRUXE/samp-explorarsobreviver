@@ -116,17 +116,14 @@ hook OnPlayerDisconnect(playerid, reason){
 hook OnItemCreateInWorld(Item:itemid) {
 	new 
 		Button:buttonid,
-		Float:x, Float:y, Float:z,
 		str[3 + MAX_ITEM_NAME];
 
 	GetItemButtonID(itemid, buttonid);
-	GetButtonPos(buttonid, x, y, z);
 	GetItemTypeName(GetItemType(itemid), str);
 
 	format(str, sizeof(str), "~y~%s", str);
 
 	SetButtonText(buttonid, str);
-	SetButtonPos(buttonid, x, y, z);
 }
 
 /*==============================================================================
@@ -197,19 +194,15 @@ hook OnPlayerDropItem(playerid, Item:itemid){
 
 /*==============================================================================
 
-	Adicional use item
+	Fix Button press
 	
 ==============================================================================*/
 
-hook OnPlayerUseItemWithBtn(playerid, Button:buttonid, Item:itemid) {
-
-	new Item:withitem = GetItemFromButtonID(Button:buttonid);
-	if(IsValidItem(withitem)) {
-		new Button:item_button;
-		GetItemButtonID(withitem, item_button);
-
-		CallLocalFunction("OnButtonPress", "dd", playerid, _:item_button);
-	}
+hook OnButtonPress(playerid, Button:buttonid) 
+{
+	// Pendente: Descubra por que diabos o botão 0 é chamado sem motivo
+	if(!IsPlayerInDynamicArea(playerid, GetButtonArea(buttonid)))
+		return Y_HOOKS_BREAK_RETURN_0;
 
 	return Y_HOOKS_CONTINUE_RETURN_0;
 }
