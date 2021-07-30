@@ -85,11 +85,9 @@ CreateLockup(Button:keypadbutton, Button:extButton, Button:intButton)
 	lck_Data[lck_Total][lck_extButton] = extButton;
 	lck_Data[lck_Total][lck_intButton] = intButton;
 	lck_Data[lck_Total][lck_locked] = 1;
-	// TODO: implement LinkTP
-	// LinkTP(extButton, intButton);
-
 	
-
+	LinkTP(extButton, intButton);
+	
 	lck_Total++;
 
 	return keycode;

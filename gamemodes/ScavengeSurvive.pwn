@@ -64,6 +64,7 @@
 // SS/button
 #define BTN_MAX							Button:32768
 #define BTN_TELEPORT_FREEZE_TIME		3000
+#define	BTN_MAX_INRANGE					5
 
 // SS/item
 #define MAX_ITEM						Item:32768
@@ -201,9 +202,9 @@ public OnGameModeInit()
 #include <mobile>
 #include <ini>
 #include <modio>
+#include <button_new>
 #include <personal-space>
 #include <new-action-text>
-#include <button>
 #include <door>
 #include <item>
 #include <inventory>

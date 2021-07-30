@@ -191,18 +191,3 @@ hook OnPlayerDropItem(playerid, Item:itemid){
 		
 	return Y_HOOKS_CONTINUE_RETURN_0;
 }
-
-/*==============================================================================
-
-	Fix Button press
-	
-==============================================================================*/
-
-hook OnButtonPress(playerid, Button:buttonid) 
-{
-	// Pendente: Descubra por que diabos o botão 0 é chamado sem motivo
-	if(!IsPlayerInDynamicArea(playerid, GetButtonArea(buttonid)))
-		return Y_HOOKS_BREAK_RETURN_0;
-
-	return Y_HOOKS_CONTINUE_RETURN_0;
-}

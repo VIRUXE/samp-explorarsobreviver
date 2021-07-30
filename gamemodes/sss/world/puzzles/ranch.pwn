@@ -52,36 +52,35 @@ hook OnGameModeInit()
 
 	buttonid[0] = CreateButton(-2796.933349, 3682.779785, 02.515481, "Pressione "KEYTEXT_INTERACT" para entrar", RANCH_STUFF_VIRTUALW); // cave 1
 	buttonid[1] = CreateButton(-1445.01, 3673.77, 4.08, "Pressione "KEYTEXT_INTERACT" para entrar", RANCH_STUFF_VIRTUALW); // cave 2
-	// LinkTP(buttonid[0], buttonid[1]);
+	LinkTP(buttonid[0], buttonid[1]);
 
 	// Cave 2
 	buttonid[0] = CreateButton(-1618.94, 3648.38, 6.90, "Pressione "KEYTEXT_INTERACT" para entrar", RANCH_STUFF_VIRTUALW); // cave 2
 	buttonid[1] = CreateButton(-785.9272, 3727.1111, 0.5293, "Pressione "KEYTEXT_INTERACT" para entrar", RANCH_STUFF_VIRTUALW); // cave 3
-	// LinkTP(buttonid[0], buttonid[1]);
+	LinkTP(buttonid[0], buttonid[1]);
 
 
 	// Subway/Metro
 
 	buttonid[0] = CreateButton(-1007.395263, 5782.741210, 42.951477, "Pressione "KEYTEXT_INTERACT" para descer a escada", RANCH_STUFF_VIRTUALW);
 	buttonid[1] = CreateButton(2526.719482, -1648.620605, 14.471982, "Pressione "KEYTEXT_INTERACT" para subir a escada");
-	// LinkTP(buttonid[0], buttonid[1]);
+	LinkTP(buttonid[0], buttonid[1]);
 
 	buttonid[0] = CreateButton(250.599380, -154.643936, -50.768798, "Pressione "KEYTEXT_INTERACT" para entrar", RANCH_STUFF_VIRTUALW);
 	buttonid[1] = CreateButton(247.878799, -154.444061, 02.399550, "Pressione "KEYTEXT_INTERACT" para entrar");
-	// LinkTP(buttonid[0], buttonid[1]);
+	LinkTP(buttonid[0], buttonid[1]);
 
 	buttonid[0] = CreateButton(-2276.608642, 5324.488281, 41.677970, "Pressione "KEYTEXT_INTERACT" para entrar", RANCH_STUFF_VIRTUALW);
 	buttonid[1] = CreateButton(-734.773986, 3861.994628, 12.482711, "Pressione "KEYTEXT_INTERACT" para entrar", RANCH_STUFF_VIRTUALW); // cave
-	// LinkTP(buttonid[0], buttonid[1]);
-
+	LinkTP(buttonid[0], buttonid[1]);
 
 	// Fort Claw underground
 
 	buttonid[0]=CreateButton(246.698684, -178.849655, -50.199367, "Pressione "KEYTEXT_INTERACT" para entrar", RANCH_STUFF_VIRTUALW); // underground
 	buttonid[1]=CreateButton(-952.559326, 5137.799804, 46.183383, "Pressione "KEYTEXT_INTERACT" para entrar", RANCH_STUFF_VIRTUALW); // metro station
-	// LinkTP(buttonid[0], buttonid[1]);
+	LinkTP(buttonid[0], buttonid[1]);
 
-	CreateButton(-972.153869, 4303.185058, 48.666248, "~r~Locked", RANCH_STUFF_VIRTUALW);
+	CreateButton(-972.153869, 4303.185058, 48.666248, "~r~Fechado", RANCH_STUFF_VIRTUALW);
 
 
 	// Lift Sequence
