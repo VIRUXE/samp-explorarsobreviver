@@ -427,7 +427,7 @@ _inv_displaySlotOptions(playerid, slotid)
 					x, y, z - ITEM_FLOOR_OFFSET,
 					.world = GetPlayerVirtualWorld(playerid),
 					.interior = GetPlayerInterior(playerid),
-					.label = 0);
+					.label = 1);
 
 				DisplayPlayerInventory(playerid);
 			}

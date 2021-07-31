@@ -13,7 +13,7 @@
 #include <logger>
 #include <errors>
 #include <YSI_Data\y_iterate>
-#include <YSI_Coding\y_timers>
+#include <YSI_Data\y_timers>
 #include <streamer>
 #include <action-text>
 #include <mathutil>
@@ -222,7 +222,7 @@ Updates a button's interior. Moves all streamer entities to the interior too.
 Boolean to indicate success or failure.
 */
 
-forward GetButtonLinkedID(Button:buttonid);
+forward Button:GetButtonLinkedID(Button:buttonid);
 /*
 # Description
 Returns the linked button of buttonid.
@@ -357,26 +357,17 @@ Float:		btn_size,
 			btn_interior,
 Button:		btn_link,
 			btn_text[BTN_MAX_TEXT],
-
 			btn_exData
 }
 
-enum e_button_range_data
-{
-Button:		btn_buttonId,
-Float:		btn_distance
-}
-
-const _BTN_ITER_SIZE = _:BTN_MAX;
-
-new
-			btn_Data[BTN_MAX][E_BTN_DATA],
-   Iterator:btn_Index<_BTN_ITER_SIZE>;
-
 static
-     Button:btn_Near[MAX_PLAYERS][BTN_MAX_INRANGE],
-   Iterator:btn_NearIndex[MAX_PLAYERS]<BTN_MAX_INRANGE>,
-     Button:btn_Pressing[MAX_PLAYERS];
+	btn_Data[BTN_MAX][E_BTN_DATA],
+	Button:btn_Near[MAX_PLAYERS][BTN_MAX_INRANGE],
+	Iterator:btn_NearIndex[MAX_PLAYERS]<BTN_MAX_INRANGE>,
+	Button:btn_Pressing[MAX_PLAYERS];
+
+const BTN_ITER_SIZE = _:BTN_MAX;
+new Iterator:btn_Index<BTN_ITER_SIZE>;
 
 
 /*==============================================================================
@@ -417,7 +408,8 @@ stock Button:CreateButton(Float:x, Float:y, Float:z, const text[],
 	new Button:buttonid = Button:Iter_Free(btn_Index);
 
 	if(_:buttonid == ITER_NONE) {
-		print("ERROR: BTN_MAX reached, please increase this constant!");
+		Logger_Err("BTN_MAX limit reached",
+			Logger_I("BTN_MAX", _:BTN_MAX));
 		return INVALID_BUTTON_ID;
 	}
 
@@ -685,7 +677,7 @@ stock SetButtonInterior(Button:buttonid, interior)
 }
 
 // btn_link
-stock GetButtonLinkedID(Button:buttonid)
+stock Button:GetButtonLinkedID(Button:buttonid)
 {
 	if(!Iter_Contains(btn_Index, _:buttonid))
 		return INVALID_BUTTON_ID;
@@ -782,36 +774,37 @@ stock GetPlayerButtonID(playerid, &Button:id) {
 	return 3;
 }
 
-stock GetPlayerButtonList(playerid, Button:list[], &size, bool:validate = false)
-{
-	if(!IsPlayerConnected(playerid))
-		return 0;
+stock GetPlayerButtonList(playerid, Button:list[], &size, bool:validate = false) {
+	if(!IsPlayerConnected(playerid)) {
+		return 1;
+	}
 
-	if(Iter_Count(btn_NearIndex[playerid]) == 0)
+	if(Iter_Count(btn_NearIndex[playerid]) == 0) {
 		return 0;
+	}
 
 	// Validate whether or not the player is actually inside the areas.
 	// Caused by a bug that hasn't been found yet, this is the quick workaround.
-	if(validate)
-	{
-		foreach(new i : btn_NearIndex[playerid])
-		{
-			if(!IsPlayerInDynamicArea(playerid, btn_Data[btn_Near[playerid][i]][btn_area]))
-			{
-				printf("ERROR: Player %d incorrectly flagged as inside button %d area, removing.", playerid, _:btn_Near[playerid][i]);
+	if(validate) {
+		foreach(new i : btn_NearIndex[playerid]) {
+			if(!IsPlayerInDynamicArea(playerid, btn_Data[btn_Near[playerid][i]][btn_area])) {
+				Logger_Err("player incorrectly flagged as inside button area",
+					Logger_I("playerid", playerid),
+					Logger_I("id", _:btn_Near[playerid][i]));
+
 				Iter_SafeRemove(btn_NearIndex[playerid], i, i);
 				continue;
 			}
 
 			list[size++] = btn_Near[playerid][i];
 		}
-	}
-	else
-	{
-		foreach(new i : btn_NearIndex[playerid])
+	} else {
+		foreach(new i : btn_NearIndex[playerid]) {
 			list[size++] = btn_Near[playerid][i];
+		}
 	}
-	return 1;
+
+	return 0;
 }
 
 stock GetPlayerAngleToButton(playerid, Button:id, &Float:angle) {
@@ -864,112 +857,34 @@ stock GetButtonAngleToPlayer(playerid, Button:id, &Float:angle) {
 ==============================================================================*/
 
 
-hook OnPlayerKeyStateChange(playerid, newkeys, oldkeys)
-{
-	if(newkeys & 16)
-	{
-		if(!IsPlayerInAnyVehicle(playerid) && Iter_Count(btn_NearIndex[playerid]) > 0)
-		{
-			if(!IsPlayerInAnyDynamicArea(playerid))
-			{
-				printf("[WARNING] Player %d is not in areas but list isn't empty. Purging list.", playerid);
+hook OnPlayerKeyStateChange(playerid, newkeys, oldkeys) {
+	if(newkeys & 16) {
+		if(!IsPlayerInAnyVehicle(playerid) && Iter_Count(btn_NearIndex[playerid]) > 0) {
+			if(!IsPlayerInAnyDynamicArea(playerid)) {
+				Logger_Err("player is not in areas but list isn't empty", Logger_I("playerid", playerid));
 				Iter_Clear(btn_NearIndex[playerid]);
 			}
 
-			new
-				Button:buttonid,
-				Float:x,
-				Float:y,
-				Float:z,
-				Float:distance,
-				list[BTN_MAX_INRANGE][e_button_range_data],
-				index;
-
-			GetPlayerPos(playerid, x, y, z);
-
 			foreach(new i : btn_NearIndex[playerid])
-			{
-				if(index >= BTN_MAX_INRANGE - 1)
-					break;
+				if(GetPlayerDistanceFromPoint(playerid,
+					btn_Data[btn_Near[playerid][i]][btn_posX],
+					btn_Data[btn_Near[playerid][i]][btn_posY],
+					btn_Data[btn_Near[playerid][i]][btn_posZ]) < btn_Data[btn_Near[playerid][i]][btn_size])
+						Internal_OnButtonPress(playerid, btn_Near[playerid][i]);
 
-				buttonid = btn_Near[playerid][i];
-
-				distance = GetDistance3D(x, y, z, btn_Data[buttonid][btn_posX], btn_Data[buttonid][btn_posY], btn_Data[buttonid][btn_posZ]);
-
-				if(distance > btn_Data[buttonid][btn_size]) {
-					continue;
-				}
-
-				if(!(btn_Data[buttonid][btn_posZ] - btn_Data[buttonid][btn_size] <= z <= btn_Data[buttonid][btn_posZ] + btn_Data[buttonid][btn_size])) {
-					continue;
-				}
-
-				list[index][btn_buttonId] = buttonid;
-				list[index][btn_distance] = distance + 0.001;
-
-				index++;
-			}
-
-			_btn_SortButtons(list, 0, index);
-
-			for(new i = index - 1; i >= 0; i--)
-			{
-				if(Internal_OnButtonPress(playerid, list[i][btn_buttonId]))
-					break;
-			}
 		}
 
-		if(oldkeys & 16)
-		{
-			if(btn_Pressing[playerid] != INVALID_BUTTON_ID)
-			{
+		if(oldkeys & 16) {
+			if(btn_Pressing[playerid] != INVALID_BUTTON_ID) {
 				CallLocalFunction("OnButtonRelease", "dd", playerid, _:btn_Pressing[playerid]);
 				btn_Pressing[playerid] = INVALID_BUTTON_ID;
 			}
 		}
 	}
-	return 1;
+
+	return Y_HOOKS_CONTINUE_RETURN_1;
 }
 
-// AVISO: Não use essa função com 'btn_distance' no valor 0.0;
-_btn_SortButtons(array[][e_button_range_data], left, right)
-{
-	new
-		tmp_left = left,
-		tmp_right = right,
-		Float:pivot = array[(left + right) / 2][btn_distance],
-		Button:buttonid,
-		Float:distance;
-
-	while(tmp_left <= tmp_right)
-	{
-		while(array[tmp_left][btn_distance] > pivot)
-			tmp_left++;
-
-		while(array[tmp_right][btn_distance] < pivot)
-			tmp_right--;
-
-		if(tmp_left <= tmp_right)
-		{
-			buttonid = Button:array[tmp_left][btn_buttonId];
-			array[tmp_left][btn_buttonId] = array[tmp_right][btn_buttonId];
-			array[tmp_right][btn_buttonId] = Button:buttonid;
-
-			distance = array[tmp_left][btn_distance];
-			array[tmp_left][btn_distance] = array[tmp_right][btn_distance];
-			array[tmp_right][btn_distance] = distance;
-
-			tmp_left++;
-			tmp_right--;
-		}
-	}
-
-	if(left < tmp_right)
-		_btn_SortButtons(array, left, tmp_right);
-
-	if(tmp_left > right)
-		_btn_SortButtons(array, tmp_left, right);
-}
 
 Internal_OnButtonPress(playerid, Button:buttonid)
 {
@@ -1006,29 +921,16 @@ Internal_OnButtonPress(playerid, Button:buttonid)
 }
 
 timer btn_Unfreeze[BTN_TELEPORT_FREEZE_TIME](playerid)
-{
 	TogglePlayerControllable(playerid, true);
-}
 
-hook OnPlayerEnterDynArea(playerid, areaid)
-{
-	if(!IsPlayerInAnyVehicle(playerid) && Iter_Count(btn_NearIndex[playerid]) < BTN_MAX_INRANGE)
-	{
+hook OnPlayerEnterDynArea(playerid, areaid) {
+	if(!IsPlayerInAnyVehicle(playerid) && Iter_Count(btn_NearIndex[playerid]) < BTN_MAX_INRANGE) {
 		new data[2];
 
 		Streamer_GetArrayData(STREAMER_TYPE_AREA, areaid, E_STREAMER_EXTRA_ID, data, 2);
 
-		// Due to odd streamer behavior reversing data arrays:
-		// Only use this if you are using streamer v2.7.1 or lower
-		// new tmp = data[0];
-		// data[0] = data[1];
-		// data[1] = tmp;
-		// end
-
-		if(data[0] == BTN_STREAMER_AREA_IDENTIFIER)
-		{
-			if(Iter_Contains(btn_Index, _:data[1]))
-			{
+		if(data[0] == BTN_STREAMER_AREA_IDENTIFIER) {
+			if(Iter_Contains(btn_Index, data[1])) {
 				new cell = Iter_Free(btn_NearIndex[playerid]);
 
 				btn_Near[playerid][cell] = Button:data[1];
@@ -1041,25 +943,20 @@ hook OnPlayerEnterDynArea(playerid, areaid)
 	}
 }
 
-hook OnPlayerLeaveDynArea(playerid, areaid)
-{
+hook OnPlayerLeaveDynArea(playerid, areaid) {
 	process_LeaveDynamicArea(playerid, areaid);
 }
 
-process_LeaveDynamicArea(playerid, areaid)
-{
-	if(!IsValidDynamicArea(areaid))
-	{
+process_LeaveDynamicArea(playerid, areaid) {
+	if(!IsValidDynamicArea(areaid)) {
 		return 1;
 	}
 
-	if(IsPlayerInAnyVehicle(playerid))
-	{
+	if(IsPlayerInAnyVehicle(playerid)) {
 		return 1;
 	}
 
-	if(Iter_Count(btn_NearIndex[playerid]) == 0)
-	{
+	if(Iter_Count(btn_NearIndex[playerid]) == 0) {
 		return 2;
 	}
 
@@ -1067,23 +964,19 @@ process_LeaveDynamicArea(playerid, areaid)
 
 	Streamer_GetArrayData(STREAMER_TYPE_AREA, areaid, E_STREAMER_EXTRA_ID, data, 2);
 
-	if(data[0] != BTN_STREAMER_AREA_IDENTIFIER)
-	{
+	if(data[0] != BTN_STREAMER_AREA_IDENTIFIER) {
 		return 3;
 	}
 
-	if(!Iter_Contains(btn_Index, _:data[1]))
-	{
+	if(!Iter_Contains(btn_Index, data[1])) {
 		return 4;
 	}
 
 	HideActionText(playerid);
 	CallLocalFunction("OnPlayerLeaveButtonArea", "dd", playerid, data[1]);
 
-	foreach(new i : btn_NearIndex[playerid])
-	{
-		if(btn_Near[playerid][i] == Button:data[1])
-		{
+	foreach(new i : btn_NearIndex[playerid]) {
+		if(btn_Near[playerid][i] == Button:data[1]) {
 			Iter_Remove(btn_NearIndex[playerid], i);
 			break;
 		}

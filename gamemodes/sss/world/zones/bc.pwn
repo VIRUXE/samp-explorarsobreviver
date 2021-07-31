@@ -11,18 +11,17 @@ Load_BC()
 	CreateFuelOutlet(617.12500, 1687.45313, 6.17969, 2.0, 130.0, frandom(40));
 	CreateFuelOutlet(620.53125, 1682.46094, 6.17969, 2.0, 130.0, frandom(40));
 	CreateFuelOutlet(624.04688, 1677.60156, 6.17969, 2.0, 130.0, frandom(40));
-/*
+
 	new
-		buttonid[2];
+		Button:buttonid[2];
 
-	buttonid[0]=CreateButton(-101.579933, 1374.613769, 10.4698, "Press F to enter", 0, 0, .label = 1);
-	buttonid[1]=CreateButton(-217.913787, 1402.804199, 27.7734, "Press F to exit", 0, 18, .label = 1);
+	buttonid[0]=CreateButton(-101.579933, 1374.613769, 10.4698, "Pressione F para entrar", 0, 0, .label = 1);
+	buttonid[1]=CreateButton(-217.913787, 1402.804199, 27.7734, "Pressione F para sair", 0, 18, .label = 1);
 	LinkTP(buttonid[0], buttonid[1]);
 
-	buttonid[0]=CreateButton(-89.3299, 1378.2357, 10.4698, "Press F to enter", 0, 0, .label = 1);
-	buttonid[1]=CreateButton(-229.2949, 1401.2293, 27.7656, "Press F to exit", 0, 18, .label = 1);
+	buttonid[0]=CreateButton(-89.3299, 1378.2357, 10.4698, "Pressione F para entrar", 0, 0, .label = 1);
+	buttonid[1]=CreateButton(-229.2949, 1401.2293, 27.7656, "Pressione F para sair", 0, 18, .label = 1);
 	LinkTP(buttonid[0], buttonid[1]);
-*/
 
 //	CreateTurret(287.0, 2047.0, 17.5, 270.0, .type = 1);
 //	CreateTurret(335.0, 1843.0, 17.5, 270.0, .type = 1);

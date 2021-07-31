@@ -173,7 +173,7 @@ hook OnGameModeInit()
 
 
 	buttonid[0] = CreateButton(279.1897, 1833.1392, 18.0874, "Pressione para entrar", .label = 1);
-	buttonid[1] = CreateButton(279.2243, 1832.3821, 2.7813, "Pressione para entrar", .label = 1);
+	buttonid[1] = CreateButton(279.2243, 1832.3821, 2.7813, "Pressione para sair", .label = 1);
 	LinkTP(buttonid[0], buttonid[1]);
 
 	// Gatehouse

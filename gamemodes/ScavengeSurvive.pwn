@@ -202,9 +202,9 @@ public OnGameModeInit()
 #include <mobile>
 #include <ini>
 #include <modio>
+#include <new-action-text>
 #include <button_new>
 #include <personal-space>
-#include <new-action-text>
 #include <door>
 #include <item>
 #include <inventory>

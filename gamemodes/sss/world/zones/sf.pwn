@@ -21,17 +21,15 @@ Load_SF()
 	SF_District_Ship1();
 	SF_District_Ship2();
 
-/*
 	// SF Factory
 	LinkTP(
-		CreateButton(-904.7388, 335.7443, 1014.1530, "Press F to open", 0),
-		CreateButton(-1857.1831, -169.5322, 9.1358, "Press F to open", 0));
+		CreateButton(-904.7388, 335.7443, 1014.1530, "Pressione F para entrar", 0),
+		CreateButton(-1857.1831, -169.5322, 9.1358, "Pressione F para sair", 0));
 
 	// SF utility room
 	LinkTP(
-		CreateButton(-2578.1204, 1144.8810, 40.3989, "Press F to enter"),
-		CreateButton(-2587.5229, 1162.4547, 55.5876, "Press F to enter"));
-*/
+		CreateButton(-2578.1204, 1144.8810, 40.3989, "Pressione F para sair"),
+		CreateButton(-2587.5229, 1162.4547, 55.5876, "Pressione F para entrar"));
 
 	DefineSupplyDropPos("Aerporto de San Fierro", -1312.81885, -16.52664, 13.08027);
 	DefineSupplyDropPos("Escola de Condução San Fierro", -2055.64697, -200.37950, 34.24461);
@@ -2093,11 +2091,11 @@ SF_District_City2()
 {
 	ChatMsgAll(YELLOW, " » Carregando região 'SF_District_City2'. Aguarde...");
 
-/*
+
 	LinkTP(
-		CreateButton(-1753.70, 883.57, 295.56, "Press ~k~~VEHICLE_ENTER_EXIT~ to enter"),
-		CreateButton(-1749.37, 871.82, 25.23, "Press ~k~~VEHICLE_ENTER_EXIT~ to enter"));
-*/
+		CreateButton(-1753.70, 883.57, 295.56, "Pressione ~k~~VEHICLE_ENTER_EXIT~ parar entrar"),
+		CreateButton(-1749.37, 871.82, 25.23, "Pressione ~k~~VEHICLE_ENTER_EXIT~ para entrar"));
+
 	CreateZipline(
 		-2114.91, 923.88, 86.04,
 		-1948.34, 952.88, 61.47);
