@@ -64,10 +64,10 @@ ShowPlayerHealthInfo(playerid)
 		SetBodyPreviewLabel(playerid, sprintf("Fome: %0.1f%", hunger), 0xFFFFFFFF, boxcolor);
 
 	if(infected1)
-		SetBodyPreviewLabel(playerid, "Infecao alimentar", 0xFF0000FF, 0xd6cb0055);
+		SetBodyPreviewLabel(playerid, "Infecao alimentar", 0xFFFFFFFF, 0xb3000055);
 
 	if(infected2)
-		SetBodyPreviewLabel(playerid, "Infecao de Ferida", 0xFF0000FF, 0xd6cb0055);
+		SetBodyPreviewLabel(playerid, "Infecao de Ferida", 0xFFFFFFFF, 0xb3000055);
 
 	for(new i; i < drugs; i++)
 	{
