@@ -163,7 +163,7 @@ hook OnPlayerCloseContainer(playerid, Container:containerid)
 
 hook OnPlayerDisconnect(playerid)
 {
-	for(new i; i <= MAX_BODY_LABEL; i++)
+	for(new i; i < MAX_BODY_LABEL; i++)
 	{
 		if(bod_LabelDraw[playerid][i] != PlayerText:INVALID_TEXT_DRAW)
 		{
