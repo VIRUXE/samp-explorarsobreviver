@@ -63,7 +63,7 @@
 
 // SS/button
 #define BTN_MAX							Button:32768
-#define BTN_TELEPORT_FREEZE_TIME		3000
+#define BTN_TELEPORT_FREEZE_TIME		1500
 #define	BTN_MAX_INRANGE					5
 
 // SS/item

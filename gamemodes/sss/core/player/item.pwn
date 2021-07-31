@@ -148,7 +148,7 @@ hook OnPlayerGiveItem(playerid, targetid, Item:itemid){
 
 /*==============================================================================
 
-	Move itens
+	Until callback
 	
 ==============================================================================*/
 
@@ -158,6 +158,21 @@ hook OnMoveItemToInventory(playerid, Item:itemid, Container:containerid){
 
 hook OnMoveItemToContainer(playerid, Item:itemid, Container:containerid){
 	return Y_HOOKS_BREAK_RETURN_0;
+}
+
+/*==============================================================================
+
+	Fix use item
+	
+==============================================================================*/
+
+hook OnPlayerUseItemWithBtn(playerid, Button:buttonid, Item:itemid){
+	new Button:id;
+	GetPlayerPressingButton(playerid, id);
+	if(!IsValidButton(id))
+		CallLocalFunction("OnButtonPress", "dd", playerid, _:buttonid);
+		
+	return Y_HOOKS_CONTINUE_RETURN_0;
 }
 
 /*==============================================================================

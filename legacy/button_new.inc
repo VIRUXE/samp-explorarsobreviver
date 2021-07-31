@@ -222,7 +222,7 @@ Updates a button's interior. Moves all streamer entities to the interior too.
 Boolean to indicate success or failure.
 */
 
-forward Button:GetButtonLinkedID(Button:buttonid);
+forward GetButtonLinkedID(Button:buttonid, &Button:id);
 /*
 # Description
 Returns the linked button of buttonid.
@@ -259,7 +259,7 @@ forward GetButtonExtraData(Button:id, &data);
 Retrieves the integer assigned to the button set with SetButtonExtraData.
 */
 
-forward GetPlayerPressingButton(playerid);
+forward GetPlayerPressingButton(playerid, &Button:id);
 /*
 # Description
 Returns the ID of the button that the player is currently pressing. This will
@@ -382,15 +382,16 @@ hook OnScriptInit()
 	Iter_Init(btn_NearIndex);
 
 	for(new i; i < MAX_PLAYERS; i++)
-	{
 		btn_Pressing[i] = INVALID_BUTTON_ID;
-	}
 }
 
 hook OnPlayerConnect(playerid)
 {
 	Iter_Clear(btn_NearIndex[playerid]);
 	btn_Pressing[playerid] = INVALID_BUTTON_ID;
+
+	for(new i; i < BTN_MAX_INRANGE; i++)
+		btn_Near[playerid][i] = INVALID_BUTTON_ID;
 }
 
 
@@ -677,12 +678,14 @@ stock SetButtonInterior(Button:buttonid, interior)
 }
 
 // btn_link
-stock Button:GetButtonLinkedID(Button:buttonid)
+stock GetButtonLinkedID(Button:buttonid, &Button:id)
 {
 	if(!Iter_Contains(btn_Index, _:buttonid))
-		return INVALID_BUTTON_ID;
+		return 0;
 
-	return btn_Data[buttonid][btn_link];
+	id = btn_Data[buttonid][btn_link];
+
+	return 1;
 }
 
 // btn_text
@@ -729,12 +732,14 @@ stock GetButtonExtraData(Button:id, &data) {
 }
 
 // btn_Pressing
-stock GetPlayerPressingButton(playerid)
-{
-	if(!(0 <= playerid < MAX_PLAYERS))
-		return -1;
+stock GetPlayerPressingButton(playerid, &Button:id) {
+	if(!IsPlayerConnected(playerid)) {
+		return 1;
+	}
 
-	return btn_Pressing[playerid];
+	id = btn_Pressing[playerid];
+	
+	return 0;
 }
 
 stock GetPlayerButtonID(playerid, &Button:id) {
@@ -893,7 +898,7 @@ Internal_OnButtonPress(playerid, Button:buttonid)
 
 	new Button:linked = btn_Data[buttonid][btn_link];
 
-	if(Iter_Contains(btn_Index, _:linked))
+	if(Iter_Contains(btn_Index, _:linked) && !IsValidButton(btn_Pressing[playerid]))
 	{
 		if(CallLocalFunction("OnButtonPress", "dd", playerid, _:buttonid))
 			return 1;
@@ -953,11 +958,11 @@ process_LeaveDynamicArea(playerid, areaid) {
 	}
 
 	if(IsPlayerInAnyVehicle(playerid)) {
-		return 1;
+		return 2;
 	}
 
 	if(Iter_Count(btn_NearIndex[playerid]) == 0) {
-		return 2;
+		return 3;
 	}
 
 	new data[2];
@@ -965,11 +970,11 @@ process_LeaveDynamicArea(playerid, areaid) {
 	Streamer_GetArrayData(STREAMER_TYPE_AREA, areaid, E_STREAMER_EXTRA_ID, data, 2);
 
 	if(data[0] != BTN_STREAMER_AREA_IDENTIFIER) {
-		return 3;
+		return 4;
 	}
 
 	if(!Iter_Contains(btn_Index, data[1])) {
-		return 4;
+		return 5;
 	}
 
 	HideActionText(playerid);
