@@ -55,12 +55,8 @@ Float:	veh_spawnR,
 
 static
 			veh_Data				[MAX_VEHICLES][E_VEHICLE_DATA],
-			veh_TypeCount			[MAX_VEHICLE_TYPE];
-
-new
-   Iterator:veh_Index<MAX_VEHICLES>;
-
-static
+			veh_TypeCount			[MAX_VEHICLE_TYPE],
+			
 PlayerText:	veh_FuelUI				[MAX_PLAYERS] = {PlayerText:INVALID_TEXT_DRAW, ...},
 PlayerText:	veh_DamageUI			[MAX_PLAYERS] = {PlayerText:INVALID_TEXT_DRAW, ...},
 PlayerText:	veh_EngineUI			[MAX_PLAYERS] = {PlayerText:INVALID_TEXT_DRAW, ...},
@@ -179,7 +175,6 @@ stock DestroyWorldVehicle(vehicleid, bool:perma = false)
 		return 0;
 	
 	CallLocalFunction("OnVehicleDestroyed", "d", vehicleid);
-	Iter_Remove(veh_Index, vehicleid);
 	
 	veh_Data[vehicleid][veh_state] = VEHICLE_STATE_DEAD;
 

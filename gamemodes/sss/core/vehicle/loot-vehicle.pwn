@@ -32,9 +32,7 @@ CreateLootVehicle(type, Float:x, Float:y, Float:z, Float:r)
 		DestroyVehicle(vehicleid);
 		return 0;
 	}
-
-	Iter_Add(veh_Index, vehicleid);
-
+	
 	SetVehicleColours(vehicleid, colour1, colour2);
 
 	GenerateVehicleData(vehicleid);

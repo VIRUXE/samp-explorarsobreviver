@@ -70,6 +70,13 @@ stock CreateVehicleArea(vehicleid)
 
 ==============================================================================*/
 
+hook OnPlayerConnect(playerid)
+{
+	Iter_Clear(varea_NearIndex[playerid]);
+
+	for(new i; i < MAX_VEHICLES_IN_RANGE; i++)
+		varea_NearList[playerid][i] = INVALID_VEHICLE_ID;
+}
 
 hook OnVehicleCreated(vehicleid)
 {
@@ -98,7 +105,7 @@ _vint_EnterArea(playerid, areaid)
 	if(!IsValidDynamicArea(areaid))
 		return;
 
-	if(Iter_Count(varea_NearIndex[playerid]) == MAX_VEHICLES_IN_RANGE - 1)
+	if(Iter_Count(varea_NearIndex[playerid]) > MAX_VEHICLES_IN_RANGE)
 		return;
 
 	new data[2];
@@ -111,7 +118,7 @@ _vint_EnterArea(playerid, areaid)
 	if(!IsValidVehicle(data[1]))
 		return;
 
-	new bool:exists = false;
+	new bool:exists;
 
 	foreach(new i : varea_NearIndex[playerid])
 	{

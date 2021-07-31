@@ -61,7 +61,7 @@ hook OnGameModeInit()
 		}
 	}
 
-	Logger_Log("loaded vehicles", Logger_I("count", Iter_Count(veh_Index)));
+	Logger_Log("loaded vehicles", Logger_I("count", Iter_Count(Vehicle)));
 
 	// TODO: re-add debug label library
 	// veh_DebugLabelType = DefineDebugLabelType("VEHICLESPAWN", 0xFFCCFFFF);
@@ -269,7 +269,7 @@ LoadVehiclesFromFile(file[])
 					continue;
 			}
 
-			foreach(new i : veh_Index)
+			foreach(new i : Vehicle)
 				if(GetVehicleDistanceFromPoint(i, posX, posY, posZ) < 7.0)
 					continue;
 

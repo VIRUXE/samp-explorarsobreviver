@@ -641,7 +641,7 @@ CreateIncenExplosion(Float:x, Float:y, Float:z, Float:range)
 		}
 	}
 
-	foreach(new i : veh_Index)
+	foreach(new i : Vehicle)
 	{
 		if(IsVehicleInRangeOfPoint(i, range, x, y, z))
 		{
@@ -681,7 +681,7 @@ CreateEmpExplosion(Float:x, Float:y, Float:z, Float:range)
 		}
 	}
 
-	foreach(new i : veh_Index)
+	foreach(new i : Vehicle)
 	{
 		if(IsVehicleInRangeOfPoint(i, range, x, y, z))
 		{
