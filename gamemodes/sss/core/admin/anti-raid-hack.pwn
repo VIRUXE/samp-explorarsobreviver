@@ -6,7 +6,8 @@ Float:	atr_OldPos	[MAX_PLAYERS][3],
 Float:	atr_SetPos	[MAX_PLAYERS][3],
 bool:	atr_Set		[MAX_PLAYERS],
 bool:	atr_Detect	[MAX_PLAYERS],
-Timer:	atr_Check	[MAX_PLAYERS];
+Timer:	atr_Check	[MAX_PLAYERS],
+		atr_Wars	[MAX_PLAYERS];
 
 hook OnPlayerConnect(playerid){   
 	atr_OldPos	[playerid][0]	=
@@ -15,6 +16,8 @@ hook OnPlayerConnect(playerid){
 
 	atr_Detect	[playerid]		=
 	atr_Set		[playerid] 	 	= false;
+	
+	atr_Wars	[playerid]		= 0;
 }
 
 hook OnPlayerUpdate(playerid){
@@ -22,8 +25,7 @@ hook OnPlayerUpdate(playerid){
 	new Float:x, Float:y, Float:z;
 	GetPlayerPos(playerid, x, y, z);
 
-	if(atr_Set[playerid])
-	{
+	if(atr_Set[playerid]) {
 		if(atr_SetPos[playerid][0] != x || atr_SetPos[playerid][1] != y || atr_SetPos[playerid][2] != z)
 			SetPlayerPos(playerid, atr_SetPos[playerid][0], atr_SetPos[playerid][1], atr_SetPos[playerid][2]);
 		else 
@@ -32,8 +34,7 @@ hook OnPlayerUpdate(playerid){
 		return 1;
 	}
 
-	if(!atr_Detect[playerid] && !IsAtConnectionPos(x, y, z) && !IsPlayerOnAdminDuty(playerid))
-	{
+	if(!atr_Detect[playerid] && !IsAtConnectionPos(x, y, z) && !IsPlayerOnAdminDuty(playerid)) {
 		new colision;
 
 		if(Distance(x, y, z, atr_OldPos[playerid][0], atr_OldPos[playerid][1], atr_OldPos[playerid][2]) >= 45.0)
@@ -45,16 +46,22 @@ hook OnPlayerUpdate(playerid){
 			CA_RayCastLine(atr_OldPos[playerid][0] + 0.15, atr_OldPos[playerid][1] + 0.15, atr_OldPos[playerid][2] + 0.6, x - 0.15, y - 0.15, z - 0.05, tmp, tmp, tmp);
 		}
 
-		if(colision != WATER_OBJECT && colision)
-		{
-			ChatMsgAdmins(5, RED, "[Anti-Raid] %p(id:%d) Atravessou um objeto. Posição: %0.1f, %0.1f, %0.1f, id: %d", playerid, playerid, x, y, z, colision);
-
+		if(colision != WATER_OBJECT && colision) {
+			if(colision != 1) {
+				if(++atr_Wars[playerid] == 3) {
+					ReportPlayer(sprintf("%P", playerid), 
+						sprintf("Anti Raid: Colidiu com o Objeto id: %d", colision), 
+						-1,
+						"A-Raid",
+						x, y, z,
+						GetPlayerVirtualWorld(playerid), GetPlayerInterior(playerid),
+						"");
+				}
+			}
 			atr_Detect[playerid] = true;
 			stop atr_Check[playerid];
 			atr_Check[playerid] = defer AntiRaidCheck(playerid);
-			return 1;
-		}
-		else {
+		} else {
 			atr_OldPos[playerid][0] = x;
 			atr_OldPos[playerid][1] = y;
 			atr_OldPos[playerid][2] = z;
@@ -122,23 +129,14 @@ stock bool:IsPlayerRaidBlock(playerid)
 
 ==============================================================================*/
 
-IRPC:115(playerid, BitStream:bs){
-	if(atr_Detect[playerid])
-		return 0;
-	return 1;
-}
+IRPC:115(playerid, BitStream:bs)
+	return atr_Detect[playerid];
 
-IRPC:131(playerid, BitStream:bs){
-	if(atr_Detect[playerid])
-		return 0;
-	return 1;
-}
+IRPC:131(playerid, BitStream:bs)
+	return atr_Detect[playerid];
 
-IRPC:26(playerid, BitStream:bs){
-	if(atr_Detect[playerid])
-		return 0;
-	return 1;
-}
+IRPC:26(playerid, BitStream:bs)
+	return atr_Detect[playerid];
 
 hook OnPlayerUseItemWithItem(playerid, Item:itemid, Item:withitemid){
 	if(atr_Detect[playerid])
