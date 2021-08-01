@@ -125,6 +125,9 @@
 #pragma warning disable 214 // Temporary fix remove const warning
 #pragma warning disable 239 // Temporary fix remove const warning
 
+// GEO-IP
+#define IPHUB_KEY ""
+
 /*==============================================================================
 
 	Guaranteed first call
@@ -201,6 +204,9 @@ public OnGameModeInit()
 #include <fsutil>
 #include <mobile>
 #include <ini>
+#include <requests>
+#include <geoip>
+#include <map-zones>
 #include <modio>
 #include <new-action-text>
 #include <button_new>
