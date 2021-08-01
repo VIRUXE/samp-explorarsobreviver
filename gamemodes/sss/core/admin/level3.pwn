@@ -839,32 +839,35 @@ ACMD:additem[3](playerid, params[])
 
 ACMD:addvehicle[3](playerid, params[])
 {
-	new
-		type,
-		Float:x,
-		Float:y,
-		Float:z,
-		Float:r,
-		vehicleid;
-
-	type = isnumeric(params) ? strval(params) : GetVehicleTypeFromName(params, true, true);
+	new	type = isnumeric(params) ? strval(params) : GetVehicleTypeFromName(params, true, true);
 
 	if(!IsValidVehicleType(type))
-	{
-		ChatMsg(playerid, YELLOW, " » Tipo de Veículo Inválido.");
-		return 1;
-	}
+		return ChatMsg(playerid, YELLOW, " » Tipo de Veículo Inválido.");
 
-	GetPlayerPos(playerid, x, y, z);
-	GetPlayerFacingAngle(playerid, r);
+	new
+	vehicleId,
+	Float:playerAngle,
+	Float:camPosX, 		Float:camPosY, 		Float:camPosZ,
+	Float:camVectorX, 	Float:camVectorY, 	Float:camVectorZ,
+	Float:vehicleX, 	Float:vehicleY, 	Float:vehicleZ,		Float:vehicleR;
 
-	vehicleid = CreateLootVehicle(type, x, y, z, r);
-	SetVehicleFuel(vehicleid, 100000.0);
-	SetVehicleHealth(vehicleid, 990.0);
-	SetVehicleParamsEx(vehicleid, 0, random(2), !random(100), 0, random(2), random(2), 0);
-	SetVehicleExternalLock(vehicleid, E_LOCK_STATE_OPEN);
-	SetVehicleTrunkLock(vehicleid, 0);
+	const Float:spawnDistance = 5.0;
 
+	GetPlayerFacingAngle(playerid, playerAngle);
+	GetPlayerCameraPos(playerid, camPosX, camPosY, camPosZ);
+	GetPlayerCameraFrontVector(playerid, camVectorX, camVectorY, camVectorZ);
+
+	vehicleX = camPosX + floatmul(camVectorX, spawnDistance);
+	vehicleY = camPosY + floatmul(camVectorY, spawnDistance);
+	vehicleZ = camPosZ + floatmul(camVectorZ, spawnDistance);
+	vehicleR = playerAngle-180;
+
+	vehicleId = CreateLootVehicle(type, vehicleX, vehicleY, vehicleZ, vehicleR);
+	SetVehicleFuel(vehicleId, 100000.0); // All the fuel
+	SetVehicleHealth(vehicleId, 990.0);
+	SetVehicleParamsEx(vehicleId, 1, 1, 0, 1, 0, 0, 0); // Fully fixed
+	SetVehicleExternalLock(vehicleId, E_LOCK_STATE_OPEN);
+	SetVehicleTrunkLock(vehicleId, 0);
 
 	if(GetPlayerAdminLevel(playerid) < STAFF_LEVEL_LEAD)
 	{
