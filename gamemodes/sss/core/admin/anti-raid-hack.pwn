@@ -116,13 +116,15 @@ hook OnPlayerLoad(playerid, filename[])
 
 AntiRaidWarn(playerid)
 {
-	if(!atr_Detect[playerid] || !IsPlayerConnected(playerid))
+	if(!IsPlayerConnected(playerid))
+		return Y_HOOKS_CONTINUE_RETURN_0;
+
+	if(!atr_Detect[playerid])
 		return Y_HOOKS_CONTINUE_RETURN_0;
 		
 	Dialog_Show(playerid, DIALOG_STYLE_MSGBOX, "Anti-Raid Protection", ls(playerid, "ANTRAIDP"), "Sair", "");
 	return Y_HOOKS_BREAK_RETURN_1;
 }
-
 
 stock bool:IsPlayerRaidBlock(playerid)
 	return atr_Detect[playerid];
