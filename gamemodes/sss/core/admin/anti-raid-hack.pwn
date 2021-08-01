@@ -43,7 +43,7 @@ hook OnPlayerUpdate(playerid){
 			new Float:tmp;
 
 			colision = 
-			CA_RayCastLine(atr_OldPos[playerid][0] + 0.15, atr_OldPos[playerid][1] + 0.15, atr_OldPos[playerid][2] + 0.6, x - 0.15, y - 0.15, z - 0.05, tmp, tmp, tmp);
+			CA_RayCastLine(atr_OldPos[playerid][0] + 0.15, atr_OldPos[playerid][1] + 0.15, atr_OldPos[playerid][2] + 0.6, x - 0.15, y - 0.15, z, tmp, tmp, tmp);
 		}
 
 		if(colision != WATER_OBJECT && colision) {
@@ -56,6 +56,8 @@ hook OnPlayerUpdate(playerid){
 						x, y, z,
 						GetPlayerVirtualWorld(playerid), GetPlayerInterior(playerid),
 						"");
+						
+					atr_Wars[playerid] = 0;
 				}
 			}
 			atr_Detect[playerid] = true;
@@ -114,6 +116,9 @@ hook OnPlayerLoad(playerid, filename[])
 
 AntiRaidWarn(playerid)
 {
+	if(!atr_Detect[playerid])
+		return Y_HOOKS_CONTINUE_RETURN_0;
+		
 	Dialog_Show(playerid, DIALOG_STYLE_MSGBOX, "Anti-Raid Protection", ls(playerid, "ANTRAIDP"), "Sair", "");
 	return Y_HOOKS_BREAK_RETURN_1;
 }
@@ -138,51 +143,26 @@ IRPC:131(playerid, BitStream:bs)
 IRPC:26(playerid, BitStream:bs)
 	return atr_Detect[playerid];
 
-hook OnPlayerUseItemWithItem(playerid, Item:itemid, Item:withitemid){
-	if(atr_Detect[playerid])
-		return AntiRaidWarn(playerid);
-	return Y_HOOKS_CONTINUE_RETURN_0;
-}
+hook OnPlayerUseItemWithItem(playerid, Item:itemid, Item:withitemid)
+	return AntiRaidWarn(playerid);
 
-hook OnPlayerPickUpItem(playerid, Item:itemid){
-	if(atr_Detect[playerid])
-		return AntiRaidWarn(playerid);
-	return Y_HOOKS_CONTINUE_RETURN_0;
-}
+hook OnPlayerPickUpItem(playerid, Item:itemid)
+	return AntiRaidWarn(playerid);
 
-hook OnPlayerGiveItem(playerid, targetid, Item:itemid){
-	if(atr_Detect[playerid])
-		return AntiRaidWarn(playerid);
-	return Y_HOOKS_CONTINUE_RETURN_0;
-}
+hook OnPlayerGiveItem(playerid, targetid, Item:itemid)
+	return AntiRaidWarn(playerid);
 
-hook OnItemRemoveFromCnt(containerid, slotid, playerid){
-	if(IsPlayerConnected(playerid))
-		if(atr_Detect[playerid])
-			return AntiRaidWarn(playerid);
-	return Y_HOOKS_CONTINUE_RETURN_0;
-}
+hook OnItemRemoveFromCnt(containerid, slotid, playerid)
+	return AntiRaidWarn(playerid);
 
-hook OnPlayerOpenInventory(playerid){
-	if(atr_Detect[playerid])
-		return AntiRaidWarn(playerid);
-	return Y_HOOKS_CONTINUE_RETURN_0;
-}
+hook OnPlayerOpenInventory(playerid)
+	return AntiRaidWarn(playerid);
 
-hook OnPlayerOpenContainer(playerid, containerid){
-	if(atr_Detect[playerid])
-		return AntiRaidWarn(playerid);
-	return Y_HOOKS_CONTINUE_RETURN_0;
-}
+hook OnPlayerOpenContainer(playerid, containerid)
+	return AntiRaidWarn(playerid);
 
-hook OnPlayerUseItem(playerid, Item:itemid){
-	if(atr_Detect[playerid])
-		return AntiRaidWarn(playerid);
-	return Y_HOOKS_CONTINUE_RETURN_0;
-}
+hook OnPlayerUseItem(playerid, Item:itemid)
+	return AntiRaidWarn(playerid);
 
-hook OnPlayerDropItem(playerid, Item:itemid){
-	if(atr_Detect[playerid])
-		return AntiRaidWarn(playerid);
-	return Y_HOOKS_CONTINUE_RETURN_0;
-}
+hook OnPlayerDropItem(playerid, Item:itemid)
+	return AntiRaidWarn(playerid);

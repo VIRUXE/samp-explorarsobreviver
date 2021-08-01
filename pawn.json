@@ -45,7 +45,10 @@
 		"samp-anti-cheat/no-reload",
 		"samp-anti-cheat/rapid-fire",
 		"YashasSamaga/BA-AntiAimbot",
-		"pBlueG/SA-MP-MySQL:R41-4"
+		"pBlueG/SA-MP-MySQL:R41-4",
+		"Southclaws/pawn-requests:0.8.7",
+		"Southclaws/SAMP-geoip",
+		"kristoisberg/samp-map-zones"
 	],
 	"build": {
 		"compiler":
