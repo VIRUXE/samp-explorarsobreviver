@@ -38,110 +38,6 @@ ACMD:sethp[3](playerid, params[])
 	return 1;
 }
 
-
-/*==============================================================================
-
-	Add to/remove from/query/toggle the whitelist feature
-
-==============================================================================*/
-
-
-ACMD:whitelist[3](playerid, params[])
-{
-	new
-		command[7],
-		name[MAX_PLAYER_NAME];
-
-	if(sscanf(params, "s[7]S()[24]", command, name))
-	{
-		ChatMsg(playerid, YELLOW, " » Utilização: /whitelist [add/remove/on/off/auto/list] - the whitelist is currently %s (auto: %s)", IsWhitelistActive() ? ("on") : ("off"), IsWhitelistAuto() ? ("on") : ("off"));
-		return 1;
-	}
-
-	/* if(!strcmp(command, "add", true))
-	{
-		if(isnull(name))
-		{
-			ChatMsg(playerid, YELLOW, " » Utilização /whitelist add [name]");
-			return 1;
-		}
-
-		new result = AddNameToWhitelist(name);
-
-		if(result == 1)
-			ChatMsg(playerid, YELLOW, " » Added "C_BLUE"%s "C_YELLOW"to whitelist.", name);
-
-		if(result == 0)
-			ChatMsg(playerid, YELLOW, " » That name "C_ORANGE"is already "C_YELLOW"in the whitelist.");
-
-		if(result == -1)
-			ChatMsg(playerid, RED, " » An error occurred.");
-	}
-	else if(!strcmp(command, "remove", true))
-	{
-		if(isnull(name))
-		{
-			ChatMsg(playerid, YELLOW, " » Utilização /whitelist remove [name]");
-			return 1;
-		}
-
-		new result = RemoveNameFromWhitelist(name);
-
-		if(result == 1)
-			ChatMsg(playerid, YELLOW, " » Removed "C_BLUE"%s "C_YELLOW"from whitelist.", name);
-
-		if(result == 0)
-			ChatMsg(playerid, YELLOW, " » That name "C_ORANGE"is not "C_YELLOW"in the whitelist.");
-
-		if(result == -1)
-			ChatMsg(playerid, RED, " » An error occurred.");
-	}
-	else  */
-	if(!strcmp(command, "on", true))
-	{
-		ChatMsgAdmins(1, YELLOW, " » Whitelist activated, only whitelisted players may join.");
-		ToggleWhitelist(true);
-	}
-	else if(!strcmp(command, "off", true))
-	{
-		ChatMsgAdmins(1, YELLOW, " » Whitelist deactivated, anyone may join the server.");
-		ToggleWhitelist(false);
-	}
-	else if(!strcmp(command, "auto", true))
-	{
-		if(!IsWhitelistAuto())
-		{
-			ChatMsgAdmins(1, YELLOW, " » Whitelist automatic toggle activated.");
-			ToggleAutoWhitelist(true);
-
-			// UpdateSetting("whitelist-auto-toggle", 0);
-		}
-		else
-		{
-			ChatMsgAdmins(1, YELLOW, " » Whitelist automatic toggle deactivated.");
-			ToggleAutoWhitelist(false);
-
-			// UpdateSetting("whitelist-auto-toggle", 0);
-		}
-	}
-/* 	else if(!strcmp(command, "?", true))
-		ChatMsg(playerid, YELLOW, IsNameInWhitelist(name) ? " » That name "C_BLUE"is "C_YELLOW"in the whitelist." : " » That name "C_ORANGE"is not "C_YELLOW"in the whitelist");
- */	else if(!strcmp(command, "list", true))
-	{
-		new list[(MAX_PLAYER_NAME + 1) * MAX_PLAYERS];
-
-		foreach(new i : Player)
-		{
-			GetPlayerName(i, name, MAX_PLAYER_NAME);
-			format(list, sizeof(list), "%s%C%s\n", list, IsPlayerWhitelisted(i) ? (GREEN) : (RED), name);
-		}
-
-		Dialog_Show(playerid, DIALOG_STYLE_MSGBOX, "Whitelisted players", list, "Sair");
-	}
-
-	return 1;
-}
-
 /* 
 	Enter spectate mode on a specific player
 
@@ -800,7 +696,7 @@ ACMD:addvehicle[3](playerid, params[])
 	Float:camVectorX, 	Float:camVectorY, 	Float:camVectorZ,
 	Float:vehicleX, 	Float:vehicleY, 	Float:vehicleZ,		Float:vehicleR;
 
-	const Float:spawnDistance = 5.0;
+	const Float:spawnDistance = 6.0;
 
 	GetPlayerFacingAngle(playerid, playerAngle);
 	GetPlayerCameraPos(playerid, camPosX, camPosY, camPosZ);
@@ -809,7 +705,7 @@ ACMD:addvehicle[3](playerid, params[])
 	vehicleX = camPosX + floatmul(camVectorX, spawnDistance);
 	vehicleY = camPosY + floatmul(camVectorY, spawnDistance);
 	vehicleZ = camPosZ + floatmul(camVectorZ, spawnDistance);
-	vehicleR = playerAngle-180;
+	vehicleR = playerAngle+90;
 
 	vehicleId = CreateLootVehicle(type, vehicleX, vehicleY, vehicleZ, vehicleR);
 	SetVehicleFuel(vehicleId, 100000.0); // All the fuel
@@ -817,6 +713,7 @@ ACMD:addvehicle[3](playerid, params[])
 	SetVehicleParamsEx(vehicleId, 1, 1, 0, 1, 0, 0, 0); // Fully fixed
 	SetVehicleExternalLock(vehicleId, E_LOCK_STATE_OPEN);
 	SetVehicleTrunkLock(vehicleId, 0);
+	ToggleVehicleWheels(vehicleId, true);
 
 	if(GetPlayerAdminLevel(playerid) < STAFF_LEVEL_LEAD)
 	{
