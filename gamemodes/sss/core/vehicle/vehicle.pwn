@@ -248,6 +248,12 @@ stock RespawnVehicle(vehicleid)
 	_veh_SyncData(vehicleid);
 }
 
+stock ToggleVehicleWheels(vehicleid, toggle)
+{
+	veh_Data[vehicleid][veh_tires] = toggle ? 0 : 15;
+	UpdateVehicleDamageStatus(vehicleid, veh_Data[vehicleid][veh_panels], veh_Data[vehicleid][veh_doors], veh_Data[vehicleid][veh_lights], veh_Data[vehicleid][veh_tires]);
+}
+
 
 /*==============================================================================
 

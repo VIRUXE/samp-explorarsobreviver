@@ -764,6 +764,7 @@ ACMD:addvehicle[3](playerid, params[])
 	SetVehicleParamsEx(vehicleId, 1, 1, 0, 1, 0, 0, 0); // Fully fixed
 	SetVehicleExternalLock(vehicleId, E_LOCK_STATE_OPEN);
 	SetVehicleTrunkLock(vehicleId, 0);
+	ToggleVehicleWheels(vehicleId, true);
 
 	if(GetPlayerAdminLevel(playerid) < STAFF_LEVEL_LEAD)
 	{
