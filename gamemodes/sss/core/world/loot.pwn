@@ -220,6 +220,23 @@ stock Item:CreateLootItem(lootindex, Float:x = 0.0, Float:y = 0.0, Float:z = 0.0
 	return itemid;
 }
 
+stock Item:CreateItemLoot(ItemType:itemtype, Float:x = 0.0, Float:y = 0.0, Float:z = 0.0, Float:rz = 0.0, worldid = 0, interiorid = 0)
+{
+	if(!IsValidItemType(itemtype))
+		return INVALID_ITEM_ID;
+
+	new Item:itemid = GetNextItemID();
+
+	if(!(Item:0 <= itemid < MAX_ITEM))
+		return INVALID_ITEM_ID;
+
+	loot_ItemLootIndex[itemid] = random(loot_IndexTotal);
+
+	itemid = CreateItem(itemtype, x, y, z, .rz = rz, .world = worldid, .interior = interiorid);
+
+	return itemid;
+}
+
 stock FillContainerWithLoot(Container:containerid, slots, lootindex)
 {
 	if(!(0 <= lootindex < loot_IndexTotal))

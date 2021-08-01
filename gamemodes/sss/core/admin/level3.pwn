@@ -721,109 +721,58 @@ ACMD:move[3](playerid, params[])
 
 ACMD:additem[3](playerid, params[])
 {
-	new
-		query[32],
-		specifiers[32],
-		data[64];
+	new name[32];
 
-	if(sscanf(params, "s[32]S()[32]S()[64]", query, specifiers, data))
+	if(sscanf(params, "s[32]", name))
 	{
-		ChatMsg(playerid, YELLOW, " » Utilização: /additem [itemid/itemname] [extradata format specifiers] [extradata array, comma separated]");
-		ChatMsg(playerid, YELLOW, " » Example: `/additem gascan df 1, 4.5` create a petrol can with an integer and a float in extradata.");
+		ChatMsg(playerid, YELLOW, " » Utilização: /additem [nome do item]");
 		return 1;
 	}
 
-	// if the "query" is not an integer type, search for the name
-	new ItemType:type = INVALID_ITEM_TYPE;
-	if(sscanf(query, "d", _:type))
+	if(strlen(name) < 3 || strlen(name) > MAX_ITEM_NAME)
 	{
-		new itemname[MAX_ITEM_NAME];
-		for(new ItemType:i; i < MAX_ITEM_TYPE; i++)
-		{
-			GetItemTypeUniqueName(i, itemname);
-
-			if(strfind(itemname, query, true) != -1)
-			{
-				type = i;
-				break;
-			}
-		}
-
-		if(type == INVALID_ITEM_TYPE)
-		{
-			for(new ItemType:i; i < MAX_ITEM_TYPE; i++)
-			{
-				GetItemTypeName(i, itemname);
-
-				if(strfind(itemname, query, true) != -1)
-				{
-					type = i;
-					break;
-				}
-			}
-		}
-		if(type == INVALID_ITEM_TYPE)
-		{
-			ChatMsg(playerid, RED, " » Invalid item type from string: '%s'", query);
-			return 1;
-		}
-	}
-	if(type == INVALID_ITEM_TYPE)
-	{
-		ChatMsg(playerid, RED, " » Invalid item type from integer: '%d'", _:type);
+		ChatMsg(playerid, RED, " » Nome do item inválido");
 		return 1;
 	}
 
-	new
-		exdata[32],
-		exdatalen = strlen(specifiers);
-	if(exdatalen > 0)
-	{
-		// generate a sscanf enum specifier format
-		new sscanf_format[32];
-		format(sscanf_format, sizeof sscanf_format, "p<,>e<%s>", specifiers);
+	new 
+		ItemType:type = INVALID_ITEM_TYPE,
+		itemname[MAX_ITEM_NAME];
 
-		// parse the extra data using the generated sscanf format string
-		if(strlen(data) && sscanf(data, sscanf_format, exdata))
+	for(new ItemType:i; i < MAX_ITEM_TYPE; i++)
+	{
+		GetItemTypeName(i, itemname);
+		
+		if(!strcmp(name, itemname, true))
 		{
-			ChatMsg(playerid, YELLOW, " » Format of exdata did not match specifier: '%s'", sscanf_format);
-			return 1;
+			type = i;
+			break;
+		}
+
+		if(strfind(itemname, name, true) != -1)
+		{
+			type = i;
 		}
 	}
 
-	// create the item and hydrate its extradata array.
-	new
-		typemaxsize,
-		Item:itemid,
-		Float:x,
-		Float:y,
-		Float:z,
-		Float:r;
-
-	GetItemTypeArrayDataSize(type, typemaxsize);
-
-	GetPlayerPos(playerid, x, y, z);
-	GetPlayerFacingAngle(playerid, r);
-
-	itemid = CreateItem(type,
-		x + (0.5 * floatsin(-r, degrees)),
-		y + (0.5 * floatcos(-r, degrees)),
-		z - ITEM_FLOOR_OFFSET, .rz = r);
-
-	if(exdatalen > 0)
-		SetItemArrayData(itemid, exdata, typemaxsize);
-
-	if(GetPlayerAdminLevel(playerid) < STAFF_LEVEL_LEAD)
+	if(type != INVALID_ITEM_TYPE)
 	{
-		inline Response(pid, dialogid, response, listitem, string:inputtext[])
-		{
-			#pragma unused pid, dialogid, response, listitem
+		new Float:x,Float:y,Float:z, Float:r;
+		
+		GetPlayerPos(playerid, x, y, z);
+		GetPlayerFacingAngle(playerid, r);
 
-			new itemname[MAX_ITEM_NAME];
-			GetItemTypeName(type, itemname);
-			log(true, "[ADDITEM] %p added item %s (d:%d) reason: %s", pid, itemname, _:type, inputtext);
-		}
-		Dialog_ShowCallback(playerid, using inline Response, DIALOG_STYLE_INPUT, "Justification", "Type a reason for adding this item:", "Enter", "");
+		CreateItemLoot(type,
+			x + (0.5 * floatsin(-r, degrees)),
+			y + (0.5 * floatcos(-r, degrees)),
+			z - ITEM_FLOOR_OFFSET,
+			r,
+			GetPlayerVirtualWorld(playerid),
+			GetPlayerInterior(playerid)
+		);
+	} else {
+		ChatMsg(playerid, RED, " » Nome do item inválido");
+		return 1;
 	}
 
 	return 1;
