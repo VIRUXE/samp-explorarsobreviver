@@ -116,7 +116,7 @@ hook OnPlayerLoad(playerid, filename[])
 
 AntiRaidWarn(playerid)
 {
-	if(!atr_Detect[playerid])
+	if(!atr_Detect[playerid] || !IsPlayerConnected(playerid))
 		return Y_HOOKS_CONTINUE_RETURN_0;
 		
 	Dialog_Show(playerid, DIALOG_STYLE_MSGBOX, "Anti-Raid Protection", ls(playerid, "ANTRAIDP"), "Sair", "");
