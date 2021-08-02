@@ -47,7 +47,7 @@ Load_FC()
 
 FC_District_Chilliad()
 {
-	ChatMsgAll(YELLOW, " » Carregando região 'FC_District_Chilliad'. Aguarde...");
+	log(false, "[ZONE] Loading 'FC_District_Chilliad'...");
 
 	CreateStaticLootSpawn(-2404.725585, -2176.453125, 32.303958,	GetLootIndexFromName("world_civilian"), 20.0);
 	CreateStaticLootSpawn(-2391.212158, -2216.532714, 32.308551,	GetLootIndexFromName("world_civilian"), 20.0);
@@ -88,7 +88,7 @@ FC_District_Chilliad()
 }
 FC_District_AngelPine()
 {
-	ChatMsgAll(YELLOW, " » Carregando região 'FC_District_AngelPine'. Aguarde...");
+	log(false, "[ZONE] Loading 'FC_District_AngelPine'...");
 
 	CreateStaticLootSpawn(-2157.903564, -2475.454589, 30.111019,	GetLootIndexFromName("world_civilian"), 20.0);
 	CreateStaticLootSpawn(-2132.607666, -2513.873046, 30.814289,	GetLootIndexFromName("world_civilian"), 20.0);
@@ -207,7 +207,7 @@ FC_District_AngelPine()
 }
 FC_District_Scrapyard()
 {
-	ChatMsgAll(YELLOW, " » Carregando região 'FC_District_Scrapyard'. Aguarde...");
+	log(false, "[ZONE] Loading 'FC_District_Scrapyard'...");
 
 	CreateItem(item_ScrapMachine, -1888.26416, -1636.40588, 20.79, 0.0, 0.0, 0.0);
 	CreateItem(item_RefineMachine, -1848.56006, -1685.39380, 22.2431, 0.0, 0.0, -54.0);
@@ -248,7 +248,7 @@ FC_District_Scrapyard()
 }
 FC_District_Farms()
 {
-	ChatMsgAll(YELLOW, " » Carregando região 'FC_District_Farms'. Aguarde...");
+	log(false, "[ZONE] Loading 'FC_District_Farms'...");
 
 	CreateStaticLootSpawn(-576.649841, -1483.673095, 9.674639,		GetLootIndexFromName("world_civilian"), 20.0);
 	CreateStaticLootSpawn(-576.912963, -1035.397460, 22.790590,		GetLootIndexFromName("world_civilian"), 20.0);
@@ -337,7 +337,7 @@ FC_District_Farms()
 }
 FC_District_EasterChem()
 {
-	ChatMsgAll(YELLOW, " » Carregando região 'FC_District_EasterChem'. Aguarde...");
+	log(false, "[ZONE] Loading 'FC_District_EasterChem'...");
 
 	CreateStaticLootSpawn(-983.560485, -676.974487, 30.980920,		GetLootIndexFromName("world_civilian"), 20.0);
 	CreateStaticLootSpawn(-1007.987182, -672.090942, 30.984039,		GetLootIndexFromName("world_civilian"), 20.0);
@@ -455,7 +455,7 @@ FC_District_EasterChem()
 }
 FC_District_FallenTree()
 {
-	ChatMsgAll(YELLOW, " » Carregando região 'FC_District_FallenTree'. Aguarde...");
+	log(false, "[ZONE] Loading 'FC_District_FallenTree'...");
 
 	CreateStaticLootSpawn(-552.575927, -504.346130, 24.501939,		GetLootIndexFromName("world_civilian"), 20.0);
 	CreateStaticLootSpawn(-569.084838, -502.943481, 24.501260,		GetLootIndexFromName("world_civilian"), 20.0);
@@ -487,7 +487,7 @@ FC_District_FallenTree()
 }
 FC_District_FlintGen()
 {
-	ChatMsgAll(YELLOW, " » Carregando região 'FC_District_FlintGen'. Aguarde...");
+	log(false, "[ZONE] Loading 'FC_District_FlintGen'...");
 
 	CreateStaticLootSpawn(-283.446838, -2174.875244, 27.649789,		GetLootIndexFromName("world_civilian"), 20.0);
 	CreateStaticLootSpawn(-396.378906, -426.530273, 15.193169,		GetLootIndexFromName("world_civilian"), 20.0);

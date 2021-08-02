@@ -26,7 +26,7 @@ Load_TR()
 
 TR_District_Bayside()
 {
-	ChatMsgAll(YELLOW, " » Carregando região 'TR_District_Bayside'. Aguarde...");
+	log(false, "[ZONE] Loading 'TR_District_Bayside'...");
 
 	CreateStaticLootSpawn(-2560.33521, 2256.71069, 4.03032,		GetLootIndexFromName("world_civilian"), 20.0);
 	CreateStaticLootSpawn(-2526.42236, 2230.25171, 3.97745,		GetLootIndexFromName("world_civilian"), 20.0);
@@ -102,7 +102,7 @@ TR_District_Bayside()
 
 TR_District_Quebrados()
 {
-	ChatMsgAll(YELLOW, " » Carregando região 'TR_District_Quebrados'. Aguarde...");
+	log(false, "[ZONE] Loading 'TR_District_Quebrados'...");
 
 	CreateStaticLootSpawn(-1603.15735, 2690.23340, 54.28019,	GetLootIndexFromName("world_civilian"), 20.0);
 	CreateStaticLootSpawn(-1589.21973, 2705.65381, 55.16963,	GetLootIndexFromName("world_civilian"), 20.0);
@@ -148,7 +148,7 @@ TR_District_Quebrados()
 
 TR_District_Barancas()
 {
-	ChatMsgAll(YELLOW, " » Carregando região 'TR_District_Barancas'. Aguarde...");
+	log(false, "[ZONE] Loading 'TR_District_Barancas'...");
 
 	CreateStaticLootSpawn(-637.60626, 1442.92505, 12.60786,		GetLootIndexFromName("world_civilian"), 20.0);
 	CreateStaticLootSpawn(-654.76465, 1446.82837, 12.60757,		GetLootIndexFromName("world_civilian"), 20.0);
@@ -171,7 +171,7 @@ TR_District_Barancas()
 
 TR_District_Sherman()
 {
-	ChatMsgAll(YELLOW, " » Carregando região 'TR_District_Sherman'. Aguarde...");
+	log(false, "[ZONE] Loading 'TR_District_Sherman'...");
 
 	CreateStaticLootSpawn(-897.95825, 1976.49341, 59.62031,		GetLootIndexFromName("world_civilian"), 20.0);
 	CreateStaticLootSpawn(-895.60889, 1967.39795, 59.62622,		GetLootIndexFromName("world_civilian"), 20.0);
@@ -212,7 +212,7 @@ TR_District_Sherman()
 
 TR_District_RobadaGen()
 {
-	ChatMsgAll(YELLOW, " » Carregando região 'TR_District_RobadaGen'. Aguarde...");
+	log(false, "[ZONE] Loading 'TR_District_RobadaGen'...");
 
 	CreateStaticLootSpawn(-2084.18799, 2308.36963, 22.98837,	GetLootIndexFromName("world_civilian"), 20.0);
 	CreateStaticLootSpawn(-1957.37402, 2391.17017, 48.48126,	GetLootIndexFromName("world_civilian"), 20.0);
