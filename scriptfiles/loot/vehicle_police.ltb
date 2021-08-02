@@ -27,6 +27,7 @@ vehicle_police, 1.0
 # misc
 12.0,	Battery
 10.0,	Wheel
+7.0,    Clock
 21.0,	Flashlight
 12.0,	Headlight
 10.0,	MediumBag

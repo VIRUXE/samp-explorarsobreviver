@@ -13,7 +13,9 @@ vehicle_industrial,	1.0
 5.0,	AntiSepBandage
 40.0,	GasCan
 30.0,	Wheel
-5.0,   Barrel
+5.0,    Barrel
+5.0,    Map
+5.0,    Clock
 
 # crafting
 1.0,	ScrapMetal
