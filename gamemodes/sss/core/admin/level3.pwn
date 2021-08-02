@@ -621,44 +621,25 @@ ACMD:additem[3](playerid, params[])
 
 	if(sscanf(params, "s[32]", name))
 	{
-		ChatMsg(playerid, YELLOW, " » Utilização: /additem [nome do item]");
-		return 1;
-	}
-
-	if(strlen(name) < 3 || strlen(name) > MAX_ITEM_NAME)
-	{
-		ChatMsg(playerid, RED, " » Nome do item inválido");
+		ChatMsg(playerid, YELLOW, " » Utilização: /additem [nome/id do item]");
 		return 1;
 	}
 
 	new 
-		ItemType:type = INVALID_ITEM_TYPE,
-		itemname[MAX_ITEM_NAME];
+		Float:x,
+		Float:y,
+		Float:z, 
+		Float:r,
+		Item:itemid,
+		uniquename[MAX_ITEM_NAME],
+		typename[MAX_ITEM_NAME + MAX_ITEM_TEXT];
 
-	for(new ItemType:i; i < MAX_ITEM_TYPE; i++)
+	GetPlayerPos(playerid, x, y, z);
+	GetPlayerFacingAngle(playerid, r);
+
+	if(IsNumeric(name) && IsValidItemType(ItemType:strval(name)))
 	{
-		GetItemTypeName(i, itemname);
-		
-		if(!strcmp(name, itemname, true))
-		{
-			type = i;
-			break;
-		}
-
-		if(strfind(itemname, name, true) != -1)
-		{
-			type = i;
-		}
-	}
-
-	if(type != INVALID_ITEM_TYPE)
-	{
-		new Float:x,Float:y,Float:z, Float:r;
-		
-		GetPlayerPos(playerid, x, y, z);
-		GetPlayerFacingAngle(playerid, r);
-
-		CreateItemLoot(type,
+		itemid = CreateItemLoot(ItemType:strval(name),
 			x + (0.5 * floatsin(-r, degrees)),
 			y + (0.5 * floatcos(-r, degrees)),
 			z - ITEM_FLOOR_OFFSET,
@@ -666,10 +647,39 @@ ACMD:additem[3](playerid, params[])
 			GetPlayerVirtualWorld(playerid),
 			GetPlayerInterior(playerid)
 		);
-	} else {
-		ChatMsg(playerid, RED, " » Nome do item inválido");
-		return 1;
+
+		GetItemName(itemid, typename);
+		GetItemTypeUniqueName(ItemType:strval(name), uniquename);
+
+		ChatMsg(playerid, YELLOW, " » Additem id "C_RED"%d (%s) "C_YELLOW": %s", strval(name), uniquename, typename);
 	}
+	else
+	{
+		new count;
+
+		for(new ItemType:i; i < MAX_ITEM_TYPE; i++)
+		{
+			GetItemTypeUniqueName(i, uniquename);
+			GetItemTypeName(i, typename);
+
+			if(strfind(uniquename, name, true) != -1 || strfind(typename, name, true) != -1)
+			{
+				itemid = CreateItemLoot(i,
+					x + ((0.3 * (++count + 1)) * floatsin(-r, degrees)),
+					y + ((0.3 * (count + 1)) * floatcos(-r, degrees)),
+					z - ITEM_FLOOR_OFFSET,
+					r,
+					GetPlayerVirtualWorld(playerid),
+					GetPlayerInterior(playerid)
+				);
+
+				GetItemName(itemid, typename);
+
+				ChatMsg(playerid, YELLOW, " » Additem id "C_RED"%d (%s) "C_YELLOW": %s", _:i, uniquename, typename);
+			}
+		}
+	}
+
 
 	return 1;
 }
@@ -690,22 +700,20 @@ ACMD:addvehicle[3](playerid, params[])
 		return ChatMsg(playerid, YELLOW, " » Tipo de Veículo Inválido.");
 
 	new
-	vehicleId,
-	Float:playerAngle,
-	Float:camPosX, 		Float:camPosY, 		Float:camPosZ,
-	Float:camVectorX, 	Float:camVectorY, 	Float:camVectorZ,
-	Float:vehicleX, 	Float:vehicleY, 	Float:vehicleZ,		Float:vehicleR;
-
-	const Float:spawnDistance = 6.0;
+		vehicleId,
+		Float:playerAngle,
+		Float:camPosX, 		Float:camPosY, 		Float:camPosZ,
+		Float:camVectorX, 	Float:camVectorY, 	Float:camVectorZ,
+		Float:vehicleX, 	Float:vehicleY, 	Float:vehicleZ,		Float:vehicleR;
 
 	GetPlayerFacingAngle(playerid, playerAngle);
 	GetPlayerCameraPos(playerid, camPosX, camPosY, camPosZ);
 	GetPlayerCameraFrontVector(playerid, camVectorX, camVectorY, camVectorZ);
 
-	vehicleX = camPosX + floatmul(camVectorX, spawnDistance);
-	vehicleY = camPosY + floatmul(camVectorY, spawnDistance);
-	vehicleZ = camPosZ + floatmul(camVectorZ, spawnDistance);
-	vehicleR = playerAngle+90;
+	vehicleX = camPosX + floatmul(camVectorX, 6.0);
+	vehicleY = camPosY + floatmul(camVectorY, 6.0);
+	vehicleZ = camPosZ + floatmul(camVectorZ, 6.0);
+	vehicleR = playerAngle + 90.0;
 
 	vehicleId = CreateLootVehicle(type, vehicleX, vehicleY, vehicleZ, vehicleR);
 	SetVehicleFuel(vehicleId, 100000.0); // All the fuel
