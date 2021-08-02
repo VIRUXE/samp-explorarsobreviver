@@ -454,9 +454,9 @@ stock IsPlayerInTutorial(playerid)
 	if(!IsPlayerConnected(playerid))
 		return 0;
 		
-	log(true, "[TUTORIAL] IsPlayerInTutorial - %p: %d", playerid, PlayerInTutorial[playerid]);
+	// log(true, "[TUTORIAL] IsPlayerInTutorial - %p: %d", playerid, PlayerInTutorial[playerid]);
 
-	PrintBacktrace();
+	// PrintBacktrace();
 
 	return PlayerInTutorial[playerid];
 }
