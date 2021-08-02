@@ -142,12 +142,8 @@ _vint_EnterArea(playerid, areaid)
 		varea_NearList[playerid][cell] = data[1];
 		Iter_Add(varea_NearIndex[playerid], cell);
 	}
-	else
-	{
-		log(true, 
-			"Vehicle %d already in NearList for player %d - NearIndex %d",
-				data[1], playerid, Iter_Count(varea_NearIndex[playerid]));
-	}
+	// else
+		// log(true, "Vehicle %d already in NearList for player %d - NearIndex %d", data[1], playerid, Iter_Count(varea_NearIndex[playerid])); // QUE SE FODA ESSA MERDA
 
 	CallLocalFunction("OnPlayerEnterVehArea", "dd", playerid, data[1]);
 
