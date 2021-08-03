@@ -932,7 +932,7 @@ public OnScriptInit()
 	item_Tomato			= DefineItemType("Tomate",						"Tomato",			19577,	1,	170.0, 0.0, 0.0,		0.03,	0.054000, 0.055999, 0.013999, 0.000000, 0.000003, 0.000003, .maxhitpoints = 1);
 	item_ToolBox		= DefineItemType("Caixa de Ferramentas",		"ToolBox",			19921,	7,	0.0, 0.0, 0.0,			0.0541,	-0.209000, 0.052999, -0.231000,  73.400024, -173.499984, 80.899993, true, .longpickup = true, .maxhitpoints = 8);
 	item_TopHat			= DefineItemType("Chapeu de Artista",			"TopHat",			19352,	2,	0.0, 0.0, 0.0,			-0.023,	0.225000, 0.034000, 0.014000, 81.799942, 7.699998, 179.999954, .maxhitpoints = 2);
-	item_Torso			= DefineItemType("Corpo",						"Torso",			2907,	12,	0.0, 0.0, 270.0,		0.0,	.longpickup = true,	.maxhitpoints = 10);
+	item_Torso			= DefineItemType("Corpo",						"Torso",			2907,	6,	0.0, 0.0, 270.0,		0.0,	0.087207, 0.093263, -0.280867, 253.355865, 355.971557, 175.203552, true, .longpickup = true, .maxhitpoints = 6);
 	item_TruckCap		= DefineItemType("Bone de Camineiro",			"TruckCap",			18961,	1,	0.0, 0.0, 0.0,			0.01,	0.225000, 0.034000, 0.014000, 81.799942, 7.699998, 179.999954, .maxhitpoints = 1);
 	item_VehicleWeapon	= DefineItemType("VEHICLE_WEAPON",				"VehicleWeapon",	356,	99,	90.0,							.maxhitpoints = 99);
 	item_WalkingCane	= DefineItemType("Cane",						"WalkingCane",		326,	3,	90.0, .maxhitpoints = 3);
@@ -1347,7 +1347,7 @@ public OnScriptInit()
 	DefineSafeboxType(item_SmallBox,		8);
 	DefineSafeboxType(item_Suitcase,		6);
 	DefineSafeboxType(item_ToolBox,			8);
-	DefineSafeboxType(item_Torso,			90, .animateonuse = false);
+	DefineSafeboxType(item_Torso,			90);
 	DefineSafeboxType(item_Workbench,		16, false, false);
 	
 	// SEED TYPE DEFINITIONS
