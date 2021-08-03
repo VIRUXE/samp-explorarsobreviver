@@ -14,7 +14,7 @@
 		"Southclaws/samp-stdlib:0.3.7-R2-2-1",
 		"Southclaws/samp-logger",
 		"Southclaws/pawn-errors",
-		"Y-Less/sscanf:2.10.2-r2",
+		"maddinat0r/sscanf:v2.8.3",
 		"samp-incognito/samp-streamer-plugin:v2.9.5",
 		"algorhitmically/optidraw",
 		"pawn-lang/YSI-Includes",
