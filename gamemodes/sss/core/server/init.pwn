@@ -1286,7 +1286,8 @@ public OnScriptInit()
 	SetRadioExplosiveTriggerItem(item_MobilePhone);
 
 
-	// FOOD ITEM TYPE DEFINITIONS
+	// FOOD ITEM TYPE DEFINITIONS	(maxbites, bitevalue, cancook, canrawinfect, destroyonend)
+
 	DefineFoodItem(item_Banana,			3, 5.5,		0, 0, 1);
 	DefineFoodItem(item_Bread,			5, 2.34,	1, 0, 1);
 	DefineFoodItem(item_BreadLoaf,		10, 6.32,	1, 0, 1);
@@ -1299,20 +1300,20 @@ public OnScriptInit()
 	DefineFoodItem(item_FishyFingers,	10, 6.3,	1, 0, 0);
 	DefineFoodItem(item_GrnApple,		4, 4.5,		0, 0, 1);
 	DefineFoodItem(item_Ham,			6, 6.12,	1, 1, 1);
-	DefineFoodItem(item_HotDog,			4, 18.00,	1, 1, 1);
+	DefineFoodItem(item_HotDog,			4, 18.00,	0, 1, 1);
 	DefineFoodItem(item_IceCream,		12, 4.1,	0, 0, 0);
 	DefineFoodItem(item_IceCreamBars,	12, 3.9,	0, 0, 0);
 	DefineFoodItem(item_Lemon,			4, 4.0,		0, 0, 1);
 	DefineFoodItem(item_Meat,			8, 18.12,	1, 1, 1);
 	DefineFoodItem(item_Meat2,			6, 16.7,	1, 1, 1);
 	DefineFoodItem(item_Orange,			4, 4.5,		0, 0, 1);
-	DefineFoodItem(item_Pizza,			6, 18.30,	1, 0, 0);
-	DefineFoodItem(item_PizzaBox,		6, 16.5,	1, 0, 0);
+	DefineFoodItem(item_Pizza,			6, 18.30,	0, 0, 0);
+	DefineFoodItem(item_PizzaBox,		6, 16.5,	0, 0, 0);
 	DefineFoodItem(item_PizzaOnly,		6, 18.5,	1, 0, 1);
 	DefineFoodItem(item_RawFish,		4, 4.5,		1, 1, 1);
 	DefineFoodItem(item_RedApple,		4, 4.5,		0, 0, 1);
 	DefineFoodItem(item_Steak,			4, 6.49,	1, 1, 1);
-	DefineFoodItem(item_Taco,			4, 13.75,	1, 0, 1);
+	DefineFoodItem(item_Taco,			4, 13.75,	0, 0, 1);
 	DefineFoodItem(item_Tomato,			3, 3.0,		1, 0, 1);
 	DefineFoodItem(item_WrappedMeat,	4, 6.7,		1, 1, 1);
 
