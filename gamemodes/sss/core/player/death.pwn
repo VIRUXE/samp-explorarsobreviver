@@ -146,11 +146,6 @@ _OnDeath(playerid, killerid, deathreason)
 	return 1;
 }
 
-
-timer DestroyTorso[10 * 60000](itemid)
-	if(IsValidItem(Item:itemid) && GetItemType(Item:itemid) == item_Torso)
-		DestroyItem(Item:itemid);
-
 DropItems(playerid, Float:x, Float:y, Float:z)
 {
 	new
@@ -159,28 +154,10 @@ DropItems(playerid, Float:x, Float:y, Float:z)
 	new Float:cx, Float:cy, Float:cz;
 
 	if(CA_RayCastLine(x, y, z, x, y, z - 600.0, cx, cy, cz) != WATER_OBJECT)
-		itemid = CreateItem(ItemType:item_Torso,  cx, cy, cz + 0.2,
+		itemid = CreateItem(item_Torso,  cx, cy, cz + 0.2,
 		.world = GetPlayerVirtualWorld(playerid), .interior = GetPlayerInterior(playerid));
 	else
 		return;
-
-	defer DestroyTorso(_:itemid);
-
-	// Head
-	//CreateDynamicObject(2908, cx, cy, cz + 0.2, 0.0, 0.0, 0.0);
-	
-	//arm
-	//CreateDynamicObject(2906, cx, cy, cz + 0.2, 0.0, 0.0, 60.0);
-	//CreateDynamicObject(2906, cx, cy, cz + 0.2, 0.0, 0.0, 60.0);
-
-	// Leg
-	/*cx += 0.6 * floatsin(-r, degrees);
-    cy += 0.6 * floatcos(-r, degrees);
-	CreateDynamicObject(2905, cx, cy, cz + 0.2, 0.0, 0.0, 270.0);
-
-	cx += 0.45 * floatsin(-r, degrees);
-    cy += 0.45 * floatcos(-r, degrees);
-	CreateDynamicObject(2905, cx, cy, cz + 0.2, 0.0, 0.0, -90.0);*/
 
 	new Container:containerid;
 
@@ -388,7 +365,7 @@ hook OnGameModeInit()
 	TextDrawAlignment			(DeathButton, 2);
 	TextDrawBackgroundColor		(DeathButton, 255);
 	TextDrawFont				(DeathButton, 1);
-	TextDrawLetterSize			(DeathButton, 0.370000, 1.599999);
+	TextDrawLetterSize			(DeathButton, 0.4, 1.6);
 	TextDrawColor				(DeathButton, -1);
 	TextDrawSetOutline			(DeathButton, 0);
 	TextDrawSetProportional		(DeathButton, 1);
