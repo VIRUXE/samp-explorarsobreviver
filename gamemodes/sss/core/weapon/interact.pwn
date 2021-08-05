@@ -421,6 +421,9 @@ DisplayTransferAmmoDialog(playerid, Container:containerid, msg[] = "")
 	targetitemtype = GetItemType(targetitemid);
 	GetItemTypeName(targetitemtype, targetitemname);
 
+	if(!IsValidItem(sourceitemid) || !IsValidItem(targetitemid))
+		return 0;
+
 	inline Response(pid, dialogid, response, listitem, string:inputtext[])
 	{
 		#pragma unused pid, dialogid, listitem
@@ -520,4 +523,6 @@ DisplayTransferAmmoDialog(playerid, Container:containerid, msg[] = "")
 		DisplayContainerInventory(playerid, containerid);
 	}
 	Dialog_ShowCallback(playerid, using inline Response, DIALOG_STYLE_INPUT, "Transferir municao", sprintf("Coloque um valor de balas para transferir de %s para %s\n\n%s", sourceitemname, targetitemname, msg), "Pronto", "Cancelar");
+
+	return 1;
 }
