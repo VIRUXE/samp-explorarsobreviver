@@ -205,7 +205,7 @@ public OnGameModeInit()
 #include <mobile>
 #include <ini>
 #include <requests>
-#include <geoip>
+//#include <geoip>
 #include <map-zones>
 #include <modio>
 #include <new-action-text>
