@@ -63,7 +63,7 @@ Load_LV()
 
 LV_District_Housing1()
 {
-	log(false, "[ZONE] Loading 'LV_News'...");
+	log(false, "[WORLD] Loading 'LV_News'...");
 
 	CreateStaticLootSpawn(2048.162353, 1015.961303, 9.711874, GetLootIndexFromName("world_civilian"), 25.0, -1);
 	CreateStaticLootSpawn(1897.363281, 1988.828247, 6.634588, GetLootIndexFromName("world_civilian"), 25.0, -1);
@@ -151,7 +151,7 @@ LV_District_Housing1()
 	CreateStaticLootSpawn(1135.039306, 2301.512695, 9.860312, GetLootIndexFromName("world_civilian"), 25.0, 3);
 	CreateStaticLootSpawn(2411.691162, 1021.561889, 13.312478, GetLootIndexFromName("world_civilian"), 25.0, 2);
 
-	log(false, "[ZONE] Loading 'LV_District_Housing1'...");
+	log(false, "[WORLD] Loading 'LV_District_Housing1'...");
 
 	CreateStaticLootSpawn(1499.182250, 2031.240844, 13.726090,		GetLootIndexFromName("world_civilian"), 12.0);
 	CreateStaticLootSpawn(1538.948486, 2031.298095, 13.724539,		GetLootIndexFromName("world_civilian"), 12.0);
@@ -364,7 +364,7 @@ LV_District_Housing1()
 
 LV_District_Housing2()
 {
-	log(false, "[ZONE] Loading 'LV_District_Housing2'...");
+	log(false, "[WORLD] Loading 'LV_District_Housing2'...");
 
 	CreateStaticLootSpawn(1028.403442, 1926.650634, 10.447250,		GetLootIndexFromName("world_civilian"), 12.0);
 	CreateStaticLootSpawn(1027.309082, 1906.812133, 10.447699,		GetLootIndexFromName("world_civilian"), 12.0);
@@ -513,7 +513,7 @@ LV_District_Housing2()
 
 LV_District_Housing3()
 {
-	log(false, "[ZONE] Loading 'LV_District_Housing3'...");
+	log(false, "[WORLD] Loading 'LV_District_Housing3'...");
 
 	CreateStaticLootSpawn(1761.792846, 2870.549804, 13.252360,		GetLootIndexFromName("world_civilian"), 12.0);
 	CreateStaticLootSpawn(1750.769042, 2867.018798, 10.322710,		GetLootIndexFromName("world_civilian"), 12.0);
@@ -754,7 +754,7 @@ LV_District_Housing3()
 
 LV_District_KACC()
 {
-	log(false, "[ZONE] Loading 'LV_District_KACC'...");
+	log(false, "[WORLD] Loading 'LV_District_KACC'...");
 
 	new Button:buttonid[1];
 
@@ -834,7 +834,7 @@ LV_District_KACC()
 
 LV_District_City1()
 {
-	log(false, "[ZONE] Loading 'LV_District_City1'...");
+	log(false, "[WORLD] Loading 'LV_District_City1'...");
 
 	CreateItem(ItemType:11, 2543.21313, 1025.56433, 11.10866, 66.0000, 4.0, 0.0);
 
@@ -1107,7 +1107,7 @@ LV_District_City1()
 
 LV_District_City2()
 {
-	log(false, "[ZONE] Loading 'LV_District_City2'...");
+	log(false, "[WORLD] Loading 'LV_District_City2'...");
 
 	CreateStaticLootSpawn(2463.546630, 2244.506103, 9.816020,		GetLootIndexFromName("world_civilian"), 12.0);
 	CreateStaticLootSpawn(2453.842529, 2244.573730, 9.812159,		GetLootIndexFromName("world_civilian"), 12.0);
@@ -1531,7 +1531,7 @@ LV_District_City2()
 
 LV_District_Strip()
 {
-	log(false, "[ZONE] Loading 'LV_District_Strip'...");
+	log(false, "[WORLD] Loading 'LV_District_Strip'...");
 
 	CreateStaticLootSpawn(2097.565917, 1158.830932, 10.643070,		GetLootIndexFromName("world_civilian"), 12.0);
 	CreateStaticLootSpawn(2151.691162, 987.570556, 9.797989,		GetLootIndexFromName("world_civilian"), 12.0);
@@ -1748,7 +1748,7 @@ LV_District_Strip()
 
 LV_District_Airport()
 {
-	log(false, "[ZONE] Loading 'LV_District_Airport'...");
+	log(false, "[WORLD] Loading 'LV_District_Airport'...");
 
 	CreateStaticLootSpawn(1673.578491, 1393.108276, 9.757200,		GetLootIndexFromName("world_civilian"), 12.0);
 	CreateStaticLootSpawn(1670.696411, 1398.275146, 9.767149,		GetLootIndexFromName("world_civilian"), 12.0);
@@ -1837,7 +1837,7 @@ LV_District_Airport()
 
 LV_District_Industrial1()
 {
-	log(false, "[ZONE] Loading 'LV_District_Industrial1'...");
+	log(false, "[WORLD] Loading 'LV_District_Industrial1'...");
 
 	CreateStaticLootSpawn(1558.014892, 1091.526245, 9.810159,		GetLootIndexFromName("world_civilian"), 12.0);
 	CreateStaticLootSpawn(1556.855834, 1073.391357, 9.808629,		GetLootIndexFromName("world_civilian"), 12.0);
@@ -2016,7 +2016,7 @@ LV_District_Industrial1()
 
 LV_District_Industrial2()
 {
-	log(false, "[ZONE] Loading 'LV_District_Industrial2'...");
+	log(false, "[WORLD] Loading 'LV_District_Industrial2'...");
 
 	CreateStaticLootSpawn(2529.212402, 746.210388, 13.727939,		GetLootIndexFromName("world_civilian"), 12.0);
 	CreateStaticLootSpawn(2536.050048, 716.275268, 9.810350,		GetLootIndexFromName("world_civilian"), 12.0);
