@@ -6,12 +6,12 @@ static
 	PlayerText:item_TD[MAX_PLAYERS] = {PlayerText:INVALID_TEXT_DRAW, ...};
 	
 hook OnGameModeInit(){
-	item_Prev = TextDrawCreate	(291.000000, 400.000000, "Preview_Model");
+	item_Prev = TextDrawCreate	(291.0, 400.0, "_");
 	TextDrawFont				(item_Prev, 5);
-	TextDrawLetterSize			(item_Prev,	0.600000, 2.000000);
-	TextDrawTextSize			(item_Prev, 53.000000, 41.000000);		
+	TextDrawLetterSize			(item_Prev,	0.5, 2.0);
+	TextDrawTextSize			(item_Prev, 53.0, 41.0);		
 	TextDrawBackgroundColor		(item_Prev, 0);
-	TextDrawSetPreviewRot		(item_Prev, -10.000000, 0.100000, -20.000000, 1.0);
+	TextDrawSetPreviewRot		(item_Prev, -10.0, 0.0, -20.0, 1.0);
 }
 
 hook OnGameModeExit()
@@ -46,7 +46,7 @@ timer HideCredit[5000](playerid){
 		PlayerTextDrawHide(playerid, item_TD[playerid]);
 	}
 }
-UpdatePlayerPreviewItem(playerid){
+UpdatePreviewItemText(playerid){
 	new iname[MAX_ITEM_NAME + MAX_ITEM_TEXT];
 	GetItemName(GetPlayerItem(playerid), iname);
 	PlayerTextDrawSetString(playerid, item_TD[playerid], iname);
@@ -54,7 +54,7 @@ UpdatePlayerPreviewItem(playerid){
 }
 
 hook OnPlayerGetItem(playerid, Item:itemid){
-	UpdatePlayerPreviewItem(playerid);
+	UpdatePreviewItemText(playerid);
 
 	new 
 		modelid,
@@ -70,23 +70,28 @@ hook OnPlayerGetItem(playerid, Item:itemid){
 }
 
 hook OnPlayerUseItem(playerid, Item:itemid)
-	UpdatePlayerPreviewItem(playerid);
+	UpdatePreviewItemText(playerid);
 
 hook OnPlayerWeaponShot(playerid, weaponid, hittype, hitid, Float:fX, Float:fY, Float:fZ)
 {
-	UpdatePlayerPreviewItem(playerid);
+	UpdatePreviewItemText(playerid);
 	return 1;
 }
 
 hook OnHoldActionFinish(playerid)
-	UpdatePlayerPreviewItem(playerid);
+	UpdatePreviewItemText(playerid);
 
 hook OnHoldActionUpdate(playerid, progress)
-	UpdatePlayerPreviewItem(playerid);
+	UpdatePreviewItemText(playerid);
 
 hook OnPlayerUseItemWithItem(playerid, Item:itemid, Item:withitemid){
-	UpdatePlayerPreviewItem(playerid);
+	UpdatePreviewItemText(playerid);
 	return Y_HOOKS_CONTINUE_RETURN_0;
+}
+
+hook OnPlayerSpawnNewChar(playerid){
+	PlayerTextDrawHide(playerid, item_TD[playerid]);
+	TextDrawHideForPlayer(playerid, item_Prev);	
 }
 
 hook OnItemRemovedFromPlayer(playerid, Item:itemid){
@@ -114,16 +119,19 @@ hook OnPlayerDisconnect(playerid, reason){
 ==============================================================================*/
 
 hook OnItemCreateInWorld(Item:itemid) {
-	new 
-		Button:buttonid,
-		str[3 + MAX_ITEM_NAME];
-
+	new Button:buttonid;
 	GetItemButtonID(itemid, buttonid);
-	GetItemTypeName(GetItemType(itemid), str);
+	SetButtonText(buttonid, "~w~"KEYTEXT_INTERACT"~h~ Para pegar");
+}
 
-	format(str, sizeof(str), "~y~%s", str);
-
-	SetButtonText(buttonid, str);
+hook OnPlayerEnterButArea(playerid, Button:buttonid) {
+	if(!IsValidItem(GetPlayerItem(playerid)) && IsValidItem(GetItemFromButtonID(buttonid))) {
+		new text[BTN_MAX_TEXT];
+		GetButtonText(buttonid, text);
+		if(strfind(text, "Para pegar")) {
+			HideActionText(playerid);
+		}
+	}
 }
 
 /*==============================================================================
