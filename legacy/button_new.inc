@@ -156,6 +156,15 @@ Removes the label from a button.
 Boolean to indicate success or failure. -1 if the button did not have a label.
 */
 
+forward GetButtonLabel(Button:buttonid, &label);
+/*
+# Description
+Return a the streamer label id used by a button.
+
+# Returns
+Boolean to indicate success or failure. -1 if the button did not have a label.
+*/
+
 forward GetButtonPos(Button:buttonid, &Float:x, &Float:y, &Float:z);
 /*
 # Description
@@ -563,6 +572,16 @@ stock DestroyButtonLabel(Button:buttonid)
 
 	return 1;
 }
+stock GetButtonLabel(Button:buttonid, &label) {
+	if(!Iter_Contains(btn_Index, _:buttonid))
+		return 0;
+
+	if(!IsValidDynamic3DTextLabel(btn_Data[buttonid][btn_label]))
+		return -1;
+
+	label = btn_Data[buttonid][btn_label];
+	return 1;
+}
 
 // btn_posX
 // btn_posY
@@ -743,14 +762,21 @@ stock GetPlayerPressingButton(playerid, &Button:id) {
 }
 
 stock GetPlayerButtonID(playerid, &Button:id) {
-	if(!IsPlayerConnected(playerid)) {
+	if(!IsPlayerConnected(playerid))
 		return 1;
-	}
 
-	if(Iter_Count(btn_NearIndex[playerid]) == 0) {
+	if(Iter_Count(btn_NearIndex[playerid]) == 0)
 		return 2;
-	}
 
+	if(IsPlayerInAnyVehicle(playerid))
+		return 3;
+
+	if(!IsPlayerInAnyDynamicArea(playerid)) {
+		Logger_Err("player is not in areas but list isn't empty", Logger_I("playerid", playerid));
+		Iter_Clear(btn_NearIndex[playerid]);
+		return 4;
+	}
+	
 	new
 		Float:x,
 		Float:y,
@@ -772,9 +798,8 @@ stock GetPlayerButtonID(playerid, &Button:id) {
 		}
 	}
 
-	if(Iter_Contains(btn_Index, _:id)) {
+	if(Iter_Contains(btn_Index, _:id))
 		return 0;
-	}
 
 	return 3;
 }
@@ -864,19 +889,35 @@ stock GetButtonAngleToPlayer(playerid, Button:id, &Float:angle) {
 
 hook OnPlayerKeyStateChange(playerid, newkeys, oldkeys) {
 	if(newkeys & 16) {
-		if(!IsPlayerInAnyVehicle(playerid) && Iter_Count(btn_NearIndex[playerid]) > 0) {
-			if(!IsPlayerInAnyDynamicArea(playerid)) {
-				Logger_Err("player is not in areas but list isn't empty", Logger_I("playerid", playerid));
-				Iter_Clear(btn_NearIndex[playerid]);
+		new Button:id;
+		if(!GetPlayerButtonID(playerid, id))
+		{
+			new Button:linked = btn_Data[id][btn_link];
+
+			if(Iter_Contains(btn_Index, _:linked) && btn_Pressing[playerid] == INVALID_BUTTON_ID)
+			{
+				if(CallLocalFunction("OnButtonPress", "dd", playerid, _:id))
+					return 1;
+
+				TogglePlayerControllable(playerid, false);
+				defer btn_Unfreeze(playerid);
+
+				Streamer_UpdateEx(playerid,
+					btn_Data[linked][btn_posX], btn_Data[linked][btn_posY], btn_Data[linked][btn_posZ],
+					btn_Data[linked][btn_world], btn_Data[linked][btn_interior]);
+
+				SetPlayerVirtualWorld(playerid, btn_Data[linked][btn_world]);
+				SetPlayerInterior(playerid, btn_Data[linked][btn_interior]);
+				SetPlayerPos(playerid, btn_Data[linked][btn_posX], btn_Data[linked][btn_posY], btn_Data[linked][btn_posZ]);
+				Streamer_Update(playerid);
 			}
+			else
+			{
+				btn_Pressing[playerid] = id;
 
-			foreach(new i : btn_NearIndex[playerid])
-				if(GetPlayerDistanceFromPoint(playerid,
-					btn_Data[btn_Near[playerid][i]][btn_posX],
-					btn_Data[btn_Near[playerid][i]][btn_posY],
-					btn_Data[btn_Near[playerid][i]][btn_posZ]) < btn_Data[btn_Near[playerid][i]][btn_size])
-						Internal_OnButtonPress(playerid, btn_Near[playerid][i]);
-
+				if(CallLocalFunction("OnButtonPress", "dd", playerid, _:id))
+					return 1;
+			}
 		}
 
 		if(oldkeys & 16) {
@@ -890,40 +931,6 @@ hook OnPlayerKeyStateChange(playerid, newkeys, oldkeys) {
 	return Y_HOOKS_CONTINUE_RETURN_1;
 }
 
-
-Internal_OnButtonPress(playerid, Button:buttonid)
-{
-	if(!Iter_Contains(btn_Index, _:buttonid))
-		return 0;
-
-	new Button:linked = btn_Data[buttonid][btn_link];
-
-	if(Iter_Contains(btn_Index, _:linked) && !IsValidButton(btn_Pressing[playerid]))
-	{
-		if(CallLocalFunction("OnButtonPress", "dd", playerid, _:buttonid))
-			return 1;
-
-		TogglePlayerControllable(playerid, false);
-		defer btn_Unfreeze(playerid);
-
-		Streamer_UpdateEx(playerid,
-			btn_Data[linked][btn_posX], btn_Data[linked][btn_posY], btn_Data[linked][btn_posZ],
-			btn_Data[linked][btn_world], btn_Data[linked][btn_interior]);
-
-		SetPlayerVirtualWorld(playerid, btn_Data[linked][btn_world]);
-		SetPlayerInterior(playerid, btn_Data[linked][btn_interior]);
-		SetPlayerPos(playerid, btn_Data[linked][btn_posX], btn_Data[linked][btn_posY], btn_Data[linked][btn_posZ]);
-	}
-	else
-	{
-		btn_Pressing[playerid] = buttonid;
-
-		if(CallLocalFunction("OnButtonPress", "dd", playerid, _:buttonid))
-			return 1;
-	}
-
-	return 0;
-}
 
 timer btn_Unfreeze[BTN_TELEPORT_FREEZE_TIME](playerid)
 	TogglePlayerControllable(playerid, true);
@@ -955,7 +962,7 @@ hook OnPlayerLeaveDynArea(playerid, areaid) {
 process_LeaveDynamicArea(playerid, areaid) {
 	if(!IsValidDynamicArea(areaid)) {
 		return 1;
-	}
+	} 
 
 	if(IsPlayerInAnyVehicle(playerid)) {
 		return 2;
