@@ -190,7 +190,7 @@ hook OnPlayerDisconnect(playerid, reason)
 		{
 			new held_data[ITM_ARR_MAX_ARRAY_DATA];
 			GetItemArrayData(itemid, held_data);
-			modio_push(filename, _T<H,E,L,D>, 2 + held_data[1], held_data);
+			modio_push(filename, _T<H,E,L,D>, ITM_ARR_MAX_ARRAY_DATA, held_data);
 		}
 		else
 		{
@@ -210,7 +210,7 @@ hook OnPlayerDisconnect(playerid, reason)
 			hols_data[0] = _:GetItemType(itemid);
 			GetItemArrayDataSize(itemid, hols_data[1]);
 			GetItemArrayData(itemid, hols_data[2], hols_data[1]);
-			modio_push(filename, _T<H,O,L,S>, 2 + hols_data[1], hols_data);
+			modio_push(filename, _T<H,O,L,S>, ITM_ARR_MAX_ARRAY_DATA, hols_data);
 		}
 		else
 		{
@@ -250,7 +250,7 @@ hook OnPlayerDisconnect(playerid, reason)
 			hat_data[0] = _:GetItemType(itemid);
 			GetItemArrayDataSize(itemid, hat_data[1]);
 			GetItemArrayData(itemid, hat_data[2], hat_data[1]);
-			modio_push(filename, _T<H,A,T,I>, 2 + hat_data[1], hat_data);
+			modio_push(filename, _T<H,A,T,I>, ITM_ARR_MAX_ARRAY_DATA, hat_data);
 		}
 		else
 		{
@@ -269,7 +269,7 @@ hook OnPlayerDisconnect(playerid, reason)
 			mask_data[0] = _:GetItemType(itemid);
 			GetItemArrayDataSize(itemid, mask_data[1]);
 			GetItemArrayData(itemid, mask_data[2], mask_data[1]);
-			modio_push(filename, _T<M,A,S,K>, 2 + mask_data[1], mask_data);
+			modio_push(filename, _T<M,A,S,K>, ITM_ARR_MAX_ARRAY_DATA, mask_data);
 		}
 		else
 		{
@@ -289,7 +289,7 @@ hook OnPlayerDisconnect(playerid, reason)
 			bag_data[0] = _:GetItemType(itemid);
 			//GetItemArrayDataSize(itemid, bag_data[1]);
 			//GetItemArrayData(itemid, bag_data[2], bag_data[1]);
-			modio_push(filename, _T<B,A,G,I>, 2 + bag_data[1], bag_data);
+			modio_push(filename, _T<B,A,G,I>, ITM_ARR_MAX_ARRAY_DATA, bag_data);
 		}
 		else
 		{
@@ -369,7 +369,12 @@ hook OnPlayerSpawnChar(playerid)
 				ClearChatForPlayer(playerid, 15);
 				ChatMsg(playerid, RED, " » Você foi morto enquanto esteve ausente. :(");
 
+				SetPlayerPos(playerid, DEFAULT_POS_X, DEFAULT_POS_Y, DEFAULT_POS_Z);
+				SetPlayerSpawnedState(playerid, false);
+				SetPlayerAliveState(playerid, false);
+				SetPlayerVirtualWorld(playerid, 0);
 				PlayerCreateNewCharacter(playerid);
+				SetPlayerBrightness(playerid, 255);
 			}
 
 			DestroyBody(i);
@@ -547,6 +552,8 @@ DamageBody(playerid, actorid, Float:amount)
 	Streamer_SetFloatData(STREAMER_TYPE_3D_TEXT_LABEL, body_NameTag[actorid], E_STREAMER_Y, y);
 	Streamer_SetFloatData(STREAMER_TYPE_3D_TEXT_LABEL, body_NameTag[actorid], E_STREAMER_Z, z);
 
+	SetDynamicActorPos(actorid, x, y, z);
+	
 	GetDynamicActorHealth(actorid, health);
 
 	if(IsPlayerRaidBlock(playerid))
