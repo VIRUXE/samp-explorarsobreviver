@@ -625,6 +625,12 @@ ACMD:additem[3](playerid, params[])
 		return 1;
 	}
 
+	if(strlen(name) < 3 && !IsNumeric(name))
+	{
+		ChatMsg(playerid, YELLOW, " » Nome do item muito pequeno");
+		return 1;
+	}
+	
 	new 
 		Float:x,
 		Float:y,
