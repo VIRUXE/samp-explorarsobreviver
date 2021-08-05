@@ -617,14 +617,20 @@ ACMD:move[3](playerid, params[])
 
 ACMD:additem[3](playerid, params[])
 {
-	new name[32];
+	new name[MAX_ITEM_NAME];
 
-	if(sscanf(params, "s[32]", name))
+	if(sscanf(params, "s["#MAX_ITEM_NAME"]", name))
 	{
 		ChatMsg(playerid, YELLOW, " » Utilização: /additem [nome/id do item]");
 		return 1;
 	}
 
+	if(strlen(name) < 3 && !IsNumeric(name))
+	{
+		ChatMsg(playerid, YELLOW, " » Nome do item muito pequeno");
+		return 1;
+	}
+	
 	new 
 		Float:x,
 		Float:y,

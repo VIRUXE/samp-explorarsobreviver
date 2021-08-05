@@ -280,27 +280,18 @@ _UpdateKeyActions(playerid)
 			AddToolTipText(playerid, KEYTEXT_DROP_ITEM, "Remover Mochila");
 
 		new 
-			Button:list[BTN_MAX_INRANGE],
-			size,
+			Button:buttonid,
 			text[BTN_MAX_TEXT];
 
-		GetPlayerButtonList(playerid, list, size);
-
-		for(new i; i < size; ++i) 
-		{
-			if(IsValidItem(GetItemFromButtonID(list[i])))
-			{
-				GetButtonText(list[i], text);
-
-				if(!strfind(text, "~y~")) // Is default item button text
-					AddToolTipText(playerid, KEYTEXT_INTERACT, "Pegar item");
-				else
-					AddToolTipText(playerid, KEYTEXT_INTERACT, "Interagir com item");
-
-				break;
-			}
-		}
+		GetPlayerButtonID(playerid, buttonid);
 		
+		if(!IsValidItem(GetItemFromButtonID(buttonid)))
+			return;
+
+		GetButtonText(buttonid, text);
+
+		AddToolTipText(playerid, KEYTEXT_INTERACT, "Interagir com item");
+
 		ShowPlayerKeyActionUI(playerid);
 		
 		return;

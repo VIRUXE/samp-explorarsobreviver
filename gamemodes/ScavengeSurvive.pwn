@@ -27,14 +27,14 @@
 ==============================================================================*/
 
 #undef MAX_PLAYERS
-#define MAX_PLAYERS						100
+#define MAX_PLAYERS						64
 
 #undef MAX_VEHICLES
-#define MAX_VEHICLES					1000 // Default is 2000
+#define MAX_VEHICLES					700
 
 // YSI
 #define _DEBUG							0
-#define CGEN_MEMORY						71000//69420
+#define CGEN_MEMORY						71000
 #define YSI_NO_VERSION_CHECK
 #define YSI_NO_OPTIMISATION_MESSAGE
 #define YSI_NO_MODE_CACHE
@@ -69,9 +69,9 @@
 // SS/item
 #define MAX_ITEM						Item:32768
 #define MAX_ITEM_TYPE					ItemType:327
-#define MAX_ITEM_NAME					24
-#define MAX_ITEM_TEXT					64
-#define MAX_CONTAINER_SLOTS				100
+#define MAX_ITEM_NAME					22
+#define MAX_ITEM_TEXT					45
+#define MAX_CONTAINER_SLOTS				90
 #define ITEM_RESPAWN_DELAY				HOUR(4)
 
 // Optidraw
@@ -205,7 +205,7 @@ public OnGameModeInit()
 #include <mobile>
 #include <ini>
 #include <requests>
-#include <geoip>
+//#include <geoip>
 #include <map-zones>
 #include <modio>
 #include <new-action-text>

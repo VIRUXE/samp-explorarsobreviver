@@ -404,6 +404,9 @@ hook OnPlayerSelectCntOpt(playerid, Container:containerid, option)
 
 DisplayTransferAmmoDialog(playerid, Container:containerid, msg[] = "")
 {
+	if(!IsValidItem(trans_SelectedItem[playerid]) || !IsValidContainer(containerid))
+		return 0;
+
 	new
 		slot,
 		Item:sourceitemid,
@@ -418,8 +421,13 @@ DisplayTransferAmmoDialog(playerid, Container:containerid, msg[] = "")
 	sourceitemtype = GetItemType(sourceitemid);
 	GetItemTypeName(sourceitemtype, sourceitemname);
 	GetContainerSlotItem(containerid, slot, targetitemid);
+
+	if(!IsValidItem(targetitemid))
+		return 0;
+
 	targetitemtype = GetItemType(targetitemid);
 	GetItemTypeName(targetitemtype, targetitemname);
+
 
 	inline Response(pid, dialogid, response, listitem, string:inputtext[])
 	{
@@ -520,4 +528,6 @@ DisplayTransferAmmoDialog(playerid, Container:containerid, msg[] = "")
 		DisplayContainerInventory(playerid, containerid);
 	}
 	Dialog_ShowCallback(playerid, using inline Response, DIALOG_STYLE_INPUT, "Transferir municao", sprintf("Coloque um valor de balas para transferir de %s para %s\n\n%s", sourceitemname, targetitemname, msg), "Pronto", "Cancelar");
+
+	return 1;
 }
