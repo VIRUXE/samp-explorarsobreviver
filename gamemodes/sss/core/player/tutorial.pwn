@@ -463,10 +463,16 @@ stock IsPlayerInTutorial(playerid)
 
 CMD:sair(playerid, params[])
 {
-	if(!IsPlayerAdmin(playerid) || GetPlayerAdminLevel(playerid) || PlayerTutorialProgress[playerid] == 5)
+	if(!IsPlayerInTutorial(playerid))
+		return 0;
+
+	if(IsPlayerAdmin(playerid) || PlayerTutorialProgress[playerid] == 5)
 	{
 		if(!IsPlayerRegistered(playerid))
 			DisplayRegisterPrompt(playerid);
+		else
+			if(!IsPlayerAdmin(playerid))
+				AskPlayerToWhitelist(playerid);
 
 		ExitTutorial(playerid);
 	}
