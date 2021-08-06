@@ -689,7 +689,7 @@ public OnScriptInit()
 	item_Campfire		= DefineItemType("Campfire",					"Campfire",			19632,	5,	0.0, 0.0, 0.0,			0.0,	0.106261, 0.004634, -0.144552, 246.614654, 345.892211, 258.267395, true, .maxhitpoints = 5);
 	item_CanDrink		= DefineItemType("Lata",						"CanDrink",			2601,	1,	0.0, 0.0, 0.0,			0.054,	0.064848, 0.059404, 0.017578, 0.000000, 359.136199, 30.178396, .maxhitpoints = 1);
 	item_Cane			= DefineItemType("Cano",						"Cane",				19348,	3,	270.0, 0.0, 0.0,		0.0,	0.041865, 0.022883, -0.079726, 4.967216, 10.411237, 0.000000, .maxhitpoints = 3);
-	item_Canister		= DefineItemType("Canister",					"Canister",			19816,	5,	0.0, 0.0, 0.0,			0.218,	0.081000, 0.032999, -0.195999,  164.900070, 8.099815, 96.199882, true, .maxhitpoints = 5);
+	item_Canister		= DefineItemType("Vasilha",						"Canister",			19816,	5,	0.0, 0.0, 0.0,			0.218,	0.081000, 0.032999, -0.195999,  164.900070, 8.099815, 96.199882, true, .maxhitpoints = 5);
 	item_CapBack1		= DefineItemType("Bone",						"CapBack1",			18939,	1,	180.0, 0.0, 0.0,		0.0,	0.062216, 0.055396, 0.001138, 90.000000, 0.000000, 180.000000, .maxhitpoints = 1);
 	item_CapBack2		= DefineItemType("Chapeu",						"CapBack2",			18940,	1,	180.0, 0.0, 0.0,		0.0,	0.062216, 0.055396, 0.001138, 90.000000, 0.000000, 180.000000, .maxhitpoints = 1);
 	item_CapBack3		= DefineItemType("Chapeu",						"CapBack3",			18941,	1,	0.0, 0.0, 0.0,			0.0,	0.062216, 0.055396, 0.001138, 90.000000, 0.000000, 180.000000, .maxhitpoints = 1);
