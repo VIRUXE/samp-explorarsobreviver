@@ -132,7 +132,7 @@ stock AskPlayerToWhitelist(playerid)
 	ClearChatForPlayer(playerid, 20);
 
 	format(whitelistMsg, sizeof(whitelistMsg), ""C_WHITE"Você precisa registrar na WhiteList para jogar no servidor.\n\n\
-		"C_WHITE"\t1. Entre em: "C_BLUE"%s"C_WHITE". "C_WHITE"(Nota: necessita de vincular seu celular no Discord)\n\
+		"C_WHITE"\t1. Entre em: http://"C_BLUE"%s"C_WHITE". "C_WHITE"(Nota: necessita de vincular seu celular no Discord)\n\
 		"C_WHITE"\t2. Digite %P"C_WHITE" em #whitelist\n\
 		"C_WHITE"\t3. Volte aqui, clique em \"Jogar\" e pronto, você ja pode se divertir! :) \n\n\
 		"C_YELLOW"Aviso:"C_WHITE" Isso serve como proteção para o servidor.\nPedimos sua compreensão.",
@@ -144,10 +144,11 @@ stock AskPlayerToWhitelist(playerid)
 
 		if(response)
 		{
-			if(!wl_Whitelisted[playerid]) 
+			if(IsPlayerAdmin(playerid))
+				wl_Whitelisted[playerid] = true;
+
+			if(!wl_Whitelisted[playerid])
 				AskPlayerToWhitelist(playerid);
-			else
-				PlayerCreateNewCharacter(playerid);
 		}
 		else
 			KickPlayer(playerid, "Decidiu sair");

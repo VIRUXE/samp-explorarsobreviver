@@ -12,6 +12,9 @@ public OnPlayerCommandText(playerid, cmdtext[])
 	for (new i, j = strlen(cmd); i < j; i++)
 		cmd[i] = tolower(cmd[i]);
 
+	if(!IsPlayerWhitelisted(playerid) && !isequal(cmd[1], "sair"))
+		return ChatMsgLang(playerid, RED, "CMDERROR4");
+
 	format(cmdfunction, 64, "cmd_%s", cmd[1]); // Format the standard command function name
 
 	if(funcidx(cmdfunction) == -1) // If it doesn't exist, all hope is not lost! It might be defined as an admin command which has the admin level after the command name
@@ -43,10 +46,7 @@ public OnPlayerCommandText(playerid, cmdtext[])
 			result = 5;
 	}
 	if(result == 1)
-	{
-		if(isnull(params))result = CallLocalFunction(cmdfunction, "is", playerid, "\1");
-		else result = CallLocalFunction(cmdfunction, "is", playerid, params);
-	}
+		result = CallLocalFunction(cmdfunction, "is", playerid, isnull(params) ? "\1" : params);
 
 /*
 	Return values for commands.
@@ -61,13 +61,16 @@ public OnPlayerCommandText(playerid, cmdtext[])
 	if(0 < result < 7)
 		log(false, "[COMMAND] [%p]: %s", playerid, cmdtext);
 
-	if		(result == 0) ChatMsgLang(playerid, ORANGE, "CMDERROR0");
-	else if	(result == 1) return 1; // valid command, do nothing.
-	else if	(result == 2) ChatMsgLang(playerid, ORANGE, "CMDERROR1");
-	else if	(result == 3) ChatMsgLang(playerid, RED, "CMDERROR2");
-	else if	(result == 4) ChatMsgLang(playerid, RED, "CMDERROR3");
-	else if	(result == 5) ChatMsgLang(playerid, RED, "CMDERROR4");
-	else if	(result == 6) ChatMsgLang(playerid, RED, "CMDERROR5");
+	switch(result)
+	{
+		case 0: ChatMsgLang(playerid, ORANGE, 	"CMDERROR0");
+		case 1: return 1; // valid command, do nothing.
+		case 2: ChatMsgLang(playerid, ORANGE, 	"CMDERROR1");
+		case 3: ChatMsgLang(playerid, RED, 		"CMDERROR2");
+		case 4: ChatMsgLang(playerid, RED, 		"CMDERROR3");
+		case 5: ChatMsgLang(playerid, RED, 		"CMDERROR4");
+		case 6: ChatMsgLang(playerid, RED, 		"CMDERROR5");
+	}
 
 	return 1;
 }
@@ -85,7 +88,7 @@ public OnRconLoginAttempt(ip[], password[], success)
 			GetPlayerIp(i, ipstring, sizeof(ipstring));
 
 			if(!strcmp(ip, ipstring, true))
-				ChatMsgAdmins(1, YELLOW, " » Failed login by %p password: %s", i, password);
+				return ChatMsgAdmins(1, YELLOW, " » Failed login by %p password: %s", i, password);
 		}
 	}
 	return 1;

@@ -454,19 +454,25 @@ stock IsPlayerInTutorial(playerid)
 	if(!IsPlayerConnected(playerid))
 		return 0;
 		
-	log(true, "[TUTORIAL] IsPlayerInTutorial - %p: %d", playerid, PlayerInTutorial[playerid]);
+	// log(true, "[TUTORIAL] IsPlayerInTutorial - %p: %d", playerid, PlayerInTutorial[playerid]);
 
-	PrintBacktrace();
+	// PrintBacktrace();
 
 	return PlayerInTutorial[playerid];
 }
 
 CMD:sair(playerid, params[])
 {
-	if(!IsPlayerAdmin(playerid) || GetPlayerAdminLevel(playerid) || PlayerTutorialProgress[playerid] == 5)
+	if(!IsPlayerInTutorial(playerid))
+		return 0;
+
+	if(IsPlayerAdmin(playerid) || PlayerTutorialProgress[playerid] == 5)
 	{
 		if(!IsPlayerRegistered(playerid))
 			DisplayRegisterPrompt(playerid);
+		else
+			if(!IsPlayerAdmin(playerid))
+				AskPlayerToWhitelist(playerid);
 
 		ExitTutorial(playerid);
 	}
