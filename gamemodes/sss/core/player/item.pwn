@@ -69,26 +69,10 @@ hook OnPlayerGetItem(playerid, Item:itemid){
 		RemovePlayerAttachedObject(playerid, ITEM_ATTACH_INDEX);
 }
 
-hook OnPlayerUseItem(playerid, Item:itemid)
-	UpdatePreviewItemText(playerid);
-
-hook OnPlayerWeaponShot(playerid, weaponid, hittype, hitid, Float:fX, Float:fY, Float:fZ)
-{
-	UpdatePreviewItemText(playerid);
-	return 1;
-}
-
-hook OnHoldActionFinish(playerid)
-	UpdatePreviewItemText(playerid);
-
-hook OnHoldActionUpdate(playerid, progress) {
-	UpdatePreviewItemText(playerid);
-	return Y_HOOKS_CONTINUE_RETURN_0;
-}
-
-hook OnPlayerUseItemWithItem(playerid, Item:itemid, Item:withitemid){
-	UpdatePreviewItemText(playerid);
-	return Y_HOOKS_CONTINUE_RETURN_0;
+hook OnItemArrayDataChanged(Item:itemid) {
+	if(IsPlayerConnected(GetItemHolder(itemid))) {
+		UpdatePreviewItemText(GetItemHolder(itemid));
+	}
 }
 
 hook OnPlayerSpawnNewChar(playerid){
@@ -102,11 +86,6 @@ hook OnItemRemovedFromPlayer(playerid, Item:itemid){
 
 	if(IsItemTypeCarry(GetItemType(itemid)))
 		SetPlayerSpecialAction(playerid, SPECIAL_ACTION_NONE);
-}
-
-hook OnPlayerDroppedItem(playerid, Item:itemid){
-	PlayerTextDrawHide(playerid, item_TD[playerid]);
-	TextDrawHideForPlayer(playerid, item_Prev);
 }
 
 hook OnPlayerDisconnect(playerid, reason){
@@ -123,7 +102,7 @@ hook OnPlayerDisconnect(playerid, reason){
 hook OnItemCreateInWorld(Item:itemid) {
 	new Button:buttonid;
 	GetItemButtonID(itemid, buttonid);
-	SetButtonText(buttonid, "~w~"KEYTEXT_INTERACT"~h~ Para pegar");
+	SetButtonText(buttonid, "~w~"KEYTEXT_INTERACT"~h~ pegar item");
 }
 
 hook OnPlayerEnterButArea(playerid, Button:buttonid) {
