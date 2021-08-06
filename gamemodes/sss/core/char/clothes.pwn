@@ -144,6 +144,7 @@ hook OnHoldActionUpdate(playerid, progress)
 
 		return Y_HOOKS_BREAK_RETURN_0;
 	}
+	return Y_HOOKS_CONTINUE_RETURN_0;
 }
 hook OnHoldActionFinish(playerid)
 {
