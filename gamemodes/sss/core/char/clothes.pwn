@@ -141,6 +141,8 @@ hook OnHoldActionUpdate(playerid, progress)
 	{
 	 	if(GetPlayerTotalVelocity(playerid) > 1.0)
 		 	StopUsingClothes(playerid);
+
+		return Y_HOOKS_BREAK_RETURN_0;
 	}
 }
 hook OnHoldActionFinish(playerid)

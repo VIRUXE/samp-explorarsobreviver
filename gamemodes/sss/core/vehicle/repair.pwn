@@ -133,7 +133,7 @@ hook OnHoldActionUpdate(playerid, progress)
 	{
 		if(GetPlayerTotalVelocity(playerid) > 1.0){
 			StopRepairingVehicle(playerid);
-			return Y_HOOKS_BREAK_RETURN_1;
+			return Y_HOOKS_BREAK_RETURN_0;
 		}
 
 		new ItemType:itemtype = GetItemType(GetPlayerItem(playerid));
@@ -141,13 +141,13 @@ hook OnHoldActionUpdate(playerid, progress)
 		if(!IsValidItemType(itemtype))
 		{
 			StopRepairingVehicle(playerid);
-			return Y_HOOKS_BREAK_RETURN_1;
+			return Y_HOOKS_BREAK_RETURN_0;
 		}
 
 		if(!IsPlayerInVehicleArea(playerid, fix_TargetVehicle[playerid]) || !IsValidVehicle(fix_TargetVehicle[playerid]))
 		{
 			StopRepairingVehicle(playerid);
-			return Y_HOOKS_BREAK_RETURN_1;
+			return Y_HOOKS_BREAK_RETURN_0;
 		}
 
 		if(CompToolHealth(itemtype, fix_Progress[playerid]))
@@ -172,6 +172,8 @@ hook OnHoldActionUpdate(playerid, progress)
 			StopRepairingVehicle(playerid);
 			NeedAToolInfo(playerid, fix_Progress[playerid]);
 		}
+
+		return Y_HOOKS_BREAK_RETURN_0;
 	}
 
 	return Y_HOOKS_CONTINUE_RETURN_0;

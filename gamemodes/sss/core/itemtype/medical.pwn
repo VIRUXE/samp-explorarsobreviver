@@ -145,7 +145,7 @@ hook OnHoldActionUpdate(playerid, progress)
 			if(!IsPlayerNextToPlayer(playerid, med_HealTarget[playerid]))
 			{
 				StopHoldAction(playerid);
-				return Y_HOOKS_BREAK_RETURN_1;
+				return Y_HOOKS_BREAK_RETURN_0;
 			}
 
 			new progresscap = HEAL_PROGRESS_MAX;
@@ -157,9 +157,10 @@ hook OnHoldActionUpdate(playerid, progress)
 			SetPlayerProgressBarMaxValue(med_HealTarget[playerid], ActionBar, progresscap);
 			SetPlayerProgressBarValue(med_HealTarget[playerid], ActionBar, progress);
 			ShowPlayerProgressBar(med_HealTarget[playerid], ActionBar);
+			return Y_HOOKS_BREAK_RETURN_1;
 		}
 
-		return Y_HOOKS_BREAK_RETURN_1;
+		return Y_HOOKS_BREAK_RETURN_0;
 	}
 
 	return Y_HOOKS_CONTINUE_RETURN_0;

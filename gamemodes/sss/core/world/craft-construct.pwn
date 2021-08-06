@@ -251,7 +251,10 @@ hook OnHoldActionUpdate(playerid, progress) {
 			cons_Constructing[playerid] = INVALID_CRAFTSET;
 			StopRemovingConstructedItem(playerid);
 		}
+
+		return Y_HOOKS_BREAK_RETURN_0;
 	}
+	return Y_HOOKS_CONTINUE_RETURN_0;
 }
 
 // TODO: Check if items are still there

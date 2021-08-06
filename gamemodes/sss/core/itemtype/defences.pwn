@@ -583,6 +583,8 @@ hook OnHoldActionUpdate(playerid, progress)
 	{
 		if(!IsItemInWorld(def_CurrentDefenceItem[playerid]) || GetPlayerTotalVelocity(playerid) > 1.0)
 			StopBuildingDefence(playerid), StopHoldAction(playerid);
+
+		return Y_HOOKS_BREAK_RETURN_0;
 	}
 
 	return Y_HOOKS_CONTINUE_RETURN_0;

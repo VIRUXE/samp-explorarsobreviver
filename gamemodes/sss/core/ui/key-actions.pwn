@@ -279,7 +279,7 @@ _UpdateKeyActions(playerid)
 		if(IsValidItem(GetPlayerBagItem(playerid)))
 			AddToolTipText(playerid, KEYTEXT_DROP_ITEM, "Remover Mochila");
 
-		new 
+		/*new 
 			Button:buttonid,
 			text[BTN_MAX_TEXT];
 
@@ -291,7 +291,8 @@ _UpdateKeyActions(playerid)
 		GetButtonText(buttonid, text);
 
 		AddToolTipText(playerid, KEYTEXT_INTERACT, "Interagir com item");
-
+		*/
+		
 		ShowPlayerKeyActionUI(playerid);
 		
 		return;

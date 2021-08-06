@@ -68,12 +68,14 @@ timer HoldActionUpdate[100](playerid)
 		return;
 	}
 
-	SetPlayerProgressBarMaxValue(playerid, ActionBar, HoldActionLimit[playerid]);
-	SetPlayerProgressBarValue(playerid, ActionBar, HoldActionProgress[playerid]);
-	ShowPlayerProgressBar(playerid, ActionBar);
-
-	CallLocalFunction("OnHoldActionUpdate", "dd", playerid, HoldActionProgress[playerid]);
-
+	// return to 1 when you want a custom volue
+	if(!CallLocalFunction("OnHoldActionUpdate", "dd", playerid, HoldActionProgress[playerid]))
+	{
+		SetPlayerProgressBarMaxValue(playerid, ActionBar, HoldActionLimit[playerid]);
+		SetPlayerProgressBarValue(playerid, ActionBar, HoldActionProgress[playerid]);
+		ShowPlayerProgressBar(playerid, ActionBar);
+	}
+	
 	HoldActionProgress[playerid] += 100;
 
 	return;

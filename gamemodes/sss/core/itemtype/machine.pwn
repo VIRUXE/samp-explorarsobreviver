@@ -294,7 +294,7 @@ hook OnHoldActionUpdate(playerid, progress)
 			{
 				StopHoldAction(playerid);
 				mach_CurrentMachine[playerid] = INVALID_ITEM_ID;
-				return Y_HOOKS_BREAK_RETURN_1;
+				return Y_HOOKS_BREAK_RETURN_0;
 			}
 		}
 

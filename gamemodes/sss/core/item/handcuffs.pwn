@@ -98,7 +98,7 @@ hook OnHoldActionUpdate(playerid, progress)
 		if(!CanPlayerHandcuffPlayer(playerid, cuf_TargetPlayer[playerid]))
 		{
 			StopApplyingHandcuffs(playerid);
-			return Y_HOOKS_BREAK_RETURN_1;
+			return Y_HOOKS_BREAK_RETURN_0;
 		}
 	}
 

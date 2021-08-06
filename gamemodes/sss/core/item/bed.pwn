@@ -99,7 +99,7 @@ hook OnHoldActionUpdate(playerid, progress){
 			ClearAnimations(playerid, 1);
 			SetPlayerBrightness(playerid, 0);
 			Bed_Item[playerid] = INVALID_ITEM_ID;
-			return Y_HOOKS_BREAK_RETURN_1;
+			return Y_HOOKS_BREAK_RETURN_0;
 		}
 
 		if(GetPlayerAnimationIndex(playerid) != 386 && GetPlayerAnimationIndex(playerid) != 0 &&
@@ -116,7 +116,7 @@ hook OnHoldActionUpdate(playerid, progress){
 			ApplyAnimation(playerid,"CRACK","crckdeth2", 4.1, 0, 1, 1, 1, 0, 1);
 		}
 		SetPlayerBrightness(playerid, 200 - (progress / (300)) );
-		return Y_HOOKS_BREAK_RETURN_1;
+		return Y_HOOKS_BREAK_RETURN_0;
 	}
 
 	return Y_HOOKS_CONTINUE_RETURN_0;

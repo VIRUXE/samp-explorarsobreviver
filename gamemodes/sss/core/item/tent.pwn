@@ -589,6 +589,7 @@ hook OnHoldActionFinish(playerid)
 			HideActionText(playerid);
 			tnt_TweakID[playerid] = CreateTentFromItem(tnt_CurrentTentItem[playerid]);
 			TweakItem(playerid, tnt_CurrentTentItem[playerid]);
+			return Y_HOOKS_BREAK_RETURN_0;
 		}
 
 		if(GetItemType(GetPlayerItem(playerid)) == item_Crowbar)
@@ -620,6 +621,7 @@ hook OnHoldActionFinish(playerid)
 
 			DestroyTent(tentid);
 			StopRemovingTent(playerid);
+			return Y_HOOKS_BREAK_RETURN_0;
 		}
 	}
 

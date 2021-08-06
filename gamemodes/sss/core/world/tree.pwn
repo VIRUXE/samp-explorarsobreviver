@@ -356,7 +356,7 @@ hook OnHoldActionUpdate(playerid, progress)
 	if(!IsValidTree(tree_CuttingTree[playerid]))
 	{
 		_StopWoodCutting(playerid);
-		return 1;
+		return Y_HOOKS_CONTINUE_RETURN_0;
 	}
 
 	new

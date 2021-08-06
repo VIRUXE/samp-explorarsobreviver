@@ -81,8 +81,10 @@ hook OnPlayerWeaponShot(playerid, weaponid, hittype, hitid, Float:fX, Float:fY, 
 hook OnHoldActionFinish(playerid)
 	UpdatePreviewItemText(playerid);
 
-hook OnHoldActionUpdate(playerid, progress)
+hook OnHoldActionUpdate(playerid, progress) {
 	UpdatePreviewItemText(playerid);
+	return Y_HOOKS_CONTINUE_RETURN_0;
+}
 
 hook OnPlayerUseItemWithItem(playerid, Item:itemid, Item:withitemid){
 	UpdatePreviewItemText(playerid);

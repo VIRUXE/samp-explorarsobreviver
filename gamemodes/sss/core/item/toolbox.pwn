@@ -76,9 +76,8 @@ hook OnHoldActionUpdate(playerid, progress){
 	if(PlayerBodyWorkRepair[playerid] != INVALID_VEHICLE_ID) {
 		if(GetPlayerTotalVelocity(playerid) > 1.0){
 			StopBodyWorkRepair(playerid);
-			return Y_HOOKS_BREAK_RETURN_1;
 		}
-		return Y_HOOKS_BREAK_RETURN_1;
+		return Y_HOOKS_BREAK_RETURN_0;
 	}
 
 	return Y_HOOKS_CONTINUE_RETURN_0;
