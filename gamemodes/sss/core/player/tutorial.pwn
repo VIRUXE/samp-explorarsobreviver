@@ -45,9 +45,12 @@ hook OnPlayerSpawnNewChar(playerid)
 
 hook OnPlayerCreateChar(playerid)
 {
-	PlayerTextDrawBoxColor(playerid, TutorialDraw[playerid], 255);
-	PlayerTextDrawSetString(playerid, TutorialDraw[playerid], ls(playerid, "TUTORPROMPT"));
-	PlayerTextDrawShow(playerid, TutorialDraw[playerid]);
+	if(IsPlayerLoggedIn(playerid))
+	{
+		PlayerTextDrawBoxColor(playerid, TutorialDraw[playerid], 255);
+		PlayerTextDrawSetString(playerid, TutorialDraw[playerid], ls(playerid, "TUTORPROMPT"));
+		PlayerTextDrawShow(playerid, TutorialDraw[playerid]);
+	}
 }
 
 hook OnHoldActionUpdate(playerid, progess)

@@ -87,6 +87,11 @@ public DCC_OnMessageCreate(DCC_Message:message)
 				{
 					wl_Whitelisted[playerid] = true;
 					ChatMsg(playerid, GREEN, "Está agora na Whitelist. Pode clicar em Jogar!");
+
+					SetPlayerPos(playerid, DEFAULT_POS_X, DEFAULT_POS_Y, DEFAULT_POS_Z);
+					SetPlayerSpawnedState(playerid, false);
+					SetPlayerAliveState(playerid, false);
+					PlayerCreateNewCharacter(playerid);
 				}
 				
 				DCC_GetUserName(discordUser, discordUsername);
