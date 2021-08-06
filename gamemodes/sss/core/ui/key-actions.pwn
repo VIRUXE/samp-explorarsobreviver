@@ -224,6 +224,12 @@ _UpdateKeyActions(playerid)
 		return;		
 	}
 
+	if(!IsPlayerOnAdminDuty(playerid))
+	{
+		HidePlayerKeyActionUI(playerid);
+		return;		
+	}
+
 	if(IsPlayerInAnyVehicle(playerid))
 	{
 		ClearPlayerKeyActionUI(playerid);
