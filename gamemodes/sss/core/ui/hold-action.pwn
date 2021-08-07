@@ -69,7 +69,7 @@ timer HoldActionUpdate[100](playerid)
 	}
 
 	// return to 1 when you want a custom volue
-	if(!CallLocalFunction("OnHoldActionUpdate", "dd", playerid, HoldActionProgress[playerid]))
+	if(!CallLocalFunction("OnHoldActionUpdate", "dd", playerid, HoldActionProgress[playerid]) && HoldActionState[playerid])
 	{
 		SetPlayerProgressBarMaxValue(playerid, ActionBar, HoldActionLimit[playerid]);
 		SetPlayerProgressBarValue(playerid, ActionBar, HoldActionProgress[playerid]);
