@@ -832,7 +832,7 @@ AccuracyWarning(playerid, total)
 
 ptask HealthHackCheck[1000](playerid)
 {
-	if(IsPlayerOnAdminDuty(playerid))
+	if(GetPlayerAdminLevel(playerid))
 		return;
 
 	new Float:health;
