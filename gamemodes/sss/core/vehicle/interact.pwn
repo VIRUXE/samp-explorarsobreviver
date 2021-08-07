@@ -195,6 +195,11 @@ hook OnPlayerKeyStateChange(playerid, newkeys, oldkeys)
 	return 1;
 }
 
+hook OnPlayerEnterVehicle(playerid, vehicleid, ispassenger)
+{
+	_varea_Interact(playerid);
+}
+
 _varea_Interact(playerid)
 {
 	if(IsPlayerInAnyVehicle(playerid))
