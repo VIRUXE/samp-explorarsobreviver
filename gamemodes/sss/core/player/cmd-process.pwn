@@ -13,7 +13,7 @@ public OnPlayerCommandText(playerid, cmdtext[])
 		cmd[i] = tolower(cmd[i]);
 
 	if(!IsPlayerWhitelisted(playerid) && !isequal(cmd[1], "sair"))
-		return ChatMsgLang(playerid, RED, "CMDERROR4");
+		return ChatMsg(playerid, RED, "Tem que vincular sua Conta de Discord primeiro antes de poder executar comandos.");
 
 	format(cmdfunction, 64, "cmd_%s", cmd[1]); // Format the standard command function name
 
