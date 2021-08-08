@@ -27,7 +27,7 @@ public OnChangelogLoaded(playerid)
 		cache_get_value(row, "title", title);
 		cache_get_value(row, "description", description);
 
-		format(rowBuffer, sizeof(rowBuffer), "%s%s"C_GREY" - %s("C_WHITE"%s"C_GREY"): "C_WHITE"%s\n", datediff <= 7 ? C_GOLD : C_GREY, date, type, title, !isequal(description, "NULL", true) ? description : "Sem descrição.");
+		format(rowBuffer, sizeof(rowBuffer), "%s%s"C_GREY"\t%s\t"C_WHITE"%s"C_GREY":%s"C_WHITE"%s\n", datediff <= 7 ? C_GOLD : C_GREY, date, type, title, strlen(title) < 10 ? "\t\t" : "\t", !isequal(description, "NULL", true) ? description : "Sem descrição.");
 	
 		strcat(changelogBuffer, rowBuffer);
 	}
@@ -39,7 +39,7 @@ public OnChangelogLoaded(playerid)
 CMD:novidades(playerid)
 {
 	// Query the database for the latest changelogs
-	if(!mysql_tquery(gDatabase, "SELECT DATEDIFF(NOW(), date) AS datediff, DATE_FORMAT(date, '%d/%m') AS date, type, title, description FROM changelog c ORDER BY c.date DESC LIMIT 30;", "OnChangelogLoaded", "d", playerid))
+	if(!mysql_tquery(gDatabase, "SELECT DATEDIFF(NOW(), date) AS datediff, DATE_FORMAT(date, '%d/%m') AS date, type, title, description FROM changelog c ORDER BY c.date DESC LIMIT 35;", "OnChangelogLoaded", "d", playerid))
 		err(false, true, "Couldn't download changelog.");
 
 	return 1;
