@@ -31,7 +31,7 @@ hook OnPlayerConnect(playerid)
 }
 
 hook OnPlayerDisconnect(playerid, reason)
-	PlayerInTutorial[playerid] = false;
+	ExitTutorial(playerid);
 
 hook OnPlayerSpawnChar(playerid)
 {
@@ -473,9 +473,8 @@ CMD:sair(playerid, params[])
 	{
 		if(!IsPlayerRegistered(playerid))
 			DisplayRegisterPrompt(playerid);
-		else
-			if(!IsPlayerAdmin(playerid))
-				AskPlayerToWhitelist(playerid);
+		else if(!IsPlayerAdmin(playerid))
+			AskPlayerToWhitelist(playerid);
 
 		ExitTutorial(playerid);
 	}
