@@ -44,7 +44,7 @@ hook OnPlayerDisconnect(playerid)
 }
 
 // Whitelist pelo Discord
-public DCC_OnMessageCreate(DCC_Message:message)
+hook DCC_OnMessageCreate(DCC_Message:message)
 {
     new
         DCC_Channel:    channel,
