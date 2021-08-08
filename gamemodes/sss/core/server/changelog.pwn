@@ -9,7 +9,7 @@ hook OnPlayerLogin(playerid)
 forward OnChangelogLoaded(playerid);
 public OnChangelogLoaded(playerid)
 {
-	new changelogBuffer[2000];
+	new changelogBuffer[3000];
 
 	for(new row; row < cache_num_rows(); row++)
 	{
