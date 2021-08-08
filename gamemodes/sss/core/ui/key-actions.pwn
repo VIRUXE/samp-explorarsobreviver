@@ -224,7 +224,7 @@ _UpdateKeyActions(playerid)
 		return;		
 	}
 
-	if(!IsPlayerOnAdminDuty(playerid))
+	if(IsPlayerOnAdminDuty(playerid))
 	{
 		HidePlayerKeyActionUI(playerid);
 		return;		
