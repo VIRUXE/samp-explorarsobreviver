@@ -104,7 +104,7 @@ public DCC_OnMessageCreate(DCC_Message:message)
 				log(true, "[WHITELIST] Discord ID %s (%s) foi atribuido para a conta %s", discordUserId, discordUsername, nameProvided);
 			}
 			else
-				SendDiscordMessage(channel, "> Nao existe uma Conta de Jogo com esse nick! **Tem que se registrar primeiro**.");
+				SendDiscordMessage(channel, "> Nao existe uma Conta de Jogo com esse nick! **Primeir tem que acabar o tutorial e registrar sua conta**.");
 		}
 		else
 			SendDiscordMessage(channel, "> Voce ja tem uma Conta de Jogo associada nessa Conta de Discord...");
@@ -117,7 +117,7 @@ public OnWhitelistSuccess(const nameProvided[MAX_PLAYER_NAME])
 {
 	new DCC_Channel:channel = DCC_GetCreatedPrivateChannel();
 
-	SendDiscordMessage(channel, "> Sua Conta de Jogo `%s` foi vinculada com sua Conta de Discord e recebeu o cargo de Sobrevivente. Bom jogo!", nameProvided);
+	SendDiscordMessage(channel, "> Sua Conta de Jogo `%s` foi vinculada com sua Conta de Discord e recebeu o cargo de Sobrevivente, para poder aceder aos restantes canais. Bom jogo!", nameProvided);
 }
 
 stock IsPlayerWhitelisted(playerid)

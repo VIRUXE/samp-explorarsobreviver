@@ -409,63 +409,27 @@ hook OnPlayerStateChange(playerid, newstate, oldstate)
 	if(GetPlayerAdminLevel(playerid) != 0)
 		return 1;
 		
-	if(newstate == PLAYER_STATE_DRIVER)
+	if(newstate == PLAYER_STATE_DRIVER || newstate == PLAYER_STATE_DRIVER)
 	{
 		new
-			vehicleid,
-			E_LOCK_STATE:lockstate;
+			vehicleId = GetPlayerVehicleID(playerid),
+			E_LOCK_STATE:vehicleLock = GetVehicleLockState(vehicleId);
 
-		vehicleid = GetPlayerVehicleID(playerid);
-		lockstate = GetVehicleLockState(vehicleid);
-
-		if(lockstate != E_LOCK_STATE_OPEN && GetTickCountDifference(GetTickCount(), GetVehicleLockTick(vehicleid)) > 3500)
+		if(vehicleLock != E_LOCK_STATE_OPEN && GetTickCountDifference(GetTickCount(), GetVehicleLockTick(vehicleId)) > SEC(3.5))
 		{
 			new
-				name[MAX_PLAYER_NAME],
-				Float:px,
-				Float:py,
-				Float:pz;
+				playerName[MAX_PLAYER_NAME],
+				Float:px, Float:py, Float:pz,
+				bool:isUsingMobile = IsPlayerMobile(playerid);
 
-			GetPlayerName(playerid, name, MAX_PLAYER_NAME);
-			GetPlayerPos(playerid, px, py, pz);
+			GetPlayerName(playerid, playerName, MAX_PLAYER_NAME);
 
-			ReportPlayer(name, sprintf("Entered locked vehicle (%d) as driver", vehicleid), -1, REPORT_TYPE_LOCKEDCAR, px, py, pz, GetPlayerVirtualWorld(playerid), GetPlayerInterior(playerid), "");
-			TimeoutPlayer(playerid, sprintf("Entered locked vehicle (%d) as driver", vehicleid));
 			RemovePlayerFromVehicle(playerid);
-			//SetPlayerPos(playerid, px, py, pz);
 
-			defer StillInVeh(playerid, vehicleid, _:lockstate);
+			defer StillInVeh(playerid, vehicleId, _:vehicleLock);
 
-			return -1;
-		}
-	}
-
-	if(newstate == PLAYER_STATE_PASSENGER)
-	{
-		new
-			vehicleid,
-			E_LOCK_STATE:lockstate;
-
-		vehicleid = GetPlayerVehicleID(playerid);
-		lockstate = GetVehicleLockState(vehicleid);
-
-		if(lockstate != E_LOCK_STATE_OPEN && GetTickCountDifference(GetTickCount(), GetVehicleLockTick(vehicleid)) > 3500)
-		{
-			new
-				name[MAX_PLAYER_NAME],
-				Float:x,
-				Float:y,
-				Float:z;
-
-			GetPlayerName(playerid, name, MAX_PLAYER_NAME);
-			GetPlayerPos(playerid, x, y, z);
-
-			ReportPlayer(name, sprintf("Entered locked vehicle (%d) as passenger", vehicleid), -1, REPORT_TYPE_LOCKEDCAR, x, y, z, GetPlayerVirtualWorld(playerid), GetPlayerInterior(playerid), "");
-			TimeoutPlayer(playerid, sprintf("Entered locked vehicle (%d) as passenger", vehicleid));
-			RemovePlayerFromVehicle(playerid);
-			SetPlayerPos(playerid, x, y, z);
-
-			defer StillInVeh(playerid, vehicleid, _:lockstate);
+			ReportPlayer(playerName, sprintf("Entered locked vehicle (%d) as %s (Mobile: %d)", vehicleId, newstate == PLAYER_STATE_DRIVER ? "driver" : "passenger", isUsingMobile), -1, REPORT_TYPE_LOCKEDCAR, px, py, pz, GetPlayerVirtualWorld(playerid), GetPlayerInterior(playerid), "");
+			TimeoutPlayer(playerid, sprintf("Entered locked vehicle (%d) as %s (Mobile: %d)", vehicleId, newstate == PLAYER_STATE_DRIVER ? "driver" : "passenger", isUsingMobile));
 
 			return -1;
 		}

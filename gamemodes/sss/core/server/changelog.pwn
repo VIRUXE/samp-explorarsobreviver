@@ -2,7 +2,8 @@
 
 hook OnPlayerLogin(playerid)
 {
-	ChatMsg(playerid, GREEN, " » Veja todas as novidades em "C_WHITE"/novidades!");
+	if(IsPlayerWhitelisted(playerid)) // meh
+		ChatMsg(playerid, GREEN, " » Veja todas as novidades em "C_WHITE"/novidades!");
 }
 
 forward OnChangelogLoaded(playerid);
@@ -14,17 +15,19 @@ public OnChangelogLoaded(playerid)
 	{
 		new
 			rowBuffer[256],
+			datediff,
 			date[64],
 			type[7],
 			title[32],
 			description[128];
 
+		cache_get_value_int(row, "datediff", datediff);
 		cache_get_value(row, "date", date);
 		cache_get_value(row, "type", type);
 		cache_get_value(row, "title", title);
 		cache_get_value(row, "description", description);
 
-		format(rowBuffer, sizeof(rowBuffer), "%s - "C_WHITE"%s(%s): %s\n", date, type, title, !isequal(description, "NULL", true) ? description : "Sem descrição.");
+		format(rowBuffer, sizeof(rowBuffer), "%s%s"C_GREY" - %s("C_WHITE"%s"C_GREY"): "C_WHITE"%s\n", datediff <= 7 ? C_GOLD : C_GREY, date, type, title, !isequal(description, "NULL", true) ? description : "Sem descrição.");
 	
 		strcat(changelogBuffer, rowBuffer);
 	}
@@ -36,6 +39,8 @@ public OnChangelogLoaded(playerid)
 CMD:novidades(playerid)
 {
 	// Query the database for the latest changelogs
-	if(!mysql_tquery(gDatabase, "SELECT DATE_FORMAT(date, '%d/%m') as date, type, title, description FROM changelog ORDER BY date DESC LIMIT 25;", "OnChangelogLoaded", "d", playerid))
+	if(!mysql_tquery(gDatabase, "SELECT DATEDIFF(NOW(), date) AS datediff, DATE_FORMAT(date, '%d/%m') AS date, type, title, description FROM changelog c ORDER BY c.date DESC LIMIT 30;", "OnChangelogLoaded", "d", playerid))
 		err(false, true, "Couldn't download changelog.");
+
+	return 1;
 }
