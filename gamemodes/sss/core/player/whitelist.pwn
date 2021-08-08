@@ -44,7 +44,7 @@ hook OnPlayerDisconnect(playerid)
 }
 
 // Whitelist pelo Discord
-public DCC_OnMessageCreate(DCC_Message:message)
+hook DCC_OnMessageCreate(DCC_Message:message)
 {
     new
         DCC_Channel:    channel,
@@ -104,7 +104,7 @@ public DCC_OnMessageCreate(DCC_Message:message)
 				log(true, "[WHITELIST] Discord ID %s (%s) foi atribuido para a conta %s", discordUserId, discordUsername, nameProvided);
 			}
 			else
-				SendDiscordMessage(channel, "> Nao existe uma Conta de Jogo com esse nick! **Primeir tem que acabar o tutorial e registrar sua conta**.");
+				SendDiscordMessage(channel, "> Nao existe uma Conta de Jogo com esse nick! **Primeiro tem que acabar o tutorial e registrar sua conta**.");
 		}
 		else
 			SendDiscordMessage(channel, "> Voce ja tem uma Conta de Jogo associada nessa Conta de Discord...");
