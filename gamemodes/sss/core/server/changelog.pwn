@@ -9,7 +9,7 @@ hook OnPlayerLogin(playerid)
 forward OnChangelogLoaded(playerid);
 public OnChangelogLoaded(playerid)
 {
-	new changelogBuffer[4000];
+	new changelogBuffer[4000] = "Dia\tTipo\tTítulo\tDescrição\n\n";
 
 	for(new row; row < cache_num_rows(); row++)
 	{
@@ -27,13 +27,28 @@ public OnChangelogLoaded(playerid)
 		cache_get_value(row, "title", title);
 		cache_get_value(row, "description", description);
 
-		format(rowBuffer, sizeof(rowBuffer), "%s%s"C_GREY"\t%s\t"C_WHITE"%s"C_GREY":%s"C_WHITE"%s\n", datediff <= 7 ? C_GOLD : C_GREY, date, type, title, strlen(title) < 7 ? "\t\t" : "\t", !isequal(description, "NULL", true) ? description : "Sem descrição.");
+
+		format(rowBuffer, sizeof(rowBuffer), "%s%s"C_GREY"\t%s%s\t"C_WHITE"%s"C_GREY":%s"C_WHITE"%s\n", datediff <= 7 ? C_GOLD : C_GREY, date, GetColourByType(type), type, title, strlen(title) < 6 ? "\t\t" : "\t", !isequal(description, "NULL", true) ? description : "Sem descrição.");
 	
 		strcat(changelogBuffer, rowBuffer);
 	}
 	Dialog_Show(playerid, DIALOG_STYLE_MSGBOX, "Registro de Alterações", changelogBuffer, "OK");
 
 	log(false, "[CHANGELOG] Change log shown to player %p", playerid);
+}
+
+GetColourByType(type[])
+{
+	new colour[9] = C_GREY;
+
+	if(isequal(type, "feat", true))
+		colour = C_GREEN;
+	else if(isequal(type, "tweak", true))
+		colour = C_YELLOW;
+	else if(isequal(type, "bugfix", true))
+		colour = C_RED;
+
+	return colour;
 }
 
 CMD:novidades(playerid)
