@@ -14,6 +14,7 @@ public OnChangelogLoaded(playerid)
 	for(new row; row < cache_num_rows(); row++)
 	{
 		new
+			rowBuffer[256],
 			datediff,
 			date[64],
 			type[7],
@@ -26,9 +27,9 @@ public OnChangelogLoaded(playerid)
 		cache_get_value(row, "title", title);
 		cache_get_value(row, "description", description);
 
-		format(gBigString, sizeof(gBigString), "%s%s"C_GREY" - %s("C_WHITE"%s"C_GREY"): "C_WHITE"%s\n", datediff <= 7 ? C_GOLD : C_GREY, date, type, title, !isequal(description, "NULL", true) ? description : "Sem descrição.");
+		format(rowBuffer, sizeof(rowBuffer), "%s%s"C_GREY" - %s("C_WHITE"%s"C_GREY"): "C_WHITE"%s\n", datediff <= 7 ? C_GOLD : C_GREY, date, type, title, !isequal(description, "NULL", true) ? description : "Sem descrição.");
 	
-		strcat(changelogBuffer, gBigString);
+		strcat(changelogBuffer, rowBuffer);
 	}
 	Dialog_Show(playerid, DIALOG_STYLE_MSGBOX, "Registro de Alterações", changelogBuffer, "OK");
 
