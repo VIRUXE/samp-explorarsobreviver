@@ -14,7 +14,7 @@ hook OnGameModeInit()
 hook OnPlayerSendChat(playerid, text[], Float:frequency)
 {
 	if(frequency == 1.0)
-		SendDiscordMessage(dc_GlobalChatChannel, "**%p**: %s", playerid, text);
+		SendDiscordMessage(dc_GlobalChatChannel, "**%p** (%d): %s", playerid, playerid, text);
 }
 
 public DCC_OnMessageCreate(DCC_Message:message)
@@ -41,7 +41,7 @@ public DCC_OnMessageCreate(DCC_Message:message)
 		DCC_GetUserName(discordUser, discordUserName);
 		DCC_GetMessageContent(message, discordMessage);
 
-		ChatMsgAll(WHITE, "[Discord] "C_GREY"%s"C_WHITE": %s", discordUserName, TagScan(discordMessage));
+		ChatMsgAll(0x5865F2FF, "[Discord] "C_GREY"%s"C_WHITE": %s", discordUserName, TagScan(discordMessage));
 	}
 
 	return 1;
