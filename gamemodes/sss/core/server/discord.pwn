@@ -61,7 +61,7 @@ public DCC_OnMessageCreate(DCC_Message:message)
 	{
 		if(isequal(discordMessage, ".restart", true))
 		{
-			SendDiscordMessage(dc_GlobalChatChannel, "*Servidor vai agora reiniciar...**");
+			SendDiscordMessage(dc_GlobalChatChannel, "**Servidor vai agora reiniciar...**");
 			SetRestart(0);
 		}
 	}
