@@ -62,12 +62,13 @@
 #define MAX_INVENTORY_SLOTS				7
 
 // SS/button
-#define BTN_MAX							Button:32768
+#define BTN_MAX							Button:64000
 #define BTN_TELEPORT_FREEZE_TIME		1500
 #define	BTN_MAX_INRANGE					5
 
 // SS/item
-#define MAX_ITEM						Item:32768
+#define MAX_ITEMS_PER_SPAWN	 			6//Defina para 2 quando quiser um inicio rápido e 6 o padrão!
+#define MAX_ITEM						Item:64000
 #define MAX_ITEM_TYPE					ItemType:327
 #define MAX_ITEM_NAME					22
 #define MAX_ITEM_TEXT					45

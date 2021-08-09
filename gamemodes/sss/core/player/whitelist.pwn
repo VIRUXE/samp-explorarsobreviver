@@ -268,7 +268,7 @@ timer _WhitelistConnect[SEC(5)](playerid)
 			wl_Whitelisted[playerid] = true;
 			log(true, "[_WhitelistConnect] Player %d is whitelisted.", playerid);
 		}
-		else
+		else if(!wl_Auto && wl_Active)
 		{
 			AskPlayerToWhitelist(playerid);
 			log(true, "[_WhitelistConnect] Player %d was asked to whitelist.", playerid);

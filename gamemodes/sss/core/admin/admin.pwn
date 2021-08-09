@@ -98,7 +98,7 @@ hook OnPlayerDisconnected(playerid)
 
 hook OnPlayerClickPlayer(playerid, clickedplayerid, source)
 {
-	if(GetPlayerAdminLevel(playerid) >= STAFF_LEVEL_MODERATOR)
+	if(GetPlayerAdminLevel(playerid) >= STAFF_LEVEL_MODERATOR && playerid != clickedplayerid)
 	{	
 		if(GetPlayerState(clickedplayerid) == PLAYER_STATE_SPECTATING && IsPlayerOnAdminDuty(clickedplayerid))
 			return 0;
