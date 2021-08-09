@@ -675,6 +675,9 @@ ACMD:additem[3](playerid, params[])
 
 		for(new ItemType:i; i < MAX_ITEM_TYPE; i++)
 		{
+			if(!IsValidItemType(i))
+				continue;
+				
 			GetItemTypeUniqueName(i, uniquename);
 			GetItemTypeName(i, typename);
 
