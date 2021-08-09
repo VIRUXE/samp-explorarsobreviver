@@ -18,9 +18,6 @@ hook OnGameModeInit()
 
 hook OnPlayerSendChat(playerid, text[], Float:frequency)
 {
-	if(strfind(text, "@everyone") != -1)
-		return 0;
-
 	new DCC_Channel:channel;
 
 	switch(frequency)
@@ -34,9 +31,8 @@ hook OnPlayerSendChat(playerid, text[], Float:frequency)
 			new DCC_Channel:radioChannel = DCC_Channel:DCC_FindChannelByName(frequency);
 		} */
 	}
-	SendDiscordMessage(channel, "**%p** (%d): %s", playerid, playerid, text);
-
-	return 1;
+	if(strfind(text, "@everyone") == -1)
+		SendDiscordMessage(channel, "**%p** (%d): %s", playerid, playerid, text);
 }
 
 hook OnPlayerLogin(playerid)
