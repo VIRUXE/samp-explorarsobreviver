@@ -817,7 +817,7 @@ public OnScriptExit()
 forward SetRestart(seconds);
 public SetRestart(seconds)
 {
-	printf("Restarting server in: %ds", seconds);
+	log(true, "[RESTART] Restarting server in: %02d:%02d", seconds / 60, seconds % 60);
 	gServerUptime = gServerMaxUptime - seconds;
 }
 

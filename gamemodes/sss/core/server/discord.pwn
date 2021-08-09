@@ -16,8 +16,25 @@ hook OnGameModeInit()
 
 hook OnPlayerSendChat(playerid, text[], Float:frequency)
 {
-	if(frequency == 1.0 && strfind(text, "@everyone") == -1)
-		SendDiscordMessage(dc_GlobalChatChannel, "**%p** (%d): %s", playerid, playerid, text);
+	if(strfind(text, "@everyone") != -1)
+		return 0;
+
+	new DCC_Channel:channel;
+
+	switch(frequency)
+	{
+		case 1.0:
+			channel = dc_GlobalChatChannel;
+		case 3.0:
+			channel = dc_StaffChatChannel;
+		/* case 3.0 .. 100.0: // Radio Frequencies
+		{
+			new DCC_Channel:radioChannel = DCC_Channel:DCC_FindChannelByName(frequency);
+		} */
+	}
+	SendDiscordMessage(channel, "**%p** (%d): %s", playerid, playerid, text);
+
+	return 1;
 }
 
 hook OnPlayerLogin(playerid)
@@ -54,9 +71,7 @@ public DCC_OnMessageCreate(DCC_Message:message)
 	DCC_GetMessageContent(message, discordMessage);
 
 	if(channel == dc_GlobalChatChannel)
-	{
 		ChatMsgAll(0x5865F2FF, "[Discord] "C_GREY"%s"C_WHITE": %s", discordUserName, TagScan(discordMessage));
-	}
 	else if(channel == dc_StaffChatChannel)
 	{
 		if(isequal(discordMessage, ".restart", true))
@@ -64,6 +79,8 @@ public DCC_OnMessageCreate(DCC_Message:message)
 			SendDiscordMessage(dc_GlobalChatChannel, "**Servidor vai agora reiniciar...**");
 			SetRestart(0);
 		}
+		else
+			ChatMsgAdmins(1, 0xff4d00FF, "[Discord] "C_GREY"%s"C_WHITE": %s", discordUserName, TagScan(discordMessage));
 	}
 
 	return 1;
@@ -83,7 +100,7 @@ stock bool:DoesDiscordIdExist(const discordId[DCC_ID_SIZE])
 		DBStatement:stmt_IdExists = db_prepare(gAccounts, "SELECT COUNT(*) FROM Player WHERE discord_id=? COLLATE NOCASE"),
 		count;
 
-	log(true, "DoesDiscordIdExist - DiscordId: %s", discordId);
+	log(true, "[DISCORD] DoesDiscordIdExist - DiscordId: %s", discordId);
 
 	stmt_bind_value(stmt_IdExists, 0, DB::TYPE_STRING, discordId, DCC_ID_SIZE);
 	stmt_bind_result_field(stmt_IdExists, 0, DB::TYPE_INTEGER, count);
