@@ -17,6 +17,16 @@ hook OnPlayerSendChat(playerid, text[], Float:frequency)
 		SendDiscordMessage(dc_GlobalChatChannel, "**%p** (%d): %s", playerid, playerid, text);
 }
 
+hook OnPlayerLogin(playerid)
+{
+	SendDiscordMessage(dc_GlobalChatChannel, "**%p** (%d) entrou no servidor.", playerid, playerid);
+}
+
+hook OnPlayerDisconnect(playerid, reason)
+{
+	SendDiscordMessage(dc_GlobalChatChannel, "**%p** (%d) %s.", playerid, playeridl, reason ? "decidiu sair" : "perdeu a conexao");
+}
+
 public DCC_OnMessageCreate(DCC_Message:message)
 {
 	new
