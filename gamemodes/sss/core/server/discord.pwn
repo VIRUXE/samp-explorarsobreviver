@@ -16,7 +16,7 @@ hook OnGameModeInit()
 
 hook OnPlayerSendChat(playerid, text[], Float:frequency)
 {
-	if(frequency == 1.0 && !strfind(text, "@everyone"))
+	if(frequency == 1.0 && strfind(text, "@everyone") == -1)
 		SendDiscordMessage(dc_GlobalChatChannel, "**%p** (%d): %s", playerid, playerid, text);
 }
 
@@ -59,7 +59,7 @@ public DCC_OnMessageCreate(DCC_Message:message)
 	}
 	else if(channel == dc_StaffChatChannel)
 	{
-		if(isequal(discordMessage, "!restart", true))
+		if(isequal(discordMessage, ".restart", true))
 			SetRestart(0);
 	}
 
