@@ -627,7 +627,9 @@ public OnScriptInit()
 		UsePlayerPedAnims();
 
 	SetNameTagDrawDistance(gNameTagDistance);
+	EnableStuntBonusForAll(false);
 	ManualVehicleEngineAndLights();
+	AllowInteriorWeapons(true);
 
 // ITEM TYPE DEFINITIONS
 	item_Accelerometer	= DefineItemType("Acelerometro",				"Accelerometer",	327,	1,	0.0, 0.0, 0.0,			0.0,	0.008151, 0.012682, -0.050635, 0.000000, 0.000000, 0.000000, .maxhitpoints = 1);
