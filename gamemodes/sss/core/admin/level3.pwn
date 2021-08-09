@@ -645,7 +645,17 @@ ACMD:additem[3](playerid, params[])
 
 	if(IsNumeric(name) && IsValidItemType(ItemType:strval(name)))
 	{
-		itemid = CreateItemLoot(ItemType:strval(name),
+		itemid = GetNextItemID();
+
+		if(!(Item:0 <= itemid < MAX_ITEM))
+		{
+			err(false, false, "Item limit reached while generating item.");
+			return -1;
+		}
+		
+		SetItemLootIndex(itemid, random(MAX_LOOT_INDEX));
+
+		itemid = CreateItem(ItemType:strval(name),
 			x + (0.5 * floatsin(-r, degrees)),
 			y + (0.5 * floatcos(-r, degrees)),
 			z - ITEM_FLOOR_OFFSET,
@@ -670,7 +680,17 @@ ACMD:additem[3](playerid, params[])
 
 			if(strfind(uniquename, name, true) != -1 || strfind(typename, name, true) != -1)
 			{
-				itemid = CreateItemLoot(i,
+				itemid = GetNextItemID();
+
+				if(!(Item:0 <= itemid < MAX_ITEM))
+				{
+					err(false, false, "Item limit reached while generating item.");
+					return -1;
+				}
+				
+				SetItemLootIndex(itemid, random(MAX_LOOT_INDEX));
+
+				itemid = CreateItem(i,
 					x + ((0.3 * (++count + 1)) * floatsin(-r, degrees)),
 					y + ((0.3 * (count + 1)) * floatcos(-r, degrees)),
 					z - ITEM_FLOOR_OFFSET,

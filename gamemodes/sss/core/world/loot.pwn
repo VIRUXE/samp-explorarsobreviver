@@ -6,7 +6,10 @@
 #define MAX_LOOT_INDEX_ITEMS	(256)
 #define MAX_LOOT_INDEX_NAME		(32)
 #define MAX_LOOT_SPAWN			(12683)
-#define MAX_ITEMS_PER_SPAWN		(6)
+
+#if !defined MAX_ITEMS_PER_SPAWN
+	#define MAX_ITEMS_PER_SPAWN	 	(6)
+#endif
 
 
 enum E_LOOT_INDEX_ITEM_DATA
@@ -26,7 +29,6 @@ Float:		loot_posZ,
 Float:		loot_weight,
 			loot_size,
 			loot_index,
-
 Item:		loot_items[MAX_ITEMS_PER_SPAWN],
 			loot_total
 }
@@ -136,9 +138,6 @@ stock CreateStaticLootSpawn(Float:x, Float:y, Float:z, lootindex, Float:weight, 
 
 	for(new i; i < size; i++)
 	{
-		if(frandom(100.0) > weight * loot_SpawnMult)
-			continue;
-
 		// Generate an item from the sample list
 		if(!_loot_PickFromSampleList(samplelist, samplelistsize, itemtype))
 			continue;
@@ -167,11 +166,13 @@ stock CreateStaticLootSpawn(Float:x, Float:y, Float:z, lootindex, Float:weight, 
 		x = (x + (frandom(1.0) * floatsin(((360 / size) * i) + rot, degrees)));
 		y = (y + (frandom(1.0) * floatcos(((360 / size) * i) + rot, degrees)));
 
-		CreateItem(itemtype, x, y,
-			z + 0.1, .rz = frandom(360.0), .world = worldid, .interior = interiorid);
+		CreateItem(itemtype, x, y, z + 0.1, .rz = frandom(360.0), .world = worldid, .interior = interiorid);
 
 		loot_SpawnData[lootspawnid][loot_items][loot_SpawnData[lootspawnid][loot_total]] = itemid;
 		loot_SpawnData[lootspawnid][loot_total]++;
+
+		if(frandom(100.0) > weight * loot_SpawnMult)
+			DestroyItem(itemid);
 	}
 
 	return loot_SpawnTotal++;
@@ -216,23 +217,6 @@ stock Item:CreateLootItem(lootindex, Float:x = 0.0, Float:y = 0.0, Float:z = 0.0
 	loot_ItemLootIndex[itemid] = lootindex;
 
 	CreateItem(itemtype, x, y, z, .rz = frandom(360.0), .world = worldid, .interior = interiorid);
-
-	return itemid;
-}
-
-stock Item:CreateItemLoot(ItemType:itemtype, Float:x = 0.0, Float:y = 0.0, Float:z = 0.0, Float:rz = 0.0, worldid = 0, interiorid = 0)
-{
-	if(!IsValidItemType(itemtype))
-		return INVALID_ITEM_ID;
-
-	new Item:itemid = GetNextItemID();
-
-	if(!(Item:0 <= itemid < MAX_ITEM))
-		return INVALID_ITEM_ID;
-
-	loot_ItemLootIndex[itemid] = random(loot_IndexTotal);
-
-	itemid = CreateItem(itemtype, x, y, z, .rz = rz, .world = worldid, .interior = interiorid);
 
 	return itemid;
 }
@@ -315,13 +299,13 @@ stock FillContainerWithLoot(Container:containerid, slots, lootindex)
 ==============================================================================*/
 
 
-new Timer:DestroyUItem[MAX_ITEM];
+new Timer:item_AutoDestroy[MAX_ITEM];
 
 hook OnItemCreateInWorld(Item:itemid) {	
-	stop DestroyUItem[itemid];
-	DestroyUItem[itemid] = defer DestroyUntilItem(_:itemid, _:GetItemType(Item:itemid));
+	stop item_AutoDestroy[itemid];
+	item_AutoDestroy[itemid] = defer DestroyUntilItem(_:itemid);
 
-	if(loot_ItemLootIndex[itemid] != -1) {
+	if(loot_ItemLootIndex[itemid] != -1 && gServerInitialising) {
 		new 
 			Float:x, Float:y, Float:z,
 			world, interior;
@@ -334,45 +318,31 @@ hook OnItemCreateInWorld(Item:itemid) {
 	}
 }
 
-timer DestroyUntilItem[ITEM_RESPAWN_DELAY - HOUR(1)](itemid, itemtype) {
-	if(!IsValidItem(Item:itemid))
-		return;
-
-	if(!IsItemInWorld(Item:itemid))
-		return;
-
-	if(GetItemType(Item:itemid) != ItemType:itemtype)
-		return;
-
+timer DestroyUntilItem[ITEM_RESPAWN_DELAY - HOUR(1)](itemid)
 	DestroyItem(Item:itemid);
-	return;
-}
 
 timer RespawnItem[timer](timer, lootindex, Float:x, Float:y, Float:z, world, interior) {
 	#pragma unused timer
 
-	if(Iter_Count(Player) < 10 && random(2) == 1)
-		defer RespawnItem(MIN(5 + random(5)), lootindex, x, y, z, world, interior);
-
-	else if(Iter_Count(Player) < 20 && random(4) == 1)
-		defer RespawnItem(MIN(5 + random(5)), lootindex, x, y, z, world, interior);
-
-	else CreateLootItem(lootindex, x, y, z, world, interior);
+	if(Iter_Count(Player) < random(MAX_PLAYERS / 10))
+		defer RespawnItem(MIN(60 + random(60)), lootindex, x, y, z, world, interior);
+	else
+		CreateLootItem(lootindex, x, y, z, world, interior);
 }
 
 hook OnItemRemoveFromWorld(Item:itemid) {
 	loot_ItemLootIndex[itemid] = -1;
-	stop DestroyUItem[itemid];
+	stop item_AutoDestroy[itemid];
 }
 
 hook OnItemDestroyed(Item:itemid)
-	stop DestroyUItem[itemid];
+	stop item_AutoDestroy[itemid];
 
 hook OnPlayerConstructed(playerid, consset, Item:result)
-	stop DestroyUItem[result];
+	stop item_AutoDestroy[result];
 
 hook OnItemSave(Item:itemid)
-	stop DestroyUItem[itemid];
+	stop item_AutoDestroy[itemid];
 
 
 /*==============================================================================
@@ -421,34 +391,6 @@ _loot_PickFromSampleList(ItemType:list[MAX_LOOT_INDEX_ITEMS], &listsize, &ItemTy
 	return 1;
 }
 
-/*
-_loot_LootSpawnItemsOfType(lootspawnid, ItemType:itemtype)
-{
-	new count;
-
-	for(new i; i < loot_SpawnData[lootspawnid][loot_total]; i++)
-	{
-		if(GetItemType(loot_SpawnData[lootspawnid][loot_items][i]) == itemtype)
-			count++;
-	}
-	// log(false, "[_loot_LootSpawnItemsOfType] loot spawn %d contains %d of %d", lootspawnid, count, _:itemtype);
-	return count;
-}
-
-_loot_ContainerItemsOfType(containerid, ItemType:itemtype)
-{
-	new count;
-
-	for(new i, j = GetContainerSize(containerid); i < j; i++)
-	{
-		if(GetItemType(GetContainerSlotItem(containerid, i)) == itemtype)
-			count++;
-	}
-	// log(false, "[_loot_ContainerItemsOfType] container %d contains %d of %d", containerid, count, _:itemtype);
-	return count;
-}
-*/
-
 hook OnItemDestroy(Item:itemid)
 {
 	loot_ItemLootIndex[itemid] = -1;
@@ -474,6 +416,17 @@ stock GetItemLootIndex(Item:itemid)
 		return -1;
 
 	return loot_ItemLootIndex[itemid];
+}
+
+stock SetItemLootIndex(Item:itemid, index) {
+	if(!IsValidItem(itemid))
+		return -1;
+
+	if(!(0 <= index < loot_IndexTotal))
+		return -1;
+
+	loot_ItemLootIndex[itemid] = index;
+	return 1;
 }
 
 // loot_posX
