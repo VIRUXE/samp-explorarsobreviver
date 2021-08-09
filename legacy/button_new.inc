@@ -781,11 +781,17 @@ stock GetPlayerButtonID(playerid, &Button:id) {
 		Float:x,
 		Float:y,
 		Float:z,
+		Float:ang,
 		Button:curid,
 		Float:curdistance,
 		Float:closetsdistance = 99999.9;
 
 	GetPlayerPos(playerid, x, y, z);
+	GetPlayerFacingAngle(playerid, ang);
+
+	x += 0.5 * floatsin(-ang, degrees);
+	y += 0.5 * floatcos(-ang, degrees);
+	z -= 0.5;
 
 	foreach(new i : btn_NearIndex[playerid]) {
 		curid = btn_Near[playerid][i];
