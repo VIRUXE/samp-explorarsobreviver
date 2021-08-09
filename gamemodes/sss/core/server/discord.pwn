@@ -27,7 +27,7 @@ hook OnPlayerLogin(playerid)
 
 hook OnPlayerDisconnect(playerid, reason)
 {
-	if(IsPlayerLoggedIn(playerid))
+	if(IsPlayerLoggedIn(playerid) && !gServerRestarting)
 		SendDiscordMessage(dc_GlobalChatChannel, "**%p (%d) %s.**", playerid, playerid, reason ? "decidiu sair" : "perdeu a conexao");
 }
 
@@ -60,7 +60,10 @@ public DCC_OnMessageCreate(DCC_Message:message)
 	else if(channel == dc_StaffChatChannel)
 	{
 		if(isequal(discordMessage, ".restart", true))
+		{
+			SendDiscordMessage(dc_GlobalChatChannel, "*Servidor vai agora reiniciar...**");
 			SetRestart(0);
+		}
 	}
 
 	return 1;
