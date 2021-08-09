@@ -164,7 +164,7 @@ hook OnItemRemoveFromCnt(containerid, slotid, playerid)
 hook OnPlayerOpenInventory(playerid)
 	return AntiRaidWarn(playerid);
 
-hook OnPlayerOpenContainer(playerid, containerid)
+hook OnPlayerOpenContainer(playerid, Container:containerid)
 	return AntiRaidWarn(playerid);
 
 hook OnPlayerUseItem(playerid, Item:itemid)
