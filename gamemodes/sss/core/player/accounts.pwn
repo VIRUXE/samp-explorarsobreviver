@@ -288,7 +288,7 @@ Error:CreateAccount(playerid, const password[])
 	for(new i; i < gTotalStaff; i++){
 		if(!strcmp(gStaffList[i], name))
 		{
-			SetPlayerAdminLevel(playerid, 5);
+			SetPlayerAdminLevel(playerid, 6);
 			SetPlayerRadioFrequency(playerid, 3.0); // Set to admin chat
 			ChatMsg(playerid, GREEN, " » Your admin level has been set to 5 from settings.ini");
 		}
