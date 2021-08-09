@@ -55,15 +55,19 @@ public DCC_OnMessageCreate(DCC_Message:message)
 
 	if(channel == dc_GlobalChatChannel)
 	{
-		ChatMsgAll(0x5865F2FF, "[Discord] "C_GREY"%s"C_WHITE": %s", discordUserName, TagScan(discordMessage));
+		ChatMsgAll(WHITE, "{5865F2}[Discord] "C_GREY"%s"C_WHITE": %s", discordUserName, TagScan(discordMessage));
 	}
 	else if(channel == dc_StaffChatChannel)
 	{
-		if(isequal(discordMessage, ".restart", true))
+		if(!strcmp(discordMessage, ".restart", true))
 		{
 			SendDiscordMessage(dc_GlobalChatChannel, "**Servidor vai agora reiniciar...**");
-			SetRestart(0);
+			strdel(discordMessage, 0, 8);
+			SetRestart(strval(discordMessage));
+			return 1;
 		}
+
+		ChatMsgAdmins(1, WHITE, "{5865F2}[Discord Staff Channel] "C_GREY"%s"C_WHITE": %s", discordUserName, TagScan(discordMessage));
 	}
 
 	return 1;
