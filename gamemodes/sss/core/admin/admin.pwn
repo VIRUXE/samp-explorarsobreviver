@@ -411,7 +411,9 @@ TogglePlayerAdminDuty(playerid, toggle, goback = true)
 
 		SetPlayerColor(playerid, !IsPlayerMobile(playerid) ? COLOR_PLAYER_NORMAL : COLOR_PLAYER_MOBILE); // 
 	}
+
 	admin_DutyTick[playerid] = GetTickCount();
+	
 	return 1;
 }
 

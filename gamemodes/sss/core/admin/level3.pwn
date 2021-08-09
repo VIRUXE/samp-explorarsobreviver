@@ -75,7 +75,7 @@ ACMD:spec[2](playerid, params[])
 	{
 		if(GetPlayerState(playerid) == PLAYER_STATE_SPECTATING)
 		{
-			TogglePlayerAdminDuty(playerid, false);
+			//TogglePlayerAdminDuty(playerid, false);
 			ExitSpectateMode(playerid);
 		}
 	}
@@ -85,7 +85,8 @@ ACMD:spec[2](playerid, params[])
 
 ACMD:free[2](playerid)
 {
-	TogglePlayerAdminDuty(playerid, !IsPlayerOnAdminDuty(playerid));
+	if(!IsPlayerOnAdminDuty(playerid))
+		TogglePlayerAdminDuty(playerid, true);
 
 	if(GetPlayerSpectateType(playerid) == SPECTATE_TYPE_FREE)
 		ExitFreeMode(playerid);
