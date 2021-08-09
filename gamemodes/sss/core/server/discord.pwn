@@ -24,7 +24,8 @@ hook OnPlayerLogin(playerid)
 
 hook OnPlayerDisconnect(playerid, reason)
 {
-	SendDiscordMessage(dc_GlobalChatChannel, "**%p (%d) %s.**", playerid, playerid, reason ? "decidiu sair" : "perdeu a conexao");
+	if(IsPlayerLoggedIn(playerid))
+		SendDiscordMessage(dc_GlobalChatChannel, "**%p (%d) %s.**", playerid, playerid, reason ? "decidiu sair" : "perdeu a conexao");
 }
 
 public DCC_OnMessageCreate(DCC_Message:message)
