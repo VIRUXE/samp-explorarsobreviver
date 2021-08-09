@@ -858,7 +858,7 @@ task RestartUpdate[1000]()
 		if(gServerUptime >= gServerMaxUptime)
 			RestartGamemode();
 
-		if(gServerUptime >= gServerMaxUptime - HOUR(1))
+		if(gServerUptime >= gServerMaxUptime - 3600)
 		{
 			new str[36];
 			format(str, 36, "Reiniciando em: %02d:%02d", (gServerMaxUptime - gServerUptime) / 60, (gServerMaxUptime - gServerUptime) % 60);
