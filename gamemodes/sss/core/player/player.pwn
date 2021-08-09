@@ -115,7 +115,7 @@ public OnPlayerDisconnect(playerid, reason)
 		}
 		case 1:
 		{
-			ChatMsgAll(GREY, " » %p saiu do servidor.", playerid);
+			ChatMsgAll(GREY, " » %p decidiu sair.", playerid);
 			Logger_Log("player quit", Logger_P(playerid));
 		}
 	}
