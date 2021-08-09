@@ -9,7 +9,7 @@ hook OnPlayerLogin(playerid)
 forward OnChangelogLoaded(playerid);
 public OnChangelogLoaded(playerid)
 {
-	new changelogBuffer[6000] = "Dia\tTipo\tTítulo\t\tDescrição\n";
+	new changelogBuffer[7000] = "Dia\tTipo\tTítulo\t\tDescrição\n";
 
 	for(new row; row < cache_num_rows(); row++)
 	{
@@ -27,13 +27,13 @@ public OnChangelogLoaded(playerid)
 		cache_get_value(row, "title", title);
 		cache_get_value(row, "description", description);
 
-		format(rowBuffer, sizeof(rowBuffer), "%s%s"C_GREY"\t%s%s\t"C_WHITE"%s"C_GREY":%s"C_WHITE"%s\n", datediff <= 7 ? C_GOLD : C_GREY, date, GetColourByType(type), type, title, strlen(title) <= 6 ? "\t\t" : "\t", !isequal(description, "NULL", true) ? description : "Sem descrição.");
+		format(rowBuffer, sizeof(rowBuffer), "%s%s"C_GREY"\t%s%s\t"C_WHITE"%s"C_GREY":%s"C_WHITE"%s\n", datediff <= 7 ? C_GOLD : C_GREY, date, GetColourByType(type), type, title, strlen(title) <= 5 ? "\t\t" : "\t", !isequal(description, "NULL", true) ? description : "Sem descrição.");
 	
 		strcat(changelogBuffer, rowBuffer);
 	}
 	Dialog_Show(playerid, DIALOG_STYLE_MSGBOX, "Registro de Alterações", changelogBuffer, "OK");
 
-	log(false, "[CHANGELOG] Change log shown to player %p", playerid);
+	log(true, "[CHANGELOG] Change log shown to player %p", playerid);
 }
 
 GetColourByType(type[])
