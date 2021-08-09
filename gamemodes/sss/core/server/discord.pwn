@@ -6,11 +6,13 @@ static stock msgBuffer[4000]; // O Limite de texto no Discord √© de 4000 caract√
 
 static
 DCC_Channel:	dc_GlobalChatChannel,
+DCC_Channel:	dc_AdminChatChannel,
 DCC_Channel:	dc_StaffChatChannel;
 
 hook OnGameModeInit()
 {
 	dc_GlobalChatChannel 	= DCC_FindChannelById("874061189330665562");
+	dc_AdminChatChannel		= DCC_FindChannelById("865056486765494283");
 	dc_StaffChatChannel 	= DCC_FindChannelById("846031149285638195");
 }
 
@@ -26,7 +28,7 @@ hook OnPlayerSendChat(playerid, text[], Float:frequency)
 		case 1.0:
 			channel = dc_GlobalChatChannel;
 		case 3.0:
-			channel = dc_StaffChatChannel;
+			channel = dc_AdminChatChannel;
 		/* case 3.0 .. 100.0: // Radio Frequencies
 		{
 			new DCC_Channel:radioChannel = DCC_Channel:DCC_FindChannelByName(frequency);
@@ -72,6 +74,8 @@ public DCC_OnMessageCreate(DCC_Message:message)
 
 	if(channel == dc_GlobalChatChannel)
 		ChatMsgAll(0x5865F2FF, "[Discord] "C_GREY"%s"C_WHITE": %s", discordUserName, TagScan(discordMessage));
+	else if(channel == dc_AdminChatChannel)
+		ChatMsgAdmins(1, 0xff4d00FF, "[Discord] "C_GREY"%s"C_WHITE": %s", discordUserName, TagScan(discordMessage));
 	else if(channel == dc_StaffChatChannel)
 	{
 		if(isequal(discordMessage, ".restart", true))
@@ -79,8 +83,6 @@ public DCC_OnMessageCreate(DCC_Message:message)
 			SendDiscordMessage(dc_GlobalChatChannel, "**Servidor vai agora reiniciar...**");
 			SetRestart(0);
 		}
-		else
-			ChatMsgAdmins(1, 0xff4d00FF, "[Discord] "C_GREY"%s"C_WHITE": %s", discordUserName, TagScan(discordMessage));
 	}
 
 	return 1;
