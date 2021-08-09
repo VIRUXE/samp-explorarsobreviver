@@ -13,18 +13,18 @@ hook OnGameModeInit()
 
 hook OnPlayerSendChat(playerid, text[], Float:frequency)
 {
-	if(frequency == 1.0)
+	if(frequency == 1.0 && !strfind(text, "@everyone"))
 		SendDiscordMessage(dc_GlobalChatChannel, "**%p** (%d): %s", playerid, playerid, text);
 }
 
 hook OnPlayerLogin(playerid)
 {
-	SendDiscordMessage(dc_GlobalChatChannel, "**%p** (%d) entrou no servidor.", playerid, playerid);
+	SendDiscordMessage(dc_GlobalChatChannel, "**%p (%d) %sentrou no servidor.**", playerid, playerid, IsPlayerMobile(playerid) ? "(Mobile) " : "");
 }
 
 hook OnPlayerDisconnect(playerid, reason)
 {
-	SendDiscordMessage(dc_GlobalChatChannel, "**%p** (%d) %s.", playerid, playerid, reason ? "decidiu sair" : "perdeu a conexao");
+	SendDiscordMessage(dc_GlobalChatChannel, "**%p (%d) %s.**", playerid, playerid, reason ? "decidiu sair" : "perdeu a conexao");
 }
 
 public DCC_OnMessageCreate(DCC_Message:message)
