@@ -129,7 +129,7 @@ stock ReportPlayer(const name[], const reason[], reporterId, const type[], Float
 	if(IsPlayerConnected(reporterId))
 		GetPlayerName(reporterId, reporterName, MAX_PLAYER_NAME);
 
-	ChatMsgAdmins(1, YELLOW, " » %p reported %s, reason: %s", isnull(reporterName) ? "Server" : reporterName, name, reason);
+	ChatMsgAdmins(1, YELLOW, " » %s reported %s, reason: %s", isnull(reporterName) ? "Server" : reporterName, name, reason);
 
 	stmt_bind_value(stmt_ReportInsert, 0, DB::TYPE_STRING, name, MAX_PLAYER_NAME);
 	stmt_bind_value(stmt_ReportInsert, 1, DB::TYPE_STRING, reason, MAX_REPORT_REASON_LENGTH);
