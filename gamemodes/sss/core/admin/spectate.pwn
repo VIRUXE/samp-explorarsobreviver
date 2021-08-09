@@ -92,6 +92,8 @@ EnterSpectateMode(playerid, targetid)
 	if(spectate_Type[playerid] == SPECTATE_TYPE_FREE)
 		ExitFreeMode(playerid);
 
+	GetPlayerPos(playerid, spectate_StartPos[playerid][0], spectate_StartPos[playerid][1], spectate_StartPos[playerid][2]);
+
 	TogglePlayerSpectating(playerid, true);
 	ToggleNameTagsForPlayer(playerid, true);
 
@@ -141,9 +143,10 @@ ExitFreeMode(playerid)
 	DestroyObject(spectate_CameraObject[playerid]);
 	spectate_CameraObject[playerid] = INVALID_OBJECT_ID;
 
+	SetCameraBehindPlayer(playerid);
+	
 	TogglePlayerSpectating(playerid, false);
 	stop spectate_Timer[playerid];
-	defer ReturnToDuty(playerid);
 
 	return 1;
 }
@@ -161,21 +164,33 @@ ExitSpectateMode(playerid)
 
 	PlayerTextDrawHide(playerid, spectate_Name);
 	PlayerTextDrawHide(playerid, spectate_Info);
+	SetCameraBehindPlayer(playerid);
 	TogglePlayerSpectating(playerid, false);
 	stop spectate_Timer[playerid];
-	defer ReturnToDuty(playerid);
 
-	return 1;
-}
-
-timer ReturnToDuty[1000](playerid)
-{
 	SetPlayerPos(playerid, spectate_StartPos[playerid][0], spectate_StartPos[playerid][1], spectate_StartPos[playerid][2]);
+
 	if(GetPlayerGender(playerid) == GENDER_MALE)
 		SetPlayerSkin(playerid, 217);
 
 	else
 		SetPlayerSkin(playerid, 211);
+
+	return 1;
+}
+
+
+hook OnPlayerSpawn(playerid)
+{
+	if(IsPlayerOnAdminDuty(playerid))
+	{
+		SetPlayerPos(playerid, spectate_StartPos[playerid][0], spectate_StartPos[playerid][1], spectate_StartPos[playerid][2]);
+		if(GetPlayerGender(playerid) == GENDER_MALE)
+			SetPlayerSkin(playerid, 217);
+
+		else
+			SetPlayerSkin(playerid, 211);
+	}
 }
 
 SpectateNextTarget(playerid)

@@ -299,21 +299,10 @@ public OnPlayerClickTextDraw(playerid, Text:clickedid)
 	return 1;
 }
 
-timer UpdateDutyPos[1000](playerid)
-	if(IsPlayerOnAdminDuty(playerid))
-		SetPlayerPos(playerid, 1000.0, 1000.0, 50.0);
-
 public OnPlayerSpawn(playerid)
 {
 	if(IsPlayerNPC(playerid))
 		return 1;
-
-	if(IsPlayerOnAdminDuty(playerid))
-	{
-		SetPlayerPos(playerid, 1000.0, 1000.0, 50.0);
-		defer UpdateDutyPos(playerid);
-		return 1;
-	}
 
 	SetPlayerColor(playerid, !IsPlayerMobile(playerid) ? COLOR_PLAYER_NORMAL : COLOR_PLAYER_MOBILE);
 
