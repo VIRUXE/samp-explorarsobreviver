@@ -4,11 +4,14 @@
 
 static stock msgBuffer[4000]; // O Limite de texto no Discord é de 4000 caractéres.
 
-static DCC_Channel:dc_GlobalChatChannel;
+static
+DCC_Channel:	dc_GlobalChatChannel,
+DCC_Channel:	dc_StaffChatChannel;
 
 hook OnGameModeInit()
 {
-	dc_GlobalChatChannel = DCC_FindChannelById("874061189330665562");
+	dc_GlobalChatChannel 	= DCC_FindChannelById("874061189330665562");
+	dc_StaffChatChannel 	= DCC_FindChannelById("846031149285638195");
 }
 
 hook OnPlayerSendChat(playerid, text[], Float:frequency)
@@ -43,16 +46,21 @@ public DCC_OnMessageCreate(DCC_Message:message)
     if(isUserBot)
         return 0;
 
-    if(channel == dc_GlobalChatChannel)
+	new 
+		discordUserName[DCC_USERNAME_SIZE],
+		discordMessage[145];
+
+	DCC_GetUserName(discordUser, discordUserName);
+	DCC_GetMessageContent(message, discordMessage);
+
+	if(channel == dc_GlobalChatChannel)
 	{
-		new 
-			discordUserName[DCC_USERNAME_SIZE],
-			discordMessage[145];
-
-		DCC_GetUserName(discordUser, discordUserName);
-		DCC_GetMessageContent(message, discordMessage);
-
 		ChatMsgAll(0x5865F2FF, "[Discord] "C_GREY"%s"C_WHITE": %s", discordUserName, TagScan(discordMessage));
+	}
+	else if(channel == dc_StaffChatChannel)
+	{
+		if(isequal(discordMessage, "!restart", true))
+			SetRestart(0);
 	}
 
 	return 1;
