@@ -356,7 +356,7 @@ hook OnPlayerSpawnChar(playerid)
 				for(new b; b < MAX_INVENTORY_SLOTS; b++)
 				{
 					new Item:subitemid;
-					GetInventorySlotItem(playerid, b, subitemid);
+					GetInventorySlotItem(playerid, 0, subitemid);
 					DestroyItem(subitemid);
 				}
 
