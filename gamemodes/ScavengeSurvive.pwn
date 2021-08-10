@@ -554,6 +554,7 @@ new stock
 #include "sss/core/player/recipes.pwn"
 #include "sss/core/player/score.pwn"
 #include "sss/core/player/anti-pedslots.pwn"
+#include "sss/core/player/body.pwn"
 
 // CHARACTER SCRIPTS
 #include "sss/core/char/movement.pwn"
@@ -717,7 +718,6 @@ new stock
 // POST-CODE
 
 #include "sss/core/player/save-load.pwn"
-#include "sss/core/player/body.pwn"
 #include "sss/core/server/auto-save.pwn"
 #tryinclude "sss/extensions/ext_post.pwn"
 
