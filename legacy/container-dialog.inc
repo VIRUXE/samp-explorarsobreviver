@@ -488,7 +488,7 @@ hook OnPlayerSelectInvOpt(playerid, option) {
 
 hook OnPlayerOpenInventory(playerid) {
 	if(IsValidContainer(cnt_CurrentContainer[playerid])) {
-		new str[8 + MAX_CONTAINER_NAME];
+		new str[3 + MAX_CONTAINER_NAME];
 
 		GetContainerName(cnt_CurrentContainer[playerid], str);
 		strcat(str, " >");

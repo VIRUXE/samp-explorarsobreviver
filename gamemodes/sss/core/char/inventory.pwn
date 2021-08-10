@@ -418,14 +418,12 @@ ShowPlayerGear(playerid)
 
 hook OnPlayerOpenedInventory(playerid)
 {
-	ClosePlayerContainer(playerid);
 	ShowPlayerGear(playerid);
 	
 }
 
 hook OnPlayerOpenedContainer(playerid, Container:containerid)
 {
-	ClosePlayerInventory(playerid);
 	ShowPlayerGear(playerid);
 }
 
@@ -481,12 +479,14 @@ hook OnPlayerUnHolsteredItem(playerid, Item:itemid)
 hook OnPlayerCloseInventory(playerid)
 {
 	HidePlayerGear(playerid);
+	ClosePlayerContainer(playerid);
 	return Y_HOOKS_CONTINUE_RETURN_0;
 }
 
 hook OnPlayerCloseContainer(playerid, Container:containerid)
 {
 	HidePlayerGear(playerid);
+	ClosePlayerInventory(playerid, false);
 	return Y_HOOKS_CONTINUE_RETURN_0;
 }
 

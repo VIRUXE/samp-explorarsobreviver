@@ -468,7 +468,7 @@ hook OnDialogModelResponse(playerid, dialogid, response, listitem)
 				DisplayPlayerInventory(playerid);
 			} else {
 				Logger_Dbg("inventory-dialog", "closing inventory via extra item response");
-				ClosePlayerInventory(playerid);
+				ClosePlayerInventory(playerid, false);
 			}
 			return 1;
 		}
