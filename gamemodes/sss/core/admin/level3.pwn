@@ -710,6 +710,8 @@ ACMD:additem[3](playerid, params[])
 		}
 	}
 
+	if(!IsValidItem(itemid))
+		ChatMsg(playerid, YELLOW, " » Nome ou id de item inválido.");
 
 	return 1;
 }
