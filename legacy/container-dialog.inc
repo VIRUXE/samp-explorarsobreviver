@@ -369,10 +369,37 @@ _container_displayOptions(playerid, slotid) {
 				}
 
 				new Float:x, Float:y, Float:z;
-				GetPlayerPos(playerid, x, y, z);
+
+				if(!IsPlayerInAnyVehicle(playerid)) {
+
+					if(IsItemTypeCarry(GetItemType(itemid))) {
+						ApplyAnimation(playerid, "CARRY", "putdwn", 5.0, 0, 0, 0, 0, 0);
+					} else {
+						ApplyAnimation(playerid, "BOMBER", "BOM_PLANT_IN", 5.0, 1, 0, 0, 0, 450);
+					}
+
+					GetPlayerPos(playerid, x, y, z);
+					z -= ITEM_FLOOR_OFFSET;
+				} else {
+
+					new 
+						vehicleid = GetPlayerVehicleID(playerid),
+						Float:size_x,
+						Float:size_y,
+						Float:size_z,
+						Float:ang;
+
+					GetVehicleModelInfo(GetVehicleModel(vehicleid), VEHICLE_MODEL_INFO_SIZE, size_x, size_y, size_z);
+					GetVehicleZAngle(vehicleid, ang);
+					GetVehiclePos(vehicleid, x, y, z);
+
+					x -= (size_y / 1.85) * floatsin(-ang, degrees), y -= (size_y / 1.85) * floatcos(-ang, degrees);
+
+					z -= 0.7;
+				}
 
 				CreateItemInWorld(itemid, 
-					x, y, z - ITEM_FLOOR_OFFSET,
+					x, y, z,
 					.world = GetPlayerVirtualWorld(playerid),
 					.interior = GetPlayerInterior(playerid),
 					.label = 1);
