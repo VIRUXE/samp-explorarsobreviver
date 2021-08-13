@@ -198,3 +198,38 @@ hook OnPlayerDropItem(playerid, Item:itemid){
 		
 	return Y_HOOKS_CONTINUE_RETURN_0;
 }
+
+/*==============================================================================
+
+	Destruir todos itens do jogador
+	
+==============================================================================*/
+
+stock DestroyPlayerItems(playerid){
+	for(new i = MAX_INVENTORY_SLOTS - 1; i >= 0; i--){
+		new Item:subitemid;
+		GetInventorySlotItem(playerid, i, subitemid);
+		if(IsValidItem(subitemid))
+			DestroyItem(subitemid);
+	}
+
+	DestroyPlayerBag(playerid);
+
+	if(IsValidItem(GetPlayerItem(playerid)))
+		DestroyItem(GetPlayerItem(playerid));
+
+	if(IsValidItem(GetPlayerHolsterItem(playerid))) {
+		DestroyItem(GetPlayerHolsterItem(playerid));
+		RemovePlayerHolsterItem(playerid);
+	}
+
+	if(IsValidItem(GetPlayerHatItem(playerid))){
+		DestroyItem(GetPlayerHatItem(playerid));
+		RemovePlayerHatItem(playerid);
+	}
+
+	if(IsValidItem(GetPlayerMaskItem(playerid))){
+		DestroyItem(GetPlayerMaskItem(playerid));
+		RemovePlayerMaskItem(playerid);
+	}
+}

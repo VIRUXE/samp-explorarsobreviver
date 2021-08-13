@@ -589,24 +589,7 @@ stock Logout(playerid, docombatlogcheck = 1)
 
 	if(IsPlayerAlive(playerid))
 	{
-		DestroyItem(itemid);
-		DestroyItem(GetPlayerHolsterItem(playerid));
-		DestroyPlayerBag(playerid);
-		RemovePlayerHolsterItem(playerid);
-		RemovePlayerWeapon(playerid);
-
-		for(new i; i < MAX_INVENTORY_SLOTS; i++)
-		{
-			new Item:subitemid;
-			GetInventorySlotItem(playerid, 0, subitemid);
-			DestroyItem(subitemid);
-		}
-
-		if(IsValidItem(GetPlayerHatItem(playerid)))
-			RemovePlayerHatItem(playerid);
-
-		if(IsValidItem(GetPlayerMaskItem(playerid)))
-			RemovePlayerMaskItem(playerid);
+		DestroyPlayerItems(playerid);
 
 		if(IsPlayerInAnyVehicle(playerid))
 		{

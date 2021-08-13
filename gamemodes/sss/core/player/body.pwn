@@ -347,24 +347,7 @@ hook OnPlayerSpawnChar(playerid)
 		{
 			if(GetDynamicActorVirtualWorld(i) == 3333)
 			{
-				DestroyItem(GetPlayerItem(playerid));
-				DestroyItem(GetPlayerHolsterItem(playerid));
-				DestroyPlayerBag(playerid);
-				RemovePlayerHolsterItem(playerid);
-				RemovePlayerWeapon(playerid);
-
-				for(new b; b < MAX_INVENTORY_SLOTS; b++)
-				{
-					new Item:subitemid;
-					GetInventorySlotItem(playerid, 0, subitemid);
-					DestroyItem(subitemid);
-				}
-
-				if(IsValidItem(GetPlayerHatItem(playerid)))
-					RemovePlayerHatItem(playerid);
-
-				if(IsValidItem(GetPlayerMaskItem(playerid)))
-					RemovePlayerMaskItem(playerid);
+				DestroyPlayerItems(playerid);
 
 				ClearChatForPlayer(playerid, 15);
 				ChatMsg(playerid, RED, " » Você foi morto enquanto esteve ausente. :(");
@@ -403,7 +386,7 @@ CreateBody(const name[], Float:x, Float:y, Float:z, Float:a, w, i, s)
 		body_NameTag[id] = Text3D:INVALID_3DTEXT_ID;
 	}
 
-	body_NameTag[id] = CreateDynamic3DTextLabel(sprintf("%s{FFFFFF}(Corpo)", body_PlayerName[id]), 0xB8B8B8FF, x, y, z, 15.0, INVALID_PLAYER_ID, INVALID_VEHICLE_ID, 1, w, i);
+	body_NameTag[id] = CreateDynamic3DTextLabel(sprintf("%s(%d)", body_PlayerName[id], id), 0xB8B8B8FF, x, y, z, 15.0, INVALID_PLAYER_ID, INVALID_VEHICLE_ID, 1, w, i);
 
 	ApplyDynamicActorAnimation(id, "SUNBATHE", "PARKSIT_M_IN", 4.1, 0, 0, 0, 1, 0);
 
