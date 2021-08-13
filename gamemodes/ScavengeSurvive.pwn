@@ -301,6 +301,7 @@ public OnGameModeInit()
 #define COLOR_PLAYER_NORMAL			0xB8B8B800
 #define COLOR_PLAYER_MOBILE			0x85858500
 #define COLOR_PLAYER_ADMIN			0xE8545400
+#define COLOR_PLAYER_VIP			0xFFAA0000
 
 // Embedding Colours
 #define C_YELLOW					"{FFFF00}"
@@ -573,6 +574,7 @@ new stock
 #include "sss/core/char/skills.pwn"
 #include "sss/core/char/travel-stats.pwn"
 #include "sss/core/char/headgear-pop.pwn"
+#include "sss/core/char/vip.pwn"
 
 // WEAPON
 #include "sss/core/weapon/loot.pwn"
