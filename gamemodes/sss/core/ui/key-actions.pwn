@@ -239,9 +239,13 @@ _UpdateKeyActions(playerid)
 			AddToolTipText(playerid, KEYTEXT_ENGINE, "Motor");
 			AddToolTipText(playerid, KEYTEXT_LIGHTS, "Luzes");
 			AddToolTipText(playerid, KEYTEXT_DOORS, "Fechadura");
+			AddToolTipText(playerid, "~k~~GROUP_CONTROL_BWD~", "Buzina");
+		} 
+		else if(GetPlayerState(playerid) == PLAYER_STATE_PASSENGER)
+		{
+			AddToolTipText(playerid, KEYTEXT_DOORS, "Fechadura");
+			AddToolTipText(playerid, "~k~~CONVERSATION_YES~", "Abrir bolso");
 		}
-
-		AddToolTipText(playerid, "~k~~VEHICLE_FIREWEAPON_ALT~", "Abrir bolso");
 
 		ShowPlayerKeyActionUI(playerid);
 		return;
