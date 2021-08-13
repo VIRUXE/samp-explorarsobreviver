@@ -660,9 +660,9 @@ ACMD:additem[3](playerid, params[])
 			x + (0.5 * floatsin(-r, degrees)),
 			y + (0.5 * floatcos(-r, degrees)),
 			z - ITEM_FLOOR_OFFSET,
-			r,
-			GetPlayerVirtualWorld(playerid),
-			GetPlayerInterior(playerid)
+			.rz = r,
+			.world = GetPlayerVirtualWorld(playerid),
+			.interior = GetPlayerInterior(playerid)
 		);
 
 		GetItemName(itemid, typename);
@@ -698,9 +698,9 @@ ACMD:additem[3](playerid, params[])
 					x + ((0.3 * (++count + 1)) * floatsin(-r, degrees)),
 					y + ((0.3 * (count + 1)) * floatcos(-r, degrees)),
 					z - ITEM_FLOOR_OFFSET,
-					r,
-					GetPlayerVirtualWorld(playerid),
-					GetPlayerInterior(playerid)
+					.rz = r,
+					.world = GetPlayerVirtualWorld(playerid),
+					.interior = GetPlayerInterior(playerid)
 				);
 
 				GetItemName(itemid, typename);
