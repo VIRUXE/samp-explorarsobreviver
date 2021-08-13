@@ -50,40 +50,40 @@ ptask UpdatePlayerScore[MIN(1)](playerid)
 		case 60 * 2:
 		{
 			SetPlayerWantedLevel(playerid, 2);
-			ChatMsgAll(RED, " » %P"C_YELLOW" ja esta vivo a "C_RED"2"C_YELLOW" hora. Deve estar trancado na base...", playerid);
+			ChatMsgAll(RED, " » %P"C_YELLOW" ja esta vivo a "C_RED"2"C_YELLOW" horas. Deve estar trancado na base...", playerid);
 		}
 		case 60 * 3:
 		{
 			SetPlayerWantedLevel(playerid, 3);
-			ChatMsgAll(RED, " » %P"C_YELLOW" ja esta vivo a "C_RED"3"C_YELLOW" hora. Acho que esqueceram de mata-lo..", playerid);
+			ChatMsgAll(RED, " » %P"C_YELLOW" ja esta vivo a "C_RED"3"C_YELLOW" horas. Acho que esqueceram de mata-lo..", playerid);
 		}
 		case 60 * 4:
 		{
 			SetPlayerWantedLevel(playerid, 4);
-			ChatMsgAll(RED, " » %P"C_YELLOW" ja esta vivo a "C_RED"4"C_YELLOW" hora. Deve estar isolado nas montanhas.", playerid);
+			ChatMsgAll(RED, " » %P"C_YELLOW" ja esta vivo a "C_RED"4"C_YELLOW" horas. Deve estar isolado nas montanhas.", playerid);
 		}
 		case 60 * 5:
 		{
 			SetPlayerWantedLevel(playerid, 5);
-			ChatMsgAll(RED, " » %P"C_YELLOW" ja esta vivo a "C_RED"5"C_YELLOW" hora. Deve valer apenas ser amigo deste :)", playerid);
+			ChatMsgAll(RED, " » %P"C_YELLOW" ja esta vivo a "C_RED"5"C_YELLOW" horas. Deve valer apenas ser amigo deste :)", playerid);
 		}
 		case 60 * 6:
 		{
 			SetPlayerWantedLevel(playerid, 6);
-			ChatMsgAll(RED, " » %P"C_YELLOW" ja esta vivo a "C_RED"6"C_YELLOW" hora. Alguem precisa resolver isso *-*", playerid);
+			ChatMsgAll(RED, " » %P"C_YELLOW" ja esta vivo a "C_RED"6"C_YELLOW" horas. Alguem precisa resolver isso *-*", playerid);
 		}
 
 		case 60 * 7: ChatMsgAll(RED,
-			" » %P"C_YELLOW" ja esta vivo a "C_RED"7"C_YELLOW" hora. Mate ele e consiga muitos itens! xD", playerid);
+			" » %P"C_YELLOW" ja esta vivo a "C_RED"7"C_YELLOW" horas. Mate ele e consiga muitos itens! xD", playerid);
 
 		case 60 * 8: ChatMsgAll(RED,
-			" » %P"C_YELLOW" ja esta vivo a "C_RED"8"C_YELLOW" hora. Com certeza esta escondido dentro da base!", playerid);
+			" » %P"C_YELLOW" ja esta vivo a "C_RED"8"C_YELLOW" horas. Com certeza esta escondido dentro da base!", playerid);
 
 		case 60 * 9: ChatMsgAll(RED,
-			" » %P"C_YELLOW" ja esta vivo a "C_RED"9"C_YELLOW" hora. Uau, deve ter amizade com Bear Grylls", playerid);
+			" » %P"C_YELLOW" ja esta vivo a "C_RED"9"C_YELLOW" horas. Uau, deve ter amizade com Bear Grylls", playerid);
 
 		case 60 * 10: ChatMsgAll(RED,
-			" » %P"C_YELLOW" ja esta vivo a "C_RED"9"C_YELLOW" hora. Uauu, este definitivamente é um especialista em sobrevivência!", playerid);
+			" » %P"C_YELLOW" ja esta vivo a "C_RED"9"C_YELLOW" horas. Uauu, este definitivamente é um especialista em sobrevivência!", playerid);
 	}
 	
 	return;
