@@ -221,10 +221,25 @@ ACMD:reports[1](playerid, params[])
 	return 1;
 }
 
-ACMD:deletereports[2](playerid, params[])
+ACMD:deletereports[4](playerid, params[])
 {
 	DeleteReadReports();
+
+	for(new i = 0; i < GetUnreadReports(); i++)
+    {
+		DeleteReport(i);
+	}
+
 	ChatMsg(playerid, YELLOW, " » Todos os relatórios foram eliminados.");
+
+	return 1;
+}
+
+ACMD:deletereadreports[2](playerid, params[])
+{
+	DeleteReadReports();
+	
+	ChatMsg(playerid, YELLOW, " » Todos os relatórios lidos foram eliminados.");
 
 	return 1;
 }
