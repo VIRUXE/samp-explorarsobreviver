@@ -20,6 +20,11 @@ hook OnPlayerSendChat(playerid, text[], Float:frequency)
 		SendDiscordMessage(dc_GlobalChatChannel, "**%p** (%d): %s", playerid, playerid, text);
 }
 
+hook OnPlayerRegister(playerid)
+{
+    SendDiscordMessage(dc_GlobalChatChannel, "**%p (%d) %sregistrou conta.**", playerid, playerid, IsPlayerMobile(playerid) ? "(Mobile) " : "");
+}
+
 hook OnPlayerLogin(playerid)
 {
 	SendDiscordMessage(dc_GlobalChatChannel, "**%p (%d) %sentrou no servidor.**", playerid, playerid, IsPlayerMobile(playerid) ? "(Mobile) " : "");
