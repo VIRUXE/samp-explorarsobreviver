@@ -67,7 +67,6 @@
 #define	BTN_MAX_INRANGE					5
 
 // SS/item
-#define MAX_ITEMS_PER_SPAWN	 			6//Defina para 2 quando quiser um inicio rápido e 6 o padrão!
 #define MAX_ITEM						Item:64000
 #define MAX_ITEM_TYPE					ItemType:327
 #define MAX_ITEM_NAME					22

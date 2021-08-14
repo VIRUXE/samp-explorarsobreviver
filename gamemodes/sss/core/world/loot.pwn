@@ -6,10 +6,7 @@
 #define MAX_LOOT_INDEX_ITEMS	(256)
 #define MAX_LOOT_INDEX_NAME		(32)
 #define MAX_LOOT_SPAWN			(12683)
-
-#if !defined MAX_ITEMS_PER_SPAWN
-	#define MAX_ITEMS_PER_SPAWN	 	(6)
-#endif
+#define MAX_ITEMS_PER_SPAWN	 	(6)
 
 
 enum E_LOOT_INDEX_ITEM_DATA
@@ -138,6 +135,9 @@ stock CreateStaticLootSpawn(Float:x, Float:y, Float:z, lootindex, Float:weight, 
 
 	for(new i; i < size; i++)
 	{
+		if(loot_SpawnMult < 1.0 && (frandom(100.0) > weight * loot_SpawnMult))
+			continue;
+			
 		// Generate an item from the sample list
 		if(!_loot_PickFromSampleList(samplelist, samplelistsize, itemtype))
 			continue;
@@ -314,21 +314,15 @@ hook OnItemCreateInWorld(Item:itemid) {
 		GetItemWorld(itemid, world);
 		GetItemInterior(itemid, interior);
 
-		defer RespawnItem(ITEM_RESPAWN_DELAY, loot_ItemLootIndex[itemid], x, y, z, world, interior);
+		defer RespawnItem(loot_ItemLootIndex[itemid], x, y, z, world, interior);
 	}
 }
 
-timer DestroyUntilItem[ITEM_RESPAWN_DELAY - HOUR(1)](itemid)
+timer DestroyUntilItem[ITEM_RESPAWN_DELAY + random(MIN(Iter_Count(Player) + floatround(loot_SpawnMult, floatround_ceil)))](itemid)
 	DestroyItem(Item:itemid);
 
-timer RespawnItem[timer](timer, lootindex, Float:x, Float:y, Float:z, world, interior) {
-	#pragma unused timer
-
-	if(Iter_Count(Player) < random(MAX_PLAYERS / 10))
-		defer RespawnItem(MIN(60 + random(60)), lootindex, x, y, z, world, interior);
-	else
-		CreateLootItem(lootindex, x, y, z, world, interior);
-}
+timer RespawnItem[ITEM_RESPAWN_DELAY - random(MIN(GetPlayerPoolSize() + floatround(loot_SpawnMult, floatround_ceil)))](lootindex, Float:x, Float:y, Float:z, world, interior)
+	CreateLootItem(lootindex, x, y, z, world, interior);
 
 hook OnItemRemoveFromWorld(Item:itemid) {
 	loot_ItemLootIndex[itemid] = -1;
