@@ -457,13 +457,13 @@ IRPC:GIVEDAM(playerid, BitStream:bs){
 					ShowActionText(playerid,
 						sprintf("~w~Digite ~g~/mc %d~n~~w~para matar o corpo de ~w~~h~%s", i, body_PlayerName[i]),
 						3000);
+
+					// Anti mobile actor bug
+					if(wPlayerID == playerid)
+						return 0;
 				}
 			}
 		}
-
-		// Anti mobile actor bug
-		if(wPlayerID == playerid)
-			return 0;
 	}
 
 	return 1;
