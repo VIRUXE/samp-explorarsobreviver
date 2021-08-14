@@ -90,9 +90,7 @@ public OnPlayerConnect(playerid)
 			ChatMsg(i, WHITE, " » %P (%d)"C_WHITE" entrou no servidor.", playerid, playerid);
 
 	if(!isnull(gMessageOfTheDay))
-	{
 		ChatMsg(playerid, BLUE, ""C_YELLOW" » Mensagem do Dia: "C_BLUE"%s", gMessageOfTheDay);
-	}
 
 	ply_Data[playerid][ply_ShowHUD] = true;
 
@@ -106,19 +104,8 @@ public OnPlayerDisconnect(playerid, reason)
 
 	Logout(playerid);
 
-	switch(reason)
-	{
-		case 0:
-		{
-			ChatMsgAll(GREY, " » %p perdeu a conexão.", playerid);
-			Logger_Log("player lost connection", Logger_P(playerid));
-		}
-		case 1:
-		{
-			ChatMsgAll(GREY, " » %p decidiu sair.", playerid);
-			Logger_Log("player quit", Logger_P(playerid));
-		}
-	}
+	ChatMsgAll(GREY, " » %P %s.", playerid, reason ? "decidiu sair" : "perdeu a conexao");
+	Logger_Log("player disconnected", Logger_P(playerid), Logger_S("reason", reason ? "quit" : "lost connection"));
 
 	SetTimerEx("OnPlayerDisconnected", 100, false, "dd", playerid, reason);
 
@@ -238,10 +225,8 @@ ptask PlayerUpdateFast[100](playerid)
 	if(IsPlayerInAnyVehicle(playerid))
 		PlayerVehicleUpdate(playerid);
 	else
-	{
 		if(!gVehicleSurfing)
 			VehicleSurfingCheck(playerid);
-	}
 
 	//PlayerBagUpdate(playerid);
 
@@ -291,10 +276,8 @@ public OnPlayerRequestSpawn(playerid)
 public OnPlayerClickTextDraw(playerid, Text:clickedid)
 {
 	if(clickedid == Text:65535)
-	{
 		if(IsPlayerDead(playerid))
 			SelectTextDraw(playerid, 0xFFFFFF88);
-	}
 
 	return 1;
 }
@@ -324,43 +307,31 @@ public OnPlayerSpawn(playerid)
 
 public OnPlayerUpdate(playerid)
 {
+	new Float:velocityX, Float:velocityY, Float:velocityZ;
+
 	if(IsPlayerInAnyVehicle(playerid))
 	{
-		static
-			str[8],
-			Float:vx,
-			Float:vy,
-			Float:vz;
+		new	uiStr[8];
 
-		GetVehicleVelocity(GetPlayerLastVehicle(playerid), vx, vy, vz);
-		ply_Data[playerid][ply_Velocity] = floatsqroot( (vx*vx)+(vy*vy)+(vz*vz) ) * 150.0;
-		format(str, 32, "%.0fkm/h", ply_Data[playerid][ply_Velocity]);
-		SetPlayerVehicleSpeedUI(playerid, str);
+		GetVehicleVelocity(GetPlayerLastVehicle(playerid), velocityX, velocityY, velocityZ);
+		ply_Data[playerid][ply_Velocity] = floatsqroot( (velocityX*velocityX)+(velocityY*velocityY)+(velocityZ*velocityZ) ) * 150.0;
+		format(uiStr, 32, "%.0fkm/h", ply_Data[playerid][ply_Velocity]);
+		SetPlayerVehicleSpeedUI(playerid, uiStr);
 	}
 	else
 	{
-		static
-			Float:vx,
-			Float:vy,
-			Float:vz;
-
-		GetPlayerVelocity(playerid, vx, vy, vz);
-		ply_Data[playerid][ply_Velocity] = floatsqroot( (vx*vx)+(vy*vy)+(vz*vz) ) * 150.0;
+		GetPlayerVelocity(playerid, velocityX, velocityY, velocityZ);
+		ply_Data[playerid][ply_Velocity] = floatsqroot( (velocityX*velocityX)+(velocityY*velocityY)+(velocityZ*velocityZ) ) * 150.0;
 	}
 
 	if(ply_Data[playerid][ply_Alive])
 	{
-		if(IsPlayerOnAdminDuty(playerid))
-			SetPlayerHealth(playerid, 99999);
-		else
-			SetPlayerHealth(playerid, ply_Data[playerid][ply_HitPoints]);
-
+		SetPlayerHealth(playerid, IsPlayerOnAdminDuty(playerid) ? 99999.9 : ply_Data[playerid][ply_HitPoints]);
 		SetPlayerArmour(playerid, ply_Data[playerid][ply_ArmourPoints]);
 	}
 	else
-	{
-		SetPlayerHealth(playerid, 99.9);		
-	}
+		SetPlayerHealth(playerid, 99.9);
+
 	return 1;
 }
 
@@ -398,13 +369,9 @@ hook OnPlayerEnterVehicle(playerid, vehicleid, ispassenger)
 		new driverid = -1;
 
 		foreach(new i : Player)
-		{
 			if(IsPlayerInVehicle(i, vehicleid))
-			{
 				if(GetPlayerState(i) == PLAYER_STATE_DRIVER)
 					driverid = i;
-			}
-		}
 
 		if(driverid == -1)
 			CancelPlayerMovement(playerid);
@@ -737,15 +704,17 @@ stock GetPlayerSpawnTick(playerid)
 	return ply_Data[playerid][ply_SpawnTick];
 }
 
-stock bool:IsAtConnectionPos(Float:x, Float:y, Float:z)
+stock bool:IsPlayerAtConnectionPos(Float:x, Float:y, Float:z)
 {
-	if(Distance(x, y, z, 1133.05, -2038.40, 69.09) < 7.0)
+	new const Float:posRadius = 7.0;
+
+	if(Distance(x, y, z, 1133.05, -2038.40, 69.09) < posRadius)
 		return true;
 
-	if(Distance(x, y, z, DEFAULT_POS_X, DEFAULT_POS_Y, DEFAULT_POS_Z) < 7.0)
+	if(Distance(x, y, z, DEFAULT_POS_X, DEFAULT_POS_Y, DEFAULT_POS_Z) < posRadius)
 		return true;
 
-	if(Distance(x, y, z, 0.0, 0.0, 0.0) < 7.0)
+	if(Distance(x, y, z, 0.0, 0.0, 0.0) < posRadius)
 		return true;
 
 	return false;

@@ -140,8 +140,7 @@ _OnDeath(playerid, killerid, deathreason)
 		}
 	}
 
-	ShowPlayerDialog(playerid, 101,
-		DIALOG_STYLE_MSGBOX, "{fc0303}Causa da Morte:", sprintf("{fc0303}%s", deathreasonstring), "X", " ");
+	ShowPlayerDialog(playerid, 101, DIALOG_STYLE_MSGBOX, "{fc0303}Causa da Morte:", sprintf("{fc0303}%s", deathreasonstring), "Ok", "");
 
 	return 1;
 }

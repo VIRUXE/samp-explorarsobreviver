@@ -646,7 +646,7 @@ stock SavePlayerData(playerid)
 	GetPlayerPos(playerid, x, y, z);
 	GetPlayerFacingAngle(playerid, r);
 
-	if(IsAtConnectionPos(x, y, z))
+	if(IsPlayerAtConnectionPos(x, y, z))
 	{
 		dbg("accounts", 1, "[SavePlayerData] ERROR: At connection pos");
 		return 0;
@@ -660,7 +660,7 @@ stock SavePlayerData(playerid)
 	if(IsPlayerAlive(playerid) && !IsPlayerInTutorial(playerid))
 	{
 		dbg("accounts", 2, "[SavePlayerData] Player is alive");
-		if(IsAtConnectionPos(x, y, z))
+		if(IsPlayerAtConnectionPos(x, y, z))
 		{
 			dbg("accounts", 2, "[SavePlayerData] ERROR: Player at default position");
 			return 0;
