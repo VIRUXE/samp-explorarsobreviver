@@ -225,7 +225,7 @@ ACMD:deletereports[4](playerid, params[])
 {
 	DeleteReadReports();
 
-	for(new i = 0; i < GetUnreadReports(); i++)
+	for(new i = 0; i < 100; i++)
     {
 		DeleteReport(i);
 	}
