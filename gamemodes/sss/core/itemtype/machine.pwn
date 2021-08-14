@@ -352,8 +352,12 @@ _machine_StartCooking(Item:itemid) {
 	cooktime *= 1000;
 
 	data[E_MACHINE_COOKING] = true;
-	DestroyDynamicObject(data[E_MACHINE_SMOKE_PARTICLE]);
+
+	if(data[E_MACHINE_SMOKE_PARTICLE] != INVALID_OBJECT_ID)
+		DestroyDynamicObject(data[E_MACHINE_SMOKE_PARTICLE]);
+
 	data[E_MACHINE_SMOKE_PARTICLE] = CreateDynamicObject(18726, x, y, z - 1.0, 0.0, 0.0, 0.0);
+
 	data[E_MACHINE_COOK_DURATION_MS] = cooktime;
 	data[E_MACHINE_START_TICK] = GetTickCount();
 
@@ -366,11 +370,13 @@ _machine_StartCooking(Item:itemid) {
 
 timer _machine_FinishCooking[cooktime](itemid, cooktime)
 {
-#pragma unused cooktime
+	#pragma unused cooktime
+	
 	new data[e_MACHINE_DATA];
 	GetItemArrayData(Item:itemid, data);
 
-	DestroyDynamicObject(data[E_MACHINE_SMOKE_PARTICLE]);
+	if(data[E_MACHINE_SMOKE_PARTICLE] != INVALID_OBJECT_ID)
+		DestroyDynamicObject(data[E_MACHINE_SMOKE_PARTICLE]);
 
 	new itemcount;
 	GetContainerItemCount(data[E_MACHINE_CONTAINER_ID], itemcount);
