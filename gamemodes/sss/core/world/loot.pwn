@@ -398,6 +398,10 @@ hook OnItemDestroy(Item:itemid)
 
 ==============================================================================*/
 
+stock GetLootIndexTotal()
+{
+	return loot_IndexTotal;
+}
 
 stock IsValidLootIndex(index)
 {
