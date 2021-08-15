@@ -211,12 +211,10 @@ ShowReportReasonInput(playerid)
 
 ACMD:reports[1](playerid, params[])
 {
-	new ret;
-
-	ret = ShowListOfReports(playerid);
-
-	if(ret == 0)
+	if(!ShowListOfReports(playerid))
 		ChatMsg(playerid, YELLOW, " » Não existem relatórios para mostrar.");
+
+	log(true, "[COMMAND] %p[%d] (%d) executed /reports", playerid, GetPlayerAdminLevel(playerid), playerid);
 
 	return 1;
 }
@@ -226,9 +224,7 @@ ACMD:deletereports[4](playerid, params[])
 	DeleteReadReports();
 
 	for(new i = 0; i < 100; i++)
-    {
 		DeleteReport(i);
-	}
 
 	ChatMsg(playerid, YELLOW, " » Todos os relatórios foram eliminados.");
 
@@ -260,10 +256,8 @@ ShowListOfReports(playerid)
 	{
 		if(IsPlayerBanned(report_CurrentReportList[playerid][idx][report_name]))
 			colour = "{FF0000}";
-
 		else if(!report_CurrentReportList[playerid][idx][report_read])
 			colour = "{FFFF00}";
-
 		else
 			colour = "{FFFFFF}";
 
@@ -282,7 +276,6 @@ ShowListOfReports(playerid)
 			report_CurrentItem[playerid] = listitem;
 		}
 	}
-
 	Dialog_ShowCallback(playerid, using inline Response, DIALOG_STYLE_LIST, "Relatórios", string, "Abrir", "Sair");
 
 	return 1;
@@ -330,7 +323,6 @@ ShowReport(playerid, reportlistitem)
 		else
 			ShowListOfReports(playerid);
 	}
-
 	Dialog_ShowCallback(playerid, using inline Response, DIALOG_STYLE_MSGBOX, report_CurrentReportList[playerid][reportlistitem][report_name], message, "Opções", "Voltar");
 
 	return 1;
