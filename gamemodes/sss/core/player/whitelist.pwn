@@ -61,26 +61,30 @@ hook DCC_OnMessageCreate(DCC_Message:message)
 
     if(channel == DCC_FindChannelById("847902208343015484")) // Canal Whitelist
     {
-		new	discordUserId[DCC_ID_SIZE];
+		new	
+			discordUserId[DCC_ID_SIZE],
+			playerAccountName[MAX_PLAYER_NAME];
 
 		DCC_GetMessageAuthor(message, discordUser);
 		DCC_GetUserId(discordUser, discordUserId);
+		playerAccountName = GetAccountNameByDiscordId(discordUserId);
 
 		// Verificar se o jogador já tem o id vinculado em alguma conta
-		if(!DoesDiscordIdExist(discordUserId))
+		if(isnull(playerAccountName))
 		{
-            new nameProvided[MAX_PLAYER_NAME];
+            new accountName[MAX_PLAYER_NAME];
 
-        	DCC_GetMessageContent(message, nameProvided);
+        	DCC_GetMessageContent(message, accountName);
 
-			if(DoesAccountExist(nameProvided))
+			if(DoesAccountExistByName(accountName))
 			{
 				new	
-					playerid = GetPlayerIdByName(nameProvided),
+					playerid = GetPlayerIdByName(accountName),
 					discordUsername[DCC_USERNAME_SIZE],
+					discordNickname[DCC_NICKNAME_SIZE],
 					DCC_Guild:guild;
 
-				SetAccountDiscordId(nameProvided, discordUserId); // Guardar id de discord na conta do jogador
+				SetAccountDiscordId(accountName, discordUserId); // Guardar id de discord na conta do jogador
 
 				// Se o jogador estiver online no servidor então colocar logo na whitelist
 				if(playerid != INVALID_PLAYER_ID)
@@ -95,13 +99,14 @@ hook DCC_OnMessageCreate(DCC_Message:message)
 				}
 				
 				DCC_GetUserName(discordUser, discordUsername);
+				DCC_GetGuildMemberNickname(guild, discordUser, discordNickname);
 				DCC_GetChannelGuild(channel, guild);
 				DCC_AddGuildMemberRole(guild, discordUser, DCC_FindRoleById("867774790189973514")); // Colocar jogador no cargo "Sobrevivente"
 
-				SendDiscordMessage(channel, "> Conta de Discord `%s` foi vinculada com a Conta de Jogo `%s`", discordUsername, nameProvided);
-				DCC_CreatePrivateChannel(discordUser, "OnWhitelistSuccess", "s", nameProvided); // Enviar Mensagem privada. Pois ao colocar no cargo, o canal whitelist desaparece, logo não dá para ver se enviar mensagem para o canal
+				SendDiscordMessage(channel, "> Conta de Discord `%s (%s)` foi vinculada com a Conta de Jogo `%s`", discordNickname, discordUsername, accountName);
+				DCC_CreatePrivateChannel(discordUser, "OnWhitelistSuccess", "s", accountName); // Enviar Mensagem privada. Pois ao colocar no cargo, o canal whitelist desaparece, logo não dá para ver se enviar mensagem para o canal
 
-				log(true, "[WHITELIST] Discord ID %s (%s) foi atribuido para a conta %s", discordUserId, discordUsername, nameProvided);
+				log(true, "[WHITELIST] Discord Account %s (Username: %s ID: %s) was linked to game account %s", discordNickname, discordUsername, discordUserId, accountName);
 			}
 			else
 				SendDiscordMessage(channel, "> Nao existe uma Conta de Jogo com esse nick! **Primeiro tem que acabar o tutorial e registrar sua conta**.");
