@@ -68,7 +68,7 @@ public DCC_OnGuildMemberAdd(DCC_Guild:guild, DCC_User:user)
 		bool:isUserLinked;
 
 	DCC_GetUserId(user, userId);
-	playerAccountName = GetAccountNameByDiscordId(userId);
+	GetAccountNameByDiscordId(userId, playerAccountName);
 	isUserLinked = isnull(playerAccountName) ? false : true;
 	DCC_GetGuildMemberNickname(guild, user, userNickname);
 	DCC_CreatePrivateChannel(user, "OnMemberJoined", "sb", userNickname, isUserLinked);
@@ -136,19 +136,17 @@ stock SendDiscordMessage(DCC_Channel:channel, const fmat[], va_args<>)
 	return 1;
 }
 
-stock GetAccountNameByDiscordId(const discordId[DCC_ID_SIZE])
+stock GetAccountNameByDiscordId(const discordId[DCC_ID_SIZE], accountName[MAX_PLAYER_NAME])
 {
-	new
-		DBStatement:stmt = db_prepare(gAccounts, "SELECT name FROM Player WHERE discord_id=? COLLATE NOCASE"),
-		accountName[MAX_PLAYER_NAME];
+	new DBStatement:stmt = db_prepare(gAccounts, "SELECT name FROM Player WHERE discord_id=? COLLATE NOCASE");
 
 	stmt_bind_value(stmt, 0, DB::TYPE_STRING, discordId, DCC_ID_SIZE);
-	stmt_bind_result_field(stmt, 0, DB::TYPE_STRING, accountName);
+	stmt_bind_result_field(stmt, 0, DB::TYPE_STRING, accountName, MAX_PLAYER_NAME);
 
 	if(stmt_execute(stmt))
 		stmt_fetch_row(stmt);
 	else
-		err(false, true, "Não foi possível executar GetAccountNameByDiscordId");
+		err(false, true, "[DISCORD] Couldn't execute GetAccountNameByDiscordId");
 
 	log(true, "[DISCORD] GetAccountNameByDiscordId(%s) - Name: %s", discordId, accountName);
 

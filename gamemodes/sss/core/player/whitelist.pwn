@@ -67,7 +67,7 @@ hook DCC_OnMessageCreate(DCC_Message:message)
 
 		DCC_GetMessageAuthor(message, discordUser);
 		DCC_GetUserId(discordUser, discordUserId);
-		playerAccountName = GetAccountNameByDiscordId(discordUserId);
+		GetAccountNameByDiscordId(discordUserId, playerAccountName);
 
 		// Verificar se o jogador já tem o id vinculado em alguma conta
 		if(isnull(playerAccountName))
