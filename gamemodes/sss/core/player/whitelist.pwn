@@ -79,7 +79,7 @@ hook DCC_OnMessageCreate(DCC_Message:message)
 			if(DoesAccountExistByName(accountName))
 			{
 				new	
-					playerid = GetPlayerIdByName(accountName),
+					playerid = GetPlayerIdByName(accountName, true),
 					discordUsername[DCC_USERNAME_SIZE],
 					discordNickname[DCC_NICKNAME_SIZE],
 					DCC_Guild:guild;
