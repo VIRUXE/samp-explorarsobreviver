@@ -275,12 +275,7 @@ stock ExitTutorial(playerid)
 	ChatMsg(playerid, WHITE, ""C_GREEN" » "C_WHITE" %s", ls(playerid, "TUTORIEXIT"));
 	log(true, "[TUTORIAL] %p saiu do tutorial.", playerid);
 
-	// Reset Inventory
-	for(new i = MAX_INVENTORY_SLOTS - 1; i >= 0; i--)
-		RemoveItemFromInventory(playerid, i);
-	
-	RemovePlayerBag(playerid);
-	RemovePlayerHolsterItem(playerid);
+	DestroyPlayerItems(playerid);
 	
 	SetPlayerPos(playerid, DEFAULT_POS_X, DEFAULT_POS_Y, DEFAULT_POS_Z);
 	SetPlayerSpawnedState(playerid, false);

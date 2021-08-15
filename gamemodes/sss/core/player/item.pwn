@@ -171,8 +171,11 @@ hook OnPlayerUseItemWithBtn(playerid, Button:buttonid, Item:itemid){
 ==============================================================================*/
 
 hook OnPlayerKeyStateChange(playerid, newkeys, oldkeys)
-	if( (newkeys == KEY_ACTION) && IsPlayerInAnyVehicle(playerid))
-			HideVehicleUI(playerid), DisplayPlayerInventory(playerid);
+	if( (newkeys == KEY_YES) && GetPlayerState(playerid) == PLAYER_STATE_PASSENGER)
+			HideVehicleUI(playerid),
+			DisplayContainerInventory(playerid, GetVehicleContainer(GetPlayerVehicleID(playerid))),
+			DisplayPlayerInventory(playerid);
+	
 
 hook OnPlayerCloseContainer(playerid, Container:containerid){
 	if(IsPlayerInAnyVehicle(playerid))
@@ -194,4 +197,39 @@ hook OnPlayerDropItem(playerid, Item:itemid){
 		return Y_HOOKS_BREAK_RETURN_1;
 		
 	return Y_HOOKS_CONTINUE_RETURN_0;
+}
+
+/*==============================================================================
+
+	Destruir todos itens do jogador
+	
+==============================================================================*/
+
+stock DestroyPlayerItems(playerid){
+	for(new i = MAX_INVENTORY_SLOTS - 1; i >= 0; i--){
+		new Item:subitemid;
+		GetInventorySlotItem(playerid, i, subitemid);
+		if(IsValidItem(subitemid))
+			DestroyItem(subitemid);
+	}
+
+	DestroyPlayerBag(playerid);
+
+	if(IsValidItem(GetPlayerItem(playerid)))
+		DestroyItem(GetPlayerItem(playerid));
+
+	if(IsValidItem(GetPlayerHolsterItem(playerid))) {
+		DestroyItem(GetPlayerHolsterItem(playerid));
+		RemovePlayerHolsterItem(playerid);
+	}
+
+	if(IsValidItem(GetPlayerHatItem(playerid))){
+		DestroyItem(GetPlayerHatItem(playerid));
+		RemovePlayerHatItem(playerid);
+	}
+
+	if(IsValidItem(GetPlayerMaskItem(playerid))){
+		DestroyItem(GetPlayerMaskItem(playerid));
+		RemovePlayerMaskItem(playerid);
+	}
 }

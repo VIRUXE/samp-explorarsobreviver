@@ -34,9 +34,10 @@ hook OnPlayerUpdate(playerid){
 		return 1;
 	}
 
-	if(!atr_Detect[playerid] && !IsAtConnectionPos(x, y, z) && !IsPlayerOnAdminDuty(playerid)) {
+	if(!atr_Detect[playerid] && !IsPlayerAtConnectionPos(playerid) && !IsPlayerOnAdminDuty(playerid)) {
 		new colision;
 
+		// Teleport hack or lag
 		if(Distance(x, y, z, atr_OldPos[playerid][0], atr_OldPos[playerid][1], atr_OldPos[playerid][2]) >= 45.0)
 			colision = 1;
 		else {
@@ -47,22 +48,24 @@ hook OnPlayerUpdate(playerid){
 		}
 
 		if(colision != WATER_OBJECT && colision) {
-			if(colision != 1) {
-				if(++atr_Wars[playerid] == 3) {
-					ReportPlayer(sprintf("%P", playerid), 
-						sprintf("Anti Raid: Colidiu com o Objeto id: %d", colision), 
-						-1,
-						"A-Raid",
-						x, y, z,
-						GetPlayerVirtualWorld(playerid), GetPlayerInterior(playerid),
-						"");
-						
-					atr_Wars[playerid] = 0;
+			if(!IsLocationRoof(x, y, z)) {
+				if(colision != 1) {
+					if(++atr_Wars[playerid] == 3) {
+						ReportPlayer(sprintf("%p", playerid), 
+							sprintf("Anti Raid: Colidiu com o Objeto id: %d", colision), 
+							-1,
+							"A-Raid",
+							x, y, z,
+							GetPlayerVirtualWorld(playerid), GetPlayerInterior(playerid),
+							"");
+							
+						atr_Wars[playerid] = 0;
+					}
 				}
+				atr_Detect[playerid] = true;
+				stop atr_Check[playerid];
+				atr_Check[playerid] = defer AntiRaidCheck(playerid);
 			}
-			atr_Detect[playerid] = true;
-			stop atr_Check[playerid];
-			atr_Check[playerid] = defer AntiRaidCheck(playerid);
 		} else {
 			atr_OldPos[playerid][0] = x;
 			atr_OldPos[playerid][1] = y;
@@ -97,7 +100,7 @@ timer AntiRaidCheck[1500](playerid){
 		new Float:x, Float:y, Float:z, Float:tmp;
 		GetPlayerPos(playerid, x, y, z);
 		if(!CA_RayCastLine(atr_OldPos[playerid][0], atr_OldPos[playerid][1], atr_OldPos[playerid][2], x, y, z, tmp, tmp, tmp) ||
-			!CA_RayCastLine(x, y, z, x, y, z + 600.0, tmp, tmp, tmp)) {
+			!IsLocationRoof(x, y, z)) {
 				atr_OldPos[playerid][0] = x;
 				atr_OldPos[playerid][1] = y;
 				atr_OldPos[playerid][2] = z;
@@ -106,6 +109,8 @@ timer AntiRaidCheck[1500](playerid){
 	}
 }
 
+stock IsLocationRoof(Float:x, Float:y, Float:z)
+	return CA_RayCastLine(x, y, z, x, y, z + 600.0, x, y, z);
 
 hook OnPlayerSave(playerid, filename[])
 	modio_push(filename, _T<A,R,A,D>, 3, _:atr_OldPos[playerid]);
@@ -114,8 +119,7 @@ hook OnPlayerLoad(playerid, filename[])
 	modio_read(filename, _T<A,R,A,D>, 3, _:atr_OldPos[playerid]);
 
 
-AntiRaidWarn(playerid)
-{
+AntiRaidWarn(playerid) {
 	if(!IsPlayerConnected(playerid))
 		return Y_HOOKS_CONTINUE_RETURN_0;
 
@@ -160,7 +164,7 @@ hook OnItemRemoveFromCnt(containerid, slotid, playerid)
 hook OnPlayerOpenInventory(playerid)
 	return AntiRaidWarn(playerid);
 
-hook OnPlayerOpenContainer(playerid, containerid)
+hook OnPlayerOpenContainer(playerid, Container:containerid)
 	return AntiRaidWarn(playerid);
 
 hook OnPlayerUseItem(playerid, Item:itemid)

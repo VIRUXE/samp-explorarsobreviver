@@ -80,3 +80,15 @@ timer HoldActionUpdate[100](playerid)
 
 	return;
 }
+
+stock SetPlayerHoldActionProgress(playerid, progress)
+{
+	if(!IsPlayerConnected(playerid))
+		return 0;
+
+	if(HoldActionState[playerid] == 0)
+		return 0;
+
+	HoldActionProgress[playerid] += progress;
+	return 1;
+}

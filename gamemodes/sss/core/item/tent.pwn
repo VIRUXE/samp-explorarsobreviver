@@ -628,6 +628,27 @@ hook OnHoldActionFinish(playerid)
 	return Y_HOOKS_CONTINUE_RETURN_0;
 }
 
+hook OnItemDestroy(Item:itemid) 
+{
+	if(GetItemType(itemid) == item_TentPack && IsItemInWorld(itemid))
+	{
+		new tentid;
+		GetItemExtraData(itemid, tentid);
+		if(IsValidTent(tentid))
+		{
+			new count;
+			GetContainerItemCount(tnt_Data[tentid][tnt_containerId], count);
+			for(new i = count; i >= 0; i--)
+			{
+				new Item:slotitem;
+				GetContainerSlotItem(tnt_Data[tentid][tnt_containerId], i, slotitem);
+				DestroyItem(slotitem);
+			}
+			DestroyTent(tentid);
+		}
+	}
+	return Y_HOOKS_CONTINUE_RETURN_0;
+}
 
 /*==============================================================================
 

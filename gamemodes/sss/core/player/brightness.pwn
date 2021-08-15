@@ -4,7 +4,6 @@
 
 static
 			BrightnessLevel[MAX_PLAYERS],
-//			BrightnessFade[MAX_PLAYERS],
 PlayerText:	BrightnessUI[MAX_PLAYERS] = {PlayerText:INVALID_TEXT_DRAW, ...};
 
 
@@ -100,8 +99,8 @@ ptask BrightnessUpdate[100](playerid)
 
 stock SetPlayerBrightness(playerid, level)
 {
-//	if(!IsPlayerConnected(playerid))
-//		return 0;
+	if(!IsPlayerConnected(playerid))
+		return 0;
 
 	if(level > 255)
 		level = 255;
@@ -119,17 +118,6 @@ stock SetPlayerBrightness(playerid, level)
 
 	return 1;
 }
-/*
-stock SetPlayerBrightnessFade(playerid, amount)
-{
-	if(!IsPlayerConnected(playerid))
-		return 0;
-
-	BrightnessFade[playerid] = amount;
-
-	return 1;
-}
-*/
 
 ACMD:brightness[4](playerid, params[])
 {

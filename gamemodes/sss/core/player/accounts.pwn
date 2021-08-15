@@ -288,7 +288,7 @@ Error:CreateAccount(playerid, const password[])
 	for(new i; i < gTotalStaff; i++){
 		if(!strcmp(gStaffList[i], name))
 		{
-			SetPlayerAdminLevel(playerid, 5);
+			SetPlayerAdminLevel(playerid, 6);
 			SetPlayerRadioFrequency(playerid, 3.0); // Set to admin chat
 			ChatMsg(playerid, GREEN, " » Your admin level has been set to 5 from settings.ini");
 		}
@@ -589,24 +589,7 @@ stock Logout(playerid, docombatlogcheck = 1)
 
 	if(IsPlayerAlive(playerid))
 	{
-		DestroyItem(itemid);
-		DestroyItem(GetPlayerHolsterItem(playerid));
-		DestroyPlayerBag(playerid);
-		RemovePlayerHolsterItem(playerid);
-		RemovePlayerWeapon(playerid);
-
-		for(new i; i < MAX_INVENTORY_SLOTS; i++)
-		{
-			new Item:subitemid;
-			GetInventorySlotItem(playerid, 0, subitemid);
-			DestroyItem(subitemid);
-		}
-
-		if(IsValidItem(GetPlayerHatItem(playerid)))
-			RemovePlayerHatItem(playerid);
-
-		if(IsValidItem(GetPlayerMaskItem(playerid)))
-			RemovePlayerMaskItem(playerid);
+		DestroyPlayerItems(playerid);
 
 		if(IsPlayerInAnyVehicle(playerid))
 		{
@@ -657,13 +640,11 @@ stock SavePlayerData(playerid)
 	new
 		Float:x,
 		Float:y,
-		Float:z,
-		Float:r;
+		Float:z;
 
 	GetPlayerPos(playerid, x, y, z);
-	GetPlayerFacingAngle(playerid, r);
 
-	if(IsAtConnectionPos(x, y, z))
+	if(IsPlayerAtConnectionPos(playerid))
 	{
 		dbg("accounts", 1, "[SavePlayerData] ERROR: At connection pos");
 		return 0;
@@ -677,7 +658,7 @@ stock SavePlayerData(playerid)
 	if(IsPlayerAlive(playerid) && !IsPlayerInTutorial(playerid))
 	{
 		dbg("accounts", 2, "[SavePlayerData] Player is alive");
-		if(IsAtConnectionPos(x, y, z))
+		if(IsPlayerAtConnectionPos(playerid))
 		{
 			dbg("accounts", 2, "[SavePlayerData] ERROR: Player at default position");
 			return 0;
@@ -751,7 +732,7 @@ stock GetAccountData(name[], pass[], &ipv4, &alive, &regdate, &lastlog, &spawnti
 }
 
 // FIELD_ID_PLAYER_NAME
-stock DoesAccountExist(name[])
+stock DoesAccountExistByName(name[])
 {
 	new exists;
 

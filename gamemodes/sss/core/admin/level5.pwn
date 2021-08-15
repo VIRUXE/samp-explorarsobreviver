@@ -114,7 +114,18 @@ ACMD:nametags[5](playerid, params[])
 {
 	ToggleNameTagsForPlayer(playerid, !GetPlayerNameTagsToggle(playerid));
 	ChatMsg(playerid, YELLOW, " » Nametags toggled %s", (GetPlayerNameTagsToggle(playerid)) ? ("on") : ("off"));
+	return 1;
+}
 
+ACMD:icount[4](playerid, params[])
+{
+	ChatMsg(playerid, YELLOW, "==================================");
+	ChatMsg(playerid, YELLOW, " » Total de Itens criados:	%i", 	Iter_Count(itm_Index));
+	ChatMsg(playerid, YELLOW, " » Total de Itens no Mundo:	%i", 	Iter_Count(itm_WorldIndex));
+	ChatMsg(playerid, YELLOW, " » Total de Veiculos:		%i", 	Iter_Count(Vehicle));
+	ChatMsg(playerid, YELLOW, " » Total de Tendas:			%i", 	Iter_Count(tnt_Index));
+	ChatMsg(playerid, YELLOW, " » Total de Corpos:			%i", 	Iter_Count(body_Count));
+	ChatMsg(playerid, YELLOW, "==================================");
 	return 1;
 }
 

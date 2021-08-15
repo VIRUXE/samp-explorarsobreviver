@@ -75,7 +75,7 @@ ACMD:spec[2](playerid, params[])
 	{
 		if(GetPlayerState(playerid) == PLAYER_STATE_SPECTATING)
 		{
-			TogglePlayerAdminDuty(playerid, false);
+			//TogglePlayerAdminDuty(playerid, false);
 			ExitSpectateMode(playerid);
 		}
 	}
@@ -85,7 +85,8 @@ ACMD:spec[2](playerid, params[])
 
 ACMD:free[2](playerid)
 {
-	TogglePlayerAdminDuty(playerid, !IsPlayerOnAdminDuty(playerid));
+	if(!IsPlayerOnAdminDuty(playerid))
+		TogglePlayerAdminDuty(playerid, true);
 
 	if(GetPlayerSpectateType(playerid) == SPECTATE_TYPE_FREE)
 		ExitFreeMode(playerid);
@@ -128,7 +129,7 @@ ACMD:ip[3](playerid, params[])
 	}
 	else
 	{
-		if(!DoesAccountExist(params))
+		if(!DoesAccountExistByName(params))
 		{
 			ChatMsg(playerid, YELLOW, " » The account '%s' does not exist.", params);
 			return 1;
@@ -653,15 +654,15 @@ ACMD:additem[3](playerid, params[])
 			return -1;
 		}
 		
-		SetItemLootIndex(itemid, random(MAX_LOOT_INDEX));
+		SetItemLootIndex(itemid, random(GetLootIndexTotal()));
 
 		itemid = CreateItem(ItemType:strval(name),
 			x + (0.5 * floatsin(-r, degrees)),
 			y + (0.5 * floatcos(-r, degrees)),
 			z - ITEM_FLOOR_OFFSET,
-			r,
-			GetPlayerVirtualWorld(playerid),
-			GetPlayerInterior(playerid)
+			.rz = r,
+			.world = GetPlayerVirtualWorld(playerid),
+			.interior = GetPlayerInterior(playerid)
 		);
 
 		GetItemName(itemid, typename);
@@ -691,15 +692,15 @@ ACMD:additem[3](playerid, params[])
 					return -1;
 				}
 				
-				SetItemLootIndex(itemid, random(MAX_LOOT_INDEX));
+				SetItemLootIndex(itemid, random(GetLootIndexTotal()));
 
 				itemid = CreateItem(i,
 					x + ((0.3 * (++count + 1)) * floatsin(-r, degrees)),
 					y + ((0.3 * (count + 1)) * floatcos(-r, degrees)),
 					z - ITEM_FLOOR_OFFSET,
-					r,
-					GetPlayerVirtualWorld(playerid),
-					GetPlayerInterior(playerid)
+					.rz = r,
+					.world = GetPlayerVirtualWorld(playerid),
+					.interior = GetPlayerInterior(playerid)
 				);
 
 				GetItemName(itemid, typename);
@@ -709,6 +710,8 @@ ACMD:additem[3](playerid, params[])
 		}
 	}
 
+	if(!IsValidItem(itemid))
+		ChatMsg(playerid, YELLOW, " » Nome ou id de item inválido.");
 
 	return 1;
 }
@@ -807,7 +810,7 @@ ACMD:setactive[3](playerid, params[])
 		return 1;
 	}
 
-	if(!DoesAccountExist(name))
+	if(!DoesAccountExistByName(name))
 	{
 		ChatMsg(playerid, RED, " » That account doesn't exist.");
 		return 1;

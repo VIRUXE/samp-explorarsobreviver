@@ -67,7 +67,6 @@
 #define	BTN_MAX_INRANGE					5
 
 // SS/item
-#define MAX_ITEMS_PER_SPAWN	 			6//Defina para 2 quando quiser um inicio rápido e 6 o padrão!
 #define MAX_ITEM						Item:64000
 #define MAX_ITEM_TYPE					ItemType:327
 #define MAX_ITEM_NAME					22
@@ -301,6 +300,7 @@ public OnGameModeInit()
 #define COLOR_PLAYER_NORMAL			0xB8B8B800
 #define COLOR_PLAYER_MOBILE			0x85858500
 #define COLOR_PLAYER_ADMIN			0xE8545400
+#define COLOR_PLAYER_VIP			0xFFAA0000
 
 // Embedding Colours
 #define C_YELLOW					"{FFFF00}"
@@ -554,6 +554,7 @@ new stock
 #include "sss/core/player/recipes.pwn"
 #include "sss/core/player/score.pwn"
 #include "sss/core/player/anti-pedslots.pwn"
+#include "sss/core/player/body.pwn"
 
 // CHARACTER SCRIPTS
 #include "sss/core/char/movement.pwn"
@@ -572,6 +573,7 @@ new stock
 #include "sss/core/char/skills.pwn"
 #include "sss/core/char/travel-stats.pwn"
 #include "sss/core/char/headgear-pop.pwn"
+#include "sss/core/char/vip.pwn"
 
 // WEAPON
 #include "sss/core/weapon/loot.pwn"
@@ -717,7 +719,6 @@ new stock
 // POST-CODE
 
 #include "sss/core/player/save-load.pwn"
-#include "sss/core/player/body.pwn"
 #include "sss/core/server/auto-save.pwn"
 #tryinclude "sss/extensions/ext_post.pwn"
 

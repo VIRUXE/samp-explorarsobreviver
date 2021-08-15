@@ -5,6 +5,7 @@ hook OnGameModeInit()
 {
 	RegisterAdminCommand(STAFF_LEVEL_LEAD, "/restart - restart the server\n");
 	RegisterAdminCommand(STAFF_LEVEL_LEAD, "/setadmin - set a player's staff level\n");
+	RegisterAdminCommand(STAFF_LEVEL_LEAD, "/setvip - set a player's vip level\n");
 	RegisterAdminCommand(STAFF_LEVEL_LEAD, "/weather - set weather\n");
 	RegisterAdminCommand(STAFF_LEVEL_LEAD, "/debug - activate a debug handler\n");
 	RegisterAdminCommand(STAFF_LEVEL_LEAD, "/sifdebug - activate SIF debug\n");
