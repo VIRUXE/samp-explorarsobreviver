@@ -52,33 +52,35 @@ Dialog_ShowCraftList(playerid, type)
 	{
 		if(IsValidCraftSet(i))
 		{
-			if(type == 1)
+			new 
+				consSet = GetCraftSetConstructSet(i),
+				isValidConsSet = IsValidWorkbenchConstructionSet(consSet);
+
+			switch(type)
 			{
-				if(GetCraftSetConstructSet(i) != -1)
-					continue;
+				case 1:
+				{
+					if(consSet != -1)
+						continue;
+				}
+				case 2:
+				{
+					if(consSet == -1)
+						continue;
+
+					if(isValidConsSet)
+						continue;
+				}
+				case 3:
+				{
+					if(consSet == -1)
+						continue;
+
+					if(!isValidConsSet)
+						continue;
+				}
 			}
-			if(type == 2)
-			{
-				new 
-					consset = GetCraftSetConstructSet(i);
-
-				if(consset == -1)
-					continue;
-
-				if(IsValidWorkbenchConstructionSet(consset))
-					continue;
-			}
-			if(type == 3)
-			{
-				new 
-					consset = GetCraftSetConstructSet(i);
-
-				if(consset == -1)
-					continue;
-
-				if(!IsValidWorkbenchConstructionSet(consset))
-					continue;
-			}
+			
 			new ItemType:resulttype;
 			GetCraftSetResult(i, resulttype);
 			GetItemTypeName(resulttype, itemname);
@@ -160,9 +162,7 @@ Dialog_ShowIngredients(playerid, CraftSet:craftset)
 	{
 		#pragma unused pid, dialogid, listitem, inputtext
 		if(!response)
-		{
 			Dialog_ShowCraftTypes(playerid);
-		}
 	}
 	Dialog_ShowCallback(playerid, using inline Response, DIALOG_STYLE_MSGBOX, itemname, gBigString[playerid], "Sair", "Voltar");
 
@@ -173,25 +173,25 @@ Dialog_ShowCraftHelp(playerid)
 {
 	gBigString[playerid][0] = EOS;
 
-	strcat(gBigString[playerid], "Crafting is a way to create new items from existing items.\n");
-	strcat(gBigString[playerid], "There are three ways to combine items in Scavenge and Survive:\n\n");
+	strcat(gBigString[playerid], "Crafting é uma forma de criar novos itens apartir de itens existentes.\n");
+	strcat(gBigString[playerid], "Existem três formas de combinar itens no nosso modo de jogo:\n\n");
 
-	strcat(gBigString[playerid], C_YELLOW"In Inventory Screens (Aka: Crafting or Combining):\n\n");
-	strcat(gBigString[playerid], C_WHITE"While viewing your inventory or a container (vehicle trunk, box, bag, etc)\n");
-	strcat(gBigString[playerid], C_WHITE"Select 'Combine' from the item options\n");
-	strcat(gBigString[playerid], C_WHITE"Go back and open the options for another item\n");
-	strcat(gBigString[playerid], C_WHITE"Select 'Combine with ...' to combine the items together\n");
-	strcat(gBigString[playerid], C_WHITE"If a recipe requires more than two items, just repeat.\n\n");
+	strcat(gBigString[playerid], C_YELLOW"Nas opções de dialogos de utilização de Item (Aka: Craftar ou Combinar):\n\n");
+	strcat(gBigString[playerid], C_WHITE"Enquanto visualiza o inventário ou container (porta-malas, caixas, mochila, etc)\n");
+	strcat(gBigString[playerid], C_WHITE"Seleciona 'Combinar' da lista de opções do item selecionado\n");
+	strcat(gBigString[playerid], C_WHITE"Volta atrás e abre as Opções para outro Item\n");
+	strcat(gBigString[playerid], C_WHITE"Seleciona 'Combinar com...' para combinar os Itens juntos.\n");
+	strcat(gBigString[playerid], C_WHITE"Se uma receita necessitar de mais do que dois itens, então repita o processo.\n\n");
 
-	strcat(gBigString[playerid], C_GREEN"On The Ground (Aka: Constructing):\n\n");
-	strcat(gBigString[playerid], C_WHITE"Place all the ingredient items on the ground\n");
-	strcat(gBigString[playerid], C_WHITE"Equip the 'Tool' item specified in the recipe page\n");
-	strcat(gBigString[playerid], C_WHITE"Hold the Interact key while close to the ingredients\n\n");
+	strcat(gBigString[playerid], C_GREEN"No chão (Aka: Construir):\n\n");
+	strcat(gBigString[playerid], C_WHITE"Coloca todos os Itens no chão\n");
+	strcat(gBigString[playerid], C_WHITE"Equipa a Ferramenta especificada na receita\n");
+	strcat(gBigString[playerid], C_WHITE"Aperta a tecla de Interação estando perto dos Itens\n\n");
 
-	strcat(gBigString[playerid], C_BLUE"At a Workbench:\n\n");
-	strcat(gBigString[playerid], C_WHITE"Place the all ingredient items in the workbench (The workbench acts like a box)\n");
-	strcat(gBigString[playerid], C_WHITE"Equip the 'Tool' item specified in the recipe page\n");
-	strcat(gBigString[playerid], C_WHITE"Hold the Interact key while standing at the workbench");
+	strcat(gBigString[playerid], C_BLUE"Numa Mesa de Trabalho:\n\n");
+	strcat(gBigString[playerid], C_WHITE"Coloca todos os Itens dentro da Mesa de Trabalho (Ela funciona como uma caixa)\n");
+	strcat(gBigString[playerid], C_WHITE"Equipa a Ferramenta especificada na receita\n");
+	strcat(gBigString[playerid], C_WHITE"Aperta a tecla de Interação enquanto está junto da Mesa de Trabalho");
 
 	inline Response(pid, dialogid, response, listitem, string:inputtext[])
 	{
