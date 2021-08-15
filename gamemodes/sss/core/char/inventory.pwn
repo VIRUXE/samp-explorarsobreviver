@@ -315,9 +315,7 @@ HidePlayerGear(playerid)
 
 ShowPlayerGear(playerid)
 {
-	new
-		Item:itemid = INVALID_ITEM_ID,
-		modelid;
+	new modelid;
 	
 	/*
 		Head
@@ -325,11 +323,9 @@ ShowPlayerGear(playerid)
 
 	TextDrawShowForPlayer(playerid, GearSlot_Head[0]);
 
-	itemid = GetPlayerHatItem(playerid);
-
-	if(IsValidItem(itemid))
+	if(IsValidItem(GetPlayerHatItem(playerid)))
 	{
-		GetItemTypeModel(GetItemType(itemid), modelid);
+		GetItemTypeModel(GetItemType(GetPlayerHatItem(playerid)), modelid);
 		TextDrawSetPreviewModel(GearSlot_Head[1], modelid);
 		TextDrawShowForPlayer(playerid, GearSlot_Head[1]);
 	}
@@ -341,11 +337,9 @@ ShowPlayerGear(playerid)
 
 	TextDrawShowForPlayer(playerid, GearSlot_Hand[0]);
 
-	itemid = GetPlayerItem(playerid);
-
-	if(IsValidItem(itemid))
+	if(IsValidItem(GetPlayerItem(playerid)))
 	{
-		GetItemTypeModel(GetItemType(itemid), modelid);
+		GetItemTypeModel(GetItemType(GetPlayerItem(playerid)), modelid);
 		TextDrawSetPreviewModel(GearSlot_Hand[1], modelid);
 		TextDrawShowForPlayer(playerid, GearSlot_Hand[1]);
 	}
@@ -357,11 +351,9 @@ ShowPlayerGear(playerid)
 
 	TextDrawShowForPlayer(playerid, GearSlot_Tors[0]);
 
-	itemid = GetPlayerArmourItem(playerid);
-
-	if(IsValidItem(itemid))
+	if(IsValidItem(GetPlayerArmourItem(playerid)))
 	{
-		GetItemTypeModel(GetItemType(itemid), modelid);
+		GetItemTypeModel(GetItemType(GetPlayerArmourItem(playerid)), modelid);
 		TextDrawSetPreviewModel(GearSlot_Tors[1], modelid);
 		TextDrawShowForPlayer(playerid, GearSlot_Tors[1]);
 	}
@@ -373,11 +365,9 @@ ShowPlayerGear(playerid)
 
 	TextDrawShowForPlayer(playerid, GearSlot_Face[0]);
 
-	itemid = GetPlayerMaskItem(playerid);
-
-	if(IsValidItem(itemid))
+	if(IsValidItem(GetPlayerMaskItem(playerid)))
 	{
-		GetItemTypeModel(GetItemType(itemid), modelid);
+		GetItemTypeModel(GetItemType(GetPlayerMaskItem(playerid)), modelid);
 		TextDrawSetPreviewModel(GearSlot_Face[1], modelid);
 		TextDrawShowForPlayer(playerid, GearSlot_Face[1]);
 	}
@@ -389,11 +379,9 @@ ShowPlayerGear(playerid)
 
 	TextDrawShowForPlayer(playerid, GearSlot_Hols[0]);
 
-	itemid = GetPlayerHolsterItem(playerid);
-
-	if(IsValidItem(itemid))
+	if(IsValidItem(GetPlayerHolsterItem(playerid)))
 	{
-		GetItemTypeModel(GetItemType(itemid), modelid);
+		GetItemTypeModel(GetItemType(GetPlayerHolsterItem(playerid)), modelid);
 		TextDrawSetPreviewModel(GearSlot_Hols[1], modelid);
 		TextDrawShowForPlayer(playerid, GearSlot_Hols[1]);
 	}
@@ -405,21 +393,20 @@ ShowPlayerGear(playerid)
 
 	TextDrawShowForPlayer(playerid, GearSlot_Back[0]);
 
-	itemid = GetPlayerBagItem(playerid);
-
-	if(IsValidItem(itemid))
+	if(IsValidItem(GetPlayerBagItem(playerid)))
 	{
-		GetItemTypeModel(GetItemType(itemid), modelid);
+		GetItemTypeModel(GetItemType(GetPlayerBagItem(playerid)), modelid);
 		TextDrawSetPreviewModel(GearSlot_Back[1], modelid);
 		TextDrawShowForPlayer(playerid, GearSlot_Back[1]);
 	}
 	else TextDrawHideForPlayer(playerid, GearSlot_Back[1]);
+	
 }
+
 
 hook OnPlayerOpenedInventory(playerid)
 {
 	ShowPlayerGear(playerid);
-	
 }
 
 hook OnPlayerOpenedContainer(playerid, Container:containerid)

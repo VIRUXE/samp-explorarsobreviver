@@ -859,7 +859,7 @@ public OnScriptInit()
 	item_Padlock		= DefineItemType("Cadeado",						"Padlock",			19804,	1,	90.0, 0.0, 0.0,			-0.016,	0.160000, 0.035000, 0.019000,  75.900054, -91.200210, 85.499847, .maxhitpoints = 1);
 	item_Pager			= DefineItemType("Pager",						"Pager",			18875,	1,	0.0, 0.0, 0.0,			0.0,	0.097277, 0.027625, 0.013023, 90.819244, 191.427993, 0.000000, .maxhitpoints = 1);
 	item_Pan			= DefineItemType("Panela",						"Pan",				19584,	2,	0.0, 0.0, 0.0,			0.100,	0.078000, 0.030999, 0.012000,  39.499954, -77.500083, 128.299819, .maxhitpoints = 2);
-	item_ParaBag		= DefineItemType("Paraquedas",					"ParaBag",			371,	6,	90.0, 0.0, 0.0,			0.0,	0.350542, 0.017385, 0.060469, 0.000000, 260.845062, 0.000000, .maxhitpoints = 6);
+	item_ParaBag		= DefineItemType("Mochila Paraquedas",			"ParaBag",			371,	6,	90.0, 0.0, 0.0,			0.0,	0.350542, 0.017385, 0.060469, 0.000000, 260.845062, 0.000000, .maxhitpoints = 6);
 	item_Parachute		= DefineItemType("Paraquedas",					"Parachute",		371,	6,	90.0, 0.0, 0.0,			0.0,	0.350542, 0.017385, 0.060469, 0.000000, 260.845062, 0.000000, .maxhitpoints = 6);
 	item_Parrot			= DefineItemType("Sebastiao",					"Parrot",			19078,	2,	0.0, 0.0, 0.0,			0.0,	0.131000, 0.021000, 0.005999,  -86.000091, 6.700000, -106.300018, .maxhitpoints = 2);
 	item_PetrolBomb		= DefineItemType("Bomba de Gasolina",			"PetrolBomb",		1650,	3,	0.0, 0.0, 0.0,			0.27,	0.143402, 0.027548, 0.063652, 0.000000, 253.648208, 0.000000, .maxhitpoints = 3);
@@ -1381,10 +1381,10 @@ public OnScriptInit()
 	// CRAFTING SET DEFINITIONS
 	// items created by hand
 	DefineItemCraftSet(item_Bandage, item_Knife, true, item_Clothes, false);
-	DefineItemCraftSet(item_Bottle, item_Bottle, true, item_Bottle, true);
+	//DefineItemCraftSet(item_Bottle, item_Bottle, true, item_Bottle, true);
 	DefineItemCraftSet(item_MolotovEmpty, item_Bottle, false, item_Bandage, false);
 	DefineItemCraftSet(item_ParaBag, item_Knife, true, item_Parachute, false);
-	DefineItemCraftSet(item_WheelLock, item_WheelLock, false, item_LocksmithKit, false);
+	DefineItemCraftSet(item_WheelLock, item_Key, false, item_LocksmithKit, false);
 
 	// items created by using a tool item on them in the world
 	//SetCraftSetConstructible(18500, item_Screwdriver, 	DefineItemCraftSet(item_Key, item_Key, false, item_Key, true, item_Motor, false), .tweak = false);
@@ -1394,7 +1394,7 @@ public OnScriptInit()
 	SetCraftSetConstructible(26500, item_Screwdriver, 	DefineItemCraftSet(item_Desk, item_RefinedMetal, false, item_WoodLog, false, item_WoodLog, false, item_WoodLog, false), item_Crowbar, 25000);
 	SetCraftSetConstructible(28500, item_Screwdriver, 	DefineItemCraftSet(item_Table, item_RefinedMetal, false, item_WoodLog, false, item_WoodLog, false, item_WoodLog, false, item_WoodLog, false), item_Crowbar, 25000);
 	SetCraftSetConstructible(30000, item_Hammer, 		DefineItemCraftSet(item_Workbench, item_RefinedMetal, false, item_RefinedMetal, false, item_WoodLog, false, item_WoodLog, false, item_WoodLog, false, item_WoodLog, false), item_Crowbar, 25000);
-	SetCraftSetConstructible(30000, item_Screwdriver, 	DefineItemCraftSet(item_RefineMachine, item_Canister, false, item_Motor, false, item_Fluctuator, false, item_PowerSupply, false), item_Crowbar, 25000);
+	SetCraftSetConstructible(30000, item_Screwdriver, 	DefineItemCraftSet(item_RefineMachine, item_CrateDoor, false, item_Canister, false, item_Motor, false, item_Fluctuator, false, item_PowerSupply, false), item_Crowbar, 25000);
 	SetCraftSetConstructible(30000, item_Screwdriver, 	DefineItemCraftSet(item_ScrapMachine, item_Canister, false, item_Motor, false, item_Fluctuator, false, item_PowerSupply, false), item_Crowbar, 25000);
 	SetCraftSetConstructible(30000, item_Screwdriver, 	DefineItemCraftSet(item_WaterMachine, item_Canister, false, item_Motor, false, item_Bucket, false, item_PowerSupply, false), item_Crowbar, 25000);
 	SetCraftSetConstructible(30000, item_Sledgehammer, 	DefineItemCraftSet(item_LargeFrame, item_RefinedMetal, false, item_RefinedMetal, false, item_RefinedMetal, false, item_RefinedMetal, false), item_Crowbar, 22000, .defence = true);

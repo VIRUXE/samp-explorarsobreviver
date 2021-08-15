@@ -654,7 +654,7 @@ ACMD:additem[3](playerid, params[])
 			return -1;
 		}
 		
-		SetItemLootIndex(itemid, random(MAX_LOOT_INDEX));
+		SetItemLootIndex(itemid, random(GetLootIndexTotal()));
 
 		itemid = CreateItem(ItemType:strval(name),
 			x + (0.5 * floatsin(-r, degrees)),
@@ -692,7 +692,7 @@ ACMD:additem[3](playerid, params[])
 					return -1;
 				}
 				
-				SetItemLootIndex(itemid, random(MAX_LOOT_INDEX));
+				SetItemLootIndex(itemid, random(GetLootIndexTotal()));
 
 				itemid = CreateItem(i,
 					x + ((0.3 * (++count + 1)) * floatsin(-r, degrees)),
