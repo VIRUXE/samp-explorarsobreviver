@@ -129,7 +129,7 @@ ACMD:ip[3](playerid, params[])
 	}
 	else
 	{
-		if(!DoesAccountExist(params))
+		if(!DoesAccountExistByName(params))
 		{
 			ChatMsg(playerid, YELLOW, " » The account '%s' does not exist.", params);
 			return 1;
@@ -810,7 +810,7 @@ ACMD:setactive[3](playerid, params[])
 		return 1;
 	}
 
-	if(!DoesAccountExist(name))
+	if(!DoesAccountExistByName(name))
 	{
 		ChatMsg(playerid, RED, " » That account doesn't exist.");
 		return 1;

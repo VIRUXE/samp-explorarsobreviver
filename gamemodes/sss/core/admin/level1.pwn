@@ -187,7 +187,7 @@ ACMD:country[1](playerid, params[])
 	}
 	else
 	{
-		if(!DoesAccountExist(params))
+		if(!DoesAccountExistByName(params))
 		{
 			ChatMsg(playerid, YELLOW, " » A conta '%s' não existe.", params);
 			return 1;
@@ -277,7 +277,7 @@ ACMD:aliases[1](playerid, params[])
 			return 4;
 	}
 
-	if(!DoesAccountExist(name))
+	if(!DoesAccountExistByName(name))
 	{
 		ChatMsg(playerid, YELLOW, " » A conta '%s' não existe.", name);
 		return 1;
@@ -358,7 +358,7 @@ ACMD:history[1](playerid, params[])
 			return 4;
 	}
 
-	if(!DoesAccountExist(name))
+	if(!DoesAccountExistByName(name))
 	{
 		ChatMsg(playerid, YELLOW, " » The account '%s' does not exist.", name);
 		return 1;
