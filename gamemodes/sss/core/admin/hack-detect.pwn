@@ -262,7 +262,7 @@ public OnCheatDetected(playerid, const ip_address[], type, code)
 		new Float:x, Float:y, Float:z;
 		GetPlayerPos(playerid, x, y, z);
 
-		if(code < 7 && IsPlayerAtConnectionPos(x, y, z))
+		if(code < 7 && IsPlayerAtConnectionPos(playerid))
 			return 1;
 
 		switch(code)

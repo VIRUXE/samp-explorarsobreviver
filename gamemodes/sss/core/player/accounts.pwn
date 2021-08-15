@@ -640,13 +640,11 @@ stock SavePlayerData(playerid)
 	new
 		Float:x,
 		Float:y,
-		Float:z,
-		Float:r;
+		Float:z;
 
 	GetPlayerPos(playerid, x, y, z);
-	GetPlayerFacingAngle(playerid, r);
 
-	if(IsPlayerAtConnectionPos(x, y, z))
+	if(IsPlayerAtConnectionPos(playerid))
 	{
 		dbg("accounts", 1, "[SavePlayerData] ERROR: At connection pos");
 		return 0;
@@ -660,7 +658,7 @@ stock SavePlayerData(playerid)
 	if(IsPlayerAlive(playerid) && !IsPlayerInTutorial(playerid))
 	{
 		dbg("accounts", 2, "[SavePlayerData] Player is alive");
-		if(IsPlayerAtConnectionPos(x, y, z))
+		if(IsPlayerAtConnectionPos(playerid))
 		{
 			dbg("accounts", 2, "[SavePlayerData] ERROR: Player at default position");
 			return 0;
@@ -734,7 +732,7 @@ stock GetAccountData(name[], pass[], &ipv4, &alive, &regdate, &lastlog, &spawnti
 }
 
 // FIELD_ID_PLAYER_NAME
-stock DoesAccountExist(name[])
+stock DoesAccountExistByName(name[])
 {
 	new exists;
 

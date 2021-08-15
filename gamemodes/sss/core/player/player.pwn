@@ -704,17 +704,20 @@ stock GetPlayerSpawnTick(playerid)
 	return ply_Data[playerid][ply_SpawnTick];
 }
 
-stock bool:IsPlayerAtConnectionPos(Float:x, Float:y, Float:z)
+stock bool:IsPlayerAtConnectionPos(playerid)
 {
+	new Float:playerX, Float:playerY, Float:playerZ;
 	new const Float:posRadius = 7.0;
 
-	if(Distance(x, y, z, 1133.05, -2038.40, 69.09) < posRadius)
+	GetPlayerPos(playerid, playerX, playerY, playerZ);
+
+	if(Distance(playerX, playerY, playerZ, 1133.05, -2038.40, 69.09) < posRadius)
 		return true;
 
-	if(Distance(x, y, z, DEFAULT_POS_X, DEFAULT_POS_Y, DEFAULT_POS_Z) < posRadius)
+	if(Distance(playerX, playerY, playerZ, DEFAULT_POS_X, DEFAULT_POS_Y, DEFAULT_POS_Z) < posRadius)
 		return true;
 
-	if(Distance(x, y, z, 0.0, 0.0, 0.0) < posRadius)
+	if(Distance(playerX, playerY, playerZ, 0.0, 0.0, 0.0) < posRadius)
 		return true;
 
 	return false;
