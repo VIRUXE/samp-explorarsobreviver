@@ -586,12 +586,12 @@ hook OnPlayerSelectInvOpt(playerid, option)
 
 			if(IsValidItem(itemid) && IsValidContainer(containerid))
 			{
+				RemoveItemFromInventory(playerid, slot);
+
 				new required = AddItemToContainer(containerid, itemid, playerid);
 
 				if(required > 0)
 					ShowActionText(playerid, sprintf(ls(playerid, "BAGEXTRASLO", true), required), 3000, 150);
-				else if(required == 0)
-					RemoveItemFromInventory(playerid, slot);
 			}
 		}
 	}
@@ -635,12 +635,12 @@ hook OnPlayerSelectCntOpt(playerid, Container:containerid, option)
 
 				if(IsValidItem(itemid))
 				{
+					RemoveItemFromContainer(containerid, slot, playerid, true);
+
 					new required = AddItemToContainer(bagcontainerid, itemid, playerid);
 
 					if(required > 0)
 						ShowActionText(playerid, sprintf(ls(playerid, "BAGEXTRASLO", true), required), 3000, 150);
-					else if(required == 0)
-						RemoveItemFromContainer(containerid, slot, playerid, true);
 				}
 			}
 		}

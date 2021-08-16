@@ -161,7 +161,7 @@ hook OnPlayerUseItem(playerid, Item:itemid)
 				PlayerPickUpItem(playerid, itemid);
 				
 			if(_DisplaySafeboxDialog(playerid, itemid, box_TypeData[box_ItemTypeBoxType[itemtype]][box_animate]))
-					return Y_HOOKS_BREAK_RETURN_1;
+				return Y_HOOKS_BREAK_RETURN_1;
 		}
 
 		else

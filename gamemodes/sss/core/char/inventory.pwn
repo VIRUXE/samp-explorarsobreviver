@@ -1,7 +1,7 @@
 
 #include <YSI_Coding\y_hooks>
 
-new
+static
 	Text:GearSlot_Head[2],
 	Text:GearSlot_Hand[2],
 	Text:GearSlot_Tors[2],
@@ -10,7 +10,7 @@ new
 	Text:GearSlot_Hols[2],
 	Text:GearSlot_Back[2],
 
-	Container:inv_TempContainerID[MAX_PLAYERS],
+	Container:inv_TempContainerID[MAX_PLAYERS] = {INVALID_CONTAINER_ID, ...},
 	inv_InventoryOptionID[MAX_PLAYERS];
 
 hook OnGameModeInit()
@@ -228,10 +228,10 @@ hook OnGameModeInit()
 }
 
 
-hook OnPlayerConnect(playerid)
+hook OnPlayerDisconnect(playerid, reason)
 {
 	inv_TempContainerID[playerid] = INVALID_CONTAINER_ID;
-	inv_InventoryOptionID[playerid] = -1;
+	inv_InventoryOptionID[playerid] = 0;
 }
 
 hook OnPlayerViewCntOpt(playerid, Container:containerid)
@@ -264,10 +264,16 @@ hook OnPlayerSelectCntOpt(playerid, Container:containerid, option)
 			{
 				new
 					slot,
-					Item:itemid;
+					Item:itemid,
+					ret;
 
 				GetPlayerContainerSlot(playerid, slot);
-				GetContainerSlotItem(containerid, slot, itemid);
+				ret = GetContainerSlotItem(containerid, slot, itemid);
+
+				if(ret) {
+					DisplayContainerInventory(playerid, containerid);
+					return 1;
+				}
 
 				if(!IsValidItem(itemid))
 				{
