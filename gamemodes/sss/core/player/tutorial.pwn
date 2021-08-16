@@ -159,6 +159,7 @@ stock EnterTutorial(playerid)
 	ClearChatForPlayer(playerid, 10);
 
 	ChatMsg(playerid, WHITE, ""C_GREEN" » "C_WHITE" %s", ls(playerid, "TUTORINTROD"));
+	ChatMsg(playerid, WHITE, ""C_GREEN" » "C_WHITE" %s", ls(playerid, "TUTOREXITCM"));
 
 	PlayerInTutorial[playerid] = true;
 
