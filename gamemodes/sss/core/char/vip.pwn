@@ -3,8 +3,8 @@
 static
         vip_Level[MAX_PLAYERS],
         vip_InventoryOption[MAX_PLAYERS],
-bool:   vip_ViewingMenu[MAX_PLAYERS];
-        //vip_EntrancePhrase[MAX_PLAYERS][128];
+bool:   vip_ViewingMenu[MAX_PLAYERS],
+        vip_EntrancePhrase[MAX_PLAYERS][128];
 
 hook OnPlayerConnect(playerid)
 {
@@ -52,13 +52,26 @@ ShowVipMenu(playerid)
 {
     gBigString[playerid][0] = EOS;
 
-    strcat(gBigString[playerid], "Tempo de Vip restante\n");
-    strcat(gBigString[playerid], "Anuncio\n");
-    strcat(gBigString[playerid], "Trocar Roupa\n");
-    strcat(gBigString[playerid], "Mudar estilo de Luta\n");
+    if(vip_Level[playerid] >= 1)
+    {
+        strcat(gBigString[playerid], "Tempo de Vip restante\n");
+        strcat(gBigString[playerid], "Anuncio\n");
+        strcat(gBigString[playerid], "Trocar Roupa\n");
+        strcat(gBigString[playerid], "Mudar estilo de Luta\n");
+        strcat(gBigString[playerid], "Cometer suicidio\n");
+        strcat(gBigString[playerid], "Frase de Entrada\n");
+    }
+    
+    if(vip_Level[playerid] >= 2)
+    {
+        //strcat(gBigString[playerid], "Function\n");
+    }
 
-    strcat(gBigString[playerid], "Cometer suicidio\n");
-    strcat(gBigString[playerid], "Frase de Entrada\n");
+
+    if(vip_Level[playerid] >= 3)
+    {
+        //strcat(gBigString[playerid], "Function\n");
+    }
 
     inline Response(pid, dialogid, response, listitem, string:inputtext[])
     {
@@ -99,14 +112,14 @@ ShowVipMenu(playerid)
 
             if(listitem == 1)
             {
-                inline Response3(pid3, dialogid3, response3, listitem3, string:inputtext3[])
+                inline Response2(pid2, dialogid2, response2, listitem2, string:inputtext2[])
                 {
-                    #pragma unused pid3, dialogid3, listitem3
+                    #pragma unused pid2, dialogid2, listitem2
 
-                    if(response3)
+                    if(response2)
                     {
                         ChatMsgAll(COLOR_PLAYER_VIP, "[Anuncio-VIP] %P(%d): "C_WHITE"%s",
-                            playerid, playerid, TagScan(inputtext3));
+                            playerid, playerid, TagScan(inputtext2));
 
                         ShowActionText(playerid, "Anuncio enviado para todos", 3000);
 
@@ -117,10 +130,10 @@ ShowVipMenu(playerid)
                         ShowVipMenu(playerid);
                     }
                 }
-                Dialog_ShowCallback(playerid, using inline Response3, DIALOG_STYLE_INPUT,
+                Dialog_ShowCallback(playerid, using inline Response2, DIALOG_STYLE_INPUT,
                     sprintf("Menu VIP "C_GREEN"(Nivel %d)", vip_Level[playerid]),
                     "Insira uma mensagem no campo abaixo:",
-                    "Visto", "Sair");
+                    "Enviar", "Sair");
             }
 
             /*=================================================================
@@ -158,13 +171,13 @@ ShowVipMenu(playerid)
 
             if(listitem == 3)
             {
-                inline Response4(pid4, dialogid4, response4, listitem4, string:inputtext4[])
+                inline Response2(pid2, dialogid2, response2, listitem2, string:inputtext2[])
                 {
-                    #pragma unused pid4, dialogid4, inputtext4
+                    #pragma unused pid2, dialogid2, inputtext2
 
-                    if(response4)
+                    if(response2)
                     {
-                        switch(listitem4)
+                        switch(listitem2)
                         {
                             case 0: SetPlayerFightingStyle(playerid, FIGHT_STYLE_KUNGFU);
                             case 1: SetPlayerFightingStyle(playerid, FIGHT_STYLE_KNEEHEAD);
@@ -182,7 +195,7 @@ ShowVipMenu(playerid)
                         ShowVipMenu(playerid);
                     }
                 }
-                Dialog_ShowCallback(playerid, using inline Response4, DIALOG_STYLE_LIST,
+                Dialog_ShowCallback(playerid, using inline Response2, DIALOG_STYLE_LIST,
                     sprintf("Menu VIP "C_GREEN"(Nivel %d)", vip_Level[playerid]),
                     "Kung Fu\nKnee Head\nEl bow\nGrab Kick",
                     "Enter", "Voltar");
@@ -228,9 +241,33 @@ ShowVipMenu(playerid)
 
             if(listitem == 5)
             {
-                // Pendente
-                ChatMsg(playerid, RED, " » Frase nao implementada ainda.");
-                vip_ViewingMenu[playerid] = false;
+                inline Response2(pid2, dialogid2, response2, listitem2, string:inputtext2[])
+                {
+                    #pragma unused pid2, dialogid2, listitem2
+
+                    if(response2)
+                    {
+                        strcat(vip_EntrancePhrase[playerid], inputtext2, 128);
+
+                        ChatMsg(playerid, WHITE, "");
+                        ChatMsg(playerid, WHITE, " » FRASE ALTERADA PARA:");
+                        ChatMsg(playerid, COLOR_PLAYER_VIP,
+                            " » O vip %p nasceu. Frase: %s", playerid, TagScan(vip_EntrancePhrase[playerid]));
+                        ChatMsg(playerid, WHITE, "");
+
+                        ShowActionText(playerid, "Frase de entrada alterada com Sucesso", 3000);
+
+                        vip_ViewingMenu[playerid] = false;
+                    }
+                    else
+                    {
+                        ShowVipMenu(playerid);
+                    }
+                }
+                Dialog_ShowCallback(playerid, using inline Response2, DIALOG_STYLE_INPUT,
+                    sprintf("Menu VIP "C_GREEN"(Nivel %d)", vip_Level[playerid]),
+                    "Insira uma frase de entrada abaixo:\n\nOBS: Essa frase vai aparecer sempre que voce nascer",
+                    "Enviar", "Sair");
             }
         }
         else
@@ -308,12 +345,7 @@ ACMD:setvip[4](playerid, params[])
         {
             GetPlayerName(id, nome);
 
-            SetPlayerVIP(id,
-                gettime() + ( segundos + (minutos * 60) + (horas * 3600) + (dias * (24 * 3600)) ));
-            
-            vip_Level[id] = nivel;
-
-            SetPlayerColor(id, COLOR_PLAYER_VIP);
+            SetVip(nome, nivel, dias, horas, minutos, segundos);
 
             ChatMsg(playerid, YELLOW, 
             " » Voce setou o vip de %s para nivel %d. Dias: %d, Horas: %d, Minutos: %d, Segundos %d",
@@ -325,8 +357,7 @@ ACMD:setvip[4](playerid, params[])
 	}
 	else if(!sscanf(params, "s[24]ddddd", nome, nivel, dias, horas, minutos, segundos))
 	{
-        SetAccountVIP(nome,
-            gettime() + (segundos + (minutos * 60) + (horas * 3600) + (dias * (24 * 3600)) ));
+        SetVip(nome, nivel, dias, horas, minutos, segundos);
 
 		ChatMsg(playerid, YELLOW, 
             " » Voce setou o vip de %s para nivel %d. Dias: %d, Horas: %d, Minutos: %d, Segundos %d",
@@ -337,6 +368,33 @@ ACMD:setvip[4](playerid, params[])
             " » Use: /setvip [playerid/name] [level] [dias] [horas] [minutos] [segundos]");
 
 	return 1;
+}
+
+stock SetVip(const name[MAX_PLAYER_NAME], level = 1, days = 30, hours = 0, minutes = 0, seconds = 0)
+{ 
+    new 
+        timestamp = gettime() + ( seconds + (minutes * 60) + (hours * 3600) + (days * (24 * 3600))),
+        id = GetPlayerIdByName(name);
+
+    SetAccountVIP(name, timestamp);
+
+    if(IsPlayerConnected(id))
+    {
+        SetPlayerVIP(id, timestamp);
+
+        if(vip_Level[id] != level)
+            ChatMsgAll(COLOR_PLAYER_VIP, " » %P É o mais novo VIP do servidor. Parabens!", id);
+
+        vip_Level[id] = level;
+
+        SetPlayerColor(id, COLOR_PLAYER_VIP);
+
+        ShowActionText(id,
+            sprintf("Parabens! voce agora possui VIP nivel %d~n~Abra o menu do VIP atraves do bolso", level),
+            5000, 200, COLOR_PLAYER_VIP);
+    }
+
+    return 1;
 }
 
 /*==============================================================================
@@ -397,5 +455,25 @@ SetVipSpawn(playerid)
         case 4: SetPlayerPos(playerid, -535.624877,     -102.932212,    63.287090); // RC
         case 5: SetPlayerPos(playerid, -2716.43823,     382.60507,      4.34639);   // SF
         case 6: SetPlayerPos(playerid, -2560.33521,     2256.71069,     5.03032);   // TR
+    }
+}
+
+/*==============================================================================
+
+	Frase e cor vip ao nascer
+    
+==============================================================================*/
+
+hook OnPlayerSpawnChar(playerid)
+{
+    if((GetPlayerVIP(playerid) - gettime()) > 1)
+    {
+        if(strlen(vip_EntrancePhrase[playerid]) > 3)
+        {
+            ChatMsgAll(COLOR_PLAYER_VIP,
+                " » O vip %p nasceu. Frase: %s", playerid, TagScan(vip_EntrancePhrase[playerid]));
+        }
+
+        SetPlayerColor(playerid, COLOR_PLAYER_VIP);
     }
 }
