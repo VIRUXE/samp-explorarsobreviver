@@ -103,7 +103,7 @@ hook DCC_OnMessageCreate(DCC_Message:message)
 				DCC_GetChannelGuild(channel, guild);
 				DCC_AddGuildMemberRole(guild, discordUser, DCC_FindRoleById("867774790189973514")); // Colocar jogador no cargo "Sobrevivente"
 
-				SendDiscordMessage(channel, "> Conta de Discord `%s (%s)` foi vinculada com a Conta de Jogo `%s`", discordNickname, discordUsername, accountName);
+				SendDiscordMessage(channel, "> Conta de Discord `%s (Nick: %s)` foi vinculada com a Conta de Jogo `%s`", discordUsername, discordNickname, accountName);
 				DCC_CreatePrivateChannel(discordUser, "OnWhitelistSuccess", "s", accountName); // Enviar Mensagem privada. Pois ao colocar no cargo, o canal whitelist desaparece, logo não dá para ver se enviar mensagem para o canal
 
 				log(true, "[WHITELIST] Discord Account %s (Username: %s ID: %s) was linked to game account %s", discordNickname, discordUsername, discordUserId, accountName);
@@ -141,11 +141,11 @@ stock AskPlayerToWhitelist(playerid)
 
 	ClearChatForPlayer(playerid, 20);
 
-	format(whitelistMsg, sizeof(whitelistMsg), ""C_WHITE"Você precisa registrar na WhiteList para jogar no servidor.\n\n\
-		"C_WHITE"\t1. Entre em: "C_BLUE"http://%s"C_WHITE". "C_WHITE"(Nota: necessita de vincular seu celular no Discord)\n\
-		"C_WHITE"\t2. Digite %P"C_WHITE" em #whitelist\n\
+	format(whitelistMsg, sizeof(whitelistMsg), ""C_WHITE"Você precisa de vincular sua Conta de Discord antes de poder jogar com outros jogadores.\n\n\
+		"C_WHITE"\t1. Entre em "C_BLUE"http://%s"C_WHITE". "C_WHITE"(Nota: necessita de vincular seu celular no Discord)\n\
+		"C_WHITE"\t2. Digite %P"C_WHITE" em #vincular-conta\n\
 		"C_WHITE"\t3. Volte aqui, clique em \"Jogar\" e pronto, você ja pode se divertir! :) \n\n\
-		"C_YELLOW"Aviso:"C_WHITE" Isso serve como proteção para o servidor.\nPedimos sua compreensão.",
+		"C_YELLOW"Aviso:"C_WHITE" Isso serve como proteção para o servidor. Pedimos sua compreensão.",
 		gWebsiteURL, playerid);
 		
 	inline Response(pid, dialogid, response, listitem, string:inputtext[])
@@ -163,7 +163,7 @@ stock AskPlayerToWhitelist(playerid)
 		else
 			KickPlayer(playerid, "Decidiu sair");
 	}
-	Dialog_ShowCallback(playerid, using inline Response, DIALOG_STYLE_MSGBOX, "WhiteList", whitelistMsg, "Jogar", "Sair");
+	Dialog_ShowCallback(playerid, using inline Response, DIALOG_STYLE_MSGBOX, "Vincular Conta", whitelistMsg, "Jogar", "Sair");
 }
 
 stock ToggleWhitelist(bool:toggle)
