@@ -272,6 +272,14 @@ _container_displayOptions(playerid, slotid) {
 							Logger_I("containerid", _:cnt_CurrentContainer[playerid]),
 							Logger_I("playerid", playerid));
 						ShowActionText(playerid, "Erro", 3000, 200);
+						DisplayContainerInventory(playerid, cnt_CurrentContainer[playerid]);
+						return 1;
+					}
+
+					if(IsPlayerInAnyVehicle(playerid) && IsItemTypeCarry(GetItemType(itemid)))
+					{
+						ShowActionText(playerid, "Nao pode pegar este item no veiculo", 3000, 200);
+						DisplayContainerInventory(playerid, cnt_CurrentContainer[playerid]);
 						return 1;
 					}
 
@@ -295,9 +303,17 @@ _container_displayOptions(playerid, slotid) {
 							Logger_I("containerid", _:cnt_CurrentContainer[playerid]),
 							Logger_I("playerid", playerid));
 						ShowActionText(playerid, "Erro", 3000, 200);
+						DisplayContainerInventory(playerid, cnt_CurrentContainer[playerid]);
 						return 1;
 					}
 
+					if(IsPlayerInAnyVehicle(playerid) && IsItemTypeCarry(GetItemType(itemid)))
+					{
+						ShowActionText(playerid, "Nao pode pegar este item no veiculo", 3000, 200);
+						DisplayContainerInventory(playerid, cnt_CurrentContainer[playerid]);
+						return 1;
+					}
+					
 					RemoveItemFromContainer(cnt_CurrentContainer[playerid], cnt_SelectedSlot[playerid], playerid);
 					GiveWorldItemToPlayer(playerid, itemid);
 
@@ -320,6 +336,7 @@ _container_displayOptions(playerid, slotid) {
 						Logger_I("containerid", _:cnt_CurrentContainer[playerid]),
 						Logger_I("playerid", playerid));
 					ShowActionText(playerid, "Erro", 3000, 200);
+					DisplayContainerInventory(playerid, cnt_CurrentContainer[playerid]);
 					return 1;
 				}
 
@@ -332,16 +349,16 @@ _container_displayOptions(playerid, slotid) {
 					return 0;
 				}
 
+				RemoveItemFromContainer(cnt_CurrentContainer[playerid], cnt_SelectedSlot[playerid], playerid);
+
 				new required = AddItemToInventory(playerid, itemid);
 
 				if(required > 0) {
 					new str[32];
 					format(str, sizeof(str), "Requer %d slots nos bolsos", required);
 					ShowActionText(playerid, str, 3000, 150);
-				} else if(required == 0) {
-					RemoveItemFromContainer(cnt_CurrentContainer[playerid], cnt_SelectedSlot[playerid], playerid);
 				}
-
+				
 				DisplayContainerInventory(playerid, cnt_CurrentContainer[playerid]);
 
 				return 1;
@@ -502,7 +519,6 @@ hook OnPlayerSelectInvOpt(playerid, option) {
 			new required = AddItemToContainer(cnt_CurrentContainer[playerid], itemid, playerid);
 
 			if(required == 0) {
-				RemoveItemFromInventory(playerid, slot);
 				if(CallLocalFunction("OnMoveItemToContainer", "ddd", playerid, _:itemid, _:cnt_CurrentContainer[playerid]))
 					return Y_HOOKS_CONTINUE_RETURN_0;
 			}

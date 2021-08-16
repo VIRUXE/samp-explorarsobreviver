@@ -365,6 +365,14 @@ _inv_displaySlotOptions(playerid, slotid)
 					ret = GetInventorySlotItem(playerid, inv_SelectedSlot[playerid], itemid2);
 					if(ret) {
 						Logger_Err("failed to get inventory slot item", Logger_I("playerid", playerid), Logger_I("slotid", inv_SelectedSlot[playerid]), Logger_I("ret", ret));
+						DisplayPlayerInventory(playerid);
+						return 1;
+					}
+
+					if(IsPlayerInAnyVehicle(playerid) && IsItemTypeCarry(GetItemType(itemid2)))
+					{
+						ShowActionText(playerid, "Nao pode pegar este item no veiculo", 3000, 200);
+						DisplayPlayerInventory(playerid);
 						return 1;
 					}
 
@@ -385,6 +393,14 @@ _inv_displaySlotOptions(playerid, slotid)
 					ret = GetInventorySlotItem(playerid, inv_SelectedSlot[playerid], itemid2);
 					if(ret) {
 						Logger_Err("failed to get inventory slot item", Logger_I("playerid", playerid), Logger_I("slotid", inv_SelectedSlot[playerid]), Logger_I("ret", ret));
+						DisplayPlayerInventory(playerid);
+						return 1;
+					}
+
+					if(IsPlayerInAnyVehicle(playerid) && IsItemTypeCarry(GetItemType(itemid2)))
+					{
+						ShowActionText(playerid, "Nao pode pegar este item no veiculo", 3000, 200);
+						DisplayPlayerInventory(playerid);
 						return 1;
 					}
 
@@ -408,6 +424,7 @@ _inv_displaySlotOptions(playerid, slotid)
 				ret = GetInventorySlotItem(playerid, inv_SelectedSlot[playerid], itemid2);
 				if(ret) {
 					Logger_Err("failed to get inventory slot item", Logger_I("playerid", playerid), Logger_I("slotid", inv_SelectedSlot[playerid]), Logger_I("ret", ret));
+					DisplayPlayerInventory(playerid);
 					return 1;
 				}
 
