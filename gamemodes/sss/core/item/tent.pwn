@@ -575,10 +575,15 @@ hook OnItemTweakFinish(playerid, Item:itemid)
 	}
 }
 
-hook OnHoldActionUpdate(playerid, progress)
+hook OnHoldActionUpdate(playerid, progress) {
 	if(tnt_CurrentTentItem[playerid] != INVALID_ITEM_ID && GetPlayerTotalVelocity(playerid) > 1.0)
+	{
 		StopBuildingTent(playerid);
-		
+		return Y_HOOKS_BREAK_RETURN_0;
+	}
+	return Y_HOOKS_CONTINUE_RETURN_0;
+}
+
 hook OnHoldActionFinish(playerid)
 {
 	if(tnt_CurrentTentItem[playerid] != INVALID_ITEM_ID)
