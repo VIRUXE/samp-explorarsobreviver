@@ -793,6 +793,8 @@ stock GetPlayerButtonID(playerid, &Button:id) {
 	y += 0.5 * floatcos(-ang, degrees);
 	z -= 0.5;
 
+	id = INVALID_BUTTON_ID;
+
 	foreach(new i : btn_NearIndex[playerid]) {
 		curid = btn_Near[playerid][i];
 
