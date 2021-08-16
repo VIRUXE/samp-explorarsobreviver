@@ -65,8 +65,8 @@ stock PlayerSendChat(playerid, chat[], Float:frequency)
 		
 	if(!IsPlayerLoggedIn(playerid))
 		return 0;
-
-	if(!IsPlayerWhitelisted(playerid))
+		
+	if(!IsPlayerWhitelisted(playerid) && IsWhitelistActive() && !IsWhitelistAuto())
 		return 0;
 
 	if(GetTickCountDifference(GetTickCount(), GetPlayerServerJoinTick(playerid)) < SEC(1))
