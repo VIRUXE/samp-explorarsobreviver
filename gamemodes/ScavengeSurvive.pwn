@@ -34,7 +34,7 @@
 
 // YSI
 #define _DEBUG							0
-#define CGEN_MEMORY						71000
+#define CGEN_MEMORY						75000
 #define YSI_NO_VERSION_CHECK
 #define YSI_NO_OPTIMISATION_MESSAGE
 #define YSI_NO_MODE_CACHE
