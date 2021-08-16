@@ -170,11 +170,15 @@ hook OnPlayerUseItemWithBtn(playerid, Button:buttonid, Item:itemid){
 	
 ==============================================================================*/
 
+hook OnPlayerOpenInventory(playerid){
+	if(IsPlayerInAnyVehicle(playerid))
+		DisplayContainerInventory(playerid, GetVehicleContainer(GetPlayerVehicleID(playerid)));
+	return Y_HOOKS_CONTINUE_RETURN_0;
+}
+
 hook OnPlayerKeyStateChange(playerid, newkeys, oldkeys)
 	if( (newkeys == KEY_YES) && GetPlayerState(playerid) == PLAYER_STATE_PASSENGER)
-			HideVehicleUI(playerid),
-			DisplayContainerInventory(playerid, GetVehicleContainer(GetPlayerVehicleID(playerid))),
-			DisplayPlayerInventory(playerid);
+		HideVehicleUI(playerid), DisplayPlayerInventory(playerid);
 	
 
 hook OnPlayerCloseContainer(playerid, Container:containerid){
