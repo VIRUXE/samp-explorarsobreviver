@@ -637,7 +637,7 @@ ACMD:additem[3](playerid, params[])
 		Float:y,
 		Float:z, 
 		Float:r,
-		Item:itemid,
+		Item:itemid = INVALID_ITEM_ID,
 		uniquename[MAX_ITEM_NAME],
 		typename[MAX_ITEM_NAME + MAX_ITEM_TEXT];
 
