@@ -69,6 +69,12 @@ hook OnPlayerInteractVehicle(playerid, vehicleid, Float:angle)
 			if(IsValidItem(GetPlayerInteractingItem(playerid)))
 				return Y_HOOKS_CONTINUE_RETURN_0;
 
+			if(GetVehicleTypeCategory(GetVehicleType(vehicleid)) == VEHICLE_CATEGORY_MOTORBIKE)
+				return Y_HOOKS_CONTINUE_RETURN_0;
+
+			if(GetVehicleTypeCategory(GetVehicleType(vehicleid)) == VEHICLE_CATEGORY_PUSHBIKE)
+				return Y_HOOKS_CONTINUE_RETURN_0;
+
 			new Float:vehicleangle;
 
 			GetVehicleZAngle(vehicleid, vehicleangle);
