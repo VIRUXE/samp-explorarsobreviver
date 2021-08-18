@@ -15,23 +15,22 @@ stock ChatMsg(playerid, colour, const fmat[], va_args<>)
 {
 	formatex(gs_Buffer, sizeof(gs_Buffer), fmat, va_start<3>);
 	ChatMsgFlat(playerid, colour, gs_Buffer);
-
 	return 1;
 }
 
 stock ChatMsgAll(colour, const fmat[], va_args<>)
 {
 	formatex(gs_Buffer, sizeof(gs_Buffer), fmat, va_start<2>);
+	remove_accent(gs_Buffer);
 	ChatMsgAllFlat(colour, gs_Buffer);
-
 	return 1;
 }
 
 stock ChatMsgLang(playerid, colour, const key[], va_args<>)
 {
 	formatex(gs_Buffer, sizeof(gs_Buffer), GetLanguageString(GetPlayerLanguage(playerid), key), va_start<3>);
+	remove_accent(gs_Buffer);
 	ChatMsgFlat(playerid, colour, gs_Buffer);
-
 	return 1;
 }
 
@@ -39,7 +38,6 @@ stock ChatMsgAdmins(level, colour, const fmat[], va_args<>)
 {
 	formatex(gs_Buffer, sizeof(gs_Buffer), fmat, va_start<3>);
 	ChatMsgAdminsFlat(level, colour, gs_Buffer);
-
 	return 1;
 }
 
@@ -114,6 +112,5 @@ stock ChatMsgAllFlat(colour, const message[])
 stock ChatMsgLangFlat(playerid, colour, const key[])
 {
 	ChatMsgFlat(playerid, colour, GetLanguageString(GetPlayerLanguage(playerid), key));
-
 	return 1;
 }

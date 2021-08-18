@@ -131,6 +131,7 @@ public DCC_OnMessageCreate(DCC_Message:message)
 stock SendDiscordMessage(DCC_Channel:channel, const fmat[], va_args<>)
 {
 	formatex(msgBuffer, sizeof(msgBuffer), fmat, va_start<2>);
+	remove_accent(msgBuffer);
 	DCC_SendChannelMessage(channel, msgBuffer);
 
 	return 1;
