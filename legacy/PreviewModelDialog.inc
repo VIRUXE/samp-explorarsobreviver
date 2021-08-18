@@ -236,7 +236,7 @@ static Prev_CreatePlayerTextDraws(playerid, const header[], const button1[], con
 				continue;
 			}
 
-			Prev@ModelTextPTD[playerid][textdrawid] = CreatePlayerTextDraw(playerid, (149.0000 + (b * DIALOG_PREVIEW_HORIZONTAL_GAP)), (198.5000 + (a * DIALOG_PREVIEW_VERTICAL_GAP)), "_");
+			Prev@ModelTextPTD[playerid][textdrawid] = CreatePlayerTextDraw(playerid, (149.0000 + (b * DIALOG_PREVIEW_HORIZONTAL_GAP)), (198.0000 + (a * DIALOG_PREVIEW_VERTICAL_GAP)), "_");
 			PlayerTextDrawFont(playerid, Prev@ModelTextPTD[playerid][textdrawid], 1);
 			PlayerTextDrawLetterSize(playerid, Prev@ModelTextPTD[playerid][textdrawid], 0.2, 1.25);
 			PlayerTextDrawColor(playerid, Prev@ModelTextPTD[playerid][textdrawid], -1);

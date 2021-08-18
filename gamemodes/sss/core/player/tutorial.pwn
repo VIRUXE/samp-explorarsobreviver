@@ -13,7 +13,7 @@ Timer:		PlayerTutorialUpd		[MAX_PLAYERS];
 
 hook OnPlayerConnect(playerid)
 {
-	TutorialDraw[playerid] = CreatePlayerTextDraw(playerid, 3.000000, 338.500000, "Play tutorial >");
+	TutorialDraw[playerid] = CreatePlayerTextDraw(playerid, 3.0, 339.0, "Play tutorial >");
 	PlayerTextDrawFont(playerid, TutorialDraw[playerid], 1);
 	PlayerTextDrawLetterSize(playerid, TutorialDraw[playerid], 0.395, 1.58);
 	PlayerTextDrawTextSize(playerid, TutorialDraw[playerid], 190.000000, 17.000000);
