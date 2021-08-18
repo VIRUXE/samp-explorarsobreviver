@@ -7,6 +7,12 @@ hook OnPlayerUseItemWithItem(playerid, Item:itemid, Item:withitemid){
 		GetItemType(withitemid) == item_LaserPointY || GetItemType(withitemid) == item_LaserPointG ||
 		GetItemType(withitemid) == item_LaserPointP){
 		
+		if(GetItemType(withitemid) != item_LaserPointR && (GetPlayerVIP(playerid) - gettime()) < 1)
+    	{
+			ShowActionText(playerid, "Somente vips podem usar esta cor de laser");
+			return Y_HOOKS_CONTINUE_RETURN_0;
+		}
+
 		if(!GetItemWeaponMods(GetPlayerItem(playerid))){
 			new model = GetItemWeaponBaseWeapon(GetItemTypeWeapon(GetItemType(GetPlayerItem(playerid))));
 

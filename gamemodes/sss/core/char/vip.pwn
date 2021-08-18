@@ -3,8 +3,7 @@
 static
         vip_Level[MAX_PLAYERS],
         vip_InventoryOption[MAX_PLAYERS],
-bool:   vip_ViewingMenu[MAX_PLAYERS],
-        vip_EntrancePhrase[MAX_PLAYERS][128];
+bool:   vip_ViewingMenu[MAX_PLAYERS];
 
 hook OnPlayerConnect(playerid)
 {
@@ -52,16 +51,12 @@ ShowVipMenu(playerid)
 {
     gBigString[playerid][0] = EOS;
 
-    if(vip_Level[playerid] >= 1)
-    {
-        strcat(gBigString[playerid], "Tempo de Vip restante\n");
-        strcat(gBigString[playerid], "Anuncio\n");
-        strcat(gBigString[playerid], "Trocar Roupa\n");
-        strcat(gBigString[playerid], "Mudar estilo de Luta\n");
-        strcat(gBigString[playerid], "Cometer suicidio\n");
-        strcat(gBigString[playerid], "Frase de Entrada\n");
-    }
-    
+    strcat(gBigString[playerid], "Tempo de Vip restante\n");
+    strcat(gBigString[playerid], "Anuncio\n");
+    strcat(gBigString[playerid], "Trocar Roupa\n");
+    strcat(gBigString[playerid], "Mudar estilo de Luta\n");
+    strcat(gBigString[playerid], "Cometer suicidio\n");
+
     if(vip_Level[playerid] >= 2)
     {
         //strcat(gBigString[playerid], "Function\n");
@@ -232,43 +227,6 @@ ShowVipMenu(playerid)
 
                 vip_ViewingMenu[playerid] = false;
             }
-
-            /*=================================================================
-
-                Frase de Entrada
-                
-            =================================================================*/
-
-            if(listitem == 5)
-            {
-                inline Response2(pid2, dialogid2, response2, listitem2, string:inputtext2[])
-                {
-                    #pragma unused pid2, dialogid2, listitem2
-
-                    if(response2)
-                    {
-                        strcat(vip_EntrancePhrase[playerid], inputtext2, 128);
-
-                        ChatMsg(playerid, WHITE, "");
-                        ChatMsg(playerid, WHITE, " » FRASE ALTERADA PARA:");
-                        ChatMsg(playerid, COLOR_PLAYER_VIP,
-                            " » O vip %p nasceu. Frase: %s", playerid, TagScan(vip_EntrancePhrase[playerid]));
-                        ChatMsg(playerid, WHITE, "");
-
-                        ShowActionText(playerid, "Frase de entrada alterada com Sucesso", 3000);
-
-                        vip_ViewingMenu[playerid] = false;
-                    }
-                    else
-                    {
-                        ShowVipMenu(playerid);
-                    }
-                }
-                Dialog_ShowCallback(playerid, using inline Response2, DIALOG_STYLE_INPUT,
-                    sprintf("Menu VIP "C_GREEN"(Nivel %d)", vip_Level[playerid]),
-                    "Insira uma frase de entrada abaixo:\n\nOBS: Essa frase vai aparecer sempre que voce nascer",
-                    "Enviar", "Sair");
-            }
         }
         else
         {
@@ -407,7 +365,7 @@ hook OnHoldActionUpdate(playerid, progress)
 {
 	if((GetPlayerVIP(playerid) - gettime()) > 1)
     {
-        SetPlayerHoldActionProgress(playerid, progress + (vip_Level[playerid] * 100) );
+        SetPlayerHoldActionProgress(playerid, progress + (vip_Level[playerid] * 25) );
     }
 	return Y_HOOKS_CONTINUE_RETURN_0;
 }
@@ -424,14 +382,25 @@ hook OnPlayerSpawnNewChar(playerid)
     {
         // Nivel 1 nascer com uma Mochila;
         GivePlayerBag(playerid, CreateItem(item_Satchel));
+        AddItemToPlayer(playerid, CreateItem(item_AntiSepBandage));
+        AddItemToPlayer(playerid, CreateItem(item_Wrench));
 
-        if(vip_Level[playerid] >= 2) // Nivel 2 nascer com Chave de Roda;
+        new Container:containerid = GetBagItemContainerID(GetPlayerBagItem(playerid));
+
+        if(vip_Level[playerid] >= 2) // Nivel 2 nascer com Ferramentas;
         {
-            AddItemToInventory(playerid, CreateItem(item_Wrench));
+            AddItemToContainer(containerid, CreateItem(item_Screwdriver));
+            AddItemToContainer(containerid, CreateItem(item_Hammer));
+            AddItemToContainer(containerid, CreateItem(item_Spanner));
         }
         if(vip_Level[playerid] >= 3) // Nivel 3 nascer com Maleta de Doutor;
         {
-            AddItemToInventory(playerid, CreateItem(item_DoctorBag));
+            new Item:itemid = CreateItem(item_M9Pistol);
+
+            SetItemWeaponItemMagAmmo(itemid, 10);
+			SetItemWeaponItemAmmoItem(itemid, item_Ammo9mm);
+
+            AddItemToContainer(containerid, itemid);
         }
 
         /*======================================================================
@@ -460,7 +429,7 @@ SetVipSpawn(playerid)
 
 /*==============================================================================
 
-	Frase e cor vip ao nascer
+	Cor vip ao nascer
     
 ==============================================================================*/
 
@@ -468,12 +437,6 @@ hook OnPlayerSpawnChar(playerid)
 {
     if((GetPlayerVIP(playerid) - gettime()) > 1)
     {
-        if(strlen(vip_EntrancePhrase[playerid]) > 3)
-        {
-            ChatMsgAll(COLOR_PLAYER_VIP,
-                " » O vip %p nasceu. Frase: %s", playerid, TagScan(vip_EntrancePhrase[playerid]));
-        }
-
         SetPlayerColor(playerid, COLOR_PLAYER_VIP);
     }
 }

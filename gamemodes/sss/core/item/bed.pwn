@@ -53,7 +53,7 @@ BedCheck(playerid, Item:itemid, bool:spawn = false){
 		new hour, minute;
 		GetServerTime(hour, minute);
 		
-		if(hour < 20 && hour > 8) {
+		if(hour < 20 && hour > 8 && (GetPlayerVIP(playerid) - gettime() < 1)) {
 			ShowActionText(playerid, ls(playerid, "SLEEPHOUR"), 6000);
 			return 0;
 		}

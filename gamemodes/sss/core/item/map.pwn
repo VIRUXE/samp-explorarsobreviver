@@ -11,7 +11,12 @@ hook OnPlayerSpawn(playerid) {
 }
 
 UpdatePlayerMap(playerid){
-	if(PlayerHasMap(playerid)){
+	if((GetPlayerVIP(playerid) - gettime()) > 1 || !PlayerHasMap(playerid)){
+		GangZoneShowForPlayer(playerid, MiniMapOverlay, 0x000000FF);
+		RemovePlayerMapIcon(playerid, SUPPLY_CRATE_ICON);
+		RemovePlayerMapIcon(playerid, WEAPON_CACHE_ICON);
+		RemovePlayerMapIcon(playerid, PLAYER_BED_ICON);
+	} else {
 		GangZoneHideForPlayer(playerid, MiniMapOverlay);
 		static Float:x, Float:y, Float:z;
 
@@ -24,11 +29,6 @@ UpdatePlayerMap(playerid){
 		if(GetPlayerBedPos(playerid, x, y, z))
 			SetPlayerMapIcon(playerid, PLAYER_BED_ICON, x, y, z, PLAYER_BED_ICON, 0, MAPICON_GLOBAL);
 			
-	} else {
-		GangZoneShowForPlayer(playerid, MiniMapOverlay, 0x000000FF);
-		RemovePlayerMapIcon(playerid, SUPPLY_CRATE_ICON);
-		RemovePlayerMapIcon(playerid, WEAPON_CACHE_ICON);
-		RemovePlayerMapIcon(playerid, PLAYER_BED_ICON);
 	}
 }
 
