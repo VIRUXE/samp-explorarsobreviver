@@ -71,7 +71,7 @@
 #define MAX_ITEM_TYPE					ItemType:327
 #define MAX_ITEM_NAME					22
 #define MAX_ITEM_TEXT					45
-#define MAX_CONTAINER_SLOTS				90
+#define MAX_CONTAINER_SLOTS				100
 #define ITEM_RESPAWN_DELAY				HOUR(4)
 
 // Optidraw
