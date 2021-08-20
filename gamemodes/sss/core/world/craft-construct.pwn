@@ -315,6 +315,9 @@ hook OnHoldActionFinish(playerid)
 		ty /= float(count);
 		tz /= float(count);
 
+		if(cons_Data[cons_CraftsetConstructSet[cons_Constructing[playerid]]][cons_tweak])
+			tx += 0.64;
+
 		itemid = CreateItem(result, tx, ty, tz, .world = GetPlayerVirtualWorld(playerid), .interior = GetPlayerInterior(playerid));
 		PlayerGainSkillExperience(playerid, uniqueid);
 
