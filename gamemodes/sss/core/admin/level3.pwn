@@ -622,41 +622,103 @@ ACMD:additem[3](playerid, params[])
 
 	if(sscanf(params, "s["#MAX_ITEM_NAME"]", name))
 	{
-		ChatMsg(playerid, YELLOW, " » Utilização: /additem [nome/id do item]");
+		ChatMsg(playerid, RED, " » Utilize: /additem [nome/id do item]");
 		return 1;
 	}
 
-	if(strlen(name) < 3 && !IsNumeric(name))
+	new 
+		uniquename[MAX_ITEM_NAME],
+		typename[MAX_ITEM_NAME];
+
+	if(IsNumeric(name) && IsValidItemType(ItemType:strval(name)))
 	{
-		ChatMsg(playerid, YELLOW, " » Nome do item muito pequeno");
+		AdminAddItem(playerid, ItemType:strval(name));
 		return 1;
 	}
-	
+	else
+	{
+		new
+			ItemType:list[64] = {ItemType:INVALID_ITEM_TYPE, ...},
+			count = -1;
+
+		gBigString[playerid][0] = EOS;
+
+		strcat(gBigString[playerid], "id\tname\tunic name\tcount\n");
+
+		for(new ItemType:i; i < MAX_ITEM_TYPE; i++)
+		{
+			if(!IsValidItemType(i))
+				continue;
+				
+			if(count == sizeof(list) - 1)
+				break;
+
+			GetItemTypeUniqueName(i, uniquename);
+			GetItemTypeName(i, typename);
+
+			if(strfind(uniquename, name, true) != -1 || strfind(typename, name, true) != -1)
+			{
+				list[++count] = i;
+
+				strcat(gBigString[playerid], ret_valstr(_:i)); // id
+				strcat(gBigString[playerid], "\t");
+
+				strcat(gBigString[playerid], typename); // type name
+				strcat(gBigString[playerid], "\t");
+				
+				strcat(gBigString[playerid], uniquename); // unic name
+				strcat(gBigString[playerid], "\t");
+
+				strcat(gBigString[playerid], ret_valstr(GetItemTypeCount(i))); // count
+				strcat(gBigString[playerid], "\n");
+			}
+		}
+
+		if(count > 1)
+		{
+			inline Response(pid, dialogid, response, listitem, string:inputtext[])
+			{
+				#pragma unused pid, dialogid, inputtext
+
+				if(response)
+				{
+					AdminAddItem(playerid, list[listitem]);
+				}
+			}
+			Dialog_ShowCallback(playerid, using inline Response, DIALOG_STYLE_TABLIST_HEADERS, "Admin Add Item", gBigString[playerid], "Select", "Exit");
+			return 1;
+		}
+		else if(list[0] != INVALID_ITEM_TYPE)
+		{
+			AdminAddItem(playerid, list[0]);
+			return 1;
+		}
+	}
+
+	ChatMsg(playerid, RED, " » Nenhum item encontrado.");
+
+	return 1;
+}
+
+AdminAddItem(playerid, ItemType:type)
+{
 	new 
 		Float:x,
 		Float:y,
 		Float:z, 
 		Float:r,
 		Item:itemid = INVALID_ITEM_ID,
-		uniquename[MAX_ITEM_NAME],
 		typename[MAX_ITEM_NAME + MAX_ITEM_TEXT];
 
 	GetPlayerPos(playerid, x, y, z);
 	GetPlayerFacingAngle(playerid, r);
+	itemid = GetNextItemID();
 
-	if(IsNumeric(name) && IsValidItemType(ItemType:strval(name)))
+	if(Item:0 <= itemid < MAX_ITEM)
 	{
-		itemid = GetNextItemID();
-
-		if(!(Item:0 <= itemid < MAX_ITEM))
-		{
-			err(false, false, "Item limit reached while generating item.");
-			return -1;
-		}
-		
 		SetItemLootIndex(itemid, random(GetLootIndexTotal()));
 
-		itemid = CreateItem(ItemType:strval(name),
+		CreateItem(type,
 			x + (0.5 * floatsin(-r, degrees)),
 			y + (0.5 * floatcos(-r, degrees)),
 			z - ITEM_FLOOR_OFFSET,
@@ -666,56 +728,10 @@ ACMD:additem[3](playerid, params[])
 		);
 
 		GetItemName(itemid, typename);
-		GetItemTypeUniqueName(ItemType:strval(name), uniquename);
 
-		ChatMsg(playerid, YELLOW, " » Additem id "C_RED"%d (%s) "C_YELLOW": %s", strval(name), uniquename, typename);
+		ChatMsg(playerid, GREEN, " » Additem id "C_BLUE"%d: "C_YELLOW"%s "C_GREEN"Count: %d", _:type, typename, GetItemTypeCount(type));
 	}
-	else
-	{
-		new count;
-
-		for(new ItemType:i; i < MAX_ITEM_TYPE; i++)
-		{
-			if(!IsValidItemType(i))
-				continue;
-				
-			GetItemTypeUniqueName(i, uniquename);
-			GetItemTypeName(i, typename);
-
-			if(strfind(uniquename, name, true) != -1 || strfind(typename, name, true) != -1)
-			{
-				itemid = GetNextItemID();
-
-				if(!(Item:0 <= itemid < MAX_ITEM))
-				{
-					err(false, false, "Item limit reached while generating item.");
-					return -1;
-				}
-				
-				SetItemLootIndex(itemid, random(GetLootIndexTotal()));
-
-				itemid = CreateItem(i,
-					x + ((0.3 * (++count + 1)) * floatsin(-r, degrees)),
-					y + ((0.3 * (count + 1)) * floatcos(-r, degrees)),
-					z - ITEM_FLOOR_OFFSET,
-					.rz = r,
-					.world = GetPlayerVirtualWorld(playerid),
-					.interior = GetPlayerInterior(playerid)
-				);
-
-				GetItemName(itemid, typename);
-
-				ChatMsg(playerid, YELLOW, " » Additem id "C_RED"%d (%s) "C_YELLOW": %s", _:i, uniquename, typename);
-			}
-		}
-	}
-
-	if(!IsValidItem(itemid))
-		ChatMsg(playerid, YELLOW, " » Nome ou id de item inválido.");
-
-	return 1;
 }
-
 
 /*==============================================================================
 
