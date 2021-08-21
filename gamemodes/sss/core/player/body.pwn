@@ -340,21 +340,25 @@ hook OnPlayerDisconnect(playerid, reason)
 
 static bool:KillPlayerBody[MAX_PLAYERS];
 
-hook OnPlayerAccountLoaded(playerid)
+hook OnPlayerSpawnCharacter(playerid, existing)
 {
-	KillPlayerBody[playerid] = false;
-	new name[MAX_PLAYER_NAME];
-	GetPlayerName(playerid, name, MAX_PLAYER_NAME);
+	if(existing)
+	{
+		KillPlayerBody[playerid] = false;
+		new name[MAX_PLAYER_NAME];
+		GetPlayerName(playerid, name, MAX_PLAYER_NAME);
 
-	foreach(new i : body_Count){
-		if(!strcmp(body_PlayerName[i], name) && !isnull(body_PlayerName[i]))
+		foreach(new i : body_Count)
 		{
-			if(GetDynamicActorVirtualWorld(i) == 3333)
+			if(!strcmp(body_PlayerName[i], name) && !isnull(body_PlayerName[i]))
 			{
-				ChatMsg(playerid, RED, " » Você foi morto enquanto esteve ausente. :(");
-				KillPlayerBody[playerid] = true;
+				if(GetDynamicActorVirtualWorld(i) == 3333)
+				{
+					ChatMsg(playerid, RED, " » Você foi morto enquanto esteve ausente. :(");
+					KillPlayerBody[playerid] = true;
+				}
+				break;
 			}
-			break;
 		}
 	}
 }
