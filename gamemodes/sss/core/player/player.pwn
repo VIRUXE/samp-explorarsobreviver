@@ -41,26 +41,29 @@ Timer:	LoadDelay[MAX_PLAYERS],
 
 
 forward OnPlayerScriptUpdate(playerid);
+forward OnPlayerConnected(playerid);
 forward OnPlayerDisconnected(playerid);
 forward OnDeath(playerid, killerid, reason);
 
 forward Float:GetPlayerTotalVelocity(playerid);
-
 
 public OnPlayerConnect(playerid)
 {
 	if(IsPlayerNPC(playerid))
 		return 1;
 
-	Logger_Log("player connected", Logger_P(playerid));
+	log(true, "[JOIN] %p connected.", playerid);
+	
+/* 	foreach(new i : Player)
+		if(i != playerid)
+			ChatMsg(i, WHITE, " » %P (%d)"C_WHITE" entrou no servidor.", playerid, playerid);
+
+	if(!isnull(gMessageOfTheDay))
+		ChatMsg(playerid, BLUE, ""C_YELLOW" » Mensagem do Dia: "C_BLUE"%s", gMessageOfTheDay); */
 
 	SetPlayerColor(playerid, COLOR_PLAYER_NORMAL);
-
 	TogglePlayerClock(playerid, false);
-	
 	SetPlayerVirtualWorld(playerid, playerid + 1);
-
-	ResetVariables(playerid);
 
 	ply_Data[playerid][ply_JoinTick] = GetTickCount();
 
@@ -73,77 +76,31 @@ public OnPlayerConnect(playerid)
 	sscanf(ipstring, "p<.>a<d>[4]", ipbyte);
 	ply_Data[playerid][ply_IP] = ((ipbyte[0] << 24) | (ipbyte[1] << 16) | (ipbyte[2] << 8) | ipbyte[3]);
 
-	if(BanCheck(playerid))
-		return 0;
-
-	stop LoadDelay[playerid];
-	LoadDelay[playerid] = defer LoadAccountDelay(playerid, 5000 + (LoadCount * 2000) );
-	LoadCount ++;
-
 	TogglePlayerControllable(playerid, false);
 	Streamer_ToggleIdleUpdate(playerid, true);
-	SetSpawnInfo(playerid, 0, 0, DEFAULT_POS_X, DEFAULT_POS_Y, DEFAULT_POS_Z, 0.0, 0, 0, 0, 0, 0, 0);
-	SpawnPlayer(playerid);
-
-	foreach(new i : Player)
-		if(i != playerid)
-			ChatMsg(i, WHITE, " » %P (%d)"C_WHITE" entrou no servidor.", playerid, playerid);
-
-	if(!isnull(gMessageOfTheDay))
-	{
-		ChatMsg(playerid, BLUE, ""C_YELLOW" » Mensagem do Dia: "C_BLUE"%s", gMessageOfTheDay);
-	}
 
 	ply_Data[playerid][ply_ShowHUD] = true;
+
+	CallLocalFunction("OnPlayerConnected", "d", playerid);
 
 	return 1;
 }
 
 public OnPlayerDisconnect(playerid, reason)
 {
-	if(gServerRestarting)
-		return 0;
-
 	Logout(playerid);
+	ResetVariables(playerid);
 
-	switch(reason)
-	{
-		case 0:
-		{
-			ChatMsgAll(GREY, " » %p perdeu a conexão.", playerid);
-			Logger_Log("player lost connection", Logger_P(playerid));
-		}
-		case 1:
-		{
-			ChatMsgAll(GREY, " » %p saiu do servidor.", playerid);
-			Logger_Log("player quit", Logger_P(playerid));
-		}
-	}
+	ChatMsgAll(GREY, " » %P %s.", playerid, reason || IsPlayerMobile(playerid) ? "saiu do servidor" : "perdeu a conexão");
+	log(true, "[PART] %p disconnected. Reason: %s", playerid, reason || IsPlayerMobile(playerid) ? "left" : "lost connection")
 
-	SetTimerEx("OnPlayerDisconnected", 100, false, "dd", playerid, reason);
+	CallLocalFunction("OnPlayerDisconnected", "dd", playerid, reason);
 
 	return 1;
 }
 
-timer LoadAccountDelay[timer](playerid, timer)
-{
-	#pragma unused timer
 
-	if(!IsPlayerConnected(playerid)){
-		LoadCount --;
-		return;
-	}
-
-	if(gServerInitialising || GetTickCountDifference(GetTickCount(), gServerInitialiseTick) < 5000)
-	{
-		ChatMsg(playerid, YELLOW, " » Aguardando 5s enquanto o servidor inicía...");
-		LoadDelay[playerid] = defer LoadAccountDelay(playerid, 5000 + (LoadCount * 2000) );
-		return;
-	}
-
-	LoadCount --;
-
-	new Error:e = LoadPlayerAccount(playerid);
+	new Error:e = LoadAccount(playerid);
 	if(IsError(e)) // LoadAccount aborted, kick player.
 	{
 		new cause[128];
