@@ -8,7 +8,6 @@ hook OnGameModeInit()
 	RegisterAdminCommand(STAFF_LEVEL_GAME_MASTER, "/avisar - Avisar um Jogador\n");
 	RegisterAdminCommand(STAFF_LEVEL_GAME_MASTER, "/kick - Kickar um Jogador\n");
 	RegisterAdminCommand(STAFF_LEVEL_GAME_MASTER, "/an - Enviar um Anúncio para todos\n");
-	RegisterAdminCommand(STAFF_LEVEL_GAME_MASTER, "/(all)country - Mostrar dados do País\n");
 	RegisterAdminCommand(STAFF_LEVEL_GAME_MASTER, "/limparchat -Limpar o Chat para todos\n");
 	RegisterAdminCommand(STAFF_LEVEL_GAME_MASTER, "/aliases - check aliases\n");
 	RegisterAdminCommand(STAFF_LEVEL_GAME_MASTER, "/history - Verificar história do Jogador?\n");
@@ -160,79 +159,6 @@ ACMD:an[1](playerid, params[])
 
 /*==============================================================================
 
-	Display player countries
-
-==============================================================================*/
-
-
-ACMD:country[1](playerid, params[])
-{
-	if(isnumeric(params))
-	{
-		new targetid = strval(params);
-
-		if(!IsPlayerConnected(targetid))
-		{
-			if(targetid > 99)
-				ChatMsg(playerid, YELLOW, " » Numeric value '%d' isn't a player ID that is currently online, treating it as a name.", targetid);
-			else
-				return 4;
-		}
-
-		new data[256];
-
-		GetPlayerCountryDataAsString(targetid, data);
-
-		Dialog_Show(playerid, DIALOG_STYLE_MSGBOX, "IP Data", data, "Sair", "");
-	}
-	else
-	{
-		if(!DoesPlayerAccountExist(params))
-		{
-			ChatMsg(playerid, YELLOW, " » A conta '%s' não existe.", params);
-			return 1;
-		}
-
-		new
-			ipint,
-			// ipstr[17],
-			country[32];
-
-		GetAccountIP(params, ipint);
-		// TODO: Use a different country service
-		// ipstr = IpIntToStr(ipint);
-		// GetIPCountry(ipstr, country);
-
-		ChatMsg(playerid, YELLOW, " » "C_BLUE"%s"C_YELLOW"'s GeoIP location: "C_BLUE"%s", params, country);
-	}
-
-	return 1;
-}
-
-ACMD:allcountry[1](playerid, params[])
-{
-	new
-		country[32],
-		list[(MAX_PLAYER_NAME + 3 + 32 + 1) * MAX_PLAYERS];
-
-	foreach(new i : Player)
-	{
-		if(GetPlayerAdminLevel(i) > GetPlayerAdminLevel(playerid))
-			country = "Desconhecido";
-		else
-			GetPlayerCachedCountryName(i, country);
-
-		format(list, sizeof(list), "%s%p - %s\n", list, i, country);
-	}
-
-	Dialog_Show(playerid, DIALOG_STYLE_LIST, "Países", list, "Sair", "");
-
-	return 1;
-}
-
-
-/*==============================================================================
-
 	Clear the chat box
 
 ==============================================================================*/
@@ -277,7 +203,7 @@ ACMD:aliases[1](playerid, params[])
 			return 4;
 	}
 
-	if(!DoesPlayerAccountExist(name))
+	if(!DoesAccountExist(name))
 	{
 		ChatMsg(playerid, YELLOW, " » A conta '%s' não existe.", name);
 		return 1;
@@ -358,7 +284,7 @@ ACMD:history[1](playerid, params[])
 			return 4;
 	}
 
-	if(!DoesPlayerAccountExist(name))
+	if(!DoesAccountExist(name))
 	{
 		ChatMsg(playerid, YELLOW, " » The account '%s' does not exist.", name);
 		return 1;
