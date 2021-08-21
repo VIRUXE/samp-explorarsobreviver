@@ -6,11 +6,10 @@
 
 #include <YSI_Coding\y_hooks>
 
-#define DISCORD_LINK_ROLE_ID 	"867774790189973514"
-#define DISCORD_LINK_CHANNEL_ID "847902208343015484"
+#define DISCORD_LINK_ROLE_ID 		"867774790189973514"
+#define DISCORD_LINKING_CHANNEL_ID 	"847902208343015484"
 
-forward OnLinkingPrivateChannelCreated(const nameProvided[MAX_PLAYER_NAME]);
-forward OnPlayerAccountLinked(const playerName[MAX_PLAYER_NAME], playerid = INVALID_PLAYER_ID);
+forward OnAccountLinked(const accountName[MAX_PLAYER_NAME], playerid = INVALID_PLAYER_ID);
 
 hook OnPlayerAccountCheck(playerid, accountState)
 {
@@ -18,15 +17,15 @@ hook OnPlayerAccountCheck(playerid, accountState)
 		PromptPlayerToLinkAccount(playerid);
 }
 
-// Handle linking via discord channel
-public DCC_OnMessageCreate(DCC_Message:message)
+// Handle linking via discord linkingChannel
+hook DCC_OnMessageCreate(DCC_Message:message)
 {
     new
-        DCC_Channel:    channel,
+        DCC_Channel:    linkingChannel,
         DCC_User:       discordUser,
         bool:           is_bot;
 
-    DCC_GetMessageChannel(message, channel);
+    DCC_GetMessageChannel(message, linkingChannel);
     DCC_GetMessageAuthor(message, discordUser);
 
     DCC_IsUserBot(discordUser, is_bot);
@@ -34,7 +33,7 @@ public DCC_OnMessageCreate(DCC_Message:message)
     if(is_bot)
         return 0;
 
-    if(channel == DCC_FindChannelById(DISCORD_LINK_CHANNEL_ID))
+    if(linkingChannel == DCC_FindChannelById(DISCORD_LINKING_CHANNEL_ID))
     {
 		new	discordUserId[DCC_ID_SIZE];
 
@@ -44,55 +43,56 @@ public DCC_OnMessageCreate(DCC_Message:message)
 		// Verificar se o jogador já tem o id vinculado em alguma conta
 		if(!DoesDiscordIdExist(discordUserId))
 		{
-            new nameProvided[MAX_PLAYER_NAME];
+            new accountName[MAX_PLAYER_NAME];
 
-        	DCC_GetMessageContent(message, nameProvided);
+        	DCC_GetMessageContent(message, accountName);
 
-			if(DoesPlayerAccountExist(nameProvided))
+			if(DoesAccountExist(accountName))
 			{
 				new	
-					playerId = GetPlayerIdByName(nameProvided),
+					playerId = GetPlayerIdByName(accountName),
 					discordUsername[DCC_USERNAME_SIZE],
 					DCC_Guild:guild;
 
-				if(SetPlayerAccountDiscordId(nameProvided, discordUserId)) // Guardar id de discord na conta do jogador
+				if(SetAccountDiscordId(accountName, discordUserId)) // Guardar id de discord na conta do jogador
 				{
-					DCC_CreatePrivateChannel(discordUser, "OnLinkingPrivateChannelCreated", "s", nameProvided); // Enviar Mensagem privada. Pois ao colocar no cargo, o canal whitelist desaparece, logo não dá para ver se enviar mensagem para o canal
+					DCC_CreatePrivateChannel(discordUser, "OnLinkingResponse", "d", accountName); // Enviar Mensagem privada. Pois ao colocar no cargo, o canal whitelist desaparece, logo não dá para ver se enviar mensagem para o canal
 
 					// Se o jogador estiver online no servidor então colocar logo na whitelist
 					if(playerId != INVALID_PLAYER_ID)
 					{
-						SetPlayerAccountState(playerId, ACCOUNT_STATE_LINKED);
+						SetAccountState(playerId, ACCOUNT_STATE_LINKED);
 						ChatMsg(playerId, GREEN, "Está agora na Whitelist. Pode clicar em Jogar!");
 					}
 					
 					DCC_GetUserName(discordUser, discordUsername);
-					DCC_GetChannelGuild(channel, guild);
+					DCC_GetChannelGuild(linkingChannel, guild);
 					DCC_AddGuildMemberRole(guild, discordUser, DCC_FindRoleById(DISCORD_LINK_ROLE_ID)); // Colocar jogador no cargo "Sobrevivente"
 
-					SendDiscordMessage(channel, "> Conta de Discord `%s` foi vinculada com a Conta de Jogo `%s`", discordUsername, nameProvided);
+					SendDiscordMessage(linkingChannel, "> Conta de Discord `%s` foi vinculada com a Conta de Jogo `%s`", discordUsername, accountName);
 
-					log(true, "[WHITELIST] Discord ID %s (%s) foi atribuido para a conta %s", discordUserId, discordUsername, nameProvided);
+					log(true, "[WHITELIST] Discord ID %s (%s) foi atribuido para a conta %s", discordUserId, discordUsername, accountName);
 
-					CallLocalFunction("OnPlayerAccountLinked", "sd", nameProvided, playerId);
+					CallLocalFunction("OnAccountLinked", "sd", accountName, playerId);
 				}
 				else
-					err(true, true, "[DISCORD-LINKING] Error executing SetPlayerAccountDiscordId (%s, %s)", nameProvided, discordUserId);
+					err(true, true, "[DISCORD-LINKING] Error executing SetAccountDiscordId (%s, %s)", accountName, discordUserId);
 			}
 			else
-				SendDiscordMessage(channel, "> Nao existe uma Conta de Jogo com esse nick! **Tem que se registrar primeiro**.");
+				SendDiscordMessage(linkingChannel, "> Nao existe uma Conta de Jogo com esse nick! **Tem que se registrar primeiro**.");
 		}
 		else
-			SendDiscordMessage(channel, "> Voce ja tem uma Conta de Jogo associada nessa Conta de Discord...");
+			SendDiscordMessage(linkingChannel, "> Voce ja tem uma Conta de Jogo associada nessa Conta de Discord...");
     }
     return 1;
 }
 
-public OnLinkingPrivateChannelCreated(const nameProvided[MAX_PLAYER_NAME])
+forward OnLinkingResponse(const accountName[MAX_PLAYER_NAME]);
+public OnLinkingResponse(const accountName[MAX_PLAYER_NAME])
 {
-	new DCC_Channel:channel = DCC_GetCreatedPrivateChannel();
+	new DCC_Channel:linkingChannel = DCC_GetCreatedPrivateChannel();
 
-	SendDiscordMessage(channel, "> Sua Conta de Jogo `%s` foi vinculada com sua Conta de Discord e recebeu o cargo de Sobrevivente. Bom jogo!", nameProvided);
+	SendDiscordMessage(linkingChannel, "> Sua Conta de Jogo `%s` foi vinculada com sua Conta de Discord e recebeu o cargo de Sobrevivente. Bom jogo!", accountName);
 }
 
 stock PromptPlayerToLinkAccount(playerid)
@@ -115,10 +115,8 @@ stock PromptPlayerToLinkAccount(playerid)
 		#pragma unused pid, dialogid, listitem, inputtext
 
 		if(response)
-		{
-			if(IsPlayerAccountLinked(playerid)) 
+			if(HasPlayerLinkedAccount(playerid)) 
 				PromptPlayerToLinkAccount(playerid);
-		}
 		else
 			KickPlayer(playerid, "Decidiu sair");
 	}
