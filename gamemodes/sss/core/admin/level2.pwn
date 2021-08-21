@@ -173,10 +173,7 @@ ACMD:ban[2](playerid, params[])
 	new name[MAX_PLAYER_NAME];
 
 	if(sscanf(params, "s[24]", name))
-	{
-		ChatMsg(playerid, YELLOW, " » Utilização: /ban [id/nick]");
-		return 1;
-	}
+		return ChatMsg(playerid, YELLOW, " » Utilização: /ban [id/nick]");
 
 	if(isnumeric(name))
 	{
@@ -184,16 +181,12 @@ ACMD:ban[2](playerid, params[])
 
 		if(IsPlayerConnected(targetid))
 			GetPlayerName(targetid, name, MAX_PLAYER_NAME);
-
 		else
 			ChatMsg(playerid, YELLOW, " » Numeric value '%d' isn't a player ID that is currently online, treating it as a name.", targetid);
 	}
 
 	if(!DoesPlayerAccountExist(name))
-	{
-		ChatMsg(playerid, YELLOW, " » The account '%s' does not exist.", name);
-		return 1;
-	}
+		return ChatMsg(playerid, YELLOW, " » The account '%s' does not exist.", name);
 
 	if(GetAdminLevelByName(name) > STAFF_LEVEL_NONE)
 		return 2;
@@ -212,9 +205,8 @@ ACMD:unban[2](playerid, params[])
 	if(sscanf(params, "s[24]", name))
 		return ChatMsg(playerid, YELLOW, " » Utilização: /unban [player name]");
 
-	if(UnBanPlayer(name))
+	if(UnbanAccount(name))
 		ChatMsg(playerid, YELLOW, " » Unbanned "C_BLUE"%s"C_YELLOW".", name);
-
 	else
 		ChatMsg(playerid, YELLOW, " » Player '%s' is not banned.");
 
@@ -235,8 +227,7 @@ ACMD:bans[2](playerid, params[])
 
 	if(ret == 0)
 		ChatMsg(playerid, YELLOW, " » Não existem bans.");
-
-	if(ret == -1)
+	else
 		ChatMsg(playerid, YELLOW, " » An error occurred while executing 'stmt_BanGetList'.");
 
 	return 1;
@@ -244,20 +235,13 @@ ACMD:bans[2](playerid, params[])
 
 ACMD:banido[2](playerid, params[])
 {
-	if(!(3 < strlen(params) < MAX_PLAYER_NAME))
-	{
-		ChatMsg(playerid, RED, " » Nome de Jogador Inválido '%s'.", params);
-		return 1;
-	}
+	if(!IsValidNickname(params))
+		return ChatMsg(playerid, RED, " » Nome de Jogador Inválido '%s'.", params);
 
-	new name[MAX_PLAYER_NAME];
-
-	strcat(name, params);
-
-	if(IsPlayerBanned(name))
-		ShowBanInfo(playerid, name);
+	if(IsAccountBanned(params))
+		ShowBanInfo(playerid, params);
 	else
-		ChatMsg(playerid, YELLOW, " » Jogador '%s' "C_BLUE"não está "C_YELLOW"banido.", name);
+		ChatMsg(playerid, YELLOW, " » Jogador '%s' "C_BLUE"não está "C_YELLOW"banido.", params);
 
 	return 1;
 }

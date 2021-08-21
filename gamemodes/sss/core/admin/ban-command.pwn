@@ -1,20 +1,18 @@
 #include <YSI_Coding\y_hooks>
 
-
 static
 	ban_CurrentName[MAX_PLAYERS][MAX_PLAYER_NAME], // Store the name in case the player quits mid-ban
 	ban_CurrentReason[MAX_PLAYERS][MAX_BAN_REASON],
 	ban_CurrentDuration[MAX_PLAYERS];
 
-
-hook OnPlayerConnect(playerid)
+hook OnPlayerDisconnect(playerid)
 {
 	ResetBanVariables(playerid);
 }
 
 BanAndEnterInfo(playerid, const name[MAX_PLAYER_NAME])
 {
-	BanPlayerByName(name, "Pending", playerid, 0);
+	BanAccount(name, "Pendente", playerid, 0);
 	FormatBanReasonDialog(playerid);
 
 	ban_CurrentName[playerid] = name;
@@ -95,7 +93,7 @@ FinaliseBan(playerid)
 
 	ChatMsg(playerid, YELLOW, " » Banned "C_BLUE"%s", ban_CurrentName[playerid]);
 
-	log(true, "[BAN] %p banned %s reason: %s", playerid, ban_CurrentName[playerid], ban_CurrentReason[playerid]);
+	log(true, "[BAN] %p banned %s. Reason: %s", playerid, ban_CurrentName[playerid], ban_CurrentReason[playerid]);
 
 	return 1;
 }

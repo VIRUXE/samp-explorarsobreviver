@@ -206,7 +206,7 @@ ShowUnbanPrompt(playerid)
 		#pragma unused pid, dialogid, listitem, inputtext
 
 		if(response)
-			UnBanPlayer(banlist_CurrentName[playerid]);
+			UnbanAccount(banlist_CurrentName[playerid]);
 
 		ShowBanOptions(playerid);
 	}
