@@ -128,11 +128,8 @@ ACMD:ip[3](playerid, params[])
 	}
 	else
 	{
-		if(!DoesPlayerAccountExist(params))
-		{
-			ChatMsg(playerid, YELLOW, " » The account '%s' does not exist.", params);
-			return 1;
-		}
+		if(!DoesAccountExist(params))
+			return ChatMsg(playerid, YELLOW, " » The account '%s' does not exist.", params);
 
 		new ip;
 
@@ -800,32 +797,6 @@ ACMD:resetpassword[3](playerid, params[])
 		ChatMsg(playerid, YELLOW, " » Password for '%s' reset.", params);
 	else
 		ChatMsg(playerid, RED, " » An error occurred.");
-
-	return 1;
-}
-
-
-ACMD:setactive[3](playerid, params[])
-{
-	new
-		name[MAX_PLAYER_NAME],
-		active;
-
-	if(sscanf(params, "s[24]d", name, active))
-	{
-		ChatMsg(playerid, YELLOW, " » Utilização: /setactive [name] [1/0]");
-		return 1;
-	}
-
-	if(!DoesPlayerAccountExist(name))
-	{
-		ChatMsg(playerid, RED, " » That account doesn't exist.");
-		return 1;
-	}
-
-	SetAccountActiveState(name, active);
-
-	ChatMsg(playerid, YELLOW, " » %s "C_BLUE"'%s' "C_YELLOW"account.", active ? ("Activated") : ("Deactivated"), name);
 
 	return 1;
 }
