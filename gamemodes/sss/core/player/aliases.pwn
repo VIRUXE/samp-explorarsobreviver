@@ -213,9 +213,9 @@ CheckForExtraAccounts(playerid)
 			strcat(string, list[i]);
 			strcat(string, ", ");
 
-			if(IsPlayerBanned(list[i]) && !donewarning)
+			if(IsAccountBanned(list[i]) && !donewarning)
 			{
-				ChatMsgAdmins(1, RED, " » Atenção: Jogador tem aliases banidos!");
+				ChatMsgAdmins(1, RED, " » Atenção: Jogador tem contas banidas!");
 				donewarning = true;
 			}
 		}
