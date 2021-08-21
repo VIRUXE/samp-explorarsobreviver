@@ -22,6 +22,7 @@ Float:		SAVED_ITEM_ROT_Z,
 
 static big_data[8192];
 
+forward OnItemSave(Item:itemid);
 
 SaveWorldItem(Item:itemid, const subdir[], bool:active, savearray = true, const data[] = "", data_size = 0)
 {
@@ -95,6 +96,8 @@ SaveWorldItem(Item:itemid, const subdir[], bool:active, savearray = true, const 
 	}
 
 	modio_finalise_write(modio_getsession_write(filename));
+
+	CallLocalFunction("OnItemSave", "d", _:itemid);
 
 	return 0;
 }

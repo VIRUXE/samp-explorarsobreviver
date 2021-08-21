@@ -56,7 +56,7 @@ hook OnPlayerConnect(playerid)
 	pveh_PlayerVehicle[playerid] = INVALID_VEHICLE_ID;
 	pveh_SaveAnyVehicle[playerid] = 1;
 	
-	foreach(new i : veh_Index)
+	foreach(new i : Vehicle)
 	{
 		if(isnull(pveh_Owner[i]))
 			continue;
@@ -123,7 +123,7 @@ LoadPlayerVehicles()
 
 	CloseDir(direc);
 
-	Logger_Log("loaded player vehicles", Logger_I("count", Iter_Count(veh_Index)));
+	Logger_Log("loaded player vehicles", Logger_I("count", Iter_Count(Vehicle)));
 
 	return 1;
 }
@@ -250,8 +250,6 @@ LoadPlayerVehicle(const filepath[])
 
 	_SetVehicleOwner(vehicleid, owner);
 
-	Iter_Add(veh_Index, vehicleid);
-
 	if(Float:data[VEH_CELL_HEALTH] > 990.0)
 		data[VEH_CELL_HEALTH] = _:990.0;
 
@@ -303,8 +301,6 @@ LoadPlayerVehicle(const filepath[])
 			Float:data[VEH_CELL_POSY],
 			Float:data[VEH_CELL_POSZ],
 			Float:data[VEH_CELL_ROTZ]);
-
-		Iter_Add(veh_Index, trailerid);
 
 		SetVehicleHealth(trailerid, Float:data[VEH_CELL_HEALTH]);
 		SetVehicleFuel(trailerid, Float:data[VEH_CELL_FUEL]);

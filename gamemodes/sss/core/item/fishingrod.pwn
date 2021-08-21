@@ -164,7 +164,9 @@ timer _CatchDelay[floatround(fish_Distance[playerid], floatround_round) * 100](p
 hook OnHoldActionUpdate(playerid, progress)
 {
 	if(fish_Status[playerid] == FISH_STATUS_CASTING)
+	{
 		fish_Distance[playerid] = progress / 100;
-
+		return Y_HOOKS_BREAK_RETURN_0;
+	}
 	return Y_HOOKS_CONTINUE_RETURN_0;
 }

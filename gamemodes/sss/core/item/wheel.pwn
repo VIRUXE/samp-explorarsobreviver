@@ -205,10 +205,10 @@ hook OnHoldActionUpdate(playerid, progress){
 	if(PlayerUpdateWheel[playerid] != INVALID_VEHICLE_ID) {
 		if(GetPlayerTotalVelocity(playerid) > 1.0){
 			StopInstallWheel(playerid);
-			return Y_HOOKS_BREAK_RETURN_1;
+			return Y_HOOKS_BREAK_RETURN_0;
 		}
 		ApplyAnimation(playerid, "COP_AMBIENT", "COPBROWSE_LOOP", 4.0, 1, 0, 0, 0, 0);
-		return Y_HOOKS_BREAK_RETURN_1;
+		return Y_HOOKS_BREAK_RETURN_0;
 	}
 
 	return Y_HOOKS_CONTINUE_RETURN_0;

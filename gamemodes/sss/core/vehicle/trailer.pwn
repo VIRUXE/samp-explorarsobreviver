@@ -135,7 +135,7 @@ task _trailerSync[1000]()
 {
 	new trailerid;
 
-	foreach(new i : veh_Index)
+	foreach(new i : Vehicle)
 	{
 		// If this vehicle doesn't have a trailer, skip.
 		if(trl_VehicleTrailer[i] == INVALID_VEHICLE_ID)
@@ -246,7 +246,7 @@ _HandleTrailerTowKey(playerid)
 		return 1;
 	}
 
-	foreach(new i : veh_Index)
+	foreach(new i : Vehicle)
 	{
 		if(i == vehicleid)
 			continue;

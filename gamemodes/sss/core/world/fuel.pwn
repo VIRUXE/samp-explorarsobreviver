@@ -215,7 +215,7 @@ hook OnHoldActionUpdate(playerid, progress)
 		if(GetItemTypeLiquidContainerType(GetItemType(itemid)) == -1)
 		{
 			StopRefuellingVehicle(playerid);
-			return Y_HOOKS_CONTINUE_RETURN_0;
+			return Y_HOOKS_BREAK_RETURN_1;
 		}
 
 		canfuel = GetLiquidItemLiquidAmount(itemid);
@@ -225,16 +225,15 @@ hook OnHoldActionUpdate(playerid, progress)
 		{
 			ShowActionText(playerid, ls(playerid, "EMPTY"), 3000, 80);
 			StopRefuellingVehicle(playerid);
-			return Y_HOOKS_CONTINUE_RETURN_0;
+			return Y_HOOKS_BREAK_RETURN_1;
 		}
 
 		if(vehiclefuel >= GetVehicleTypeMaxFuel(GetVehicleType(fuel_CurrentlyRefuelling[playerid])) || !IsPlayerInVehicleArea(playerid, fuel_CurrentlyRefuelling[playerid]))
 		{
 			StopRefuellingVehicle(playerid);
-			return Y_HOOKS_CONTINUE_RETURN_0;
+			return Y_HOOKS_BREAK_RETURN_1;
 		}
 
-		// Override the HoldAction setters
 		SetPlayerProgressBarValue(playerid, ActionBar, vehiclefuel * 1000);
 		SetPlayerProgressBarMaxValue(playerid, ActionBar, GetVehicleTypeMaxFuel(GetVehicleType(fuel_CurrentlyRefuelling[playerid])) * 1000);
 		ShowPlayerProgressBar(playerid, ActionBar);
@@ -246,6 +245,7 @@ hook OnHoldActionUpdate(playerid, progress)
 		transfer = (canfuel - 0.8 < 0.0) ? canfuel : 0.8;
 		SetLiquidItemLiquidAmount(itemid, canfuel - transfer);
 		SetVehicleFuel(fuel_CurrentlyRefuelling[playerid], vehiclefuel + transfer);
+		return Y_HOOKS_BREAK_RETURN_1;
 	}
 	else if(fuel_CurrentFuelOutlet[playerid] != INVALID_FUEL_OUTLET_ID)
 	{
@@ -253,7 +253,7 @@ hook OnHoldActionUpdate(playerid, progress)
 			defer ReFuelOutlet(fuel_CurrentFuelOutlet[playerid]);
 			fuel_Data[fuel_CurrentFuelOutlet[playerid]][fuel_amount] = 0.0;
 			StopRefuellingFuelCan(playerid);
-			return Y_HOOKS_CONTINUE_RETURN_0;
+			return Y_HOOKS_BREAK_RETURN_1;
 		}
 		
 		new
@@ -272,7 +272,7 @@ hook OnHoldActionUpdate(playerid, progress)
 		if(liqcont == -1)
 		{
 			StopRefuellingFuelCan(playerid);
-			return Y_HOOKS_CONTINUE_RETURN_0;
+			return Y_HOOKS_BREAK_RETURN_1;
 		}
 
 		amount = GetLiquidItemLiquidAmount(itemid);
@@ -282,16 +282,16 @@ hook OnHoldActionUpdate(playerid, progress)
 		if(amount >= capacity || fuel_Data[fuel_CurrentFuelOutlet[playerid]][fuel_amount] <= 0.0)
 		{
 			StopRefuellingFuelCan(playerid);
-			return Y_HOOKS_CONTINUE_RETURN_0;
+			return Y_HOOKS_BREAK_RETURN_1;
 		}
 
 		GetPlayerPos(playerid, px, py, pz);
 		SetPlayerFacingAngle(playerid, GetAngleToPoint(px, py, fuel_Data[fuel_CurrentFuelOutlet[playerid]][fuel_posX], fuel_Data[fuel_CurrentFuelOutlet[playerid]][fuel_posY]));
 
-		// Override the HoldAction setters
 		SetPlayerProgressBarValue(playerid, ActionBar, amount * 1000);
 		SetPlayerProgressBarMaxValue(playerid, ActionBar, capacity * 1000);
 		ShowPlayerProgressBar(playerid, ActionBar);
+
 		ApplyAnimation(playerid, "PED", "DRIVE_BOAT", 4.0, 1, 0, 0, 0, 0, 1);
 
 		transfer = (amount + 1.2 > capacity) ? capacity - amount : 1.2;
@@ -303,6 +303,7 @@ hook OnHoldActionUpdate(playerid, progress)
 			fuel_Data[fuel_CurrentFuelOutlet[playerid]][fuel_amount] = 0.0;
 			
 		UpdateFuelText(fuel_CurrentFuelOutlet[playerid]);
+		return Y_HOOKS_BREAK_RETURN_1;
 	}
 
 	return Y_HOOKS_CONTINUE_RETURN_0;

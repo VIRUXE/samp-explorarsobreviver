@@ -2,14 +2,14 @@
 #include <YSI_Coding\y_hooks>
 
 
-#define MAX_CLOTHES		(55)
-#define MAX_SKIN_NAME	(32)
+#define MAX_CLOTHES			(55)
+#define MAX_CLOTHES_NAME	(32)
 
 
 enum E_SKIN_DATA
 {
 			skin_model,
-			skin_name[MAX_SKIN_NAME],
+			skin_name[MAX_CLOTHES_NAME],
 			skin_gender,
 Float:		skin_lootSpawnChance,
 			skin_canWearHats,
@@ -36,7 +36,7 @@ hook OnPlayerConnect(playerid)
 }
 
 
-DefineClothesType(modelid, const name[MAX_SKIN_NAME], gender, Float:spawnchance, bool:wearhats, bool:wearmasks)
+DefineClothesType(modelid, const name[MAX_CLOTHES_NAME], gender, Float:spawnchance, bool:wearhats, bool:wearmasks)
 {
 	skin_Data[skin_Total][skin_model] = modelid;
 	skin_Data[skin_Total][skin_name] = name;
@@ -141,7 +141,10 @@ hook OnHoldActionUpdate(playerid, progress)
 	{
 	 	if(GetPlayerTotalVelocity(playerid) > 1.0)
 		 	StopUsingClothes(playerid);
+
+		return Y_HOOKS_BREAK_RETURN_0;
 	}
+	return Y_HOOKS_CONTINUE_RETURN_0;
 }
 hook OnHoldActionFinish(playerid)
 {
@@ -202,7 +205,7 @@ stock GetClothesName(skinid, name[])
 		return 0;
 
 	name[0] = EOS;
-	strcat(name, skin_Data[skinid][skin_name], MAX_SKIN_NAME);
+	strcat(name, skin_Data[skinid][skin_name], MAX_CLOTHES_NAME);
 
 	return 1;
 }

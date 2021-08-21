@@ -149,17 +149,14 @@ hook OnItemCreateInWorld(Item:itemid)
 
 	if(def_ItemTypeDefenceType[itemtype] != INVALID_DEFENCE_TYPE)
 	{
-		new itemdata[e_DEFENCE_DATA], Button:buttonid;
+		new itemdata[e_DEFENCE_DATA];
 
 		GetItemArrayData(itemid, itemdata);
-		GetItemButtonID(itemid, buttonid);
 
 		itemdata[def_active] = false;
 
 		if(itemdata[def_hit] > 0)
 			SetItemHitPoints(itemid, itemdata[def_hit]);
-
-		//SetButtonSize(buttonid, 1.2); // Default = 1.0;
 
 		SetItemArrayData(itemid, itemdata, e_DEFENCE_DATA);
 	}
@@ -294,7 +291,8 @@ hook OnPlayerDroppedItem(playerid, Item:itemid)
 	{
 		new Float:x, Float:y, Float:z;
 		GetPlayerPos(playerid, x, y, z);
-		SetItemPos(itemid, x, y, z - ITEM_FLOOR_OFFSET);
+		CA_RayCastLine(x, y, z, x, y, z - 2.0, z, z, z);
+		SetItemPos(itemid, x, y, z + 0.15);
 	}
 }
 
@@ -304,16 +302,16 @@ hook OnPlayerPickUpItem(playerid, Item:itemid)
 
 	if(def_ItemTypeDefenceType[itemtype] != INVALID_DEFENCE_TYPE)
 	{
-		new active;
-		GetItemArrayDataAtCell(itemid, active, def_active);
-		if(active)
+		new itemdata[e_DEFENCE_DATA];
+		GetItemArrayData(itemid, itemdata);
+		if(itemdata[def_active])
 		{
 			_InteractDefence(playerid, itemid);
 			return Y_HOOKS_BREAK_RETURN_1;
 		}
 	}
 
-	return 1;
+	return Y_HOOKS_CONTINUE_RETURN_0;
 }
 
 hook OnPlayerUseItemWithItem(playerid, Item:itemid, Item:withitemid)
@@ -322,9 +320,9 @@ hook OnPlayerUseItemWithItem(playerid, Item:itemid, Item:withitemid)
 
 	if(def_ItemTypeDefenceType[withitemtype] != INVALID_DEFENCE_TYPE)
 	{
-		new active;
-		GetItemArrayDataAtCell(withitemid, active, def_active);
-		if(active)
+		new itemdata[e_DEFENCE_DATA];
+		GetItemArrayData(withitemid, itemdata);
+		if(itemdata[def_active])
 		{
 			if(IsValidItem(def_CurrentDefenceEdit[playerid]))
 			{
@@ -585,6 +583,8 @@ hook OnHoldActionUpdate(playerid, progress)
 	{
 		if(!IsItemInWorld(def_CurrentDefenceItem[playerid]) || GetPlayerTotalVelocity(playerid) > 1.0)
 			StopBuildingDefence(playerid), StopHoldAction(playerid);
+
+		return Y_HOOKS_BREAK_RETURN_0;
 	}
 
 	return Y_HOOKS_CONTINUE_RETURN_0;
@@ -1172,9 +1172,9 @@ hook OnItemDestroy(Item:itemid)
 		if(def_Col[itemid] != -1)
 			CA_DestroyObject(def_Col[itemid]), def_Col[itemid] = -1;
 		
-		new active;
-		GetItemArrayDataAtCell(itemid, active, def_active);
-		if(active)
+		new itemdata[e_DEFENCE_DATA];
+		GetItemArrayData(itemid, itemdata);
+		if(itemdata[def_active])
 		{
 			CallLocalFunction("OnDefenceDestroy", "d", _:itemid);
 		}

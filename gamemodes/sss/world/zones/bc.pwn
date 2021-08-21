@@ -1,7 +1,6 @@
 
 #include <YSI_Coding\y_hooks>
 
-
 Load_BC()
 {
 	CreateFuelOutlet(603.48438, 1707.23438, 6.17969, 2.0, 130.0, frandom(40));
@@ -11,18 +10,16 @@ Load_BC()
 	CreateFuelOutlet(617.12500, 1687.45313, 6.17969, 2.0, 130.0, frandom(40));
 	CreateFuelOutlet(620.53125, 1682.46094, 6.17969, 2.0, 130.0, frandom(40));
 	CreateFuelOutlet(624.04688, 1677.60156, 6.17969, 2.0, 130.0, frandom(40));
-/*
-	new
-		buttonid[2];
 
-	buttonid[0]=CreateButton(-101.579933, 1374.613769, 10.4698, "Press F to enter", 0, 0, .label = 1);
-	buttonid[1]=CreateButton(-217.913787, 1402.804199, 27.7734, "Press F to exit", 0, 18, .label = 1);
+	new	Button:buttonid[2];
+
+	buttonid[0] = CreateButton(-101.579933, 1374.613769, 10.4698, 	"Pressione F para entrar", 	0, 0, .label = 1);
+	buttonid[1] = CreateButton(-217.913787, 1402.804199, 27.7734, 	"Pressione F para sair", 	0, 18, .label = 1);
 	LinkTP(buttonid[0], buttonid[1]);
 
-	buttonid[0]=CreateButton(-89.3299, 1378.2357, 10.4698, "Press F to enter", 0, 0, .label = 1);
-	buttonid[1]=CreateButton(-229.2949, 1401.2293, 27.7656, "Press F to exit", 0, 18, .label = 1);
+	buttonid[0] = CreateButton(-89.3299, 1378.2357, 10.4698, 		"Pressione F para entrar", 	0, 0, .label = 1);
+	buttonid[1] = CreateButton(-229.2949, 1401.2293, 27.7656, 		"Pressione F para sair", 	0, 18, .label = 1);
 	LinkTP(buttonid[0], buttonid[1]);
-*/
 
 //	CreateTurret(287.0, 2047.0, 17.5, 270.0, .type = 1);
 //	CreateTurret(335.0, 1843.0, 17.5, 270.0, .type = 1);
@@ -48,7 +45,7 @@ Load_BC()
 
 BC_District_Payasdas()
 {
-	ChatMsgAll(YELLOW, " » Carregando região 'BC_District_Payasdas'. Aguarde...");
+	log(false, "[WORLD] Loading 'BC_District_Payasdas'...");
 
 	CreateStaticLootSpawn(-162.708709, 2764.035888, 61.619419,		GetLootIndexFromName("world_civilian"), 20.0);
 	CreateStaticLootSpawn(-168.285522, 2727.203857, 61.401859,		GetLootIndexFromName("world_civilian"), 20.0);
@@ -83,9 +80,10 @@ BC_District_Payasdas()
 	CreateStaticLootSpawn(-218.358703, 2718.873779, 65.796173,		GetLootIndexFromName("world_police"), 20.0);
 	CreateStaticLootSpawn(-237.108871, 2664.212402, 72.680557,		GetLootIndexFromName("world_survivor"), 10.0);
 }
+
 BC_District_Verdant()
 {
-	ChatMsgAll(YELLOW, " » Carregando região 'BC_District_Verdant'. Aguarde...");
+	log(false, "[WORLD] Loading 'BC_District_Verdant'...");
 
 	CreateStaticLootSpawn(377.433288, 2594.337890, 15.473210,		GetLootIndexFromName("world_civilian"), 20.0);
 	CreateStaticLootSpawn(413.673675, 2536.922363, 18.147050,		GetLootIndexFromName("world_civilian"), 20.0);
@@ -140,9 +138,10 @@ BC_District_Verdant()
 
 	CreateHackerTrap(7412.60131, 2543.074218, 25.582199,			GetLootIndexFromName("world_military"));
 }
+
 BC_District_Area69()
 {
-	ChatMsgAll(YELLOW, " » Carregando região 'BC_District_Area69'. Aguarde...");
+	log(false, "[WORLD] Loading 'BC_District_Area69'...");
 
 	CreateStaticLootSpawn(211.756774, 1859.329711, 12.133520,		GetLootIndexFromName("world_industrial"), 20.0);
 	CreateStaticLootSpawn(222.789550, 1855.840698, 11.984900,		GetLootIndexFromName("world_industrial"), 20.0);
@@ -255,9 +254,10 @@ BC_District_Area69()
 	CreateHackerTrap(254.308044, 1781.366699, 4.162489,				GetLootIndexFromName("world_military"));
 	CreateHackerTrap(249.463699, 1782.034301, 4.162690,				GetLootIndexFromName("world_military"));
 }
+
 BC_District_BoneEast()
 {
-	ChatMsgAll(YELLOW, " » Carregando região 'BC_District_BoneEast'. Aguarde...");
+	log(false, "[WORLD] Loading 'BC_District_BoneEast'...");
 
 	CreateStaticLootSpawn(790.219055, 1990.437377, 4.361800,		GetLootIndexFromName("world_civilian"), 20.0);
 	CreateStaticLootSpawn(701.584167, 1992.585693, 4.535160,		GetLootIndexFromName("world_civilian"), 20.0);
@@ -291,9 +291,10 @@ BC_District_BoneEast()
 	CreateStaticLootSpawn(787.046752, 1681.969116, 7.177010,		GetLootIndexFromName("world_survivor"), 10.0);
 	CreateStaticLootSpawn(667.891845, 1713.228149, 9.806329,		GetLootIndexFromName("world_survivor"), 10.0);
 }
+
 BC_District_BigEar()
 {
-	ChatMsgAll(YELLOW, " » Carregando região 'BC_District_BigEar'. Aguarde...");
+	log(false, "[WORLD] Loading 'BC_District_BigEar'...");
 
 	CreateStaticLootSpawn(-299.839294, 1577.899414, 74.346000,		GetLootIndexFromName("world_civilian"), 20.0);
 	CreateStaticLootSpawn(-324.601623, 1535.770629, 74.552757,		GetLootIndexFromName("world_civilian"), 20.0);
@@ -313,9 +314,10 @@ BC_District_BigEar()
 	CreateStaticLootSpawn(-345.378326, 1608.751831, 74.794219,		GetLootIndexFromName("world_survivor"), 10.0);
 	CreateStaticLootSpawn(-226.494766, 1404.072998, 72.073638,		GetLootIndexFromName("world_survivor"), 10.0);
 }
+
 BC_District_Probe()
 {
-	ChatMsgAll(YELLOW, " » Carregando região 'BC_District_Probe'. Aguarde...");
+	log(false, "[WORLD] Loading 'BC_District_Probe'...");
 
 	CreateStaticLootSpawn(-226.105682, 1405.623779, 26.767429,		GetLootIndexFromName("world_civilian"), 20.0);
 	CreateStaticLootSpawn(-16.725469, 1385.647094, 8.141059,		GetLootIndexFromName("world_civilian"), 20.0);
@@ -338,9 +340,10 @@ BC_District_Probe()
 	CreateStaticLootSpawn(-93.175300, 1364.588378, 9.262379,		GetLootIndexFromName("world_industrial"), 20.0);
 	CreateStaticLootSpawn(-219.953491, 1404.425415, 26.767999,		GetLootIndexFromName("world_survivor"), 10.0);
 }
+
 BC_District_Octane()
 {
-	ChatMsgAll(YELLOW, " » Carregando região 'BC_District_Octane'. Aguarde...");
+	log(false, "[WORLD] Loading 'BC_District_Octane'...");
 
 	CreateStaticLootSpawn(406.390502, 1161.583251, 6.903639,		GetLootIndexFromName("world_civilian"), 20.0);
 	CreateStaticLootSpawn(502.410369, 1119.108764, 13.740139,		GetLootIndexFromName("world_civilian"), 20.0);
@@ -393,9 +396,10 @@ BC_District_Octane()
 	CreateStaticLootSpawn(596.116455, 1255.403808, 27.729589,		GetLootIndexFromName("world_survivor"), 15.0);
 	CreateStaticLootSpawn(713.606140, 1596.020996, 3.042929,		GetLootIndexFromName("world_survivor"), 15.0);
 }
+
 BC_District_Carson()
 {
-	ChatMsgAll(YELLOW, " » Carregando região 'BC_District_Carson'. Aguarde...");
+	log(false, "[WORLD] Loading 'BC_District_Carson'...");
 
 	CreateStaticLootSpawn(-204.049407, 1052.944702, 18.736200,		GetLootIndexFromName("world_civilian"), 20.0);
 	CreateStaticLootSpawn(-203.905685, 1061.835571, 18.736690,		GetLootIndexFromName("world_civilian"), 20.0);
@@ -561,9 +565,10 @@ BC_District_Carson()
 	CreateStaticLootSpawn(-245.723236, 1068.867797, 18.658399,		GetLootIndexFromName("world_industrial"), 20.0);
 
 }
+
 BC_District_Hunter()
 {
-	ChatMsgAll(YELLOW, " » Carregando região 'BC_District_Hunter'. Aguarde...");
+	log(false, "[WORLD] Loading 'BC_District_Hunter'...");
 
 	CreateStaticLootSpawn(627.578979, 894.678649, -42.107200,		GetLootIndexFromName("world_industrial"), 20.0);
 	CreateStaticLootSpawn(578.331787, 829.218872, -30.850990,		GetLootIndexFromName("world_industrial"), 20.0);
@@ -585,9 +590,10 @@ BC_District_Hunter()
 	CreateStaticLootSpawn(568.314575, 824.260559, -23.132759,		GetLootIndexFromName("world_survivor"), 10.0);
 	CreateStaticLootSpawn(495.127593, 785.502502, -23.075759,		GetLootIndexFromName("world_survivor"), 10.0);
 }
+
 BC_District_BoneGen()
 {
-	ChatMsgAll(YELLOW, " » Carregando região 'BC_District_BoneGen'. Aguarde...");
+	log(false, "[WORLD] Loading 'BC_District_BoneGen'...");
 
 	CreateStaticLootSpawn(-583.062133, 2713.019042, 70.823257,		GetLootIndexFromName("world_civilian"), 20.0);
 	CreateStaticLootSpawn(-13.895059, 2345.650634, 23.131660,		GetLootIndexFromName("world_civilian"), 20.0);
@@ -665,5 +671,4 @@ BC_District_BoneGen()
 	CreateStaticLootSpawn(-417.139739, 1356.921264, 11.771269,		GetLootIndexFromName("world_survivor"), 10.0);
 	CreateStaticLootSpawn(-555.274108, 2580.320312, 64.810043,		GetLootIndexFromName("world_survivor"), 10.0);
 	CreateStaticLootSpawn(-9.954810, 2336.925292, 23.302459,		GetLootIndexFromName("world_survivor"), 10.0);
-
 }

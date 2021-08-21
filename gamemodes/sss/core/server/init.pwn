@@ -489,7 +489,7 @@ ItemType:		item_LaserPointG	= INVALID_ITEM_TYPE,
 ItemType:		item_Barrel			= INVALID_ITEM_TYPE,
 // 310
 ItemType:		item_CluBellMask 	= INVALID_ITEM_TYPE,
-ItemType:		item_BalaclavaMask		= INVALID_ITEM_TYPE,
+ItemType:		item_BalaclavaMask	= INVALID_ITEM_TYPE,
 ItemType:		item_FireHelmet		= INVALID_ITEM_TYPE,
 ItemType:		item_FireHelmet1	= INVALID_ITEM_TYPE,
 ItemType:		item_HeadPhones		= INVALID_ITEM_TYPE,
@@ -627,24 +627,19 @@ public OnScriptInit()
 		UsePlayerPedAnims();
 
 	SetNameTagDrawDistance(gNameTagDistance);
+	EnableStuntBonusForAll(false);
 	ManualVehicleEngineAndLights();
-
-	EnableAntiCheat(4, false); // Anti-teleport hack (into/between vehicles)
-	EnableAntiCheat(11, false); // Anti-Health hack (in vehicle)
-	EnableAntiCheat(5, false); // Anti-Teleport (vehicle to player)
-	EnableAntiCheat(15, false); // Anti-Weapon hack
-	EnableAntiCheat(12, false); // Anti-Health hack (onfoot)
-
+	AllowInteriorWeapons(true);
 
 // ITEM TYPE DEFINITIONS
 	item_Accelerometer	= DefineItemType("Acelerometro",				"Accelerometer",	327,	1,	0.0, 0.0, 0.0,			0.0,	0.008151, 0.012682, -0.050635, 0.000000, 0.000000, 0.000000, .maxhitpoints = 1);
 	item_AdvancedKeypad	= DefineItemType("Teclado Avancado",			"AdvancedKeypad",	19273,	2,	270.0, 0.0, 0.0,		0.0,	0.198234, 0.101531, 0.095477, 0.000000, 343.020019, 0.000000, .maxhitpoints = 2);
 	item_AK47Rifle		= DefineItemType("AK-47",						"AK47Rifle",		355,	5,	90.0,							.maxhitpoints = 5);
-	item_Ammo308		= DefineItemType("Municao .308 Rounds",			"Ammo308",			2039,	1,	0.0, 0.0, 0.0,			0.082,	0.221075, 0.067746, 0.037494, 87.375968, 305.182189, 5.691741, .maxhitpoints = 1);
+	item_Ammo308		= DefineItemType("Municao .308",				"Ammo308",			2039,	1,	0.0, 0.0, 0.0,			0.082,	0.221075, 0.067746, 0.037494, 87.375968, 305.182189, 5.691741, .maxhitpoints = 1);
 	item_Ammo357		= DefineItemType("Municao .357",				"Ammo357",			2039,	2,	0.0, 0.0, 0.0,			0.082,	0.221075, 0.067746, 0.037494, 87.375968, 305.182189, 5.691741, .maxhitpoints = 2);
 	item_Ammo357Tracer	= DefineItemType("Municao .357",				"Ammo357Tracer",	2039,	2,	0.0, 0.0, 0.0,			0.082,	0.221075, 0.067746, 0.037494, 87.375968, 305.182189, 5.691741, .maxhitpoints = 2);
 	item_Ammo50			= DefineItemType("Municao .50",					"Ammo50",			2037,	2,	0.0, 0.0, 0.0,			0.082,	0.221075, 0.067746, 0.037494, 87.375968, 305.182189, 5.691741, .maxhitpoints = 2);
-	item_Ammo50BMG		= DefineItemType("Municao .50 Rounds",			"Ammo50BMG",		2037,	2,	0.0, 0.0, 0.0,			0.082,	0.221075, 0.067746, 0.037494, 87.375968, 305.182189, 5.691741, .maxhitpoints = 2);
+	item_Ammo50BMG		= DefineItemType("Municao .50",					"Ammo50BMG",		2037,	2,	0.0, 0.0, 0.0,			0.082,	0.221075, 0.067746, 0.037494, 87.375968, 305.182189, 5.691741, .maxhitpoints = 2);
 	item_Ammo556		= DefineItemType("Municao 5.56",				"Ammo556",			2040,	3,	0.0, 0.0, 0.0,			0.082,	0.221075, 0.067746, 0.037494, 87.375968, 305.182189, 5.691741, .maxhitpoints = 3);
 	item_Ammo556HP		= DefineItemType("Municao 5.56",				"Ammo556HP",		2040,	3,	0.0, 0.0, 0.0,			0.082,	0.221075, 0.067746, 0.037494, 87.375968, 305.182189, 5.691741, .maxhitpoints = 3);
 	item_Ammo556Tracer	= DefineItemType("Municao 5.56",				"Ammo556Tracer",	2040,	3,	0.0, 0.0, 0.0,			0.082,	0.221075, 0.067746, 0.037494, 87.375968, 305.182189, 5.691741, .maxhitpoints = 3);
@@ -696,7 +691,7 @@ public OnScriptInit()
 	item_Campfire		= DefineItemType("Campfire",					"Campfire",			19632,	5,	0.0, 0.0, 0.0,			0.0,	0.106261, 0.004634, -0.144552, 246.614654, 345.892211, 258.267395, true, .maxhitpoints = 5);
 	item_CanDrink		= DefineItemType("Lata",						"CanDrink",			2601,	1,	0.0, 0.0, 0.0,			0.054,	0.064848, 0.059404, 0.017578, 0.000000, 359.136199, 30.178396, .maxhitpoints = 1);
 	item_Cane			= DefineItemType("Cano",						"Cane",				19348,	3,	270.0, 0.0, 0.0,		0.0,	0.041865, 0.022883, -0.079726, 4.967216, 10.411237, 0.000000, .maxhitpoints = 3);
-	item_Canister		= DefineItemType("Canister",					"Canister",			19816,	5,	0.0, 0.0, 0.0,			0.218,	0.081000, 0.032999, -0.195999,  164.900070, 8.099815, 96.199882, true, .maxhitpoints = 5);
+	item_Canister		= DefineItemType("Vasilha",						"Canister",			19816,	5,	0.0, 0.0, 0.0,			0.218,	0.081000, 0.032999, -0.195999,  164.900070, 8.099815, 96.199882, true, .maxhitpoints = 5);
 	item_CapBack1		= DefineItemType("Bone",						"CapBack1",			18939,	1,	180.0, 0.0, 0.0,		0.0,	0.062216, 0.055396, 0.001138, 90.000000, 0.000000, 180.000000, .maxhitpoints = 1);
 	item_CapBack2		= DefineItemType("Chapeu",						"CapBack2",			18940,	1,	180.0, 0.0, 0.0,		0.0,	0.062216, 0.055396, 0.001138, 90.000000, 0.000000, 180.000000, .maxhitpoints = 1);
 	item_CapBack3		= DefineItemType("Chapeu",						"CapBack3",			18941,	1,	0.0, 0.0, 0.0,			0.0,	0.062216, 0.055396, 0.001138, 90.000000, 0.000000, 180.000000, .maxhitpoints = 1);
@@ -763,7 +758,7 @@ public OnScriptInit()
 	item_Fork			= DefineItemType("Garfo",						"Fork",				11715,	1,	0.0, 0.0, 0.0,			0.0,	0.086000, 0.039000, 0.068000,  88.800025, -2.300116, 1.699898, .maxhitpoints = 1);
 	item_FryingPan		= DefineItemType("Frigideira",					"FryingPan",		19581,	2,	0.0, 0.0, 0.0,			-0.028,	0.078000, 0.017999, 0.025000,  -29.900056, -88.800018, 59.299705, .maxhitpoints = 2);
 	item_Fusebox		= DefineItemType("Caixa de Fusiveis",			"Fusebox",			328,	2,	90.0, 0.0, 0.0,			0.0,	.maxhitpoints = 2);
-	item_GarageDoor		= DefineItemType("",							"GarageDoor",		19908,	14, 0.0, 90.0, 0.0,			0.0, .maxhitpoints = 10);
+	item_GarageDoor		= DefineItemType("Portao de Garagem",			"GarageDoor",		19908,	14, 0.0, 90.0, 0.0,			0.0, .maxhitpoints = 10);
 	item_GasCan			= DefineItemType("Galao",						"GasCan",			1650,	3,	0.0, 0.0, 0.0,			0.27,	0.143402, 0.027548, 0.063652, 0.000000, 253.648208, 0.000000, .maxhitpoints = 3);
 	item_GasMask		= DefineItemType("Mascara de Gas",				"GasMask",			19472,	1,	180.0, 0.0, 0.0,		0.0,	0.062216, 0.055396, 0.001138, 90.000000, 0.000000, 180.000000, .maxhitpoints = 1);
 	item_GearBox		= DefineItemType("Transmissao",					"GearBox",			19918,	5,	0.0, 0.0, 0.0,			-0.0361,0.073999, -0.039000, -0.169000,  73.400024, -173.499984, 80.899993, .longpickup = true, .maxhitpoints = 4);
@@ -780,7 +775,7 @@ public OnScriptInit()
 	item_HardDrive		= DefineItemType("Disco Rigido",				"HardDrive",		328,	1,	90.0, 0.0, 0.0,			0.0,	.maxhitpoints = 1);
 	item_Headlight		= DefineItemType("Farol",						"Headlight",		19280,	1,	90.0, 0.0, 0.0,			0.0,	0.107282, 0.051477, 0.023807, 0.000000, 259.073913, 351.287475, .maxhitpoints = 1);
 	item_HeadPhones		= DefineItemType("Fone de Ouvido",				"HeadPhones",		19424,	1,	180.0, 0.0, 0.0,		0.0,	0.062216, 0.055396, 0.001138, 90.000000, 0.000000, 180.000000, .maxhitpoints = 1);
-	item_HeartShapedBox	= DefineItemType("Caixa de Coracao",			"HeartShapedBox",	1240,	1,	90.0, 0.0, 0.0,			-0.02,	0.171999, 0.077999, -0.016999,  0.000000, 0.000000, 10.200000, .longpickup = true, .maxhitpoints = 1);
+	item_HeartShapedBox	= DefineItemType("Mochila Coracao",				"HeartShapedBox",	1240,	1,	90.0, 0.0, 0.0,			-0.02,	0.171999, 0.077999, -0.016999,  0.000000, 0.000000, 10.200000, .longpickup = true, .maxhitpoints = 1);
 	item_Heatseeker		= DefineItemType("Heatseeker",					"Heatseeker",		360,	6,	90.0, .maxhitpoints = 6);
 	item_HelmArmy		= DefineItemType("Capacete Militar",			"HelmArmy",			19106,	2,	345.0, 270.0, 0.0,		0.045,	0.184999, -0.007999, 0.046999, 94.199989, 22.700027, 4.799994, .maxhitpoints = 2);
 	item_HerpDerp		= DefineItemType("Unidade de Derp",				"HerpDerp",			19513,	1,	0.0, 0.0, 0.0,			0.0,	0.103904, -0.003697, -0.015173, 94.655189, 184.031860, 0.000000, .maxhitpoints = 1);
@@ -816,10 +811,10 @@ public OnScriptInit()
 	item_Lemon			= DefineItemType("Limao",						"Lemon",			19574,	1,	170.0, 0.0, 0.0,		0.03,	0.000003, 0.000003, 0.000003, 0.000000, 0.000003, 0.000003, .maxhitpoints = 1);
 	item_LenKnocksRifle	= DefineItemType("Espingarda Len-Knocks",		"LenKnocksRifle",	358,	5,	90.0,							.maxhitpoints = 5);
 	item_Locator		= DefineItemType("Localizador",					"Locator",			2967,	1,	0.0, 0.0, 0.0,			0.0,	0.095999, 0.064999, 0.000000, -1.300025, -67.899948, -92.999908, .maxhitpoints = 1);
-	item_LockBreaker	= DefineItemType("Electronic Lockpick",			"LockBreaker",		1952,	2,	0.0, 0.0, 0.0,			0.001,	0.098000, 0.039999, 0.085000,  -94.900032, -177.600021, 18.499980, .maxhitpoints = 2);
+	item_LockBreaker	= DefineItemType("Disjuntor de Bloqueio",		"LockBreaker",		1952,	2,	0.0, 0.0, 0.0,			0.001,	0.098000, 0.039999, 0.085000,  -94.900032, -177.600021, 18.499980, .maxhitpoints = 2);
 	item_Locker			= DefineItemType("Armario",						"Locker",			11729,	12,	0.0, 0.0, 0.0,			0.0,	.longpickup = true,	.maxhitpoints = 10);
 	item_LocksmithKit	= DefineItemType("Kit de Chaveiro",				"LocksmithKit",		1210,	3,	0.0, 0.0, 90.0,			0.0,	0.285915, 0.078406, -0.009429, 0.000000, 270.000000, 0.000000, false, 0xFFF4A460, .maxhitpoints = 3);
-	item_LongPlank		= DefineItemType("Madeira",						"LongPlank",		2937,	9,	0.0, 0.0, 0.0,			0.0,	0.141491, 0.002142, -0.190920, 248.561920, 350.667724, 175.203552, true, .maxhitpoints = 9);
+	item_LongPlank		= DefineItemType("Prancha Longa",				"LongPlank",		2937,	9,	0.0, 0.0, 0.0,			0.0,	0.141491, 0.002142, -0.190920, 248.561920, 350.667724, 175.203552, true, .maxhitpoints = 9);
 	item_M16Rifle		= DefineItemType("M16",							"M16Rifle",			356,	5,	90.0, .maxhitpoints = 5);
 	item_M77RMRifle		= DefineItemType("M77-RM",						"M77RMRifle",		357,	5,	90.0,							.maxhitpoints = 5);
 	item_M9Pistol		= DefineItemType("M9",							"M9Pistol",			346,	1,	90.0, .maxhitpoints = 1);
@@ -850,7 +845,7 @@ public OnScriptInit()
 	item_Motor			= DefineItemType("Motor",						"Motor",			2006,	2,	0.0, 0.0, 0.0,			0.0,	0.129999, 0.087999, 0.009000,  -86.099967, -112.099975, 92.699890, .maxhitpoints = 2);
 	item_MP5			= DefineItemType("MP5",							"MP5",				353,	4,	90.0, .maxhitpoints = 4);
 	item_Mustard		= DefineItemType("Mustarda",					"Mustard",			11723,	1,	0.0, 0.0, 0.0,			-0.1,	0.100000, 0.077000, 0.041000,  4.400032, -2.300116, 138.699905, .maxhitpoints = 1);
-	item_Nailbat		= DefineItemType("Nailbat",						"Nailbat",			2045,	3,	0.0, 0.0, 0.0,			0.0,	0.071999,-0.025000,0.315999,99.899986,0.000000,0.199999,	.maxhitpoints = 3);
+	item_Nailbat		= DefineItemType("Bastao com Pregos",						"Nailbat",			2045,	3,	0.0, 0.0, 0.0,			0.0,	0.071999,-0.025000,0.315999,99.899986,0.000000,0.199999,	.maxhitpoints = 3);
 	item_NightVision	= DefineItemType("Visao Noturna",				"NightVision",		000,	2,	90.0, .maxhitpoints = 2);
 	item_Note			= DefineItemType("Nota",						"Note",				2953,	1,	0.0, 0.0, 0.0,			0.0,	0.083999, 0.022000, -0.013000,  -82.300018, -14.900006, -83.200042, false, 0xCAFFFFFF, .maxhitpoints = 1);
 	item_NULL			= DefineItemType("NULL",						"NULL",				0,		1, .maxhitpoints = 0);
@@ -858,18 +853,18 @@ public OnScriptInit()
 	item_NULL3			= DefineItemType("NULL3",						"NULL3",			000,	1,	90.0, .maxhitpoints = 1);
 	item_NULL4			= DefineItemType("NULL4",						"NULL4",			000,	1,	90.0, .maxhitpoints = 1);
 	item_OilCan			= DefineItemType("Lata de Oleo",				"OilCan",			19621,	2,	0.0, 0.0, 0.0,			0.060,	0.075999, 0.022000, 0.011000,  7.800007, -11.899963, 81.800025, .maxhitpoints = 2);
-	item_OilDrum		= DefineItemType("Oil Drum",	 				"OilDrum",			19812,	5,	0.0, 0.0, 0.0,			0.468,	0.053000, 0.480999, -0.340999,  -109.899971, -10.700182, 98.799865, true, .maxhitpoints = 5);
+	item_OilDrum		= DefineItemType("Tambor de Oleo",	 			"OilDrum",			19812,	5,	0.0, 0.0, 0.0,			0.468,	0.053000, 0.480999, -0.340999,  -109.899971, -10.700182, 98.799865, true, .maxhitpoints = 5);
 	item_Orange			= DefineItemType("Laranja",						"Orange",			19574,	1,	0.0, 0.0, 0.0,			0.000,	0.078000, 0.040998, 0.009000,  86.399932, -161.300003, 83.699714, .maxhitpoints = 1);
 	item_OrangeJuice	= DefineItemType("Suco de Laranja",				"OrangeJuice",		19563,	1,	0.0, 0.0, 0.0,			0.026,	0.177000, 0.088999, -0.118000,  -161.999969, -165.499984, -1.699998, .maxhitpoints = 1);
 	item_Padlock		= DefineItemType("Cadeado",						"Padlock",			19804,	1,	90.0, 0.0, 0.0,			-0.016,	0.160000, 0.035000, 0.019000,  75.900054, -91.200210, 85.499847, .maxhitpoints = 1);
 	item_Pager			= DefineItemType("Pager",						"Pager",			18875,	1,	0.0, 0.0, 0.0,			0.0,	0.097277, 0.027625, 0.013023, 90.819244, 191.427993, 0.000000, .maxhitpoints = 1);
 	item_Pan			= DefineItemType("Panela",						"Pan",				19584,	2,	0.0, 0.0, 0.0,			0.100,	0.078000, 0.030999, 0.012000,  39.499954, -77.500083, 128.299819, .maxhitpoints = 2);
-	item_ParaBag		= DefineItemType("Paraquedas",					"ParaBag",			371,	6,	90.0, 0.0, 0.0,			0.0,	0.350542, 0.017385, 0.060469, 0.000000, 260.845062, 0.000000, .maxhitpoints = 6);
+	item_ParaBag		= DefineItemType("Mochila Paraquedas",			"ParaBag",			371,	6,	90.0, 0.0, 0.0,			0.0,	0.350542, 0.017385, 0.060469, 0.000000, 260.845062, 0.000000, .maxhitpoints = 6);
 	item_Parachute		= DefineItemType("Paraquedas",					"Parachute",		371,	6,	90.0, 0.0, 0.0,			0.0,	0.350542, 0.017385, 0.060469, 0.000000, 260.845062, 0.000000, .maxhitpoints = 6);
 	item_Parrot			= DefineItemType("Sebastiao",					"Parrot",			19078,	2,	0.0, 0.0, 0.0,			0.0,	0.131000, 0.021000, 0.005999,  -86.000091, 6.700000, -106.300018, .maxhitpoints = 2);
 	item_PetrolBomb		= DefineItemType("Bomba de Gasolina",			"PetrolBomb",		1650,	3,	0.0, 0.0, 0.0,			0.27,	0.143402, 0.027548, 0.063652, 0.000000, 253.648208, 0.000000, .maxhitpoints = 3);
 	item_Pills          = DefineItemType("Comprimidos",					"Pills",			2709,	1,	0.0, 0.0, 0.0,			0.09,	0.044038, 0.082106, 0.000000, 0.000000, 0.000000, 0.000000, .maxhitpoints = 1);
-	item_PisschBox      = DefineItemType("Caixa de Pissh",				"PisschBox",		19572,	2,	0.0, 0.0, 0.0,			0.0363,	-0.001000, -0.043999, -0.167999,  -110.499992, -12.499979, 83.099990, .maxhitpoints = 2);
+	item_PisschBox      = DefineItemType("Caixa Cerveja",				"PisschBox",		19572,	2,	0.0, 0.0, 0.0,			0.0363,	-0.001000, -0.043999, -0.167999,  -110.499992, -12.499979, 83.099990, .maxhitpoints = 2);
 	item_Pizza          = DefineItemType("Pizza",						"Pizza",			1582,	2,	0.0, 0.0, 0.0,			0.0,	0.320344, 0.064041, 0.168296, 92.941909, 358.492523, 14.915378, .maxhitpoints = 2);
 	item_PizzaBox       = DefineItemType("Caixa de Pizza",				"PizzaBox",			19571,	3,	90.0, 0.0, 0.0,			0.0,	0.263000, 0.057999, -0.184000,  0.000000, 0.000000, 0.000000, .maxhitpoints = 3);
 	item_PizzaHat       = DefineItemType("Chapeu de Pizza",				"PizzaHat",			19558,	1,	2.0, -93.0, 0.0,		0.0,	0.186999, 0.043000, 0.012999,  9.900009, -175.300125, -94.199996, .maxhitpoints = 1);
@@ -886,7 +881,7 @@ public OnScriptInit()
 	item_Radio          = DefineItemType("Radio",						"Radio",			2966,	1,	0.0, 0.0, 0.0,			0.0,	0.073999, 0.066999, -0.057000,  101.699996, -151.699951, 0.000000, .maxhitpoints = 1);
 	item_RadioBox       = DefineItemType("Amplificador",				"RadioBox",			19612,	8,	0.0, 0.0, 0.0,			-0.020,	-0.090000, 0.132999, -0.202000,  63.499916, 108.599983, 95.499877, .maxhitpoints = 8);
 	item_RadioPole      = DefineItemType("Antena de Radio",				"RadioPole",		3221,	3,	0.0, 0.0, 0.0,			0.0,	0.081356, 0.034642, -0.167247, 0.000000, 0.000000, 240.265777, .maxhitpoints = 3);
-	item_Rake           = DefineItemType("Rake",						"Rake",				18890,	6,	90.0, 0.0, 0.0,			0.0,	-0.002599, 0.003984, 0.026356, 190.231231, 0.222518, 271.565185, .maxhitpoints = 6);
+	item_Rake           = DefineItemType("Ancinho",						"Rake",				18890,	6,	90.0, 0.0, 0.0,			0.0,	-0.002599, 0.003984, 0.026356, 190.231231, 0.222518, 271.565185, .maxhitpoints = 6);
 	item_RawFish        = DefineItemType("Peixe",						"RawFish",			19630,	9,	0.0, 0.0, 0.0,			0.000,	0.047000, 0.021999, 0.083000,  -84.299980, -75.299972, 103.100028, .maxhitpoints = 9);
 	item_RedApple       = DefineItemType("Maca Vermelha",				"RedApple",			19575,	1,	170.0, 0.0, 0.0,		0.03,	0.100000, 0.039000, 0.018000,  4.400032, -2.300116, 138.699905, .maxhitpoints = 1);
 	item_RedCrate       = DefineItemType("Red Crate",					"RedCrate",			2669,	15,	0.0, 0.0, 0.0,		0.0,	0.0, 0.0, 0.0, 0.0, 0.0, 0.0, false,  .maxhitpoints = 20);
@@ -899,14 +894,14 @@ public OnScriptInit()
 	item_Rucksack       = DefineItemType("Mochila de Viagem",			"Rucksack",			19559,	5,	91.0, -4.0, 0.0,		0.16,	0.350542, 0.017385, 0.060469, 0.000000, 260.845062, 0.000000, .maxhitpoints = 5);
 	item_Satchel        = DefineItemType("Mochila Pequena",				"Satchel",			363,	2,	270.0, 0.0, 0.0,		0.0,	0.052853, 0.034967, -0.177413, 0.000000, 261.397491, 349.759826, .maxhitpoints = 2);
 	item_Sawnoff        = DefineItemType("Sawnoff",						"Sawnoff",			350,	2,	90.0, .maxhitpoints = 2);
-	item_ScrapMachine	= DefineItemType("Scrap Machine",				"ScrapMachine",		920,	12,	0.0, 0.0, 0.0,			0.4344,	.maxhitpoints = 12);
-	item_ScrapMetal		= DefineItemType("Scrap Metal",					"ScrapMetal",		19941,	1,	0.0, 0.0, 0.0,			0.218,	0.110999, 0.031000, 0.031999,  -101.400001, 3.700001, -97.499969, false, 0xFF4D2525, .maxhitpoints = 1);
+	item_ScrapMachine	= DefineItemType("Maquina de Sucata",			"ScrapMachine",		920,	12,	0.0, 0.0, 0.0,			0.4344,	.maxhitpoints = 12);
+	item_ScrapMetal		= DefineItemType("Sucata",						"ScrapMetal",		19941,	1,	0.0, 0.0, 0.0,			0.218,	0.110999, 0.031000, 0.031999,  -101.400001, 3.700001, -97.499969, false, 0xFF4D2525, .maxhitpoints = 1);
 	item_Screwdriver	= DefineItemType("Chave de Fenda",				"Screwdriver",		18644,	1,	90.0, 0.0, 0.0,			0.0,	0.099341, 0.021018, 0.009145, 193.644195, 0.000000, 0.000000, .maxhitpoints = 1);
 	item_SeedBag		= DefineItemType("Sementes",					"SeedBag",			2663,	2,	0.0, 0.0, 0.0,			0.205,	0.320356, 0.042146, 0.049817, 0.000000, 260.512817, 349.967254, false, 0xFFF4A460, .maxhitpoints = 2);
 	item_SemiAutoRifle	= DefineItemType("Espingarda",					"SemiAutoRifle",	357,	5,	90.0, .maxhitpoints = 5);
 	item_Shield			= DefineItemType("Escudo",						"Shield",			18637,	8,	0.0, 0.0, 0.0,			0.0,	-0.262389, 0.016478, -0.151046, 103.597534, 6.474381, 38.321765, .maxhitpoints = 8);
-	item_Sign			= DefineItemType("Sinal",						"Sign",				19471,	6,	0.0, 0.0, 270.0,		0.0,	.longpickup = true, .maxhitpoints = 6);
-	item_SignShot		= DefineItemType("Sinal",						"SignShot",			3265,	3,	0.0, 0.0, 0.0,			0.0,	0.081356, 0.034642, -0.167247, 0.000000, 0.000000, 240.265777, .maxhitpoints = 3);
+	item_Sign			= DefineItemType("Placa",						"Sign",				19471,	6,	0.0, 0.0, 270.0,		0.0,	.longpickup = true, .maxhitpoints = 6);
+	item_SignShot		= DefineItemType("Placa de Perigo",				"SignShot",			3265,	3,	0.0, 0.0, 0.0,			0.0,	0.081356, 0.034642, -0.167247, 0.000000, 0.000000, 240.265777, .maxhitpoints = 3);
 	item_Sledgehammer	= DefineItemType("Marreta",						"Sledgehammer",		19631,	7,	0.0, 90.0, 0.0,			0.000,	0.075000, -0.004000, 0.269000,  -84.600021, -70.899993, 0.000000, .maxhitpoints = 7);
 	item_SmallBox		= DefineItemType("Caixa Pequena",				"SmallBox",			2969,	4,	0.0, 0.0, 0.0,			0.0,	0.114177, 0.089762, -0.173014, 247.160079, 354.746368, 79.219100, true, .longpickup = true, .maxhitpoints = 4);
 	item_SmallTable		= DefineItemType("Mesa Pequena",				"SmallTable",		2346,	10,	0.0, 0.0, 0.0,			-0.03, .maxhitpoints = 10, .longpickup = true);
@@ -925,7 +920,7 @@ public OnScriptInit()
 	item_SwatHelmet		= DefineItemType("Chapeu de Bope",				"SwatHelmet",		19514,	1,	-22.0, -98.0, 2.0,		0.0,	0.186999, 0.043000, 0.029999,  76.099891, -68.100074, -2.499999, .maxhitpoints = 1);
 	item_Sword			= DefineItemType("Espada",						"Sword",			339,	4,	90.0, .maxhitpoints = 4);
 	item_Table			= DefineItemType("Mesa",						"Table",			2115,	14,	0.0, 0.0, 0.0,			-0.0280, .maxhitpoints = 14, .longpickup = true);
-	item_Taco			= DefineItemType("Taco",						"Taco",				2769,	1,	0.0, 0.0, 0.0,			0.0,	0.069803, 0.057707, 0.039241, 0.000000, 78.877342, 0.000000, .maxhitpoints = 1);
+	item_Taco			= DefineItemType("Resto de Hamburguer",			"Taco",				2769,	1,	0.0, 0.0, 0.0,			0.0,	0.069803, 0.057707, 0.039241, 0.000000, 78.877342, 0.000000, .maxhitpoints = 1);
 	item_TallFrame		= DefineItemType("Frame de Metal",				"TallFrame",		3025,	14,	0.0, 180.0, 0.0,			0.0);
 	item_Teargas		= DefineItemType("Teargas",						"Teargas",			343,	2,	90.0, .maxhitpoints = 2);
 	item_Tec9			= DefineItemType("Tec 9",						"Tec9",				372,	2,	90.0, .maxhitpoints = 2);
@@ -939,7 +934,7 @@ public OnScriptInit()
 	item_Tomato			= DefineItemType("Tomate",						"Tomato",			19577,	1,	170.0, 0.0, 0.0,		0.03,	0.054000, 0.055999, 0.013999, 0.000000, 0.000003, 0.000003, .maxhitpoints = 1);
 	item_ToolBox		= DefineItemType("Caixa de Ferramentas",		"ToolBox",			19921,	7,	0.0, 0.0, 0.0,			0.0541,	-0.209000, 0.052999, -0.231000,  73.400024, -173.499984, 80.899993, true, .longpickup = true, .maxhitpoints = 8);
 	item_TopHat			= DefineItemType("Chapeu de Artista",			"TopHat",			19352,	2,	0.0, 0.0, 0.0,			-0.023,	0.225000, 0.034000, 0.014000, 81.799942, 7.699998, 179.999954, .maxhitpoints = 2);
-	item_Torso			= DefineItemType("Corpo",						"Torso",			2907,	12,	0.0, 0.0, 270.0,		0.0,	.longpickup = true,	.maxhitpoints = 10);
+	item_Torso			= DefineItemType("Corpo",						"Torso",			2907,	6,	0.0, 0.0, 270.0,		0.0,	0.087207, 0.093263, -0.280867, 253.355865, 355.971557, 175.203552, true, .longpickup = true, .maxhitpoints = 6);
 	item_TruckCap		= DefineItemType("Bone de Camineiro",			"TruckCap",			18961,	1,	0.0, 0.0, 0.0,			0.01,	0.225000, 0.034000, 0.014000, 81.799942, 7.699998, 179.999954, .maxhitpoints = 1);
 	item_VehicleWeapon	= DefineItemType("VEHICLE_WEAPON",				"VehicleWeapon",	356,	99,	90.0,							.maxhitpoints = 99);
 	item_WalkingCane	= DefineItemType("Cane",						"WalkingCane",		326,	3,	90.0, .maxhitpoints = 3);
@@ -955,12 +950,12 @@ public OnScriptInit()
 	item_WitchesHat		= DefineItemType("Chapeu de Bruxa",				"WitchesHat",		19528,	1,	0.0, -84.0, 0.0,		0.0,	0.290000, 0.018000, 0.053999,  -107.600021, 102.500000, 0.000000, .maxhitpoints = 1);
 	item_WoodLog		= DefineItemType("Madeira",						"WoodLog",			19793,	1,	0.0, 0.0, 0.0,			0.000,	0.034999, 0.018998, -0.150000,  -74.199989, -110.000022, -54.900020, .maxhitpoints = 1);
 	item_WoodPanel		= DefineItemType("Rampa de Madeira",			"WoodPanel",		5153,	11,	0.0, 23.537, 0.0,		0.0,	-0.342762, 0.908910, -0.453703, 296.326019, 46.126548, 226.118209,  true, .maxhitpoints = 7);
-	item_Workbench		= DefineItemType("Mesa de Trabalho",			"Workbench",		936,	12,	0.0, 0.0, 0.0,			0.4434,	.longpickup = true, .maxhitpoints = 12);
+	item_Workbench		= DefineItemType("Mesa de Trabalho",			"Workbench",		936,	12,	0.0, 0.0, 0.0,			0.4434, .maxhitpoints = 12);
 	item_WrappedMeat	= DefineItemType("Carne Embrulhada",			"WrappedMeat",		19560,	1,	0.0, 0.0, 0.0,			0.0,	0.223000, 0.052999, 0.064999,  -70.300064, 165.600082, 10.500000, .maxhitpoints = 1);
 	item_Wrench			= DefineItemType("Chave de Roda",				"Wrench",			18633,	2,	0.0, 90.0, 0.0,			0.0,	0.084695, -0.009181, 0.152275, 98.865089, 270.085449, 0.000000, .maxhitpoints = 2);
 	item_XmasHat		= DefineItemType("Chapeu de Natal",				"XmasHat",			19066,	1,	0.0, 0.0, 0.0,			0.0,	0.135000, -0.018001, -0.002000,  90.000000, 174.500061, 9.600001, .maxhitpoints = 1);
 	item_ZorroMask		= DefineItemType("Mascara de Zorro",			"ZorroMask",		18974,	1,	0.0, 0.0, 0.0,			0.0,	0.193932, 0.050861, 0.017257, 90.000000, 0.000000, 0.000000, .maxhitpoints = 1);
-	item_Clock			= DefineItemType("Relogio",						"Clock",			2710,	1,	0.0, 0.0, 0.0,			0.0,	0.193932, 0.050861, 0.017257, 90.000000, 0.000000, 0.000000, .maxhitpoints = 1);
+	item_Clock			= DefineItemType("Relogio",						"Clock",			2710,	1,	0.0, 0.0, 0.0,			0.18,	0.193932, 0.050861, 0.017257, 90.000000, 0.000000, 0.000000, .maxhitpoints = 1);
 	item_MaskRed		= DefineItemType("Mascara de Hoquei",			"RHockeyMask",		19037,	1,	0.0, 0.0, 0.0,			0.082,	0.221075, 0.067746, 0.037494, 87.375968, 305.182189, 5.691741, .maxhitpoints = 1);
     item_MaskGreen		= DefineItemType("Mascara de Hoquei",			"GHockeyMask",		19038,	1,	0.0, 0.0, 0.0,			0.082,	0.221075, 0.067746, 0.037494, 87.375968, 305.182189, 5.691741, .maxhitpoints = 1);
 
@@ -1293,7 +1288,8 @@ public OnScriptInit()
 	SetRadioExplosiveTriggerItem(item_MobilePhone);
 
 
-	// FOOD ITEM TYPE DEFINITIONS
+	// FOOD ITEM TYPE DEFINITIONS	(maxbites, bitevalue, cancook, canrawinfect, destroyonend)
+
 	DefineFoodItem(item_Banana,			3, 5.5,		0, 0, 1);
 	DefineFoodItem(item_Bread,			5, 2.34,	1, 0, 1);
 	DefineFoodItem(item_BreadLoaf,		10, 6.32,	1, 0, 1);
@@ -1306,20 +1302,20 @@ public OnScriptInit()
 	DefineFoodItem(item_FishyFingers,	10, 6.3,	1, 0, 0);
 	DefineFoodItem(item_GrnApple,		4, 4.5,		0, 0, 1);
 	DefineFoodItem(item_Ham,			6, 6.12,	1, 1, 1);
-	DefineFoodItem(item_HotDog,			4, 18.00,	1, 1, 1);
+	DefineFoodItem(item_HotDog,			4, 18.00,	0, 1, 1);
 	DefineFoodItem(item_IceCream,		12, 4.1,	0, 0, 0);
 	DefineFoodItem(item_IceCreamBars,	12, 3.9,	0, 0, 0);
 	DefineFoodItem(item_Lemon,			4, 4.0,		0, 0, 1);
 	DefineFoodItem(item_Meat,			8, 18.12,	1, 1, 1);
 	DefineFoodItem(item_Meat2,			6, 16.7,	1, 1, 1);
 	DefineFoodItem(item_Orange,			4, 4.5,		0, 0, 1);
-	DefineFoodItem(item_Pizza,			6, 18.30,	1, 0, 0);
-	DefineFoodItem(item_PizzaBox,		6, 16.5,	1, 0, 0);
+	DefineFoodItem(item_Pizza,			6, 18.30,	0, 0, 0);
+	DefineFoodItem(item_PizzaBox,		6, 16.5,	0, 0, 0);
 	DefineFoodItem(item_PizzaOnly,		6, 18.5,	1, 0, 1);
 	DefineFoodItem(item_RawFish,		4, 4.5,		1, 1, 1);
 	DefineFoodItem(item_RedApple,		4, 4.5,		0, 0, 1);
 	DefineFoodItem(item_Steak,			4, 6.49,	1, 1, 1);
-	DefineFoodItem(item_Taco,			4, 13.75,	1, 0, 1);
+	DefineFoodItem(item_Taco,			4, 13.75,	0, 0, 1);
 	DefineFoodItem(item_Tomato,			3, 3.0,		1, 0, 1);
 	DefineFoodItem(item_WrappedMeat,	4, 6.7,		1, 1, 1);
 
@@ -1353,7 +1349,7 @@ public OnScriptInit()
 	DefineSafeboxType(item_SmallBox,		8);
 	DefineSafeboxType(item_Suitcase,		6);
 	DefineSafeboxType(item_ToolBox,			8);
-	DefineSafeboxType(item_Torso,			90, .animateonuse = false);
+	DefineSafeboxType(item_Torso,			90);
 	DefineSafeboxType(item_Workbench,		16, false, false);
 	
 	// SEED TYPE DEFINITIONS
@@ -1385,10 +1381,10 @@ public OnScriptInit()
 	// CRAFTING SET DEFINITIONS
 	// items created by hand
 	DefineItemCraftSet(item_Bandage, item_Knife, true, item_Clothes, false);
-	DefineItemCraftSet(item_Bottle, item_Bottle, true, item_Bottle, true);
+	//DefineItemCraftSet(item_Bottle, item_Bottle, true, item_Bottle, true);
 	DefineItemCraftSet(item_MolotovEmpty, item_Bottle, false, item_Bandage, false);
 	DefineItemCraftSet(item_ParaBag, item_Knife, true, item_Parachute, false);
-	DefineItemCraftSet(item_WheelLock, item_WheelLock, false, item_LocksmithKit, false);
+	DefineItemCraftSet(item_WheelLock, item_Key, false, item_LocksmithKit, false);
 
 	// items created by using a tool item on them in the world
 	//SetCraftSetConstructible(18500, item_Screwdriver, 	DefineItemCraftSet(item_Key, item_Key, false, item_Key, true, item_Motor, false), .tweak = false);
@@ -1398,7 +1394,7 @@ public OnScriptInit()
 	SetCraftSetConstructible(26500, item_Screwdriver, 	DefineItemCraftSet(item_Desk, item_RefinedMetal, false, item_WoodLog, false, item_WoodLog, false, item_WoodLog, false), item_Crowbar, 25000);
 	SetCraftSetConstructible(28500, item_Screwdriver, 	DefineItemCraftSet(item_Table, item_RefinedMetal, false, item_WoodLog, false, item_WoodLog, false, item_WoodLog, false, item_WoodLog, false), item_Crowbar, 25000);
 	SetCraftSetConstructible(30000, item_Hammer, 		DefineItemCraftSet(item_Workbench, item_RefinedMetal, false, item_RefinedMetal, false, item_WoodLog, false, item_WoodLog, false, item_WoodLog, false, item_WoodLog, false), item_Crowbar, 25000);
-	SetCraftSetConstructible(30000, item_Screwdriver, 	DefineItemCraftSet(item_RefineMachine, item_Canister, false, item_Motor, false, item_Fluctuator, false, item_PowerSupply, false), item_Crowbar, 25000);
+	SetCraftSetConstructible(30000, item_Screwdriver, 	DefineItemCraftSet(item_RefineMachine, item_CrateDoor, false, item_Canister, false, item_Motor, false, item_Fluctuator, false, item_PowerSupply, false), item_Crowbar, 25000);
 	SetCraftSetConstructible(30000, item_Screwdriver, 	DefineItemCraftSet(item_ScrapMachine, item_Canister, false, item_Motor, false, item_Fluctuator, false, item_PowerSupply, false), item_Crowbar, 25000);
 	SetCraftSetConstructible(30000, item_Screwdriver, 	DefineItemCraftSet(item_WaterMachine, item_Canister, false, item_Motor, false, item_Bucket, false, item_PowerSupply, false), item_Crowbar, 25000);
 	SetCraftSetConstructible(30000, item_Sledgehammer, 	DefineItemCraftSet(item_LargeFrame, item_RefinedMetal, false, item_RefinedMetal, false, item_RefinedMetal, false, item_RefinedMetal, false), item_Crowbar, 22000, .defence = true);

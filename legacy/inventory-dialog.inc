@@ -29,7 +29,7 @@ forward DisplayPlayerInventory(playerid);
 
 // ClosePlayerInventory closes the inventory dialog, optionally calls
 // `OnPlayerCloseInventory`.
-forward ClosePlayerInventory(playerid, call = false);
+forward ClosePlayerInventory(playerid, call = true);
 
 // GetPlayerSelectedInventorySlot returns the selected inventory slot.
 forward GetPlayerSelectedInventorySlot(playerid);
@@ -66,6 +66,11 @@ forward bool:IsPlayerViewingInventory(playerid);
 // OnPlayerOpenInventory is called when the player opens their inventory. Return
 // 1 to cancel.
 forward OnPlayerOpenInventory(playerid);
+
+// OnPlayerOpenedInventory is called after a inventory dialog has been shown to
+// the player, there are no return controls.
+
+forward OnPlayerOpenedInventory(playerid);
 
 // OnPlayerCloseInventory is called when a player closes their inventory via
 // close button or if `call` is set on `ClosePlayerInventory`.
@@ -173,16 +178,17 @@ stock DisplayPlayerInventory(playerid)
 	if(!isnull(inv_ExtraItemList[playerid]))
 		strcat(list, inv_ExtraItemList[playerid]);
 
-	format(title, sizeof(title), "Inventario (%d/%d)", size - slots, size);
+	format(title, sizeof(title), "~g~Bolsos (%d/%d)", size - slots, size);
 
-	ShowPlayerDialog(playerid, 33, DIALOG_STYLE_PREVIEW_MODEL, title, list, "Enter", "Esc");
+	ShowPlayerDialog(playerid, 33, DIALOG_STYLE_PREVIEW_MODEL, title, list, "Enter", "Sair");
 
 	inv_ViewingInventory[playerid] = true;
 
+	CallLocalFunction("OnPlayerOpenedInventory", "d", playerid);
 	return 0;
 }
 
-stock ClosePlayerInventory(playerid, call = false)
+stock ClosePlayerInventory(playerid, call = true)
 {
 	if(!inv_ViewingInventory[playerid])
 		return 1;
@@ -359,6 +365,14 @@ _inv_displaySlotOptions(playerid, slotid)
 					ret = GetInventorySlotItem(playerid, inv_SelectedSlot[playerid], itemid2);
 					if(ret) {
 						Logger_Err("failed to get inventory slot item", Logger_I("playerid", playerid), Logger_I("slotid", inv_SelectedSlot[playerid]), Logger_I("ret", ret));
+						DisplayPlayerInventory(playerid);
+						return 1;
+					}
+
+					if(IsPlayerInAnyVehicle(playerid) && IsItemTypeCarry(GetItemType(itemid2)))
+					{
+						ShowActionText(playerid, "Nao pode pegar este item no veiculo", 3000, 200);
+						DisplayPlayerInventory(playerid);
 						return 1;
 					}
 
@@ -379,15 +393,24 @@ _inv_displaySlotOptions(playerid, slotid)
 					ret = GetInventorySlotItem(playerid, inv_SelectedSlot[playerid], itemid2);
 					if(ret) {
 						Logger_Err("failed to get inventory slot item", Logger_I("playerid", playerid), Logger_I("slotid", inv_SelectedSlot[playerid]), Logger_I("ret", ret));
+						DisplayPlayerInventory(playerid);
+						return 1;
+					}
+
+					if(IsPlayerInAnyVehicle(playerid) && IsItemTypeCarry(GetItemType(itemid2)))
+					{
+						ShowActionText(playerid, "Nao pode pegar este item no veiculo", 3000, 200);
+						DisplayPlayerInventory(playerid);
 						return 1;
 					}
 
 					RemoveItemFromInventory(playerid, inv_SelectedSlot[playerid]);
+
+					ClosePlayerInventory(playerid);
+
 					GiveWorldItemToPlayer(playerid, itemid2, 1);
-
+					
 					PlayerUseItem(playerid);
-
-					ClosePlayerInventory(playerid, true);
 				} else {
 					ShowActionText(playerid, "Voce ja esta segurando um item", 3000, 200);
 					DisplayPlayerInventory(playerid);
@@ -401,22 +424,49 @@ _inv_displaySlotOptions(playerid, slotid)
 				ret = GetInventorySlotItem(playerid, inv_SelectedSlot[playerid], itemid2);
 				if(ret) {
 					Logger_Err("failed to get inventory slot item", Logger_I("playerid", playerid), Logger_I("slotid", inv_SelectedSlot[playerid]), Logger_I("ret", ret));
+					DisplayPlayerInventory(playerid);
 					return 1;
 				}
 
 				RemoveItemFromInventory(playerid, inv_SelectedSlot[playerid]);
 
-				if(IsItemTypeCarry(GetItemType(itemid2))) {
-					ApplyAnimation(playerid, "CARRY", "putdwn", 5.0, 0, 0, 0, 0, 0);
-				} else {
-					ApplyAnimation(playerid, "BOMBER", "BOM_PLANT_IN", 5.0, 1, 0, 0, 0, 450);
-				}
-
 				new Float:x, Float:y, Float:z;
-				GetPlayerPos(playerid, x, y, z);
-				CreateItemInWorld(itemid2, x, y, z - ITEM_FLOOR_OFFSET, .world = GetPlayerVirtualWorld(playerid), .interior = GetPlayerInterior(playerid));
 
-				ClosePlayerInventory(playerid, true);
+				if(!IsPlayerInAnyVehicle(playerid)) {
+
+					if(IsItemTypeCarry(GetItemType(itemid2))) {
+						ApplyAnimation(playerid, "CARRY", "putdwn", 5.0, 0, 0, 0, 0, 0);
+					} else {
+						ApplyAnimation(playerid, "BOMBER", "BOM_PLANT_IN", 5.0, 1, 0, 0, 0, 450);
+					}
+
+					GetPlayerPos(playerid, x, y, z);
+					z -= ITEM_FLOOR_OFFSET;
+				} else {
+
+					new 
+						vehicleid = GetPlayerVehicleID(playerid),
+						Float:size_x,
+						Float:size_y,
+						Float:size_z,
+						Float:ang;
+
+					GetVehicleModelInfo(GetVehicleModel(vehicleid), VEHICLE_MODEL_INFO_SIZE, size_x, size_y, size_z);
+					GetVehicleZAngle(vehicleid, ang);
+					GetVehiclePos(vehicleid, x, y, z);
+
+					x -= (size_y / 1.85) * floatsin(-ang, degrees), y -= (size_y / 1.85) * floatcos(-ang, degrees);
+
+					z -= 0.7;
+				}
+				
+				CreateItemInWorld(itemid2,
+					x, y, z,
+					.world = GetPlayerVirtualWorld(playerid),
+					.interior = GetPlayerInterior(playerid),
+					.label = 1);
+
+				DisplayPlayerInventory(playerid);
 			}
 			default: {
 				if(!CallLocalFunction("OnPlayerSelectInventoryOpt", "dd", playerid, listitem - 3)) {
@@ -445,7 +495,7 @@ hook OnDialogModelResponse(playerid, dialogid, response, listitem)
 			Logger_I("listitem", listitem));
 
 		if(!response) {
-			ClosePlayerInventory(playerid, true);
+			ClosePlayerInventory(playerid);
 			return 1;
 		}
 
@@ -455,7 +505,7 @@ hook OnDialogModelResponse(playerid, dialogid, response, listitem)
 				DisplayPlayerInventory(playerid);
 			} else {
 				Logger_Dbg("inventory-dialog", "closing inventory via extra item response");
-				ClosePlayerInventory(playerid);
+				ClosePlayerInventory(playerid, false);
 			}
 			return 1;
 		}
@@ -463,6 +513,7 @@ hook OnDialogModelResponse(playerid, dialogid, response, listitem)
 		new
 			Item:itemid2,
 			ret;
+			
 		ret = GetInventorySlotItem(playerid, listitem, itemid2);
 		if(ret || !IsValidItem(itemid2)) {
 			DisplayPlayerInventory(playerid);

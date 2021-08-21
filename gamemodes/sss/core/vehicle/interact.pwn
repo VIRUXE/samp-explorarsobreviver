@@ -1,7 +1,7 @@
 #include <YSI_Coding\y_hooks>
 
 
-#define MAX_VEHICLES_IN_RANGE			(15)
+#define MAX_VEHICLES_IN_RANGE			(8)
 #define VEH_STREAMER_AREA_IDENTIFIER	(500)
 
 
@@ -13,7 +13,7 @@ Float:		E_VEHICLE_AREA_DISTANCE
 
 static
 			varea_AreaID[MAX_VEHICLES],
-			varea_NearList[MAX_PLAYERS][MAX_VEHICLES_IN_RANGE],
+			varea_NearList[MAX_PLAYERS][MAX_VEHICLES_IN_RANGE] = {INVALID_VEHICLE_ID, ...},
    Iterator:varea_NearIndex[MAX_PLAYERS]<MAX_VEHICLES_IN_RANGE>;
 
 
@@ -70,6 +70,13 @@ stock CreateVehicleArea(vehicleid)
 
 ==============================================================================*/
 
+hook OnPlayerConnect(playerid)
+{
+	Iter_Clear(varea_NearIndex[playerid]);
+
+	for(new i; i < MAX_VEHICLES_IN_RANGE; i++)
+		varea_NearList[playerid][i] = INVALID_VEHICLE_ID;
+}
 
 hook OnVehicleCreated(vehicleid)
 {
@@ -81,12 +88,12 @@ hook OnVehicleCreated(vehicleid)
 hook OnPlayerEnterDynArea(playerid, areaid)
 {
 	_vint_EnterArea(playerid, areaid);
+	return Y_HOOKS_CONTINUE_RETURN_0;
 }
 
 hook OnPlayerLeaveDynArea(playerid, areaid)
 {
 	_vint_LeaveArea(playerid, areaid);
-
 	return Y_HOOKS_CONTINUE_RETURN_0;
 }
 
@@ -98,7 +105,7 @@ _vint_EnterArea(playerid, areaid)
 	if(!IsValidDynamicArea(areaid))
 		return;
 
-	if(Iter_Count(varea_NearIndex[playerid]) == MAX_VEHICLES_IN_RANGE)
+	if(Iter_Count(varea_NearIndex[playerid]) > MAX_VEHICLES_IN_RANGE)
 		return;
 
 	new data[2];
@@ -111,7 +118,7 @@ _vint_EnterArea(playerid, areaid)
 	if(!IsValidVehicle(data[1]))
 		return;
 
-	new bool:exists = false;
+	new bool:exists;
 
 	foreach(new i : varea_NearIndex[playerid])
 	{
@@ -135,10 +142,8 @@ _vint_EnterArea(playerid, areaid)
 		varea_NearList[playerid][cell] = data[1];
 		Iter_Add(varea_NearIndex[playerid], cell);
 	}
-	else
-	{
-		log(true, "Vehicle %d already in NearList for player %d", data[1], playerid);
-	}
+	// else
+		// log(true, "Vehicle %d already in NearList for player %d - NearIndex %d", data[1], playerid, Iter_Count(varea_NearIndex[playerid])); // QUE SE FODA ESSA MERDA
 
 	CallLocalFunction("OnPlayerEnterVehArea", "dd", playerid, data[1]);
 
@@ -174,6 +179,7 @@ _vint_LeaveArea(playerid, areaid)
 		if(varea_NearList[playerid][i] == data[1])
 		{
 			Iter_Remove(varea_NearIndex[playerid], i);
+			varea_NearList[playerid][i] = INVALID_VEHICLE_ID;
 			break;
 		}
 	}
@@ -187,6 +193,11 @@ hook OnPlayerKeyStateChange(playerid, newkeys, oldkeys)
 		_varea_Interact(playerid);
 
 	return 1;
+}
+
+hook OnPlayerEnterVehicle(playerid, vehicleid, ispassenger)
+{
+	_varea_Interact(playerid);
 }
 
 _varea_Interact(playerid)

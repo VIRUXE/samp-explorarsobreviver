@@ -142,7 +142,11 @@ WeaponsCacheDrop(Float:x, Float:y, Float:z)
 hook OnButtonPress(playerid, Button:id)
 {
 	if(id == webc_Button && IsValidContainer(webc_Containerid))
+	{
 		DisplayContainerInventory(playerid, webc_Containerid);
+		return Y_HOOKS_BREAK_RETURN_1;
+	}
+	return Y_HOOKS_CONTINUE_RETURN_0;
 }
 
 stock GetLastWeaponCachePos(&Float:x, &Float:y, &Float:z)

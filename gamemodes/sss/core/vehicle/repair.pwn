@@ -131,23 +131,18 @@ hook OnHoldActionUpdate(playerid, progress)
 {
 	if(fix_TargetVehicle[playerid] != INVALID_VEHICLE_ID)
 	{
-		if(GetPlayerTotalVelocity(playerid) > 1.0){
-			StopRepairingVehicle(playerid);
-			return Y_HOOKS_BREAK_RETURN_1;
-		}
-
 		new ItemType:itemtype = GetItemType(GetPlayerItem(playerid));
 
 		if(!IsValidItemType(itemtype))
 		{
 			StopRepairingVehicle(playerid);
-			return Y_HOOKS_BREAK_RETURN_1;
+			return Y_HOOKS_BREAK_RETURN_0;
 		}
 
 		if(!IsPlayerInVehicleArea(playerid, fix_TargetVehicle[playerid]) || !IsValidVehicle(fix_TargetVehicle[playerid]))
 		{
 			StopRepairingVehicle(playerid);
-			return Y_HOOKS_BREAK_RETURN_1;
+			return Y_HOOKS_BREAK_RETURN_0;
 		}
 
 		if(CompToolHealth(itemtype, fix_Progress[playerid]))
@@ -172,6 +167,8 @@ hook OnHoldActionUpdate(playerid, progress)
 			StopRepairingVehicle(playerid);
 			NeedAToolInfo(playerid, fix_Progress[playerid]);
 		}
+
+		return Y_HOOKS_BREAK_RETURN_0;
 	}
 
 	return Y_HOOKS_CONTINUE_RETURN_0;
@@ -190,22 +187,22 @@ NeedAToolInfo(playerid, Float:vehiclehealth){
 
 CompToolHealth(ItemType:itemtype, Float:health)
 {
-	if(health <= VEHICLE_HEALTH_CHUNK_2)
+	if(health - 2.0 <= VEHICLE_HEALTH_CHUNK_2)
 	{
 		if(itemtype == item_Wrench)
 			return 1;
 	}
-	else if(health <= VEHICLE_HEALTH_CHUNK_3)
+	else if(health - 2.0 <= VEHICLE_HEALTH_CHUNK_3)
 	{
 		if(itemtype == item_Screwdriver)
 			return 1;
 	}
-	else if(health <= VEHICLE_HEALTH_CHUNK_4)
+	else if(health - 2.0 <= VEHICLE_HEALTH_CHUNK_4)
 	{
 		if(itemtype == item_Hammer)
 			return 1;
 	}
-	else if(health <= VEHICLE_HEALTH_MAX)
+	else if(health - 2.0 <= VEHICLE_HEALTH_MAX)
 	{
 		if(itemtype == item_Spanner)
 			return 1;

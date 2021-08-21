@@ -465,7 +465,7 @@ _twk_BuildUI(playerid)
 	PlayerTextDrawTextSize			(playerid, twk_Unlock[playerid], 20.0, 80.0);
 	PlayerTextDrawSetSelectable		(playerid, twk_Unlock[playerid], true);
 
-	twk_Done[playerid]				=CreatePlayerTextDraw(playerid, 547.000000, 230.000000, "Feito");
+	twk_Done[playerid]				=CreatePlayerTextDraw(playerid, 547.000000, 230.000000, "Terminar");
 	PlayerTextDrawAlignment			(playerid, twk_Done[playerid], 2);
 	PlayerTextDrawBackgroundColor	(playerid, twk_Done[playerid], 175);
 	PlayerTextDrawFont				(playerid, twk_Done[playerid], 1);

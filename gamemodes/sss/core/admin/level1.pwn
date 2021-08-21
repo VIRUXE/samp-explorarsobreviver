@@ -204,10 +204,7 @@ ACMD:aliases[1](playerid, params[])
 	}
 
 	if(!DoesAccountExist(name))
-	{
-		ChatMsg(playerid, YELLOW, " » A conta '%s' não existe.", name);
-		return 1;
-	}
+		return ChatMsg(playerid, YELLOW, " » A conta '%s' não existe.", name);
 
 	if(GetAdminLevelByName(name) > GetPlayerAdminLevel(playerid))
 	{
@@ -285,10 +282,7 @@ ACMD:history[1](playerid, params[])
 	}
 
 	if(!DoesAccountExist(name))
-	{
-		ChatMsg(playerid, YELLOW, " » The account '%s' does not exist.", name);
-		return 1;
-	}
+		return ChatMsg(playerid, YELLOW, " » The account '%s' does not exist.", name);
 
 	if(GetAdminLevelByName(name) > GetPlayerAdminLevel(playerid))
 	{

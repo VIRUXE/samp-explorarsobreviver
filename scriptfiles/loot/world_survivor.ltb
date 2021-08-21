@@ -7,16 +7,20 @@ world_survivor, 1.0
 7.0,    Spanner
 12.0,	Crowbar
 20.0,   Map
+15.0,   Clock
+
 # meds
 10.0,	Bandage
 25.0,	AntiSepBandage
 35.0,	Medkit
 60.0,	Pills
+
 # bags
 28.0,	Daypack
 40.0,	Backpack
 25.0,	MediumBag
 10.0,	Rucksack
+
 # other stuff
 10.0,	Wheel
 38.0,	FireLighter
@@ -40,7 +44,6 @@ world_survivor, 1.0
 9.0,	M77RMRifle
 2.0,	WASR3Rifle
 0.1,	AK47Rifle
-
 10.0,	Ammo556HP
 7.0,	Ammo357
 3.0,	Ammo762

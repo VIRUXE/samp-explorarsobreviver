@@ -1,6 +1,6 @@
 #include <YSI_Coding\y_hooks>
 
-#define MAX_BODY			(2048)
+#define MAX_BODY			(1048)
 
 // Directory for storing player-saved body
 #define DIRECTORY_BODY			DIRECTORY_MAIN"body/"
@@ -189,15 +189,13 @@ hook OnPlayerDisconnect(playerid, reason)
 		if(IsValidItem(itemid))
 		{
 			new held_data[ITM_ARR_MAX_ARRAY_DATA];
-			held_data[0] = _:GetItemType(itemid);
-			GetItemArrayDataSize(itemid, held_data[1]);
-			GetItemArrayData(itemid, held_data[2], held_data[1]);
-			modio_push(filename, _T<H,E,L,D>, 2 + held_data[1], held_data);
+			GetItemArrayData(itemid, held_data);
+			modio_push(filename, _T<H,E,L,D>, ITM_ARR_MAX_ARRAY_DATA, held_data);
 		}
 		else
 		{
-			new held_data[1] = { -1 };
-			modio_push(filename, _T<H,E,L,D>, 1, held_data);
+			new held_data[ITM_ARR_MAX_ARRAY_DATA] = { -1 };
+			modio_push(filename, _T<H,E,L,D>, ITM_ARR_MAX_ARRAY_DATA, held_data);
 		}
 
 	/*
@@ -212,12 +210,12 @@ hook OnPlayerDisconnect(playerid, reason)
 			hols_data[0] = _:GetItemType(itemid);
 			GetItemArrayDataSize(itemid, hols_data[1]);
 			GetItemArrayData(itemid, hols_data[2], hols_data[1]);
-			modio_push(filename, _T<H,O,L,S>, 2 + hols_data[1], hols_data);
+			modio_push(filename, _T<H,O,L,S>, ITM_ARR_MAX_ARRAY_DATA, hols_data);
 		}
 		else
 		{
-			new hols_data[1] = { -1 };
-			modio_push(filename, _T<H,O,L,S>, 1, hols_data);
+			new hols_data[ITM_ARR_MAX_ARRAY_DATA] = { -1 };
+			modio_push(filename, _T<H,O,L,S>, ITM_ARR_MAX_ARRAY_DATA, hols_data);
 		}
 
 	/*
@@ -252,12 +250,12 @@ hook OnPlayerDisconnect(playerid, reason)
 			hat_data[0] = _:GetItemType(itemid);
 			GetItemArrayDataSize(itemid, hat_data[1]);
 			GetItemArrayData(itemid, hat_data[2], hat_data[1]);
-			modio_push(filename, _T<H,A,T,I>, 2 + hat_data[1], hat_data);
+			modio_push(filename, _T<H,A,T,I>, ITM_ARR_MAX_ARRAY_DATA, hat_data);
 		}
 		else
 		{
-			new hat_data[1] = { -1 };
-			modio_push(filename, _T<H,A,T,I>, 1, hat_data);
+			new hat_data[ITM_ARR_MAX_ARRAY_DATA] = { -1 };
+			modio_push(filename, _T<H,A,T,I>, ITM_ARR_MAX_ARRAY_DATA, hat_data);
 		}
 
 	/*
@@ -271,12 +269,12 @@ hook OnPlayerDisconnect(playerid, reason)
 			mask_data[0] = _:GetItemType(itemid);
 			GetItemArrayDataSize(itemid, mask_data[1]);
 			GetItemArrayData(itemid, mask_data[2], mask_data[1]);
-			modio_push(filename, _T<M,A,S,K>, 2 + mask_data[1], mask_data);
+			modio_push(filename, _T<M,A,S,K>, ITM_ARR_MAX_ARRAY_DATA, mask_data);
 		}
 		else
 		{
-			new hat_data[1] = { -1 };
-			modio_push(filename, _T<M,A,S,K>, 1, hat_data);
+			new hat_data[ITM_ARR_MAX_ARRAY_DATA] = { -1 };
+			modio_push(filename, _T<M,A,S,K>, ITM_ARR_MAX_ARRAY_DATA, hat_data);
 		}
 
 	/*
@@ -291,12 +289,12 @@ hook OnPlayerDisconnect(playerid, reason)
 			bag_data[0] = _:GetItemType(itemid);
 			//GetItemArrayDataSize(itemid, bag_data[1]);
 			//GetItemArrayData(itemid, bag_data[2], bag_data[1]);
-			modio_push(filename, _T<B,A,G,I>, 2 + bag_data[1], bag_data);
+			modio_push(filename, _T<B,A,G,I>, ITM_ARR_MAX_ARRAY_DATA, bag_data);
 		}
 		else
 		{
-			new bag_data[1] = { -1 };
-			modio_push(filename, _T<B,A,G,I>, 1, bag_data);
+			new bag_data[ITM_ARR_MAX_ARRAY_DATA] = { -1 };
+			modio_push(filename, _T<B,A,G,I>, ITM_ARR_MAX_ARRAY_DATA, bag_data);
 		}
 
 	/*
@@ -338,13 +336,11 @@ hook OnPlayerDisconnect(playerid, reason)
 	return 1;
 }
 
-static bool:KillPlayerBody[MAX_PLAYERS];
 
-hook OnPlayerSpawnCharacter(playerid, existing)
+hook OnPlayerSpawnCharacter(playerid, bool:existing)
 {
 	if(existing)
 	{
-		KillPlayerBody[playerid] = false;
 		new name[MAX_PLAYER_NAME];
 		GetPlayerName(playerid, name, MAX_PLAYER_NAME);
 
@@ -352,62 +348,24 @@ hook OnPlayerSpawnCharacter(playerid, existing)
 		{
 			if(!strcmp(body_PlayerName[i], name) && !isnull(body_PlayerName[i]))
 			{
-				if(GetDynamicActorVirtualWorld(i) == 3333)
-				{
-					ChatMsg(playerid, RED, " » Você foi morto enquanto esteve ausente. :(");
-					KillPlayerBody[playerid] = true;
-				}
-				break;
+				DestroyPlayerItems(playerid);
+
+				ClearChatForPlayer(playerid, 15);
+				ChatMsg(playerid, RED, " » Você foi morto enquanto esteve ausente. :(");
+
+				SetPlayerPos(playerid, DEFAULT_POS_X, DEFAULT_POS_Y, DEFAULT_POS_Z);
+				SetPlayerSpawnedState(playerid, false);
+				SetPlayerAliveState(playerid, false);
+				SetPlayerVirtualWorld(playerid, 0);
+				PlayerCreateNewCharacter(playerid);
+				SetPlayerBrightness(playerid, 255);
 			}
-		}
-	}
-}
 
-hook OnPlayerLogin(playerid)
-{
-	if(KillPlayerBody[playerid])
-	{
-		SetPlayerPos(playerid, DEFAULT_POS_X, DEFAULT_POS_Y, DEFAULT_POS_Z);
-		DestroyItem(GetPlayerItem(playerid));
-		DestroyItem(GetPlayerHolsterItem(playerid));
-		DestroyPlayerBag(playerid);
-		RemovePlayerHolsterItem(playerid);
-		RemovePlayerWeapon(playerid);
-
-		for(new i; i < MAX_INVENTORY_SLOTS; i++)
-		{
-			new Item:subitemid;
-			GetInventorySlotItem(playerid, 0, subitemid);
-			DestroyItem(subitemid);
-		}
-
-		if(IsValidItem(GetPlayerHatItem(playerid)))
-			RemovePlayerHatItem(playerid);
-
-		if(IsValidItem(GetPlayerMaskItem(playerid)))
-			RemovePlayerMaskItem(playerid);
-
-		SetPlayerHP(playerid, -1.0);
-		defer SetPlayerDeath(playerid);
-		ChatMsg(playerid, RED, " » Você foi morto enquanto esteve ausente. :(");
-		KillPlayerBody[playerid] = false;
-	}
-
-	new name[MAX_PLAYER_NAME];
-	GetPlayerName(playerid, name, MAX_PLAYER_NAME);
-
-	foreach(new i : body_Count){
-		if(!strcmp(body_PlayerName[i], name) && !isnull(body_PlayerName[i]))
-		{
 			DestroyBody(i);
 			break;
 		}
 	}
-	return Y_HOOKS_CONTINUE_RETURN_0;
 }
-
-timer SetPlayerDeath[3000](playerid)
-	SetPlayerHP(playerid, -1.0);
 
 CreateBody(const name[], Float:x, Float:y, Float:z, Float:a, w, i, s)
 {
@@ -429,7 +387,7 @@ CreateBody(const name[], Float:x, Float:y, Float:z, Float:a, w, i, s)
 		body_NameTag[id] = Text3D:INVALID_3DTEXT_ID;
 	}
 
-	body_NameTag[id] = CreateDynamic3DTextLabel(sprintf("%s{FFFFFF}(Corpo)", body_PlayerName[id]), 0xB8B8B8FF, x, y, z, 15.0, INVALID_PLAYER_ID, INVALID_VEHICLE_ID, 1, w, i);
+	body_NameTag[id] = CreateDynamic3DTextLabel(sprintf("%s(%d)", body_PlayerName[id], id), 0xB8B8B8FF, x, y, z, 15.0, INVALID_PLAYER_ID, INVALID_VEHICLE_ID, 1, w, i);
 
 	ApplyDynamicActorAnimation(id, "SUNBATHE", "PARKSIT_M_IN", 4.1, 0, 0, 0, 1, 0);
 
@@ -446,13 +404,8 @@ stock DestroyBody(bodyid)
 	if(!IsValidDynamicActor(bodyid))
 		return 0;
 
-	new
-		filename[MAX_PLAYER_NAME + 22];
-		//session;
-
+	new filename[MAX_PLAYER_NAME + 22];
 	format(filename, sizeof(filename), DIRECTORY_BODY"%s.dat", body_PlayerName[bodyid]);
-	//session = modio_getsession_write(filename);
-	//modio_close_session_write(session);
 	fremove(filename);
 
 	Iter_Remove(body_Count, bodyid);
@@ -467,24 +420,6 @@ stock DestroyBody(bodyid)
 
 	return 1;
 }
-
-//OnCameraTarget 
-/*IRPC:168(playerid, BitStream:bs)
-{
-	new ObjectTarget, VehicleTarget, PlayerTarget, ActorTarget;
-	BS_ReadValue(bs,
-		PR_UINT16, ObjectTarget,
-		PR_UINT16, VehicleTarget,
-		PR_UINT16, PlayerTarget,
-		PR_UINT16, ActorTarget
-	);
-
-	ChatMsg(playerid, -1,
-		"ObjectTarget:%d, VehicleTarget:%d, PlayerTarget:%d, ActorTarget:%d",
-			ObjectTarget, VehicleTarget, PlayerTarget, ActorTarget);
-
-	return 1;
-}*/
 
 // GiveTakeDamage
 const GIVEDAM = 115;
@@ -507,7 +442,8 @@ IRPC:GIVEDAM(playerid, BitStream:bs){
 			Float:z,
 			Float:cx,
 			Float:cy,
-			Float:cz;
+			Float:cz,
+			Float:tmp;
 
 		GetPlayerPos(playerid, cx, cy, cz);
 
@@ -517,18 +453,19 @@ IRPC:GIVEDAM(playerid, BitStream:bs){
 			
 			if(Distance(cx, cy, cz, x, y, z) < 8.0)
 			{
-				if(!CA_RayCastLine(x, y, z, cx, cy, cz,  cx, cy, cz))
+				if(!CA_RayCastLine(x, y, z, cx, cy, cz, tmp, tmp, tmp))
 				{
 					ShowActionText(playerid,
 						sprintf("~w~Digite ~g~/mc %d~n~~w~para matar o corpo de ~w~~h~%s", i, body_PlayerName[i]),
 						3000);
+
+					// Anti mobile actor bug
+					if(wPlayerID == playerid)
+						return 0;
 				}
 			}
 		}
 	}
-
-	if(wPlayerID == playerid)
-		return 0;
 
 	return 1;
 }
@@ -544,6 +481,9 @@ CMD:mc(playerid, params[])
 			ChatMsg(playerid, RED, "[Mobile] > Digite /mv [id do corpo]");
 			return 1;
 		}
+
+		if(IsPlayerRaidBlock(playerid))
+			return 0;
 
 		if(!IsValidDynamicActor(actorid))
 		{
@@ -578,6 +518,9 @@ DamageBody(playerid, actorid, Float:amount)
 	if(IsPlayerOnAdminDuty(playerid))
 		return 0;
 		
+	if(GetDynamicActorVirtualWorld(actorid) == 3333)
+		return 0;
+		
 	new 
 		Float:x, Float:y, Float:z,
 		Float:px, Float:py, Float:pz,
@@ -587,32 +530,21 @@ DamageBody(playerid, actorid, Float:amount)
 	GetPlayerPos(playerid, px, py, pz);
 
 	if(CA_RayCastLine(x, y, z, px, py, pz, tmp, tmp, tmp))
-		return 1;
+		return 0;
+
+	Streamer_SetFloatData(STREAMER_TYPE_3D_TEXT_LABEL, body_NameTag[actorid], E_STREAMER_X, x);
+	Streamer_SetFloatData(STREAMER_TYPE_3D_TEXT_LABEL, body_NameTag[actorid], E_STREAMER_Y, y);
+	Streamer_SetFloatData(STREAMER_TYPE_3D_TEXT_LABEL, body_NameTag[actorid], E_STREAMER_Z, z);
 
 	SetDynamicActorPos(actorid, x, y, z);
-	ClearDynamicActorAnimations(actorid);
 	
 	GetDynamicActorHealth(actorid, health);
 
-	if(IsPlayerRaidBlock(playerid)){
-		Dialog_Show(playerid, DIALOG_STYLE_MSGBOX, "Anti-Raid Protection", ls(playerid, "ANTRAIDP"), "Sair", "");
-		return 1;
-	}
-	
-	if((health- amount) < 1.0)
+	if(IsPlayerRaidBlock(playerid))
+		return 0;
+
+	if((health - amount) < 1.0)
 	{
-		new forname[MAX_PLAYER_NAME];
-		foreach(new i : Player)
-		{
-			GetPlayerName(i, forname, MAX_PLAYER_NAME);
-
-			if(!strcmp(forname, body_PlayerName[actorid]))
-			{
-				Kick(i);
-				return 1;
-			}
-		}
-
 		new
 			ItemType:itemtype,
 			Item:itemid,
@@ -623,10 +555,8 @@ DamageBody(playerid, actorid, Float:amount)
 
 		CA_RayCastLine(x, y, z, x, y, z - 600.0, cx, cy, cz);
 
-		itemid = CreateItem(ItemType:item_Torso, cx, cy, cz + 0.2, .world = GetPlayerVirtualWorld(playerid), .interior = GetPlayerInterior(playerid));
+		itemid = CreateItem(item_Torso, cx, cy, cz + 0.2, .world = GetPlayerVirtualWorld(playerid), .interior = GetPlayerInterior(playerid));
 
-		defer DestroyTorso(_:itemid);
-		
 		GetItemArrayDataAtCell(itemid, _:containerid, 0);
 
 		new name[MAX_PLAYER_NAME + 8];
@@ -636,7 +566,6 @@ DamageBody(playerid, actorid, Float:amount)
 
 		new
 			filename[MAX_PLAYER_NAME + 22],
-//			session,
 			data[SAVED_BODY_END];
 
 		format(filename, sizeof(filename), DIRECTORY_BODY"%s.dat", body_PlayerName[actorid]);
@@ -651,7 +580,6 @@ DamageBody(playerid, actorid, Float:amount)
 		{
 			Logger_Err("modio read failed _T<H,E,L,D>",
 				Logger_I("error", length));
-
 		}
 		else if(IsValidItemType(ItemType:held_data[0]) && length > 0)
 		{
@@ -810,10 +738,18 @@ DamageBody(playerid, actorid, Float:amount)
 				AddItemToContainer(containerid, itemid);
 			}
 		}
-		
+
+		new session = modio_getsession_write(filename);
+
+		if(session != -1)
+			modio_close_session_write(session);
+
 		data[SAVED_BODY_WORLD] = 3333;
+
 		modio_push(filename, _T<D,A,T,A>, SAVED_BODY_END, data);
 
+		modio_finalise_write(modio_getsession_write(filename));
+		
 		if(IsValidDynamic3DTextLabel(body_NameTag[actorid])){
 			DestroyDynamic3DTextLabel(body_NameTag[actorid]);
 			body_NameTag[actorid] = Text3D:INVALID_3DTEXT_ID;

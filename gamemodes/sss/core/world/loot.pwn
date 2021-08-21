@@ -6,7 +6,7 @@
 #define MAX_LOOT_INDEX_ITEMS	(256)
 #define MAX_LOOT_INDEX_NAME		(32)
 #define MAX_LOOT_SPAWN			(12683)
-#define MAX_ITEMS_PER_SPAWN		(6)
+#define MAX_ITEMS_PER_SPAWN	 	(6)
 
 
 enum E_LOOT_INDEX_ITEM_DATA
@@ -26,7 +26,6 @@ Float:		loot_posZ,
 Float:		loot_weight,
 			loot_size,
 			loot_index,
-
 Item:		loot_items[MAX_ITEMS_PER_SPAWN],
 			loot_total
 }
@@ -136,9 +135,9 @@ stock CreateStaticLootSpawn(Float:x, Float:y, Float:z, lootindex, Float:weight, 
 
 	for(new i; i < size; i++)
 	{
-		if(frandom(100.0) > weight * loot_SpawnMult)
+		if(loot_SpawnMult < 1.0 && (frandom(100.0) > weight * loot_SpawnMult))
 			continue;
-
+			
 		// Generate an item from the sample list
 		if(!_loot_PickFromSampleList(samplelist, samplelistsize, itemtype))
 			continue;
@@ -167,105 +166,16 @@ stock CreateStaticLootSpawn(Float:x, Float:y, Float:z, lootindex, Float:weight, 
 		x = (x + (frandom(1.0) * floatsin(((360 / size) * i) + rot, degrees)));
 		y = (y + (frandom(1.0) * floatcos(((360 / size) * i) + rot, degrees)));
 
-		CreateItem(itemtype,
-			x,
-			y,
-			z + 0.1, .rz = frandom(360.0), .world = worldid, .interior = interiorid);
+		CreateItem(itemtype, x, y, z + 0.1, .rz = frandom(360.0), .world = worldid, .interior = interiorid);
 
 		loot_SpawnData[lootspawnid][loot_items][loot_SpawnData[lootspawnid][loot_total]] = itemid;
 		loot_SpawnData[lootspawnid][loot_total]++;
+
+		if(frandom(100.0) > weight * loot_SpawnMult)
+			DestroyItem(itemid);
 	}
 
 	return loot_SpawnTotal++;
-}
-
-/*==============================================================================
-
-	Automatic item respawn
-
-==============================================================================*/
-
-new Timer:DestroyUItem[MAX_ITEM];
-
-hook OnPlayerDroppedItem(playerid, Item:itemid)
-{	
-	stop DestroyUItem[itemid];
-	DestroyUItem[itemid] = defer DestroyUntilItem(_:itemid);
-	return Y_HOOKS_CONTINUE_RETURN_0;
-}
-
-hook OnItemRemoveFromWorld(Item:itemid)
-{
-	if(loot_ItemLootIndex[itemid] != -1){
-		new 
-			Float:x, Float:y, Float:z,
-			world, interior;
-
-		GetItemPos(itemid, x, y, z);
-		GetItemWorld(itemid, world);
-		GetItemInterior(itemid, interior);
-
-		defer RespawnItem(loot_ItemLootIndex[itemid], x, y, z, world, interior);
-	}
-
-	loot_ItemLootIndex[itemid] = -1;
-	stop DestroyUItem[itemid];
-}
-
-timer RespawnItem[ITEM_RESPAWN_DELAY](lootindex, Float:x, Float:y, Float:z, worldid, interiorid)
-	CreateLootItem(lootindex, x, y, z, worldid, interiorid);
-
-hook OnItemDestroyed(Item:itemid)
-	stop DestroyUItem[itemid];
-
-hook OnPlayerConstructed(playerid, consset, result)
-	stop DestroyUItem[Item:result];
-
-timer DestroyUntilItem[ITEM_RESPAWN_DELAY - HOUR(1)](_itemid)
-{
-	new Item:itemid = Item:_itemid;
-
-	if(!IsValidItem(itemid) || !IsItemInWorld(itemid))
-		return;
-
-	new Float:x, Float:y, Float:z;
-	GetItemPos(itemid, x, y, z);
-	
-	foreach(new i : Player)
-	{
-		if(IsPlayerInRangeOfPoint(i, 20.0, x, y, z))
-		{
-			DestroyUItem[itemid] = defer DestroyUntilItem(_:itemid);
-			return;
-		}
-	}
-
-	new ItemType:type = GetItemType(itemid);
-
-	if(IsItemTypeSafebox(type)){
-		new Container:containerid;
-		GetItemArrayDataAtCell(itemid, _:containerid, 0);
-		if(!IsContainerEmpty(containerid))
-			return;
-	}
-
-	if(IsItemTypeDefence(type)){
-		new bool:active;
-		GetItemArrayDataAtCell(itemid, active, 0);
-		if(active)
-			return;
-	}
-
-	if(type == item_TentPack){
-		new tentid;
-		GetItemExtraData(itemid, tentid);
-		if(IsValidTent(tentid))
-			return;
-	}
-
-	DestroyItem(itemid);
-
-	return;
 }
 
 stock Item:CreateLootItem(lootindex, Float:x = 0.0, Float:y = 0.0, Float:z = 0.0, worldid = 0, interiorid = 0)
@@ -384,6 +294,53 @@ stock FillContainerWithLoot(Container:containerid, slots, lootindex)
 
 /*==============================================================================
 
+	Automatic item respawn
+
+==============================================================================*/
+
+
+new Timer:item_AutoDestroy[MAX_ITEM];
+
+hook OnItemCreateInWorld(Item:itemid) {	
+	stop item_AutoDestroy[itemid];
+	item_AutoDestroy[itemid] = defer DestroyUntilItem(_:itemid);
+
+	if(loot_ItemLootIndex[itemid] != -1 && gServerInitialising) {
+		new 
+			Float:x, Float:y, Float:z,
+			world, interior;
+
+		GetItemPos(itemid, x, y, z);
+		GetItemWorld(itemid, world);
+		GetItemInterior(itemid, interior);
+
+		defer RespawnItem(loot_ItemLootIndex[itemid], x, y, z, world, interior);
+	}
+}
+
+timer DestroyUntilItem[ITEM_RESPAWN_DELAY + random(MIN(Iter_Count(Player) + floatround(loot_SpawnMult, floatround_ceil)))](itemid)
+	DestroyItem(Item:itemid);
+
+timer RespawnItem[ITEM_RESPAWN_DELAY - random(MIN(GetPlayerPoolSize() + floatround(loot_SpawnMult, floatround_ceil)))](lootindex, Float:x, Float:y, Float:z, world, interior)
+	CreateLootItem(lootindex, x, y, z, world, interior);
+
+hook OnItemRemoveFromWorld(Item:itemid) {
+	loot_ItemLootIndex[itemid] = -1;
+	stop item_AutoDestroy[itemid];
+}
+
+hook OnItemDestroyed(Item:itemid)
+	stop item_AutoDestroy[itemid];
+
+hook OnPlayerConstructed(playerid, consset, Item:result)
+	stop item_AutoDestroy[result];
+
+hook OnItemSave(Item:itemid)
+	stop item_AutoDestroy[itemid];
+
+
+/*==============================================================================
+
 	Internal
 
 ==============================================================================*/
@@ -428,34 +385,6 @@ _loot_PickFromSampleList(ItemType:list[MAX_LOOT_INDEX_ITEMS], &listsize, &ItemTy
 	return 1;
 }
 
-/*
-_loot_LootSpawnItemsOfType(lootspawnid, ItemType:itemtype)
-{
-	new count;
-
-	for(new i; i < loot_SpawnData[lootspawnid][loot_total]; i++)
-	{
-		if(GetItemType(loot_SpawnData[lootspawnid][loot_items][i]) == itemtype)
-			count++;
-	}
-	// log(false, "[_loot_LootSpawnItemsOfType] loot spawn %d contains %d of %d", lootspawnid, count, _:itemtype);
-	return count;
-}
-
-_loot_ContainerItemsOfType(containerid, ItemType:itemtype)
-{
-	new count;
-
-	for(new i, j = GetContainerSize(containerid); i < j; i++)
-	{
-		if(GetItemType(GetContainerSlotItem(containerid, i)) == itemtype)
-			count++;
-	}
-	// log(false, "[_loot_ContainerItemsOfType] container %d contains %d of %d", containerid, count, _:itemtype);
-	return count;
-}
-*/
-
 hook OnItemDestroy(Item:itemid)
 {
 	loot_ItemLootIndex[itemid] = -1;
@@ -469,6 +398,10 @@ hook OnItemDestroy(Item:itemid)
 
 ==============================================================================*/
 
+stock GetLootIndexTotal()
+{
+	return loot_IndexTotal;
+}
 
 stock IsValidLootIndex(index)
 {
@@ -481,6 +414,17 @@ stock GetItemLootIndex(Item:itemid)
 		return -1;
 
 	return loot_ItemLootIndex[itemid];
+}
+
+stock SetItemLootIndex(Item:itemid, index) {
+	if(!IsValidItem(itemid))
+		return -1;
+
+	if(!(0 <= index < loot_IndexTotal))
+		return -1;
+
+	loot_ItemLootIndex[itemid] = index;
+	return 1;
 }
 
 // loot_posX

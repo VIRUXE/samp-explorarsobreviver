@@ -55,12 +55,8 @@ Float:	veh_spawnR,
 
 static
 			veh_Data				[MAX_VEHICLES][E_VEHICLE_DATA],
-			veh_TypeCount			[MAX_VEHICLE_TYPE];
-
-new
-   Iterator:veh_Index<MAX_VEHICLES>;
-
-static
+			veh_TypeCount			[MAX_VEHICLE_TYPE],
+			
 PlayerText:	veh_FuelUI				[MAX_PLAYERS] = {PlayerText:INVALID_TEXT_DRAW, ...},
 PlayerText:	veh_DamageUI			[MAX_PLAYERS] = {PlayerText:INVALID_TEXT_DRAW, ...},
 PlayerText:	veh_EngineUI			[MAX_PLAYERS] = {PlayerText:INVALID_TEXT_DRAW, ...},
@@ -83,10 +79,19 @@ forward OnVehicleReset(oldid, newid);
 forward Float:GetVehicleFuel(vehicleid);
 
 
-hook OnPlayerConnect(playerid)
+hook OnPlayerSpawn(playerid)
 {
-	veh_NameUI[playerid]			=CreatePlayerTextDraw(playerid, 621.000000, 415.000000, "Infernus");
-	PlayerTextDrawAlignment			(playerid, veh_NameUI[playerid], 3);
+	if(veh_FuelUI[playerid] != PlayerText:INVALID_TEXT_DRAW) {
+		PlayerTextDrawDestroy(playerid, veh_FuelUI[playerid]);
+		PlayerTextDrawDestroy(playerid, veh_DamageUI[playerid]);
+		PlayerTextDrawDestroy(playerid, veh_EngineUI[playerid]);
+		PlayerTextDrawDestroy(playerid, veh_DoorsUI[playerid]);
+		PlayerTextDrawDestroy(playerid, veh_NameUI[playerid]);
+		PlayerTextDrawDestroy(playerid, veh_SpeedUI[playerid]);
+	}
+
+	veh_NameUI[playerid]			=CreatePlayerTextDraw(playerid, IsPlayerMobile(playerid) ? 5.0 : 621.0, 415.0, "Infernus");
+	PlayerTextDrawAlignment			(playerid, veh_NameUI[playerid], IsPlayerMobile(playerid) ? 1 : 3);
 	PlayerTextDrawBackgroundColor	(playerid, veh_NameUI[playerid], 255);
 	PlayerTextDrawFont				(playerid, veh_NameUI[playerid], 2);
 	PlayerTextDrawLetterSize		(playerid, veh_NameUI[playerid], 0.349999, 1.799998);
@@ -94,8 +99,8 @@ hook OnPlayerConnect(playerid)
 	PlayerTextDrawSetOutline		(playerid, veh_NameUI[playerid], 1);
 	PlayerTextDrawSetProportional	(playerid, veh_NameUI[playerid], 1);
 
-	veh_SpeedUI[playerid]			=CreatePlayerTextDraw(playerid, 620.000000, 401.000000, "220km/h");
-	PlayerTextDrawAlignment			(playerid, veh_SpeedUI[playerid], 3);
+	veh_SpeedUI[playerid]			=CreatePlayerTextDraw(playerid, IsPlayerMobile(playerid) ? 5.0 : 620.0, 401.0, "220km/h");
+	PlayerTextDrawAlignment			(playerid, veh_SpeedUI[playerid], IsPlayerMobile(playerid) ? 1 : 3);
 	PlayerTextDrawBackgroundColor	(playerid, veh_SpeedUI[playerid], 255);
 	PlayerTextDrawFont				(playerid, veh_SpeedUI[playerid], 2);
 	PlayerTextDrawLetterSize		(playerid, veh_SpeedUI[playerid], 0.250000, 1.599998);
@@ -103,8 +108,8 @@ hook OnPlayerConnect(playerid)
 	PlayerTextDrawSetOutline		(playerid, veh_SpeedUI[playerid], 1);
 	PlayerTextDrawSetProportional	(playerid, veh_SpeedUI[playerid], 1);
 
-	veh_FuelUI[playerid]			=CreatePlayerTextDraw(playerid, 620.000000, 386.000000, "0.0/0.0L");
-	PlayerTextDrawAlignment			(playerid, veh_FuelUI[playerid], 3);
+	veh_FuelUI[playerid]			=CreatePlayerTextDraw(playerid, IsPlayerMobile(playerid) ? 5.0 : 620.0, 386.0, "0.0/0.0L");
+	PlayerTextDrawAlignment			(playerid, veh_FuelUI[playerid], IsPlayerMobile(playerid) ? 1 : 3);
 	PlayerTextDrawBackgroundColor	(playerid, veh_FuelUI[playerid], 255);
 	PlayerTextDrawFont				(playerid, veh_FuelUI[playerid], 2);
 	PlayerTextDrawLetterSize		(playerid, veh_FuelUI[playerid], 0.250000, 1.599999);
@@ -112,8 +117,8 @@ hook OnPlayerConnect(playerid)
 	PlayerTextDrawSetOutline		(playerid, veh_FuelUI[playerid], 1);
 	PlayerTextDrawSetProportional	(playerid, veh_FuelUI[playerid], 1);
 
-	veh_DamageUI[playerid]			=CreatePlayerTextDraw(playerid, 620.000000, 371.000000, "DANO");
-	PlayerTextDrawAlignment			(playerid, veh_DamageUI[playerid], 3);
+	veh_DamageUI[playerid]			=CreatePlayerTextDraw(playerid, IsPlayerMobile(playerid) ? 5.0 : 620.0, 371.0, "DANO");
+	PlayerTextDrawAlignment			(playerid, veh_DamageUI[playerid], IsPlayerMobile(playerid) ? 1 : 3);
 	PlayerTextDrawBackgroundColor	(playerid, veh_DamageUI[playerid], 255);
 	PlayerTextDrawFont				(playerid, veh_DamageUI[playerid], 2);
 	PlayerTextDrawLetterSize		(playerid, veh_DamageUI[playerid], 0.250000, 1.599999);
@@ -121,8 +126,8 @@ hook OnPlayerConnect(playerid)
 	PlayerTextDrawSetOutline		(playerid, veh_DamageUI[playerid], 1);
 	PlayerTextDrawSetProportional	(playerid, veh_DamageUI[playerid], 1);
 
-	veh_EngineUI[playerid]			=CreatePlayerTextDraw(playerid, 620.000000, 356.000000, "MOTOR");
-	PlayerTextDrawAlignment			(playerid, veh_EngineUI[playerid], 3);
+	veh_EngineUI[playerid]			=CreatePlayerTextDraw(playerid, IsPlayerMobile(playerid) ? 5.0 : 620.0, 356.0, "MOTOR");
+	PlayerTextDrawAlignment			(playerid, veh_EngineUI[playerid], IsPlayerMobile(playerid) ? 1 : 3);
 	PlayerTextDrawBackgroundColor	(playerid, veh_EngineUI[playerid], 255);
 	PlayerTextDrawFont				(playerid, veh_EngineUI[playerid], 2);
 	PlayerTextDrawLetterSize		(playerid, veh_EngineUI[playerid], 0.250000, 1.599999);
@@ -130,8 +135,8 @@ hook OnPlayerConnect(playerid)
 	PlayerTextDrawSetOutline		(playerid, veh_EngineUI[playerid], 1);
 	PlayerTextDrawSetProportional	(playerid, veh_EngineUI[playerid], 1);
 
-	veh_DoorsUI[playerid]			=CreatePlayerTextDraw(playerid, 620.000000, 341.000000, "PORTAS");
-	PlayerTextDrawAlignment			(playerid, veh_DoorsUI[playerid], 3);
+	veh_DoorsUI[playerid]			=CreatePlayerTextDraw(playerid, IsPlayerMobile(playerid) ? 5.0 : 620.0, 341.0, "PORTAS");
+	PlayerTextDrawAlignment			(playerid, veh_DoorsUI[playerid], IsPlayerMobile(playerid) ? 1 : 3);
 	PlayerTextDrawBackgroundColor	(playerid, veh_DoorsUI[playerid], 255);
 	PlayerTextDrawFont				(playerid, veh_DoorsUI[playerid], 2);
 	PlayerTextDrawLetterSize		(playerid, veh_DoorsUI[playerid], 0.250000, 1.599999);
@@ -179,7 +184,6 @@ stock DestroyWorldVehicle(vehicleid, bool:perma = false)
 		return 0;
 	
 	CallLocalFunction("OnVehicleDestroyed", "d", vehicleid);
-	Iter_Remove(veh_Index, vehicleid);
 	
 	veh_Data[vehicleid][veh_state] = VEHICLE_STATE_DEAD;
 
@@ -251,6 +255,12 @@ stock RespawnVehicle(vehicleid)
 {
 	SetVehicleToRespawn(vehicleid);
 	_veh_SyncData(vehicleid);
+}
+
+stock ToggleVehicleWheels(vehicleid, toggle)
+{
+	veh_Data[vehicleid][veh_tires] = toggle ? 0 : 15;
+	UpdateVehicleDamageStatus(vehicleid, veh_Data[vehicleid][veh_panels], veh_Data[vehicleid][veh_doors], veh_Data[vehicleid][veh_lights], veh_Data[vehicleid][veh_tires]);
 }
 
 
@@ -511,14 +521,12 @@ PlayerVehicleUpdate(playerid)
 	else
 		PlayerTextDrawHide(playerid, veh_DoorsUI[playerid]);
 
-	if(!IsPlayerViewingInventory(playerid))
-	{
-		PlayerTextDrawShow(playerid, veh_FuelUI[playerid]);
-		PlayerTextDrawShow(playerid, veh_DoorsUI[playerid]);
-		PlayerTextDrawShow(playerid, veh_DamageUI[playerid]);
-		PlayerTextDrawShow(playerid, veh_EngineUI[playerid]);
-	}
-	
+
+	PlayerTextDrawShow(playerid, veh_FuelUI[playerid]);
+	PlayerTextDrawShow(playerid, veh_DoorsUI[playerid]);
+	PlayerTextDrawShow(playerid, veh_DamageUI[playerid]);
+	PlayerTextDrawShow(playerid, veh_EngineUI[playerid]);
+
 	if(IsBaseWeaponDriveby(GetPlayerWeapon(playerid)))
 	{
 		if(GetTickCountDifference(GetTickCount(), GetPlayerVehicleExitTick(playerid)) > 3000 && playerstate == PLAYER_STATE_DRIVER)

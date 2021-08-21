@@ -188,9 +188,14 @@ _EatItem(playerid, Item:itemid)
 	return 1;
 }
 
-hook OnHoldActionUpdate(playerid, progress)
+hook OnHoldActionUpdate(playerid, progress) {
 	if(food_CurrentItem[playerid] != INVALID_ITEM_ID && GetPlayerTotalVelocity(playerid) > 1.0)
+	{
 		_StopEating(playerid);
+		return Y_HOOKS_BREAK_RETURN_0;
+	}
+	return Y_HOOKS_CONTINUE_RETURN_0;
+}
 
 hook OnHoldActionFinish(playerid)
 {

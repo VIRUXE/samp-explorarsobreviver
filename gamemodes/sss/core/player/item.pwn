@@ -6,17 +6,12 @@ static
 	PlayerText:item_TD[MAX_PLAYERS] = {PlayerText:INVALID_TEXT_DRAW, ...};
 	
 hook OnGameModeInit(){
-	item_Prev = TextDrawCreate(291.000000, 400.000000, "Preview_Model");
-	TextDrawFont(item_Prev, 5);
-	TextDrawLetterSize(item_Prev, 0.600000, 2.000000);
-	TextDrawTextSize(item_Prev, 53.000000, 41.000000);		
-	TextDrawSetOutline(item_Prev, 0);
-	TextDrawSetShadow(item_Prev, 0);
-	TextDrawAlignment(item_Prev, 1);
-	TextDrawColor(item_Prev, -1);
-	TextDrawBackgroundColor(item_Prev, 0);
-	TextDrawSetPreviewRot(item_Prev, -10.000000, 0.100000, -20.000000, 1.0);
-	TextDrawSetPreviewModel(item_Prev, 19300);
+	item_Prev = TextDrawCreate	(291.0, 400.0, "_");
+	TextDrawFont				(item_Prev, 5);
+	TextDrawLetterSize			(item_Prev,	0.5, 2.0);
+	TextDrawTextSize			(item_Prev, 53.0, 41.0);		
+	TextDrawBackgroundColor		(item_Prev, 0);
+	TextDrawSetPreviewRot		(item_Prev, -10.0, 0.0, -20.0, 1.0);
 }
 
 hook OnGameModeExit()
@@ -51,7 +46,7 @@ timer HideCredit[5000](playerid){
 		PlayerTextDrawHide(playerid, item_TD[playerid]);
 	}
 }
-UpdatePlayerPreviewItem(playerid){
+UpdatePreviewItemText(playerid){
 	new iname[MAX_ITEM_NAME + MAX_ITEM_TEXT];
 	GetItemName(GetPlayerItem(playerid), iname);
 	PlayerTextDrawSetString(playerid, item_TD[playerid], iname);
@@ -59,7 +54,7 @@ UpdatePlayerPreviewItem(playerid){
 }
 
 hook OnPlayerGetItem(playerid, Item:itemid){
-	UpdatePlayerPreviewItem(playerid);
+	UpdatePreviewItemText(playerid);
 
 	new 
 		modelid,
@@ -74,21 +69,15 @@ hook OnPlayerGetItem(playerid, Item:itemid){
 		RemovePlayerAttachedObject(playerid, ITEM_ATTACH_INDEX);
 }
 
-hook OnItemArrayDataChanged(Item:itemid){
-	foreach(new i : Player){
-		if(GetPlayerItem(i) == itemid){
-			UpdatePlayerPreviewItem(i);
-		}
+hook OnItemArrayDataChanged(Item:itemid) {
+	if(IsPlayerConnected(GetItemHolder(itemid))) {
+		UpdatePreviewItemText(GetItemHolder(itemid));
 	}
 }
 
-hook OnItemDestroy(Item:itemid){
-	foreach(new i : Player){
-		if(GetPlayerItem(i) == itemid){
-			PlayerTextDrawHide(i, item_TD[i]);
-			TextDrawHideForPlayer(i, item_Prev);
-		}
-	}
+hook OnPlayerSpawnNewChar(playerid){
+	PlayerTextDrawHide(playerid, item_TD[playerid]);
+	TextDrawHideForPlayer(playerid, item_Prev);	
 }
 
 hook OnItemRemovedFromPlayer(playerid, Item:itemid){
@@ -106,29 +95,24 @@ hook OnPlayerDisconnect(playerid, reason){
 
 /*==============================================================================
 
-	Anti Drop item bug
-	
-==============================================================================*/
-
-hook OnPlayerDroppedItem(playerid, Item:itemid){
-	if(IsItemTypeDefence(GetItemType(itemid))){
-		new Float:x, Float:y, Float:z;
-		GetItemPos(itemid, x, y, z);
-		CA_RayCastLine(x, y, z, x, y, z - 3.0, z, z, z);
-		SetItemPos(itemid, x, y, z + 0.15);
-	}
-}
-
-/*==============================================================================
-
 	Default item button text
 	
 ==============================================================================*/
 
-hook OnItemCreateInWorld(Item:itemid){
+hook OnItemCreateInWorld(Item:itemid) {
 	new Button:buttonid;
 	GetItemButtonID(itemid, buttonid);
-	SetButtonText(buttonid, "Pressione F para pegar");
+	SetButtonText(buttonid, "~w~"KEYTEXT_INTERACT"~h~ pegar item");
+}
+
+hook OnPlayerEnterButArea(playerid, Button:buttonid) {
+	if(!IsValidItem(GetPlayerItem(playerid)) && IsValidItem(GetItemFromButtonID(buttonid))) {
+		new text[BTN_MAX_TEXT];
+		GetButtonText(buttonid, text);
+		if(strfind(text, "Para pegar")) {
+			HideActionText(playerid);
+		}
+	}
 }
 
 /*==============================================================================
@@ -153,7 +137,7 @@ hook OnPlayerGiveItem(playerid, targetid, Item:itemid){
 
 /*==============================================================================
 
-	Move itens
+	Until callback
 	
 ==============================================================================*/
 
@@ -167,25 +151,89 @@ hook OnMoveItemToContainer(playerid, Item:itemid, Container:containerid){
 
 /*==============================================================================
 
+	Fix use item
+	
+==============================================================================*/
+
+hook OnPlayerUseItemWithBtn(playerid, Button:buttonid, Item:itemid){
+	new Button:id;
+	GetPlayerPressingButton(playerid, id);
+	if(!IsValidButton(id))
+		CallLocalFunction("OnButtonPress", "dd", playerid, _:buttonid);
+		
+	return Y_HOOKS_CONTINUE_RETURN_0;
+}
+
+/*==============================================================================
+
 	View inventory in Vehicle
 	
 ==============================================================================*/
 
-hook OnPlayerKeyStateChange(playerid, newkeys, oldkeys)
-	if( (newkeys == KEY_ACTION) && IsPlayerInAnyVehicle(playerid))
-			HideVehicleUI(playerid), DisplayPlayerInventory(playerid);
+hook OnPlayerOpenInventory(playerid){
+	if(IsPlayerInAnyVehicle(playerid))
+		DisplayContainerInventory(playerid, GetVehicleContainer(GetPlayerVehicleID(playerid)));
+	return Y_HOOKS_CONTINUE_RETURN_0;
+}
 
-hook OnPlayerCloseContainer(playerid, Container:containerid)
+hook OnPlayerKeyStateChange(playerid, newkeys, oldkeys)
+	if( (newkeys == KEY_YES) && GetPlayerState(playerid) == PLAYER_STATE_PASSENGER)
+		HideVehicleUI(playerid), DisplayPlayerInventory(playerid);
+	
+
+hook OnPlayerCloseContainer(playerid, Container:containerid){
 	if(IsPlayerInAnyVehicle(playerid))
 		ShowVehicleUI(playerid, GetPlayerLastVehicle(playerid));
+	
+	return Y_HOOKS_CONTINUE_RETURN_0;
+}
 
 hook OnPlayerCloseInventory(playerid)
+{
 	if(IsPlayerInAnyVehicle(playerid))
 		ShowVehicleUI(playerid, GetPlayerLastVehicle(playerid));
+		
+	return Y_HOOKS_CONTINUE_RETURN_0;
+}
 
 hook OnPlayerDropItem(playerid, Item:itemid){
 	if(IsPlayerInAnyVehicle(playerid))
 		return Y_HOOKS_BREAK_RETURN_1;
 		
 	return Y_HOOKS_CONTINUE_RETURN_0;
+}
+
+/*==============================================================================
+
+	Destruir todos itens do jogador
+	
+==============================================================================*/
+
+stock DestroyPlayerItems(playerid){
+	for(new i = MAX_INVENTORY_SLOTS - 1; i >= 0; i--){
+		new Item:subitemid;
+		GetInventorySlotItem(playerid, i, subitemid);
+		if(IsValidItem(subitemid))
+			DestroyItem(subitemid);
+	}
+
+	DestroyPlayerBag(playerid);
+
+	if(IsValidItem(GetPlayerItem(playerid)))
+		DestroyItem(GetPlayerItem(playerid));
+
+	if(IsValidItem(GetPlayerHolsterItem(playerid))) {
+		DestroyItem(GetPlayerHolsterItem(playerid));
+		RemovePlayerHolsterItem(playerid);
+	}
+
+	if(IsValidItem(GetPlayerHatItem(playerid))){
+		DestroyItem(GetPlayerHatItem(playerid));
+		RemovePlayerHatItem(playerid);
+	}
+
+	if(IsValidItem(GetPlayerMaskItem(playerid))){
+		DestroyItem(GetPlayerMaskItem(playerid));
+		RemovePlayerMaskItem(playerid);
+	}
 }

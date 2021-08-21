@@ -306,8 +306,6 @@ hook OnPlayerEnterDynArea(playerid, areaid) {
 			_zipline_exit(playerid);
 		}
 	}
-
-	return 1;
 }
 
 hook OnPlayerKeyStateChange(playerid, newkeys, oldkeys) {

@@ -7,27 +7,33 @@ world_civilian, 1.0
 20.0,   Spanner
 41.0,	Crowbar
 30.0,   Map
+25.0,   Clock
+
 # meds
 10.0,	AntiSepBandage
 20.0,	Bandage
 10.0,	Medkit
 30.0,	Pills
+
 # bags
 36.0,	Satchel
 32.0,	Daypack
 6.0,	Backpack
 4.0,	MediumBag
 3.0,	Rucksack
+
 # vehicle stuff
 22.0,	Key
 20.0,	Wheel
 30.0,	GasCan
 28.0,	WheelLock
+
 # other useful stuff
 10.0,	Barbecue
 10.0,	FireworkBox
 49.0,	FireLighter
 34.0,	FishRod
+
 # melee weapons
 22.0,	GolfClub
 12.0,	Knife
@@ -57,6 +63,7 @@ world_civilian, 1.0
 12.0,	Orange
 13.0,	RedApple
 14.0,	Banana
+
 # kinda rare
 3.0,	IceCreamBars
 3.0,	PizzaOnly
@@ -71,6 +78,7 @@ world_civilian, 1.0
 2.0,	Meat2
 2.0,	RawFish
 2.0,	Wine2
+
 # super rare
 5.0,	Champagne
 3.0,	Wine3
@@ -166,3 +174,5 @@ world_civilian, 1.0
 1.0,	Flag
 0.1,	EasterEgg
 2.0,    Dice
+2.0,	Sign
+0.5,    SignShot

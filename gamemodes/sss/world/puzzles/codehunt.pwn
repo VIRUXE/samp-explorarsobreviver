@@ -85,11 +85,9 @@ CreateLockup(Button:keypadbutton, Button:extButton, Button:intButton)
 	lck_Data[lck_Total][lck_extButton] = extButton;
 	lck_Data[lck_Total][lck_intButton] = intButton;
 	lck_Data[lck_Total][lck_locked] = 1;
-	// TODO: implement LinkTP
-	// LinkTP(extButton, intButton);
-
 	
-
+	LinkTP(extButton, intButton);
+	
 	lck_Total++;
 
 	return keycode;
@@ -135,9 +133,9 @@ hook OnPlayerKeypadEnter(playerid, keypadid, code, match)
 LoadLockup_SF()
 {
 	new keycode = CreateLockup(
-		CreateButton(-2493.90112, 313.94443, 29.72062, "Press "KEYTEXT_INTERACT" to interact"),
-		CreateButton(-2499.1262, 315.1892, 29.4147, "Press "KEYTEXT_INTERACT" to go inside"),
-		CreateButton(-2499.1262, 318.6712, 1036.9948, "Press "KEYTEXT_INTERACT" to leave"));
+		CreateButton(-2493.90112, 313.94443, 29.72062, "Pressione "KEYTEXT_INTERACT" para interagir"),
+		CreateButton(-2499.1262, 315.1892, 29.4147, "Pressione "KEYTEXT_INTERACT" para entrar"),
+		CreateButton(-2499.1262, 318.6712, 1036.9948, "Pressione "KEYTEXT_INTERACT" para sair"));
 
 	new Float:coords[][]=
 	{

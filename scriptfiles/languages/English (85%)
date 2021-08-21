@@ -387,6 +387,7 @@ M9PistolS_T=Press {KEYTEXT_RELOAD} to reload, press {KEYTEXT_PUT_AWAY} to holste
 Mac10_T=Press {KEYTEXT_RELOAD} to reload, press {KEYTEXT_PUT_AWAY} to holster and hold {KEYTEXT_DROP_ITEM} to remove ammo
 Mailbox_T=This item has no use yet
 Map_T=Keep this with you so you don't get lost on the way :)
+Clock_T=Keep this with you to view the time when you open your pockets
 Meat_T=Cook and eat this for food value
 Meat2_T=FOOD ITEM
 MediumBag_T=Press {KEYTEXT_PUT_AWAY} to wear a bag, press {KEYTEXT_DROP_ITEM} while holding nothing to remove a bag

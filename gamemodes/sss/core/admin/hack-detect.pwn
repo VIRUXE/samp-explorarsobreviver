@@ -232,18 +232,6 @@ static NexCheatName[53][45] = {
 	{"NOPs"}
 };
 
-hook OnGameModeInit()
-	defer DisableUntilAC();
-
-timer DisableUntilAC[1000]()
-{
-	EnableAntiCheat(4, false); // Anti-teleport hack (into/between vehicles)
-	EnableAntiCheat(11, false); // Anti-Health hack (in vehicle)
-	EnableAntiCheat(5, false); // Anti-Teleport (vehicle to player)
-	EnableAntiCheat(15, false); // Anti-Weapon hack
-	EnableAntiCheat(32, false); // Anti-Carjack hack
-}
-
 hook OnPlayerSpawn(playerid)
 {
 	if(IsPlayerMobile(playerid))
@@ -252,6 +240,7 @@ hook OnPlayerSpawn(playerid)
 		EnableAntiCheatForPlayer(playerid, 39, false); // Dialog-Hack
 		EnableAntiCheatForPlayer(playerid, 28, false); // Anti-FakeKill
 	}
+	
 	stop IsPlayerRunning[playerid];
 	sprintcount[playerid] = 0;
 }
@@ -273,7 +262,7 @@ public OnCheatDetected(playerid, const ip_address[], type, code)
 		new Float:x, Float:y, Float:z;
 		GetPlayerPos(playerid, x, y, z);
 
-		if(code < 7 && IsAtConnectionPos(x, y, z))
+		if(code < 7 && IsPlayerAtConnectionPos(playerid))
 			return 1;
 
 		switch(code)
@@ -420,63 +409,27 @@ hook OnPlayerStateChange(playerid, newstate, oldstate)
 	if(GetPlayerAdminLevel(playerid) != 0)
 		return 1;
 		
-	if(newstate == PLAYER_STATE_DRIVER)
+	if(newstate == PLAYER_STATE_DRIVER || newstate == PLAYER_STATE_DRIVER)
 	{
 		new
-			vehicleid,
-			E_LOCK_STATE:lockstate;
+			vehicleId = GetPlayerVehicleID(playerid),
+			E_LOCK_STATE:vehicleLock = GetVehicleLockState(vehicleId);
 
-		vehicleid = GetPlayerVehicleID(playerid);
-		lockstate = GetVehicleLockState(vehicleid);
-
-		if(lockstate != E_LOCK_STATE_OPEN && GetTickCountDifference(GetTickCount(), GetVehicleLockTick(vehicleid)) > 3500)
+		if(vehicleLock != E_LOCK_STATE_OPEN && GetTickCountDifference(GetTickCount(), GetVehicleLockTick(vehicleId)) > SEC(3.5))
 		{
 			new
-				name[MAX_PLAYER_NAME],
-				Float:px,
-				Float:py,
-				Float:pz;
+				playerName[MAX_PLAYER_NAME],
+				Float:px, Float:py, Float:pz,
+				bool:isUsingMobile = IsPlayerMobile(playerid);
 
-			GetPlayerName(playerid, name, MAX_PLAYER_NAME);
-			GetPlayerPos(playerid, px, py, pz);
+			GetPlayerName(playerid, playerName, MAX_PLAYER_NAME);
 
-			ReportPlayer(name, sprintf("Entered locked vehicle (%d) as driver", vehicleid), -1, REPORT_TYPE_LOCKEDCAR, px, py, pz, GetPlayerVirtualWorld(playerid), GetPlayerInterior(playerid), "");
-			TimeoutPlayer(playerid, sprintf("Entered locked vehicle (%d) as driver", vehicleid));
 			RemovePlayerFromVehicle(playerid);
-			//SetPlayerPos(playerid, px, py, pz);
 
-			defer StillInVeh(playerid, vehicleid, _:lockstate);
+			defer StillInVeh(playerid, vehicleId, _:vehicleLock);
 
-			return -1;
-		}
-	}
-
-	if(newstate == PLAYER_STATE_PASSENGER)
-	{
-		new
-			vehicleid,
-			E_LOCK_STATE:lockstate;
-
-		vehicleid = GetPlayerVehicleID(playerid);
-		lockstate = GetVehicleLockState(vehicleid);
-
-		if(lockstate != E_LOCK_STATE_OPEN && GetTickCountDifference(GetTickCount(), GetVehicleLockTick(vehicleid)) > 3500)
-		{
-			new
-				name[MAX_PLAYER_NAME],
-				Float:x,
-				Float:y,
-				Float:z;
-
-			GetPlayerName(playerid, name, MAX_PLAYER_NAME);
-			GetPlayerPos(playerid, x, y, z);
-
-			ReportPlayer(name, sprintf("Entered locked vehicle (%d) as passenger", vehicleid), -1, REPORT_TYPE_LOCKEDCAR, x, y, z, GetPlayerVirtualWorld(playerid), GetPlayerInterior(playerid), "");
-			TimeoutPlayer(playerid, sprintf("Entered locked vehicle (%d) as passenger", vehicleid));
-			RemovePlayerFromVehicle(playerid);
-			SetPlayerPos(playerid, x, y, z);
-
-			defer StillInVeh(playerid, vehicleid, _:lockstate);
+			ReportPlayer(playerName, sprintf("Entered locked vehicle (%d) as %s (Mobile: %d)", vehicleId, newstate == PLAYER_STATE_DRIVER ? "driver" : "passenger", isUsingMobile), -1, REPORT_TYPE_LOCKEDCAR, px, py, pz, GetPlayerVirtualWorld(playerid), GetPlayerInterior(playerid), "");
+			TimeoutPlayer(playerid, sprintf("Entered locked vehicle (%d) as %s (Mobile: %d)", vehicleId, newstate == PLAYER_STATE_DRIVER ? "driver" : "passenger", isUsingMobile));
 
 			return -1;
 		}
@@ -843,49 +796,49 @@ AccuracyWarning(playerid, total)
 
 ptask HealthHackCheck[1000](playerid)
 {
-	if(IsPlayerOnAdminDuty(playerid))
+	if(GetPlayerAdminLevel(playerid))
 		return;
 
-	new Float:health;
-	GetPlayerHealth(playerid, health);
+	new Float:playerHealth;
 
-	// Onfoot 
-	if(IsPlayerSpawned(playerid) && health > 99.9)
-		ChatMsgAdmins(3, RED, "[Anti-Health Hack] %p(%d) detected. Health: %f", playerid, playerid, health);
+	GetPlayerHealth(playerid, playerHealth);
 
-	if(!IsPlayerInAnyVehicle(playerid))
-		return;
-
-	// In vehicle
-	new
-		Float:vehiclehp,
-		vehicleid = GetPlayerVehicleID(playerid);
-
-	GetVehicleHealth(vehicleid, vehiclehp);
-
-	if(vehiclehp > 990.0 && GetPlayerVehicleSeat(playerid) == 0) // Only check the driver - Checking passengers causes a false ban
+	if(IsPlayerSpawned(playerid) && playerHealth > 99.9)
 	{
 		new
-			Float:x,
-			Float:y,
-			Float:z,
-			name[MAX_PLAYER_NAME],
-			reason[64];
+			Float:x, Float:y, Float:z,
+			playerName[MAX_PLAYER_NAME];
 
 		GetPlayerPos(playerid, x, y, z);
-		GetPlayerName(playerid, name, MAX_PLAYER_NAME);
-		format(reason, sizeof(reason), "Veículo com %.2f de Vida (Impossível pelo Servidor)", vehiclehp);
-		ReportPlayer(name, reason, -1, REPORT_TYPE_VHEALTH, x, y, z, GetPlayerVirtualWorld(playerid), GetPlayerInterior(playerid), "");
-		KickPlayer(playerid, reason);
+		GetPlayerName(playerid, playerName, MAX_PLAYER_NAME);
 
-		SetVehicleHealth(vehicleid, 300.0);
-		defer vh_ResetVehiclePosition(vehicleid);
+		ReportPlayer(playerName, "Hack de Vida", -1, "HP", x, y, z, GetPlayerVirtualWorld(playerid), GetPlayerInterior(playerid), "");
+		KickPlayer(playerid, "Hack de Vida");
+	}
+
+	if(IsPlayerInAnyVehicle(playerid))
+	{
+		new
+			Float:vehicleHP,
+			vehicleId = GetPlayerVehicleID(playerid);
+
+		GetVehicleHealth(vehicleId, vehicleHP);
+
+		if(vehicleHP > 990.0 && GetPlayerVehicleSeat(playerid) == 0) // Only check the driver - Checking passengers causes a false ban
+		{
+			new
+				Float:playerX, Float:playerY, Float:playerZ,
+				playerName[MAX_PLAYER_NAME];
+
+			GetPlayerPos(playerid, playerX, playerY, playerZ);
+			GetPlayerName(playerid, playerName, MAX_PLAYER_NAME);
+
+			ReportPlayer(playerName, "Hack de Vida no Veículo", -1, REPORT_TYPE_VHEALTH, playerX, playerY, playerZ, GetPlayerVirtualWorld(playerid), GetPlayerInterior(playerid), "");
+			KickPlayer(playerid, "Hack de Vida no Veículo");
+
+			SetVehicleHealth(vehicleId, 300.0); // Reset vehicle health so others don't get banned
+		}
 	}
 
 	return;
-}
-
-timer vh_ResetVehiclePosition[1500](vehicleid)
-{
-	SetVehicleHealth(vehicleid, 300.0);
 }

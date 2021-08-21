@@ -1,40 +1,22 @@
 
-CreateLootVehicle(type, Float:x, Float:y, Float:z, Float:r)
+stock CreateLootVehicle(type, Float:x, Float:y, Float:z, Float:r)
 {
 	new
 		vehicleid,
-		model,
-		colour1,
-		colour2;
-
-	model = GetVehicleTypeModel(type);
-
-	switch(model)
-	{
-		case 416, 433, 523, 427, 490, 528, 407, 544, 596, 597, 598, 599, 432, 601:
-		{
-			colour1 = -1;
-			colour2 = -1;
-		}
-		default:
-		{
-			colour1 = 128 + random(128);
-			colour2 = 128 + random(128);
-		}
-	}
+		canModelHaveColour = CanVehicleHaveColour(GetVehicleTypeModel(type)),
+		colour1 = canModelHaveColour ? GetRandomVehicleColour() : -1,
+		colour2 = canModelHaveColour ? GetRandomVehicleColour() : -1;
 	
 	vehicleid = CreateWorldVehicle(type, x, y, z, r, colour1, colour2);
 	SetVehicleEngine(vehicleid, 0);
 
 	if(vehicleid >= MAX_VEHICLES)
 	{
-		err(false, false, "Vehicle limit reached.");
+		err(true, false, "Vehicle limit reached.");
 		DestroyVehicle(vehicleid);
 		return 0;
 	}
-
-	Iter_Add(veh_Index, vehicleid);
-
+	
 	SetVehicleColours(vehicleid, colour1, colour2);
 
 	GenerateVehicleData(vehicleid);
@@ -43,31 +25,26 @@ CreateLootVehicle(type, Float:x, Float:y, Float:z, Float:r)
 	return vehicleid;
 }
 
-GenerateVehicleData(vehicleid)
+stock GenerateVehicleData(vehicleid)
 {
 	new
-		type,
-		category,
-		Float:maxfuel,
+		type			 = GetVehicleType(vehicleid),
+		category		 = GetVehicleTypeCategory(type),
+		Float:maxfuel	 = GetVehicleTypeMaxFuel(type),
 		lootindexname[32],
 		lootindex,
-		trunksize;
+		trunksize		 = GetVehicleTypeTrunkSize(type);
 
-	type = GetVehicleType(vehicleid);
-	category = GetVehicleTypeCategory(type);
-	maxfuel = GetVehicleTypeMaxFuel(type);
 	GetVehicleTypeLootIndex(type, lootindexname);
 	lootindex = GetLootIndexFromName(lootindexname);
-	trunksize = GetVehicleTypeTrunkSize(type);
 
-// Health
+	// Health
 	SetVehicleHP(vehicleid, 300 + random(200));
 
-// Fuel
+	// Fuel
 	SetVehicleFuel(vehicleid, frandom(10.0) );
 
-// Visual Damage
-
+	// Visual Damage
 	if(category < VEHICLE_CATEGORY_MOTORBIKE)
 	{
 		new
@@ -80,12 +57,9 @@ GenerateVehicleData(vehicleid)
 			encode_lights(random(2), random(2), random(2), random(2)),
 			encode_tires(random(2), random(2), random(2), random(2)) );
 
-// Locks
-
-		if(maxfuel == 0.0)
-		{
+		// Locks
+		if(maxfuel == 0.0) // ??????????
 			SetVehicleParamsEx(vehicleid, 1, 0, 0, 0, 0, 0, 0);
-		}
 		else
 		{
 			new locked;
@@ -105,13 +79,10 @@ GenerateVehicleData(vehicleid)
 		}
 	}
 
-
-// Putting loot in trunks
-
+	// Putting loot in trunks
 	if(lootindex != -1 && 0 < trunksize <= MAX_CONTAINER_SLOTS)
 		FillContainerWithLoot(GetVehicleContainer(vehicleid), random(trunksize / 3), lootindex);
 
-// Number plate
-
+	// Number plate
 	SetVehicleNumberPlate(vehicleid, RandomNumberPlateString());
 }

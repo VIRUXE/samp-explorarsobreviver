@@ -27,11 +27,14 @@
 ==============================================================================*/
 
 #undef MAX_PLAYERS
-#define MAX_PLAYERS						100
+#define MAX_PLAYERS						64
+
+#undef MAX_VEHICLES
+#define MAX_VEHICLES					700
 
 // YSI
 #define _DEBUG							0
-#define CGEN_MEMORY						71000//69420
+#define CGEN_MEMORY						75000
 #define YSI_NO_VERSION_CHECK
 #define YSI_NO_OPTIMISATION_MESSAGE
 #define YSI_NO_MODE_CACHE
@@ -59,14 +62,15 @@
 #define MAX_INVENTORY_SLOTS				7
 
 // SS/button
-#define BTN_MAX							Button:32768
-#define BTN_TELEPORT_FREEZE_TIME		3000
+#define BTN_MAX							Button:64000
+#define BTN_TELEPORT_FREEZE_TIME		1500
+#define	BTN_MAX_INRANGE					5
 
 // SS/item
-#define MAX_ITEM						Item:32768
+#define MAX_ITEM						Item:64000
 #define MAX_ITEM_TYPE					ItemType:327
-#define MAX_ITEM_NAME					24
-#define MAX_ITEM_TEXT					64
+#define MAX_ITEM_NAME					22
+#define MAX_ITEM_TEXT					45
 #define MAX_CONTAINER_SLOTS				100
 #define ITEM_RESPAWN_DELAY				HOUR(4)
 
@@ -121,6 +125,9 @@
 #pragma warning disable 214 // Temporary fix remove const warning
 #pragma warning disable 239 // Temporary fix remove const warning
 
+// GEO-IP
+#define IPHUB_KEY ""
+
 /*==============================================================================
 
 	Guaranteed first call
@@ -173,6 +180,7 @@ public OnGameModeInit()
 #include <crashdetect>
 #include <sscanf2>
 #include <mathutil>
+#include <SKY>
 #include <YSI_Core\y_utils>
 #include <YSI_Coding\y_va>
 #include <YSI_Coding\y_timers>
@@ -196,10 +204,13 @@ public OnGameModeInit()
 #include <fsutil>
 #include <mobile>
 #include <ini>
+#include <requests>
+//#include <geoip>
+#include <map-zones>
 #include <modio>
-#include <personal-space>
 #include <new-action-text>
-#include <button>
+#include <button_new>
+#include <personal-space>
 #include <door>
 #include <item>
 #include <inventory>
@@ -289,6 +300,7 @@ public OnGameModeInit()
 #define COLOR_PLAYER_NORMAL			0xB8B8B800
 #define COLOR_PLAYER_MOBILE			0x85858500
 #define COLOR_PLAYER_ADMIN			0xE8545400
+#define COLOR_PLAYER_VIP			0xFFAA0000
 
 // Embedding Colours
 #define C_YELLOW					"{FFFF00}"
@@ -543,6 +555,7 @@ new stock
 #include "sss/core/player/recipes.pwn"
 #include "sss/core/player/score.pwn"
 #include "sss/core/player/anti-pedslots.pwn"
+#include "sss/core/player/body.pwn"
 
 // CHARACTER SCRIPTS
 #include "sss/core/char/movement.pwn"
@@ -561,6 +574,7 @@ new stock
 #include "sss/core/char/skills.pwn"
 #include "sss/core/char/travel-stats.pwn"
 #include "sss/core/char/headgear-pop.pwn"
+#include "sss/core/char/vip.pwn"
 
 // WEAPON
 #include "sss/core/weapon/loot.pwn"
@@ -588,7 +602,7 @@ new stock
 #include "sss/core/world/weapons-cache.pwn"
 #include "sss/core/world/loot.pwn"
 #include "sss/core/world/item-tweak.pwn"
-#include "sss/core/world/trash.pwn"
+#include "sss/core/world/bin.pwn"
 
 // ITEM TYPE CATEGORIES
 #include "sss/core/itemtype/defences.pwn"
@@ -662,7 +676,6 @@ new stock
 #include "sss/core/item/locker.pwn"
 #include "sss/core/item/largeframe.pwn"
 #include "sss/core/item/barbecue.pwn"
-#include "sss/core/item/campfire.pwn"
 #include "sss/core/item/sign.pwn"
 #include "sss/core/item/workbench.pwn"
 #include "sss/core/item/scrap-machine.pwn"
@@ -677,7 +690,7 @@ new stock
 #include "sss/core/item/wooddoor.pwn"
 #include "sss/core/item/largegate.pwn"
 #include "sss/core/item/toolbox.pwn"
-//#include "sss/core/item/clock.pwn"
+#include "sss/core/item/clock.pwn"
 
 // ADMINISTRATION TOOLS
 #include "sss/core/admin/report.pwn"
@@ -706,7 +719,6 @@ new stock
 // POST-CODE
 
 #include "sss/core/player/save-load.pwn"
-#include "sss/core/player/body.pwn"
 #include "sss/core/server/auto-save.pwn"
 #tryinclude "sss/extensions/ext_post.pwn"
 
@@ -806,7 +818,7 @@ public OnScriptExit()
 forward SetRestart(seconds);
 public SetRestart(seconds)
 {
-	printf("Restarting server in: %ds", seconds);
+	log(true, "[RESTART] Restarting server in: %02d:%02d", seconds / 60, seconds % 60);
 	gServerUptime = gServerMaxUptime - seconds;
 }
 

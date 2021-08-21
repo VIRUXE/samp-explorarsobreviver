@@ -79,20 +79,16 @@ hook OnGameModeInit()
 ==============================================================================*/
 
 
-ReportPlayer(const name[], const reason[], reporter, const type[], Float:posx, Float:posy, Float:posz, world, interior, const infostring[])
+stock ReportPlayer(const name[], const reason[], reporterId, const type[], Float:posx, Float:posy, Float:posz, world, interior, const infostring[])
 {
-	new reportername[MAX_PLAYER_NAME];
+	new reporterName[MAX_PLAYER_NAME];
 
-	if(reporter == -1)
-	{
-		ChatMsgAdmins(1, YELLOW, " » Server reported %s, reason: %s", name, reason);
-		reportername = "Server";
-	}
-	else
-	{
-		ChatMsgAdmins(1, YELLOW, " » %p reported %s, reason: %s", reporter, name, reason);
-		GetPlayerName(reporter, reportername, MAX_PLAYER_NAME);
-	}
+	if(IsPlayerConnected(reporterId))
+		GetPlayerName(reporterId, reporterName, MAX_PLAYER_NAME);
+
+	log(true, "[REPORT] %s reported %s. Reason: %s", isnull(reporterName) ? "Server" : reporterName, name, reason);
+	ChatMsgAdmins(1, YELLOW, " » %s reported %s. Reason: %s", isnull(reporterName) ? "Server" : reporterName, name, reason);
+	SendDiscordMessage(DCC_FindChannelById("874083183690391602"), "%s reportou %s. Razão: %s", isnull(reporterName) ? "Servidor" : reporterName, name, reason);
 
 	stmt_bind_value(stmt_ReportInsert, 0, DB::TYPE_STRING, name, MAX_PLAYER_NAME);
 	stmt_bind_value(stmt_ReportInsert, 1, DB::TYPE_STRING, reason, MAX_REPORT_REASON_LENGTH);
@@ -104,12 +100,10 @@ ReportPlayer(const name[], const reason[], reporter, const type[], Float:posx, F
 	stmt_bind_value(stmt_ReportInsert, 7, DB::TYPE_INTEGER, world);
 	stmt_bind_value(stmt_ReportInsert, 8, DB::TYPE_INTEGER, interior);
 	stmt_bind_value(stmt_ReportInsert, 9, DB::TYPE_STRING, infostring, MAX_REPORT_INFO_LENGTH);
-	stmt_bind_value(stmt_ReportInsert, 10, DB::TYPE_STRING, reportername, MAX_PLAYER_NAME);
+	stmt_bind_value(stmt_ReportInsert, 10, DB::TYPE_STRING, reporterName, MAX_PLAYER_NAME);
 
 	if(stmt_execute(stmt_ReportInsert))
-	{
 		return 1;
-	}
 
 	return 0;
 }

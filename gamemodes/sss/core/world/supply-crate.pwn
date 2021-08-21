@@ -336,7 +336,11 @@ SupplyCrateLand()
 hook OnButtonPress(playerid, Button:id)
 {
 	if(id == sup_Button && IsValidContainer(sup_Containerid))
+	{
 		DisplayContainerInventory(playerid, sup_Containerid);
+		return Y_HOOKS_BREAK_RETURN_1;
+	}
+	return Y_HOOKS_CONTINUE_RETURN_0;
 }
 
 hook OnDynamicObjectMoved(objectid)

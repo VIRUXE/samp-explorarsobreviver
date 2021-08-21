@@ -23,30 +23,6 @@ hook OnGameModeInit()
 	DefineSupplyDropPos("Tierra Robada South", -720.72766, 972.52899, 11.04721);
 	DefineSupplyDropPos("Tierra Robada Midland", -1484.86084, 1977.28833, 46.76990);
 	DefineSupplyDropPos("Tierra Robada North Freeway", -2547.67798, 2614.91919, 59.90747);
-
-	AddLoot();
-	AddLoot();
-	AddLoot();
-
-	repeat AddLoot();
-}
-
-new Float:LootAngle;
-timer AddLoot[60000]()
-{
-	CreateStaticLootSpawn(
-		-2460.0 + (frandom(8.0) * floatsin(LootAngle, degrees)),
-		2235.0 + (frandom(8.0) * floatcos(LootAngle, degrees)),
-		4.0, 4, 100, GetLootIndexFromName("world_military"));
-
-	SetItemExtraData(CreateItem(item_Ammo9mm,-2460.0 + (frandom(8.0) * floatsin(LootAngle, degrees)), 2235.0 + (frandom(8.0) * floatcos(LootAngle, degrees)), 4.0), 1000);
-	SetItemExtraData(CreateItem(item_Ammo50,-2460.0 + (frandom(8.0) * floatsin(LootAngle, degrees)), 2235.0 + (frandom(8.0) * floatcos(LootAngle, degrees)), 4.0), 1000);
-	SetItemExtraData(CreateItem(item_AmmoBuck,-2460.0 + (frandom(8.0) * floatsin(LootAngle, degrees)), 2235.0 + (frandom(8.0) * floatcos(LootAngle, degrees)), 4.0), 1000);
-	SetItemExtraData(CreateItem(item_Ammo556,-2460.0 + (frandom(8.0) * floatsin(LootAngle, degrees)), 2235.0 + (frandom(8.0) * floatcos(LootAngle, degrees)), 4.0), 1000);
-	SetItemExtraData(CreateItem(item_Ammo357,-2460.0 + (frandom(8.0) * floatsin(LootAngle, degrees)), 2235.0 + (frandom(8.0) * floatcos(LootAngle, degrees)), 4.0), 1000);
-	SetItemExtraData(CreateItem(item_AmmoRocket,-2460.0 + (frandom(8.0) * floatsin(LootAngle, degrees)), 2235.0 + (frandom(8.0) * floatcos(LootAngle, degrees)), 4.0), 1000);
-
-	LootAngle += 10.0;
 }
 
 TR_District_Bayside()

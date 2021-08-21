@@ -161,7 +161,7 @@ hook OnPlayerUseItem(playerid, Item:itemid)
 				PlayerPickUpItem(playerid, itemid);
 				
 			if(_DisplaySafeboxDialog(playerid, itemid, box_TypeData[box_ItemTypeBoxType[itemtype]][box_animate]))
-					return Y_HOOKS_BREAK_RETURN_1;
+				return Y_HOOKS_BREAK_RETURN_1;
 		}
 
 		else
@@ -252,15 +252,6 @@ hook OnPlayerCloseContainer(playerid, Container:containerid)
 		box_CurrentBoxItem[playerid] = INVALID_ITEM_ID;
 	}
 }
-
-hook OnPlayerPickUpItem(playerid, Item:itemid)
-{
-	if(GetItemType(itemid) == item_Torso)
-		return Y_HOOKS_BREAK_RETURN_1;
-
-	return Y_HOOKS_CONTINUE_RETURN_1;
-}
-
 
 /*==============================================================================
 

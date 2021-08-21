@@ -75,7 +75,7 @@ ACMD:spec[2](playerid, params[])
 	{
 		if(GetPlayerState(playerid) == PLAYER_STATE_SPECTATING)
 		{
-			TogglePlayerAdminDuty(playerid, false);
+			//TogglePlayerAdminDuty(playerid, false);
 			ExitSpectateMode(playerid);
 		}
 	}
@@ -85,7 +85,8 @@ ACMD:spec[2](playerid, params[])
 
 ACMD:free[2](playerid)
 {
-	TogglePlayerAdminDuty(playerid, !IsPlayerOnAdminDuty(playerid));
+	if(!IsPlayerOnAdminDuty(playerid))
+		TogglePlayerAdminDuty(playerid, true);
 
 	if(GetPlayerSpectateType(playerid) == SPECTATE_TYPE_FREE)
 		ExitFreeMode(playerid);
@@ -614,110 +615,100 @@ ACMD:move[3](playerid, params[])
 
 ACMD:additem[3](playerid, params[])
 {
-	new
-		query[32],
-		specifiers[32],
-		data[64];
+	new name[MAX_ITEM_NAME];
 
-	if(sscanf(params, "s[32]S()[32]S()[64]", query, specifiers, data))
+	if(sscanf(params, "s["#MAX_ITEM_NAME"]", name))
 	{
-		ChatMsg(playerid, YELLOW, " » Utilização: /additem [itemid/itemname] [extradata format specifiers] [extradata array, comma separated]");
-		ChatMsg(playerid, YELLOW, " » Example: `/additem gascan df 1, 4.5` create a petrol can with an integer and a float in extradata.");
+		ChatMsg(playerid, YELLOW, " » Utilização: /additem [nome/id do item]");
 		return 1;
 	}
 
-	// if the "query" is not an integer type, search for the name
-	new ItemType:type = INVALID_ITEM_TYPE;
-	if(sscanf(query, "d", _:type))
+	if(strlen(name) < 3 && !IsNumeric(name))
 	{
-		new itemname[MAX_ITEM_NAME];
-		for(new ItemType:i; i < MAX_ITEM_TYPE; i++)
-		{
-			GetItemTypeUniqueName(i, itemname);
-
-			if(strfind(itemname, query, true) != -1)
-			{
-				type = i;
-				break;
-			}
-		}
-
-		if(type == INVALID_ITEM_TYPE)
-		{
-			for(new ItemType:i; i < MAX_ITEM_TYPE; i++)
-			{
-				GetItemTypeName(i, itemname);
-
-				if(strfind(itemname, query, true) != -1)
-				{
-					type = i;
-					break;
-				}
-			}
-		}
-		if(type == INVALID_ITEM_TYPE)
-		{
-			ChatMsg(playerid, RED, " » Invalid item type from string: '%s'", query);
-			return 1;
-		}
-	}
-	if(type == INVALID_ITEM_TYPE)
-	{
-		ChatMsg(playerid, RED, " » Invalid item type from integer: '%d'", _:type);
+		ChatMsg(playerid, YELLOW, " » Nome do item muito pequeno");
 		return 1;
 	}
-
-	new
-		exdata[32],
-		exdatalen = strlen(specifiers);
-	if(exdatalen > 0)
-	{
-		// generate a sscanf enum specifier format
-		new sscanf_format[32];
-		format(sscanf_format, sizeof sscanf_format, "p<,>e<%s>", specifiers);
-
-		// parse the extra data using the generated sscanf format string
-		if(strlen(data) && sscanf(data, sscanf_format, exdata))
-		{
-			ChatMsg(playerid, YELLOW, " » Format of exdata did not match specifier: '%s'", sscanf_format);
-			return 1;
-		}
-	}
-
-	// create the item and hydrate its extradata array.
-	new
-		typemaxsize,
-		Item:itemid,
+	
+	new 
 		Float:x,
 		Float:y,
-		Float:z,
-		Float:r;
-
-	GetItemTypeArrayDataSize(type, typemaxsize);
+		Float:z, 
+		Float:r,
+		Item:itemid = INVALID_ITEM_ID,
+		uniquename[MAX_ITEM_NAME],
+		typename[MAX_ITEM_NAME + MAX_ITEM_TEXT];
 
 	GetPlayerPos(playerid, x, y, z);
 	GetPlayerFacingAngle(playerid, r);
 
-	itemid = CreateItem(type,
-		x + (0.5 * floatsin(-r, degrees)),
-		y + (0.5 * floatcos(-r, degrees)),
-		z - ITEM_FLOOR_OFFSET, .rz = r);
-
-	if(exdatalen > 0)
-		SetItemArrayData(itemid, exdata, typemaxsize);
-
-	if(GetPlayerAdminLevel(playerid) < STAFF_LEVEL_LEAD)
+	if(IsNumeric(name) && IsValidItemType(ItemType:strval(name)))
 	{
-		inline Response(pid, dialogid, response, listitem, string:inputtext[])
-		{
-			#pragma unused pid, dialogid, response, listitem
+		itemid = GetNextItemID();
 
-			new itemname[MAX_ITEM_NAME];
-			GetItemTypeName(type, itemname);
-			log(true, "[ADDITEM] %p added item %s (d:%d) reason: %s", pid, itemname, _:type, inputtext);
+		if(!(Item:0 <= itemid < MAX_ITEM))
+		{
+			err(false, false, "Item limit reached while generating item.");
+			return -1;
 		}
-		Dialog_ShowCallback(playerid, using inline Response, DIALOG_STYLE_INPUT, "Justification", "Type a reason for adding this item:", "Enter", "");
+		
+		SetItemLootIndex(itemid, random(GetLootIndexTotal()));
+
+		itemid = CreateItem(ItemType:strval(name),
+			x + (0.5 * floatsin(-r, degrees)),
+			y + (0.5 * floatcos(-r, degrees)),
+			z - ITEM_FLOOR_OFFSET,
+			.rz = r,
+			.world = GetPlayerVirtualWorld(playerid),
+			.interior = GetPlayerInterior(playerid)
+		);
+
+		GetItemName(itemid, typename);
+		GetItemTypeUniqueName(ItemType:strval(name), uniquename);
+
+		ChatMsg(playerid, YELLOW, " » Additem id "C_RED"%d (%s) "C_YELLOW": %s", strval(name), uniquename, typename);
 	}
+	else
+	{
+		new count;
+
+		for(new ItemType:i; i < MAX_ITEM_TYPE; i++)
+		{
+			if(!IsValidItemType(i))
+				continue;
+				
+			GetItemTypeUniqueName(i, uniquename);
+			GetItemTypeName(i, typename);
+
+			if(strfind(uniquename, name, true) != -1 || strfind(typename, name, true) != -1)
+			{
+				itemid = GetNextItemID();
+
+				if(!(Item:0 <= itemid < MAX_ITEM))
+				{
+					err(false, false, "Item limit reached while generating item.");
+					return -1;
+				}
+				
+				SetItemLootIndex(itemid, random(GetLootIndexTotal()));
+
+				itemid = CreateItem(i,
+					x + ((0.3 * (++count + 1)) * floatsin(-r, degrees)),
+					y + ((0.3 * (count + 1)) * floatcos(-r, degrees)),
+					z - ITEM_FLOOR_OFFSET,
+					.rz = r,
+					.world = GetPlayerVirtualWorld(playerid),
+					.interior = GetPlayerInterior(playerid)
+				);
+
+				GetItemName(itemid, typename);
+
+				ChatMsg(playerid, YELLOW, " » Additem id "C_RED"%d (%s) "C_YELLOW": %s", _:i, uniquename, typename);
+			}
+		}
+	}
+
+	if(!IsValidItem(itemid))
+		ChatMsg(playerid, YELLOW, " » Nome ou id de item inválido.");
 
 	return 1;
 }
@@ -732,32 +723,34 @@ ACMD:additem[3](playerid, params[])
 
 ACMD:addvehicle[3](playerid, params[])
 {
-	new
-		type,
-		Float:x,
-		Float:y,
-		Float:z,
-		Float:r,
-		vehicleid;
-
-	type = isnumeric(params) ? strval(params) : GetVehicleTypeFromName(params, true, true);
+	new	type = isnumeric(params) ? strval(params) : GetVehicleTypeFromName(params, true, true);
 
 	if(!IsValidVehicleType(type))
-	{
-		ChatMsg(playerid, YELLOW, " » Tipo de Veículo Inválido.");
-		return 1;
-	}
+		return ChatMsg(playerid, YELLOW, " » Tipo de Veículo Inválido.");
 
-	GetPlayerPos(playerid, x, y, z);
-	GetPlayerFacingAngle(playerid, r);
+	new
+		vehicleId,
+		Float:playerAngle,
+		Float:camPosX, 		Float:camPosY, 		Float:camPosZ,
+		Float:camVectorX, 	Float:camVectorY, 	Float:camVectorZ,
+		Float:vehicleX, 	Float:vehicleY, 	Float:vehicleZ,		Float:vehicleR;
 
-	vehicleid = CreateLootVehicle(type, x, y, z, r);
-	SetVehicleFuel(vehicleid, 100000.0);
-	SetVehicleHealth(vehicleid, 990.0);
-	SetVehicleParamsEx(vehicleid, 0, random(2), !random(100), 0, random(2), random(2), 0);
-	SetVehicleExternalLock(vehicleid, E_LOCK_STATE_OPEN);
-	SetVehicleTrunkLock(vehicleid, 0);
+	GetPlayerFacingAngle(playerid, playerAngle);
+	GetPlayerCameraPos(playerid, camPosX, camPosY, camPosZ);
+	GetPlayerCameraFrontVector(playerid, camVectorX, camVectorY, camVectorZ);
 
+	vehicleX = camPosX + floatmul(camVectorX, 6.0);
+	vehicleY = camPosY + floatmul(camVectorY, 6.0);
+	vehicleZ = camPosZ + floatmul(camVectorZ, 6.0);
+	vehicleR = playerAngle + 90.0;
+
+	vehicleId = CreateLootVehicle(type, vehicleX, vehicleY, vehicleZ, vehicleR);
+	SetVehicleFuel(vehicleId, 100000.0); // All the fuel
+	SetVehicleHealth(vehicleId, 990.0);
+	SetVehicleParamsEx(vehicleId, 1, 1, 0, 1, 0, 0, 0); // Fully fixed
+	SetVehicleExternalLock(vehicleId, E_LOCK_STATE_OPEN);
+	SetVehicleTrunkLock(vehicleId, 0);
+	ToggleVehicleWheels(vehicleId, true);
 
 	if(GetPlayerAdminLevel(playerid) < STAFF_LEVEL_LEAD)
 	{

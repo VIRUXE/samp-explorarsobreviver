@@ -26,7 +26,7 @@
 forward DisplayContainerInventory(playerid, Container:containerid);
 
 // ClosePlayerContainer closes an open container dialog if any.
-forward ClosePlayerContainer(playerid, call = false);
+forward ClosePlayerContainer(playerid, call = true);
 
 // GetPlayerCurrentContainer returns the container that a player is viewing.
 forward GetPlayerCurrentContainer(playerid, &Container:containerid);
@@ -145,15 +145,16 @@ stock DisplayContainerInventory(playerid, Container:containerid) {
 		cnt_ItemListTotal[playerid]++;
 	}*/
 
-	format(cnt_InventoryString[playerid], sizeof(cnt_InventoryString[]), "%s%d\tInventario >\n",
+	format(cnt_InventoryString[playerid], sizeof(cnt_InventoryString[]), "%s%d\tBolsos >\n",
 		cnt_InventoryString[playerid], GetPlayerSkin(playerid));
 
-	cnt_CurrentContainer[playerid] = containerid;
 
 	if(CallLocalFunction("OnPlayerOpenContainer", "dd", playerid, _:containerid)) {
 		return 2;
 	}
 
+	cnt_CurrentContainer[playerid] = containerid;
+	
 	GetContainerName(containerid, containername);
 
 	format(title, sizeof(title), "%s (%d/%d)", containername, containerSize - freeSlots, containerSize);
@@ -163,12 +164,14 @@ stock DisplayContainerInventory(playerid, Container:containerid) {
 			Logger_I("length", strlen(cnt_InventoryString[playerid])));
 	}
 
-	ShowPlayerDialog(playerid, 35, DIALOG_STYLE_PREVIEW_MODEL, title, cnt_InventoryString[playerid], "Enter", "Esc");
+	ShowPlayerDialog(playerid, 35, DIALOG_STYLE_PREVIEW_MODEL, title, cnt_InventoryString[playerid], "Enter", "Sair");
+
+	CallLocalFunction("OnPlayerOpenedContainer", "dd", playerid, _:containerid);
 
 	return 0;
 }
 
-stock ClosePlayerContainer(playerid, call = false) {
+stock ClosePlayerContainer(playerid, call = true) {
 	if(!IsPlayerConnected(playerid)) {
 		return 1;
 	}
@@ -244,7 +247,7 @@ _container_displayOptions(playerid, slotid) {
 
 	GetItemName(itemid_outer, tmp);
 
-	cnt_OptionsList[playerid] = "Equipar\nMover para inventario\nSoltar item\n";
+	cnt_OptionsList[playerid] = "Equipar\nUsar\nMover para inventario\nSoltar item\n";
 	cnt_OptionsCount[playerid] = 0;
 
 	CallLocalFunction("OnPlayerViewContainerOpt", "dd", playerid, _:cnt_CurrentContainer[playerid]);
@@ -269,6 +272,14 @@ _container_displayOptions(playerid, slotid) {
 							Logger_I("containerid", _:cnt_CurrentContainer[playerid]),
 							Logger_I("playerid", playerid));
 						ShowActionText(playerid, "Erro", 3000, 200);
+						DisplayContainerInventory(playerid, cnt_CurrentContainer[playerid]);
+						return 1;
+					}
+
+					if(IsPlayerInAnyVehicle(playerid) && IsItemTypeCarry(GetItemType(itemid)))
+					{
+						ShowActionText(playerid, "Nao pode pegar este item no veiculo", 3000, 200);
+						DisplayContainerInventory(playerid, cnt_CurrentContainer[playerid]);
 						return 1;
 					}
 
@@ -280,8 +291,41 @@ _container_displayOptions(playerid, slotid) {
 					DisplayContainerInventory(playerid, cnt_CurrentContainer[playerid]);
 				}
 			}
-
 			case 1: {
+				if(GetPlayerItem(playerid) == INVALID_ITEM_ID) {
+					new
+						Item:itemid,
+						ret;
+
+					ret = GetContainerSlotItem(cnt_CurrentContainer[playerid], cnt_SelectedSlot[playerid], itemid);
+					if(ret) {
+						Logger_Err("current container invalid in dialog call",
+							Logger_I("containerid", _:cnt_CurrentContainer[playerid]),
+							Logger_I("playerid", playerid));
+						ShowActionText(playerid, "Erro", 3000, 200);
+						DisplayContainerInventory(playerid, cnt_CurrentContainer[playerid]);
+						return 1;
+					}
+
+					if(IsPlayerInAnyVehicle(playerid) && IsItemTypeCarry(GetItemType(itemid)))
+					{
+						ShowActionText(playerid, "Nao pode pegar este item no veiculo", 3000, 200);
+						DisplayContainerInventory(playerid, cnt_CurrentContainer[playerid]);
+						return 1;
+					}
+					
+					RemoveItemFromContainer(cnt_CurrentContainer[playerid], cnt_SelectedSlot[playerid], playerid);
+					GiveWorldItemToPlayer(playerid, itemid);
+
+					ClosePlayerContainer(playerid);
+					
+					PlayerUseItem(playerid);
+				} else {
+					ShowActionText(playerid, "Voce ja esta segurando um item", 3000, 200);
+					DisplayContainerInventory(playerid, cnt_CurrentContainer[playerid]);
+				}
+			}
+			case 2: {
 				new
 					Item:itemid,
 					ret;
@@ -292,6 +336,7 @@ _container_displayOptions(playerid, slotid) {
 						Logger_I("containerid", _:cnt_CurrentContainer[playerid]),
 						Logger_I("playerid", playerid));
 					ShowActionText(playerid, "Erro", 3000, 200);
+					DisplayContainerInventory(playerid, cnt_CurrentContainer[playerid]);
 					return 1;
 				}
 
@@ -304,21 +349,21 @@ _container_displayOptions(playerid, slotid) {
 					return 0;
 				}
 
+				RemoveItemFromContainer(cnt_CurrentContainer[playerid], cnt_SelectedSlot[playerid], playerid);
+
 				new required = AddItemToInventory(playerid, itemid);
 
 				if(required > 0) {
 					new str[32];
-					format(str, sizeof(str), "Requer %d slots no inventario", required);
+					format(str, sizeof(str), "Requer %d slots nos bolsos", required);
 					ShowActionText(playerid, str, 3000, 150);
-				} else if(required == 0) {
-					RemoveItemFromContainer(cnt_CurrentContainer[playerid], cnt_SelectedSlot[playerid], playerid);
 				}
-
+				
 				DisplayContainerInventory(playerid, cnt_CurrentContainer[playerid]);
 
 				return 1;
 			}
-			case 2: {
+			case 3: {
 				new
 					Item:itemid,
 					ret;
@@ -341,17 +386,49 @@ _container_displayOptions(playerid, slotid) {
 				}
 
 				new Float:x, Float:y, Float:z;
-				GetPlayerPos(playerid, x, y, z);
-				CreateItemInWorld(itemid, x, y, z - ITEM_FLOOR_OFFSET, .world = GetPlayerVirtualWorld(playerid), .interior = GetPlayerInterior(playerid));
+
+				if(!IsPlayerInAnyVehicle(playerid)) {
+
+					if(IsItemTypeCarry(GetItemType(itemid))) {
+						ApplyAnimation(playerid, "CARRY", "putdwn", 5.0, 0, 0, 0, 0, 0);
+					} else {
+						ApplyAnimation(playerid, "BOMBER", "BOM_PLANT_IN", 5.0, 1, 0, 0, 0, 450);
+					}
+
+					GetPlayerPos(playerid, x, y, z);
+					z -= ITEM_FLOOR_OFFSET;
+				} else {
+
+					new 
+						vehicleid = GetPlayerVehicleID(playerid),
+						Float:size_x,
+						Float:size_y,
+						Float:size_z,
+						Float:ang;
+
+					GetVehicleModelInfo(GetVehicleModel(vehicleid), VEHICLE_MODEL_INFO_SIZE, size_x, size_y, size_z);
+					GetVehicleZAngle(vehicleid, ang);
+					GetVehiclePos(vehicleid, x, y, z);
+
+					x -= (size_y / 1.85) * floatsin(-ang, degrees), y -= (size_y / 1.85) * floatcos(-ang, degrees);
+
+					z -= 0.7;
+				}
+
+				CreateItemInWorld(itemid, 
+					x, y, z,
+					.world = GetPlayerVirtualWorld(playerid),
+					.interior = GetPlayerInterior(playerid),
+					.label = 1);
 
 				DisplayContainerInventory(playerid, cnt_CurrentContainer[playerid]);
 			}
 			default: {
-				if(!CallLocalFunction("OnPlayerSelectContainerOpt", "ddd", playerid, _:cnt_CurrentContainer[playerid], listitem - 3)) {
+				if(!CallLocalFunction("OnPlayerSelectContainerOpt", "ddd", playerid, _:cnt_CurrentContainer[playerid], listitem - 4)) {
 					DisplayContainerInventory(playerid, cnt_CurrentContainer[playerid]);
 				} else {
 					Logger_Dbg("container-dialog", "closing container via option response");
-					ClosePlayerInventory(playerid);
+					ClosePlayerContainer(playerid);
 				}
 			}
 		}
@@ -396,7 +473,7 @@ hook OnDialogModelResponse(playerid, dialogid, response, listitem)
 				}
 			}
 		} else {
-			ClosePlayerContainer(playerid, true);
+			ClosePlayerContainer(playerid);
 		}
 	}
 	return 1;
@@ -442,7 +519,6 @@ hook OnPlayerSelectInvOpt(playerid, option) {
 			new required = AddItemToContainer(cnt_CurrentContainer[playerid], itemid, playerid);
 
 			if(required == 0) {
-				RemoveItemFromInventory(playerid, slot);
 				if(CallLocalFunction("OnMoveItemToContainer", "ddd", playerid, _:itemid, _:cnt_CurrentContainer[playerid]))
 					return Y_HOOKS_CONTINUE_RETURN_0;
 			}
@@ -455,7 +531,7 @@ hook OnPlayerSelectInvOpt(playerid, option) {
 
 hook OnPlayerOpenInventory(playerid) {
 	if(IsValidContainer(cnt_CurrentContainer[playerid])) {
-		new str[8 + MAX_CONTAINER_NAME];
+		new str[3 + MAX_CONTAINER_NAME];
 
 		GetContainerName(cnt_CurrentContainer[playerid], str);
 		strcat(str, " >");

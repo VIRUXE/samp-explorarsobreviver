@@ -528,24 +528,7 @@ stock Logout(playerid, docombatlogcheck = 1)
 
 	if(IsPlayerAlive(playerid))
 	{
-		DestroyItem(itemid);
-		DestroyItem(GetPlayerHolsterItem(playerid));
-		DestroyPlayerBag(playerid);
-		RemovePlayerHolsterItem(playerid);
-		RemovePlayerWeapon(playerid);
-
-		for(new i; i < MAX_INVENTORY_SLOTS; i++)
-		{
-			new Item:subitemid;
-			GetInventorySlotItem(playerid, 0, subitemid);
-			DestroyItem(subitemid);
-		}
-
-		if(IsValidItem(GetPlayerHatItem(playerid)))
-			RemovePlayerHatItem(playerid);
-
-		if(IsValidItem(GetPlayerMaskItem(playerid)))
-			RemovePlayerMaskItem(playerid);
+		DestroyPlayerItems(playerid);
 
 		if(IsPlayerInAnyVehicle(playerid))
 		{
@@ -596,13 +579,11 @@ stock SavePlayerData(playerid)
 	new
 		Float:x,
 		Float:y,
-		Float:z,
-		Float:r;
+		Float:z;
 
 	GetPlayerPos(playerid, x, y, z);
-	GetPlayerFacingAngle(playerid, r);
 
-	if(IsAtConnectionPos(x, y, z))
+	if(IsPlayerAtConnectionPos(playerid))
 	{
 		dbg("accounts", 1, "[SavePlayerData] ERROR: At connection pos");
 		return 0;
@@ -616,7 +597,7 @@ stock SavePlayerData(playerid)
 	if(IsPlayerAlive(playerid) && !IsPlayerInTutorial(playerid))
 	{
 		dbg("accounts", 2, "[SavePlayerData] Player is alive");
-		if(IsAtConnectionPos(x, y, z))
+		if(IsPlayerAtConnectionPos(playerid))
 		{
 			dbg("accounts", 2, "[SavePlayerData] ERROR: Player at default position");
 			return 0;

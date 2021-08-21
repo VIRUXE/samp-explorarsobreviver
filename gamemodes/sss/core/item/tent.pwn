@@ -575,10 +575,15 @@ hook OnItemTweakFinish(playerid, Item:itemid)
 	}
 }
 
-hook OnHoldActionUpdate(playerid, progress)
+hook OnHoldActionUpdate(playerid, progress) {
 	if(tnt_CurrentTentItem[playerid] != INVALID_ITEM_ID && GetPlayerTotalVelocity(playerid) > 1.0)
+	{
 		StopBuildingTent(playerid);
-		
+		return Y_HOOKS_BREAK_RETURN_0;
+	}
+	return Y_HOOKS_CONTINUE_RETURN_0;
+}
+
 hook OnHoldActionFinish(playerid)
 {
 	if(tnt_CurrentTentItem[playerid] != INVALID_ITEM_ID)
@@ -589,6 +594,7 @@ hook OnHoldActionFinish(playerid)
 			HideActionText(playerid);
 			tnt_TweakID[playerid] = CreateTentFromItem(tnt_CurrentTentItem[playerid]);
 			TweakItem(playerid, tnt_CurrentTentItem[playerid]);
+			return Y_HOOKS_BREAK_RETURN_0;
 		}
 
 		if(GetItemType(GetPlayerItem(playerid)) == item_Crowbar)
@@ -620,12 +626,34 @@ hook OnHoldActionFinish(playerid)
 
 			DestroyTent(tentid);
 			StopRemovingTent(playerid);
+			return Y_HOOKS_BREAK_RETURN_0;
 		}
 	}
 
 	return Y_HOOKS_CONTINUE_RETURN_0;
 }
 
+hook OnItemDestroy(Item:itemid) 
+{
+	if(GetItemType(itemid) == item_TentPack && IsItemInWorld(itemid))
+	{
+		new tentid;
+		GetItemExtraData(itemid, tentid);
+		if(IsValidTent(tentid))
+		{
+			new count;
+			GetContainerItemCount(tnt_Data[tentid][tnt_containerId], count);
+			for(new i = count; i >= 0; i--)
+			{
+				new Item:slotitem;
+				GetContainerSlotItem(tnt_Data[tentid][tnt_containerId], i, slotitem);
+				DestroyItem(slotitem);
+			}
+			DestroyTent(tentid);
+		}
+	}
+	return Y_HOOKS_CONTINUE_RETURN_0;
+}
 
 /*==============================================================================
 

@@ -177,12 +177,12 @@ hook OnHoldActionUpdate(playerid, progress)
 			!IsPlayerInVehicleArea(playerid, lsk_TargetVehicle[playerid]))
 		{
 			StopCraftingKey(playerid);
-			return Y_HOOKS_BREAK_RETURN_1;
+			return Y_HOOKS_BREAK_RETURN_0;
 		}
 
 		SetPlayerToFaceVehicle(playerid, lsk_TargetVehicle[playerid]);
 
-		return Y_HOOKS_BREAK_RETURN_1;
+		return Y_HOOKS_BREAK_RETURN_0;
 	}
 
 	return Y_HOOKS_CONTINUE_RETURN_0;

@@ -185,7 +185,7 @@ ACMD:ban[2](playerid, params[])
 			ChatMsg(playerid, YELLOW, " » Numeric value '%d' isn't a player ID that is currently online, treating it as a name.", targetid);
 	}
 
-	if(!DoesPlayerAccountExist(name))
+	if(!DoesAccountExist(name))
 		return ChatMsg(playerid, YELLOW, " » The account '%s' does not exist.", name);
 
 	if(GetAdminLevelByName(name) > STAFF_LEVEL_NONE)

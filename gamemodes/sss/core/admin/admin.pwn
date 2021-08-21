@@ -92,7 +92,7 @@ hook OnPlayerDisconnected(playerid)
 
 hook OnPlayerClickPlayer(playerid, clickedplayerid, source)
 {
-	if(GetPlayerAdminLevel(playerid) >= STAFF_LEVEL_MODERATOR)
+	if(GetPlayerAdminLevel(playerid) >= STAFF_LEVEL_MODERATOR && playerid != clickedplayerid)
 	{	
 		if(GetPlayerState(clickedplayerid) == PLAYER_STATE_SPECTATING && IsPlayerOnAdminDuty(clickedplayerid))
 			return 0;
@@ -405,7 +405,9 @@ TogglePlayerAdminDuty(playerid, toggle, goback = true)
 
 		SetPlayerColor(playerid, !IsPlayerMobile(playerid) ? COLOR_PLAYER_NORMAL : COLOR_PLAYER_MOBILE); // 
 	}
+
 	admin_DutyTick[playerid] = GetTickCount();
+	
 	return 1;
 }
 

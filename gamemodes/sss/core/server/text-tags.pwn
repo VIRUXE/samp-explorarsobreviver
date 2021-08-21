@@ -31,7 +31,7 @@ stock TagScan(const chat[], colour = WHITE)
 	strcpy(text, chat, 256);
 	length = strlen(chat);
 
-	while(a < (length - 1) && tags < 3)
+	while(a < (length - 1) && tags < MAX_PLAYER_NAME)
 	{
 		if(text[a]=='@')
 		{
@@ -39,9 +39,9 @@ stock TagScan(const chat[], colour = WHITE)
 			{
 				new
 					id,
-					tmp[3];
+					tmp[4];
 
-				strmid(tmp, text, a+1, a+3);
+				strmid(tmp, text, a+1, a+4);
 				id = strval(tmp);
 
 				if(IsPlayerConnected(id))
@@ -55,9 +55,13 @@ stock TagScan(const chat[], colour = WHITE)
 					{
 						strdel(text[a], 0, 2);
 					}
-					else
+					else if(id<100)
 					{
 						strdel(text[a], 0, 3);
+					}
+					else
+					{
+						strdel(text[a], 0, 4);
 					}
 
 					strins(text[a], tmpName, 0);
@@ -74,6 +78,36 @@ stock TagScan(const chat[], colour = WHITE)
 			}
 			else
 			{
+				new
+					id,
+					tmp[MAX_PLAYER_NAME];
+
+				strmid(tmp, text, a + 1, a + (length - a) );
+
+				id = strfind(tmp, " ");
+				
+				if(id != -1)
+					format(tmp, id, tmp);
+
+				id = GetPlayerIdByName(tmp, true, true);
+
+				if(IsPlayerConnected(id))
+				{
+					new
+						tmpName[MAX_PLAYER_NAME+17];
+
+					format(tmpName, MAX_PLAYER_NAME+17, "%P%C", id, colour);
+
+					strdel(text[a], 0, a + strlen(tmp) + 2);
+		
+					strins(text[a], tmpName, 0);
+
+					length += strlen(tmpName);
+					a += strlen(tmpName);
+					tags++;
+					continue;
+				}
+
 				a++;
 			}
 		}

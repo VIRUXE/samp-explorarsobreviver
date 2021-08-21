@@ -89,12 +89,12 @@ public OnHoldActionUpdate(playerid, progress)
 		if(!IsValidVehicle(cro_TargetVehicle[playerid]) || !IsPlayerInVehicleArea(playerid, cro_TargetVehicle[playerid]))
 		{
 			StopBreakingVehicleLock(playerid);
-			return Y_HOOKS_BREAK_RETURN_1;
+			return Y_HOOKS_BREAK_RETURN_0;
 		}
 
 		SetPlayerToFaceVehicle(playerid, cro_TargetVehicle[playerid]);
 
-		return Y_HOOKS_BREAK_RETURN_1;
+		return Y_HOOKS_BREAK_RETURN_0;
 	}
 
 	return Y_HOOKS_CONTINUE_RETURN_0;

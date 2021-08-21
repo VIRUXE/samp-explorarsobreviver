@@ -10,7 +10,7 @@
 
 
 #define MAX_CONSTRUCT_SET (50)
-#define MAX_CONSTRUCT_SET_ITEMS (BTN_MAX_INRANGE)
+#define MAX_CONSTRUCT_SET_ITEMS (8)
 
 
 enum E_CONSTRUCT_SET_DATA
@@ -37,7 +37,7 @@ Item:	cons_DeconstructingItem[MAX_PLAYERS] = {INVALID_ITEM_ID, ...},
 
 
 forward OnPlayerConstruct(playerid, consset);
-forward OnPlayerConstructed(playerid, consset, result);
+forward OnPlayerConstructed(playerid, consset, Item:result);
 forward OnPlayerDeconstruct(playerid, Item:itemid);
 forward OnPlayerDeconstructed(playerid, Item:itemid);
 
@@ -251,7 +251,10 @@ hook OnHoldActionUpdate(playerid, progress) {
 			cons_Constructing[playerid] = INVALID_CRAFTSET;
 			StopRemovingConstructedItem(playerid);
 		}
+
+		return Y_HOOKS_BREAK_RETURN_0;
 	}
+	return Y_HOOKS_CONTINUE_RETURN_0;
 }
 
 // TODO: Check if items are still there

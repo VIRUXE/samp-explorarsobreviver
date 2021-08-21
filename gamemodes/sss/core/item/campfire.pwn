@@ -50,7 +50,6 @@ hook OnItemCreateInWorld(Item:itemid)
 				CreateItem(item_WoodLog, x - 0.25 + frandom(0.5), y - 0.25 + frandom(0.5), z, .rz = random(360));
 				CreateItem(item_WoodLog, x - 0.25 + frandom(0.5), y - 0.25 + frandom(0.5), z, .rz = random(360));
 				CreateItem(item_WoodLog, x - 0.25 + frandom(0.5), y - 0.25 + frandom(0.5), z, .rz = random(360));
-				return Y_HOOKS_BREAK_RETURN_1;
 			}
 		}
 		else
@@ -126,17 +125,20 @@ cmp_CookItem(Item:itemid, Item:fooditem)
 timer cmp_BurnOut[time](itemid, time)
 {
 	#pragma unused time
-	new
-		Float:x,
-		Float:y,
-		Float:z;
+	if(IsValidItem(Item:itemid))
+	{
+		new
+			Float:x,
+			Float:y,
+			Float:z;
 
-	GetItemPos(Item:itemid, x, y, z);
-	DestroyItem(Item:itemid);
+		GetItemPos(Item:itemid, x, y, z);
+		DestroyItem(Item:itemid);
 
-	CreateItem(item_BurntLog, x - 0.25 + frandom(0.5), y - 0.25 + frandom(0.5), z, .rz = random(360));
-	CreateItem(item_BurntLog, x - 0.25 + frandom(0.5), y - 0.25 + frandom(0.5), z, .rz = random(360));
-	CreateItem(item_BurntLog, x - 0.25 + frandom(0.5), y - 0.25 + frandom(0.5), z, .rz = random(360));
+		CreateItem(item_BurntLog, x - 0.25 + frandom(0.5), y - 0.25 + frandom(0.5), z, .rz = random(360));
+		CreateItem(item_BurntLog, x - 0.25 + frandom(0.5), y - 0.25 + frandom(0.5), z, .rz = random(360));
+		CreateItem(item_BurntLog, x - 0.25 + frandom(0.5), y - 0.25 + frandom(0.5), z, .rz = random(360));
+	}
 }
 
 timer cmp_FinishCooking[60000](itemid)

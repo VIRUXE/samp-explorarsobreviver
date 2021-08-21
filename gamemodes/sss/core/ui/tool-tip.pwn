@@ -1,10 +1,30 @@
 
 #include <YSI_Coding\y_hooks>
 
-
 static
 bool:		ToolTips[MAX_PLAYERS] = {bool:true, ...},
-PlayerText:	ToolTipText[MAX_PLAYERS] = {PlayerText:INVALID_TEXT_DRAW, ...};
+PlayerText:	ToolTipText[MAX_PLAYERS] = {PlayerText:INVALID_TEXT_DRAW, ...},
+Timer:		ToolTipTimer[MAX_PLAYERS];
+
+hook OnPlayerConnect(playerid)
+{
+	ToolTipText[playerid] = CreatePlayerTextDraw(playerid,		   500.000000, 122.000000, "text");
+	PlayerTextDrawLetterSize	 (playerid, ToolTipText[playerid], 0.4, 1.0);
+	PlayerTextDrawTextSize		 (playerid, ToolTipText[playerid], 635.000000, -158.000000);
+	PlayerTextDrawSetOutline	 (playerid, ToolTipText[playerid], 1);
+	PlayerTextDrawSetShadow		 (playerid, ToolTipText[playerid], 1);
+	PlayerTextDrawAlignment		 (playerid, ToolTipText[playerid], 1);
+	PlayerTextDrawColor			 (playerid, ToolTipText[playerid], -1);
+	PlayerTextDrawBackgroundColor(playerid, ToolTipText[playerid], 255);
+	PlayerTextDrawBoxColor		 (playerid, ToolTipText[playerid], 50);
+	PlayerTextDrawUseBox		 (playerid, ToolTipText[playerid], 1);
+}
+
+/*==============================================================================
+
+	Show
+
+==============================================================================*/
 
 ShowHelpTip(playerid, const text[], time = 0)
 {
@@ -23,11 +43,72 @@ ShowHelpTip(playerid, const text[], time = 0)
 	PlayerTextDrawSetString(playerid, ToolTipText[playerid], str);
 	PlayerTextDrawShow(playerid, ToolTipText[playerid]);
 
+	stop ToolTipTimer[playerid];
+
 	if(time > 0)
-		defer HideHelpTip_Delay(playerid, time);
+		ToolTipTimer[playerid] = defer HideHelpTip_Delay(playerid, time);
 
 	return 1;
 }
+
+hook OnPlayerPickedUpItem(playerid, Item:itemid)
+{
+	if(ToolTips[playerid])
+	{
+		new ItemType:itype = GetItemType(itemid);
+		
+		if(IsItemTypeDefence(itype))
+			ShowHelpTip(playerid, ls(playerid, "DEFENCE_T"), 20000);
+
+		else if(IsItemTypeSafebox(itype))
+			ShowHelpTip(playerid, ls(playerid, "SAFEBOX_T"), 20000);
+
+		else if(IsItemTypeBag(itype))
+			ShowHelpTip(playerid, ls(playerid, "BAG_T"), 20000);
+
+		else if(GetHatFromItem(itype) != -1)
+			ShowHelpTip(playerid, ls(playerid, "HAT_T"), 20000);
+
+		else if(GetMaskFromItem(itype) != -1)
+			ShowHelpTip(playerid, ls(playerid, "MASK_T"), 20000);
+
+		if(GetItemTypeLiquidContainerType(itype) != -1)
+			ShowHelpTip(playerid, ls(playerid, "LIQUID_T"), 20000);
+
+		else if(GetItemTypeWeaponBaseWeapon(itype))
+			ShowHelpTip(playerid, ls(playerid, "WEAPON_T"), 20000);
+
+		else if(IsValidHolsterItem(itype))
+			ShowHelpTip(playerid, ls(playerid, "HOLSTER_T"), 20000);
+			
+		else if(GetItemTypeAmmoType(itype) != -1)
+			ShowHelpTip(playerid, ls(playerid, "AMMO_T"), 20000);
+
+		else if(IsItemTypeFood(itype))
+			ShowHelpTip(playerid, ls(playerid, "FOOD_T"), 20000);
+
+		else {
+			new	itemname[MAX_ITEM_NAME],
+				itemtipkey[MAX_LANGUAGE_KEY_LEN];
+
+			GetItemTypeUniqueName(itype, itemname);
+			
+			if(strlen(itemname) > MAX_LANGUAGE_KEY_LEN - 3)
+				itemname[MAX_LANGUAGE_KEY_LEN - 3] = EOS;
+
+			format(itemtipkey, sizeof(itemtipkey), "%s_T", itemname);
+			itemtipkey[MAX_LANGUAGE_KEY_LEN - 1] = EOS;
+
+			ShowHelpTip(playerid, ls(playerid, itemtipkey), 20000);
+		}
+	}
+}
+
+/*==============================================================================
+
+	Hide
+
+==============================================================================*/
 
 timer HideHelpTip_Delay[time](playerid, time)
 {
@@ -37,90 +118,33 @@ timer HideHelpTip_Delay[time](playerid, time)
 
 HideHelpTip(playerid)
 {
+	stop ToolTipTimer[playerid];
 	PlayerTextDrawHide(playerid, ToolTipText[playerid]);
 }
 
-hook OnPlayerConnect(playerid)
-{
-	ToolTipText[playerid] = CreatePlayerTextDraw(playerid, 500.000000, 122.000000, "As Setas indicam a 'Frente', ou seja, o lado 'vulneravel' da Defesa~n~Afaste da frente, para a conseguir mover~n~Segure para mos");
-	PlayerTextDrawFont(playerid, ToolTipText[playerid], 1);
-	PlayerTextDrawLetterSize(playerid, ToolTipText[playerid], 0.312499, 1.199999);
-	PlayerTextDrawTextSize(playerid, ToolTipText[playerid], 635.000000, -158.000000);
-	PlayerTextDrawSetOutline(playerid, ToolTipText[playerid], 1);
-	PlayerTextDrawSetShadow(playerid, ToolTipText[playerid], 0);
-	PlayerTextDrawAlignment(playerid, ToolTipText[playerid], 1);
-	PlayerTextDrawColor(playerid, ToolTipText[playerid], -1);
-	PlayerTextDrawBackgroundColor(playerid, ToolTipText[playerid], 255);
-	PlayerTextDrawBoxColor(playerid, ToolTipText[playerid], 50);
-	PlayerTextDrawUseBox(playerid, ToolTipText[playerid], 1);
-	PlayerTextDrawSetProportional(playerid, ToolTipText[playerid], 1);
-	PlayerTextDrawSetSelectable(playerid, ToolTipText[playerid], 0);
-}
-
-hook OnPlayerPickedUpItem(playerid, Item:itemid)
-{
+hook OnPlayerDroppedItem(playerid, Item:itemid)
 	if(ToolTips[playerid])
-	{
-		new
-			itemname[MAX_ITEM_NAME],
-			itemtipkey[12];
+		ToolTipTimer[playerid] = defer HideHelpTip_Delay(playerid, 100);
 
-		GetItemTypeUniqueName(GetItemType(itemid), itemname);
-
-		if(strlen(itemname) > 9)
-			itemname[9] = EOS;
-
-		format(itemtipkey, sizeof(itemtipkey), "%s_T", itemname);
-		itemtipkey[11] = EOS;
-
-		ShowHelpTip(playerid, ls(playerid, itemtipkey), 20000);
-	}
-}
-
-hook OnPlayerDropItem(playerid, Item:itemid)
-{
+hook OnItemRemovedFromPlayer(playerid, Item:itemid)
 	if(ToolTips[playerid])
-		HideHelpTip(playerid);
-
-	return Y_HOOKS_CONTINUE_RETURN_0;
-}
-
-hook OnPlayerGiveItem(playerid, targetid, Item:itemid)
-{
-	if(ToolTips[playerid])
-		HideHelpTip(playerid);
-
-	return Y_HOOKS_CONTINUE_RETURN_0;
-}
+		ToolTipTimer[playerid] = defer HideHelpTip_Delay(playerid, 100);
 
 hook OnPlayerOpenInventory(playerid)
-{
 	if(ToolTips[playerid])
-	{
-		defer tHideHelpTip(playerid);
-	}
-	return Y_HOOKS_CONTINUE_RETURN_0;
-}
+		ToolTipTimer[playerid] = defer HideHelpTip_Delay(playerid, 100);
 
-timer tHideHelpTip[100](playerid)
-	if(IsPlayerConnected(playerid))
-		HideHelpTip(playerid);
-
-hook OnPlayerOpenContainer(playerid, containerid)
-{
+hook OnPlayerOpenedContainer(playerid, Container:containerid)
 	if(ToolTips[playerid])
-		HideHelpTip(playerid);
+		ToolTipTimer[playerid] = defer HideHelpTip_Delay(playerid, 100);
 
-	return Y_HOOKS_CONTINUE_RETURN_0;
-}
 
-hook OnPlayerOpenedContainer(playerid, containerid)
-{
-	if(ToolTips[playerid])
-		HideHelpTip(playerid);
+/*==============================================================================
 
-	return Y_HOOKS_CONTINUE_RETURN_0;
-}
+	Functions
+
+==============================================================================*/
+
 
 stock IsPlayerToolTipsOn(playerid)
 {
@@ -136,6 +160,8 @@ stock SetPlayerToolTips(playerid, bool:st)
 		return 0;
 
 	ToolTips[playerid] = st;
+
+	HideHelpTip(playerid);
 
 	return 1;
 }
