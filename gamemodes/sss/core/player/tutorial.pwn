@@ -3,6 +3,8 @@
 
 	No need to do it ever again, since you're already forced to do it before registering.
 
+	Only RCON admins can skip it.
+
 	VIRUXE
  */
 
@@ -16,9 +18,8 @@ bool:		tut_Active[MAX_PLAYERS],
 			tut_Vehicle[MAX_PLAYERS],
 Item:		tut_Items[MAX_PLAYERS][MAX_TUTORIAL_ITEMS];
 
-forward OnPlayerEnterTutorial(playerid);
+forward OnPlayerStartTutorial(playerid);
 forward OnPlayerFinishTutorial(playerid);
-forward OnPlayerExitTutorial(playerid);
 
 hook OnPlayerAccountCheck(playerid, accountState)
 {
@@ -340,6 +341,8 @@ stock ToggleTutorialForPlayer(playerid, bool:toggle)
 
 	if(tut_Active[playerid]) // Tutorial set to active, so let's create it
 	{
+		CallLocalFunction("OnPlayerStartedTutorial", "d", playerid);
+
 		new 
 			tutorialVirtualWorld = playerid+1,
 			tutorialClothes;
@@ -426,7 +429,7 @@ stock ToggleTutorialForPlayer(playerid, bool:toggle)
 		// RemovePlayerBag(playerid);
 		// RemovePlayerHolsterItem(playerid);
 		
-		SetPlayerVirtualWorld(playerid, 0); // Set player in the normal world to do something else
+		CallLocalFunction("OnPlayerFinishTutorial", "d", playerid);
 	}
 
 	ClearChatForPlayer(playerid, 20);
@@ -437,9 +440,10 @@ stock ToggleTutorialForPlayer(playerid, bool:toggle)
 CMD:saltar(playerid, params[])
 {
 	if(IsPlayerAdmin(playerid))
+	{
 		ToggleTutorialForPlayer(playerid, false);
-	else
-		ShowActionText(playerid, "~R~Voce precisa fazer as tarefas para sair");
+		return 1;
+	}
 	
 	return 1;
 }
