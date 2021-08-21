@@ -360,14 +360,12 @@ hook OnPlayerClickTextDraw(playerid, Text:clickedid)
 		TextDrawHideForPlayer(playerid, DeathText);
 		TextDrawHideForPlayer(playerid, DeathButton);
 		SetPlayerBrightness(playerid, 255);
-		defer SpawnDeathDelay(playerid);
+		
+		CallLocalFunction("OnPlayerRequestRespawn", "d", playerid);
 	}
 
 	return 1;
 }
-
-timer SpawnDeathDelay[1200](playerid)
-	SpawnLoggedInPlayer(playerid);
 
 hook OnGameModeInit()
 {
