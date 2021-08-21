@@ -75,7 +75,7 @@ stock IsValidNickname(const name[])
 		i,
 		len = strlen(name);
 
-	if(len < 3)
+	if(len < 3 || len > MAX_PLAYER_NAME)
 		return 0;
 
 	while(i < len)
