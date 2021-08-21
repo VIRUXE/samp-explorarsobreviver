@@ -2,20 +2,25 @@
 
 enum // All the account steps
 {
-	ACCOUNT_STATE_INVALID, // When an error occurs
+	ACCOUNT_STATE_INVALID,
 	ACCOUNT_STATE_NOTREGISTERED,
-	ACCOUNT_STATE_REGISTERED, // Registered but not linked with discord
+	ACCOUNT_STATE_TUTORIAL,
 	ACCOUNT_STATE_REGISTERING,
-	ACCOUNT_STATE_LINKED, // Linked on Discord
+	ACCOUNT_STATE_REGISTERED, // Not Linked
+	ACCOUNT_STATE_LINKED,
 	ACCOUNT_STATE_BANNED,
 	ACCOUNT_STATE_LOGGINGIN,
 	ACCOUNT_STATE_LOGGEDIN
 }
 
+enum E_ACCOUNT_DATA
+{
+	accState			= ACCOUNT_STATE_INVALID,
+	accLoginAttempts	= 0
+}
+
 static
-				acc_State[MAX_PLAYERS],
-bool:			acc_LoggedIn[MAX_PLAYERS],
-				acc_LoginAttempts[MAX_PLAYERS],
+				account[MAX_PLAYERS][E_ACCOUNT_DATA],
 
 DBStatement:	stmt_AccountRegistered,
 DBStatement:	stmt_AccountCreate,
@@ -58,20 +63,19 @@ DBStatement:	stmt_AccountSetActiveState,
 
 DBStatement:	stmt_AccountGetAliasData;
 	
-forward OnPlayerAccountCheck(playerid, accountState);
-forward OnPlayerAccountLoaded(playerid);
-forward OnPlayerRegister(playerid);
-forward OnPlayerLogin(playerid);
+forward OnAccountStateChanged(playerid, accountState);
+forward OnAccountLoaded(playerid);
 
 hook OnGameModeInit()
 {
-	db_query(gAccountsDatabase, "CREATE TABLE IF NOT EXISTS Player (name TEXT, pass TEXT, ipv4 INTEGER, alive INTEGER, regdate INTEGER, lastlog INTEGER, spawntime INTEGER, totalspawns INTEGER, vip INTEGER, discord_id TEXT, gpci TEXT, active)");
+	db_query(gAccountsDatabase, "CREATE TABLE IF NOT EXISTS Player (name TEXT, pass TEXT, ipv4 INTEGER, alive INTEGER, regdate INTEGER, lastlog INTEGER, spawntime INTEGER, totalspawns INTEGER, vip INTEGER, discord_id TEXT, gpci TEXT)");
 	db_query(gAccountsDatabase, "CREATE INDEX IF NOT EXISTS Player_index ON Player(name)");
 
 	DatabaseTableCheck(gAccountsDatabase, "Player", 12);
 
+	// Database Prepared Statements
 	stmt_AccountRegistered		= db_prepare(gAccountsDatabase, "SELECT COUNT(*) FROM Player WHERE name=? COLLATE NOCASE");
-	stmt_AccountCreate			= db_prepare(gAccountsDatabase, "INSERT INTO Player (name, pass, ipv4, alive, regdate, lastlog, spawntime, spawns, VIP, gpci, active) VALUES(?,?,?,1,?,?,0,0,0,?,1)");
+	stmt_AccountCreate			= db_prepare(gAccountsDatabase, "INSERT INTO Player (name, pass, ipv4, alive, regdate, lastlog, spawntime, spawns, VIP, gpci) VALUES(?,?,?,1,?,?,0,0,0,?)");
 	stmt_AccountLoad			= db_prepare(gAccountsDatabase, "SELECT * FROM Player WHERE name=? COLLATE NOCASE");
 	stmt_AccountUpdate			= db_prepare(gAccountsDatabase, "UPDATE Player SET alive=?, vip=? WHERE name=? COLLATE NOCASE");
 
@@ -106,43 +110,25 @@ hook OnGameModeInit()
 	stmt_AccountGetGpci			= db_prepare(gAccountsDatabase, "SELECT gpci FROM Player WHERE name=? COLLATE NOCASE");
 	stmt_AccountSetGpci			= db_prepare(gAccountsDatabase, "UPDATE Player SET gpci=? WHERE name=? COLLATE NOCASE");
 
-	stmt_AccountGetActiveState	= db_prepare(gAccountsDatabase, "SELECT active FROM Player WHERE name=? COLLATE NOCASE");
-	stmt_AccountSetActiveState	= db_prepare(gAccountsDatabase, "UPDATE Player SET active=? WHERE name=? COLLATE NOCASE");
-
 	stmt_AccountGetAliasData	= db_prepare(gAccountsDatabase, "SELECT ipv4, pass, gpci FROM Player WHERE name=? AND active COLLATE NOCASE");
 }
 
 hook OnPlayerConnect(playerid) // Check the player's account state
 {
-	new playerName[MAX_PLAYER_NAME];
-
-	GetPlayerName(playerid, playerName);
-
-	if(DoesPlayerAccountExist(playerName))
-	{
-		new isAccountActive;
-
-		GetAccountActiveState(playerName, isAccountActive);
-
-		if(isAccountActive || !IsPlayerBanned(playerName))
-			acc_State[playerid] = !DoesAccountHaveDiscord(playerName) ? ACCOUNT_STATE_REGISTERED : ACCOUNT_STATE_LINKED;
-		else
-			acc_State[playerid] = ACCOUNT_STATE_BANNED;
-	}
+	if(DoesAccountExistByPlayerId(playerid))
+		SetAccountState(playerid, !IsPlayerBanned(playerid) ? (!HasPlayerLinkedAccount(playerid) ? ACCOUNT_STATE_REGISTERED : ACCOUNT_STATE_LINKED) : ACCOUNT_STATE_BANNED);
 	else
-		acc_State[playerid] = ACCOUNT_STATE_NOTREGISTERED;
-
-	CallLocalFunction("OnPlayerAccountCheck", "dd", playerid, acc_State[playerid]);
+		SetAccountState(playerid, ACCOUNT_STATE_NOTREGISTERED);
 }
 
 hook OnPlayerDisconnect(playerid)
 {
-	acc_State[playerid] = ACCOUNT_STATE_INVALID;
-	acc_LoggedIn[playerid] = false;
-	acc_LoginAttempts[playerid] = 0;
+	SetAccountState(playerid, ACCOUNT_STATE_INVALID);
+
+	account[playerid][accLoginAttempts] = 0;
 }
 
-public OnPlayerAccountCheck(playerid, accountState)
+public OnAccountStateChanged(playerid, accountState)
 {
 	if(accountState == ACCOUNT_STATE_LINKED)
 		LoginPlayer(playerid);
@@ -151,49 +137,43 @@ public OnPlayerAccountCheck(playerid, accountState)
 stock bool:IsPlayerRegistering(playerid)
 {
 	if(!IsPlayerConnected(playerid))
-		return 0;
+		return false;
 
-	return acc_State[playerid] == ACCOUNT_STATE_REGISTERING ? true : false;
+	return GetAccountState(playerid) == ACCOUNT_STATE_REGISTERING ? true : false;
 }
 
 stock bool:IsPlayerLoggingIn(playerid)
 {
 	if(!IsPlayerConnected(playerid))
-		return 0;
+		return false;
 
-	return acc_State[playerid] == ACCOUNT_STATE_LOGGINGIN ? true : false;
+	return GetAccountState(playerid) == ACCOUNT_STATE_LOGGINGIN ? true : false;
 }
 
 stock bool:IsPlayerLoggedIn(playerid)
 {
 	if(!IsPlayerConnected(playerid))
-		return 0;
+		return false;
 
-	return acc_State[playerid] == ACCOUNT_STATE_LOGGEDIN ? true : false;
+	return GetAccountState(playerid) == ACCOUNT_STATE_LOGGEDIN ? true : false;
 }
 
-stock IsPlayerAccountLinked(playerid)
-{
-	if(!IsPlayerConnected(playerid))
-		return 0;
-
-	return acc_State[playerid] == ACCOUNT_STATE_LINKED ? true : false;
-}
-
-stock GetPlayerAccountState(playerid)
+stock GetAccountState(playerid)
 {
 	if(IsPlayerConnected(playerid))
 		return 0;
 
-	return acc_State[playerid];
+	return account[playerid][accState];
 }
 
-stock SetPlayerAccountState(playerid, newState)
+stock SetAccountState(playerid, newState)
 {
 	if(IsPlayerConnected(playerid))
 		return;
-	
-	acc_State[playerid] = newState;
+
+	account[playerid][accState] = newState;
+
+	CallLocalFunction("OnAccountStateChanged", "dd", playerid, newState);
 }
 
 
@@ -202,7 +182,7 @@ stock SetPlayerAccountState(playerid, newState)
 	Loads database data into memory and applies it to the player.
 
 ==============================================================================*/
-stock Error:LoadPlayerAccount(playerid)
+stock LoadAccount(playerid)
 {
 	new
 		name[MAX_PLAYER_NAME],
@@ -216,16 +196,16 @@ stock Error:LoadPlayerAccount(playerid)
 		VIP,
 		active;
 
-	stmt_bind_value(stmt_AccountLoad, 0, 		DB::TYPE_STRING, 	name, MAX_PLAYER_NAME);
-	stmt_bind_result_field(stmt_AccountLoad, 1, DB::TYPE_STRING, 	password, MAX_PASSWORD_LEN);
-	stmt_bind_result_field(stmt_AccountLoad, 2, DB::TYPE_INTEGER, 	ipv4);
-	stmt_bind_result_field(stmt_AccountLoad, 3, DB::TYPE_INTEGER, 	alive);
-	stmt_bind_result_field(stmt_AccountLoad, 4, DB::TYPE_INTEGER, 	regdate);
-	stmt_bind_result_field(stmt_AccountLoad, 5, DB::TYPE_INTEGER, 	lastlog);
-	stmt_bind_result_field(stmt_AccountLoad, 6, DB::TYPE_INTEGER, 	spawntime);
-	stmt_bind_result_field(stmt_AccountLoad, 7,	DB::TYPE_INTEGER, 	spawns);
-	stmt_bind_result_field(stmt_AccountLoad, 8, DB::TYPE_INTEGER, 	VIP);
-	stmt_bind_result_field(stmt_AccountLoad, 9, DB::TYPE_INTEGER, 	active);
+	stmt_bind_value(		stmt_AccountLoad, 0, DB::TYPE_STRING, 	name, MAX_PLAYER_NAME);
+	stmt_bind_result_field(	stmt_AccountLoad, 1, DB::TYPE_STRING, 	password, MAX_PASSWORD_LEN);
+	stmt_bind_result_field(	stmt_AccountLoad, 2, DB::TYPE_INTEGER, 	ipv4);
+	stmt_bind_result_field(	stmt_AccountLoad, 3, DB::TYPE_INTEGER, 	alive);
+	stmt_bind_result_field(	stmt_AccountLoad, 4, DB::TYPE_INTEGER, 	regdate);
+	stmt_bind_result_field(	stmt_AccountLoad, 5, DB::TYPE_INTEGER, 	lastlog);
+	stmt_bind_result_field(	stmt_AccountLoad, 6, DB::TYPE_INTEGER, 	spawntime);
+	stmt_bind_result_field(	stmt_AccountLoad, 7, DB::TYPE_INTEGER, 	spawns);
+	stmt_bind_result_field(	stmt_AccountLoad, 8, DB::TYPE_INTEGER, 	VIP);
+	stmt_bind_result_field(	stmt_AccountLoad, 9, DB::TYPE_INTEGER, 	active);
 
 	if(!stmt_execute(stmt_AccountLoad))
 		return Error(-1, "failed to execute statement stmt_AccountLoad");
@@ -248,12 +228,12 @@ stock Error:LoadPlayerAccount(playerid)
 	if(gAutoLoginWithIP && GetPlayerIpAsInt(playerid) == ipv4)
 		return NoError(2);
 
-	CallLocalFunction("OnPlayerAccountLoaded", "d", playerid);
+	CallLocalFunction("OnAccountLoaded", "d", playerid);
 
 	return NoError(1);
 }
 
-Error:CreatePlayerAccount(playerid, const password[MAX_PASSWORD_LEN])
+CreateAccount(playerid, const password[MAX_PASSWORD_LEN])
 {
 	new
 		name[MAX_PLAYER_NAME],
@@ -279,7 +259,6 @@ Error:CreatePlayerAccount(playerid, const password[MAX_PASSWORD_LEN])
 	SetPlayerToolTips(playerid, true);
 	SetPlayerRadioFrequency(playerid, 1.0); // Global chat by default
 	
-	PlayerCreateNewCharacter(playerid);
 	DisplayLoginPrompt(playerid);
 
 	CallLocalFunction("OnPlayerRegister", "d", playerid);
@@ -311,7 +290,7 @@ stock DisplayRegisterPrompt(playerid)
 
 			WP_Hash(passwordHash, MAX_PASSWORD_LEN, inputtext);
 
-			CreatePlayerAccount(playerid, passwordHash);
+			CreateAccount(playerid, passwordHash);
 			PromptPlayerToLinkAccount(playerid);
 		}
 		else
@@ -332,12 +311,12 @@ stock DisplayLoginPrompt(playerid, badpass = false)
 	Logger_Log("player is logging in", Logger_P(playerid));
 	CallLocalFunction("OnPlayerLoggingIn", "d", playerid);
 
-	SetPlayerAccountState(playerid, ACCOUNT_STATE_LOGGINGIN);
+	SetAccountState(playerid, ACCOUNT_STATE_LOGGINGIN);
 
 	new dialogText[150];
 
 	if(badpass)
-		format(dialogText, 150, ls(playerid, "ACCLOGWROPW"), acc_LoginAttempts[playerid]);
+		format(dialogText, 150, ls(playerid, "ACCLOGWROPW"), account[playerid][accLoginAttempts]);
 	else
 		format(dialogText, 150, ls(playerid, "ACCLOGIBODY"), playerid);
 
@@ -360,9 +339,9 @@ stock DisplayLoginPrompt(playerid, badpass = false)
 					LoginPlayer(playerid);
 				else
 				{
-					acc_LoginAttempts[playerid]++;
+					account[playerid][accLoginAttempts]++;
 
-					if(acc_LoginAttempts[playerid] < 5)
+					if(account[playerid][accLoginAttempts] < 5)
 						DisplayLoginPrompt(playerid, 1);
 					else
 					{
@@ -395,6 +374,7 @@ stock bool:IsValidPassword(const password[])
 stock LoginPlayer(playerid)
 {
 	new serial[MAX_GPCI_LEN];
+
 	gpci(playerid, serial, MAX_GPCI_LEN);
 
 	Logger_Log("player logged in",
@@ -433,15 +413,11 @@ stock LoginPlayer(playerid)
 			ChatMsg(playerid, YELLOW, " » %d Bugs reportados. Digite "C_BLUE"/bugs", issues);
 	}
 
-	acc_LoggedIn[playerid] = true;
-	acc_LoginAttempts[playerid] = 0;
+	SetAccountState(playerid, ACCOUNT_STATE_LOGGEDIN);
+	account[playerid][accLoginAttempts] = 0;
 
 	SetPlayerRadioFrequency(playerid, 1.0); // Global chat by default
 	SetPlayerBrightness(playerid, 255);
-
-	SpawnLoggedInPlayer(playerid);
-
-	CallLocalFunction("OnPlayerLogin", "d", playerid);
 }
 
 
@@ -453,7 +429,7 @@ stock LoginPlayer(playerid)
 
 stock Logout(playerid, docombatlogcheck = 1)
 {
-	if(!acc_LoggedIn[playerid])
+	if(GetAccountState(playerid) == ACCOUNT_STATE_LOGGEDIN)
 	{
 		Logger_Log("player logged out",
 			Logger_P(playerid),
@@ -477,7 +453,7 @@ stock Logout(playerid, docombatlogcheck = 1)
 		Logger_F("y", y),
 		Logger_F("z", z),
 		Logger_F("r", r),
-		Logger_B("logged_in", acc_LoggedIn[playerid]),
+		Logger_B("logged_in", true),
 		Logger_B("alive", IsPlayerAlive(playerid)),
 		Logger_B("knocked_out", IsPlayerKnockedOut(playerid))
 	);
@@ -605,7 +581,7 @@ stock SavePlayerData(playerid)
 {
 	dbg("accounts", 1, "[SavePlayerData] Saving '%p'", playerid);
 
-	if(!acc_LoggedIn[playerid])
+	if(IsPlayerLoggedIn(playerid))
 	{
 		dbg("accounts", 1, "[SavePlayerData] ERROR: Player isn't logged in");
 		return 0;
@@ -713,7 +689,7 @@ stock GetAccountData(name[], pass[], &ipv4, &alive, &regdate, &lastlog, &spawnti
 	return 1;
 }
 
-stock DoesPlayerAccountExist(const accountName[])
+stock bool:DoesAccountExist(const accountName[MAX_PLAYER_NAME])
 {
 	new exists;
 
@@ -722,8 +698,25 @@ stock DoesPlayerAccountExist(const accountName[])
 
 	if(stmt_execute(stmt_AccountRegistered))
 		stmt_fetch_row(stmt_AccountRegistered);
+	else
+		err(false, true, "[ACCOUNTS] Impossible to execute DoesAccountExist(%s)", accountName);
 
-	return exists;
+	return exists ? true : false;
+}
+
+stock bool:DoesAccountExistByPlayerId(playerid)
+{
+	new playerName[MAX_PLAYER_NAME];
+
+	GetPlayerName(playerid, playerName);
+
+	return DoesAccountExist(playerName);
+}
+
+stock bool:DoesAccountExistByDiscordId(const discordId[DCC_ID_SIZE])
+{
+
+	return false;
 }
 
 stock GetAccountPassword(name[], password[MAX_PASSWORD_LEN])
@@ -917,10 +910,10 @@ stock GetAccountDiscordId(playerid)
 	return discordId;
 }
 
-stock SetPlayerAccountDiscordId(const name[], const discordid[DCC_ID_SIZE])
+stock SetAccountDiscordId(const accountName[], const discordId[DCC_ID_SIZE])
 {
-	stmt_bind_value(stmt_AccountSetDiscordId, 0, DB::TYPE_STRING, discordid, DCC_ID_SIZE);
-	stmt_bind_value(stmt_AccountSetDiscordId, 1, DB::TYPE_STRING, name, MAX_PLAYER_NAME);
+	stmt_bind_value(stmt_AccountSetDiscordId, 0, DB::TYPE_STRING, discordId, DCC_ID_SIZE);
+	stmt_bind_value(stmt_AccountSetDiscordId, 1, DB::TYPE_STRING, accountName, MAX_PLAYER_NAME);
 
 	if(stmt_execute(stmt_AccountSetDiscordId))
 		return 1;
@@ -928,22 +921,30 @@ stock SetPlayerAccountDiscordId(const name[], const discordid[DCC_ID_SIZE])
 	return 0;
 }
 
-stock DoesAccountHaveDiscord(const name[MAX_PLAYER_NAME])
+stock bool:IsAccountLinked(const accountName[MAX_PLAYER_NAME])
 {
-	new
-		does = -1;
+	new linked;
 
-	stmt_bind_result_field(stmt_AccountHaveDiscord, 0, DB::TYPE_INTEGER, does);
-	stmt_bind_value(stmt_AccountHaveDiscord, 0, DB::TYPE_STRING, name, MAX_PLAYER_NAME);
+	stmt_bind_result_field(stmt_AccountHaveDiscord, 0, DB::TYPE_INTEGER, linked);
+	stmt_bind_value(stmt_AccountHaveDiscord, 0, DB::TYPE_STRING, accountName, MAX_PLAYER_NAME);
 
 	if(stmt_execute(stmt_AccountHaveDiscord))
 		stmt_fetch_row(stmt_AccountHaveDiscord);
 	else
-		err(false, true, ("[ACCOUNTS] Impossível executar stmt_AccountHaveDiscord"));
+		err(false, true, ("[ACCOUNTS] Impossível executar stmt_AccountHaveDiscord(%s)", accountName));
 
-	log(true, "[ACCOUNTS] DoesAccountHaveDiscord - Player %s: %d", name, does);
+	log(true, "[ACCOUNTS] IsAccountLinked - %s: %d", accountName, linked);
 
-	return does;
+	return linked ? true : false;
+}
+
+stock bool:HasPlayerLinkedAccount(playerid)
+{
+	new playerName[MAX_PLAYER_NAME];
+
+	GetPlayerName(playerid, playerName);
+
+	return IsAccountLinked(playerName);
 }
 
 stock GetAccountGPCI(const name[], gpci[MAX_GPCI_LEN])
@@ -965,27 +966,6 @@ stock SetAccountGPCI(const name[], gpci[MAX_GPCI_LEN])
 	stmt_bind_value(stmt_AccountSetGpci, 1, DB::TYPE_STRING, name, MAX_PLAYER_NAME);
 
 	return stmt_execute(stmt_AccountSetGpci);
-}
-
-stock GetAccountActiveState(const name[], &active)
-{
-	stmt_bind_result_field(stmt_AccountGetActiveState, 0, DB::TYPE_INTEGER, active);
-	stmt_bind_value(stmt_AccountGetActiveState, 0, DB::TYPE_STRING, name, MAX_PLAYER_NAME);
-
-	if(!stmt_execute(stmt_AccountGetActiveState))
-		return 0;
-
-	stmt_fetch_row(stmt_AccountGetActiveState);
-
-	return 1;
-}
-
-stock SetAccountActiveState(const name[], active)
-{
-	stmt_bind_value(stmt_AccountSetActiveState, 0, DB::TYPE_INTEGER, active);
-	stmt_bind_value(stmt_AccountSetActiveState, 1, DB::TYPE_STRING, name, MAX_PLAYER_NAME);
-
-	return stmt_execute(stmt_AccountSetActiveState);
 }
 
 // Pass, IP and gpci
