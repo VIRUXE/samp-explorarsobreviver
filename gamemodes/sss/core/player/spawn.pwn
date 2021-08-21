@@ -1,4 +1,3 @@
-
 #include <YSI_Coding\y_hooks>
 
 
@@ -24,7 +23,7 @@ Float:		spawn_ResBleed,
 ItemType:	spawn_ResItems[16][e_item_object];
 
 static
-bool:		spawn_State[MAX_PLAYERS] = {false, ...},
+bool:		spawn_Spawned[MAX_PLAYERS] = {false, ...},
 Float:		spawn_PosX[MAX_PLAYERS],
 Float:		spawn_PosY[MAX_PLAYERS],
 Float:		spawn_PosZ[MAX_PLAYERS],
@@ -34,11 +33,7 @@ new
 PlayerText:	ClassButtonMale[MAX_PLAYERS] = {PlayerText:INVALID_TEXT_DRAW, ...},
 PlayerText:	ClassButtonFemale[MAX_PLAYERS] = {PlayerText:INVALID_TEXT_DRAW, ...};
 
-
-forward OnPlayerCreateChar(playerid);
-forward OnPlayerSpawnChar(playerid);
-forward OnPlayerSpawnNewChar(playerid);
-
+forward OnPlayerSpawnCharacter(playerid, bool:existing);
 
 hook OnGameModeInit()
 {
@@ -86,14 +81,7 @@ hook OnGameModeInit()
 
 hook OnPlayerConnect(playerid)
 {
-	spawn_State[playerid] = false;
-
-//	defer LoadClassUI(playerid);
-//}
-//
-//timer LoadClassUI[1](playerid)
-//{
-	ClassButtonMale[playerid]		=CreatePlayerTextDraw(playerid, 250.000000, 200.000000, "~n~Male~n~~n~");
+	ClassButtonMale[playerid]		=CreatePlayerTextDraw(playerid, 250.000000, 200.000000, "~n~Homem~n~~n~");
 	PlayerTextDrawAlignment			(playerid, ClassButtonMale[playerid], 2);
 	PlayerTextDrawBackgroundColor	(playerid, ClassButtonMale[playerid], 255);
 	PlayerTextDrawFont				(playerid, ClassButtonMale[playerid], 1);
@@ -107,7 +95,7 @@ hook OnPlayerConnect(playerid)
 	PlayerTextDrawTextSize			(playerid, ClassButtonMale[playerid], 44.000000, 100.000000);
 	PlayerTextDrawSetSelectable		(playerid, ClassButtonMale[playerid], true);
 
-	ClassButtonFemale[playerid]		=CreatePlayerTextDraw(playerid, 390.000000, 200.000000, "~n~Female~n~~n~");
+	ClassButtonFemale[playerid]		=CreatePlayerTextDraw(playerid, 390.000000, 200.000000, "~n~Mulher~n~~n~");
 	PlayerTextDrawAlignment			(playerid, ClassButtonFemale[playerid], 2);
 	PlayerTextDrawBackgroundColor	(playerid, ClassButtonFemale[playerid], 255);
 	PlayerTextDrawFont				(playerid, ClassButtonFemale[playerid], 1);
@@ -122,193 +110,121 @@ hook OnPlayerConnect(playerid)
 	PlayerTextDrawSetSelectable		(playerid, ClassButtonFemale[playerid], true);
 }
 
-SpawnLoggedInPlayer(playerid)
+hook OnPlayerDisconnect(playerid)
 {
-	if(IsPlayerAlive(playerid))
-	{
-		new ret = PlayerSpawnExistingCharacter(playerid);
-
-		if(!ret)
-		{
-			SetPlayerBrightness(playerid, 255);
-			return 1;
-		}
-		else
-			err(false, false, "PlayerSpawnExistingCharacter returned %d", ret);
-	}
-	
-	PlayerCreateNewCharacter(playerid);
-	SetPlayerBrightness(playerid, 255);
-
-	return 0;
+	spawn_Spawned[playerid] = false;
 }
 
-PrepareForSpawn(playerid)
+hook OnPlayerRegister(playerid) // If player finished the tutorial it means he doesn't have a character yet, so let's create him a new one
 {
-	SetPlayerSpawnedState(playerid, true);
-
-	SetCameraBehindPlayer(playerid);
-	SetAllWeaponSkills(playerid, 500);
-	CancelSelectTextDraw(playerid);
+	PromptCharacterGenderSelection(playerid);
 }
 
-PlayerSpawnExistingCharacter(playerid)
+hook OnPlayerLogin(playerid)
 {
-	if(IsPlayerSpawned(playerid))
-		return 1;
-
-	if(!LoadPlayerChar(playerid))
-		return 2;
-
-	new
-		Float:x,
-		Float:y,
-		Float:z,
-		Float:r;
-
-	GetPlayerSpawnPos(playerid, x, y, z);
-	GetPlayerSpawnRot(playerid, r);
-
-	Streamer_UpdateEx(playerid, x, y, z, 0, 0);
-	SetPlayerPos(playerid, x, y, z);
-	SetPlayerFacingAngle(playerid, r);
-
-	SetPlayerGender(playerid, GetClothesGender(GetPlayerClothes(playerid)));
-
-	SetPlayerClothes(playerid, GetPlayerClothesID(playerid));
-	FreezePlayer(playerid, SEC(gLoginFreezeTime));
-
-	PrepareForSpawn(playerid);
-
-	if(GetPlayerStance(playerid) == 1)
-		ApplyAnimation(playerid, "SUNBATHE", "PARKSIT_M_OUT", 4.0, 0, 0, 0, 0, 0);
-	else if(GetPlayerStance(playerid) == 2)
-		ApplyAnimation(playerid, "SUNBATHE", "PARKSIT_M_OUT", 4.0, 0, 0, 0, 0, 0);
-	else if(GetPlayerStance(playerid) == 3)
-		ApplyAnimation(playerid, "ROB_BANK", "SHP_HandsUp_Scr", 4.0, 0, 1, 1, 1, 0);
-
-	Logger_Log("player spawned existing character",
-		Logger_P(playerid),
-		Logger_F("x", x),
-		Logger_F("y", y),
-		Logger_F("z", z),
-		Logger_F("r", r));
-
-	CallLocalFunction("OnPlayerSpawnChar", "d", playerid);
-
-	Streamer_Update(playerid);
-
-	return 0;
+	SpawnExistingPlayerCharacter(playerid);
 }
 
-PlayerCreateNewCharacter(playerid)
+hook OnPlayerRequestRespawn(playerid)
 {
-	SetPlayerPos(playerid, DEFAULT_POS_X + 5, DEFAULT_POS_Y, DEFAULT_POS_Z);
-	SetPlayerFacingAngle(playerid, 0.0);
-	SetPlayerVirtualWorld(playerid, 0);
-	SetPlayerInterior(playerid, 0);
-
-	SetPlayerCameraLookAt(playerid, DEFAULT_POS_X, DEFAULT_POS_Y, DEFAULT_POS_Z);
-	SetPlayerCameraPos(playerid, DEFAULT_POS_X, DEFAULT_POS_Y, DEFAULT_POS_Z - 1.0);
-	Streamer_UpdateEx(playerid, DEFAULT_POS_X, DEFAULT_POS_Y, DEFAULT_POS_Z);
-
-	SetPlayerBrightness(playerid, 255);
-	TogglePlayerControllable(playerid, false);
-
-	if(IsPlayerLoggedIn(playerid))
-	{
-		PlayerTextDrawSetString(playerid, ClassButtonMale[playerid], sprintf("~n~%s~n~~n~", ls(playerid, "GENDER_M")));
-		PlayerTextDrawSetString(playerid, ClassButtonFemale[playerid], sprintf("~n~%s~n~~n~", ls(playerid, "GENDER_F")));
-		PlayerTextDrawShow(playerid, ClassButtonMale[playerid]);
-		PlayerTextDrawShow(playerid, ClassButtonFemale[playerid]);
-		SelectTextDraw(playerid, 0xFFFFFF88);
-	}
-
-	CallLocalFunction("OnPlayerCreateChar", "d", playerid);
+	PromptCharacterGenderSelection(playerid);
 }
 
 hook OnPlayerClickPlayerTD(playerid, PlayerText:playertextid)
 {
-	if(playertextid == ClassButtonMale[playerid])
-		PlayerSpawnNewCharacter(playerid, GENDER_MALE);
-	else if(playertextid == ClassButtonFemale[playerid])
-		PlayerSpawnNewCharacter(playerid, GENDER_FEMALE);
+	SpawnNewPlayerCharacter(playerid, playertextid == ClassButtonMale[playerid] ? GENDER_MALE : GENDER_FEMALE);
 }
 
-
-hook OnPlayerClickTextDraw(playerid, Text:clickedid)
+public OnPlayerSpawnCharacter(playerid, bool:existing)
 {
-	if(clickedid == Text:65535)
-	{
-	 	if(!IsPlayerSpawned(playerid) && IsPlayerLoggedIn(playerid) && !IsPlayerDead(playerid))
-			SelectTextDraw(playerid, 0xFFFFFF88);
-	}
-}
+	if(!IsPlayerConnected(playerid))
+		return;
 
-PlayerSpawnNewCharacter(playerid, gender)
-{
-	if(IsPlayerSpawned(playerid))
-		return 0;
+	if(existing)
+		ChatMsg(playerid, CHAT_RADIO, " » Quer jogar com um amigo? Sincronize sua Radio na mesma frequencia dele.");
 
-	new name[MAX_PLAYER_NAME];
+	SetPlayerHP(playerid, existing ? spawn_NewBlood : spawn_ResBlood);
+	SetPlayerFP(playerid, existing ? spawn_NewFood : spawn_ResFood);
+	SetPlayerBleedRate(playerid, existing ? spawn_NewBleed : spawn_ResBleed);
 
-	GetPlayerName(playerid, name, MAX_PLAYER_NAME);
+	// SetPlayerGender(playerid, GetClothesGender(GetPlayerClothes(playerid)));
 
-	SetPlayerTotalSpawns(playerid, GetPlayerTotalSpawns(playerid) + 1);
+	// SetPlayerClothes(playerid, GetPlayerClothesID(playerid));
 
-	SetAccountLastSpawnTimestamp(name, gettime());
-
-	SetAccountTotalSpawns(name, GetPlayerTotalSpawns(playerid));
-
-	new Item:backpackitem, Item:tmpitem, Float:x, Float:y, Float:z, Float:r;
-
-	GenerateSpawnPoint(playerid, x, y, z, r);
-	Streamer_UpdateEx(playerid, x, y, z, 0, 0);
-	SetPlayerPos(playerid, x, y, z);
-	SetPlayerFacingAngle(playerid, r);
 	SetPlayerVirtualWorld(playerid, 0);
+
+	FreezePlayer(playerid, SEC(gLoginFreezeTime));
+
+	Streamer_Update(playerid); // ?????
+	// Streamer_UpdateEx(playerid, x, y, z, 0, 0); // ?????
+
+	SetPlayerSpawnedState(playerid, true);
+
+	SetCameraBehindPlayer(playerid);
+	SetAllWeaponSkills(playerid, 500);
+
+	CancelSelectTextDraw(playerid);
+	PlayerTextDrawDestroy(playerid, ClassButtonMale[playerid]);
+	PlayerTextDrawDestroy(playerid, ClassButtonFemale[playerid]);
+	
+	SetPlayerBrightness(playerid, 255); // Character ready so show world
+}
+
+stock PromptCharacterGenderSelection(playerid)
+{
+	if(!IsPlayerConnected(playerid))
+		return;
+
+	CallLocalFunction("OnPlayerSelectingCharacterGender", "d", playerid);
+
+	SetPlayerBrightness(playerid, 0);
+
+	PlayerTextDrawSetString(playerid, ClassButtonMale[playerid], sprintf("~n~%s~n~~n~", ls(playerid, "GENDER_M")));
+	PlayerTextDrawSetString(playerid, ClassButtonFemale[playerid], sprintf("~n~%s~n~~n~", ls(playerid, "GENDER_F")));
+	PlayerTextDrawShow(playerid, ClassButtonMale[playerid]);
+	PlayerTextDrawShow(playerid, ClassButtonFemale[playerid]);
+	SelectTextDraw(playerid, 0xFFFFFF88);
+}
+
+stock SpawnNewPlayerCharacter(playerid, gender)
+{
+	if(!IsPlayerConnected(playerid))
+		return;
+
+	new
+	Item:backpackItem,
+	Item:tmpItem,
+	Float:spawnX, Float:spawnY, Float:spawnZ, Float:spawnR,
+	playerClothes;
+
+	GenerateSpawnPoint(playerid, spawnX, spawnY, spawnZ, spawnR);
+	// Streamer_UpdateEx(playerid, spawnX, spawnY, spawnZ, spawnR, 0);
+	SetPlayerPos(playerid, spawnX, spawnY, spawnZ);
+	SetPlayerFacingAngle(playerid, spawnR);
+	
 	SetPlayerInterior(playerid, 0);
 
-	if(gender == GENDER_MALE)
+	new randomClothes = (gender == GENDER_MALE ? 0 : 7) + random(7);
+	switch(randomClothes)
 	{
-		switch(random(6))
-		{
-			case 0: SetPlayerClothesID(playerid, skin_Civ0M);
-			case 1: SetPlayerClothesID(playerid, skin_Civ1M);
-			case 2: SetPlayerClothesID(playerid, skin_Civ2M);
-			case 3: SetPlayerClothesID(playerid, skin_Civ3M);
-			case 4: SetPlayerClothesID(playerid, skin_Civ4M);
-			case 5: SetPlayerClothesID(playerid, skin_MechM);
-			case 6: SetPlayerClothesID(playerid, skin_BikeM);
-		}
+		case 0: 	playerClothes = skin_Civ0M;
+		case 1: 	playerClothes = skin_Civ1M;
+		case 2: 	playerClothes = skin_Civ2M;
+		case 3: 	playerClothes = skin_Civ3M;
+		case 4: 	playerClothes = skin_Civ4M;
+		case 5: 	playerClothes = skin_MechM;
+		case 6: 	playerClothes = skin_BikeM;
+		case 7: 	playerClothes = skin_Civ0F;
+		case 8: 	playerClothes = skin_Civ1F;
+		case 9: 	playerClothes = skin_Civ2F;
+		case 10: 	playerClothes = skin_Civ3F;
+		case 11: 	playerClothes = skin_Civ4F;
+		case 12: 	playerClothes = skin_ArmyF;
+		case 13: 	playerClothes = skin_IndiF;
 	}
-	else
-	{
-		switch(random(6))
-		{
-			case 0: SetPlayerClothesID(playerid, skin_Civ0F);
-			case 1: SetPlayerClothesID(playerid, skin_Civ1F);
-			case 2: SetPlayerClothesID(playerid, skin_Civ2F);
-			case 3: SetPlayerClothesID(playerid, skin_Civ3F);
-			case 4: SetPlayerClothesID(playerid, skin_Civ4F);
-			case 5: SetPlayerClothesID(playerid, skin_ArmyF);
-			case 6: SetPlayerClothesID(playerid, skin_IndiF);
-		}
-	}
+	SetPlayerClothesID(playerid, playerClothes);
 
-	if(IsNewPlayer(playerid))
-	{
-		SetPlayerHP(playerid, spawn_NewBlood);
-		SetPlayerFP(playerid, spawn_NewFood);
-		SetPlayerBleedRate(playerid, spawn_NewBleed);
-		ChatMsg(playerid, CHAT_RADIO, " » Quer jogar com um amigo? Sincronize sua Radio na mesma frequencia dele.");
-	}
-	else
-	{
-		SetPlayerHP(playerid, spawn_ResBlood);
-		SetPlayerFP(playerid, spawn_ResFood);
-		SetPlayerBleedRate(playerid, spawn_ResBleed);
-	}
+	log(true, "[SPAWN] RandomClothes %d for Player %p", randomClothes, playerid);
 
 	SetPlayerAP(playerid, 0.0);
 	SetPlayerClothes(playerid, GetPlayerClothesID(playerid));
@@ -316,17 +232,10 @@ PlayerSpawnNewCharacter(playerid, gender)
 
 	SetPlayerAliveState(playerid, true);
 
-	FreezePlayer(playerid, SEC(gLoginFreezeTime));
-	PrepareForSpawn(playerid);
-
-	PlayerTextDrawHide(playerid, ClassButtonMale[playerid]);
-	PlayerTextDrawHide(playerid, ClassButtonFemale[playerid]);
-
 	if(IsValidItemType(spawn_BagType))
 	{
-		backpackitem = CreateItem(spawn_BagType);
-
-		GivePlayerBag(playerid, backpackitem);
+		backpackItem = CreateItem(spawn_BagType);
+		GivePlayerBag(playerid, backpackItem);
 	}
 
 	new i = random(16);
@@ -334,57 +243,43 @@ PlayerSpawnNewCharacter(playerid, gender)
 	if(!IsValidItemType(spawn_ResItems[i][e_itmobj_type]))
 		i = 0;
 
-	tmpitem = CreateItem(spawn_ResItems[i][e_itmobj_type]);
+	tmpItem = CreateItem(spawn_ResItems[i][e_itmobj_type]);
 
 	if(spawn_ResItems[i][e_itmobj_exdata] != 0)
-		SetItemExtraData(tmpitem, spawn_ResItems[i][e_itmobj_exdata]);
+		SetItemExtraData(tmpItem, spawn_ResItems[i][e_itmobj_exdata]);
 
-	AddItemToInventory(playerid, tmpitem);
+	AddItemToInventory(playerid, tmpItem);
 
-	if(IsNewPlayer(playerid))
-	{
-		i = random(16);
 
-		if(!IsValidItemType(spawn_NewItems[i][e_itmobj_type]))
-			i = 0;
-
-		tmpitem = CreateItem(spawn_NewItems[i][e_itmobj_type]);
-
-		if(spawn_NewItems[i][e_itmobj_exdata] != 0)
-			SetItemExtraData(tmpitem, spawn_NewItems[i][e_itmobj_exdata]);
-
-		AddItemToInventory(playerid, tmpitem);
-	}
-
-	SetPlayerBrightness(playerid, 255);
-
-	CallLocalFunction("OnPlayerSpawnNewChar", "d", playerid);
-
-	Logger_Log("player spawned new character",
-		Logger_P(playerid),
-		Logger_F("x", x),
-		Logger_F("y", y),
-		Logger_F("z", z),
-		Logger_F("r", r));
-
-	return 1;
+	CallLocalFunction("OnPlayerSpawnCharacter", "db", playerid, false);
 }
 
+stock SpawnExistingPlayerCharacter(playerid)
+{
+	if(!IsPlayerConnected(playerid))
+		return;
 
-/*==============================================================================
+	new
+	Float:x,
+	Float:y,
+	Float:z,
+	Float:r;
 
-	Interface
+	GetPlayerSpawnPos(playerid, x, y, z);
+	GetPlayerSpawnRot(playerid, r);
+	
+	SetPlayerPos(playerid, x, y, z);
+	SetPlayerFacingAngle(playerid, r);
 
-==============================================================================*/
+	CallLocalFunction("OnPlayerSpawnCharacter", "db", playerid, true);
+}
 
-
-// spawn_State
 stock IsPlayerSpawned(playerid)
 {
 	if(!IsPlayerConnected(playerid))
 		return 0;
 
-	return spawn_State[playerid];
+	return spawn_Spawned[playerid];
 }
 
 stock SetPlayerSpawnedState(playerid, bool:st)
@@ -392,7 +287,7 @@ stock SetPlayerSpawnedState(playerid, bool:st)
 	if(!IsPlayerConnected(playerid))
 		return 0;
 
-	spawn_State[playerid] = st;
+	spawn_Spawned[playerid] = st;
 
 	return 1;
 }
@@ -421,7 +316,6 @@ stock SetPlayerSpawnPos(playerid, Float:x, Float:y, Float:z)
 	return 1;
 }
 
-// spawn_RotZ
 stock GetPlayerSpawnRot(playerid, &Float:r)
 {
 	if(!IsPlayerConnected(playerid))
