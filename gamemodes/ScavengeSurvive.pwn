@@ -525,7 +525,7 @@ new stock
 // PLAYER INTERNAL SCRIPTS
 #include "sss/core/player/accounts.pwn"
 #include "sss/core/player/discord-linking.pwn"
-#include "sss/core/player/discord.pwn"
+#include "sss/code/player/discord-chat.pwn"
 #include "sss/core/player/aliases.pwn"
 #include "sss/core/player/ipv4-log.pwn"
 #include "sss/core/player/gpci-log.pwn"
@@ -701,7 +701,6 @@ new stock
 #include "sss/core/admin/rcon.pwn"
 #include "sss/core/admin/freeze.pwn"
 #include "sss/core/admin/name-tags.pwn"
-#include "sss/core/admin/player-list.pwn"
 #include "sss/core/admin/relatorio.pwn"
 
 // POST-CODE
