@@ -47,11 +47,14 @@ stock atosr(a[], size = sizeof(a))
 	return s;
 }
 
-static const accentTable[] = "AAAAAAACEEEEIIIIDNOOOOO×OUUUUYpBaaaaaaaceeeeiiiionooooo+ouuuuyby";
+stock remove_accent(text[])
+{
+	new const accentTable[] = "AAAAAAACEEEEIIIIDNOOOOO×OUUUUYpBaaaaaaaceeeeiiiionooooo+ouuuuyby";
 
-stock remove_accent(text[]) {
-    for (new i = 0; text[i] != '\0'; i++) {
-        if (text[i] < 192) continue;
+    for (new i = 0; text[i] != '\0'; i++)
+	{
+        if(text[i] < 192) continue;
+
         text[i] = accentTable[text[i]-192];
     }
 }
