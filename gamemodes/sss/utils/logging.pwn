@@ -30,13 +30,15 @@ stock dbg(const handler[], level, const text[], va_args<>)
 
 stock err(bool:backtrace, bool:discord, const text[], va_args<>)
 {
-	log(discord, "[ERROR] %s", text, va_start<3>);
+	new errBuffer[256];
+	formatex(errBuffer, sizeof(errBuffer), text, va_start<3>);
+	log(discord, "[ERROR] %s", errBuffer);
 
 	if(backtrace)
 	{
-		if(!discord)
-			PrintBacktrace();
-		else
+		PrintBacktrace();
+
+		if(discord) // Send backtrace to discord also
 		{
 			new traceBuffer[2000];
 
