@@ -88,6 +88,13 @@ hook OnItemRemovedFromPlayer(playerid, Item:itemid){
 		SetPlayerSpecialAction(playerid, SPECIAL_ACTION_NONE);
 }
 
+hook OnItemDestroy(Item:itemid) {
+	if(IsPlayerConnected(GetItemHolder(itemid))) {
+		PlayerTextDrawHide(GetItemHolder(itemid), item_TD[GetItemHolder(itemid)]);
+		TextDrawHideForPlayer(GetItemHolder(itemid), item_Prev);
+	}
+}
+
 hook OnPlayerDisconnect(playerid, reason){
 	PlayerTextDrawDestroy(playerid, item_TD[playerid]);
 	TextDrawHideForPlayer(playerid, item_Prev);

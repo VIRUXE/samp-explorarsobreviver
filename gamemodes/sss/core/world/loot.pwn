@@ -417,9 +417,6 @@ stock GetItemLootIndex(Item:itemid)
 }
 
 stock SetItemLootIndex(Item:itemid, index) {
-	if(!IsValidItem(itemid))
-		return -1;
-
 	if(!(0 <= index < loot_IndexTotal))
 		return -1;
 
