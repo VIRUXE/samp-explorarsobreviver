@@ -8,8 +8,8 @@ DCC_Channel:	log_DiscordChannelErrors;
 
 hook OnGameModeInit()
 {
-	log_DiscordChannel = DCC_Channel:DCC_FindChannelById("864931954516295690");
-	log_DiscordChannelErrors = DCC_Channel:DCC_FindChannelById("863050555676819456");
+	log_DiscordChannel 			= DCC_Channel:DCC_FindChannelById("864931954516295690");
+	log_DiscordChannelErrors 	= DCC_Channel:DCC_FindChannelById("863050555676819456");
 }
 
 stock log(bool:discord, const text[], va_args<>)
@@ -43,7 +43,7 @@ stock err(bool:backtrace, bool:discord, const text[], va_args<>)
 			new traceBuffer[2000];
 
 			GetBacktrace(traceBuffer);
-			SendDiscordMessage(log_DiscordChannelErrors, "```%s```", traceBuffer);
+			SendDiscordMessage(log_DiscordChannelErrors, "%s```%s```", errBuffer, traceBuffer);
 		}
 	}
 }
