@@ -183,10 +183,6 @@ public OnGameModeInit()
 #include <zipline>
 #include <ladders>
 #include <attachment-fix>
-#include <BustAim>
-#include <no-reload>
-#include <rapid-fire>
-#include <optud>
 #include <discord-connector>
 #include <a_mysql>
 
