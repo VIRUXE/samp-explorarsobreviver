@@ -26,6 +26,9 @@
 
 ==============================================================================*/
 
+#undef MAX_PLAYER_NAME
+#define MAX_PLAYER_NAME 				20 // Não se utiliza SetPlayerName logo apenas fica 20 chars
+
 #undef MAX_PLAYERS
 #define MAX_PLAYERS						64
 
