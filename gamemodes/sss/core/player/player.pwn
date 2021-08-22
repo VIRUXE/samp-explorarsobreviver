@@ -104,7 +104,7 @@ public OnPlayerDisconnect(playerid, reason)
 
 	Logout(playerid);
 
-	ChatMsgAll(GREY, " » %P %s.", playerid, reason ? "decidiu sair" : "perdeu a conexao");
+	ChatMsgAll(GREY, " » %P "C_GREY"%s.", playerid, reason ? "decidiu sair" : "perdeu a conexao");
 	Logger_Log("player disconnected", Logger_P(playerid), Logger_S("reason", reason ? "quit" : "lost connection"));
 
 	SetTimerEx("OnPlayerDisconnected", 100, false, "dd", playerid, reason);
