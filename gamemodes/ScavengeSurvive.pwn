@@ -77,48 +77,6 @@
 // Optidraw
 #define OD_METHOD						METHOD_BOX
 
-// Nex Anti-cheat
-#define AC_USE_AMMUNATIONS  			false
-#define AC_USE_PICKUP_WEAPONS  			false
-#define AC_USE_RESTAURANTS  			false
-#define AC_USE_VENDING_MACHINES  		false
-#define AC_USE_TUNING_GARAGES  			false
-#define AC_USE_PAYNSPRAY  				false
-#define AC_USE_CASINOS  				false
-#define AC_USE_NPC  					false
-#define AC_USE_QUERY  					true
-#define AC_DEFAULT_COLOR  				-1
-#define AC_MAX_CLASSES  				1
-#define AC_MAX_SKINS  					312
-#define AC_MAX_CONNECTS_FROM_IP  		5
-#define AC_MAX_RCON_LOGIN_ATTEMPT  		2
-#define AC_MAX_MSGS_REC_DIFF  			800
-#define AC_MAX_PING              		600
-#define AC_MIN_TIME_RECONNECT  			12
-#define AC_SPEEDHACK_VEH_RESET_DELAY	4
-#define AC_MAX_NOP_WARNINGS				9
-#define AC_MAX_NOP_TIMER_WARNINGS		4
-#define AC_MAX_PING_WARNINGS			8
-#define AC_MAX_MONEY_WARNINGS			2
-#define AC_MAX_AIR_WARNINGS				5
-#define AC_MAX_AIR_VEH_WARNINGS			4
-#define AC_MAX_SPEEDHACK_WARNINGS		5
-#define AC_MAX_SPEEDHACK_VEH_WARNINGS	1 * AC_SPEEDHACK_VEH_RESET_DELAY
-#define AC_MAX_FLYHACK_WARNINGS			2
-#define AC_MAX_FLYHACK_BIKE_WARNINGS	8
-#define AC_MAX_FLYHACK_VEH_WARNINGS		4
-#define AC_MAX_CARSHOT_WARNINGS			4
-#define AC_MAX_GODMODE_WARNINGS			3
-#define AC_MAX_GODMODE_VEH_WARNINGS		3
-#define AC_MAX_FAKE_WEAPON_WARNINGS		3
-#define AC_MAX_SILENT_AIM_WARNINGS		3
-#define AC_MAX_PRO_AIM_WARNINGS			2
-#define AC_MAX_AFK_GHOST_WARNINGS		2
-#define AC_MAX_RAPID_FIRE_WARNINGS		17
-#define AC_MAX_AUTO_C_WARNINGS			9
-#define AC_MAX_TELEPORT_GLITCH_WARNINGS	2
-#define AC_MAX_CJ_RUN_WARNINGS			3
-
 // pawn-errors
 #pragma warning disable 208 // TODO: Fix reparse issues and remove!
 #pragma dynamic 64000
@@ -193,7 +151,6 @@ public OnGameModeInit()
 #include <colandreas> 
 #include <streamer>
 #include <optidraw>
-#include <nex-ac>
 #include <whirlpool>
 #include <sqlitei>
 #include <formatex>
@@ -400,8 +357,7 @@ bool:	gVehicleSurfing,
 Float:	gNameTagDistance,
 		gCombatLogWindow,
 		gLoginFreezeTime,
-		gMaxTaboutTime,
-		gCrashOnExit;
+		gMaxTaboutTime;
 
 // INTERNAL
 new
@@ -797,13 +753,6 @@ OnGameModeInit_Setup()
 public OnGameModeExit()
 {
 	print("[OnGameModeExit] Shutting down...");
-
-	if(gCrashOnExit)
-	{
-		new File:f = fopen("nonexistentfile", io_read), _s[1];
-		fread(f, _s);
-		fclose(f);
-	}
 
 	return 1;
 }

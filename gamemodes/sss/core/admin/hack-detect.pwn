@@ -169,220 +169,10 @@ public OnIncomingRawPacket(playerid, packetid, BitStream:bs)
 	return 1;
 }*/
 
-
-/*==============================================================================
-
-	Nex-AntiCheat
-
-==============================================================================*/
-
-static NexCheatName[53][45] = {
-	{"AirBreak(onfoot)"},
-	{"AirBreak(in vehicle)"},
-	{"teleport hack(onfoot)"},
-	{"teleport hack(vehicle)"},
-	{"tp hack(into/between vehicles)"},
-	{"tp hack(vehicle to player)"},
-	{"teleport hack(pickups)"},
-	{"FlyHack (onfoot)"},
-	{"FlyHack (in vehicle)"},
-	{"SpeedHack (onfoot)"},
-	{"SpeedHack (in vehicle)"},
-	{"Health hack (in vehicle)"},
-	{"Health hack (onfoot)"},
-	{"Armour hack"},
-	{"Money hack"},
-	{"Weapon hack"},
-	{"Ammo hack (add)"},
-	{"Ammo hack (infinite)"},
-	{"Special actions hack"},
-	{"GodMode from bullets(onfoot)"},
-	{"GodMode from bullets(vehicle)"},
-	{"Invisible hack"},
-	{"lagcomp-spoof"},
-	{"Tuning hack"},
-	{"Parkour mod"},
-	{"Quick turn"},
-	{"Rapid fire"},
-	{"FakeSpawn"},
-	{"FakeKill"},
-	{"Pro Aim"},
-	{"CJ run"},
-	{"CarShot"},
-	{"CarJack"},
-	{"UnFreeze"},
-	{"AFK Ghost"},
-	{"Full Aiming"},
-	{"Fake NPC"},
-	{"Reconnect"},
-	{"High ping"},
-	{"Dialog hack"},
-	{"Protection from sandbox"},
-	{"Protection from invalid version"},
-	{"Rcon hack"},
-	{"Tuning crasher"},
-	{"Invalid seat crasher"},
-	{"Dialog crasher"},
-	{"Attached object crasher"},
-	{"Weapon Crasher"},
-	{"Protection from connection flood in one slot"},
-	{"callback functions flood"},
-	{"flood by seat changing"},
-	{"DoS"},
-	{"NOPs"}
-};
-
 hook OnPlayerSpawn(playerid)
 {
-	if(IsPlayerMobile(playerid))
-	{
-		EnableAntiCheatForPlayer(playerid, 52, false); // Anti-Nop
-		EnableAntiCheatForPlayer(playerid, 39, false); // Dialog-Hack
-		EnableAntiCheatForPlayer(playerid, 28, false); // Anti-FakeKill
-	}
-	
 	stop IsPlayerRunning[playerid];
 	sprintcount[playerid] = 0;
-}
-
-forward OnCheatDetected(playerid, const ip_address[], type, code);
-public OnCheatDetected(playerid, const ip_address[], type, code)
-{
-	if(type)
-		BlockIpAddress(ip_address, 0);
-	else
-	{
-		if(IsPlayerInTutorial(playerid) || IsPlayerOnAdminDuty(playerid))
-			return 1;
-
-		
-		if(gServerInitialising || GetTickCountDifference(GetTickCount(), gServerInitialiseTick) < 5000)
-			return 1;
-
-		new Float:x, Float:y, Float:z;
-		GetPlayerPos(playerid, x, y, z);
-
-		if(code < 7 && IsPlayerAtConnectionPos(playerid))
-			return 1;
-
-		switch(code)
-		{
-			case 40: SendClientMessage(playerid, AC_DEFAULT_COLOR, MAX_CONNECTS_MSG);
-			case 41: SendClientMessage(playerid, AC_DEFAULT_COLOR, UNKNOWN_CLIENT_MSG);
-			default:
-			{
-				new name[24];
-				GetPlayerName(playerid, name, 24);
-				ReportPlayer(name, NexCheatName[code], -1, "NEX-AC", x, y, z, GetPlayerVirtualWorld(playerid), GetPlayerInterior(playerid), sprintf("%.1f, %.1f, %.1f", x, y, z) );
-			}
-		}
-
-		if(IsPlayerDataLoaded(playerid) && code < 13 && GetAdminsOnline(1, 6) == 0)
-		{
-			ChatMsg(playerid, RED, "Você foi kickado por suspeita de %s.", NexCheatName[code]);
-			AntiCheatKickWithDesync(playerid, code);
-		}
-	}
-	return 1;
-}
-/*
-forward OnCheatWarning(playerid, const ip_address[], type, code, code2, count);
-public OnCheatWarning(playerid, const ip_address[], type, code, code2, count)
-{
-	if(!type)
-	{
-		if(IsPlayerInTutorial(playerid) || IsPlayerOnAdminDuty(playerid))
-			return 1;
-			
-		ChatMsgAdmins(6, RED, "[Nex-Ac] Warning: %P(id:%d) Name: %s(%d)", playerid, playerid, NexCheatName[code], code);
-	}
-	return 1;
-}
-*/
-/*==============================================================================
-
-	Anti-rapid-fire
-
-==============================================================================*/
-
-forward OnAntiCheatFireRate(playerid, weaponid, interval);
-public OnAntiCheatFireRate(playerid, weaponid, interval)
-{
-	new
-		name[MAX_PLAYER_NAME],
-		Float:px,
-		Float:py,
-		Float:pz;
-
-	GetPlayerName(playerid, name, MAX_PLAYER_NAME);
-	GetPlayerPos(playerid, px, py, pz);
-
-	ReportPlayer(name, "Rapid Fire", -1, "FireRate", px, py, pz, GetPlayerVirtualWorld(playerid), GetPlayerInterior(playerid), "");
-}
-
-/*==============================================================================
-
-	Anti-NoReload
-
-==============================================================================*/
-
-public OnAntiCheatNoReload(playerid, roundsfired)
-{
-	new
-		name[MAX_PLAYER_NAME],
-		Float:px,
-		Float:py,
-		Float:pz;
-
-	GetPlayerName(playerid, name, MAX_PLAYER_NAME);
-	GetPlayerPos(playerid, px, py, pz);
-
-	ReportPlayer(name, "NoReload", -1, "NoReload", px, py, pz, GetPlayerVirtualWorld(playerid), GetPlayerInterior(playerid), "");
-}
-
-
-/*==============================================================================
-
-	Anti-Parkour
-
-==============================================================================*/
-
-public OnAntiCheatTurnUpsideDown(playerid, Float:angle)
-{
-	new
-		name[MAX_PLAYER_NAME],
-		Float:px,
-		Float:py,
-		Float:pz;
-
-	GetPlayerName(playerid, name, MAX_PLAYER_NAME);
-	GetPlayerPos(playerid, px, py, pz);
-
-	ReportPlayer(name, "Parkour Mod", -1, "Parkour", px, py, pz, GetPlayerVirtualWorld(playerid), GetPlayerInterior(playerid), "");
-}
-
-public OnPlayerSuspectedForAimbot(playerid,hitid,weaponid,warnings)
-{
-    new
-	    lastattacker,
-		lastweapon;
-
-	if(!IsPlayerCombatLogging(playerid, lastattacker, Item:lastweapon))
-	{
-		new
-			name[MAX_PLAYER_NAME],
-			Float:px,
-			Float:py,
-			Float:pz;
-
-		GetPlayerName(playerid, name, MAX_PLAYER_NAME);
-		GetPlayerPos(playerid, px, py, pz);
-
-		ReportPlayer(name, "Aimbot", -1, "AimBot", px, py, pz, GetPlayerVirtualWorld(playerid), GetPlayerInterior(playerid), "");
-		
-    	//KickPlayer(playerid, "Aimbot");
-	}	
-	return 1;
 }
 
 IPacket:206(playerid, BitStream:bs)
@@ -390,6 +180,7 @@ IPacket:206(playerid, BitStream:bs)
 	new bulletData[PR_BulletSync];
 	BS_IgnoreBits(bs, 8);
 	BS_ReadBulletSync(bs, bulletData);
+
 	if(!IsPlayerAdmin(playerid) && bulletData[PR_weaponId] == WEAPON_MINIGUN && GetPlayerWeapon(playerid) != WEAPON_MINIGUN)
 	{
 	    KickPlayer(playerid, "Invisible Weapon Minigun");
@@ -488,9 +279,7 @@ hook OnPlayerWeaponShot(playerid, weaponid, hittype, hitid, Float:fX, Float:fY, 
 		}
 	}
 	else
-	{
 		ammo_ShotCounter[playerid] = 1;
-	}
 
 	ammo_LastShot[playerid] = GetTickCount();
 
@@ -610,12 +399,10 @@ hook OnPlayerWeaponShot(playerid, weaponid, hittype, hitid, Float:fX, Float:fY, 
 				return 0;
 			}
 		}
-
 		case 22, 26, 28, 32, 34, 38:
 		{
 			// Do nothing
 		}
-
 		default:
 		{
 			if(hittype == BULLET_HIT_TYPE_PLAYER)
@@ -731,10 +518,10 @@ hook OnPlayerWeaponShot(playerid, weaponid, hittype, hitid, Float:fX, Float:fY, 
 
 hook OnPlayerDisconnect(playerid, reason)
 {
-	ea_PlayerShots[playerid] = 0;
-	ea_PlayerHits[playerid] = 0;
-	ea_Currshot[playerid] = 0;
-	ea_TotalChecks[playerid] = 0;
+	ea_PlayerShots[playerid] 	= 0;
+	ea_PlayerHits[playerid] 	= 0;
+	ea_Currshot[playerid] 		= 0;
+	ea_TotalChecks[playerid] 	= 0;
 
 	for(new i = 0; i < NUM_SHOT_CHECK; i++)
 		ea_LastShots[playerid][i] = -1;
@@ -747,9 +534,9 @@ stock GetPlayerShotStats(playerid, &shots, &hits, &Float:accuracy)
 	if(!IsPlayerConnected(playerid))
 		return 0;
 
-	shots = ea_PlayerShots[playerid];
-	hits = ea_PlayerHits[playerid];
-	accuracy = floatdiv(float(ea_PlayerHits[playerid]), float(ea_PlayerShots[playerid]));
+	shots 		= ea_PlayerShots[playerid];
+	hits 		= ea_PlayerHits[playerid];
+	accuracy 	= floatdiv(float(ea_PlayerHits[playerid]), float(ea_PlayerShots[playerid]));
 
 	return 1;
 }
