@@ -29,65 +29,7 @@
 #undef MAX_PLAYER_NAME
 #define MAX_PLAYER_NAME 				20 // Não se utiliza SetPlayerName logo apenas fica 20 chars
 
-#undef MAX_PLAYERS
-#define MAX_PLAYERS						64
-
-#undef MAX_VEHICLES
-#define MAX_VEHICLES					700
-
-// YSI
-#define _DEBUG							0
-#define CGEN_MEMORY						75000
-#define YSI_NO_VERSION_CHECK
-#define YSI_NO_OPTIMISATION_MESSAGE
-#define YSI_NO_MODE_CACHE
-#define YSI_NO_HEAP_MALLOC
-#define YSI_NO_CACHE_MESSAGE
-
-
-// SQLitei
-#define DB_DEBUG						false 
-#define DB_MAX_STATEMENTS				128
-#define DB_DEBUG_BACKTRACE_NOTICE		true
-#define DB_DEBUG_BACKTRACE_WARNING		true
-#define DB_DEBUG_BACKTRACE_ERROR		true
-
-// strlib
-#define STRLIB_RETURN_SIZE				256
-
-// modio
-#define MODIO_DEBUG						0
-#define MODIO_FILE_STRUCTURE_VERSION	20
-#define MODIO_SCRIPT_EXIT_FIX			1
-#define MAX_MODIO_SESSION				2048
-
-// SS/inventory
-#define MAX_INVENTORY_SLOTS				7
-
-// SS/button
-#define BTN_MAX							Button:64000
-#define BTN_TELEPORT_FREEZE_TIME		1500
-#define	BTN_MAX_INRANGE					5
-
-// SS/item
-#define MAX_ITEM						Item:64000
-#define MAX_ITEM_TYPE					ItemType:327
-#define MAX_ITEM_NAME					22
-#define MAX_ITEM_TEXT					45
-#define MAX_CONTAINER_SLOTS				100
-#define ITEM_RESPAWN_DELAY				HOUR(4)
-
-// Optidraw
-#define OD_METHOD						METHOD_BOX
-
-// pawn-errors
-#pragma warning disable 208 // TODO: Fix reparse issues and remove!
-#pragma dynamic 64000
-#pragma warning disable 214 // Temporary fix remove const warning
-#pragma warning disable 239 // Temporary fix remove const warning
-
-// GEO-IP
-#define IPHUB_KEY ""
+#include "config.pwn"
 
 /*==============================================================================
 
@@ -388,7 +330,7 @@ new stock
 
 ==============================================================================*/
 
-#include "config.pwn"
+
 
 // UTILITIES
 #include "sss/utils/logging.pwn"
