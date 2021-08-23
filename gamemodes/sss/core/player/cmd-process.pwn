@@ -9,6 +9,8 @@ public OnPlayerCommandText(playerid, cmdtext[])
 
 	sscanf(cmdtext, "s[30]s[127]", cmd, params);
 
+	RemoveAccents(params);
+
 	for (new i, j = strlen(cmd); i < j; i++)
 		cmd[i] = tolower(cmd[i]);
 
@@ -59,7 +61,7 @@ public OnPlayerCommandText(playerid, cmdtext[])
 	// If a command returns 7, don't log it.
 
 	if(0 < result < 7)
-		log(false, "[COMMAND] [%p]: %s", playerid, cmdtext);
+		log(false, "[COMMAND] %p (%d): %s", playerid, playerid, cmdtext);
 
 	switch(result)
 	{

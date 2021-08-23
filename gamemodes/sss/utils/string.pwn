@@ -47,7 +47,7 @@ stock atosr(a[], size = sizeof(a))
 	return s;
 }
 
-stock remove_accent(text[])
+stock RemoveAccents(text[])
 {
 	new const accentTable[] = "AAAAAAACEEEEIIIIDNOOOOO×OUUUUYpBaaaaaaaceeeeiiiionooooo+ouuuuyby";
 

@@ -109,6 +109,7 @@ public DCC_OnMessageCreate(DCC_Message:message)
 
 	DCC_GetUserName(discordUser, discordUserName);
 	DCC_GetMessageContent(message, discordMessage);
+	RemoveAccents(discordMessage);
 
 	if(channel == dc_GlobalChatChannel)
 		ChatMsgAll(0x5865F2FF, "[Discord] "C_GREY"%s"C_WHITE": %s", discordUserName, TagScan(discordMessage));
@@ -131,7 +132,6 @@ public DCC_OnMessageCreate(DCC_Message:message)
 stock SendDiscordMessage(DCC_Channel:channel, const fmat[], va_args<>)
 {
 	formatex(msgBuffer, sizeof(msgBuffer), fmat, va_start<2>);
-	remove_accent(msgBuffer);
 	DCC_SendChannelMessage(channel, msgBuffer);
 
 	return 1;

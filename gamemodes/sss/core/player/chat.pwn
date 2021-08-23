@@ -20,11 +20,12 @@ bool:	chat_Quiet[MAX_PLAYERS],
 forward Float:GetPlayerRadioFrequency(playerid);
 forward OnPlayerSendChat(playerid, text[], Float:frequency);
 
-hook OnPlayerConnect(playerid)
+hook OnPlayerDisconnect(playerid)
 {
 	chat_LastMessageTick[playerid] = 0;
 	chat_Freq[playerid] = 0.0;
 	chat_Mode[playerid] = 0;
+
 	return 1;
 }
 
@@ -41,6 +42,10 @@ hook OnPlayerText(playerid, text[])
 		case CHAT_MODE_ADMIN:
 			freq = 3.0;
 	}
+
+	if(IsPlayerMobile(playerid))
+		RemoveAccents(text);
+
 	PlayerSendChat(playerid, text, freq);
 
 	return 0;
@@ -72,8 +77,7 @@ stock PlayerSendChat(playerid, chat[], Float:frequency)
 	if(GetTickCountDifference(GetTickCount(), GetPlayerServerJoinTick(playerid)) < SEC(1))
 		return 0;
 
-	if(CallLocalFunction("OnPlayerSendChat", "dsf", playerid, chat, frequency))
-		return 0;
+	CallLocalFunction("OnPlayerSendChat", "dsf", playerid, chat, frequency);
 
 	if(IsPlayerMuted(playerid))
 	{
