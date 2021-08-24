@@ -621,10 +621,7 @@ ACMD:additem[3](playerid, params[])
 	new name[MAX_ITEM_NAME];
 
 	if(sscanf(params, "s["#MAX_ITEM_NAME"]", name))
-	{
-		ChatMsg(playerid, RED, " » Utilize: /additem [nome/id do item]");
-		return 1;
-	}
+		return ChatMsg(playerid, YELLOW, " » Utilize: /additem [nome/id do item]");
 
 	new 
 		uniquename[MAX_ITEM_NAME],
@@ -643,7 +640,7 @@ ACMD:additem[3](playerid, params[])
 
 		gBigString[playerid][0] = EOS;
 
-		strcat(gBigString[playerid], "id\tname\tunic name\tcount\n");
+		strcat(gBigString[playerid], "ID:\tNome:\tChave:\tExistentes:\n");
 
 		for(new ItemType:i; i < MAX_ITEM_TYPE; i++)
 		{
@@ -681,11 +678,9 @@ ACMD:additem[3](playerid, params[])
 				#pragma unused pid, dialogid, inputtext
 
 				if(response)
-				{
 					AdminAddItem(playerid, list[listitem]);
-				}
 			}
-			Dialog_ShowCallback(playerid, using inline Response, DIALOG_STYLE_TABLIST_HEADERS, "Admin Add Item", gBigString[playerid], "Select", "Exit");
+			Dialog_ShowCallback(playerid, using inline Response, DIALOG_STYLE_TABLIST_HEADERS, "Adicionar Item", gBigString[playerid], "Selecionar", "Sair");
 			return 1;
 		}
 		else if(list[0] != INVALID_ITEM_TYPE)
@@ -729,7 +724,7 @@ AdminAddItem(playerid, ItemType:type)
 
 		GetItemName(itemid, typename);
 
-		ChatMsg(playerid, GREEN, " » Additem id "C_BLUE"%d: "C_YELLOW"%s "C_GREEN"Count: %d", _:type, typename, GetItemTypeCount(type));
+		ChatMsg(playerid, GREEN, " » Item "C_YELLOW"%s"C_GREEN"  (ID "C_BLUE"%d"C_GREEN") Added - Count: %d", typename, _:type, GetItemTypeCount(type));
 	}
 }
 
