@@ -742,30 +742,6 @@ ACMD:addvehicle[3](playerid, params[])
 	if(!IsValidVehicleType(type))
 		return ChatMsg(playerid, YELLOW, " » Tipo de Veículo Inválido.");
 
-	new
-		vehicleId,
-		Float:playerAngle,
-		Float:camPosX, 		Float:camPosY, 		Float:camPosZ,
-		Float:camVectorX, 	Float:camVectorY, 	Float:camVectorZ,
-		Float:vehicleX, 	Float:vehicleY, 	Float:vehicleZ,		Float:vehicleR;
-
-	GetPlayerFacingAngle(playerid, playerAngle);
-	GetPlayerCameraPos(playerid, camPosX, camPosY, camPosZ);
-	GetPlayerCameraFrontVector(playerid, camVectorX, camVectorY, camVectorZ);
-
-	vehicleX = camPosX + floatmul(camVectorX, 6.0);
-	vehicleY = camPosY + floatmul(camVectorY, 6.0);
-	vehicleZ = camPosZ + floatmul(camVectorZ, 6.0);
-	vehicleR = playerAngle + 90.0;
-
-	vehicleId = CreateLootVehicle(type, vehicleX, vehicleY, vehicleZ, vehicleR);
-	SetVehicleFuel(vehicleId, 100000.0); // All the fuel
-	SetVehicleHealth(vehicleId, 990.0);
-	SetVehicleParamsEx(vehicleId, 1, 1, 0, 1, 0, 0, 0); // Fully fixed
-	SetVehicleExternalLock(vehicleId, E_LOCK_STATE_OPEN);
-	SetVehicleTrunkLock(vehicleId, 0);
-	ToggleVehicleWheels(vehicleId, true);
-
 	if(GetPlayerAdminLevel(playerid) < STAFF_LEVEL_LEAD)
 	{
 		inline Response(pid, dialogid, response, listitem, string:inputtext[])
@@ -776,6 +752,31 @@ ACMD:addvehicle[3](playerid, params[])
 		}
 		Dialog_ShowCallback(playerid, using inline Response, DIALOG_STYLE_INPUT, "Justificação", "Introduz a Motivo para ter adicionado esse veículo:", "OK", "");
 	}
+
+	new
+		vehicleId,
+		Float:playerAngle,
+		Float:camPosX, 		Float:camPosY, 		Float:camPosZ,
+		Float:camVectorX, 	Float:camVectorY, 	Float:camVectorZ,
+		Float:vehicleX, 	Float:vehicleY, 	Float:vehicleZ;
+
+	GetPlayerFacingAngle(playerid, playerAngle);
+	GetPlayerCameraPos(playerid, camPosX, camPosY, camPosZ);
+	GetPlayerCameraFrontVector(playerid, camVectorX, camVectorY, camVectorZ);
+
+	vehicleX = camPosX + floatmul(camVectorX, 6.0);
+	vehicleY = camPosY + floatmul(camVectorY, 6.0);
+	vehicleZ = camPosZ + floatmul(camVectorZ, 6.0);
+
+	vehicleId = CreateLootVehicle(type, vehicleX, vehicleY, vehicleZ, playerAngle);
+	SetVehicleFuel(vehicleId, 100000.0); // All the fuel
+	SetVehicleHealth(vehicleId, 990.0);
+	SetVehicleParamsEx(vehicleId, 1, 1, 0, 1, 0, 0, 0); // Fully fixed
+	SetVehicleEngine(vehicleId, true);
+	SetVehicleExternalLock(vehicleId, E_LOCK_STATE_OPEN);
+	SetVehicleTrunkLock(vehicleId, 0);
+	ToggleVehicleWheels(vehicleId, true);
+	PutPlayerInVehicle(playerid, vehicleId, 0);
 
 	return 1;
 }
