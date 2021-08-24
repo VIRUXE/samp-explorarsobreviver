@@ -357,7 +357,11 @@ hook OnPlayerKeyStateChange(playerid, newkeys, oldkeys)
 					{
 						if(GetVehicleFuel(vehicleid) > 0.0)
 							SetVehicleEngine(vehicleid, !GetVehicleEngine(vehicleid));
+						else
+							ShowActionText(playerid, "O mostrador indica que nao tem combustivel...", 3000);
 					}
+					else
+						ShowActionText(playerid, "O motor parece estar quebrado demais para ligar...", 3000);
 				}
 			}
 		}
@@ -484,6 +488,7 @@ PlayerVehicleUpdate(playerid)
 			{
 				SetVehicleEngine(vehicleid, 0);
 				PlayerTextDrawColor(playerid, veh_EngineUI[playerid], VEHICLE_UI_INACTIVE);
+				ShowActionText(playerid, "~r~O motor parou de vez! Tem que reparar...", 3000);
 			}
 			else if(health <= VEHICLE_HEALTH_CHUNK_2 && GetPlayerTotalVelocity(playerid) > 1.0)
 			{
@@ -497,10 +502,13 @@ PlayerVehicleUpdate(playerid)
 					{
 						VehicleEngineState(vehicleid, 0);
 						PlayerTextDrawColor(playerid, veh_EngineUI[playerid], VEHICLE_UI_INACTIVE);
+						ShowActionText(playerid, "~r~O motor esta a falhar! Vai mais devagar...", 3000);
 					}
 				}
 				else
 				{
+					// ShowActionText(playerid, "Parece que o motor esta a perder forca...", 3000);
+
 					if(random(100) < 100 - enginechance)
 					{
 						VehicleEngineState(vehicleid, 1);
