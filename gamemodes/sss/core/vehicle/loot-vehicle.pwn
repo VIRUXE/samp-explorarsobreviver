@@ -39,7 +39,7 @@ stock GenerateVehicleData(vehicleid)
 	lootindex = GetLootIndexFromName(lootindexname);
 
 	// Health
-	SetVehicleHP(vehicleid, 300 + random(400));
+	SetVehicleHP(vehicleid, 300 + random(300));
 
 	// Fuel
 	SetVehicleFuel(vehicleid, frandom(10.0) );
