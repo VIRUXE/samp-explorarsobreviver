@@ -179,6 +179,18 @@ stock PlaySoundForAll(sound, Float:x, Float:y, Float:z, Float:range = -1.0)
 	return 1;
 }
 
+stock LowerPlayerToGround(playerid)
+{
+	if(!CA_IsPlayerOnSurface(playerid)) // Pousar o jogador
+	{
+		new Float:playerX, Float:playerY, Float:playerZ, Float:groundZ;
+
+		GetPlayerPos(playerid, playerX, playerY, playerZ);
+		CA_FindZ_For2DCoord(playerX, playerY, groundZ);
+		SetPlayerPos(playerid, playerX, playerY, groundZ+3.0);
+	}
+}
+
 stock IsPlayerInWater(playerid)
 {
 	new
