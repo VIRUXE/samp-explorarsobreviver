@@ -62,6 +62,11 @@ ACMD:restart[4](playerid, params[])
 
 	return 1;
 }
+ACMD:rr[4](playerid, params[])
+{
+	SetRestart(0);
+	return 1;
+}
 
 
 /*==============================================================================
