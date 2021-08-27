@@ -121,6 +121,15 @@ hook OnPlayerClickPlayer(playerid, clickedplayerid, source)
     return 0;
 }
 
+hook OnPlayerKeyStateChange(playerid, newkeys, oldkeys)
+{
+	if(newkeys & KEY_JUMP && newkeys & KEY_CROUCH)
+	{
+		ClearAnimations(playerid);
+		TogglePlayerAdminDuty(playerid, !admin_OnDuty[playerid], newkeys & KEY_WALK ? false : true);
+	}
+}
+
 /*==============================================================================
 
 	Core
@@ -355,7 +364,7 @@ ChatMsgAdminsFlat(level, colour, const message[])
 	return 1;
 }
 
-TogglePlayerAdminDuty(playerid, toggle, goback = true)
+stock TogglePlayerAdminDuty(playerid, toggle, goback = true)
 {
 	if(GetTickCountDifference(GetTickCount(), admin_DutyTick[playerid]) < 1500)
 		return 0;
