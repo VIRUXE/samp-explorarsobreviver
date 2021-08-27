@@ -187,7 +187,7 @@ stock LowerPlayerToGround(playerid)
 
 		GetPlayerPos(playerid, playerX, playerY, playerZ);
 		CA_FindZ_For2DCoord(playerX, playerY, groundZ);
-		SetPlayerPos(playerid, playerX, playerY, groundZ+3.0);
+		SetPlayerPos(playerid, playerX, playerY, groundZ+2.0);
 	}
 }
 
