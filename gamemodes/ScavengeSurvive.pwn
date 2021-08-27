@@ -609,6 +609,7 @@ new stock
 #include "sss/core/admin/mute.pwn"
 #include "sss/core/admin/rcon.pwn"
 #include "sss/core/admin/freeze.pwn"
+#include "sss/core/admin/fly.pwn"
 #include "sss/core/admin/name-tags.pwn"
 #include "sss/core/admin/player-list.pwn"
 #include "sss/core/admin/relatorio.pwn"
