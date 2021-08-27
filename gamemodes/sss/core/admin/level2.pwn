@@ -5,7 +5,6 @@ hook OnGameModeInit()
 	RegisterAdminCommand(STAFF_LEVEL_MODERATOR, "/adm - Entrar em Modo de Administração\n");
 	RegisterAdminCommand(STAFF_LEVEL_MODERATOR, "/goto, /get - Teleportar Jogadores\n");
 	RegisterAdminCommand(STAFF_LEVEL_MODERATOR, "/gotopos - go to coordinates\n");
-	RegisterAdminCommand(STAFF_LEVEL_MODERATOR, "/fly - voar né?\n");
 	RegisterAdminCommand(STAFF_LEVEL_MODERATOR, "/cong - (Des)Congelar Jogadores\n");
 	RegisterAdminCommand(STAFF_LEVEL_MODERATOR, "/(un)ban - (Des)Banir Jogadores\n");
 	RegisterAdminCommand(STAFF_LEVEL_MODERATOR, "/bans - Visualizar lista de Bans\n");
