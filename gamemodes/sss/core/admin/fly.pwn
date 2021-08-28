@@ -23,7 +23,7 @@ hook OnPlayerKeyStateChange(playerid, newkeys, oldkeys)
 
 hook OnPlayerUpdate(playerid)
 {
-	if(!IsAdminFlying(playerid))
+	if(!isFlying[playerid])
         return 1;
 
     new
