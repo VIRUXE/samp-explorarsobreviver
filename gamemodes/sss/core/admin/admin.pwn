@@ -123,10 +123,10 @@ hook OnPlayerClickPlayer(playerid, clickedplayerid, source)
 
 hook OnPlayerKeyStateChange(playerid, newkeys, oldkeys)
 {
-	if(newkeys & KEY_JUMP && newkeys & KEY_CROUCH)
+	if(newkeys & KEY_JUMP && newkeys & KEY_CROUCH) // Toggle de Duty com SHIFT + C
 	{
 		ClearAnimations(playerid);
-		TogglePlayerAdminDuty(playerid, !admin_OnDuty[playerid], newkeys & KEY_WALK ? false : true);
+		TogglePlayerAdminDuty(playerid, !admin_OnDuty[playerid], newkeys & KEY_WALK ? false : true); // SHIFT + ALT + C para sair no local que se encontra
 	}
 }
 
