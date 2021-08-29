@@ -73,5 +73,9 @@ hook OnPlayerUpdate(playerid)
 hook OnPlayerDisconnect(playerid)
     isFlying[playerid] = false;
 
+hook OnAdminToggleDuty(playerid, bool:duty)
+	if(duty == false && isFlying[playerid])
+		isFlying[playerid] = false;
+
 stock bool:IsAdminFlying(playerid)
     return isFlying[playerid];
