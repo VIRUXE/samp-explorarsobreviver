@@ -96,6 +96,21 @@ hook OnPlayerDisconnected(playerid)
 	admin_PlayerKicked[playerid] = 0;
 }
 
+public OnPlayerClickMap(playerid, Float:fX, Float:fY, Float:fZ)
+{
+	if(GetPlayerAdminLevel(playerid) >= STAFF_LEVEL_MODERATOR)
+	{
+		if(!IsPlayerOnAdminDuty(playerid))
+			TogglePlayerAdminDuty(playerid, true);
+
+		new Float:playerZ;
+
+		CA_FindZ_For2DCoord(Float:fX, Float:fY, playerZ);
+
+		SetPlayerPos(playerid, Float:fX, Float:fY, playerZ+2.0);
+	}
+}
+
 hook OnPlayerClickPlayer(playerid, clickedplayerid, source)
 {
 	if(GetPlayerAdminLevel(playerid) >= STAFF_LEVEL_MODERATOR && playerid != clickedplayerid)
@@ -376,6 +391,7 @@ stock TogglePlayerAdminDuty(playerid, toggle, goback = true)
 			ItemType:itemtype,
 			Float:x, Float:y, Float:z;
 		
+
 		GetPlayerPos(playerid, x, y, z);
 		SetPlayerSpawnPos(playerid, x, y, z);
 
@@ -396,8 +412,10 @@ stock TogglePlayerAdminDuty(playerid, toggle, goback = true)
 
 		// Mostrar a todos os Jogadores que o Admin está em serviço
 		SetPlayerScore(playerid, 0);
-		SetPlayerColor(playerid, COLOR_PLAYER_ADMIN); // 
+		SetPlayerColor(playerid, COLOR_PLAYER_ADMIN);
 
+		ToggleMapForPlayer(playerid, true);
+		
 		admin_OnDuty[playerid] = true;
 	}
 	else if(!toggle && admin_OnDuty[playerid])
@@ -422,6 +440,8 @@ stock TogglePlayerAdminDuty(playerid, toggle, goback = true)
 	}
 
 	admin_DutyTick[playerid] = GetTickCount();
+
+	CallLocalFunction("OnAdminToggleDuty", "db", playerid, toggle);
 	
 	return 1;
 }
