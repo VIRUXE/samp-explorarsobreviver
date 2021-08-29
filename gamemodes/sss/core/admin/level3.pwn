@@ -724,7 +724,7 @@ AdminAddItem(playerid, ItemType:type)
 
 		GetItemName(itemid, typename);
 
-		ChatMsg(playerid, GREEN, " » Item "C_YELLOW"%s"C_GREEN"  (ID "C_BLUE"%d"C_GREEN") Added - Count: %d", typename, _:type, GetItemTypeCount(type));
+		ChatMsg(playerid, GREEN, " » Item "C_YELLOW"%s"C_GREEN" (ID "C_BLUE"%d"C_GREEN") Added - Count: %d", typename, _:type, GetItemTypeCount(type));
 	}
 }
 
