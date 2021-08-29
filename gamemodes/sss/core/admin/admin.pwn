@@ -125,7 +125,11 @@ hook OnPlayerClickPlayer(playerid, clickedplayerid, source)
 		{
 			TeleportPlayerToPlayer(playerid, clickedplayerid);
 
-			SetPlayerChatMode(playerid, 0);
+			if(GetPlayerAdminLevel(clickedplayerid))
+				SetPlayerChatMode(playerid, 3);
+			else
+				SetPlayerChatMode(playerid, 0);
+		
 			ChatMsg(playerid, YELLOW, " » Você teleportou para %P", clickedplayerid);
 			ChatMsgLang(clickedplayerid, YELLOW, "TELEPORTEDT", playerid);
 		}
