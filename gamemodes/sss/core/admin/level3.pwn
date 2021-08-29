@@ -635,7 +635,7 @@ ACMD:additem[3](playerid, params[])
 	else
 	{
 		new
-			ItemType:list[64] = {ItemType:INVALID_ITEM_TYPE, ...},
+			ItemType:list[_:MAX_ITEM_TYPE] = {ItemType:INVALID_ITEM_TYPE, ...},
 			count = -1;
 
 		gBigString[playerid][0] = EOS;
@@ -645,9 +645,6 @@ ACMD:additem[3](playerid, params[])
 		for(new ItemType:i; i < MAX_ITEM_TYPE; i++)
 		{
 			if(!IsValidItemType(i))
-				continue;
-				
-			if(count == sizeof(list) - 1)
 				break;
 
 			GetItemTypeUniqueName(i, uniquename);

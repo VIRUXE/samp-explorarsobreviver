@@ -24,7 +24,7 @@ hook OnPlayerConnect(playerid)
 	PlayerTextDrawBoxColor(playerid, TutorialDraw[playerid], 255);
 	PlayerTextDrawUseBox(playerid, TutorialDraw[playerid], 1);
 	PlayerTextDrawSetProportional(playerid, TutorialDraw[playerid], 1);
-	PlayerTextDrawSetSelectable		(playerid, TutorialDraw[playerid], true);
+	
 
 	PlayerTutorialProgress[playerid] = 0;
 }
@@ -46,6 +46,7 @@ hook OnPlayerCreateChar(playerid)
 {
 	if(IsPlayerLoggedIn(playerid))
 	{
+		PlayerTextDrawSetSelectable(playerid, TutorialDraw[playerid], true);
 		PlayerTextDrawSetString(playerid, TutorialDraw[playerid], ls(playerid, "TUTORPROMPT"));
 		PlayerTextDrawShow(playerid, TutorialDraw[playerid]);
 	}
@@ -202,7 +203,8 @@ stock EnterTutorial(playerid)
 
 	PlayerTextDrawHide(playerid, ClassButtonMale[playerid]);
 	PlayerTextDrawHide(playerid, ClassButtonFemale[playerid]);
-	PlayerTextDrawHide(playerid, TutorialDraw[playerid]);
+	
+	PlayerTextDrawSetSelectable(playerid, TutorialDraw[playerid], false);
 
 	SetPlayerBrightness(playerid, 255);
 

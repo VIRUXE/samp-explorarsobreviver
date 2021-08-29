@@ -131,7 +131,7 @@ hook OnGameModeInit()
 {
 	for(new i = 1; i < MAX_BIN; i++)
 	{
-		bin_Button[i] = CreateButton(bin_Pos[i][0], bin_Pos[i][1], bin_Pos[i][2] + 0.64, "Pressione "KEYTEXT_INTERACT" para vasculhar o lixo");
+		bin_Button[i] = CreateButton(bin_Pos[i][0], bin_Pos[i][1], bin_Pos[i][2] + 0.64, "Pressione "KEYTEXT_INTERACT" para vasculhar o lixo", .areasize = 1.5);
 		bin_BtnContainer[bin_Button[i]] = CreateContainer("Lixeira", 16);
 		FillContainerWithLoot(bin_BtnContainer[bin_Button[i]], 1, GetLootIndexFromName("world_survivor"));
 	}
@@ -149,19 +149,10 @@ hook OnButtonPress(playerid, Button:buttonid)
 
 task RestartBin[HOUR(2)]()
 {
-	new Item:itemid;
-
 	for(new i = 0; i < MAX_BIN; i++)
 	{
-		new itemcount;
-
-		GetContainerItemCount(bin_BtnContainer[bin_Button[i]], itemcount);
-
-		for(new c = itemcount - 1; c > -1; c--)
-		{
-			GetContainerSlotItem(bin_BtnContainer[bin_Button[i]], i, itemid);
-			DestroyItem(itemid);
-		}
+		DestroyContainer(bin_BtnContainer[bin_Button[i]]);
+		bin_BtnContainer[bin_Button[i]] = CreateContainer("Lixeira", 16);
 
 		if(random(5) != 1)
 			FillContainerWithLoot(bin_BtnContainer[bin_Button[i]], 1, GetLootIndexFromName("world_survivor"));
