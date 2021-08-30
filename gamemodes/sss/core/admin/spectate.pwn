@@ -497,20 +497,14 @@ hook OnPlayerKeyStateChange(playerid, newkeys, oldkeys)
 	return 1;
 }
 
-CanPlayerSpectate(playerid, targetid)
+stock CanPlayerSpectate(playerid, targetid)
 {
-	if(targetid == playerid || !IsPlayerConnected(targetid) || !(IsPlayerSpawned(targetid)) || GetPlayerState(targetid) == PLAYER_STATE_SPECTATING)
+	if(targetid == playerid || !IsPlayerConnected(targetid) || !IsPlayerSpawned(targetid) || GetPlayerState(targetid) == PLAYER_STATE_SPECTATING)
 		return 0;
 
-	if(GetPlayerAdminLevel(playerid) == 1)
-	{
-		new name[MAX_PLAYER_NAME];
-
-		GetPlayerName(targetid, name, MAX_PLAYER_NAME);
-
-		if(!IsPlayerReported(name))
+	if(GetPlayerAdminLevel(playerid) == STAFF_LEVEL_GAME_MASTER)
+		if(!IsPlayerReported(targetid))
 			return 0;
-	}
 
 	return 1;
 }
