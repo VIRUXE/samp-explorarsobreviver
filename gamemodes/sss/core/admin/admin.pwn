@@ -100,8 +100,7 @@ public OnPlayerClickMap(playerid, Float:fX, Float:fY, Float:fZ)
 {
 	if(GetPlayerAdminLevel(playerid) >= STAFF_LEVEL_MODERATOR)
 	{
-		if(!IsPlayerOnAdminDuty(playerid))
-			ToggleAdminDuty(playerid, true);
+		ToggleAdminDuty(playerid, true);
 
 		new Float:playerZ;
 
@@ -117,8 +116,6 @@ hook OnPlayerClickPlayer(playerid, clickedplayerid, source)
 	{	
 		if(GetPlayerState(clickedplayerid) == PLAYER_STATE_SPECTATING && IsPlayerOnAdminDuty(clickedplayerid))
 			return 0;
-
-		
 
 		ToggleAdminDuty(playerid, true);
 
@@ -440,8 +437,6 @@ stock ToggleAdminDuty(playerid, toggle, goback = true)
 
 		SetPlayerColor(playerid, !IsPlayerMobile(playerid) ? COLOR_PLAYER_NORMAL : COLOR_PLAYER_MOBILE); // 
 	}
-
-	
 
 	CallLocalFunction("OnAdminToggleDuty", "db", playerid, toggle);
 	
