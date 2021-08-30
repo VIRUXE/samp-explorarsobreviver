@@ -12,72 +12,66 @@ bool: 	RelatorioTempo[MAX_PLAYERS],
 bool:	RelatorioEnviado[MAX_PLAYERS],
 bool:   RelatorioBlock[MAX_PLAYERS];
 
-ACMD:blockrr[1](playerid, params[]){
-	new prid;
-	if(sscanf(params, "d", prid)) return ChatMsg(playerid, RED, " > Use /blockrr [id]");
-    RelatorioBlock[prid] = !RelatorioBlock[prid];
-    if(RelatorioBlock[prid]) ChatMsg(playerid, YELLOW, " > Você bloqueou %p de usar o /relatorio!", prid);
-    else ChatMsg(playerid, YELLOW, " > %p agora pode usar /relatorio", prid);
-	return 1;
-}
-
-ACMD:rr[1](playerid, params[])
+ACMD:blockrr[1](playerid, params[])
 {
-	new prid, msg[200];
+	new senderId;
 
-	if(sscanf(params, "ds[200]", prid, msg)) return ChatMsg(playerid, RED, " > Use /rr [id] [Mensagem]");
+	if(sscanf(params, "d", senderId)) 
+		return ChatMsg(playerid, RED, " » Use /blockrr [id]");
 
-	if(RelatorioEnviado[prid] == false) return ChatMsg(playerid, RED, " > Esse player não enviou nenhum relatório ou já foi respondido.");
+    RelatorioBlock[senderId] = !RelatorioBlock[senderId];
+		
+	return ChatMsg(playerid, YELLOW, RelatorioBlock[senderId] ? " » Você bloqueou %p de usar o /relatorio!" : " » %p agora pode usar /relatorio", senderId);
+}
 
-	if(!IsPlayerConnected(prid)) return ChatMsg(playerid, RED, " > Jogador não conectado.");
+ACMD:rrel[1](playerid, params[])
+{
+	new senderId, msg[200];
 
-    ChatMsg(prid, GREEN, "="C_WHITE"="C_GREEN"="C_WHITE"="C_GREEN"="C_WHITE"="C_GREEN"="C_WHITE"="C_GREEN"="C_WHITE"="C_GREEN"="C_WHITE"="C_GREEN"=");
+	if(sscanf(params, "ds[200]", senderId, msg)) 
+		return ChatMsg(playerid, RED, " » Use /rr [id] [Mensagem]");
 
-	new string[500];
-	format(string, 500, "[Relatório] %p(id:%d) respondeu: "C_WHITE"%s", playerid, playerid, msg);
-	ChatMsg(prid, GREEN, string);
+	if(RelatorioEnviado[senderId] == false) 
+		return ChatMsg(playerid, RED, " » Esse player não enviou nenhum relatório ou já foi respondido.");
 
-	ChatMsg(prid, GREEN, "="C_WHITE"="C_GREEN"="C_WHITE"="C_GREEN"="C_WHITE"="C_GREEN"="C_WHITE"="C_GREEN"="C_WHITE"="C_GREEN"="C_WHITE"="C_GREEN"=");
+	if(!IsPlayerConnected(senderId)) 
+		return ChatMsg(playerid, RED, " » Jogador não conectado.");
 
-	format(string, 500, " > %p(id:%d) respondeu o relatório de %p(id:%d): %s", playerid, playerid, prid, prid, msg);
-	ChatMsgAdmins(1, GREEN, string);
+    ChatMsg(senderId, GREEN, "="C_WHITE"="C_GREEN"="C_WHITE"="C_GREEN"="C_WHITE"="C_GREEN"="C_WHITE"="C_GREEN"="C_WHITE"="C_GREEN"="C_WHITE"="C_GREEN"=");
+	ChatMsg(senderId, GREEN, "[Relatório] %p(id:%d) respondeu: "C_WHITE"%s", playerid, playerid, msg);
+	ChatMsg(senderId, GREEN, "="C_WHITE"="C_GREEN"="C_WHITE"="C_GREEN"="C_WHITE"="C_GREEN"="C_WHITE"="C_GREEN"="C_WHITE"="C_GREEN"="C_WHITE"="C_GREEN"=");
+	ChatMsgAdmins(1, GREEN, " » %p (%d) respondeu o relatório de %p(id:%d): %s", playerid, playerid, senderId, senderId, msg);
 
-	RelatorioEnviado[prid] = RelatorioTempo[prid] = false, RelatorioTempo2[prid] = 100;
+	RelatorioEnviado[senderId] = RelatorioTempo[senderId] = false, RelatorioTempo2[senderId] = 100;
 	return 1;
 }
+
 CMD:relatorio(playerid, params[])
 {
     if(!IsPlayerLoggedIn(playerid))
-	{
-		ChatMsgLang(playerid, YELLOW, "LOGGEDINREQ");
-		return 1;
-	}
+		return ChatMsgLang(playerid, YELLOW, "LOGGEDINREQ");
 
-    if(RelatorioTempo[playerid] == true)
-	{
-		new string[128];
-		format(string, 128, " > Aguarde"C_YELLOW" %d "C_RED"segundos para usar esse comando novamente.", RelatorioTempo2[playerid]);
-		ChatMsg(playerid, RED, string);
-		return 1;
-	}
+    if(RelatorioTempo[playerid])
+		return ChatMsg(playerid, RED, " » Aguarde"C_YELLOW" %d "C_RED"segundos para usar esse comando novamente.", RelatorioTempo2[playerid]);
 
-	if(RelatorioBlock[playerid]) return ChatMsg(playerid, RED, " > Aguarde para usar esse comando novamente.");
+	if(RelatorioBlock[playerid])
+		return ChatMsg(playerid, RED, " » Aguarde para usar esse comando novamente.");
 
 	new msg[200];
 
-    if(sscanf(params, "s[200]", msg)) return ChatMsg(playerid, RED, " > Use /Relatorio [Mensagem]");
+    if(sscanf(params, "s[200]", msg))
+		return ChatMsg(playerid, RED, " » Use /Relatorio [Mensagem]");
 
     ChatMsgAdmins(1, BLUE, "="C_WHITE"="C_BLUE"="C_WHITE"="C_BLUE"="C_WHITE"="C_BLUE"="C_WHITE"="C_BLUE"="C_WHITE"="C_BLUE"="C_WHITE"="C_BLUE"=");
-    ChatMsgAdmins(1, BLUE, "[Relatório]: %p(id:%d)"C_BLUE": "C_WHITE"%s", playerid, playerid, msg);
+    ChatMsgAdmins(1, BLUE, "[Relatório]: %p (%d)"C_BLUE": "C_WHITE"%s", playerid, playerid, msg);
     ChatMsgAdmins(1, BLUE, "="C_WHITE"="C_BLUE"="C_WHITE"="C_BLUE"="C_WHITE"="C_BLUE"="C_WHITE"="C_BLUE"="C_WHITE"="C_BLUE"="C_WHITE"="C_BLUE"=");
 	RelatorioTempo[playerid] = true;
     RelatorioTempo2[playerid] = 80;
     RelatorioEnviado[playerid] = true;
 
     defer RelatorioFalse(playerid);
-
-    ChatMsg(playerid, YELLOW, " > Relatório Enviado com Sucesso. Aguarde a administração do servidor.");
-	return 1;
+    
+	return ChatMsg(playerid, YELLOW, " » Relatório Enviado com Sucesso. Aguarde a administração do servidor.");
 }
 
 hook OnPlayerConnect(playerid)
@@ -94,7 +88,5 @@ timer RelatorioFalse[1000](playerid)
         defer RelatorioFalse(playerid);
 	}
 	else
-	{
 	    RelatorioTempo[playerid] = false;
-	}
 }
