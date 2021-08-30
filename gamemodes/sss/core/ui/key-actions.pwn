@@ -155,7 +155,7 @@ hook OnPlayerStateChange(playerid, newstate, oldstate)
 	return 1;
 }
 
-hook OnAdminToggleDuty(playerid, duty)
+hook OnAdminToggleDuty(playerid, bool:duty)
 {
 	_UpdateKeyActions(playerid);
 }
@@ -198,12 +198,18 @@ _UpdateKeyActions(playerid)
 	{
 		if(IsPlayerOnAdminDuty(playerid))
 		{
-			/* if(IsAdminFlying(playerid))
-				AddToolTipText(playerid, "SHIFT ~w~+ ~y~RMB", "Alternar Velocidade"); */
+			if(IsAdminFlying(playerid))
+			{
+				AddToolTipText(playerid, "SHIFT ~w~+ ~y~RMB", "Alternar Velocidade");
+				AddToolTipText(playerid, "~k~~PED_SPRINT~", "Cima");
+				AddToolTipText(playerid, "~k~~PED_DUCK~", "Baixo");
+				AddToolTipText(playerid, "~k~~PED_JUMPING~ ", "Modo lento");
+			}
 
 			AddToolTipText(playerid, "~k~~PED_JUMPING~ ~w~+ ~y~~k~~VEHICLE_ENTER_EXIT~", !IsAdminFlying(playerid) ? "Ativar Fly" : "Desativar Fly");
 			AddToolTipText(playerid, "~k~~PED_JUMPING~ ~w~+ ~y~~k~~PED_DUCK~", "Sair de ADM");
 			AddToolTipText(playerid, "~k~~PED_JUMPING~ ~w~+ ~y~~k~~PED_DUCK~ ~w~+ ~y~~k~~SNEAK_ABOUT~", "Sair de ADM no Local");
+
 			ShowPlayerKeyActionUI(playerid);
 			return;
 		}
@@ -364,7 +370,9 @@ _UpdateKeyActions(playerid)
 		AddToolTipText(playerid, KEYTEXT_DROP_ITEM, "Soltar");
 	}
 	
-	AddToolTipText(playerid, KEYTEXT_INVENTORY, "Abrir bolso");
+	if(GetPlayerAdminLevel(playerid) < STAFF_LEVEL_MODERATOR)
+		AddToolTipText(playerid, KEYTEXT_INVENTORY, "Abrir bolso");
+
 	ShowPlayerKeyActionUI(playerid);
 
 	return;
