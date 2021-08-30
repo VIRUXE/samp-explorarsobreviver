@@ -184,14 +184,14 @@ stock ClosePlayerContainer(playerid, call = true) {
 		return 2;
 	}
 
+	cnt_CurrentContainer[playerid] = INVALID_CONTAINER_ID;
+
 	if(call) {
 		if(CallLocalFunction("OnPlayerCloseContainer", "dd", playerid, _:cnt_CurrentContainer[playerid])) {
 			DisplayContainerInventory(playerid, cnt_CurrentContainer[playerid]);
 			return 3;
 		}
 	}
-
-	cnt_CurrentContainer[playerid] = INVALID_CONTAINER_ID;
 
 	return 0;
 }

@@ -196,6 +196,8 @@ stock ClosePlayerInventory(playerid, call = true)
 	Logger_Dbg("inventory-dialog", "hiding inventory for player",
 		Logger_I("playerid", playerid));
 
+	inv_ViewingInventory[playerid] = false;
+
 	if(call)
 	{
 		if(CallLocalFunction("OnPlayerCloseInventory", "d", playerid)) 
@@ -204,9 +206,7 @@ stock ClosePlayerInventory(playerid, call = true)
 			return 2;
 		}
 	}
-
-	inv_ViewingInventory[playerid] = false;
-
+	
 	return 0;
 }
 

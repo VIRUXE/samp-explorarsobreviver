@@ -174,6 +174,40 @@ hook OnHoldActionUpdate(playerid, progress)
 	return Y_HOOKS_CONTINUE_RETURN_0;
 }
 
+// State change
+hook OnPlayerStateChange(playerid, newstate, oldstate)
+{
+	if(!IsPlayerToolTipsOn(playerid))
+		return 1;
+
+	if(newstate != PLAYER_STATE_DRIVER)
+		return 1;
+
+	new vehicleid = GetPlayerVehicleID(playerid);
+
+	if(!IsValidVehicle(vehicleid))
+		return 1;
+
+	_ShowRepairTip(playerid, vehicleid);
+
+	return 1;
+}
+
+_ShowRepairTip(playerid, vehicleid){
+	new Float:health;
+	GetVehicleHealth(vehicleid, health);
+	if(health <= VEHICLE_HEALTH_CHUNK_2)
+		ShowHelpTip(playerid, ls(playerid, "TUTORVEHVER"), 20000);
+	else if(health <= VEHICLE_HEALTH_CHUNK_3)
+		ShowHelpTip(playerid, ls(playerid, "TUTORVEHBRO"), 20000);
+	else if(health <= VEHICLE_HEALTH_CHUNK_4)
+		ShowHelpTip(playerid, ls(playerid, "TUTORVEHBIT"), 20000);
+	else if(health <= VEHICLE_HEALTH_MAX)
+		ShowHelpTip(playerid, ls(playerid, "TUTORVEHSLI"), 20000);
+
+	return;
+}
+
 NeedAToolInfo(playerid, Float:vehiclehealth){
 	if(vehiclehealth <= VEHICLE_HEALTH_CHUNK_2)
 		ShowActionText(playerid, ls(playerid, "NEEDAWRENC"), 3000, 100);
