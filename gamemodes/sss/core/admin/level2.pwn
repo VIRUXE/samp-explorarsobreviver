@@ -20,14 +20,7 @@ hook OnGameModeInit()
 ==============================================================================*/
 ACMD:adm[2](playerid, params[])
 {
-	if(GetPlayerState(playerid) == PLAYER_STATE_SPECTATING)
-	{
-		ChatMsg(playerid, YELLOW, " » Não pode entrar em Modo de Admin enquanto está em Spectate.");
-		return 1;
-	}
-	
-	if(!TogglePlayerAdminDuty(playerid, !IsPlayerOnAdminDuty(playerid), strcmp(params, "aqui", true, 4)))
-		ChatMsg(playerid, YELLOW, " » Aguarde para usar o modo admin.");
+	ToggleAdminDuty(playerid, !IsPlayerOnAdminDuty(playerid), strcmp(params, "aqui", true, 4));
 
 	return 1;
 }

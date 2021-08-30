@@ -25,7 +25,8 @@ hook OnPlayerUpdate(playerid){
 	new Float:x, Float:y, Float:z;
 	GetPlayerPos(playerid, x, y, z);
 
-	if(atr_Set[playerid]) {
+	if(atr_Set[playerid])
+	{
 		if(atr_SetPos[playerid][0] != x || atr_SetPos[playerid][1] != y || atr_SetPos[playerid][2] != z)
 			SetPlayerPos(playerid, atr_SetPos[playerid][0], atr_SetPos[playerid][1], atr_SetPos[playerid][2]);
 		else 
@@ -40,7 +41,8 @@ hook OnPlayerUpdate(playerid){
 		// Teleport hack or lag
 		if(Distance(x, y, z, atr_OldPos[playerid][0], atr_OldPos[playerid][1], atr_OldPos[playerid][2]) >= 45.0)
 			colision = 1;
-		else {
+		else 
+		{
 			new Float:tmp;
 
 			colision = 
@@ -50,14 +52,15 @@ hook OnPlayerUpdate(playerid){
 		if(colision != WATER_OBJECT && colision) {
 			if(!IsLocationRoof(x, y, z)) {
 				if(colision != 1) {
-					if(++atr_Wars[playerid] == 3) {
+					if(++atr_Wars[playerid] == 3) 
+					{
 						ReportPlayer(sprintf("%p", playerid), 
 							sprintf("Anti Raid: Colidiu com o Objeto id: %d", colision), 
 							-1,
-							"A-Raid",
+							"Anti-Raid",
 							x, y, z,
 							GetPlayerVirtualWorld(playerid), GetPlayerInterior(playerid),
-							"");
+							"Servidor");
 							
 						atr_Wars[playerid] = 0;
 					}
@@ -66,7 +69,9 @@ hook OnPlayerUpdate(playerid){
 				stop atr_Check[playerid];
 				atr_Check[playerid] = defer AntiRaidCheck(playerid);
 			}
-		} else {
+		} 
+		else 
+		{
 			atr_OldPos[playerid][0] = x;
 			atr_OldPos[playerid][1] = y;
 			atr_OldPos[playerid][2] = z;

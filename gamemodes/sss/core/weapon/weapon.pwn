@@ -599,7 +599,7 @@ hook OnPlayerKeyStateChange(playerid, newkeys, oldkeys)
 
 		if(itmw_Data[itmw_ItemTypeWeapon[itemtype]][itmw_flags] & WEAPON_FLAG_ONLY_FIRE_AIMED)
 		{
-			if(!(newkeys & KEY_HANDBRAKE))
+			if(!(newkeys & KEY_AIM))
 				return Y_HOOKS_CONTINUE_RETURN_1;
 		}
 

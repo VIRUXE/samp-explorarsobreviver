@@ -332,23 +332,23 @@ stock SetVip(const name[MAX_PLAYER_NAME], level = 1, days = 30, hours = 0, minut
 { 
     new 
         timestamp = gettime() + ( seconds + (minutes * 60) + (hours * 3600) + (days * (24 * 3600))),
-        id = GetPlayerIdByName(name);
+        playerId = GetPlayerIdByName(name);
 
     SetAccountVIP(name, timestamp);
 
-    if(IsPlayerConnected(id))
+    if(IsPlayerConnected(playerId))
     {
-        SetPlayerVIP(id, timestamp);
+        SetPlayerVIP(playerId, timestamp);
 
-        if(vip_Level[id] != level)
-            ChatMsgAll(COLOR_PLAYER_VIP, " » %P É o mais novo VIP do servidor. Parabens!", id);
+        if(vip_Level[playerId] != level)
+            ChatMsgAll(COLOR_PLAYER_VIP, " » %P"C_ORANGE" É o mais novo VIP do servidor. Parabens!", playerId);
 
-        vip_Level[id] = level;
+        vip_Level[playerId] = level;
 
-        SetPlayerColor(id, COLOR_PLAYER_VIP);
+        SetPlayerColor(playerId, COLOR_PLAYER_VIP);
 
-        ShowActionText(id,
-            sprintf("Parabens! voce agora possui VIP nivel %d~n~Abra o menu do VIP atraves do bolso", level),
+        ShowActionText(playerId,
+            sprintf("Parabens! Voce agora possui VIP nivel %d~n~Abra o menu do VIP atraves do bolso", level),
             5000, 200, COLOR_PLAYER_VIP);
     }
 

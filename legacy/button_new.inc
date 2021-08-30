@@ -902,7 +902,7 @@ hook OnPlayerKeyStateChange(playerid, newkeys, oldkeys) {
 		{
 			new Button:linked = btn_Data[id][btn_link];
 
-			if(Iter_Contains(btn_Index, _:linked) && btn_Pressing[playerid] == INVALID_BUTTON_ID)
+			if(Iter_Contains(btn_Index, _:linked))
 			{
 				if(CallLocalFunction("OnButtonPress", "dd", playerid, _:id))
 					return 1;

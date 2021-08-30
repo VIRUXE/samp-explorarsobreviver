@@ -6,7 +6,6 @@ static
 PlayerText:	KeyActions[MAX_PLAYERS] = {PlayerText:INVALID_TEXT_DRAW, ...},
 			KeyActionsText[MAX_PLAYERS][512];
 
-
 hook OnPlayerConnect(playerid)
 {
 	KeyActions[playerid] = CreatePlayerTextDraw(playerid, 5.000000, 211.000000, "~y~H~W~ Abrir bolsos~n~~y~N ~W~Dropar item");
@@ -43,11 +42,6 @@ stock HidePlayerKeyActionUI(playerid)
 	PlayerTextDrawHide(playerid, KeyActions[playerid]);
 }
 
-stock ClearPlayerKeyActionUI(playerid)
-{
-	KeyActionsText[playerid][0] = EOS;
-}
-
 stock AddToolTipText(playerid, const key[], const use[])
 {
 	new tmp[128];
@@ -78,38 +72,27 @@ stock AddToolTipText(playerid, const key[], const use[])
 
 ==============================================================================*/
 
-
 // Enter/exit inventory
-hook OnPlayerOpenInventory(playerid)
+hook OnPlayerOpenedInventory(playerid)
+{
+	HidePlayerKeyActionUI(playerid);
+}
+
+hook OnPlayerOpenedContainer(playerid, Container:containerid)
 {
 	HidePlayerKeyActionUI(playerid);
 }
 
 hook OnPlayerCloseInventory(playerid)
 {
-	defer t_UpdateKeyActions(playerid);
+	_UpdateKeyActions(playerid);
 	return Y_HOOKS_CONTINUE_RETURN_0;
-}
-
-hook OnPlayerOpenContainer(playerid, Container:containerid)
-{
-	HidePlayerKeyActionUI(playerid);
 }
 
 hook OnPlayerCloseContainer(playerid, Container:containerid)
 {
-	defer t_UpdateKeyActions(playerid);
+	_UpdateKeyActions(playerid);
 	return Y_HOOKS_CONTINUE_RETURN_0;
-}
-
-hook OnPlayerAddToInventory(playerid, Item:itemid)
-{
-	_UpdateKeyActions(playerid);
-}
-
-hook OnItemRemovedFromInv(playerid, Item:itemid, slot)
-{
-	_UpdateKeyActions(playerid);
 }
 
 hook OnItemRemovedFromPlayer(playerid, Item:itemid)
@@ -120,7 +103,7 @@ hook OnItemRemovedFromPlayer(playerid, Item:itemid)
 // Pickup/drop item
 hook OnPlayerPickedUpItem(playerid, Item:itemid)
 {
-	defer t_UpdateKeyActions(playerid);
+	_UpdateKeyActions(playerid);
 }
 
 hook OnPlayerDroppedItem(playerid, Item:itemid)
@@ -165,28 +148,10 @@ hook OnPlayerLeaveDynArea(playerid, areaid)
 	_UpdateKeyActions(playerid);
 }
 
-
-timer t_UpdateKeyActions[100](playerid)
-	_UpdateKeyActions(playerid);
-
 // State change
 hook OnPlayerStateChange(playerid, newstate, oldstate)
 {
 	_UpdateKeyActions(playerid);
-
-	if(!IsPlayerToolTipsOn(playerid))
-		return 1;
-
-	if(newstate != PLAYER_STATE_DRIVER)
-		return 1;
-
-	new vehicleid = GetPlayerVehicleID(playerid);
-
-	if(!IsValidVehicle(vehicleid))
-		return 1;
-
-	_ShowRepairTip(playerid, vehicleid);
-
 	return 1;
 }
 
@@ -198,42 +163,44 @@ _UpdateKeyActions(playerid)
 		return;		
 	}
 
-	if(IsPlayerViewingInventory(playerid))
+	new Container:containerid;
+	GetPlayerCurrentContainer(playerid, containerid);
+
+	// Hide
+	if(IsPlayerViewingInventory(playerid) || IsValidContainer(containerid) || !IsPlayerHudOn(playerid))
 	{
 		HidePlayerKeyActionUI(playerid);
 		return;		
 	}
 
-	new Container:containerid;
-	GetPlayerCurrentContainer(playerid, containerid);
-	if(IsValidContainer(containerid))
-	{
-		HidePlayerKeyActionUI(playerid);
-		return;		
-	}
+	// Show
+
+	KeyActionsText[playerid][0] = EOS; // Clear Text
 
 	if(IsPlayerKnockedOut(playerid))
 	{
-		HidePlayerKeyActionUI(playerid);
+		AddToolTipText(playerid, "~w~Voce foi", "~r~Imobilizado");
+		ShowPlayerKeyActionUI(playerid);
 		return;		
 	}
 
-	if(!IsPlayerHudOn(playerid))
+	if(GetPlayerAdminLevel(playerid) >= STAFF_LEVEL_MODERATOR)
 	{
-		HidePlayerKeyActionUI(playerid);
-		return;		
-	}
-
-	if(IsPlayerOnAdminDuty(playerid))
-	{
-		HidePlayerKeyActionUI(playerid);
-		return;		
+		if(IsPlayerOnAdminDuty(playerid))
+		{
+			AddToolTipText(playerid, "~k~~PED_JUMPING~ ~w~+ ~y~ ~k~~VEHICLE_ENTER_EXIT~", !IsAdminFlying(playerid) ? "Ativar Fly" : "Desativar Fly");
+			AddToolTipText(playerid, "~k~~PED_JUMPING~ ~w~+ ~y~ ~k~~PED_DUCK~", "Sair do trabalho");
+			ShowPlayerKeyActionUI(playerid);
+			return;
+		}
+		else
+		{
+			AddToolTipText(playerid, "~k~~PED_JUMPING~ ~w~+ ~y~ ~k~~PED_DUCK~", "Entrar em trabalho");
+		}
 	}
 
 	if(IsPlayerInAnyVehicle(playerid))
 	{
-		ClearPlayerKeyActionUI(playerid);
-
 		if(GetPlayerState(playerid) == PLAYER_STATE_DRIVER)
 		{
 			AddToolTipText(playerid, KEYTEXT_ENGINE, "Motor");
@@ -255,8 +222,6 @@ _UpdateKeyActions(playerid)
 		Item:itemid = GetPlayerItem(playerid),
 		invehiclearea = GetPlayerVehicleArea(playerid),
 		inplayerarea = -1;
-
-	ClearPlayerKeyActionUI(playerid);
 
 	if(invehiclearea != INVALID_VEHICLE_ID)
 	{
@@ -289,20 +254,7 @@ _UpdateKeyActions(playerid)
 		if(IsValidItem(GetPlayerBagItem(playerid)))
 			AddToolTipText(playerid, KEYTEXT_DROP_ITEM, "Remover Mochila");
 
-		/*new 
-			Button:buttonid,
-			text[BTN_MAX_TEXT];
 
-		GetPlayerButtonID(playerid, buttonid);
-		
-		if(!IsValidItem(GetItemFromButtonID(buttonid)))
-			return;
-
-		GetButtonText(buttonid, text);
-
-		AddToolTipText(playerid, KEYTEXT_INTERACT, "Interagir com item");
-		*/
-		
 		ShowPlayerKeyActionUI(playerid);
 		
 		return;
@@ -408,8 +360,6 @@ _UpdateKeyActions(playerid)
 
 	if(GetItemTypeWeapon(itemtype) != -1)
 	{
-		ClearPlayerKeyActionUI(playerid);
-
 		if(IsValidHolsterItem(itemtype))
 			AddToolTipText(playerid, KEYTEXT_PUT_AWAY, "Guardar no Coldre");
 
@@ -429,21 +379,6 @@ _UpdateKeyActions(playerid)
 	
 	AddToolTipText(playerid, KEYTEXT_INVENTORY, "Abrir bolso");
 	ShowPlayerKeyActionUI(playerid);
-
-	return;
-}
-
-_ShowRepairTip(playerid, vehicleid){
-	new Float:health;
-	GetVehicleHealth(vehicleid, health);
-	if(health <= VEHICLE_HEALTH_CHUNK_2)
-		ShowHelpTip(playerid, ls(playerid, "TUTORVEHVER"), 20000);
-	else if(health <= VEHICLE_HEALTH_CHUNK_3)
-		ShowHelpTip(playerid, ls(playerid, "TUTORVEHBRO"), 20000);
-	else if(health <= VEHICLE_HEALTH_CHUNK_4)
-		ShowHelpTip(playerid, ls(playerid, "TUTORVEHBIT"), 20000);
-	else if(health <= VEHICLE_HEALTH_MAX)
-		ShowHelpTip(playerid, ls(playerid, "TUTORVEHSLI"), 20000);
 
 	return;
 }

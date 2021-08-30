@@ -6,18 +6,21 @@ static MiniMapOverlay;
 hook OnScriptInit()
 	MiniMapOverlay = GangZoneCreate(-6000, -6000, 6000, 6000);
 
-hook OnPlayerSpawn(playerid) {
-	GangZoneShowForPlayer(playerid, MiniMapOverlay, 0x000000FF);
-}
+hook OnPlayerSpawn(playerid)
+	ToggleMapForPlayer(playerid, false);
 
 UpdatePlayerMap(playerid){
-	if((GetPlayerVIP(playerid) - gettime()) > 1 || !PlayerHasMap(playerid)){
-		GangZoneShowForPlayer(playerid, MiniMapOverlay, 0x000000FF);
+	if((GetPlayerVIP(playerid) - gettime()) > 1 || !PlayerHasMap(playerid))
+	{
+		ToggleMapForPlayer(playerid, false);
 		RemovePlayerMapIcon(playerid, SUPPLY_CRATE_ICON);
 		RemovePlayerMapIcon(playerid, WEAPON_CACHE_ICON);
 		RemovePlayerMapIcon(playerid, PLAYER_BED_ICON);
-	} else {
-		GangZoneHideForPlayer(playerid, MiniMapOverlay);
+	} 
+	else 
+	{
+		ToggleMapForPlayer(playerid, true);
+		
 		static Float:x, Float:y, Float:z;
 
 		if(GetLastSupplyPos(x, y, z))
@@ -79,4 +82,12 @@ bool:PlayerHasMap(playerid) {
 	}
 
 	return false;
+}
+
+stock ToggleMapForPlayer(playerid, toggle)
+{
+	if(!toggle)
+		GangZoneShowForPlayer(playerid, MiniMapOverlay, 0x000000FF);
+	else
+		GangZoneHideForPlayer(playerid, MiniMapOverlay);
 }

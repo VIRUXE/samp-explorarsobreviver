@@ -29,6 +29,8 @@
 #undef MAX_PLAYER_NAME
 #define MAX_PLAYER_NAME 				20 // Não se utiliza SetPlayerName logo apenas fica 20 chars
 
+#define KEY_AIM KEY_HANDBRAKE
+
 #include "config.pwn"
 
 /*==============================================================================
@@ -610,6 +612,7 @@ new stock
 #include "sss/core/admin/mute.pwn"
 #include "sss/core/admin/rcon.pwn"
 #include "sss/core/admin/freeze.pwn"
+#include "sss/core/admin/fly.pwn"
 #include "sss/core/admin/name-tags.pwn"
 #include "sss/core/admin/player-list.pwn"
 #include "sss/core/admin/relatorio.pwn"

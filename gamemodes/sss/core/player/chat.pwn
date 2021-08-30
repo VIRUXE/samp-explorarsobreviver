@@ -372,7 +372,7 @@ CMD:r(playerid, params[])
 CMD:quiet(playerid, params[])
 {
 	chat_Quiet[playerid] = !chat_Quiet[playerid];
-	ChatMsgLang(playerid, WHITE, chat_Quiet[playerid] ? "RADIOQUIET1" : "RADIOQUIET0");
+	ChatMsgLang(playerid, YELLOW, chat_Quiet[playerid] ? "RADIOQUIET1" : "RADIOQUIET0");
 
 	return 1;
 }
@@ -383,7 +383,7 @@ ACMD:a[1](playerid, params[])
 	if(isnull(params))
 	{
 		SetPlayerChatMode(playerid, CHAT_MODE_ADMIN);
-		ChatMsgLang(playerid, WHITE, "RADIOADMINC");
+		ChatMsgLang(playerid, YELLOW, "RADIOADMINC");
 	}
 	else
 		PlayerSendChat(playerid, params, 3.0);

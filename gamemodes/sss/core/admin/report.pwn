@@ -249,9 +249,11 @@ stock GetUnreadReports()
 	return count;
 }
 
-stock IsPlayerReported(name[])
+stock IsPlayerReported(playerid)
 {
-	new count;
+	new count, name[MAX_PLAYER_NAME];
+
+	GetPlayerName(playerid, name);
 
 	stmt_bind_value(stmt_ReportNameExists, 0, DB::TYPE_STRING, name, MAX_PLAYER_NAME);
 	stmt_bind_result_field(stmt_ReportNameExists, 0, DB::TYPE_INTEGER, count);
@@ -261,7 +263,7 @@ stock IsPlayerReported(name[])
 
 	stmt_fetch_row(stmt_ReportNameExists);
 
-	if(count > 0)
+	if(!count)
 		return 1;
 
 	return 0;
