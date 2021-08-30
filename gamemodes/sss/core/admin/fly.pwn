@@ -11,7 +11,7 @@ hook OnPlayerKeyStateChange(playerid, newkeys, oldkeys)
 {
 	if(newkeys & KEY_JUMP && newkeys & 16 && IsPlayerOnAdminDuty(playerid)) // JUMP and ENTER/F
 	{
-        ClearAnimations(playerid);
+        CancelPlayerMovement(playerid);
 
         if(!isFlying[playerid])
             ApplyAnimation(playerid, "PARACHUTE", "FALL_SKYDIVE", 4.0, 1, 0, 0, 0, 0, 1);
@@ -19,6 +19,8 @@ hook OnPlayerKeyStateChange(playerid, newkeys, oldkeys)
             LowerPlayerToGround(playerid);
 
         isFlying[playerid] = !isFlying[playerid];
+
+		CallLocalFunction("OnAdminToggleFly", "db", playerid, isFlying[playerid]);
 	}
 }
 

@@ -155,6 +155,16 @@ hook OnPlayerStateChange(playerid, newstate, oldstate)
 	return 1;
 }
 
+hook OnAdminToggleDuty(playerid, duty)
+{
+	_UpdateKeyActions(playerid);
+}
+
+hook OnAdminToggleFly(playerid, flying)
+{
+	_UpdateKeyActions(playerid);
+}
+
 _UpdateKeyActions(playerid)
 {
 	if(!IsPlayerSpawned(playerid))
@@ -188,15 +198,17 @@ _UpdateKeyActions(playerid)
 	{
 		if(IsPlayerOnAdminDuty(playerid))
 		{
-			AddToolTipText(playerid, "~k~~PED_JUMPING~ ~w~+ ~y~ ~k~~VEHICLE_ENTER_EXIT~", !IsAdminFlying(playerid) ? "Ativar Fly" : "Desativar Fly");
-			AddToolTipText(playerid, "~k~~PED_JUMPING~ ~w~+ ~y~ ~k~~PED_DUCK~", "Sair do trabalho");
+			/* if(IsAdminFlying(playerid))
+				AddToolTipText(playerid, "SHIFT ~w~+ ~y~RMB", "Alternar Velocidade"); */
+
+			AddToolTipText(playerid, "~k~~PED_JUMPING~ ~w~+ ~y~~k~~VEHICLE_ENTER_EXIT~", !IsAdminFlying(playerid) ? "Ativar Fly" : "Desativar Fly");
+			AddToolTipText(playerid, "~k~~PED_JUMPING~ ~w~+ ~y~~k~~PED_DUCK~", "Sair de ADM");
+			AddToolTipText(playerid, "~k~~PED_JUMPING~ ~w~+ ~y~~k~~PED_DUCK~ ~w~+ ~y~~k~~SNEAK_ABOUT~", "Sair de ADM no Local");
 			ShowPlayerKeyActionUI(playerid);
 			return;
 		}
 		else
-		{
-			AddToolTipText(playerid, "~k~~PED_JUMPING~ ~w~+ ~y~ ~k~~PED_DUCK~", "Entrar em trabalho");
-		}
+			AddToolTipText(playerid, "~k~~PED_JUMPING~ ~w~+ ~y~~k~~PED_DUCK~", "Entrar em ADM");
 	}
 
 	if(IsPlayerInAnyVehicle(playerid))
@@ -254,7 +266,6 @@ _UpdateKeyActions(playerid)
 		if(IsValidItem(GetPlayerBagItem(playerid)))
 			AddToolTipText(playerid, KEYTEXT_DROP_ITEM, "Remover Mochila");
 
-
 		ShowPlayerKeyActionUI(playerid);
 		
 		return;
@@ -266,26 +277,21 @@ _UpdateKeyActions(playerid)
 
 	if(itemtype == item_Note)
 		AddToolTipText(playerid, KEYTEXT_INTERACT, "Ler/Escrever");
-
 	if(itemtype == item_Sign)
 		AddToolTipText(playerid, KEYTEXT_INTERACT, "Colocar Placa");
-
 	else if(itemtype == item_Armour)
 		AddToolTipText(playerid, KEYTEXT_INTERACT, "Vestir");
-
 	else if(itemtype == item_Crowbar)
 		AddToolTipText(playerid, KEYTEXT_INTERACT, "Desmontar");
-
 	else if(itemtype == item_Shield)
 		AddToolTipText(playerid, KEYTEXT_INTERACT, "Colocar Barreira");
 	else if(itemtype == item_HandCuffs)
 	{
 		if(inplayerarea != -1)
-		AddToolTipText(playerid, KEYTEXT_INTERACT, "Algemar Jogador");
+			AddToolTipText(playerid, KEYTEXT_INTERACT, "Algemar Jogador");
 	}
 	else if(itemtype == item_Wheel)
 		AddToolTipText(playerid, KEYTEXT_INTERACT, "Reparar Roda");
-
 	else if(itemtype == item_GasCan)
 	{
 		if(invehiclearea != INVALID_VEHICLE_ID)
@@ -297,44 +303,26 @@ _UpdateKeyActions(playerid)
 			AddToolTipText(playerid, KEYTEXT_INTERACT, "Encher na Bomba");
 	}
 	else if(itemtype == item_Clothes)
-	{
 		AddToolTipText(playerid, KEYTEXT_INTERACT, "Vestir Roupa");
-	}
 	else if(itemtype == item_Headlight)
 	{
 		if(invehiclearea != INVALID_VEHICLE_ID)
-		{
 			if(IsPlayerAtVehicleBonnet(playerid, invehiclearea))
 				AddToolTipText(playerid, KEYTEXT_INTERACT, "Trocar Farol");
-		}
 	}
 	else if(itemtype == item_Pills)
-	{
 		AddToolTipText(playerid, KEYTEXT_INTERACT, "Tomar Comprimido");
-	}
 	else if(itemtype == item_AutoInjec)
-	{
-		if(inplayerarea == -1)
-			AddToolTipText(playerid, KEYTEXT_INTERACT, "Injetar em Si");
-		else
-			AddToolTipText(playerid, KEYTEXT_INTERACT, "Injetar no Jogador");
-	}
+		AddToolTipText(playerid, KEYTEXT_INTERACT, inplayerarea == -1 ? "Injetar em Si" : "Injetar no Jogador");
 	else if(itemtype == item_HerpDerp)
 		AddToolTipText(playerid, KEYTEXT_INTERACT, "Herp-a-derp");
 	else if(itemtype == item_Medkit || itemtype == item_Bandage || itemtype == item_DoctorBag)
-	{
-		if(inplayerarea != -1)
-			AddToolTipText(playerid, KEYTEXT_INTERACT, "Curar Jogador");
-		else
-			AddToolTipText(playerid, KEYTEXT_INTERACT, "Curar a Si mesmo");
-	}
+		AddToolTipText(playerid, KEYTEXT_INTERACT, inplayerarea != -1 ? "Curar Jogador" : "Curar a Si mesmo");
 	else if(itemtype == item_Wrench || itemtype == item_Screwdriver || itemtype == item_Hammer || itemtype == item_Spanner)
 	{
 		if(invehiclearea != INVALID_VEHICLE_ID)
-		{
 			if(IsPlayerAtVehicleBonnet(playerid, invehiclearea))
 				AddToolTipText(playerid, KEYTEXT_INTERACT, "Reparar Motor");
-		}
 	}
 	else
 	{
@@ -347,13 +335,10 @@ _UpdateKeyActions(playerid)
 		}
 		else if(GetHatFromItem(itemtype) != -1)
 			AddToolTipText(playerid, KEYTEXT_INTERACT, "Vestir");
-
 		else if(GetMaskFromItem(itemtype) != -1)
 			AddToolTipText(playerid, KEYTEXT_INTERACT, "Vestir");
-
 		else if(GetItemTypeExplosiveType(itemtype) != -1)
 			AddToolTipText(playerid, KEYTEXT_INTERACT, "Armar Explosivo");
-
 		else if(GetItemTypeLiquidContainerType(itemtype) != -1 && itemtype != item_GasCan)
 			AddToolTipText(playerid, KEYTEXT_INTERACT, "Beber");
 	}
@@ -363,7 +348,8 @@ _UpdateKeyActions(playerid)
 		if(IsValidHolsterItem(itemtype))
 			AddToolTipText(playerid, KEYTEXT_PUT_AWAY, "Guardar no Coldre");
 
-		if(GetItemWeaponCalibre(GetItemTypeWeapon(itemtype)) != NO_CALIBRE){
+		if(GetItemWeaponCalibre(GetItemTypeWeapon(itemtype)) != NO_CALIBRE)
+		{
 			AddToolTipText(playerid, KEYTEXT_RELOAD, "Recarregar");
 
 			if(GetItemTypeAmmoType(GetItemWeaponItemAmmoItem(itemid)) != -1 && GetItemWeaponItemMagAmmo(itemid) + GetItemWeaponItemReserve(itemid) != 0)
@@ -372,7 +358,8 @@ _UpdateKeyActions(playerid)
 				AddToolTipText(playerid, KEYTEXT_DROP_ITEM, "Soltar");
 		}
 	}
-	else {
+	else
+	{
 		AddToolTipText(playerid, KEYTEXT_PUT_AWAY, "Guardar");
 		AddToolTipText(playerid, KEYTEXT_DROP_ITEM, "Soltar");
 	}
