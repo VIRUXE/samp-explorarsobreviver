@@ -40,7 +40,7 @@ stock CreateFuelOutlet(Float:x, Float:y, Float:z, Float:areasize, Float:capacity
 		return -1;
 	}
 
-	fuel_Data[fuel_Total][fuel_buttonId]	= CreateButton(x, y, z + 0.5, "Fill petrol can", .label = true, .labeltext = "0.0", .areasize = areasize, .streamdist = areasize + 1.0, .testlos = false);
+	fuel_Data[fuel_Total][fuel_buttonId]	= CreateButton(x, y, z + 0.5, "Bomba de Combustivel", .label = true, .labeltext = "0.0", .areasize = areasize, .streamdist = areasize + 1.0, .testlos = false);
 
 	fuel_Data[fuel_Total][fuel_state]		= 1;
 	fuel_Data[fuel_Total][fuel_capacity]	= capacity;
