@@ -206,7 +206,7 @@ SpectateNextTarget(playerid)
 	{
 		iters++;
 
-		if(!CanPlayerSpectate(playerid, id))
+		if(!CanAdminSpectatePlayer(playerid, id))
 		{
 			id++;
 
@@ -236,7 +236,7 @@ SpectatePrevTarget(playerid)
 	{
 		iters++;
 
-		if(!CanPlayerSpectate(playerid, id))
+		if(!CanAdminSpectatePlayer(playerid, id))
 		{
 			id--;
 
@@ -497,20 +497,14 @@ hook OnPlayerKeyStateChange(playerid, newkeys, oldkeys)
 	return 1;
 }
 
-CanPlayerSpectate(playerid, targetid)
+stock CanAdminSpectatePlayer(playerid, targetid)
 {
-	if(targetid == playerid || !IsPlayerConnected(targetid) || !(IsPlayerSpawned(targetid)) || GetPlayerState(targetid) == PLAYER_STATE_SPECTATING)
+	if(GetPlayerAdminLevel(playerid) == STAFF_LEVEL_GAME_MASTER)
+		if(!IsPlayerReported(targetid))
+			return -1;
+
+	if(targetid == playerid || !IsPlayerConnected(targetid) || !IsPlayerSpawned(targetid) || GetPlayerState(targetid) == PLAYER_STATE_SPECTATING)
 		return 0;
-
-	if(GetPlayerAdminLevel(playerid) == 1)
-	{
-		new name[MAX_PLAYER_NAME];
-
-		GetPlayerName(targetid, name, MAX_PLAYER_NAME);
-
-		if(!IsPlayerReported(name))
-			return 0;
-	}
 
 	return 1;
 }

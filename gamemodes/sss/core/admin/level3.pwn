@@ -47,37 +47,41 @@ ACMD:spec[2](playerid, params[])
 {
 	new targetid = !isnull(params) ? strval(params) : -1;
 
-	if(targetid > -1) // Valid player id 
+	if(targetid > -1) // ID provided
 	{
-		if(targetid == playerid)
-			return ChatMsg(playerid, RED, " » Esse ID é seu viado.");
+		if(Iter_Count(Player) == 1)
+			return ChatMsg(playerid, RED, "Apenas está você online, vai dar spec em quem?...");
 
-		if(GetPlayerAdminLevel(playerid) == STAFF_LEVEL_GAME_MASTER)
+		if(CanAdminSpectatePlayer(playerid, targetid) != -1) // Has Spectate permission
 		{
-			new name[MAX_PLAYER_NAME];
+			new tries;
 
-			GetPlayerName(targetid, name, MAX_PLAYER_NAME);
+			while(CanAdminSpectatePlayer(playerid, targetid) == 0 && tries < 3)
+			{
+				targetid = random(GetPlayerPoolSize()); // Não funciona corretamente?
+				tries++;
 
-			if(!IsPlayerReported(name))
-				return ChatMsg(playerid, RED, " » Apenas pode spectar Jogadores Reportados.");
+				log(false, "Spec - Target: %d Try: %d", targetid, tries);
+			}
+
+			if(tries <= 3)
+			{
+				ToggleAdminDuty(playerid, true);
+				EnterSpectateMode(playerid, targetid);
+			}
 		}
 		else
-		{
-			// Check if target player id is valid or not. If not, select a random valid one
-			while(targetid == playerid || !IsPlayerConnected(targetid))
-				targetid = random(GetPlayerPoolSize());
-
-			TogglePlayerAdminDuty(playerid, true);
-			EnterSpectateMode(playerid, targetid);
-		}
+			ChatMsg(playerid, RED, "Apenas pode dar Spec em Jogadores Reportados.");
 	}
 	else // No player id provided
 	{
 		if(GetPlayerState(playerid) == PLAYER_STATE_SPECTATING)
 		{
-			//TogglePlayerAdminDuty(playerid, false);
+			//ToggleAdminDuty(playerid, false);
 			ExitSpectateMode(playerid);
 		}
+		else
+			ChatMsg(playerid, YELLOW, "Não está em Spectate...");
 	}
 
 	return 1;
@@ -86,7 +90,7 @@ ACMD:spec[2](playerid, params[])
 ACMD:free[2](playerid)
 {
 	if(!IsPlayerOnAdminDuty(playerid))
-		TogglePlayerAdminDuty(playerid, true);
+		ToggleAdminDuty(playerid, true);
 
 	if(GetPlayerSpectateType(playerid) == SPECTATE_TYPE_FREE)
 		ExitFreeMode(playerid);

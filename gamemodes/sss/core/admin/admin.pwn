@@ -101,7 +101,7 @@ public OnPlayerClickMap(playerid, Float:fX, Float:fY, Float:fZ)
 	if(GetPlayerAdminLevel(playerid) >= STAFF_LEVEL_MODERATOR)
 	{
 		if(!IsPlayerOnAdminDuty(playerid))
-			TogglePlayerAdminDuty(playerid, true);
+			ToggleAdminDuty(playerid, true);
 
 		new Float:playerZ;
 
@@ -118,23 +118,19 @@ hook OnPlayerClickPlayer(playerid, clickedplayerid, source)
 		if(GetPlayerState(clickedplayerid) == PLAYER_STATE_SPECTATING && IsPlayerOnAdminDuty(clickedplayerid))
 			return 0;
 
-		if(GetPlayerState(playerid) == PLAYER_STATE_SPECTATING)
-			ExitSpectateMode(playerid);
-
-		if(TogglePlayerAdminDuty(playerid, true))
-		{
-			TeleportPlayerToPlayer(playerid, clickedplayerid);
-
-			if(GetPlayerAdminLevel(clickedplayerid))
-				SetPlayerChatMode(playerid, 3);
-			else
-				SetPlayerChatMode(playerid, 0);
 		
-			ChatMsg(playerid, YELLOW, " » Você teleportou para %P", clickedplayerid);
-			ChatMsgLang(clickedplayerid, YELLOW, "TELEPORTEDT", playerid);
-		}
+
+		ToggleAdminDuty(playerid, true);
+
+		TeleportPlayerToPlayer(playerid, clickedplayerid);
+
+		if(GetPlayerAdminLevel(clickedplayerid))
+			SetPlayerChatMode(playerid, 3);
 		else
-			ChatMsg(playerid, RED, " » Aguarde para teleportar novamente.");
+			SetPlayerChatMode(playerid, 0);
+	
+		ChatMsg(playerid, YELLOW, " » Você teleportou para %P", clickedplayerid);
+		ChatMsgLang(clickedplayerid, YELLOW, "TELEPORTEDT", playerid);
 	}
 
     return 0;
@@ -145,7 +141,7 @@ hook OnPlayerKeyStateChange(playerid, newkeys, oldkeys)
 	if(newkeys & KEY_JUMP && newkeys & KEY_CROUCH) // Toggle de Duty com SHIFT + C
 	{
 		ClearAnimations(playerid);
-		TogglePlayerAdminDuty(playerid, !admin_OnDuty[playerid], newkeys & KEY_WALK ? false : true); // SHIFT + ALT + C para sair no local que se encontra
+		ToggleAdminDuty(playerid, !admin_OnDuty[playerid], newkeys & KEY_WALK ? false : true); // SHIFT + ALT + C para sair no local que se encontra
 	}
 }
 
@@ -383,10 +379,10 @@ ChatMsgAdminsFlat(level, colour, const message[])
 	return 1;
 }
 
-stock TogglePlayerAdminDuty(playerid, toggle, goback = true)
+stock ToggleAdminDuty(playerid, toggle, goback = true)
 {
-	if(GetTickCountDifference(GetTickCount(), admin_DutyTick[playerid]) < 1500)
-		return 0;
+	while(GetTickCountDifference(GetTickCount(), admin_DutyTick[playerid]) < 1500)
+		admin_DutyTick[playerid] = GetTickCount();
 
 	if(toggle && !admin_OnDuty[playerid])
 	{
@@ -395,6 +391,8 @@ stock TogglePlayerAdminDuty(playerid, toggle, goback = true)
 			ItemType:itemtype,
 			Float:x, Float:y, Float:z;
 		
+		if(GetPlayerState(playerid) == PLAYER_STATE_SPECTATING)
+			ExitSpectateMode(playerid);
 
 		GetPlayerPos(playerid, x, y, z);
 		SetPlayerSpawnPos(playerid, x, y, z);
@@ -408,9 +406,9 @@ stock TogglePlayerAdminDuty(playerid, toggle, goback = true)
 
 		Logout(playerid, (GetPlayerAdminLevel(playerid) < STAFF_LEVEL_DEVELOPER) ); // docombatlogcheck for admins level < 5
 
-		RemovePlayerArmourItem(playerid);
+		RemovePlayerArmourItem(playerid); // Talvez seja melhor colocar no logout?
 
-		RemoveAllDrugs(playerid);
+		RemoveAllDrugs(playerid); // Talvez seja melhor colocar no logout?
 
 		SetPlayerSkin(playerid, GetPlayerGender(playerid) == GENDER_MALE ? 217 : 211);
 
@@ -443,7 +441,7 @@ stock TogglePlayerAdminDuty(playerid, toggle, goback = true)
 		SetPlayerColor(playerid, !IsPlayerMobile(playerid) ? COLOR_PLAYER_NORMAL : COLOR_PLAYER_MOBILE); // 
 	}
 
-	admin_DutyTick[playerid] = GetTickCount();
+	
 
 	CallLocalFunction("OnAdminToggleDuty", "db", playerid, toggle);
 	
