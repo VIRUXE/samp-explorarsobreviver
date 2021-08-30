@@ -66,7 +66,8 @@ hook OnPlayerUpdate(playerid)
 			else
 				velocityMult[playerid] = 1.0;
 
-			ChatMsg(playerid, YELLOW, " » Velocidade de Fly: %0.2f", velocityMult[playerid]);
+			// TODO: Trocar por textdraw talvez? Para não spammar o chat.
+			// ChatMsg(playerid, YELLOW, " » Velocidade de Fly: %0.2f", velocityMult[playerid]);
 		}
 
 		if(lr == KEY_LEFT)		
