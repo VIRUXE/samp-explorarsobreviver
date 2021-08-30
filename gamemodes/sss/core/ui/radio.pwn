@@ -268,7 +268,7 @@ hook OnPlayerOpenInventory(playerid)
 	if(rad_ViewingRadio[playerid])
 		return Y_HOOKS_BREAK_RETURN_1;
 	
-	rad_InventoryItem[playerid] = AddInventoryListItem(playerid, "Radio", 19942);
+	rad_InventoryItem[playerid] = AddInventoryListItem(playerid, "~y~Radio >");
 
 	return Y_HOOKS_CONTINUE_RETURN_0;
 }
