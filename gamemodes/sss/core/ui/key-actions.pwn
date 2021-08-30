@@ -72,6 +72,12 @@ stock AddToolTipText(playerid, const key[], const use[])
 
 ==============================================================================*/
 
+// Staff
+hook OnAdminToggleDuty(playerid, bool:toggle)
+{
+	_UpdateKeyActions(playerid);
+}
+
 // Enter/exit inventory
 hook OnPlayerOpenedInventory(playerid)
 {
@@ -188,14 +194,27 @@ _UpdateKeyActions(playerid)
 	{
 		if(IsPlayerOnAdminDuty(playerid))
 		{
-			AddToolTipText(playerid, "~k~~PED_JUMPING~ ~w~+ ~y~ ~k~~VEHICLE_ENTER_EXIT~", !IsAdminFlying(playerid) ? "Ativar Fly" : "Desativar Fly");
-			AddToolTipText(playerid, "~k~~PED_JUMPING~ ~w~+ ~y~ ~k~~PED_DUCK~", "Sair do trabalho");
+			AddToolTipText(playerid, "~k~~PED_JUMPING~ ~w~+ ~y~~k~~PED_DUCK~", "Sair do trabalho");
+
+			if(IsAdminFlying(playerid))
+			{
+				AddToolTipText(playerid, "~k~~PED_JUMPING~ ~w~+~y~ ~k~~VEHICLE_ENTER_EXIT~", "Desativar Fly");
+
+				//AddToolTipText(playerid, "~k~~PED_SPRINT~", "Cima");
+				//AddToolTipText(playerid, "~k~~PED_DUCK~", "Baixo");
+				//AddToolTipText(playerid, "~k~~PED_JUMPING~ ", "Modo lento");
+			}
+			else
+			{
+				AddToolTipText(playerid, "~k~~PED_JUMPING~ ~w~+ ~y~~k~~VEHICLE_ENTER_EXIT~", "Ativar Fly");
+			}
+
 			ShowPlayerKeyActionUI(playerid);
 			return;
 		}
 		else
 		{
-			AddToolTipText(playerid, "~k~~PED_JUMPING~ ~w~+ ~y~ ~k~~PED_DUCK~", "Entrar em trabalho");
+			AddToolTipText(playerid, "~k~~PED_JUMPING~ ~w~+ ~y~~k~~PED_DUCK~", "Duty");
 		}
 	}
 
@@ -377,7 +396,9 @@ _UpdateKeyActions(playerid)
 		AddToolTipText(playerid, KEYTEXT_DROP_ITEM, "Soltar");
 	}
 	
-	AddToolTipText(playerid, KEYTEXT_INVENTORY, "Abrir bolso");
+	if(GetPlayerAdminLevel(playerid) < STAFF_LEVEL_MODERATOR)
+		AddToolTipText(playerid, KEYTEXT_INVENTORY, "Abrir bolso");
+
 	ShowPlayerKeyActionUI(playerid);
 
 	return;

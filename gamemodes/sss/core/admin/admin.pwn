@@ -380,7 +380,7 @@ ChatMsgAdminsFlat(level, colour, const message[])
 	return 1;
 }
 
-stock ToggleAdminDuty(playerid, toggle, goback = true)
+stock ToggleAdminDuty(playerid, bool:toggle, goback = true)
 {
 	while(GetTickCountDifference(GetTickCount(), admin_DutyTick[playerid]) < 1500)
 		admin_DutyTick[playerid] = GetTickCount();
