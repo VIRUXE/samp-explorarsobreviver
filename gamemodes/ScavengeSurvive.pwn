@@ -29,6 +29,8 @@
 #undef MAX_PLAYER_NAME
 #define MAX_PLAYER_NAME 				20 // Não se utiliza SetPlayerName logo apenas fica 20 chars
 
+#define KEY_AIM KEY_HANDBRAKE
+
 #include "config.pwn"
 
 /*==============================================================================

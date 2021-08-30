@@ -59,7 +59,7 @@ hook OnPlayerUpdate(playerid)
 	}
 	else
 	{
-		if(k & KEY_HANDBRAKE && k & KEY_JUMP)
+		if(k & KEY_JUMP && k & KEY_AIM)
 		{	
 			if(velocityMult[playerid] < 10.0)
 				velocityMult[playerid] += 0.05;
