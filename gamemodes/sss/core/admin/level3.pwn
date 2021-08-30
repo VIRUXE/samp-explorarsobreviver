@@ -47,13 +47,31 @@ ACMD:spec[2](playerid, params[])
 {
 	new targetid = !isnull(params) ? strval(params) : -1;
 
-	if(targetid > -1) // Valid player id 
+	if(targetid > -1) // ID provided
 	{
-		while(!CanPlayerSpectate(playerid, targetid))
-			targetid = random(GetPlayerPoolSize());
+		if(Iter_Count(Player) == 1)
+			return ChatMsg(playerid, RED, "Apenas está você online, vai dar spec em quem?...");
 
-		TogglePlayerAdminDuty(playerid, true);
-		EnterSpectateMode(playerid, targetid);
+		if(CanAdminSpectatePlayer(playerid, targetid) != -1) // Has Spectate permission
+		{
+			new tries;
+
+			while(CanAdminSpectatePlayer(playerid, targetid) == 0 && tries < 3)
+			{
+				targetid = random(GetPlayerPoolSize()); // Não funciona corretamente?
+				tries++;
+
+				log(false, "Spec - Target: %d Try: %d", targetid, tries);
+			}
+
+			if(tries <= 3)
+			{
+				TogglePlayerAdminDuty(playerid, true);
+				EnterSpectateMode(playerid, targetid);
+			}
+		}
+		else
+			ChatMsg(playerid, RED, "Apenas pode dar Spec em Jogadores Reportados.");
 	}
 	else // No player id provided
 	{
@@ -62,6 +80,8 @@ ACMD:spec[2](playerid, params[])
 			//TogglePlayerAdminDuty(playerid, false);
 			ExitSpectateMode(playerid);
 		}
+		else
+			ChatMsg(playerid, YELLOW, "Não está em Spectate...");
 	}
 
 	return 1;
