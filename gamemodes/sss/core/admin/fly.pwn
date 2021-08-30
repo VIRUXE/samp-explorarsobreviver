@@ -1,10 +1,11 @@
 #include <YSI_Coding\y_hooks>
 
-#define VELOCITY_MULT	3.0
 #define VELOCITY_NORM	1.0
 #define HEIGHT_GAIN		0.5
 
-static bool:isFlying[MAX_PLAYERS];
+static
+		bool:isFlying[MAX_PLAYERS],
+		Float:velocityMult[MAX_PLAYERS] = 0.1;
 
 hook OnPlayerKeyStateChange(playerid, newkeys, oldkeys)
 {
@@ -30,18 +31,18 @@ hook OnPlayerUpdate(playerid)
 		k, ud, lr,
         Float:heightMult = 0.01,
 		Float:angle,
-		Float:velocityMult;
+		Float:velocityFactor;
 
 	GetPlayerKeys(playerid, k, ud, lr);
 	GetPlayerFacingAngle(playerid, angle);
 
 	if(ud == KEY_UP)        
-        velocityMult = VELOCITY_NORM;
+        velocityFactor = VELOCITY_NORM;
 	else if(ud == KEY_DOWN) 
-        velocityMult =-VELOCITY_NORM;
+        velocityFactor =-VELOCITY_NORM;
 	
 	if(k & KEY_JUMP)
-        velocityMult *= VELOCITY_MULT;
+        velocityFactor *= velocityMult[playerid];
 	if(k & KEY_SPRINT)
         heightMult = HEIGHT_GAIN * 10;
 	if(k & KEY_SPRINT && k & KEY_JUMP) 
@@ -52,12 +53,22 @@ hook OnPlayerUpdate(playerid)
 	if(k & KEY_FIRE) // Botão ESQ - Mover em axis
 	{
 		if(lr == KEY_LEFT)		
-            velocityMult = VELOCITY_NORM, angle += 90.0;
+            velocityFactor = VELOCITY_NORM, angle += 90.0;
 		else if(lr == KEY_RIGHT)
-            velocityMult = VELOCITY_NORM, angle -= 90.0;
+            velocityFactor = VELOCITY_NORM, angle -= 90.0;
 	}
 	else
 	{
+		if(k & KEY_HANDBRAKE && k & KEY_JUMP)
+		{	
+			if(velocityMult[playerid] < 10.0)
+				velocityMult[playerid] += 0.05;
+			else
+				velocityMult[playerid] = 1.0;
+
+			ChatMsg(playerid, YELLOW, " » Velocidade de Fly: %0.2f", velocityMult[playerid]);
+		}
+
 		if(lr == KEY_LEFT)		
             angle += 6.0;
 		else if(lr == KEY_RIGHT)
@@ -65,7 +76,7 @@ hook OnPlayerUpdate(playerid)
 
 		SetPlayerFacingAngle(playerid, angle);
 	}
-	SetPlayerVelocity(playerid, velocityMult*floatsin(-angle, degrees), velocityMult*floatcos(-angle, degrees), heightMult);
+	SetPlayerVelocity(playerid, velocityFactor*floatsin(-angle, degrees), velocityFactor*floatcos(-angle, degrees), heightMult);
 
 	return 1;
 }
