@@ -93,6 +93,7 @@ public OnGameModeInit()
 #include <YSI_Coding\y_iterate>
 #include <YSI_Storage\y_ini>
 #include <YSI_Visual\y_dialog>
+#include <alt_dialogs>
 #include <PreviewModelDialog>
 #include <Pawn.RakNet>
 #include <colandreas> 

@@ -31,7 +31,7 @@ hook OnPlayerOpenInventory(playerid)
 {
     if((GetPlayerVIP(playerid) - gettime()) > 1)
     {
-	    vip_InventoryOption[playerid] = AddInventoryListItem(playerid, "VIP", 19941);
+	    vip_InventoryOption[playerid] = AddInventoryListItem(playerid, "~y~Menu VIP >");
     }
 	return Y_HOOKS_CONTINUE_RETURN_0;
 }

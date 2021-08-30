@@ -36,7 +36,7 @@ forward GetPlayerSelectedInventorySlot(playerid);
 
 // AddInventoryListItem adds a list item to the inventory dialog for additional
 // actions. This should only ever be used in `OnPlayerOpenInventory`.
-forward AddInventoryListItem(playerid, const itemname[], modelid = 19300);
+forward AddInventoryListItem(playerid, const itemname[]);
 
 // AddInventoryOption adds an inventory option to an item option menu. This
 // should only ever be used in `OnPlayerViewInventoryOpt`.
@@ -128,7 +128,7 @@ stock DisplayPlayerInventory(playerid)
 
 	new
 		title[18],
-		list[(MAX_INVENTORY_SLOTS * (MAX_ITEM_NAME + MAX_ITEM_TEXT + 11))],
+		list[(MAX_INVENTORY_SLOTS * (MAX_ITEM_NAME + MAX_ITEM_TEXT))],
 		Item:itemid,
 		tmp[MAX_ITEM_NAME + MAX_ITEM_TEXT],
 		size;
@@ -140,7 +140,6 @@ stock DisplayPlayerInventory(playerid)
 		return 2;
 	}
 
-	new model, ItemType:itemtype;
 	for(new i; i < size; i++)
 	{
 		ret_outer = GetInventorySlotItem(playerid, i, itemid);
@@ -148,12 +147,10 @@ stock DisplayPlayerInventory(playerid)
 		if(!IsValidItem(itemid) || ret_outer)
 			break;
 
-		itemtype = GetItemType(itemid);
-
 		GetItemName(itemid, tmp);
-		GetItemTypeModel(itemtype, model);
 
-		format(list, sizeof(list), "%s%d\t%s\n", list, model, tmp);
+		strcat(list, tmp);
+		strcat(list, "\n");
 
 		inv_ItemListTotal[playerid]++;
 	}
@@ -165,7 +162,7 @@ stock DisplayPlayerInventory(playerid)
 
 	/*for(new i; i < slots; i++)
 	{
-		strcat(list, "19300\t<Vazio>\n");
+		strcat(list, "<Vazio>\n");
 		inv_ItemListTotal[playerid]++;
 	}*/
 
@@ -178,9 +175,9 @@ stock DisplayPlayerInventory(playerid)
 	if(!isnull(inv_ExtraItemList[playerid]))
 		strcat(list, inv_ExtraItemList[playerid]);
 
-	format(title, sizeof(title), "~g~Bolsos (%d/%d)", size - slots, size);
+	format(title, sizeof(title), "Bolsos (%d/%d)", size - slots, size);
 
-	ShowPlayerDialog(playerid, 33, DIALOG_STYLE_PREVIEW_MODEL, title, list, "Enter", "Sair");
+	ShowPlayerAltDialog(playerid, 33, AD_STYLE_LIST, title, list, "Enter", "Sair");
 
 	inv_ViewingInventory[playerid] = true;
 
@@ -196,6 +193,8 @@ stock ClosePlayerInventory(playerid, call = true)
 	Logger_Dbg("inventory-dialog", "hiding inventory for player",
 		Logger_I("playerid", playerid));
 
+	inv_ViewingInventory[playerid] = false;
+
 	if(call)
 	{
 		if(CallLocalFunction("OnPlayerCloseInventory", "d", playerid)) 
@@ -204,9 +203,7 @@ stock ClosePlayerInventory(playerid, call = true)
 			return 2;
 		}
 	}
-
-	inv_ViewingInventory[playerid] = false;
-
+	
 	return 0;
 }
 
@@ -218,7 +215,7 @@ stock GetPlayerSelectedInventorySlot(playerid)
 	return inv_SelectedSlot[playerid];
 }
 
-stock AddInventoryListItem(playerid, const itemname[], modelid = 19300)
+stock AddInventoryListItem(playerid, const itemname[])
 {
 	if(strlen(inv_ExtraItemList[playerid]) + strlen(itemname) > sizeof(inv_ExtraItemList[]))
 		return 0;
@@ -226,12 +223,6 @@ stock AddInventoryListItem(playerid, const itemname[], modelid = 19300)
 	Logger_Dbg("inventory-dialog", "adding inventory list item",
 		Logger_I("playerid", playerid),
 		Logger_S("itemname", itemname));
-
-	if(modelid != 19300)
-		format(inv_ExtraItemList[playerid], 128,
-			"%s%d(0.0,0.0,180.0,0.64,-1,-1)\t", inv_ExtraItemList[playerid], modelid);
-	else
-		strcat(inv_ExtraItemList[playerid], "19300\t");
 
 	strcat(inv_ExtraItemList[playerid], itemname);
 	strcat(inv_ExtraItemList[playerid], "\n");
@@ -319,37 +310,10 @@ hook OnPlayerConnect(playerid)
 	inv_ViewingInventory[playerid] = false;
 }
 
-_inv_displaySlotOptions(playerid, slotid)
+hook OnAltDialogResponse(playerid, dialogid, response, listitem)
 {
-	new
-		name[MAX_ITEM_NAME + MAX_ITEM_TEXT + 6],
-		Item:itemid,
-		itemsize,
-		ret_outer;
-	
-	ret_outer = GetInventorySlotItem(playerid, slotid, itemid);
-	if(ret_outer) {
-		return 1;
-	}
-
-	GetItemName(itemid, name);
-	GetItemTypeSize(GetItemType(itemid), itemsize);
-	format(name, sizeof(name), "[%d]%s", itemsize, name);
-	
-	inv_OptionsList[playerid] = "Equipar\nUsar\nJogar Fora\n";
-	inv_OptionsCount[playerid] = 0;
-
-	CallLocalFunction("OnPlayerViewInventoryOpt", "d", playerid);
-
-	inline Response(pid, dialogid, response, listitem, string:inputtext[]) {
-		#pragma unused pid, dialogid
-
-		Logger_Dbg("inventory-dialog", "player responded to inventory item options",
-			Logger_I("playerid", playerid),
-			Logger_I("response", response),
-			Logger_I("listitem", listitem),
-			Logger_S("inputtext", inputtext));
-
+	if(dialogid == 32)
+	{
 		if(!response) {
 			DisplayPlayerInventory(playerid);
 			return 1;
@@ -359,17 +323,17 @@ _inv_displaySlotOptions(playerid, slotid)
 			case 0: {
 				if(GetPlayerItem(playerid) == INVALID_ITEM_ID) {
 					new
-						Item:itemid2,
+						Item:itemid,
 						ret;
 					
-					ret = GetInventorySlotItem(playerid, inv_SelectedSlot[playerid], itemid2);
+					ret = GetInventorySlotItem(playerid, inv_SelectedSlot[playerid], itemid);
 					if(ret) {
 						Logger_Err("failed to get inventory slot item", Logger_I("playerid", playerid), Logger_I("slotid", inv_SelectedSlot[playerid]), Logger_I("ret", ret));
 						DisplayPlayerInventory(playerid);
 						return 1;
 					}
 
-					if(IsPlayerInAnyVehicle(playerid) && IsItemTypeCarry(GetItemType(itemid2)))
+					if(IsPlayerInAnyVehicle(playerid) && IsItemTypeCarry(GetItemType(itemid)))
 					{
 						ShowActionText(playerid, "Nao pode pegar este item no veiculo", 3000, 200);
 						DisplayPlayerInventory(playerid);
@@ -377,7 +341,7 @@ _inv_displaySlotOptions(playerid, slotid)
 					}
 
 					RemoveItemFromInventory(playerid, inv_SelectedSlot[playerid]);
-					GiveWorldItemToPlayer(playerid, itemid2, 1);
+					GiveWorldItemToPlayer(playerid, itemid, 1);
 					DisplayPlayerInventory(playerid);
 				} else {
 					ShowActionText(playerid, "Voce ja esta segurando um item", 3000, 200);
@@ -387,17 +351,17 @@ _inv_displaySlotOptions(playerid, slotid)
 			case 1: {
 				if(GetPlayerItem(playerid) == INVALID_ITEM_ID) {
 					new
-						Item:itemid2,
+						Item:itemid,
 						ret;
 					
-					ret = GetInventorySlotItem(playerid, inv_SelectedSlot[playerid], itemid2);
+					ret = GetInventorySlotItem(playerid, inv_SelectedSlot[playerid], itemid);
 					if(ret) {
 						Logger_Err("failed to get inventory slot item", Logger_I("playerid", playerid), Logger_I("slotid", inv_SelectedSlot[playerid]), Logger_I("ret", ret));
 						DisplayPlayerInventory(playerid);
 						return 1;
 					}
 
-					if(IsPlayerInAnyVehicle(playerid) && IsItemTypeCarry(GetItemType(itemid2)))
+					if(IsPlayerInAnyVehicle(playerid) && IsItemTypeCarry(GetItemType(itemid)))
 					{
 						ShowActionText(playerid, "Nao pode pegar este item no veiculo", 3000, 200);
 						DisplayPlayerInventory(playerid);
@@ -408,7 +372,7 @@ _inv_displaySlotOptions(playerid, slotid)
 
 					ClosePlayerInventory(playerid);
 
-					GiveWorldItemToPlayer(playerid, itemid2, 1);
+					GiveWorldItemToPlayer(playerid, itemid, 1);
 					
 					PlayerUseItem(playerid);
 				} else {
@@ -418,10 +382,10 @@ _inv_displaySlotOptions(playerid, slotid)
 			}
 			case 2: {
 				new
-					Item:itemid2,
+					Item:itemid,
 					ret;
 				
-				ret = GetInventorySlotItem(playerid, inv_SelectedSlot[playerid], itemid2);
+				ret = GetInventorySlotItem(playerid, inv_SelectedSlot[playerid], itemid);
 				if(ret) {
 					Logger_Err("failed to get inventory slot item", Logger_I("playerid", playerid), Logger_I("slotid", inv_SelectedSlot[playerid]), Logger_I("ret", ret));
 					DisplayPlayerInventory(playerid);
@@ -434,7 +398,7 @@ _inv_displaySlotOptions(playerid, slotid)
 
 				if(!IsPlayerInAnyVehicle(playerid)) {
 
-					if(IsItemTypeCarry(GetItemType(itemid2))) {
+					if(IsItemTypeCarry(GetItemType(itemid))) {
 						ApplyAnimation(playerid, "CARRY", "putdwn", 5.0, 0, 0, 0, 0, 0);
 					} else {
 						ApplyAnimation(playerid, "BOMBER", "BOM_PLANT_IN", 5.0, 1, 0, 0, 0, 450);
@@ -460,7 +424,7 @@ _inv_displaySlotOptions(playerid, slotid)
 					z -= 0.7;
 				}
 				
-				CreateItemInWorld(itemid2,
+				CreateItemInWorld(itemid,
 					x, y, z,
 					.world = GetPlayerVirtualWorld(playerid),
 					.interior = GetPlayerInterior(playerid),
@@ -480,13 +444,6 @@ _inv_displaySlotOptions(playerid, slotid)
 		}
 		return 1;
 	}
-	Dialog_ShowCallback(playerid, using inline Response, DIALOG_STYLE_LIST, name, inv_OptionsList[playerid], "Opções", "Sair");
-
-	return 0;
-}
-
-hook OnDialogModelResponse(playerid, dialogid, response, listitem)
-{
 	if(dialogid == 33)
 	{
 		Logger_Dbg("inventory-dialog", "player responded to inventory dialog",
@@ -511,15 +468,30 @@ hook OnDialogModelResponse(playerid, dialogid, response, listitem)
 		}
 
 		new
-			Item:itemid2,
+			Item:itemid,
 			ret;
 			
-		ret = GetInventorySlotItem(playerid, listitem, itemid2);
-		if(ret || !IsValidItem(itemid2)) {
+		ret = GetInventorySlotItem(playerid, listitem, itemid);
+		if(ret || !IsValidItem(itemid)) {
 			DisplayPlayerInventory(playerid);
 		} else {
 			inv_SelectedSlot[playerid] = listitem;
-			_inv_displaySlotOptions(playerid, listitem);
+
+			new
+				title[MAX_ITEM_NAME + MAX_ITEM_TEXT + 6],
+				itemsize;
+			
+			GetItemName(itemid, title);
+			GetItemTypeSize(GetItemType(itemid), itemsize);
+
+			format(title, sizeof(title), "(%d) %s", itemsize, title);
+
+			inv_OptionsList[playerid] = "Equipar\nUsar\nJogar Fora\n";
+			inv_OptionsCount[playerid] = 0;
+
+			CallLocalFunction("OnPlayerViewInventoryOpt", "d", playerid);
+
+			ShowPlayerAltDialog(playerid, 32, AD_STYLE_LIST, title, inv_OptionsList[playerid], "Enter", "Voltar");
 		}
 
 		return 0;
