@@ -9,11 +9,7 @@ public OnRconCommand(cmd[])
 
 	if(!strcmp(command, "restart"))
 	{
-		if(isnull(params))
-			SetRestart(0);
-		else
-			SetRestart(strval(params));
-
+		SetRestart(isnull(params) ? 0 : strval(params));
 		return 1;
 	}
 
