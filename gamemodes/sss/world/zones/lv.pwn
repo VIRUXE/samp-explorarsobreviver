@@ -4,41 +4,6 @@
 
 Load_LV()
 {
-	CreateFuelOutlet(2120.82031, 914.718750, 11.25781, 2.0, 100.0, frandom(25.0));
-	CreateFuelOutlet(2114.90625, 914.718750, 11.25781, 2.0, 100.0, frandom(25.0));
-	CreateFuelOutlet(2109.04688, 914.718750, 11.25781, 2.0, 100.0, frandom(25.0));
-	CreateFuelOutlet(2120.82031, 925.507810, 11.25781, 2.0, 100.0, frandom(25.0));
-	CreateFuelOutlet(2114.90625, 925.507810, 11.25781, 2.0, 100.0, frandom(25.0));
-	CreateFuelOutlet(2109.04688, 925.507810, 11.25781, 2.0, 100.0, frandom(25.0));
-
-	CreateFuelOutlet(2207.69531, 2480.32813, 11.31250, 2.0, 100.0, frandom(25.0));
-	CreateFuelOutlet(2207.69531, 2474.68750, 11.31250, 2.0, 100.0, frandom(25.0));
-	CreateFuelOutlet(2207.69531, 2470.25000, 11.31250, 2.0, 100.0, frandom(25.0));
-	CreateFuelOutlet(2196.89844, 2480.32813, 11.31250, 2.0, 100.0, frandom(25.0));
-	CreateFuelOutlet(2196.89844, 2474.68750, 11.31250, 2.0, 100.0, frandom(25.0));
-	CreateFuelOutlet(2196.89844, 2470.25000, 11.31250, 2.0, 100.0, frandom(25.0));
-
-	CreateFuelOutlet(2153.31250, 2742.52344, 11.27344, 2.0, 100.0, frandom(25.0));
-	CreateFuelOutlet(2147.53125, 2742.52344, 11.27344, 2.0, 100.0, frandom(25.0));
-	CreateFuelOutlet(2141.67188, 2742.52344, 11.27344, 2.0, 100.0, frandom(25.0));
-	CreateFuelOutlet(2153.31250, 2753.32031, 11.27344, 2.0, 100.0, frandom(25.0));
-	CreateFuelOutlet(2147.53125, 2753.32031, 11.27344, 2.0, 100.0, frandom(25.0));
-	CreateFuelOutlet(2141.67188, 2753.32031, 11.27344, 2.0, 100.0, frandom(25.0));
-
-	CreateFuelOutlet(1590.35156, 2204.50000, 11.31250, 2.0, 100.0, frandom(25.0));
-	CreateFuelOutlet(1596.13281, 2204.50000, 11.31250, 2.0, 100.0, frandom(25.0));
-	CreateFuelOutlet(1602.00000, 2204.50000, 11.31250, 2.0, 100.0, frandom(25.0));
-	CreateFuelOutlet(1590.35156, 2193.71094, 11.31250, 2.0, 100.0, frandom(25.0));
-	CreateFuelOutlet(1596.13281, 2193.71094, 11.31250, 2.0, 100.0, frandom(25.0));
-	CreateFuelOutlet(1602.00000, 2193.71094, 11.31250, 2.0, 100.0, frandom(25.0));
-
-	CreateFuelOutlet(2634.64063, 1100.94531, 11.25000, 2.0, 100.0, frandom(20.0));
-	CreateFuelOutlet(2639.87500, 1100.96094, 11.25000, 2.0, 100.0, frandom(20.0));
-	CreateFuelOutlet(2645.25000, 1100.96094, 11.25000, 2.0, 100.0, frandom(20.0));
-	CreateFuelOutlet(2634.64063, 1111.75000, 11.25000, 2.0, 100.0, frandom(20.0));
-	CreateFuelOutlet(2639.87500, 1111.75000, 11.25000, 2.0, 100.0, frandom(20.0));
-	CreateFuelOutlet(2645.25000, 1111.75000, 11.25000, 2.0, 100.0, frandom(20.0));
-
 	CreateLadder(1177.6424, -1305.6337, 13.9241, 29.0859, 0.0);
 
 	LV_District_Housing1();

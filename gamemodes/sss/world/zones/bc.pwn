@@ -3,14 +3,6 @@
 
 Load_BC()
 {
-	CreateFuelOutlet(603.48438, 1707.23438, 6.17969, 2.0, 130.0, frandom(40));
-	CreateFuelOutlet(606.89844, 1702.21875, 6.17969, 2.0, 130.0, frandom(40));
-	CreateFuelOutlet(610.25000, 1697.26563, 6.17969, 2.0, 130.0, frandom(40));
-	CreateFuelOutlet(613.71875, 1692.26563, 6.17969, 2.0, 130.0, frandom(40));
-	CreateFuelOutlet(617.12500, 1687.45313, 6.17969, 2.0, 130.0, frandom(40));
-	CreateFuelOutlet(620.53125, 1682.46094, 6.17969, 2.0, 130.0, frandom(40));
-	CreateFuelOutlet(624.04688, 1677.60156, 6.17969, 2.0, 130.0, frandom(40));
-
 	new	Button:buttonid[2];
 
 	buttonid[0] = CreateButton(-101.579933, 1374.613769, 10.4698, 	"Pressione F para entrar", 	0, 0, .label = 1);

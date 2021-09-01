@@ -414,7 +414,21 @@ stock ToggleAdminDuty(playerid, bool:toggle, goback = true)
 
 		// Mostrar a todos os Jogadores que o Admin está em serviço
 		SetPlayerScore(playerid, 0);
-		SetPlayerColor(playerid, COLOR_PLAYER_ADMIN);
+
+		foreach(new i : Player)
+		{
+			if(GetPlayerAdminLevel(i))
+			{
+				new BitStream:bs = BS_New();
+
+				BS_WriteValue(bs,
+					PR_UINT16, playerid,
+					PR_UINT32, COLOR_PLAYER_ADMIN);
+					
+				PR_SendRPC(bs, i, 72);
+				BS_Delete(bs);
+			}
+		}
 
 		ToggleMapForPlayer(playerid, true);
 		
