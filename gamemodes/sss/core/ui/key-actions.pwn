@@ -15,7 +15,7 @@ hook OnPlayerConnect(playerid)
 	PlayerTextDrawSetOutline(playerid, KeyActions[playerid], 1);
 	PlayerTextDrawSetShadow(playerid, KeyActions[playerid], 1);
 	PlayerTextDrawAlignment(playerid, KeyActions[playerid], 1);
-	PlayerTextDrawColor(playerid, KeyActions[playerid], -65281);
+	PlayerTextDrawColor(playerid, KeyActions[playerid], 0xc4a656ff);
 	PlayerTextDrawBackgroundColor(playerid, KeyActions[playerid], 255);
 	PlayerTextDrawBoxColor(playerid, KeyActions[playerid], 50);
 	PlayerTextDrawUseBox(playerid, KeyActions[playerid], 0);
@@ -57,10 +57,10 @@ stock AddToolTipText(playerid, const key[], const use[])
 		else if(!strcmp(key, KEYTEXT_LIGHTS)) 		strcat(tmp, "N");
 		else if(!strcmp(key, KEYTEXT_DOORS)) 		strcat(tmp, "2");
 
-		format(tmp, sizeof(tmp), "~y~%s ~w~%s~n~", tmp, use);
+		format(tmp, sizeof(tmp), "%s ~w~%s~n~~y~", tmp, use);
 	}
 	else
-		format(tmp, sizeof(tmp), "~y~%s ~w~%s~n~", key, use);
+		format(tmp, sizeof(tmp), "%s ~w~%s~n~~y~", key, use);
 
 	strcat(KeyActionsText[playerid], tmp);
 }
@@ -200,21 +200,21 @@ _UpdateKeyActions(playerid)
 		{
 			if(IsAdminFlying(playerid))
 			{
-				AddToolTipText(playerid, "SHIFT ~w~+ ~y~RMB", "Alternar Velocidade");
+				AddToolTipText(playerid, "SHIFT + RMB", "Velocidade");
 				AddToolTipText(playerid, "~k~~PED_SPRINT~", "Cima");
 				AddToolTipText(playerid, "~k~~PED_DUCK~", "Baixo");
 				AddToolTipText(playerid, "~k~~PED_JUMPING~ ", "Modo lento");
 			}
 
-			AddToolTipText(playerid, "~k~~PED_JUMPING~ ~w~+ ~y~~k~~VEHICLE_ENTER_EXIT~", !IsAdminFlying(playerid) ? "Ativar Fly" : "Desativar Fly");
-			AddToolTipText(playerid, "~k~~PED_JUMPING~ ~w~+ ~y~~k~~PED_DUCK~", "Sair de ADM");
-			AddToolTipText(playerid, "~k~~PED_JUMPING~ ~w~+ ~y~~k~~PED_DUCK~ ~w~+ ~y~~k~~SNEAK_ABOUT~", "Sair de ADM no Local");
+			AddToolTipText(playerid, "~k~~PED_JUMPING~ + ~k~~VEHICLE_ENTER_EXIT~", !IsAdminFlying(playerid) ? "Ativar Fly" : "Desativar Fly");
+			AddToolTipText(playerid, "~k~~PED_JUMPING~ + ~k~~PED_DUCK~", "Sair de ADM");
+			AddToolTipText(playerid, "~k~~PED_JUMPING~ + ~k~~PED_DUCK~ +~k~~SNEAK_ABOUT~", "Sair de ADM no Local");
 
 			ShowPlayerKeyActionUI(playerid);
 			return;
 		}
 		else
-			AddToolTipText(playerid, "~k~~PED_JUMPING~ ~w~+ ~y~~k~~PED_DUCK~", "Entrar em ADM");
+			AddToolTipText(playerid, "~k~~PED_JUMPING~ + ~k~~PED_DUCK~", "Entrar em ADM");
 	}
 
 	if(IsPlayerInAnyVehicle(playerid))
