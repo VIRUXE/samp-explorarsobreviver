@@ -329,17 +329,25 @@ PlayerSpawnNewCharacter(playerid, gender)
 		GivePlayerBag(playerid, backpackitem);
 	}
 
-	new i = random(16);
+	new i = random(16), size;
 
-	if(!IsValidItemType(spawn_ResItems[i][e_itmobj_type]))
+	if(IsValidItemType(spawn_ResItems[i][e_itmobj_type]))
 		i = 0;
 
-	tmpitem = CreateItem(spawn_ResItems[i][e_itmobj_type]);
+	GetItemTypeSize(spawn_ResItems[i][e_itmobj_type], size);
+	if(size < 4)
+	{
+		tmpitem = CreateItem(spawn_ResItems[i][e_itmobj_type]);
 
-	if(spawn_ResItems[i][e_itmobj_exdata] != 0)
-		SetItemExtraData(tmpitem, spawn_ResItems[i][e_itmobj_exdata]);
+		if(spawn_ResItems[i][e_itmobj_exdata] != 0)
+			SetItemExtraData(tmpitem, spawn_ResItems[i][e_itmobj_exdata]);
 
-	AddItemToInventory(playerid, tmpitem);
+		AddItemToInventory(playerid, tmpitem);
+	}
+	else
+	{
+		log(true, "item too big for respawn. itemtype: %d", _:spawn_ResItems[i][e_itmobj_type]);
+	}
 
 	if(IsNewPlayer(playerid))
 	{
@@ -348,12 +356,20 @@ PlayerSpawnNewCharacter(playerid, gender)
 		if(!IsValidItemType(spawn_NewItems[i][e_itmobj_type]))
 			i = 0;
 
-		tmpitem = CreateItem(spawn_NewItems[i][e_itmobj_type]);
+		GetItemTypeSize(spawn_NewItems[i][e_itmobj_type], size);
+		if(size < 4)
+		{
+			tmpitem = CreateItem(spawn_NewItems[i][e_itmobj_type]);
 
-		if(spawn_NewItems[i][e_itmobj_exdata] != 0)
-			SetItemExtraData(tmpitem, spawn_NewItems[i][e_itmobj_exdata]);
+			if(spawn_NewItems[i][e_itmobj_exdata] != 0)
+				SetItemExtraData(tmpitem, spawn_NewItems[i][e_itmobj_exdata]);
 
-		AddItemToInventory(playerid, tmpitem);
+			AddItemToInventory(playerid, tmpitem);
+		}
+		else
+		{
+			log(true, "item too big for new player respawn. itemtype: %d", _:spawn_NewItems[i][e_itmobj_type]);
+		}
 	}
 
 	SetPlayerBrightness(playerid, 255);
