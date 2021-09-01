@@ -138,7 +138,7 @@ hook OnPlayerKeyStateChange(playerid, newkeys, oldkeys)
 	if(GetPlayerAdminLevel(playerid) >= STAFF_LEVEL_MODERATOR && (newkeys & KEY_JUMP && newkeys & KEY_CROUCH)) // Toggle Duty with SHIFT + C
 	{
 		ToggleAdminDuty(playerid, !admin_OnDuty[playerid], newkeys & KEY_WALK ? false : true); // SHIFT + ALT + C para sair no local que se encontra
-		CancelPlayerMovement(playerid);
+		ClearAnimations(playerid, 1);
 	}
 	return 1;
 }
@@ -382,17 +382,19 @@ stock ToggleAdminDuty(playerid, bool:toggle, goback = true)
 	while(GetTickCountDifference(GetTickCount(), admin_DutyTick[playerid]) < 1500)
 		admin_DutyTick[playerid] = GetTickCount();
 
+	new Float:x, Float:y, Float:z;
+
+	GetPlayerPos(playerid, x, y, z);
+
 	if(toggle && !admin_OnDuty[playerid])
 	{
 		new
 			Item:itemid,
-			ItemType:itemtype,
-			Float:x, Float:y, Float:z;
-		
+			ItemType:itemtype;
+
 		if(GetPlayerState(playerid) == PLAYER_STATE_SPECTATING)
 			ExitSpectateMode(playerid);
 
-		GetPlayerPos(playerid, x, y, z);
 		SetPlayerSpawnPos(playerid, x, y, z);
 
 		itemid = GetPlayerItem(playerid);
@@ -424,10 +426,10 @@ stock ToggleAdminDuty(playerid, bool:toggle, goback = true)
 
 		if(goback)
 		{
-			new Float:x, Float:y, Float:z;
+			new Float:spawnx, Float:spawny, Float:spawnz;
 
-			GetPlayerSpawnPos(playerid, x, y, z);
-			SetPlayerPos(playerid, x, y, z);
+			GetPlayerSpawnPos(playerid, spawnx, spawny, spawnz);
+			SetPlayerPos(playerid, spawnx, spawny, spawnz);
 		}
 
 		ToggleNameTagsForPlayer(playerid, false);
@@ -440,6 +442,7 @@ stock ToggleAdminDuty(playerid, bool:toggle, goback = true)
 	}
 
 	CallLocalFunction("OnAdminToggleDuty", "db", playerid, toggle);
+	log(true, "[DUTY] Admin %p %s. (%.3f, %.3f, %.3f - %s)", playerid, toggle ? "entrou em serviço" : goback ? "saiu de serviço no local onde entrou" : "saiu de serviço no local actual", x,y,z, GetPlayerZoneName(playerid));
 	
 	return 1;
 }
