@@ -198,13 +198,13 @@ _UpdateKeyActions(playerid)
 	{
 		if(IsPlayerOnAdminDuty(playerid))
 		{
-			if(IsAdminFlying(playerid))
+			/* if(IsAdminFlying(playerid))
 			{
 				AddToolTipText(playerid, "SHIFT + RMB", "Velocidade");
 				AddToolTipText(playerid, "~k~~PED_SPRINT~", "Cima");
 				AddToolTipText(playerid, "~k~~PED_DUCK~", "Baixo");
 				AddToolTipText(playerid, "~k~~PED_JUMPING~ ", "Modo lento");
-			}
+			} */
 
 			AddToolTipText(playerid, "~k~~PED_JUMPING~ + ~k~~VEHICLE_ENTER_EXIT~", !IsAdminFlying(playerid) ? "Ativar Fly" : "Desativar Fly");
 			AddToolTipText(playerid, "~k~~PED_JUMPING~ + ~k~~PED_DUCK~", "Sair de ADM");

@@ -1,5 +1,25 @@
+stock GetPlayerZoneName(playerid)
+{
+    new
+		MapZone:zone = GetPlayerMapZone(playerid),
+		name[MAX_MAP_ZONE_NAME],
+		soundid;
 
-TeleportPlayerToPlayer(playerid, targetid)
+	if(IsValidMapZone(zone))
+	{
+		GetMapZoneName(zone, name);
+		GetMapZoneSoundID(zone, soundid);
+
+		PlayerPlaySound(playerid, soundid, 0.0, 0.0, 0.0);
+	}
+	else
+		name = "Oceano";
+
+	return name;
+}
+
+
+stock TeleportPlayerToPlayer(playerid, targetid)
 {
 	if(targetid == playerid)
 		return 0;
@@ -61,7 +81,7 @@ TeleportPlayerToPlayer(playerid, targetid)
 	return 1;
 }
 
-IsValidUsername(const name[])
+stock IsValidUsername(const name[])
 {
 	new
 		i,
