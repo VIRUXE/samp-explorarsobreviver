@@ -641,10 +641,6 @@ SF_District_Housing2()
 		-2674.76, 867.24, 82.52,
 		-2674.28, 820.22, 73.14);
 
-	CreateFuelOutlet(-2410.80, 970.85, 44.48, 2.0, 100.0, frandom(40.0));
-	CreateFuelOutlet(-2410.80, 976.19, 44.48, 2.0, 100.0, frandom(40.0));
-	CreateFuelOutlet(-2410.80, 981.52, 44.48, 2.0, 100.0, frandom(40.0));
-
 	DefineWeaponsCachePos(-1838.79651, 1543.79602, 6.11533);
 	DefineWeaponsCachePos(-1791.30994, 1543.37488, 6.12531);
 	DefineWeaponsCachePos(-1740.91626, 1543.25623, 6.14425);
@@ -2771,15 +2767,6 @@ SF_District_Industrial()
 
 	CreateDynamicObject(2002, -1978.52356, 131.39619, 26.68210, 0.00000, 0.00000, 90.00000);
 	CreateDynamic3DTextLabel("XBOX ONE", YELLOW, -1978.52356, 131.39619, 28.2150, 10.0);
-
-	CreateFuelOutlet(-1679.3594, 403.0547, 6.3828, 2.0, 100.0, frandom(35.0));
-	CreateFuelOutlet(-1675.2188, 407.1953, 6.3828, 2.0, 100.0, frandom(35.0));
-	CreateFuelOutlet(-1669.9063, 412.5313, 6.3828, 2.0, 100.0, frandom(35.0));
-	CreateFuelOutlet(-1665.5234, 416.9141, 6.3828, 2.0, 100.0, frandom(35.0));
-	CreateFuelOutlet(-1685.9688, 409.6406, 6.3828, 2.0, 100.0, frandom(35.0));
-	CreateFuelOutlet(-1681.8281, 413.7813, 6.3828, 2.0, 100.0, frandom(35.0));
-	CreateFuelOutlet(-1676.5156, 419.1172, 6.3828, 2.0, 100.0, frandom(35.0));
-	CreateFuelOutlet(-1672.1328, 423.5000, 6.3828, 2.0, 100.0, frandom(35.0));
 
 	DefineWeaponsCachePos(-2716.43823, 382.60507, 3.34639);
 	DefineWeaponsCachePos(-2521.67456, 318.69183, 34.09675);
