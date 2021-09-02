@@ -654,7 +654,7 @@ OnGameModeInit_Setup()
 {
 	print("[OnGameModeInit_Setup] Setting up...");
 
-	Logger_Log("Initialising Scavenge and Survive");
+	log(false, "Initialising Scavenge and Survive");
 
 	Streamer_ToggleErrorCallback(true);
 
@@ -771,35 +771,13 @@ task RestartUpdate[1000]()
 
 		gServerUptime++;
 	}
-
-	HTTP(0, HTTP_GET, "localhost:7788/update", "", "OnUpdateCheck");
-}
-
-forward OnUpdateCheck(index, response_code, data[]);
-public OnUpdateCheck(index, response_code, data[])
-{
-	if(response_code != 200)
-		return;
-
-	if(strlen(data) == 0)
-		return;
-
-	new status[8], time;
-	if(sscanf(data, "s[8]d", status, time))
-		return;
-
-	if(strcmp(status, "update"))
-		return;
-
-	Logger_Log("updated amx ready to go", Logger_I("restart_seconds", time));
-	SetRestart(time);
 }
 
 DirectoryCheck(const directory[])
 {
 	if(!Exists(directory))
 	{
-		Logger_Log("creating directory", Logger_S("directory", directory));
+		log(false, "creating directory - directory: %s", directory);
 		CreateDir(directory);
 	}
 }
