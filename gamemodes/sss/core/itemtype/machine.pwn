@@ -197,10 +197,7 @@ _mach_TapInteract(playerid)
 	new Container:containerid;
 	GetItemArrayDataAtCell(mach_CurrentMachine[playerid], _:containerid, E_MACHINE_CONTAINER_ID);
 
-	Logger_Dbg("machine", "machine interact tap",
-		Logger_I("id", _:mach_CurrentMachine[playerid]),
-		Logger_I("containerid", _:containerid),
-		Logger_I("playerid", playerid));
+	log(true, "[MACHINE] Interact Tap from %p (%d) - id: %d containerid: %d", playerid, _:mach_CurrentMachine[playerid], _:containerid);
 
 	// return 1 on OnPlayerUseMachine to cancel display of container inventory.
 	new ret = CallLocalFunction("OnPlayerUseMachine", "ddd", playerid, _:mach_CurrentMachine[playerid], 0);
@@ -226,10 +223,7 @@ timer _mach_HoldInteract[250](playerid)
 	new Container:containerid;
 	GetItemArrayDataAtCell(mach_CurrentMachine[playerid], _:containerid, 0);
 
-	Logger_Dbg("machine", "machine interact hold",
-		Logger_I("id", _:mach_CurrentMachine[playerid]),
-		Logger_I("containerid", _:containerid),
-		Logger_I("playerid", playerid));
+	log(true, "[MACHINE] Interact Hold from %p (%d) - id: %d containerid: %d", playerid, _:mach_CurrentMachine[playerid], _:containerid);
 
 	new Float:fuel;
 	GetItemArrayDataAtCell(mach_CurrentMachine[playerid], _:fuel, E_MACHINE_FUEL);
