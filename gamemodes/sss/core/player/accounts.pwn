@@ -191,11 +191,9 @@ Error:LoadAccount(playerid)
 	if(!stmt_fetch_row(stmt_AccountExists))
 		return Error(-1, "failed to fetch statement result stmt_AccountExists");
 
-	if(exists == 0)
+	if(!exists)
 	{
-		Logger_Log("LoadAccount: account does not exist",
-			Logger_I("playerid", playerid)
-		);
+		log(false, "[ACCOUNT] %p does not exist.", playerid);
 		return NoError(0);
 	}
 
@@ -304,7 +302,7 @@ stock DisplayRegisterPrompt(playerid)
 	new str[150];
 	format(str, 150, ls(playerid, "ACCREGIBODY"), playerid);
 
-	Logger_Log("player is registering", Logger_P(playerid));
+	log(true, "[ACCOUNTS] %p is registering", playerid);
 
 	inline Response(pid, dialogid, response, listitem, string:inputtext[])
 	{
@@ -328,14 +326,11 @@ stock DisplayRegisterPrompt(playerid)
 			{
 				new cause[128];
 				GetLastErrorCause(cause);
-				Logger_Err("failed to create account for player",
-					Logger_P(playerid),
-					Logger_S("cause", cause)
-				);
+				log(true, "[ACCOUNTS] failed to create account for %p. reason: %s", playerid, cause);
 				Handled();
 				return 1;
 			}
-			Logger_Log("account created", Logger_P(playerid));
+			log(true, "[ACCOUNTS] Account %p created", playerid);
 
 			// Account created so we can now ask the player to whitelist if necessary
 			if(IsWhitelistActive() && !IsWhitelistAuto())
@@ -363,7 +358,7 @@ stock DisplayLoginPrompt(playerid, badpass = 0)
 	else
 		format(str, 150, ls(playerid, "ACCLOGIBODY"), playerid);
 
-	Logger_Log("player is logging in", Logger_P(playerid));
+	log(true, "[ACCOUNTS] %p is logging in", playerid);
 
 	inline Response(pid, dialogid, response, listitem, string:inputtext[])
 	{
@@ -434,11 +429,7 @@ stock Login(playerid)
 	new serial[MAX_GPCI_LEN];
 	gpci(playerid, serial, MAX_GPCI_LEN);
 
-	Logger_Log("player logged in",
-		Logger_P(playerid),
-		Logger_S("gpci", serial),
-		Logger_B("alive", IsPlayerAlive(playerid))
-	);
+	log(true, "[ACCOUNTS] %p logged in - gpci: %s alive: %d", serial, IsPlayerAlive(playerid));
 
 	// TODO: move to a single query
 	stmt_bind_value(stmt_AccountSetIpv4, 0, DB::TYPE_INTEGER, GetPlayerIpAsInt(playerid));
@@ -492,10 +483,7 @@ stock Logout(playerid, docombatlogcheck = 1)
 {
 	if(!acc_LoggedIn[playerid])
 	{
-		Logger_Log("player logged out",
-			Logger_P(playerid),
-			Logger_B("logged_in", false)
-		);
+		log(true, "[ACCOUNTS] %p logged out - logged in: false");
 		return 0;
 	}
 	
@@ -508,20 +496,11 @@ stock Logout(playerid, docombatlogcheck = 1)
 	GetPlayerPos(playerid, x, y, z);
 	GetPlayerFacingAngle(playerid, r);
 
-	Logger_Log("player logged out",
-		Logger_P(playerid),
-		Logger_F("x", x),
-		Logger_F("y", y),
-		Logger_F("z", z),
-		Logger_F("r", r),
-		Logger_B("logged_in", acc_LoggedIn[playerid]),
-		Logger_B("alive", IsPlayerAlive(playerid)),
-		Logger_B("knocked_out", IsPlayerKnockedOut(playerid))
-	);
+	log(true, "[ACCOUNTS] %p logged out - location: %s (%.3f, %.3f, %.3f, %.3f) logged in: %d alive: %d knocked out: %d ", GetPlayerZoneName(playerid), x,y,z,r, acc_LoggedIn[playerid], IsPlayerAlive(playerid), IsPlayerKnockedOut(playerid));
 
 	if(IsPlayerOnAdminDuty(playerid))
 	{
-		dbg("accounts", 1, "[LOGOUT] ERROR: Player on admin duty, aborting save.");
+		dbg("accounts", 1, "[ACCOUNTS] ERROR: Player on admin duty, aborting save.");
 		return 0;
 	}
 
@@ -535,8 +514,7 @@ stock Logout(playerid, docombatlogcheck = 1)
 
 			if(IsPlayerCombatLogging(playerid, lastattacker, Item:lastweapon))
 			{
-				Logger_Log("player combat-logged",
-					Logger_P(playerid));
+				log(true, "[ACCOUNTS] %p combat-logged", playerid);
 
 				ChatMsgAll(YELLOW, " » %p Deslogou em Combate esse Viado!", playerid);
 
