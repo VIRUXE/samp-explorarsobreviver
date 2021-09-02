@@ -241,13 +241,7 @@ public OnSafeboxLoad(Item:itemid, active, uuid[], data[], length)
 			AddItemToContainer(containerid, subitem);
 		}
 
-		Logger_Log("safebox loaded",
-			Logger_S("uuid", uuid),
-			Logger_I("itemid", _:itemid),
-			Logger_I("containerid", _:containerid),
-			Logger_I("active", active),
-			Logger_I("items", GetStoredItemCount())
-		);
+		log(false, "safebox loaded - uuid: %s itemid: %d containerid: %d active: %d items: %d", uuid, _:itemid, _:containerid, active, GetStoredItemCount());
 
 		ClearSerializer();
 	}
