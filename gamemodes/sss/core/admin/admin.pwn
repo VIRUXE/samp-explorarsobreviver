@@ -455,7 +455,7 @@ stock ToggleAdminDuty(playerid, bool:toggle, goback = true)
 		SetPlayerColor(playerid, !IsPlayerMobile(playerid) ? COLOR_PLAYER_NORMAL : COLOR_PLAYER_MOBILE); // 
 	}
 
-	CallLocalFunction("OnAdminToggleDuty", "db", playerid, toggle);
+	CallLocalFunction("OnAdminToggleDuty", "dbb", playerid, toggle, goback);
 	log(true, "[DUTY] Admin %p %s. (%.3f, %.3f, %.3f - %s)", playerid, toggle ? "entrou em serviço" : goback ? "saiu de serviço no local onde entrou" : "saiu de serviço no local actual", x,y,z, GetPlayerZoneName(playerid));
 	
 	return 1;

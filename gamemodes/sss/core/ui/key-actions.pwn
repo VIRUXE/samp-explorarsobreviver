@@ -155,7 +155,7 @@ hook OnPlayerStateChange(playerid, newstate, oldstate)
 	return 1;
 }
 
-hook OnAdminToggleDuty(playerid, bool:duty)
+hook OnAdminToggleDuty(playerid, bool:duty, bool:goback)
 {
 	_UpdateKeyActions(playerid);
 }

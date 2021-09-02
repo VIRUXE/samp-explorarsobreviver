@@ -87,12 +87,14 @@ hook OnPlayerUpdate(playerid)
 hook OnPlayerDisconnect(playerid)
     isFlying[playerid] = false;
 
-hook OnAdminToggleDuty(playerid, bool:duty)
+hook OnAdminToggleDuty(playerid, bool:duty, bool:goback)
 {
 	if(duty == false && isFlying[playerid])
 	{
 		isFlying[playerid] = false;
-		LowerPlayerToGround(playerid);
+		
+		if(!goback)
+			LowerPlayerToGround(playerid);
 
 		log(false, "[FLY] ADM off enquanto estava em fly");
 	}
