@@ -187,7 +187,6 @@ ACMD:debug[4](playerid, params[])
 	}
 
 	debug_set_level(handlername, level);
-	Logger_ToggleDebug(handlername, bool:level);
 
 	ChatMsg(playerid, YELLOW, " » SS debug level for '%s': %d", handlername, level);
 
