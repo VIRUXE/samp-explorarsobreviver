@@ -18,12 +18,12 @@ hook OnGameModeInit()
 	if(count == 0)
 		err(false, false, "No loot table entries loaded!");
 	else
-		Logger_Log("loaded loot table entries", Logger_I("count", count));
+		log(false, "loaded loot %d table entries", count);
 }
 
 LoadLootTableDir(const directory_with_root[])
 {
-	Logger_Log("loading loot tables from directory", Logger_S("directory", directory_with_root));
+	log(false, "loading loot tables from directory: %s", directory_with_root);
 
 	new
 		Directory:direc,
@@ -65,7 +65,7 @@ LoadLootTableDir(const directory_with_root[])
 
 LoadLootTableFromFile(file[])
 {
-	Logger_Log("loading loot table from file", Logger_S("file", file));
+	log(false, "loading loot table from file %s", file);
 
 	if(!fexist(file))
 	{
@@ -126,7 +126,7 @@ LoadLootTableFromFile(file[])
 
 	fclose(f);
 
-	Logger_Log("loaded item spawn rates", Logger_I("count", count), Logger_S("file", file));
+	log(false, "loaded %d item spawn rates from %s", count, file);
 
 	return 1;
 }
