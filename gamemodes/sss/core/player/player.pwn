@@ -102,8 +102,6 @@ public OnPlayerDisconnect(playerid, reason)
 	if(gServerRestarting)
 		return 0;
 
-	LowerPlayerToGround(playerid); // No caso de por alguma razão estar no ar. Pode ser abusado...
-
 	Logout(playerid);
 
 	ChatMsgAll(GREY, " » %P "C_GREY"%s.", playerid, reason ? "decidiu sair" : "perdeu a conexao");
