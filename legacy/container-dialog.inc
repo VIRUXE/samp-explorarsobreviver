@@ -11,7 +11,6 @@
 
 
 #include <a_samp>
-#include <logger>
 #include <container>
 #include <inventory-dialog>
 #include <YSI_Visual\y_dialog>
@@ -102,11 +101,6 @@ stock DisplayContainerInventory(playerid, Container:containerid) {
 		return 1;
 	}
 
-	Logger_Dbg("container-dialog", "displaying container dialog to player",
-		Logger_I("playerid", playerid),
-		Logger_I("containerid", _:containerid),
-		Logger_I("viewingInventory", IsPlayerViewingInventory(playerid)));
-
 	new
 		containerSize,
 		Item:itemid,
@@ -140,7 +134,7 @@ stock DisplayContainerInventory(playerid, Container:containerid) {
 		cnt_ItemListTotal[playerid]++;
 	}*/
 
-	strcat(cnt_InventoryString[playerid], "~y~Bolsos >\n");
+	strcat(cnt_InventoryString[playerid], "Bolsos >\n");
 
 	if(CallLocalFunction("OnPlayerOpenContainer", "dd", playerid, _:containerid)) {
 		return 2;
@@ -153,12 +147,11 @@ stock DisplayContainerInventory(playerid, Container:containerid) {
 	format(title, sizeof(title), "%s (%d/%d)", containername, containerSize - freeSlots, containerSize);
 
 	if(strlen(cnt_InventoryString[playerid]) >= 2048) {
-		Logger_Err("cnt_InventoryString is over 2048 chars: %d",
-			Logger_I("length", strlen(cnt_InventoryString[playerid])));
+		printf("cnt_InventoryString is over 2048 chars: %d", strlen(cnt_InventoryString[playerid]));
 	}
 
 
-	ShowPlayerAltDialog(playerid, 35, AD_STYLE_LIST, title, cnt_InventoryString[playerid], "Enter", "Sair");
+	ShowPlayerDialog(playerid, 35, DIALOG_STYLE_LIST, title, cnt_InventoryString[playerid], "Enter", "Sair");
 
 	CallLocalFunction("OnPlayerOpenedContainer", "dd", playerid, _:containerid);
 
@@ -169,10 +162,6 @@ stock ClosePlayerContainer(playerid, call = true) {
 	if(!IsPlayerConnected(playerid)) {
 		return 1;
 	}
-
-	Logger_Dbg("container-dialog", "closing container dialog for player",
-		Logger_I("playerid", playerid),
-		Logger_I("containerid", _:cnt_CurrentContainer[playerid]));
 
 	if(cnt_CurrentContainer[playerid] == INVALID_CONTAINER_ID) {
 		return 2;
@@ -232,7 +221,7 @@ hook OnPlayerConnect(playerid)
 	cnt_CurrentContainer[playerid] = INVALID_CONTAINER_ID;
 }
 
-hook OnAltDialogResponse(playerid, dialogid, response, listitem)
+hook OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 {
 	if(dialogid == 36)
 	{
@@ -250,9 +239,6 @@ hook OnAltDialogResponse(playerid, dialogid, response, listitem)
 
 					ret = GetContainerSlotItem(cnt_CurrentContainer[playerid], cnt_SelectedSlot[playerid], itemid);
 					if(ret) {
-						Logger_Err("current container invalid in dialog call",
-							Logger_I("containerid", _:cnt_CurrentContainer[playerid]),
-							Logger_I("playerid", playerid));
 						ShowActionText(playerid, "Erro", 3000, 200);
 						DisplayContainerInventory(playerid, cnt_CurrentContainer[playerid]);
 						return 1;
@@ -281,9 +267,6 @@ hook OnAltDialogResponse(playerid, dialogid, response, listitem)
 
 					ret = GetContainerSlotItem(cnt_CurrentContainer[playerid], cnt_SelectedSlot[playerid], itemid);
 					if(ret) {
-						Logger_Err("current container invalid in dialog call",
-							Logger_I("containerid", _:cnt_CurrentContainer[playerid]),
-							Logger_I("playerid", playerid));
 						ShowActionText(playerid, "Erro", 3000, 200);
 						DisplayContainerInventory(playerid, cnt_CurrentContainer[playerid]);
 						return 1;
@@ -314,9 +297,6 @@ hook OnAltDialogResponse(playerid, dialogid, response, listitem)
 
 				ret = GetContainerSlotItem(cnt_CurrentContainer[playerid], cnt_SelectedSlot[playerid], itemid);
 				if(ret) {
-					Logger_Err("current container invalid in dialog call",
-						Logger_I("containerid", _:cnt_CurrentContainer[playerid]),
-						Logger_I("playerid", playerid));
 					ShowActionText(playerid, "Erro", 3000, 200);
 					DisplayContainerInventory(playerid, cnt_CurrentContainer[playerid]);
 					return 1;
@@ -352,9 +332,6 @@ hook OnAltDialogResponse(playerid, dialogid, response, listitem)
 
 				ret = GetContainerSlotItem(cnt_CurrentContainer[playerid], cnt_SelectedSlot[playerid], itemid);
 				if(ret) {
-					Logger_Err("current container invalid in dialog call",
-						Logger_I("containerid", _:cnt_CurrentContainer[playerid]),
-						Logger_I("playerid", playerid));
 					ShowActionText(playerid, "Erro", 3000, 200);
 					return 1;
 				}
@@ -409,7 +386,6 @@ hook OnAltDialogResponse(playerid, dialogid, response, listitem)
 				if(!CallLocalFunction("OnPlayerSelectContainerOpt", "ddd", playerid, _:cnt_CurrentContainer[playerid], listitem - 4)) {
 					DisplayContainerInventory(playerid, cnt_CurrentContainer[playerid]);
 				} else {
-					Logger_Dbg("container-dialog", "closing container via option response");
 					ClosePlayerContainer(playerid);
 				}
 			}
@@ -428,7 +404,6 @@ hook OnAltDialogResponse(playerid, dialogid, response, listitem)
 				DisplayPlayerInventory(playerid);
 			} else {
 				if(!(0 <= listitem < MAX_CONTAINER_SLOTS)) {
-					Logger_Err("invalid listitem value", Logger_I("listitem", listitem));
 					return 0;
 				}
 
@@ -451,7 +426,7 @@ hook OnAltDialogResponse(playerid, dialogid, response, listitem)
 
 					CallLocalFunction("OnPlayerViewContainerOpt", "dd", playerid, _:cnt_CurrentContainer[playerid]);
 
-					ShowPlayerAltDialog(playerid, 36, AD_STYLE_LIST, title, cnt_OptionsList[playerid], "Enter", "Voltar");
+					ShowPlayerDialog(playerid, 36, DIALOG_STYLE_LIST, title, cnt_OptionsList[playerid], "Enter", "Voltar");
 
 					cnt_SelectedSlot[playerid] = listitem;
 				}
@@ -517,7 +492,7 @@ hook OnPlayerOpenInventory(playerid) {
 	if(IsValidContainer(cnt_CurrentContainer[playerid])) {
 		new str[4 + MAX_CONTAINER_NAME];
 		GetContainerName(cnt_CurrentContainer[playerid], str);
-		format(str, sizeof(str), "~y~%s >", str);
+		format(str, sizeof(str), "%s >", str);
 
 		cnt_InventoryContainerItem[playerid] = AddInventoryListItem(playerid, str);
 	}

@@ -15,7 +15,6 @@
 #include <item>
 #include <inventory>
 #include <YSI_Visual\y_dialog>
-
 #include <YSI_Coding\y_hooks>
 
 
@@ -123,9 +122,6 @@ stock DisplayPlayerInventory(playerid)
 	if(!IsPlayerConnected(playerid))
 		return 1;
 
-	Logger_Dbg("inventory-dialog", "showing inventory for player",
-		Logger_I("playerid", playerid));
-
 	new
 		title[18],
 		list[(MAX_INVENTORY_SLOTS * (MAX_ITEM_NAME + MAX_ITEM_TEXT))],
@@ -177,7 +173,7 @@ stock DisplayPlayerInventory(playerid)
 
 	format(title, sizeof(title), "Bolsos (%d/%d)", size - slots, size);
 
-	ShowPlayerAltDialog(playerid, 33, AD_STYLE_LIST, title, list, "Enter", "Sair");
+	ShowPlayerDialog(playerid, 33, DIALOG_STYLE_LIST, title, list, "Enter", "Sair");
 
 	inv_ViewingInventory[playerid] = true;
 
@@ -189,9 +185,6 @@ stock ClosePlayerInventory(playerid, call = true)
 {
 	if(!inv_ViewingInventory[playerid])
 		return 1;
-
-	Logger_Dbg("inventory-dialog", "hiding inventory for player",
-		Logger_I("playerid", playerid));
 
 	inv_ViewingInventory[playerid] = false;
 
@@ -220,10 +213,6 @@ stock AddInventoryListItem(playerid, const itemname[])
 	if(strlen(inv_ExtraItemList[playerid]) + strlen(itemname) > sizeof(inv_ExtraItemList[]))
 		return 0;
 
-	Logger_Dbg("inventory-dialog", "adding inventory list item",
-		Logger_I("playerid", playerid),
-		Logger_S("itemname", itemname));
-
 	strcat(inv_ExtraItemList[playerid], itemname);
 	strcat(inv_ExtraItemList[playerid], "\n");
 
@@ -234,10 +223,6 @@ stock AddInventoryOption(playerid, const option[])
 {
 	if(strlen(inv_OptionsList[playerid]) + strlen(option) > sizeof(inv_OptionsList[]))
 		return 0;
-
-	Logger_Dbg("inventory-dialog", "adding inventory item option",
-		Logger_I("playerid", playerid),
-		Logger_S("option", option));
 
 	strcat(inv_OptionsList[playerid], option);
 	strcat(inv_OptionsList[playerid], "\n");
@@ -310,7 +295,7 @@ hook OnPlayerConnect(playerid)
 	inv_ViewingInventory[playerid] = false;
 }
 
-hook OnAltDialogResponse(playerid, dialogid, response, listitem)
+hook OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 {
 	if(dialogid == 32)
 	{
@@ -328,7 +313,6 @@ hook OnAltDialogResponse(playerid, dialogid, response, listitem)
 					
 					ret = GetInventorySlotItem(playerid, inv_SelectedSlot[playerid], itemid);
 					if(ret) {
-						Logger_Err("failed to get inventory slot item", Logger_I("playerid", playerid), Logger_I("slotid", inv_SelectedSlot[playerid]), Logger_I("ret", ret));
 						DisplayPlayerInventory(playerid);
 						return 1;
 					}
@@ -356,7 +340,6 @@ hook OnAltDialogResponse(playerid, dialogid, response, listitem)
 					
 					ret = GetInventorySlotItem(playerid, inv_SelectedSlot[playerid], itemid);
 					if(ret) {
-						Logger_Err("failed to get inventory slot item", Logger_I("playerid", playerid), Logger_I("slotid", inv_SelectedSlot[playerid]), Logger_I("ret", ret));
 						DisplayPlayerInventory(playerid);
 						return 1;
 					}
@@ -387,7 +370,6 @@ hook OnAltDialogResponse(playerid, dialogid, response, listitem)
 				
 				ret = GetInventorySlotItem(playerid, inv_SelectedSlot[playerid], itemid);
 				if(ret) {
-					Logger_Err("failed to get inventory slot item", Logger_I("playerid", playerid), Logger_I("slotid", inv_SelectedSlot[playerid]), Logger_I("ret", ret));
 					DisplayPlayerInventory(playerid);
 					return 1;
 				}
@@ -434,10 +416,8 @@ hook OnAltDialogResponse(playerid, dialogid, response, listitem)
 			}
 			default: {
 				if(!CallLocalFunction("OnPlayerSelectInventoryOpt", "dd", playerid, listitem - 3)) {
-					Logger_Dbg("inventory-dialog", "opening inventory via extra item response");
 					DisplayPlayerInventory(playerid);
 				} else {
-					Logger_Dbg("inventory-dialog", "closing inventory via option response");
 					ClosePlayerInventory(playerid);
 				}
 			}
@@ -446,11 +426,6 @@ hook OnAltDialogResponse(playerid, dialogid, response, listitem)
 	}
 	if(dialogid == 33)
 	{
-		Logger_Dbg("inventory-dialog", "player responded to inventory dialog",
-			Logger_I("playerid", playerid),
-			Logger_I("response", response),
-			Logger_I("listitem", listitem));
-
 		if(!response) {
 			ClosePlayerInventory(playerid);
 			return 1;
@@ -458,10 +433,8 @@ hook OnAltDialogResponse(playerid, dialogid, response, listitem)
 
 		if(listitem >= inv_ItemListTotal[playerid]) {
 			if(!CallLocalFunction("OnPlayerSelectExtraItem", "dd", playerid, listitem - inv_ItemListTotal[playerid])) {
-				Logger_Dbg("inventory-dialog", "opening inventory via extra item response");
 				DisplayPlayerInventory(playerid);
 			} else {
-				Logger_Dbg("inventory-dialog", "closing inventory via extra item response");
 				ClosePlayerInventory(playerid, false);
 			}
 			return 1;
@@ -491,7 +464,7 @@ hook OnAltDialogResponse(playerid, dialogid, response, listitem)
 
 			CallLocalFunction("OnPlayerViewInventoryOpt", "d", playerid);
 
-			ShowPlayerAltDialog(playerid, 32, AD_STYLE_LIST, title, inv_OptionsList[playerid], "Enter", "Voltar");
+			ShowPlayerDialog(playerid, 32, DIALOG_STYLE_LIST, title, inv_OptionsList[playerid], "Enter", "Voltar");
 		}
 
 		return 0;
@@ -503,11 +476,6 @@ hook OnPlayerKeyStateChange(playerid, newkeys, oldkeys)
 {
 	if(!IsPlayerInAnyVehicle(playerid))
 	{
-		Logger_Dbg("inventory-dialog", "OnPlayerKeyStateChange",
-			Logger_I("playerid", playerid),
-			Logger_I("newkeys", newkeys),
-			Logger_I("oldkeys", oldkeys));
-
 		if(newkeys & KEY_CTRL_BACK)
 			DisplayPlayerInventory(playerid);
 		else if(newkeys & KEY_YES)
@@ -536,8 +504,6 @@ _inv_putAway(playerid) {
 	
 	new ret = GetInventoryFreeSlots(playerid, freeslots);
 	if(ret) {
-		Logger_Err("failed to get inventory free slots",
-			Logger_I("return", ret));
 		return;
 	}
 

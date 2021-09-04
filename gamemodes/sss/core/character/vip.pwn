@@ -31,7 +31,7 @@ hook OnPlayerOpenInventory(playerid)
 {
     if((GetPlayerVIP(playerid) - gettime()) > 1)
     {
-	    vip_InventoryOption[playerid] = AddInventoryListItem(playerid, "~y~Menu VIP >");
+	    vip_InventoryOption[playerid] = AddInventoryListItem(playerid, "Menu VIP >");
     }
 	return Y_HOOKS_CONTINUE_RETURN_0;
 }
@@ -349,7 +349,7 @@ stock SetVip(const name[MAX_PLAYER_NAME], level = 1, days = 30, hours = 0, minut
 
         ShowActionText(playerId,
             sprintf("Parabens! Voce agora possui VIP nivel %d~n~Abra o menu do VIP atraves do bolso", level),
-            5000, 200, COLOR_PLAYER_VIP);
+            5000, 200);
     }
 
     return 1;

@@ -80,7 +80,6 @@ public OnGameModeInit()
 #include <YSI_Coding\y_iterate>
 #include <YSI_Storage\y_ini>
 #include <YSI_Visual\y_dialog>
-#include <alt_dialogs>
 #include <PreviewModelDialog>
 #include <Pawn.RakNet>
 #include <colandreas> 
@@ -100,7 +99,7 @@ public OnGameModeInit()
 //#include <geoip>
 #include <map-zones>
 #include <modio>
-#include <new-action-text>
+#include <action-text>
 #include <button_new>
 #include <personal-space>
 #include <door>

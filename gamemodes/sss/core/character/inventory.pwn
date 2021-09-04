@@ -317,6 +317,7 @@ HidePlayerGear(playerid)
 
 	TextDrawHideForPlayer(playerid, GearSlot_Back[0]);
 	TextDrawHideForPlayer(playerid, GearSlot_Back[1]);
+	CancelSelectTextDraw(playerid);
 }
 
 ShowPlayerGear(playerid)
@@ -407,6 +408,7 @@ ShowPlayerGear(playerid)
 	}
 	else TextDrawHideForPlayer(playerid, GearSlot_Back[1]);
 	
+	SelectTextDraw(playerid, YELLOW);
 }
 
 
