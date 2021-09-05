@@ -1,35 +1,4 @@
-/*==============================================================================
-
-
-	Southclaws' Scavenge and Survive
-
-		Big thanks to Onfire559/Adam for the initial concept and developing
-		the idea a lot long ago with some very productive discussions!
-		Recently influenced by Minecraft and DayZ, credits to the creators of
-		those games and their fundamental mechanics and concepts.
-
-		Copyright (C) 2020 Barnaby "Southclaws" Keene
-
-		This Source Code Form is subject to the terms of the Mozilla Public
-		License, v. 2.0. If a copy of the MPL was not distributed with this
-		file, You can obtain one at http://mozilla.org/MPL/2.0/.
-
-
-==============================================================================*/
-
-
 #include <a_samp>
-
-/*==============================================================================
-
-	Library Predefinitions
-
-==============================================================================*/
-
-#undef MAX_PLAYER_NAME
-#define MAX_PLAYER_NAME 				20 // Não se utiliza SetPlayerName logo apenas fica 20 chars
-
-#define KEY_AIM KEY_HANDBRAKE
 
 #include "config.pwn"
 
@@ -133,12 +102,9 @@ public OnGameModeInit()
 #include <discord-connector>
 #include <a_mysql>
 
-/*==============================================================================
-
-	Definitions
-
-==============================================================================*/
 // Limits
+#undef MAX_PLAYER_NAME
+#define MAX_PLAYER_NAME 			20 // Não se utiliza SetPlayerName logo apenas fica 20 chars
 #define MAX_MOTD_LEN				128
 #define MAX_WEBSITE_NAME			64
 #define MAX_RULE					24
@@ -177,6 +143,7 @@ public OnGameModeInit()
 #define HOLDING(%0)					((newkeys & (%0)) == (%0))
 #define RELEASED(%0)				(((newkeys & (%0)) != (%0)) && ((oldkeys & (%0)) == (%0)))
 #define PRESSED(%0)					(((newkeys & (%0)) == (%0)) && ((oldkeys & (%0)) != (%0)))
+#define KEY_AIM 					KEY_HANDBRAKE
 
 // Colours
 #define YELLOW						0xFFFF00FF
