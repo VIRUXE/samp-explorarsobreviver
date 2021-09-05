@@ -603,6 +603,7 @@ new stock
 #include "sss/core/admin/name-tags.pwn"
 #include "sss/core/admin/player-list.pwn"
 #include "sss/core/admin/relatorio.pwn"
+#include "sss/core/admin/ticket.pwn"
 
 // POST-CODE
 
