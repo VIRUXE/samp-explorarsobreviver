@@ -17,6 +17,22 @@
 
 ==============================================================================*/
 
+
+#include <a_samp>
+
+/*==============================================================================
+
+	Library Predefinitions
+
+==============================================================================*/
+
+#undef MAX_PLAYER_NAME
+#define MAX_PLAYER_NAME 				20 // Não se utiliza SetPlayerName logo apenas fica 20 chars
+
+#define KEY_AIM KEY_HANDBRAKE
+
+#include "config.pwn"
+
 /*==============================================================================
 
 	Guaranteed first call
@@ -34,10 +50,6 @@
 	means for declaring entities with relevant data.
 
 ==============================================================================*/
-
-#include "config.pwn"
-
-#include <a_samp>
 
 public OnGameModeInit()
 {
@@ -73,6 +85,7 @@ public OnGameModeInit()
 #include <crashdetect>
 #include <sscanf2>
 #include <mathutil>
+#include <SKY>
 #include <YSI_Core\y_utils>
 #include <YSI_Coding\y_va>
 #include <YSI_Coding\y_timers>
@@ -164,7 +177,6 @@ public OnGameModeInit()
 #define HOLDING(%0)					((newkeys & (%0)) == (%0))
 #define RELEASED(%0)				(((newkeys & (%0)) != (%0)) && ((oldkeys & (%0)) == (%0)))
 #define PRESSED(%0)					(((newkeys & (%0)) == (%0)) && ((oldkeys & (%0)) != (%0)))
-#define KEY_AIM 					KEY_HANDBRAKE
 
 // Colours
 #define YELLOW						0xFFFF00FF
