@@ -9,18 +9,11 @@ static
 
 hook OnPlayerKeyStateChange(playerid, newkeys, oldkeys)
 {
-	if(newkeys & KEY_JUMP && newkeys & 16 && IsPlayerOnAdminDuty(playerid)) // JUMP and ENTER/F
+	if(HOLDING(KEY_JUMP) && PRESSED(16) && IsPlayerOnAdminDuty(playerid)) // JUMP and ENTER/F
 	{
-        CancelPlayerMovement(playerid);
+		CancelPlayerMovement(playerid); // Cancelar o salto
 
-        if(!isFlying[playerid])
-            ApplyAnimation(playerid, "PARACHUTE", "FALL_SKYDIVE", 4.0, 1, 0, 0, 0, 0, 1);
-        else
-            LowerPlayerToGround(playerid);
-
-        isFlying[playerid] = !isFlying[playerid];
-
-		CallLocalFunction("OnAdminToggleFly", "db", playerid, isFlying[playerid]);
+		ToggleAdminFly(playerid, !isFlying[playerid]);
 	}
 }
 
@@ -102,3 +95,29 @@ hook OnAdminToggleDuty(playerid, bool:duty, bool:goback)
 
 stock bool:IsAdminFlying(playerid)
     return isFlying[playerid];
+
+stock ToggleAdminFly(playerid, bool:toggle)
+{
+	if(toggle != isFlying[playerid])
+	{
+		new Float:x, Float:y, Float:z;
+
+		GetPlayerPos(playerid, x,y,z);
+
+		isFlying[playerid] = toggle;
+
+		if(isFlying[playerid])
+		{
+			if(!IsAdminOnDuty(playerid)
+				ToggleAdminDuty(playerid, true);
+
+			ApplyAnimation(playerid, "PARACHUTE", "FALL_SKYDIVE", 4.0, 1, 0, 0, 0, 0, 1);
+		}
+		else
+			LowerPlayerToGround(playerid);
+		        
+		log(true, "[FLY] Admin %p %s. (%0.3f, %0.3f, %0.3f - %s)", playerid, isFlying[playerid] ? "started flying" : "stopped flying", x,y,z, GetPlayerZoneName(playerid));
+
+		CallLocalFunction("OnAdminToggleFly", "db", playerid, isFlying[playerid]);
+	}
+}

@@ -77,6 +77,9 @@ stock TeleportPlayerToPlayer(playerid, targetid)
 		SetPlayerFacingAngle(playerid, ang);
 		SetPlayerVelocity(playerid, vx, vy, vz);
 	}
+	
+	if(IsAdminFlying(playerid) && GetPlayerAdminLevel(targetid))
+		ToggleAdminFly(targetid, true);
 
 	return 1;
 }
