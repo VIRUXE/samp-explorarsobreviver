@@ -13,10 +13,10 @@ forward OnPlayerShootPlayer(playerid, targetid, bodypart, Float:bleedrate, Float
 
 hook OnPlayerGiveDamage(playerid, damagedid, Float:amount, weaponid, bodypart)
 {
-	if(IsPlayerOnAdminDuty(damagedid))
+	if(IsAdminOnDuty(damagedid))
 		return 0;
 
-	if(IsPlayerOnAdminDuty(playerid))
+	if(IsAdminOnDuty(playerid))
 		return 0;
 
 	if(!IsPlayerSpawned(damagedid))
@@ -35,7 +35,7 @@ hook OnPlayerGiveDamage(playerid, damagedid, Float:amount, weaponid, bodypart)
 
 _HandleFirearmDamage(playerid, targetid, bodypart)
 {
-	if(IsPlayerOnAdminDuty(playerid) || IsPlayerOnAdminDuty(targetid))
+	if(IsAdminOnDuty(playerid) || IsAdminOnDuty(targetid))
 		return 0;
 
 	new

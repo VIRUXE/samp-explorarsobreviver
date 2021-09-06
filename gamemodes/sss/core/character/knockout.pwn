@@ -50,7 +50,7 @@ hook OnPlayerDeath(playerid, killerid, reason)
 
 stock KnockOutPlayer(playerid, duration)
 {
-	if(IsPlayerOnAdminDuty(playerid))
+	if(IsAdminOnDuty(playerid))
 		return 0;
 
 	if(!IsPlayerSpawned(playerid))
@@ -140,7 +140,7 @@ timer KnockOutUpdate[100](playerid)
 		return;
 	}
 
-	if(IsPlayerOnAdminDuty(playerid))
+	if(IsAdminOnDuty(playerid))
 		WakeUpPlayer(playerid);
 
 	if(IsValidVehicle(knockout_InVehicleID[playerid]))

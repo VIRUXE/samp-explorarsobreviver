@@ -196,7 +196,7 @@ _UpdateKeyActions(playerid)
 
 	if(GetPlayerAdminLevel(playerid) >= STAFF_LEVEL_MODERATOR)
 	{
-		if(IsPlayerOnAdminDuty(playerid))
+		if(IsAdminOnDuty(playerid))
 		{
 			/* if(IsAdminFlying(playerid))
 			{

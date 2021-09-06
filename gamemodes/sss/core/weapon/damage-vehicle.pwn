@@ -31,7 +31,7 @@ hook OnPlayerTakeDamage(playerid, issuerid, Float:amount, weaponid, bodypart)
 
 _DoVehicleCollisionDamage(playerid, targetid)
 {
-	if(IsPlayerOnAdminDuty(playerid) || IsPlayerOnAdminDuty(targetid))
+	if(IsAdminOnDuty(playerid) || IsAdminOnDuty(targetid))
 		return 0;
 
 	new

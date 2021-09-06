@@ -29,7 +29,7 @@ hook OnPlayerDroppedItem(playerid, Item:itemid)
 
 hook OnPlayerUseItemWithItem(playerid, Item:itemid, Item:withitemid)
 {
-	if(GetPlayerSpecialAction(playerid) == SPECIAL_ACTION_CUFFED || IsPlayerOnAdminDuty(playerid) || IsPlayerKnockedOut(playerid) || GetPlayerAnimationIndex(playerid) == 1381)
+	if(GetPlayerSpecialAction(playerid) == SPECIAL_ACTION_CUFFED || IsAdminOnDuty(playerid) || IsPlayerKnockedOut(playerid) || GetPlayerAnimationIndex(playerid) == 1381)
 		return 1;
 
 	_PickUpAmmoTransferCheck(playerid, itemid, withitemid);

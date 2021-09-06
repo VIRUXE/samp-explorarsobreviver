@@ -326,7 +326,7 @@ public OnPlayerUpdate(playerid)
 
 	if(ply_Data[playerid][ply_Alive])
 	{
-		SetPlayerHealth(playerid, IsPlayerOnAdminDuty(playerid) ? 99999.9 : ply_Data[playerid][ply_HitPoints]);
+		SetPlayerHealth(playerid, IsAdminOnDuty(playerid) ? 99999.9 : ply_Data[playerid][ply_HitPoints]);
 		SetPlayerArmour(playerid, ply_Data[playerid][ply_ArmourPoints]);
 	}
 	else

@@ -201,7 +201,7 @@ _HolsterChecks(playerid)
 		return 0;
 
 	// On duty
-	if(IsPlayerOnAdminDuty(playerid))
+	if(IsAdminOnDuty(playerid))
 		return 0;
 
 	// Knocked out

@@ -71,7 +71,7 @@ hook OnScriptInit()
 
 stock PlayerInflictWound(playerid, targetid, E_WND_TYPE:type, Float:bleedrate, Float:knockmult, calibre, bodypart, const source[])
 {
-	if(IsPlayerOnAdminDuty(playerid) || IsPlayerOnAdminDuty(targetid))
+	if(IsAdminOnDuty(playerid) || IsAdminOnDuty(targetid))
 		return 0;
 
 	if(IsPlayerKnockedOut(playerid))
@@ -85,7 +85,7 @@ stock PlayerInflictWound(playerid, targetid, E_WND_TYPE:type, Float:bleedrate, F
 	// Não atacar jogadores em atendimento
 	foreach(new i : StreamedPlayer[targetid])
 	{
-		if(IsPlayerOnAdminDuty(i) && !IsPlayerUnfocused(i))
+		if(IsAdminOnDuty(i) && !IsPlayerUnfocused(i))
 		{
 			new Float:x, Float:y, Float:z;
 			GetPlayerPos(i, x, y, z);

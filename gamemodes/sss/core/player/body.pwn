@@ -148,7 +148,7 @@ hook OnPlayerDisconnect(playerid, reason)
 		lastattacker,
 		lastweapon;
 
-	if(!IsPlayerCombatLogging(playerid, lastattacker, Item:lastweapon) && !IsPlayerOnAdminDuty(playerid) && IsPlayerLoggedIn(playerid))
+	if(!IsPlayerCombatLogging(playerid, lastattacker, Item:lastweapon) && !IsAdminOnDuty(playerid) && IsPlayerLoggedIn(playerid))
 	{
 		new Float:x, Float:y, Float:z, Float:a, name[MAX_PLAYER_NAME];
 		GetPlayerName(playerid, name, MAX_PLAYER_NAME);
@@ -514,7 +514,7 @@ public OnPlayerGiveDamageDynamicActor(playerid, actorid, Float:amount, weaponid,
 
 DamageBody(playerid, actorid, Float:amount)
 {
-	if(IsPlayerOnAdminDuty(playerid))
+	if(IsAdminOnDuty(playerid))
 		return 0;
 		
 	if(GetDynamicActorVirtualWorld(actorid) == 3333)

@@ -672,7 +672,7 @@ _SaveIfOwnedBy(vehicleid, playerid)
 _PlayerUpdateVehicle(playerid, vehicleid)
 {
 	dbg("player-vehicle", 1, "[_PlayerUpdateVehicle] %d %d (%s)", playerid, vehicleid, GetVehicleUUID(vehicleid));
-	if(IsPlayerOnAdminDuty(playerid))
+	if(IsAdminOnDuty(playerid))
 		return;
 
 	new vehiclename[MAX_VEHICLE_TYPE_NAME];

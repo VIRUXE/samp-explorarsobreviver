@@ -31,7 +31,7 @@ hook OnPlayerScriptUpdate(playerid)
 		return;
 	}
 
-	if(IsPlayerOnAdminDuty(playerid))
+	if(IsAdminOnDuty(playerid))
 	{
 		RemovePlayerAttachedObject(playerid, ATTACHSLOT_BLOOD);		
 		return;

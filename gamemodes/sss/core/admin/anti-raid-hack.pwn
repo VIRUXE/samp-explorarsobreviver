@@ -35,7 +35,7 @@ hook OnPlayerUpdate(playerid){
 		return 1;
 	}
 
-	if(!atr_Detect[playerid] && !IsPlayerAtConnectionPos(playerid) && !IsPlayerOnAdminDuty(playerid)) {
+	if(!atr_Detect[playerid] && !IsPlayerAtConnectionPos(playerid) && !IsAdminOnDuty(playerid)) {
 		new colision;
 
 		// Teleport hack or lag

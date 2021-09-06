@@ -84,7 +84,7 @@ _UpdateTicket()
         if(GetPlayerAdminLevel(i))
         {
             PlayerTextDrawSetString(i, ticket_Draw[i], ticket_Text);
-            if(IsPlayerOnAdminDuty(i))
+            if(IsAdminOnDuty(i))
             {
                 PlayerTextDrawShow(i, ticket_Draw[i]);
             }

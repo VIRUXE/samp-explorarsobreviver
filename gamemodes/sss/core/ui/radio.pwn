@@ -64,7 +64,7 @@ UpdateRadioMarker(playerid, info = 1)
 			if(IsValidDynamicMapIcon(Radio_Icon[playerid][i]) && !PlayerHasMap(playerid))
 				DestroyDynamicMapIcon(Radio_Icon[playerid][i]);
 
-			if(GetPlayerRadioFrequency(playerid) == GetPlayerRadioFrequency(i) && !IsPlayerOnAdminDuty(i))
+			if(GetPlayerRadioFrequency(playerid) == GetPlayerRadioFrequency(i) && !IsAdminOnDuty(i))
 			{
 				if(PlayerHasMap(playerid))
 				{

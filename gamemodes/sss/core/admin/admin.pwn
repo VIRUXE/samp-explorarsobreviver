@@ -114,7 +114,7 @@ hook OnPlayerClickPlayer(playerid, clickedplayerid, source)
 {
 	if(GetPlayerAdminLevel(playerid) >= STAFF_LEVEL_MODERATOR && playerid != clickedplayerid)
 	{	
-		if(GetPlayerState(clickedplayerid) == PLAYER_STATE_SPECTATING && IsPlayerOnAdminDuty(clickedplayerid))
+		if(GetPlayerState(clickedplayerid) == PLAYER_STATE_SPECTATING && IsAdminOnDuty(clickedplayerid))
 			return 0;
 
 		ToggleAdminDuty(playerid, true);
@@ -539,7 +539,7 @@ stock GetAdminRankColour(rank)
 	return admin_Colours[rank];
 }
 
-stock IsPlayerOnAdminDuty(playerid)
+stock IsAdminOnDuty(playerid)
 {
 	if(!IsPlayerConnected(playerid))
 		return 0;

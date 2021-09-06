@@ -101,7 +101,7 @@ hook OnPlayerMeleePlayer(playerid, targetid, Float:bleedrate, Float:knockmult)
 
 stock AFK_CheckKick(playerid)
 {
-	if(IsPlayerConnected(playerid) && !IsPlayerOnAdminDuty(playerid) && tab_IsTabbed[playerid])
+	if(IsPlayerConnected(playerid) && !IsAdminOnDuty(playerid) && tab_IsTabbed[playerid])
 	{
 		if(GetTickCountDifference(GetTickCount(), tab_TabOutTick[playerid]) > SEC(gMaxTaboutTime))
 		{

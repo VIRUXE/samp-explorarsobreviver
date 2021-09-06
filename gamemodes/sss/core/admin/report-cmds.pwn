@@ -93,7 +93,7 @@ ShowReportMenu(playerid)
 
 					targetid = GetClosestPlayerFromPlayer(playerid, distance);
 
-					if(!IsPlayerConnected(targetid) || IsPlayerOnAdminDuty(targetid))
+					if(!IsPlayerConnected(targetid) || IsAdminOnDuty(targetid))
 					{
 						ChatMsgLang(playerid, RED, "REPNOPF100M");
 						return 1;
@@ -334,7 +334,7 @@ ShowReportOptions(playerid)
 
 	options = "Banir\nEliminar\nEliminar todos os relatórios desse Jogador\nMarcar como não lido\n";
 
-	if(IsPlayerOnAdminDuty(playerid))
+	if(IsAdminOnDuty(playerid))
 	{
 		strcat(options, "Ir para a posição do relatório\n");
 
@@ -386,7 +386,7 @@ ShowReportOptions(playerid)
 				}
 				case 4:
 				{
-					if(IsPlayerOnAdminDuty(playerid))
+					if(IsAdminOnDuty(playerid))
 					{
 						SetPlayerPos(playerid, report_CurrentPos[playerid][0], report_CurrentPos[playerid][1], report_CurrentPos[playerid][2]);
 						SetPlayerVirtualWorld(playerid, report_CurrentWorld[playerid]);
@@ -397,7 +397,7 @@ ShowReportOptions(playerid)
 				{
 					if(!strcmp(report_CurrentType[playerid], "TELE"))
 					{
-						if(IsPlayerOnAdminDuty(playerid))
+						if(IsAdminOnDuty(playerid))
 						{
 							new Float:x, Float:y, Float:z;
 
@@ -410,7 +410,7 @@ ShowReportOptions(playerid)
 
 					if(!strcmp(report_CurrentType[playerid], "CAM"))
 					{
-						if(IsPlayerOnAdminDuty(playerid))
+						if(IsAdminOnDuty(playerid))
 						{
 							new Float:x, Float:y, Float:z;
 
@@ -423,7 +423,7 @@ ShowReportOptions(playerid)
 
 					if(!strcmp(report_CurrentType[playerid], "VTP"))
 					{
-						if(IsPlayerOnAdminDuty(playerid))
+						if(IsAdminOnDuty(playerid))
 						{
 							new Float:x, Float:y, Float:z;
 
@@ -438,7 +438,7 @@ ShowReportOptions(playerid)
 				{
 					if(!strcmp(report_CurrentType[playerid], "CAM"))
 					{
-						if(IsPlayerOnAdminDuty(playerid))
+						if(IsAdminOnDuty(playerid))
 						{
 							new Float:x, Float:y, Float:z, Float:vx, Float:vy, Float:vz;
 

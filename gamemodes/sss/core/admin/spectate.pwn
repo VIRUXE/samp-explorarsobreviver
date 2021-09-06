@@ -182,7 +182,7 @@ ExitSpectateMode(playerid)
 
 hook OnPlayerSpawn(playerid)
 {
-	if(IsPlayerOnAdminDuty(playerid))
+	if(IsAdminOnDuty(playerid))
 	{
 		SetPlayerPos(playerid, spectate_StartPos[playerid][0], spectate_StartPos[playerid][1], spectate_StartPos[playerid][2]);
 		if(GetPlayerGender(playerid) == GENDER_MALE)
@@ -527,7 +527,7 @@ stock GetPlayerSpectateType(playerid)
 
 ACMD:freezecam[2](playerid)
 {
-	if(!IsPlayerOnAdminDuty(playerid))
+	if(!IsAdminOnDuty(playerid))
 		return 6;
 
 	new

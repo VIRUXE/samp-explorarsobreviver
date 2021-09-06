@@ -62,7 +62,7 @@ hook OnPlayerConnect(playerid)
 
 SavePlayerChar(playerid)
 {
-	if(IsPlayerOnAdminDuty(playerid))
+	if(IsAdminOnDuty(playerid))
 		return 0;
 
 	new

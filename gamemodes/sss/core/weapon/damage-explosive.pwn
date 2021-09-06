@@ -23,7 +23,7 @@ hook OnPlayerTakeDamage(playerid, issuerid, Float:amount, weaponid, bodypart)
 
 _DoExplosiveDamage(playerid, targetid, Float:multiplier)
 {
-	if(IsPlayerOnAdminDuty(playerid) || IsPlayerOnAdminDuty(targetid))
+	if(IsAdminOnDuty(playerid) || IsAdminOnDuty(targetid))
 		return 0;
 
 	new

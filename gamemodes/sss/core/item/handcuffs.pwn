@@ -31,7 +31,7 @@ hook OnPlayerKeyStateChange(playerid, newkeys, oldkeys)
 			{
 				foreach(new i : Character)
 				{
-					if(i == playerid || IsPlayerOnAdminDuty(i))
+					if(i == playerid || IsAdminOnDuty(i))
 						continue;
 
 					if(IsPlayerNextToPlayer(playerid, i))
@@ -53,7 +53,7 @@ hook OnPlayerKeyStateChange(playerid, newkeys, oldkeys)
 			{
 				foreach(new i : Character)
 				{
-					if(i == playerid || IsPlayerOnAdminDuty(i))
+					if(i == playerid || IsAdminOnDuty(i))
 						continue;
 
 					if(IsPlayerNextToPlayer(playerid, i))

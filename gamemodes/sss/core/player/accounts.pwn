@@ -519,7 +519,7 @@ stock Logout(playerid, docombatlogcheck = 1)
 		Logger_B("knocked_out", IsPlayerKnockedOut(playerid))
 	);
 
-	if(IsPlayerOnAdminDuty(playerid))
+	if(IsAdminOnDuty(playerid))
 	{
 		dbg("accounts", 1, "[LOGOUT] ERROR: Player on admin duty, aborting save.");
 		return 0;
@@ -631,7 +631,7 @@ stock SavePlayerData(playerid)
 		return 0;
 	}
 
-	if(IsPlayerOnAdminDuty(playerid))
+	if(IsAdminOnDuty(playerid))
 	{
 		dbg("accounts", 1, "[SavePlayerData] ERROR: On admin duty");
 		return 0;

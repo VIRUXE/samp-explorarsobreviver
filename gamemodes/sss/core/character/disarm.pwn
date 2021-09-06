@@ -8,7 +8,7 @@ hook OnPlayerKeyStateChange(playerid, newkeys, oldkeys)
 	if(GetPlayerWeapon(playerid) != 0 || IsValidItem(GetPlayerItem(playerid)))
 		return 1;
 
-	if(GetPlayerSpecialAction(playerid) == SPECIAL_ACTION_CUFFED || IsPlayerOnAdminDuty(playerid) || IsPlayerKnockedOut(playerid) || GetPlayerAnimationIndex(playerid) == 1381)
+	if(GetPlayerSpecialAction(playerid) == SPECIAL_ACTION_CUFFED || IsAdminOnDuty(playerid) || IsPlayerKnockedOut(playerid) || GetPlayerAnimationIndex(playerid) == 1381)
 		return 1;
 
 	if(newkeys & 16)

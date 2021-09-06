@@ -20,7 +20,7 @@ hook OnGameModeInit()
 ==============================================================================*/
 ACMD:adm[2](playerid, params[])
 {
-	ToggleAdminDuty(playerid, !IsPlayerOnAdminDuty(playerid), strcmp(params, "aqui", true, 4));
+	ToggleAdminDuty(playerid, !IsAdminOnDuty(playerid), strcmp(params, "aqui", true, 4));
 
 	return 1;
 }
@@ -35,7 +35,7 @@ ACMD:adm[2](playerid, params[])
 
 ACMD:goto[2](playerid, params[])
 {
-	if(!(IsPlayerOnAdminDuty(playerid)) && GetPlayerAdminLevel(playerid) < STAFF_LEVEL_DEVELOPER)
+	if(!(IsAdminOnDuty(playerid)) && GetPlayerAdminLevel(playerid) < STAFF_LEVEL_DEVELOPER)
 		return 6;
 
 	new targetid;
@@ -63,7 +63,7 @@ ACMD:goto[2](playerid, params[])
 
 ACMD:get[2](playerid, params[])
 {
-	if(!(IsPlayerOnAdminDuty(playerid)) && GetPlayerAdminLevel(playerid) < STAFF_LEVEL_DEVELOPER)
+	if(!(IsAdminOnDuty(playerid)) && GetPlayerAdminLevel(playerid) < STAFF_LEVEL_DEVELOPER)
 		return 6;
 
 	new targetid;

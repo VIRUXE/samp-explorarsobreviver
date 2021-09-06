@@ -50,7 +50,7 @@ public OnPlayerDeath(playerid, killerid, reason)
 
 _OnDeath(playerid, killerid, deathreason)
 {
-	if(!IsPlayerAlive(playerid) || IsPlayerOnAdminDuty(playerid))
+	if(!IsPlayerAlive(playerid) || IsAdminOnDuty(playerid))
 		return 0;
 
 	new deathreasonstring[256];

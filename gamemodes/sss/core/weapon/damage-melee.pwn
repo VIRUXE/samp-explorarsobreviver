@@ -37,7 +37,7 @@ _HandleCustomMelee(playerid, ItemType:itemtype)
 	if(GetPlayerSpecialAction(playerid) == SPECIAL_ACTION_CUFFED)
 		return 0;
 
-	if(IsPlayerOnAdminDuty(playerid))
+	if(IsAdminOnDuty(playerid))
 		return 0;
 
 	if(IsPlayerKnockedOut(playerid))
@@ -159,7 +159,7 @@ _HandleStandardMelee(playerid, targetid)
 
 _DoMeleeDamage(playerid, targetid, Float:bleedrate, Float:knockmult)
 {
-	if(IsPlayerOnAdminDuty(playerid) || IsPlayerOnAdminDuty(targetid))
+	if(IsAdminOnDuty(playerid) || IsAdminOnDuty(targetid))
 		return 0;
 
 	dmg_ReturnBleedrate[targetid] = bleedrate;

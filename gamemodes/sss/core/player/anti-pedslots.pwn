@@ -12,7 +12,7 @@ new psu_View[MAX_PED_SLOTS_USED][MAX_PLAYERS];
 
 ptask UpdatePlayerPSU[500](playerid)
 {
-    if(GetPlayerState(playerid) == PLAYER_STATE_SPECTATING || IsPlayerOnAdminDuty(playerid))
+    if(GetPlayerState(playerid) == PLAYER_STATE_SPECTATING || IsAdminOnDuty(playerid))
         return;
         
     for(new i = 0; i < MAX_PED_SLOTS_USED; i++)

@@ -276,7 +276,7 @@ ShowDetfieldListOptions(playerid, detfieldid)
 				}
 				case 1:
 				{
-					if(IsPlayerOnAdminDuty(playerid))
+					if(IsAdminOnDuty(playerid))
 					{
 						new
 							Float:x,
@@ -618,7 +618,7 @@ ShowDetfieldLogOptions(playerid, detfieldid, logentry)
 			{
 				case 0:
 				{
-					if(IsPlayerOnAdminDuty(playerid))
+					if(IsAdminOnDuty(playerid))
 					{
 						SetPlayerPos(playerid,
 							dfm_LogBuffer[playerid][logentry][DETLOG_BUFFER_POS_X],

@@ -6,7 +6,7 @@
 
 hook OnPlayerScriptUpdate(playerid)
 {
-	if(IsPlayerOnAdminDuty(playerid))
+	if(IsAdminOnDuty(playerid))
 		return;
 
 	if(!IsPlayerSpawned(playerid))

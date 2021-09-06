@@ -11,13 +11,13 @@ public OnPlayerTakeDamage(playerid, issuerid, Float:amount, weaponid, bodypart)
 	if(!IsPlayerConnected(issuerid))
 		return 1;
 		
-	if(IsPlayerOnAdminDuty(playerid))
+	if(IsAdminOnDuty(playerid))
 		return 0;
 
 	if(!IsPlayerSpawned(playerid))
 		return 0;
 
-	if(IsPlayerOnAdminDuty(issuerid))
+	if(IsAdminOnDuty(issuerid))
 		return 0;
 
 	if(!IsPlayerSpawned(issuerid))

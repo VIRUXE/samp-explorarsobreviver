@@ -704,7 +704,7 @@ hook OnPlayerEnterDynArea(playerid, areaid)
 	{
 		if(areaid == det_AreaID[i])
 		{
-			if(!IsPlayerOnAdminDuty(playerid))
+			if(!IsAdminOnDuty(playerid))
 				DetectionFieldLogPlayer(playerid, i);
 
 			if(GetPlayerState(playerid) != PLAYER_STATE_SPECTATING)

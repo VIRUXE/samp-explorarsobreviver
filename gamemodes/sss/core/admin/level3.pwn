@@ -89,7 +89,7 @@ ACMD:spec[2](playerid, params[])
 
 ACMD:free[2](playerid)
 {
-	if(!IsPlayerOnAdminDuty(playerid))
+	if(!IsAdminOnDuty(playerid))
 		ToggleAdminDuty(playerid, true);
 
 	if(GetPlayerSpectateType(playerid) == SPECTATE_TYPE_FREE)
@@ -159,7 +159,7 @@ ACMD:ip[3](playerid, params[])
 
 ACMD:vehicle[3](playerid, params[])
 {
-	if(!IsPlayerOnAdminDuty(playerid) && GetPlayerAdminLevel(playerid) < STAFF_LEVEL_LEAD)
+	if(!IsAdminOnDuty(playerid) && GetPlayerAdminLevel(playerid) < STAFF_LEVEL_LEAD)
 		return 6;
 
 	new
@@ -302,7 +302,7 @@ ACMD:vehicle[3](playerid, params[])
 
 ACMD:bb[3](playerid)
 {
-    if(!(IsPlayerOnAdminDuty(playerid)) && GetPlayerAdminLevel(playerid) < STAFF_LEVEL_SECRET)
+    if(!(IsAdminOnDuty(playerid)) && GetPlayerAdminLevel(playerid) < STAFF_LEVEL_SECRET)
 		return 6;
 
     ChatMsgAdmins(1, BLUE, "[Admin-Log] %p(id:%d) usou o teleporte /bb", playerid, playerid);
@@ -312,7 +312,7 @@ ACMD:bb[3](playerid)
 
 ACMD:sf[3](playerid)
 {
-    if(!(IsPlayerOnAdminDuty(playerid)) && GetPlayerAdminLevel(playerid) < STAFF_LEVEL_SECRET)
+    if(!(IsAdminOnDuty(playerid)) && GetPlayerAdminLevel(playerid) < STAFF_LEVEL_SECRET)
 		return 6;
 
 	ChatMsgAdmins(1, BLUE, "[Admin-Log] %p(id:%d) usou o teleporte /sf", playerid, playerid);
@@ -322,7 +322,7 @@ ACMD:sf[3](playerid)
 
 ACMD:lv[3](playerid)
 {
-    if(!(IsPlayerOnAdminDuty(playerid)) && GetPlayerAdminLevel(playerid) < STAFF_LEVEL_SECRET)
+    if(!(IsAdminOnDuty(playerid)) && GetPlayerAdminLevel(playerid) < STAFF_LEVEL_SECRET)
 		return 6;
 
     ChatMsgAdmins(1, BLUE, "[Admin-Log] %p(id:%d) usou o teleporte /lv", playerid, playerid);
@@ -332,7 +332,7 @@ ACMD:lv[3](playerid)
 
 ACMD:ls[3](playerid)
 {
-    if(!(IsPlayerOnAdminDuty(playerid)) && GetPlayerAdminLevel(playerid) < STAFF_LEVEL_SECRET)
+    if(!(IsAdminOnDuty(playerid)) && GetPlayerAdminLevel(playerid) < STAFF_LEVEL_SECRET)
 		return 6;
 
 	ChatMsgAdmins(1, BLUE, "[Admin-Log] %p(id:%d) usou o teleporte /ls", playerid, playerid);
@@ -342,7 +342,7 @@ ACMD:ls[3](playerid)
 
 ACMD:fc[3](playerid)
 {
-    if(!(IsPlayerOnAdminDuty(playerid)) && GetPlayerAdminLevel(playerid) < STAFF_LEVEL_SECRET)
+    if(!(IsAdminOnDuty(playerid)) && GetPlayerAdminLevel(playerid) < STAFF_LEVEL_SECRET)
 		return 6;
 
     ChatMsgAdmins(1, BLUE, "[Admin-Log] %p(id:%d) usou o teleporte /fc", playerid, playerid);
@@ -352,7 +352,7 @@ ACMD:fc[3](playerid)
 
 ACMD:bs[3](playerid)
 {
-    if(!(IsPlayerOnAdminDuty(playerid)) && GetPlayerAdminLevel(playerid) < STAFF_LEVEL_SECRET)
+    if(!(IsAdminOnDuty(playerid)) && GetPlayerAdminLevel(playerid) < STAFF_LEVEL_SECRET)
 		return 6;
 
     ChatMsgAdmins(1, BLUE, "[Admin-Log] %p(id:%d) usou o teleporte /bs", playerid, playerid);
@@ -362,7 +362,7 @@ ACMD:bs[3](playerid)
 
 ACMD:mg[3](playerid)
 {
-    if(!(IsPlayerOnAdminDuty(playerid)) && GetPlayerAdminLevel(playerid) < STAFF_LEVEL_SECRET)
+    if(!(IsAdminOnDuty(playerid)) && GetPlayerAdminLevel(playerid) < STAFF_LEVEL_SECRET)
 		return 6;
 
     ChatMsgAdmins(1, BLUE, "[Admin-Log] %p(id:%d) usou o teleporte /mg", playerid, playerid);
@@ -372,7 +372,7 @@ ACMD:mg[3](playerid)
 
 ACMD:dm[3](playerid)
 {
-    if(!(IsPlayerOnAdminDuty(playerid)) && GetPlayerAdminLevel(playerid) < STAFF_LEVEL_SECRET)
+    if(!(IsAdminOnDuty(playerid)) && GetPlayerAdminLevel(playerid) < STAFF_LEVEL_SECRET)
 		return 6;
 
     ChatMsgAdmins(1, BLUE, "[Admin-Log] %p(id:%d) usou o teleporte /dm", playerid, playerid);
@@ -382,7 +382,7 @@ ACMD:dm[3](playerid)
 
 ACMD:pc[3](playerid)
 {
-    if(!(IsPlayerOnAdminDuty(playerid)) && GetPlayerAdminLevel(playerid) < STAFF_LEVEL_SECRET)
+    if(!(IsAdminOnDuty(playerid)) && GetPlayerAdminLevel(playerid) < STAFF_LEVEL_SECRET)
 		return 6;
 
     ChatMsgAdmins(1, BLUE, "[Admin-Log] %p(id:%d) usou o teleporte /pc", playerid, playerid);
@@ -392,7 +392,7 @@ ACMD:pc[3](playerid)
 
 ACMD:ap[3](playerid)
 {
-    if(!(IsPlayerOnAdminDuty(playerid)) && GetPlayerAdminLevel(playerid) < STAFF_LEVEL_SECRET)
+    if(!(IsAdminOnDuty(playerid)) && GetPlayerAdminLevel(playerid) < STAFF_LEVEL_SECRET)
 		return 6;
 
     ChatMsgAdmins(1, BLUE, "[Admin-Log] %p(id:%d) usou o teleporte /ap", playerid, playerid);
@@ -402,7 +402,7 @@ ACMD:ap[3](playerid)
 
 ACMD:lp[3](playerid)
 {
-    if(!(IsPlayerOnAdminDuty(playerid)) && GetPlayerAdminLevel(playerid) < STAFF_LEVEL_SECRET)
+    if(!(IsAdminOnDuty(playerid)) && GetPlayerAdminLevel(playerid) < STAFF_LEVEL_SECRET)
 		return 6;
 
     ChatMsgAdmins(1, BLUE, "[Admin-Log] %p(id:%d) usou o teleporte /lp", playerid, playerid);
@@ -412,7 +412,7 @@ ACMD:lp[3](playerid)
 
 ACMD:lb[3](playerid)
 {
-    if(!(IsPlayerOnAdminDuty(playerid)) && GetPlayerAdminLevel(playerid) < STAFF_LEVEL_SECRET)
+    if(!(IsAdminOnDuty(playerid)) && GetPlayerAdminLevel(playerid) < STAFF_LEVEL_SECRET)
 		return 6;
 
     ChatMsgAdmins(1, BLUE, "[Admin-Log] %p(id:%d) usou o teleporte /lb", playerid, playerid);
@@ -422,7 +422,7 @@ ACMD:lb[3](playerid)
 
 ACMD:eq[3](playerid)
 {
-    if(!(IsPlayerOnAdminDuty(playerid)) && GetPlayerAdminLevel(playerid) < STAFF_LEVEL_SECRET)
+    if(!(IsAdminOnDuty(playerid)) && GetPlayerAdminLevel(playerid) < STAFF_LEVEL_SECRET)
 		return 6;
 
     ChatMsgAdmins(1, BLUE, "[Admin-Log] %p(id:%d) usou o teleporte /eq", playerid, playerid);
@@ -432,7 +432,7 @@ ACMD:eq[3](playerid)
 
 ACMD:ec[3](playerid)
 {
-    if(!(IsPlayerOnAdminDuty(playerid)) && GetPlayerAdminLevel(playerid) < STAFF_LEVEL_SECRET)
+    if(!(IsAdminOnDuty(playerid)) && GetPlayerAdminLevel(playerid) < STAFF_LEVEL_SECRET)
 		return 6;
 
     ChatMsgAdmins(1, BLUE, "[Admin-Log] %p(id:%d) usou o teleporte /ec", playerid, playerid);
@@ -442,7 +442,7 @@ ACMD:ec[3](playerid)
 
 ACMD:mcd[3](playerid)
 {
-    if(!(IsPlayerOnAdminDuty(playerid)) && GetPlayerAdminLevel(playerid) < STAFF_LEVEL_SECRET)
+    if(!(IsAdminOnDuty(playerid)) && GetPlayerAdminLevel(playerid) < STAFF_LEVEL_SECRET)
 		return 6;
 
     ChatMsgAdmins(1, BLUE, "[Admin-Log] %p(id:%d) usou o teleporte /mcd", playerid, playerid);
@@ -452,7 +452,7 @@ ACMD:mcd[3](playerid)
 
 ACMD:69[3](playerid)
 {
-    if(!(IsPlayerOnAdminDuty(playerid)) && GetPlayerAdminLevel(playerid) < STAFF_LEVEL_SECRET)
+    if(!(IsAdminOnDuty(playerid)) && GetPlayerAdminLevel(playerid) < STAFF_LEVEL_SECRET)
 		return 6;
 
     ChatMsgAdmins(1, BLUE, "[Admin-Log] %p(id:%d) usou o teleporte /69", playerid, playerid);
@@ -462,7 +462,7 @@ ACMD:69[3](playerid)
 
 ACMD:cb[3](playerid)
 {
-    if(!(IsPlayerOnAdminDuty(playerid)) && GetPlayerAdminLevel(playerid) < STAFF_LEVEL_SECRET)
+    if(!(IsAdminOnDuty(playerid)) && GetPlayerAdminLevel(playerid) < STAFF_LEVEL_SECRET)
 		return 6;
 
     ChatMsgAdmins(1, BLUE, "[Admin-Log] %p(id:%d) usou o teleporte /cb", playerid, playerid);
@@ -472,7 +472,7 @@ ACMD:cb[3](playerid)
 
 ACMD:51[3](playerid)
 {
-    if(!(IsPlayerOnAdminDuty(playerid)) && GetPlayerAdminLevel(playerid) < STAFF_LEVEL_SECRET)
+    if(!(IsAdminOnDuty(playerid)) && GetPlayerAdminLevel(playerid) < STAFF_LEVEL_SECRET)
 		return 6;
 
     ChatMsgAdmins(1, BLUE, "[Admin-Log] %p(id:%d) usou o teleporte /51", playerid, playerid);
@@ -482,7 +482,7 @@ ACMD:51[3](playerid)
 
 ACMD:kacc[3](playerid)
 {
-    if(!(IsPlayerOnAdminDuty(playerid)) && GetPlayerAdminLevel(playerid) < STAFF_LEVEL_SECRET)
+    if(!(IsAdminOnDuty(playerid)) && GetPlayerAdminLevel(playerid) < STAFF_LEVEL_SECRET)
 		return 6;
 
     ChatMsgAdmins(1, BLUE, "[Admin-Log] %p(id:%d) usou o teleporte /kacc", playerid, playerid);
@@ -492,7 +492,7 @@ ACMD:kacc[3](playerid)
 
 ACMD:militarls1[3](playerid)
 {
-    if(!(IsPlayerOnAdminDuty(playerid)) && GetPlayerAdminLevel(playerid) < STAFF_LEVEL_SECRET)
+    if(!(IsAdminOnDuty(playerid)) && GetPlayerAdminLevel(playerid) < STAFF_LEVEL_SECRET)
 		return 6;
 
     ChatMsgAdmins(1, BLUE, "[Admin-Log] %p(id:%d) usou o teleporte /militarls1", playerid, playerid);
@@ -502,7 +502,7 @@ ACMD:militarls1[3](playerid)
 
 ACMD:militarls2[3](playerid)
 {
-    if(!(IsPlayerOnAdminDuty(playerid)) && GetPlayerAdminLevel(playerid) < STAFF_LEVEL_SECRET)
+    if(!(IsAdminOnDuty(playerid)) && GetPlayerAdminLevel(playerid) < STAFF_LEVEL_SECRET)
 		return 6;
 
     ChatMsgAdmins(1, BLUE, "[Admin-Log] %p(id:%d) usou o teleporte /militarls2", playerid, playerid);
@@ -512,7 +512,7 @@ ACMD:militarls2[3](playerid)
 
 ACMD:ilhals[3](playerid)
 {
-    if(!(IsPlayerOnAdminDuty(playerid)) && GetPlayerAdminLevel(playerid) < STAFF_LEVEL_SECRET)
+    if(!(IsAdminOnDuty(playerid)) && GetPlayerAdminLevel(playerid) < STAFF_LEVEL_SECRET)
 		return 6;
 
     ChatMsgAdmins(1, BLUE, "[Admin-Log] %p(id:%d) usou o teleporte /ilhals", playerid, playerid);
@@ -522,7 +522,7 @@ ACMD:ilhals[3](playerid)
 
 ACMD:ilhalv[3](playerid)
 {
-    if(!(IsPlayerOnAdminDuty(playerid)) && GetPlayerAdminLevel(playerid) < STAFF_LEVEL_SECRET)
+    if(!(IsAdminOnDuty(playerid)) && GetPlayerAdminLevel(playerid) < STAFF_LEVEL_SECRET)
 		return 6;
 
     ChatMsgAdmins(1, BLUE, "[Admin-Log] %p(id:%d) usou o teleporte /ilhalv", playerid, playerid);
@@ -532,7 +532,7 @@ ACMD:ilhalv[3](playerid)
 
 ACMD:ilhasf[3](playerid)
 {
-    if(!(IsPlayerOnAdminDuty(playerid)) && GetPlayerAdminLevel(playerid) < STAFF_LEVEL_SECRET)
+    if(!(IsAdminOnDuty(playerid)) && GetPlayerAdminLevel(playerid) < STAFF_LEVEL_SECRET)
 		return 6;
 
     ChatMsgAdmins(1, BLUE, "[Admin-Log] %p(id:%d) usou o teleporte /ilhasf", playerid, playerid);
@@ -572,7 +572,7 @@ ACMD:teleportes[3](playerid)
 
 ACMD:move[3](playerid, params[])
 {
-	if(!IsPlayerOnAdminDuty(playerid) && GetPlayerAdminLevel(playerid) < STAFF_LEVEL_SECRET)
+	if(!IsAdminOnDuty(playerid) && GetPlayerAdminLevel(playerid) < STAFF_LEVEL_SECRET)
 		return 6;
 
 	new
@@ -845,7 +845,7 @@ ACMD:setactive[3](playerid, params[])
 
 ACMD:delete[3](playerid, params[])
 {
-	if(!(IsPlayerOnAdminDuty(playerid)) && GetPlayerAdminLevel(playerid) == STAFF_LEVEL_ADMINISTRATOR)
+	if(!(IsAdminOnDuty(playerid)) && GetPlayerAdminLevel(playerid) == STAFF_LEVEL_ADMINISTRATOR)
 		return 6;
 
 	new
