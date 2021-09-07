@@ -101,7 +101,13 @@ ACMD:gotopos[2](playerid, params[])
 		return ChatMsg(playerid, YELLOW, "Utilização: /gotopos x, y, z (Com ou sem virgulas)");
 
 	ChatMsg(playerid, YELLOW, " » Teleportado para %f, %f, %f", x, y, z);
-	SetPlayerPos(playerid, x, y, z);
+
+	new vehicleid = GetPlayerVehicleID(playerid);
+	
+	if(IsValidVehicle(vehicleid))
+		SetVehiclePos(vehicleid, x, y, z + 0.3);
+	else
+		SetPlayerPos(playerid, x, y, z);
 
 	return 1;
 }
@@ -165,7 +171,7 @@ ACMD:ban[2](playerid, params[])
 {
 	new name[MAX_PLAYER_NAME];
 
-	if(sscanf(params, "s[24]", name))
+	if(sscanf(params, "s["#MAX_PLAYER_NAME"]", name))
 	{
 		ChatMsg(playerid, YELLOW, " » Utilização: /ban [id/nick]");
 		return 1;
@@ -202,7 +208,7 @@ ACMD:unban[2](playerid, params[])
 {
 	new name[MAX_PLAYER_NAME];
 
-	if(sscanf(params, "s[24]", name))
+	if(sscanf(params, "s["#MAX_PLAYER_NAME"]", name))
 		return ChatMsg(playerid, YELLOW, " » Utilização: /unban [player name]");
 
 	if(UnBanPlayer(name))
