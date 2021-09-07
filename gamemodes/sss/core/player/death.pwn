@@ -133,10 +133,10 @@ _OnDeath(playerid, killerid, deathreason)
 				deathreasonstring = "Se afogou.";
 			case 54:
 				deathreasonstring = "A maioria dos ossos foram quebrados, parece que caiu de uma grande altura.";
-			case 255:
+			case 51:
 				deathreasonstring = "Sofreu uma concussão massiva devido a uma explosao.";
 			default:
-				deathreasonstring = "Morreu por motivo desconhecido. Provavelmente de queda, fome ou sangramento.";
+				deathreasonstring = "Cometeu suicídio ou morreu de fome/sangramento.";
 		}
 	}
 
