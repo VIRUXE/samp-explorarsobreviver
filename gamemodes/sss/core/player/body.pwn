@@ -331,6 +331,24 @@ hook OnPlayerDisconnect(playerid, reason)
 		if(gServerRestarting)
 			return 1;
 
+		new vehicleid = GetPlayerVehicleID(playerid);
+		if(IsValidVehicle(vehicleid))
+		{
+			new
+				Float:size_x,
+				Float:size_y,
+				Float:size_z,
+				Float:ang;
+
+			GetVehicleModelInfo(GetVehicleModel(vehicleid), VEHICLE_MODEL_INFO_SIZE, size_x, size_y, size_z);
+			GetVehicleZAngle(vehicleid, ang);
+			GetVehiclePos(vehicleid, x, y, z);
+
+			ang += 90.0;
+			x += (size_x / 1.4) * floatsin(-ang, degrees);
+			y += (size_x / 1.4) * floatcos(-ang, degrees);
+		}
+
 		CreateBody(name, x, y, z, a, GetPlayerVirtualWorld(playerid), GetPlayerInterior(playerid), GetPlayerSkin(playerid));
 	}
 	return 1;
