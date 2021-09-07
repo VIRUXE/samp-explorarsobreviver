@@ -485,6 +485,11 @@ hook OnPlayerCloseContainer(playerid, Container:containerid)
 	return Y_HOOKS_CONTINUE_RETURN_0;
 }
 
+hook OnItemRemovedFromPlayer(playerid, Item:itemid)
+{
+	TextDrawHideForPlayer(playerid, GearSlot_Hand[1]);
+}
+
 hook OnPlayerClickTextDraw(playerid, Text:clickedid)
 {
 	if(clickedid == INVALID_TEXT_DRAW) // Hide gear pressing ESC
