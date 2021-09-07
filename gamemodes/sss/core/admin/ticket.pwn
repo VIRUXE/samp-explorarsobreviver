@@ -6,11 +6,11 @@
 static 
 ticket_HelpText[MAX_TICKETS][MAX_TICKET_LEN],
 ticket_Beggar[MAX_TICKETS] = {INVALID_PLAYER_ID, ...},
-ticket_Helper[MAX_TICKETS] = {INVALID_PLAYER_ID, ...},
-ticket_Timestamp[MAX_TICKETS],
+Timestamp:ticket_Timestamp[MAX_TICKETS],
 ticket_Text[MAX_TICKETS * (MAX_TICKET_LEN + MAX_PLAYER_NAME + 12)] = "~w~Tickets",
-ticket_Count = MAX_TICKETS - 1,
-PlayerText:ticket_Draw[MAX_PLAYERS];
+ticket_Count,
+PlayerText:ticket_Draw[MAX_PLAYERS],
+ticket_Helping[MAX_PLAYERS] = {INVALID_PLAYER_ID, ...};
 
 hook OnPlayerConnect(playerid)
 {
@@ -30,10 +30,19 @@ hook OnPlayerConnect(playerid)
     return 1;
 }
 
+hook OnPlayerDisconnect(playerid, reason)
+{
+    ticket_Helping[playerid] = INVALID_PLAYER_ID;
+    PlayerTextDrawDestroy(playerid, ticket_Draw[playerid]);
+}
+
 CMD:ticket(playerid, params[])
 {
-    if(ticket_Count == -1)
+    if(ticket_Count == MAX_TICKETS - 1)
         return ChatMsg(playerid, RED, " » Muitos pedidos no momento, tente novamente em instantes...");
+
+    if(IsPlayerConnected(ticket_Helping[playerid]))
+        return ChatMsg(playerid, RED, " » Ja esta em atendimento");
 
     new
         lastattacker,
@@ -46,14 +55,57 @@ CMD:ticket(playerid, params[])
         return ChatMsg(playerid, RED, " » Use /Ticket [Mensagem]");
 
     ticket_Beggar[ticket_Count] = playerid;
-    ticket_Timestamp[ticket_Count] = gettime();
+    ticket_Timestamp[ticket_Count] = Now();
 
     PlayerTextDrawSetString(playerid, ticket_Draw[playerid], "~y~Aguardando atendimento...");
     PlayerTextDrawShow(playerid, ticket_Draw[playerid]);
 
+    ++ticket_Count;
+
     _UpdateTicket();
 
-    return --ticket_Count;
+    return 1;
+}
+
+ACMD:helper[3](playerid, params[])
+{
+    if(!IsAdminOnDuty(playerid))
+        return 6;
+
+    new ticketid = strval(params);
+
+    if(!IsPlayerConnected(ticket_Beggar[ticketid]))
+    {
+        _UpdateTicket();
+        return ChatMsg(playerid, RED, " » Jogador não conectado, atualizando ticket...");
+    }
+
+    if(IsPlayerConnected(ticket_Helping[ticket_Beggar[ticketid]]))
+        return ChatMsg(playerid, RED, " » Jogador em atendimento.");
+
+    if(IsPlayerConnected(ticket_Helping[playerid]))
+        return ChatMsg(playerid, RED, " » Voce já está atendendo um jogador.");
+
+    new
+        lastattacker,
+        lastweapon;
+
+    if(IsPlayerCombatLogging(ticket_Beggar[ticketid], lastattacker, Item:lastweapon))
+        return ChatMsg(playerid, RED, " » O jogador foi atacado, aguarde para ajuda-lo.");
+
+    ticket_Helping[ticket_Beggar[ticketid]] = playerid;
+    ticket_Helping[playerid] = ticket_Beggar[ticketid];
+
+    PlayerTextDrawSetString(ticket_Beggar[ticketid], ticket_Draw[ticket_Beggar[ticketid]], "_~n~~g~Em atendimento!");
+    PlayerTextDrawShow(ticket_Beggar[ticketid], ticket_Draw[ticket_Beggar[ticketid]]);
+
+    TeleportPlayerToPlayer(playerid, ticket_Beggar[ticketid]);
+
+    --ticket_Count;
+
+    _UpdateTicket();
+
+    return 1;
 }
 
 hook OnAdminToggleDuty(playerid, bool:duty, bool:goback)
@@ -67,21 +119,25 @@ hook OnAdminToggleDuty(playerid, bool:duty, bool:goback)
 _UpdateTicket()
 {
     ticket_Text = "~y~Tickets~n~";
-    new timeformat[9];
-    for(new i; i < MAX_TICKETS; i++)
+    new timeformat[6];
+    for(new i; i < ticket_Count; i++)
     {
-        if(IsPlayerConnected(ticket_Beggar[i]))
+        if(!IsPlayerConnected(ticket_Beggar[i]))
         {
-            TimeFormat(Timestamp:ticket_Timestamp[i], ISO6801_TIME, timeformat);
+            ticket_Beggar[i] = INVALID_PLAYER_ID;
+        }
+        else if(!IsPlayerConnected(ticket_Helping[ticket_Beggar[i]]))
+        {
+            TimeFormat(ticket_Timestamp[i], "%H:%M", timeformat);
             format(ticket_Text, sizeof(ticket_Text),
-                "%s~w~%s ~g~%p(%d)~w~: %s~n~",
-            ticket_Text, timeformat, ticket_Beggar[i], ticket_Beggar[i], ticket_HelpText[i]);
+                "%s~w~%i. %s ~g~%p(%d)~w~: %s~n~",
+            ticket_Text, i, timeformat, ticket_Beggar[i], ticket_Beggar[i], ticket_HelpText[i]);
         }
     }
     
     foreach(new i : Player)
     {
-        if(GetPlayerAdminLevel(i))
+        if(GetPlayerAdminLevel(i) && !IsPlayerConnected(ticket_Helping[i]))
         {
             PlayerTextDrawSetString(i, ticket_Draw[i], ticket_Text);
             if(IsAdminOnDuty(i))
@@ -91,3 +147,6 @@ _UpdateTicket()
         }
     }
 }
+
+stock GetPlayerHelper(playerid)
+    return IsPlayerConnected(playerid) ? -1 : ticket_Helping[playerid];
