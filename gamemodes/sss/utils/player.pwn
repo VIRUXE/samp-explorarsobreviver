@@ -78,8 +78,8 @@ stock TeleportPlayerToPlayer(playerid, targetid)
 		SetPlayerVelocity(playerid, vx, vy, vz);
 	}
 	
-	if(IsAdminFlying(playerid) && GetPlayerAdminLevel(targetid))
-		ToggleAdminFly(targetid, true);
+	if(IsAdminFlying(targetid) && GetPlayerAdminLevel(playerid))
+		ToggleAdminFly(playerid, true);
 
 	return 1;
 }
