@@ -3,150 +3,134 @@
 #define MAX_TICKETS         10
 #define MAX_TICKET_LEN      64
 
-static 
-ticket_HelpText[MAX_TICKETS][MAX_TICKET_LEN],
-ticket_Beggar[MAX_TICKETS] = {INVALID_PLAYER_ID, ...},
-Timestamp:ticket_Timestamp[MAX_TICKETS],
-ticket_Text[MAX_TICKETS * (MAX_TICKET_LEN + MAX_PLAYER_NAME + 12)] = "~w~Tickets",
-ticket_Count,
-PlayerText:ticket_Draw[MAX_PLAYERS],
-ticket_Helping[MAX_PLAYERS] = {INVALID_PLAYER_ID, ...};
+static
+PlayerText: ticket_Board,
+			ticket_Data[MAX_PLAYERS],
 
-hook OnPlayerConnect(playerid)
+enum E_TICKET_DATA
 {
-    ticket_Draw[playerid] = CreatePlayerTextDraw(playerid, 320.000000, 1.000000, ticket_Text);
-	PlayerTextDrawFont              (playerid, ticket_Draw[playerid], 1);
-	PlayerTextDrawLetterSize        (playerid, ticket_Draw[playerid], 0.300000, 1.200000);
-	PlayerTextDrawTextSize          (playerid, ticket_Draw[playerid], 1000.000000, 17.000000);
-	PlayerTextDrawSetOutline        (playerid, ticket_Draw[playerid], 1);
-	PlayerTextDrawSetShadow         (playerid, ticket_Draw[playerid], 1);
-	PlayerTextDrawAlignment         (playerid, ticket_Draw[playerid], 1);
-	PlayerTextDrawColor             (playerid, ticket_Draw[playerid], -1);
-	PlayerTextDrawBackgroundColor   (playerid, ticket_Draw[playerid], 255);
-	PlayerTextDrawBoxColor          (playerid, ticket_Draw[playerid], 50);
-	PlayerTextDrawUseBox            (playerid, ticket_Draw[playerid], 1);
-	PlayerTextDrawSetProportional   (playerid, ticket_Draw[playerid], 1);
-	PlayerTextDrawSetSelectable     (playerid, ticket_Draw[playerid], 0);
-    return 1;
+	TICKET_DATE,
+	TICKET_TYPE, // Report (Player/Bug), Duvidas
+	TICKET_OWNER[MAX_PLAYER_NAME],
+	TICKET_TEXT[128],
+	TICKET_STATE = {-1, ...}, // 0 - Open / 1 - In Process
+}
+
+hook OnGameModeInit
+{
+	ticket_Board = CreateTextDraw	(playerid, 320.000000, 1.000000, "Explorar Sobreviver");
+	TextDrawFont					(playerid, ticket_Board, 1);
+	TextDrawLetterSize				(playerid, ticket_Board, 0.300000, 1.200000);
+	TextDrawTextSize				(playerid, ticket_Board, 1000.000000, 17.000000);
+	TextDrawSetOutline				(playerid, ticket_Board, 1);
+	TextDrawSetShadow				(playerid, ticket_Board, 1);
+	TextDrawAlignment				(playerid, ticket_Board, 1);
+	TextDrawColor					(playerid, ticket_Board, -1);
+	TextDrawBackgroundColor			(playerid, ticket_Board, 255);
+	TextDrawBoxColor				(playerid, ticket_Board, 50);
+	TextDrawUseBox					(playerid, ticket_Board, 1);
+	TextDrawSetProportional			(playerid, ticket_Board, 1);
+	TextDrawSetSelectable			(playerid, ticket_Board, 0);
+}
+
+hook OnGameModeExit
+{
+	TextDrawDestroy(playerid, ticket_Board);
 }
 
 hook OnPlayerDisconnect(playerid, reason)
 {
-    ticket_Helping[playerid] = INVALID_PLAYER_ID;
-    PlayerTextDrawDestroy(playerid, ticket_Draw[playerid]);
+	if(ticket_Data[playerid][TICKET_STATE] != -1)
+	{
+		ticket_Data[TICKET_DATE] =;
+		ticket_Data[TICKET_TYPE] = -1;
+		ticket_Data[TICKET_OWNER][0] =;
+		ticket_Data[TICKET_TEXT][0] = ;
+		ticket_Data[TICKET_STATE] = -1;
+	}
 }
 
 CMD:ticket(playerid, params[])
 {
-    if(ticket_Count == MAX_TICKETS - 1)
-        return ChatMsg(playerid, RED, " » Muitos pedidos no momento, tente novamente em instantes...");
+	if(!isnull(params))
+	{
+		if(GetPlayerAdminLevel(playerid))
+		{
+			if(!isnumeric(params))
+				return ChatMsg(playerid, RED, "Tem de especificar um Id de Jogador.");
 
-    if(IsPlayerConnected(ticket_Helping[playerid]))
-        return ChatMsg(playerid, RED, " » Ja esta em atendimento");
+			new targetId = strval(params);
 
-    new
-        lastattacker,
-        lastweapon;
+			if(!IsPlayerConnected(targetId))
+				return 4;
 
-    if(IsPlayerCombatLogging(playerid, lastattacker, Item:lastweapon))
-        return ChatMsg(playerid, RED, " » Foi atacado, aguarde para usar isso.");
+			// Answer ticket
+		}
+		else
+			return ChatMsg(playerid, YELLOW, "Utilizacao: /ticket (sem parametros)");
+	}
+	else
+	{
+		if(ticket_Data[playerid][TICKET_STATE] != -1)
+			return ChatMsg(playerid, YELLOW, "Ja tem um Ticket aberto.");
 
-    if(sscanf(params, "s["#MAX_TICKET_LEN"]", ticket_HelpText[ticket_Count]))
-        return ChatMsg(playerid, RED, " » Use /Ticket [Mensagem]");
+		ShowPlayerDialog(playerid, dialogid, DIALOG_STYLE_MSGBOX, caption[], info[], button1[], button2[]);
 
-    ticket_Beggar[ticket_Count] = playerid;
-    ticket_Timestamp[ticket_Count] = Now();
+		_UpdateTicketsBoard();
+	}
 
-    PlayerTextDrawSetString(playerid, ticket_Draw[playerid], "~y~Aguardando atendimento...");
-    PlayerTextDrawShow(playerid, ticket_Draw[playerid]);
-
-    ++ticket_Count;
-
-    _UpdateTicket();
-
-    return 1;
-}
-
-ACMD:helper[3](playerid, params[])
-{
-    if(!IsAdminOnDuty(playerid))
-        return 6;
-
-    new ticketid = strval(params);
-
-    if(!IsPlayerConnected(ticket_Beggar[ticketid]))
-    {
-        _UpdateTicket();
-        return ChatMsg(playerid, RED, " » Jogador não conectado, atualizando ticket...");
-    }
-
-    if(IsPlayerConnected(ticket_Helping[ticket_Beggar[ticketid]]))
-        return ChatMsg(playerid, RED, " » Jogador em atendimento.");
-
-    if(IsPlayerConnected(ticket_Helping[playerid]))
-        return ChatMsg(playerid, RED, " » Voce já está atendendo um jogador.");
-
-    new
-        lastattacker,
-        lastweapon;
-
-    if(IsPlayerCombatLogging(ticket_Beggar[ticketid], lastattacker, Item:lastweapon))
-        return ChatMsg(playerid, RED, " » O jogador foi atacado, aguarde para ajuda-lo.");
-
-    ticket_Helping[ticket_Beggar[ticketid]] = playerid;
-    ticket_Helping[playerid] = ticket_Beggar[ticketid];
-
-    PlayerTextDrawSetString(ticket_Beggar[ticketid], ticket_Draw[ticket_Beggar[ticketid]], "_~n~~g~Em atendimento!");
-    PlayerTextDrawShow(ticket_Beggar[ticketid], ticket_Draw[ticket_Beggar[ticketid]]);
-
-    TeleportPlayerToPlayer(playerid, ticket_Beggar[ticketid]);
-
-    --ticket_Count;
-
-    _UpdateTicket();
-
-    return 1;
+	return 1;
 }
 
 hook OnAdminToggleDuty(playerid, bool:duty, bool:goback)
 {
-    if(duty)
-        PlayerTextDrawShow(playerid, ticket_Draw[playerid]);
-    else
-        PlayerTextDrawHide(playerid, ticket_Draw[playerid]);
+	if(duty)
+	{
+		if(AreThereTicketsOpen())
+			TextDrawShowForPlayer(playerid, ticket_Board);
+	}
+	else
+		PlayerTextDrawHide(playerid, ticket_Board);
 }
 
-_UpdateTicket()
+_UpdateTicketsBoard()
 {
-    ticket_Text = "~y~Tickets~n~";
-    new timeformat[6];
-    for(new i; i < ticket_Count; i++)
-    {
-        if(!IsPlayerConnected(ticket_Beggar[i]))
-        {
-            ticket_Beggar[i] = INVALID_PLAYER_ID;
-        }
-        else if(!IsPlayerConnected(ticket_Helping[ticket_Beggar[i]]))
-        {
-            TimeFormat(ticket_Timestamp[i], "%H:%M", timeformat);
-            format(ticket_Text, sizeof(ticket_Text),
-                "%s~w~%i. %s ~g~%p(%d)~w~: %s~n~",
-            ticket_Text, i, timeformat, ticket_Beggar[i], ticket_Beggar[i], ticket_HelpText[i]);
-        }
-    }
-    
-    foreach(new i : Player)
-    {
-        if(GetPlayerAdminLevel(i) && !IsPlayerConnected(ticket_Helping[i]))
-        {
-            PlayerTextDrawSetString(i, ticket_Draw[i], ticket_Text);
-            if(IsAdminOnDuty(i))
-            {
-                PlayerTextDrawShow(i, ticket_Draw[i]);
-            }
-        }
-    }
+
+	ticket_Text = "~y~Tickets~n~";
+
+	for(new i; i < ticket_Count; i++)
+	{
+		if(!IsPlayerConnected(ticket_Beggar[i]))
+			ticket_Beggar[i] = INVALID_PLAYER_ID;
+		else if(!IsPlayerConnected(ticket_Helping[ticket_Beggar[i]]))
+		{
+			new timeformat[6];
+
+			TimeFormat(ticket_Timestamp[i], "%H:%M", timeformat);
+			
+			format(ticket_Text, sizeof(ticket_Text), "%s~w~%i. %s ~g~%p(%d)~w~: %s~n~", ticket_Text, i, timeformat, ticket_Beggar[i], ticket_Beggar[i], ticket_HelpText[i]);
+		}
+	}
+	
+	foreach(new i : Player)
+	{
+		if(GetPlayerAdminLevel(i) && !IsPlayerConnected(ticket_Helping[i]))
+		{
+			PlayerTextDrawSetString(i, ticket_Board[i], ticket_Text);
+
+			if(IsAdminOnDuty(i))
+				PlayerTextDrawShow(i, ticket_Board[i]);
+		}
+	}
 }
 
-stock GetPlayerHelper(playerid)
-    return IsPlayerConnected(playerid) ? -1 : ticket_Helping[playerid];
+stock bool:AreThereTicketsOpen()
+{
+	foreach(i : Player)
+	{
+		if(ticket_Data[i][TICKET_STATE] != -1)
+			return true;
+	}
+
+	return false;
+}
