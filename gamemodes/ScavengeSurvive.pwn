@@ -62,7 +62,6 @@ public OnGameModeInit()
 #include <YSI_Coding\y_iterate>
 #include <YSI_Storage\y_ini>
 #include <YSI_Visual\y_dialog>
-#include <PreviewModelDialog>
 #include <Pawn.RakNet>
 #include <colandreas> 
 #include <streamer>
@@ -81,6 +80,7 @@ public OnGameModeInit()
 //#include <geoip>
 #include <map-zones>
 #include <modio>
+#include <dialog-draw>
 #include <action-text>
 #include <button_new>
 #include <personal-space>

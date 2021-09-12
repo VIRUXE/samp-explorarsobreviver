@@ -33,8 +33,6 @@ Dialog_ShowCraftTypes(playerid)
 	Dialog_ShowCallback(playerid, using inline Response, DIALOG_STYLE_LIST, "Receitas", "Receitas de Combinação\nReceitas de Construção\nReceitas de Mesa de Trabalho\n"C_GREEN"Ajuda", "Enter", "Esc");
 }
 
-new CraftSet:PlayerListCraft[MAX_PLAYERS][MAX_CONSTRUCT_SET];
-
 Dialog_ShowCraftList(playerid, type)
 {
 	// 0 All
@@ -43,66 +41,70 @@ Dialog_ShowCraftList(playerid, type)
 	// 3 Workbench
 
 	new
-		itemname[MAX_ITEM_NAME],
-		LCraft[270],
-		model,
-		items;
+		f_str[700],
+		itemname[MAX_ITEM_NAME];
 
 	for(new CraftSet:i; i < CraftSet:GetCraftSetTotal(); i++)
 	{
 		if(IsValidCraftSet(i))
 		{
-			new 
-				consSet = GetCraftSetConstructSet(i),
-				isValidConsSet = IsValidWorkbenchConstructionSet(consSet);
-
-			switch(type)
+			if(type == 1)
 			{
-				case 1:
-				{
-					if(consSet != -1)
-						continue;
-				}
-				case 2:
-				{
-					if(consSet == -1)
-						continue;
-
-					if(isValidConsSet)
-						continue;
-				}
-				case 3:
-				{
-					if(consSet == -1)
-						continue;
-
-					if(!isValidConsSet)
-						continue;
-				}
+				if(GetCraftSetConstructSet(i) != -1)
+					continue;
 			}
-			
+			if(type == 2)
+			{
+				new 
+					consset = GetCraftSetConstructSet(i);
+
+				if(consset == -1)
+					continue;
+
+				if(IsValidWorkbenchConstructionSet(consset))
+					continue;
+			}
+			if(type == 3)
+			{
+				new 
+					consset = GetCraftSetConstructSet(i);
+
+				if(consset == -1)
+					continue;
+
+				if(!IsValidWorkbenchConstructionSet(consset))
+					continue;
+			}
 			new ItemType:resulttype;
 			GetCraftSetResult(i, resulttype);
 			GetItemTypeName(resulttype, itemname);
-			GetItemTypeModel(resulttype, model);
 		}
 		else
+		{
 			itemname = "INVALID CRAFT SET";
+		}
 
-		PlayerListCraft[playerid][items++] = i;
-		format(LCraft, sizeof(LCraft), "%s%d\t%s\n", LCraft, model, itemname);
+		format(f_str, sizeof(f_str), "%s%i. %s\n", f_str, _:i, itemname);
 	}
 
-	ShowPlayerDialog(playerid, CRAFT_DIALOG, DIALOG_STYLE_PREVIEW_MODEL, "Receitas", LCraft, "Enter", "Esc");
-}
-
-hook OnDialogModelResponse(playerid, dialogid, response, listitem){
-	if(dialogid == CRAFT_DIALOG){
+	inline Response(pid, dialogid, response, listitem, string:inputtext[])
+	{
+		#pragma unused pid, dialogid, listitem
+		
 		if(response)
-			Dialog_ShowIngredients(playerid, CraftSet:PlayerListCraft[playerid][listitem]);
+		{
+			new craftset;
+
+			sscanf(inputtext, "p<.>i{s[96]}", craftset);
+
+			Dialog_ShowIngredients(playerid, CraftSet:craftset);
+		}
 		else
+		{
 			Dialog_ShowCraftTypes(playerid);
+		}
 	}
+	Dialog_ShowCallback(playerid, using inline Response, DIALOG_STYLE_LIST, "Craftsets", f_str, "Ver", "Fechar");
 }
 
 Dialog_ShowIngredients(playerid, CraftSet:craftset)

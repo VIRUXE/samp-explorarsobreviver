@@ -40,8 +40,8 @@ hook OnPlayerSelectExtraItem(playerid, item)
 {
 	if(item == vip_InventoryOption[playerid])
     {
-        ShowVipMenu(playerid);
         ClosePlayerInventory(playerid);
+        ShowVipMenu(playerid);
         return Y_HOOKS_BREAK_RETURN_1;
     }
 	return Y_HOOKS_CONTINUE_RETURN_0;
@@ -149,13 +149,28 @@ ShowVipMenu(playerid)
                         break;
 
                     GetClothesName(i, c_name);
-
-                    format(list, sizeof(list), "%s%d(0.0, 0.0, -32.0, 0.90)\t%s\n",
-                        list, GetClothesModel(i), c_name);
+                    strcat(list, c_name);
+                    strcat(list, "\n");
                 }
 
-                ShowPlayerDialog(playerid, 66, DIALOG_STYLE_PREVIEW_MODEL,
-                    "~Y~Roupas VIP", list, "Enter", "Voltar");
+                inline Response2(pid2, dialogid2, response2, listitem2, string:inputtext2[])
+                {
+                    #pragma unused pid2, dialogid2, inputtext2
+
+                    if(response2)
+                    {
+                        SetPlayerClothes(playerid, listitem2);
+                        SetPlayerGender(playerid, GetClothesGender(listitem2));
+                        ShowActionText(playerid, "Roupa trocada", 3000);
+                    }
+                    else
+                    {
+                        ShowVipMenu(playerid);
+                    }
+                }
+                Dialog_ShowCallback(playerid, using inline Response2, DIALOG_STYLE_LIST,
+                    sprintf("Menu VIP "C_GREEN"(Nivel %d)", vip_Level[playerid]),
+                    list, "Enter", "Voltar");
             }
 
             /*=================================================================
@@ -239,24 +254,6 @@ ShowVipMenu(playerid)
     vip_ViewingMenu[playerid] = true;
 }
 
-
-hook OnDialogModelResponse(playerid, dialogid, response, listitem)
-{
-	if(dialogid == 66)
-    {
-		if(response)
-        {
-			SetPlayerClothes(playerid, listitem);
-            SetPlayerGender(playerid, GetClothesGender(listitem));
-            ShowActionText(playerid, "Roupa trocada", 3000);
-        }
-		else
-        {
-			ShowVipMenu(playerid);
-        }
-	}
-}
-
 /*==============================================================================
 
 	Save vip info
@@ -313,7 +310,7 @@ ACMD:setvip[4](playerid, params[])
                 playerid, nivel, dias, horas, segundos);
         }
 	}
-	else if(!sscanf(params, "s[24]ddddd", nome, nivel, dias, horas, minutos, segundos))
+	else if(!sscanf(params, "s["#MAX_PLAYER_NAME"]ddddd", nome, nivel, dias, horas, minutos, segundos))
 	{
         SetVip(nome, nivel, dias, horas, minutos, segundos);
 

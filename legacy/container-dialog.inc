@@ -13,7 +13,6 @@
 #include <a_samp>
 #include <container>
 #include <inventory-dialog>
-#include <YSI_Visual\y_dialog>
 #include <YSI_Coding\y_hooks>
 
 
@@ -84,9 +83,6 @@ static
 	cnt_ItemListTotal[MAX_PLAYERS],
 	Container:cnt_CurrentContainer[MAX_PLAYERS],
 	cnt_SelectedSlot[MAX_PLAYERS],
-	cnt_InventoryString[MAX_PLAYERS][MAX_CONTAINER_SLOTS * (MAX_ITEM_NAME + MAX_ITEM_TEXT + 10)],
-	cnt_OptionsList[MAX_PLAYERS][150],
-	cnt_OptionsCount[MAX_PLAYERS],
 	cnt_InventoryContainerItem[MAX_PLAYERS],
 	cnt_InventoryOptionID[MAX_PLAYERS];
 
@@ -113,32 +109,26 @@ stock DisplayContainerInventory(playerid, Container:containerid) {
 	GetContainerItemCount(containerid, itemCount);
 	GetContainerSize(containerid, containerSize);
 
-	cnt_InventoryString[playerid][0] = EOS;
-	cnt_ItemListTotal[playerid] = 0;
+	cnt_ItemListTotal[playerid] = -1;
 
 	for(new i; i < itemCount; i++) 
 	{
 		GetContainerSlotItem(containerid, i, itemid);
 		GetItemName(itemid, tmp);
-		
-		strcat(cnt_InventoryString[playerid], tmp);
-		strcat(cnt_InventoryString[playerid], "\n");
+	
+		AddDialogDrawItem(playerid, tmp);
 
 		cnt_ItemListTotal[playerid]++;
 	}
 
 	GetContainerFreeSlots(containerid, freeSlots);
 
-	/*for(new i; i < freeSlots; i++) {
-		strcat(cnt_InventoryString[playerid], "<Vazio>\n");
-		cnt_ItemListTotal[playerid]++;
-	}*/
-
-	strcat(cnt_InventoryString[playerid], "Bolsos >\n");
-
 	if(CallLocalFunction("OnPlayerOpenContainer", "dd", playerid, _:containerid)) {
 		return 2;
 	}
+
+	AddDialogDrawItem(playerid, "Bolsos >", 0x30aa30ff);
+	cnt_ItemListTotal[playerid]++;
 
 	cnt_CurrentContainer[playerid] = containerid;
 	
@@ -146,12 +136,7 @@ stock DisplayContainerInventory(playerid, Container:containerid) {
 
 	format(title, sizeof(title), "%s (%d/%d)", containername, containerSize - freeSlots, containerSize);
 
-	if(strlen(cnt_InventoryString[playerid]) >= 2048) {
-		printf("cnt_InventoryString is over 2048 chars: %d", strlen(cnt_InventoryString[playerid]));
-	}
-
-
-	ShowPlayerDialog(playerid, 35, DIALOG_STYLE_LIST, title, cnt_InventoryString[playerid], "Enter", "Sair");
+	ShowDialogDraw(playerid, 35, title);
 
 	CallLocalFunction("OnPlayerOpenedContainer", "dd", playerid, _:containerid);
 
@@ -201,13 +186,7 @@ stock GetPlayerContainerSlot(playerid, &slot)
 
 stock AddContainerOption(playerid, const option[]) 
 {
-	if(strlen(cnt_OptionsList[playerid]) + strlen(option) > sizeof(cnt_OptionsList[]))
-		return -1;
-
-	strcat(cnt_OptionsList[playerid], option);
-	strcat(cnt_OptionsList[playerid], "\n");
-
-	return cnt_OptionsCount[playerid]++;
+	return AddDialogDrawItem(playerid, option, 0x30aa30ff);
 }
 
 
@@ -221,7 +200,7 @@ hook OnPlayerConnect(playerid)
 	cnt_CurrentContainer[playerid] = INVALID_CONTAINER_ID;
 }
 
-hook OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
+hook OnDialogDrawResponse(playerid, dialogid, response, listitem)
 {
 	if(dialogid == 36)
 	{
@@ -383,7 +362,7 @@ hook OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 				DisplayContainerInventory(playerid, cnt_CurrentContainer[playerid]);
 			}
 			default: {
-				if(!CallLocalFunction("OnPlayerSelectContainerOpt", "ddd", playerid, _:cnt_CurrentContainer[playerid], listitem - 4)) {
+				if(!CallLocalFunction("OnPlayerSelectContainerOpt", "ddd", playerid, _:cnt_CurrentContainer[playerid], listitem)) {
 					DisplayContainerInventory(playerid, cnt_CurrentContainer[playerid]);
 				} else {
 					ClosePlayerContainer(playerid);
@@ -421,14 +400,15 @@ hook OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 
 					format(title, sizeof(title), "(%d) %s", itemsize, title);
 					
-					cnt_OptionsList[playerid] = "Equipar\nUsar\nMover para o bolso\nSoltar item\n";
-					cnt_OptionsCount[playerid] = 0;
+					AddDialogDrawItem(playerid, "Equipar", 0x30aa30ff);
+					AddDialogDrawItem(playerid, "Usar", 0x30aa30ff);
+					AddDialogDrawItem(playerid, "Mover para o bolso", 0x30aa30ff);
+					AddDialogDrawItem(playerid, "Soltar item", 0x30aa30ff);
+					cnt_SelectedSlot[playerid] = listitem;
 
 					CallLocalFunction("OnPlayerViewContainerOpt", "dd", playerid, _:cnt_CurrentContainer[playerid]);
 
-					ShowPlayerDialog(playerid, 36, DIALOG_STYLE_LIST, title, cnt_OptionsList[playerid], "Enter", "Voltar");
-
-					cnt_SelectedSlot[playerid] = listitem;
+					ShowDialogDraw(playerid, 36, title);
 				}
 			}
 		} else {
@@ -479,7 +459,7 @@ hook OnPlayerSelectInvOpt(playerid, option) {
 
 			if(required == 0) {
 				if(CallLocalFunction("OnMoveItemToContainer", "ddd", playerid, _:itemid, _:cnt_CurrentContainer[playerid]))
-					return Y_HOOKS_CONTINUE_RETURN_0;
+					return Y_HOOKS_BREAK_RETURN_1;
 			}
 			return Y_HOOKS_BREAK_RETURN_0;
 		}
@@ -503,6 +483,7 @@ hook OnPlayerOpenInventory(playerid) {
 hook OnPlayerSelectExtraItem(playerid, item) {
 	if(IsValidContainer(cnt_CurrentContainer[playerid])) {
 		if(item == cnt_InventoryContainerItem[playerid]) {
+			ClosePlayerInventory(playerid, false);
 			DisplayContainerInventory(playerid, cnt_CurrentContainer[playerid]);
 			return Y_HOOKS_BREAK_RETURN_1;
 		}

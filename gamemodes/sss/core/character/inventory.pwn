@@ -492,7 +492,7 @@ hook OnItemRemovedFromPlayer(playerid, Item:itemid)
 
 hook OnPlayerClickTextDraw(playerid, Text:clickedid)
 {
-	if(clickedid == INVALID_TEXT_DRAW) // Hide gear pressing ESC
+	/*if(clickedid == INVALID_TEXT_DRAW) // Hide gear pressing ESC
 	{
 		new Container:containerid;
 		GetPlayerCurrentContainer(playerid, containerid);
@@ -500,7 +500,7 @@ hook OnPlayerClickTextDraw(playerid, Text:clickedid)
 		{
 			HidePlayerGear(playerid);
 		}
-	}
+	}*/
 
 	if(clickedid == GearSlot_Head[0])
 		_inv_HandleGearSlotClick_Head(playerid);

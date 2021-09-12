@@ -14,7 +14,6 @@
 #include <tick-difference>
 #include <item>
 #include <inventory>
-#include <YSI_Visual\y_dialog>
 #include <YSI_Coding\y_hooks>
 
 
@@ -40,19 +39,6 @@ forward AddInventoryListItem(playerid, const itemname[]);
 // AddInventoryOption adds an inventory option to an item option menu. This
 // should only ever be used in `OnPlayerViewInventoryOpt`.
 forward AddInventoryOption(playerid, const option[]);
-
-// GetInventoryListItems returns the available inventory list items.
-forward GetInventoryListItems(playerid, list[], len = sizeof list);
-
-// GetInventoryOptions returns the available inventory options.
-forward GetInventoryOptions(playerid, list[], len = sizeof list);
-
-// GetInventoryListItemCount returns the amount of additional inventory list
-// items.
-forward GetInventoryListItemCount(playerid);
-
-// GetInventoryOptionCount returns the amount of inventory item options.
-forward GetInventoryOptionCount(playerid);
 
 // bool returns true if the player is in the inventory screen.
 forward bool:IsPlayerViewingInventory(playerid);
@@ -105,10 +91,6 @@ static
 	inv_ItemListTotal[MAX_PLAYERS],
 	inv_SelectedSlot[MAX_PLAYERS],
 	bool:inv_ViewingInventory[MAX_PLAYERS],
-	inv_ExtraItemList[MAX_PLAYERS][128],
-	inv_ExtraItemCount[MAX_PLAYERS],
-	inv_OptionsList[MAX_PLAYERS][128],
-	inv_OptionsCount[MAX_PLAYERS],
 	inv_PutAwayTick[MAX_PLAYERS],
 	Timer:inv_PutAwayTimer[MAX_PLAYERS];
 
@@ -124,12 +106,11 @@ stock DisplayPlayerInventory(playerid)
 
 	new
 		title[18],
-		list[(MAX_INVENTORY_SLOTS * (MAX_ITEM_NAME + MAX_ITEM_TEXT))],
 		Item:itemid,
 		tmp[MAX_ITEM_NAME + MAX_ITEM_TEXT],
 		size;
 
-	inv_ItemListTotal[playerid] = 0;
+	inv_ItemListTotal[playerid] = -1;
 
 	new ret_outer = GetPlayerInventorySize(playerid, size);
 	if(ret_outer) {
@@ -145,8 +126,7 @@ stock DisplayPlayerInventory(playerid)
 
 		GetItemName(itemid, tmp);
 
-		strcat(list, tmp);
-		strcat(list, "\n");
+		AddDialogDrawItem(playerid, tmp);
 
 		inv_ItemListTotal[playerid]++;
 	}
@@ -156,24 +136,12 @@ stock DisplayPlayerInventory(playerid)
 	if(ret_outer) 
 		return 3;
 
-	/*for(new i; i < slots; i++)
-	{
-		strcat(list, "<Vazio>\n");
-		inv_ItemListTotal[playerid]++;
-	}*/
-
-	inv_ExtraItemList[playerid][0] = EOS;
-	inv_ExtraItemCount[playerid] = 0;
-
 	if(CallLocalFunction("OnPlayerOpenInventory", "d", playerid))
 		return 4;
 
-	if(!isnull(inv_ExtraItemList[playerid]))
-		strcat(list, inv_ExtraItemList[playerid]);
-
 	format(title, sizeof(title), "Bolsos (%d/%d)", size - slots, size);
 
-	ShowPlayerDialog(playerid, 33, DIALOG_STYLE_LIST, title, list, "Enter", "Sair");
+	ShowDialogDraw(playerid, 33, title);
 
 	inv_ViewingInventory[playerid] = true;
 
@@ -190,7 +158,7 @@ stock ClosePlayerInventory(playerid, call = true)
 
 	if(call)
 	{
-		if(CallLocalFunction("OnPlayerCloseInventory", "d", playerid)) 
+		if(CallLocalFunction("OnPlayerCloseInventory", "d", playerid))
 		{
 			DisplayPlayerInventory(playerid);
 			return 2;
@@ -210,60 +178,12 @@ stock GetPlayerSelectedInventorySlot(playerid)
 
 stock AddInventoryListItem(playerid, const itemname[])
 {
-	if(strlen(inv_ExtraItemList[playerid]) + strlen(itemname) > sizeof(inv_ExtraItemList[]))
-		return 0;
-
-	strcat(inv_ExtraItemList[playerid], itemname);
-	strcat(inv_ExtraItemList[playerid], "\n");
-
-	return inv_ExtraItemCount[playerid]++;
+	return AddDialogDrawItem(playerid, itemname, 0x30aa30ff);
 }
 
 stock AddInventoryOption(playerid, const option[])
 {
-	if(strlen(inv_OptionsList[playerid]) + strlen(option) > sizeof(inv_OptionsList[]))
-		return 0;
-
-	strcat(inv_OptionsList[playerid], option);
-	strcat(inv_OptionsList[playerid], "\n");
-
-	return inv_OptionsCount[playerid]++;
-}
-
-stock GetInventoryListItems(playerid, list[], len = sizeof list)
-{
-	if(!IsPlayerConnected(playerid))
-		return 1;
-
-	memcpy(list, inv_ExtraItemList[playerid], 0, 4 * inv_ExtraItemCount[playerid], len);
-
-	return 0;
-}
-
-stock GetInventoryOptions(playerid, list[], len = sizeof list)
-{
-	if(!IsPlayerConnected(playerid))
-		return 1;
-
-	memcpy(list, inv_OptionsList[playerid], 0, 4 * inv_OptionsCount[playerid], len);
-
-	return 0;
-}
-
-stock GetInventoryListItemCount(playerid)
-{
-	if(!IsPlayerConnected(playerid))
-		return 0;
-
-	return inv_ExtraItemCount[playerid];
-}
-
-stock GetInventoryOptionCount(playerid)
-{
-	if(!IsPlayerConnected(playerid))
-		return 0;
-
-	return inv_OptionsCount[playerid];
+	return AddDialogDrawItem(playerid, option, 0x30aa30ff);
 }
 
 stock bool:IsPlayerViewingInventory(playerid)
@@ -295,7 +215,7 @@ hook OnPlayerConnect(playerid)
 	inv_ViewingInventory[playerid] = false;
 }
 
-hook OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
+hook OnDialogDrawResponse(playerid, dialogid, response, listitem)
 {
 	if(dialogid == 32)
 	{
@@ -415,7 +335,7 @@ hook OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 				DisplayPlayerInventory(playerid);
 			}
 			default: {
-				if(!CallLocalFunction("OnPlayerSelectInventoryOpt", "dd", playerid, listitem - 3)) {
+				if(!CallLocalFunction("OnPlayerSelectInventoryOpt", "dd", playerid, listitem)) {
 					DisplayPlayerInventory(playerid);
 				} else {
 					ClosePlayerInventory(playerid);
@@ -431,8 +351,8 @@ hook OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 			return 1;
 		}
 
-		if(listitem >= inv_ItemListTotal[playerid]) {
-			if(!CallLocalFunction("OnPlayerSelectExtraItem", "dd", playerid, listitem - inv_ItemListTotal[playerid])) {
+		if(listitem > inv_ItemListTotal[playerid]) {
+			if(!CallLocalFunction("OnPlayerSelectExtraItem", "dd", playerid, listitem)) {
 				DisplayPlayerInventory(playerid);
 			} else {
 				ClosePlayerInventory(playerid, false);
@@ -459,12 +379,13 @@ hook OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 
 			format(title, sizeof(title), "(%d) %s", itemsize, title);
 
-			inv_OptionsList[playerid] = "Equipar\nUsar\nJogar Fora\n";
-			inv_OptionsCount[playerid] = 0;
+			AddDialogDrawItem(playerid, "Equipar", 0x30aa30ff);
+			AddDialogDrawItem(playerid, "Usar", 0x30aa30ff);
+			AddDialogDrawItem(playerid, "Soltar item", 0x30aa30ff);
 
 			CallLocalFunction("OnPlayerViewInventoryOpt", "d", playerid);
 
-			ShowPlayerDialog(playerid, 32, DIALOG_STYLE_LIST, title, inv_OptionsList[playerid], "Enter", "Voltar");
+			ShowDialogDraw(playerid, 32, title);
 		}
 
 		return 0;
