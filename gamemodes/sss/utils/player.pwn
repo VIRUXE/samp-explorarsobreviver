@@ -92,7 +92,7 @@ stock TeleportPlayerToPlayer(playerid, targetid)
 	return 1;
 }
 
-stock IsValidUsername(const name[])
+stock IsNicknameValid(const name[])
 {
 	new
 		i,

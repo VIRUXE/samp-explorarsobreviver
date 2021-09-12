@@ -528,7 +528,7 @@ stock AddDetectionFieldException(detfieldid, const name[MAX_PLAYER_NAME])
 	if(det_ExceptionCount[detfieldid] == MAX_DETFIELD_EXCEPTIONS)
 		return -1;
 
-	if(!IsValidUsername(name))
+	if(!IsNicknameValid(name))
 		return -2;
 
 	if(IsNameInExceptionList(detfieldid, name))
