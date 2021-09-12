@@ -299,8 +299,6 @@ public OnPlayerSpawn(playerid)
 	PreloadPlayerAnims(playerid);
 
 	SetPlayerHealth(playerid, 99.9);
-	
-	Streamer_Update(playerid);
 
 	return 1;
 }

@@ -195,9 +195,6 @@ PlayerSpawnExistingCharacter(playerid)
 		Logger_F("r", r));
 
 	CallLocalFunction("OnPlayerSpawnChar", "d", playerid);
-
-	Streamer_Update(playerid);
-
 	return 0;
 }
 

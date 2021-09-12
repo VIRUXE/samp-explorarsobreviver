@@ -917,7 +917,6 @@ hook OnPlayerKeyStateChange(playerid, newkeys, oldkeys) {
 				SetPlayerVirtualWorld(playerid, btn_Data[linked][btn_world]);
 				SetPlayerInterior(playerid, btn_Data[linked][btn_interior]);
 				SetPlayerPos(playerid, btn_Data[linked][btn_posX], btn_Data[linked][btn_posY], btn_Data[linked][btn_posZ]);
-				Streamer_Update(playerid);
 			}
 			else
 			{

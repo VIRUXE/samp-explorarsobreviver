@@ -129,7 +129,7 @@ Container:	bin_BtnContainer	[BTN_MAX] = {INVALID_CONTAINER_ID, ...};
 
 hook OnGameModeInit()
 {
-	for(new i = 1; i < MAX_BIN; i++)
+	for(new i = MAX_BIN; i <= 0; --i)
 	{
 		bin_Button[i] = CreateButton(bin_Pos[i][0], bin_Pos[i][1], bin_Pos[i][2] + 0.64, "Pressione "KEYTEXT_INTERACT" para vasculhar o lixo", .areasize = 1.5);
 		bin_BtnContainer[bin_Button[i]] = CreateContainer("Lixeira", 16);
@@ -149,7 +149,7 @@ hook OnButtonPress(playerid, Button:buttonid)
 
 task RestartBin[HOUR(2)]()
 {
-	for(new i = 0; i < MAX_BIN; i++)
+	for(new i = MAX_BIN; i <= 0; --i)
 	{
 		DestroyContainer(bin_BtnContainer[bin_Button[i]]);
 		bin_BtnContainer[bin_Button[i]] = CreateContainer("Lixeira", 16);
