@@ -185,25 +185,32 @@ CMD:ticket(playerid, params[])
 			{
 				if(isequal(params, "fechar", true))
 				{
+					new ticketOwnerId = -1;
+
 					// Loop para encontrar o ticket aberto com o id do admin
 					for(new i; i < MAX_PLAYERS; i++)
 					{
 						if(ticket_Data[i][TICKET_ADMIN] == playerid)
 						{
-							ToggleGodMode(i, false);
-							SetPlayerChatMode(i, CHAT_LOCAL);
-							ChatMsg(i, GREEN, "O seu Ticket foi Fechado. Avalie por favor, de 1 a 3 (1 mau, 2 normal, 3 bom), o atendimento de %P", playerid);
-
-							ToggleAdminDuty(playerid, false);
-							SetPlayerChatMode(playerid, 3); // ADMIN CHAT
-							ChatMsg(playerid, GREEN, "Voce Fechou o Ticket de %P", i);
-
-							_DeleteTicket(i);
+							ticketOwnerId = i;
 							break;
 						}
-						else
-							return ChatMsg(playerid, YELLOW, "Nao esta a atender ninguem para poder fechar.");
 					}
+
+					if(ticketOwnerId != -1)
+					{
+						ToggleGodMode(ticketOwnerId, false);
+						SetPlayerChatMode(ticketOwnerId, CHAT_LOCAL);
+						ChatMsg(ticketOwnerId, GREEN, "O seu Ticket foi Fechado. Avalie por favor, de 1 a 3 (1 mau, 2 normal, 3 bom), o atendimento de %P", playerid);
+
+						ToggleAdminDuty(playerid, false);
+						SetPlayerChatMode(playerid, 3); // ADMIN CHAT
+						ChatMsg(playerid, GREEN, "Voce Fechou o Ticket de %P", ticketOwnerId);
+
+						_DeleteTicket(ticketOwnerId);
+					}
+					else
+						return ChatMsg(playerid, YELLOW, "Nao esta a atender ninguem para poder fechar.");
 				}
 				else
 					ChatMsg(playerid, YELLOW, "Utilizacao: /ticket (id/fechar)");
