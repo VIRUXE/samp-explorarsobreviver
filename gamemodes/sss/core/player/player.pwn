@@ -31,7 +31,8 @@ Float:	ply_Velocity,
 		ply_ShowHUD,
 		ply_stance,
 		ply_JoinTick,
-		ply_SpawnTick
+		ply_SpawnTick,
+bool:	ply_GodMode
 }
 
 static
@@ -307,6 +308,7 @@ public OnPlayerUpdate(playerid)
 {
 	new Float:velocityX, Float:velocityY, Float:velocityZ;
 
+	// Vehicle Speed
 	if(IsPlayerInAnyVehicle(playerid))
 	{
 		new	uiStr[8];
@@ -322,9 +324,10 @@ public OnPlayerUpdate(playerid)
 		ply_Data[playerid][ply_Velocity] = floatsqroot( (velocityX*velocityX)+(velocityY*velocityY)+(velocityZ*velocityZ) ) * 150.0;
 	}
 
+	// Player Health
 	if(ply_Data[playerid][ply_Alive])
 	{
-		SetPlayerHealth(playerid, IsAdminOnDuty(playerid) ? 99999.9 : ply_Data[playerid][ply_HitPoints]);
+		SetPlayerHealth(playerid, IsPlayerGod(playerid) ? 99999.9 : ply_Data[playerid][ply_HitPoints]);
 		SetPlayerArmour(playerid, ply_Data[playerid][ply_ArmourPoints]);
 	}
 	else
@@ -720,3 +723,12 @@ stock bool:IsPlayerAtConnectionPos(playerid)
 
 	return false;
 }
+
+stock ToggleGodMode(playerid, god)
+{
+	if(god != ply_Data[playerid][ply_GodMode])
+		ply_Data[playerid][ply_GodMode] = god;
+}
+
+stock bool:IsPlayerGod(playerid)
+	return ply_Data[playerid][ply_GodMode];
