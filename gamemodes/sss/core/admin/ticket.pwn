@@ -41,13 +41,18 @@ hook OnGameModeExit
 hook OnPlayerDisconnect(playerid, reason)
 {
 	if(ticket_Data[playerid][TICKET_STATE] != -1)
+		_DeleteTicket(playerid);
+}
+
+hook OnAdminToggleDuty(playerid, bool:duty, bool:goback)
+{
+	if(duty)
 	{
-		ticket_Data[TICKET_DATE] =;
-		ticket_Data[TICKET_TYPE] = -1;
-		ticket_Data[TICKET_OWNER][0] =;
-		ticket_Data[TICKET_TEXT][0] = ;
-		ticket_Data[TICKET_STATE] = -1;
+		if(AreThereTicketsOpen())
+			TextDrawShowForPlayer(playerid, ticket_Board);
 	}
+	else
+		TextDrawHideForPlayer(playerid, ticket_Board);
 }
 
 CMD:ticket(playerid, params[])
@@ -65,6 +70,11 @@ CMD:ticket(playerid, params[])
 				return 4;
 
 			// Answer ticket
+			ToggleGodMode(targetId);
+			ToggleAdminDuty(playerid, true);
+			TeleportPlayerToPlayer(playerid, targetId);
+			SetPlayerChatMode(playerid, CHAT_TICKETS);
+			SetPlayerChatMode(targetId, CHAT_TICKETS);
 		}
 		else
 			return ChatMsg(playerid, YELLOW, "Utilizacao: /ticket (sem parametros)");
@@ -82,15 +92,16 @@ CMD:ticket(playerid, params[])
 	return 1;
 }
 
-hook OnAdminToggleDuty(playerid, bool:duty, bool:goback)
+_CreateTicket(playerid)
+{}
+
+_DeleteTicket(playerid)
 {
-	if(duty)
-	{
-		if(AreThereTicketsOpen())
-			TextDrawShowForPlayer(playerid, ticket_Board);
-	}
-	else
-		PlayerTextDrawHide(playerid, ticket_Board);
+	ticket_Data[TICKET_DATE] =;
+	ticket_Data[TICKET_TYPE] = -1;
+	ticket_Data[TICKET_OWNER][0] =;
+	ticket_Data[TICKET_TEXT][0] = ;
+	ticket_Data[TICKET_STATE] = -1;
 }
 
 _UpdateTicketsBoard()
