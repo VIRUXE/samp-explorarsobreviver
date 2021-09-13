@@ -5,15 +5,14 @@
 
 static
 PlayerText: ticket_Board,
-			ticket_Data[MAX_PLAYERS],
+			ticket_Data[MAX_PLAYERS], // Um ticket para cada jogador
+			ticket_Count;
 
 enum E_TICKET_DATA
 {
 	TICKET_DATE,
-	TICKET_TYPE, // Report (Player/Bug), Duvidas
-	TICKET_OWNER[MAX_PLAYER_NAME],
+	TICKET_ADMIN = {-1, ...},
 	TICKET_TEXT[128],
-	TICKET_STATE = {-1, ...}, // 0 - Open / 1 - In Process
 }
 
 hook OnGameModeInit
@@ -40,7 +39,7 @@ hook OnGameModeExit
 
 hook OnPlayerDisconnect(playerid, reason)
 {
-	if(ticket_Data[playerid][TICKET_STATE] != -1)
+	if(ticket_Data[playerid][TICKET_DATE] != 0)
 		_DeleteTicket(playerid);
 }
 
@@ -55,60 +54,34 @@ hook OnAdminToggleDuty(playerid, bool:duty, bool:goback)
 		TextDrawHideForPlayer(playerid, ticket_Board);
 }
 
-CMD:ticket(playerid, params[])
+_CreateTicket(playerid, text[128])
 {
-	if(!isnull(params))
-	{
-		if(GetPlayerAdminLevel(playerid))
-		{
-			if(!isnumeric(params))
-				return ChatMsg(playerid, RED, "Tem de especificar um Id de Jogador.");
+	ticket_Data[playerid][TICKET_DATE] = GetTickCount(); // Apenas precisamos para saber a idade do ticket
+	ticket_Data[playerid][TICKET_TEXT] = text;
 
-			new targetId = strval(params);
+	ticket_Count++;
 
-			if(!IsPlayerConnected(targetId))
-				return 4;
-
-			// Answer ticket
-			ToggleGodMode(targetId);
-			ToggleAdminDuty(playerid, true);
-			TeleportPlayerToPlayer(playerid, targetId);
-			SetPlayerChatMode(playerid, CHAT_TICKETS);
-			SetPlayerChatMode(targetId, CHAT_TICKETS);
-		}
-		else
-			return ChatMsg(playerid, YELLOW, "Utilizacao: /ticket (sem parametros)");
-	}
-	else
-	{
-		if(ticket_Data[playerid][TICKET_STATE] != -1)
-			return ChatMsg(playerid, YELLOW, "Ja tem um Ticket aberto.");
-
-		ShowPlayerDialog(playerid, dialogid, DIALOG_STYLE_MSGBOX, caption[], info[], button1[], button2[]);
-
-		_UpdateTicketsBoard();
-	}
-
-	return 1;
+	_UpdateTicketsBoard();
 }
-
-_CreateTicket(playerid)
-{}
 
 _DeleteTicket(playerid)
 {
-	ticket_Data[TICKET_DATE] =;
-	ticket_Data[TICKET_TYPE] = -1;
-	ticket_Data[TICKET_OWNER][0] =;
-	ticket_Data[TICKET_TEXT][0] = ;
-	ticket_Data[TICKET_STATE] = -1;
+	ticket_Data[playerid][TICKET_DATE] = 0;
+	ticket_Data[playerid][TICKET_ADMIN] = -1;
+	ticket_Data[playerid][TICKET_TEXT][0] = EOS;
+
+	ticket_Count--;
+}
+
+_AssignAdminToPlayer(adminId, playerId)
+{
+	ticket_Data[playerId][TICKET_ADMIN] = adminId;
+
+	ChatMsg(playerId, GREEN, "Voce sera agora atendido por %P", adminId);
 }
 
 _UpdateTicketsBoard()
 {
-
-	ticket_Text = "~y~Tickets~n~";
-
 	for(new i; i < ticket_Count; i++)
 	{
 		if(!IsPlayerConnected(ticket_Beggar[i]))
@@ -137,11 +110,65 @@ _UpdateTicketsBoard()
 
 stock bool:AreThereTicketsOpen()
 {
-	foreach(i : Player)
+	for(new idx = 0; )
+}
+
+CMD:ticket(playerid, params[])
+{
+	if(!isnull(params))
 	{
-		if(ticket_Data[i][TICKET_STATE] != -1)
-			return true;
+		if(GetPlayerAdminLevel(playerid))
+		{
+			if(isnumeric(params))
+			{
+				new targetId = strval(params);
+
+				if(!IsPlayerConnected(targetId))
+					return 4;
+
+				_AssignAdminToPlayer(adminId, playerId);
+
+				// Answer ticket
+				// ToggleGodMode(targetId);
+				ToggleAdminDuty(playerid, true);
+				TeleportPlayerToPlayer(playerid, targetId);
+				// SetPlayerChatMode(playerid, CHAT_TICKETS);
+				// SetPlayerChatMode(targetId, CHAT_TICKETS);
+			}
+			else
+			{
+				if(isequal(params, "close", true))
+				{
+					// Loop para encontrar o ticket aberto com o id do admin
+					for(new i; i < MAX_PLAYERS; i++)
+					{
+						if(ticket_Data[i][TICKET_ADMIN] == playerid)
+						{
+							ChatMsg(i, YELLOW, "O seu Ticket foi Fechado.");
+							ChatMsg(playerid, GREEN, "Voce Fechou o Ticket de %P", i);
+
+							_DeleteTicket(i);
+							break;
+						}
+					}
+				}
+				else
+				{
+
+				}
+			}
+
+		}
+		else
+			return ChatMsg(playerid, YELLOW, "Utilizacao: /ticket (sem parametros)");
+	}
+	else
+	{
+		if(ticket_Data[playerid][TICKET_STATE] != -1)
+			return ChatMsg(playerid, YELLOW, "Ja tem um Ticket aberto.");
+
+		ShowPlayerDialog(playerid, dialogid, DIALOG_STYLE_MSGBOX, caption[], info[], button1[], button2[]);
 	}
 
-	return false;
+	return 1;
 }
