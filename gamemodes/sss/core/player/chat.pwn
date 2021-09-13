@@ -6,7 +6,8 @@ enum
 	CHAT_MODE_LOCAL,		// 0 - Speak to players within chatbubble distance
 	CHAT_MODE_GLOBAL,		// 1 - Speak to all players
 	CHAT_MODE_RADIO,		// 2 - Speak to players on the same radio frequency
-	CHAT_MODE_ADMIN			// 3 - Speak to admins
+	CHAT_MODE_ADMIN,		// 3 - Speak to admins
+	CHAT_MODE_TICKET		// 4 - Bidirectional conversation between an admin and a player that made a ticket
 }
 
 new
@@ -41,6 +42,8 @@ hook OnPlayerText(playerid, text[])
 			freq = 1.0;
 		case CHAT_MODE_ADMIN:
 			freq = 3.0;
+		case CHAT_MODE_TICKET:
+			freq = 4.0;
 	}
 
 	if(IsPlayerMobile(playerid))
@@ -237,6 +240,10 @@ stock PlayerSendChat(playerid, chat[], Float:frequency)
 		}
 
 		return 1;
+	}
+	else if(frequency == 4.0)
+	{
+
 	}
 	else
 	{
