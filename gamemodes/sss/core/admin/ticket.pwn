@@ -210,7 +210,7 @@ CMD:ticket(playerid, params[])
 						ChatMsg(playerid, GREEN, " » Voce Fechou o Ticket de %P", ticketOwnerId);
 
 						TogglePlayerMute(ticketOwnerId, true);
-						TogglePlayerControllable(playerid, false);
+						TogglePlayerControllable(ticketOwnerId, false);
 						inline Response(pid, dialogid, response, listitem, string:inputtext[])
 						{
 							#pragma unused pid, dialogid, listitem
@@ -224,9 +224,9 @@ CMD:ticket(playerid, params[])
 							TogglePlayerMute(ticketOwnerId, false);
 							SetPlayerChatMode(ticketOwnerId, CHAT_LOCAL);
 							ToggleGodMode(ticketOwnerId, false);
-							TogglePlayerControllable(playerid, true);
+							TogglePlayerControllable(ticketOwnerId, true);
 						}
-						Dialog_ShowCallback(playerid, using inline Response, DIALOG_STYLE_INPUT, "Ticket - Avaliar Atendimento", "O seu Ticket foi Fechado.\n\nAvalie por favor, de 1 a 3 (3 - Bom, 2 - Normal, 1 - Mau), a qualidade do atendimento.\n\nIsso e muito importante para podermos avaliar a nossa equipe e verificar se todos os jogadores sao tratados justamente.", "Avaliar", "Agora nao");
+						Dialog_ShowCallback(ticketOwnerId, using inline Response, DIALOG_STYLE_INPUT, "Ticket - Avaliar Atendimento", "O seu Ticket foi Fechado.\n\nAvalie por favor, de 1 a 3 (3 - Bom, 2 - Normal, 1 - Mau), a qualidade do atendimento.\n\nIsso e muito importante para podermos avaliar a nossa equipe e verificar se todos os jogadores sao tratados justamente.", "Avaliar", "Agora nao");
 
 						_DeleteTicket(ticketOwnerId);
 					}
