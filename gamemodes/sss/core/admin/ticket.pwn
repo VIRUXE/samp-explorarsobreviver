@@ -4,11 +4,12 @@ enum E_TICKET_DATA
 {
 	TICKET_DATE,
 	TICKET_ADMIN,
-	TICKET_TEXT[128],
+	TICKET_TEXT[128], // Limite do inputbox
 }
 
 static
 Text: 	ticket_Board,
+bool:	ticket_BoardVisible[MAX_PLAYERS] = {true, ...},
 		ticket_Data[MAX_PLAYERS][E_TICKET_DATA], // Um ticket para cada jogador
 		ticket_Count;
 
@@ -29,7 +30,7 @@ hook OnGameModeInit()
 	TextDrawSetProportional	(ticket_Board, 1);
 	TextDrawSetSelectable	(ticket_Board, 0);
 
-	for(new playerid; playerid < MAX_PLAYERS; playerid++) // Meh gambiarra...
+	for(new playerid; playerid < MAX_PLAYERS; playerid++) // Admin pode ser ID 0...
 		ticket_Data[playerid][TICKET_ADMIN] = -1;
 }
 
@@ -42,6 +43,11 @@ hook OnPlayerDisconnect(playerid, reason)
 {
 	if(ticket_Data[playerid][TICKET_DATE] != 0)
 		_DeleteTicket(playerid);
+}
+
+hook OnPlayerLogin(playerid)
+{
+	TextDrawShowForPlayer(playerid, ticket_Board);
 }
 
 _CreateTicket(playerid, const text[128])
@@ -156,6 +162,14 @@ stock bool:IsAdminOnTicket(adminId)
 	return false;
 }
 
+stock bool:IsPlayerBeingAttended(playerid)
+{
+	if(ticket_Data[playerid][TICKET_ADMIN] != -1)
+		return true;
+
+	return false;
+}
+
 CMD:ticket(playerid, params[])
 {
 	if(!isnull(params))
@@ -171,21 +185,29 @@ CMD:ticket(playerid, params[])
 
 				if(IsAdminOnTicket(playerid))
 					return ChatMsg(playerid, RED, " » Ja esta em atendimento de um ticket. Nao pode entrar noutro.");
-
-				// Answer ticket
-				if(_AssignAdminToPlayer(playerid, ticketOwnerId))
+				
+				inline Response(pid, dialogid, response, listitem, string:inputtext[])
 				{
-					ToggleGodMode(ticketOwnerId, true);
-					ToggleAdminDuty(playerid, true);
-					TeleportPlayerToPlayer(playerid, ticketOwnerId);
-					SetPlayerChatMode(playerid, CHAT_MODE_TICKET);
-					SetPlayerChatMode(ticketOwnerId, CHAT_MODE_TICKET);
+					#pragma unused pid, dialogid, listitem, inputtext
 
-					ChatMsg(playerid, GREEN, " » Esta agora a atender o jogador %P.", ticketOwnerId);
-					ChatMsg(ticketOwnerId, GREEN, " » Esta agora a ser atendido pelo Admin %P.", playerid);
+					if(response)
+					{
+						if(_AssignAdminToPlayer(playerid, ticketOwnerId))
+						{
+							ToggleGodMode(ticketOwnerId, true);
+							ToggleAdminDuty(playerid, true);
+							TeleportPlayerToPlayer(playerid, ticketOwnerId);
+							SetPlayerChatMode(playerid, CHAT_MODE_TICKET);
+							SetPlayerChatMode(ticketOwnerId, CHAT_MODE_TICKET);
+
+							ChatMsg(playerid, GREEN, " » Esta agora a atender o jogador %P.", ticketOwnerId);
+							ChatMsg(ticketOwnerId, GREEN, " » Esta agora a ser atendido pelo Admin %P.", playerid);
+						}
+						else
+							return ChatMsg(playerid, RED, " » Esse jogador ja se encontra a ser atendido.");
+					}
 				}
-				else
-					return ChatMsg(playerid, RED, " » Esse jogador ja se encontra a ser atendido.");
+				Dialog_ShowCallback(ticketOwnerId, using inline Response, DIALOG_STYLE_MSGBOX, "Ticket - Aceitar Ticket", ticket_Data[ticketOwnerId][TICKET_TEXT], "Aceitar", "Sair");
 			}
 			else // Comando(s)
 			{
@@ -229,6 +251,8 @@ CMD:ticket(playerid, params[])
 						Dialog_ShowCallback(ticketOwnerId, using inline Response, DIALOG_STYLE_INPUT, "Ticket - Avaliar Atendimento", "O seu Ticket foi Fechado.\n\nAvalie por favor, de 1 a 3 (3 - Bom, 2 - Normal, 1 - Mau), a qualidade do atendimento.\n\nIsso e muito importante para podermos avaliar a nossa equipe e verificar se todos os jogadores sao tratados justamente.", "Avaliar", "Agora nao");
 
 						_DeleteTicket(ticketOwnerId);
+
+						log(false, "[TICKET] %p(%d) Fechou o Ticket de %p(%d)", playerid, playerid, ticketOwnerId, ticketOwnerId);
 					}
 					else
 						return ChatMsg(playerid, YELLOW, " » Nao esta a atender ninguem para poder fechar.");
@@ -263,8 +287,15 @@ CMD:ticket(playerid, params[])
 	return 1;
 }
 
-ACMD:toggletickets[1](playerid, params[]) // Mostrar/Esconder board
+ACMD:ticketboard[1](playerid, params[]) // Mostrar/Esconder board
 {
+	#pragma unused params
+	ticket_BoardVisible[playerid] = !ticket_BoardVisible[playerid];
+
+	if(ticket_BoardVisible[playerid])
+		TextDrawShowForPlayer(playerid, ticket_Board);
+	else
+		TextDrawHideForPlayer(playerid, ticket_Board);
 
 	return 1;
 }
