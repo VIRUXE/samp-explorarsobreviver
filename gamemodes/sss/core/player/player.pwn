@@ -724,7 +724,7 @@ stock bool:IsPlayerAtConnectionPos(playerid)
 	return false;
 }
 
-stock ToggleGodMode(playerid, god)
+stock ToggleGodMode(playerid, bool:god)
 {
 	if(god != ply_Data[playerid][ply_GodMode])
 		ply_Data[playerid][ply_GodMode] = god;
