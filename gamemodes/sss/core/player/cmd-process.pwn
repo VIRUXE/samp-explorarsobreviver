@@ -1,6 +1,22 @@
+#include <YSI_Coding\y_hooks>
+
+static bool:UseCommands[MAX_PLAYERS] = {true, ...};
+
+stock ToggleCommands(playerid, bool:enable) {
+	UseCommands[playerid] = enable;
+}
+
+hook OnPlayerDisconnect(playerid, reason) {
+	UseCommands[playerid] = true;
+}
 
 public OnPlayerCommandText(playerid, cmdtext[])
 {
+	if(!UseCommands[playerid]) {
+		ShowActionText(playerid, "~r~Bloqueado de usar comandos");
+		return 1;
+	}
+
 	new
 		cmd[30],
 		params[127],
@@ -9,7 +25,7 @@ public OnPlayerCommandText(playerid, cmdtext[])
 
 	sscanf(cmdtext, "s[30]s[127]", cmd, params);
 
-	RemoveAccents(params);
+	RemoveAccents(params); // ???
 
 	for (new i, j = strlen(cmd); i < j; i++)
 		cmd[i] = tolower(cmd[i]);
