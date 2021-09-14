@@ -327,8 +327,8 @@ public OnPlayerUpdate(playerid)
 	// Player Health
 	if(ply_Data[playerid][ply_Alive])
 	{
-		SetPlayerHealth(playerid, IsPlayerGod(playerid) ? 99999.9 : ply_Data[playerid][ply_HitPoints]);
-		SetPlayerArmour(playerid, ply_Data[playerid][ply_ArmourPoints]);
+		SetPlayerHealth(playerid, IsPlayerGod(playerid) ? (Float:0x7F800000) : ply_Data[playerid][ply_HitPoints]);
+		SetPlayerArmour(playerid, IsPlayerGod(playerid) ? (Float:0x7F800000) : ply_Data[playerid][ply_ArmourPoints]);
 	}
 	else
 		SetPlayerHealth(playerid, 99.9);
