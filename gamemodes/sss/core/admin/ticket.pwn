@@ -46,7 +46,7 @@ hook OnPlayerDisconnect(playerid, reason)
 
 hook OnPlayerLogin(playerid)
 {
-	if(AreThereTicketsOpen())
+	if(GetPlayerAdminLevel(playerid) && AreThereTicketsOpen())
 		TextDrawShowForPlayer(playerid, ticket_Board);
 }
 
@@ -134,7 +134,7 @@ _UpdateTicketList()
 
 	foreach(new i : Player)
 	{
-		if(IsTicketListVisible(i))
+		if(GetPlayerAdminLevel(i) && IsTicketListVisible(i))
 			TextDrawShowForPlayer(i, ticket_Board);
 	}
 
@@ -148,22 +148,22 @@ stock bool:AreThereTicketsOpen()
 {
 	for(new playerid; playerid < MAX_PLAYERS; playerid++)
 	{
-		if(DoesPlayerHaveATicket(playerid) && ticket_Data[playerid][TICKET_ADMIN] == -1)
+		if(DoesPlayerHaveATicket(playerid) && !IsPlayerBeingAttended(playerid))
 			return true;
 	}
 
 	return false;
 }
 
-stock bool:IsAdminAttendingAnyone(adminId)
+stock IsAdminAttendingAPlayer(adminId)
 {
 	for(new playerid; playerid < MAX_PLAYERS; playerid++)
 	{
 		if(ticket_Data[playerid][TICKET_ADMIN] == adminId)
-			return true;
+			return playerid;
 	}
 
-	return false;
+	return -1;
 }
 
 stock bool:IsPlayerBeingAttended(playerid)
@@ -177,6 +177,14 @@ stock bool:IsPlayerBeingAttended(playerid)
 stock bool:DoesPlayerHaveATicket(playerid)
 {
 	if(ticket_Data[playerid][TICKET_DATE] != 0)
+		return true;
+
+	return false;
+}
+
+stock bool:DoesPlayerHaveATicketOpen(playerid)
+{
+	if(DoesPlayerHaveATicket(playerid) && !IsPlayerBeingAttended(playerid))
 		return true;
 
 	return false;
@@ -242,20 +250,17 @@ CMD:ticket(playerid, params[])
 	}
 	else // Sem parametros
 	{
-		if(GetPlayerAdminLevel(playerid)) // Admin - Abrir o Ticket mais antigo para atender
+		if(GetPlayerAdminLevel(playerid)) // Admin - Abrir o Ticket mais antigo para atender (Nota: Nao um admin nao pode criar tickets)
 		{
-			if(IsAdminAttendingAnyone(playerid))
+			if(IsAdminAttendingAPlayer(playerid) != -1)
 				return ChatMsg(playerid, RED, " » Ja esta em atendimento de um ticket. Nao pode entrar noutro.");
 
 			new ticketOwnerId = _GetOldestTicketOwnerId();
 
 			if(ticketOwnerId == -1)
-				return ChatMsg(playerid, GREEN, "Nao existem Tickets por atender.");
+				return ChatMsg(playerid, GREEN, " » Nao existem Tickets por atender.");
 
-			if(!IsPlayerConnected(ticketOwnerId))
-				return 4;
-
-			if(IsPlayerBeingAttended(playerid))
+			if(IsPlayerBeingAttended(ticketOwnerId))
 				return ChatMsg(playerid, RED, " » Esse jogador já está em atendimento.");
 
 			inline Response(pid, dialogid, response, listitem, string:inputtext[])
@@ -278,12 +283,12 @@ CMD:ticket(playerid, params[])
 					log(true, "[TICKET] %p(%d) is attending %p(%d)", playerid, playerid, ticketOwnerId, ticketOwnerId);
 				}
 			}
-			Dialog_ShowCallback(ticketOwnerId, using inline Response, DIALOG_STYLE_MSGBOX, "Ticket - Aceitar Ticket", ticket_Data[ticketOwnerId][TICKET_TEXT], "Aceitar", "Sair");
+			Dialog_ShowCallback(playerid, using inline Response, DIALOG_STYLE_MSGBOX, "Ticket - Aceitar Ticket", ticket_Data[ticketOwnerId][TICKET_TEXT], "Aceitar", "Sair");
 		}
 		else // Jogador normal
 		{
 			if(DoesPlayerHaveATicket(playerid))
-				return ChatMsg(playerid, YELLOW, " » Você já tem um ticket aberto. Aguarde até que um Admin atenda.");
+				return ChatMsg(playerid, YELLOW, " » Você já fez um Ticket. Aguarde até que um Admin atenda ou feche.");
 
 			inline Response(pid, dialogid, response, listitem, string:inputtext[])
 			{
@@ -297,7 +302,7 @@ CMD:ticket(playerid, params[])
 					return ChatMsg(playerid, GREEN, " » Ticket enviado com sucesso. Aguarde até que um Admin atenda.");
 				}
 			}
-			Dialog_ShowCallback(playerid, using inline Response, DIALOG_STYLE_INPUT, "Ticket - Enviar um Ticket", "sdsfgsgrgsgegsegse\n\nsdsdfsgrgrgs", "Enviar", "Cancelar");
+			Dialog_ShowCallback(playerid, using inline Response, DIALOG_STYLE_INPUT, "Ticket - Enviar um Ticket", "Por favor, seja o mais detalhado possivel ao descrever o seu problema. (Tem 128 caracteres para o fazer.)\n\nIsso fara com que seja mais facil/rapido para o Admin resolver o seu problema.\n\n\nEsse sistema serve principalmente para tirar duvidas ou resolver problemas 'gerais.\nExemplo, algum tipo de bug e nao para reportar jogadores. Para isso use /report", "Enviar", "Cancelar");
 		}
 	}
 
