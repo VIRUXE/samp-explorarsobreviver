@@ -209,7 +209,7 @@ _PickUpAmmoTransferCheck(playerid, Item:helditemid, Item:ammoitemid)
 
 			if(ammoitemtype != helditemtype)
 			{
-				ShowActionText(playerid, ls(playerid, "AMMIXINTINS", true), 5000);
+				ShowActionText(playerid, ls(playerid, "AMMIXINTINS"), 5000);
 				return 1;
 			}
 
@@ -246,7 +246,7 @@ timer _TransferWeaponToWeapon[400](playerid, srcitem, tgtitem)
 		SetItemWeaponItemMagAmmo(Item:srcitem, 0);
 		SetItemWeaponItemReserve(Item:srcitem, remainder);
 
-		ShowActionText(playerid, sprintf(ls(playerid, "AMTRANSWTOW", true), (reserveammo + magammo) - remainder), 3000);
+		ShowActionText(playerid, sprintf(ls(playerid, "AMTRANSWTOW"), (reserveammo + magammo) - remainder), 3000);
 	}
 
 	ApplyAnimation(playerid, "BOMBER", "BOM_PLANT_2IDLE", 4.0, 0, 0, 0, 0, 0, 1);
@@ -276,7 +276,7 @@ timer _TransferTinToWeapon[400](playerid, srcitem, tgtitem)
 		else
 			DestroyItem(Item:srcitem);
 
-		ShowActionText(playerid, sprintf(ls(playerid, "AMTRANSTTOW", true), ammo - remainder), 3000);
+		ShowActionText(playerid, sprintf(ls(playerid, "AMTRANSTTOW"), ammo - remainder), 3000);
 	}
 
 	ApplyAnimation(playerid, "BOMBER", "BOM_PLANT_2IDLE", 4.0, 0, 0, 0, 0, 0, 1);
@@ -299,7 +299,7 @@ timer _TransferWeaponToTin[400](playerid, srcitem, tgtitem)
 	SetItemWeaponItemMagAmmo(Item:srcitem, 0);
 	SetItemWeaponItemReserve(Item:srcitem, 0);
 
-	ShowActionText(playerid, sprintf(ls(playerid, "AMTRANSWTOT", true), amount), 3000);
+	ShowActionText(playerid, sprintf(ls(playerid, "AMTRANSWTOT"), amount), 3000);
 
 	ApplyAnimation(playerid, "BOMBER", "BOM_PLANT_2IDLE", 4.0, 0, 0, 0, 0, 0, 1);
 	return;
@@ -321,7 +321,7 @@ timer _TransferTinToTin[400](playerid, srcitem, tgtitem)
 	SetItemExtraData(Item:tgtitem, existing + amount);
 	SetItemExtraData(Item:srcitem, 0);
 
-	ShowActionText(playerid, sprintf(ls(playerid, "AMTRANSTTOT", true), amount), 3000);
+	ShowActionText(playerid, sprintf(ls(playerid, "AMTRANSTTOT"), amount), 3000);
 
 	ApplyAnimation(playerid, "BOMBER", "BOM_PLANT_2IDLE", 4.0, 0, 0, 0, 0, 0, 1);
 	return;

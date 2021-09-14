@@ -186,7 +186,7 @@ stock PlayerInflictWound(playerid, targetid, E_WND_TYPE:type, Float:bleedrate, F
 			Logger_S("source", source));
 	}
 
-	ShowActionText(targetid, sprintf(ls(targetid, "WOUNDEDMSSG", true), source, (knockmult * (((woundcount + 1) * 0.2) * ((totalbleedrate * 50) + 1)) < 50.0 ? ("Leve") : ("Grave"))), 5000);
+	ShowActionText(targetid, sprintf(ls(targetid, "WOUNDEDMSSG"), source, (knockmult * (((woundcount + 1) * 0.2) * ((totalbleedrate * 50) + 1)) < 50.0 ? ("Leve") : ("Grave"))), 5000);
 
 	return 1;
 }

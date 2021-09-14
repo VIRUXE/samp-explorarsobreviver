@@ -485,11 +485,11 @@ AddItemToPlayer(playerid, Item:itemid)
 
 	if(itemsize > freeslots)
 	{
-		ShowActionText(playerid, sprintf(ls(playerid, "BAGEXTRASLO", true), itemsize - freeslots), 3000, 150);
+		ShowActionText(playerid, sprintf(ls(playerid, "BAGEXTRASLO"), itemsize - freeslots), 3000, 150);
 		return;
 	}
 
-	ShowActionText(playerid, ls(playerid, "BAGITMADDED", true), 3000, 150);
+	ShowActionText(playerid, ls(playerid, "BAGITMADDED"), 3000, 150);
 	ApplyAnimation(playerid, "PED", "PHONE_IN", 4.0, 1, 0, 0, 0, 300);
 	bag_PuttingInBag[playerid] = true;
 	defer bag_PutItemIn(playerid, _:itemid, _:containerid);
@@ -591,7 +591,7 @@ hook OnPlayerSelectInvOpt(playerid, option)
 				new required = AddItemToContainer(containerid, itemid, playerid);
 
 				if(required > 0)
-					ShowActionText(playerid, sprintf(ls(playerid, "BAGEXTRASLO", true), required), 3000, 150);
+					ShowActionText(playerid, sprintf(ls(playerid, "BAGEXTRASLO"), required), 3000, 150);
 			}
 		}
 	}
@@ -640,7 +640,7 @@ hook OnPlayerSelectCntOpt(playerid, Container:containerid, option)
 					new required = AddItemToContainer(bagcontainerid, itemid, playerid);
 
 					if(required > 0)
-						ShowActionText(playerid, sprintf(ls(playerid, "BAGEXTRASLO", true), required), 3000, 150);
+						ShowActionText(playerid, sprintf(ls(playerid, "BAGEXTRASLO"), required), 3000, 150);
 				}
 			}
 		}

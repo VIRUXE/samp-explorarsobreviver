@@ -109,7 +109,7 @@ hook OnPlayerKeyStateChange(playerid, newkeys, oldkeys) // Quando tenta vestir r
 				if(skin_Data[skinid][skin_gender] == GetPlayerGender(playerid))
 					StartUsingClothes(playerid, itemid);
 				else
-					ShowActionText(playerid, ls(playerid, "CLOTHESWRGE", true), 3000, 130);
+					ShowActionText(playerid, ls(playerid, "CLOTHESWRGE"), 3000, 130);
 			}
 		}
 	}

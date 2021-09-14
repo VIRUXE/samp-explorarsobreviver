@@ -96,7 +96,7 @@ hook OnPlayerUseItemWithItem(playerid, Item:itemid, Item:withitemid)
 			if(Item:data[cmp_foodItem] == INVALID_ITEM_ID)
 			{
 				cmp_CookItem(withitemid, itemid);
-				ShowActionText(playerid, ls(playerid, "FIRELITSTAR", true), 3000);
+				ShowActionText(playerid, ls(playerid, "FIRELITSTAR"), 3000);
 			}
 		}
 	}

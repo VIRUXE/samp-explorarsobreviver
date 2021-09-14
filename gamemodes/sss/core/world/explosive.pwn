@@ -210,7 +210,7 @@ hook OnPlayerUseItem(playerid, Item:itemid)
 
 			StartHoldAction(playerid, 1000);
 			ApplyAnimation(playerid, "BOMBER", "BOM_Plant_Loop", 4.0, 1, 0, 0, 0, 0, 1);
-			ShowActionText(playerid, ls(playerid, "ARMINGBOMB", true));
+			ShowActionText(playerid, ls(playerid, "ARMINGBOMB"));
 		}
 		else if(exp_Data[exp_ItemTypeExplosive[itemtype]][exp_trigger] == PROXIMITY)
 		{
@@ -219,7 +219,7 @@ hook OnPlayerUseItem(playerid, Item:itemid)
 
 			StartHoldAction(playerid, 1000);
 			ApplyAnimation(playerid, "BOMBER", "BOM_Plant_Loop", 4.0, 1, 0, 0, 0, 0, 1);
-			ShowActionText(playerid, ls(playerid, "ARMINGBOMB", true));
+			ShowActionText(playerid, ls(playerid, "ARMINGBOMB"));
 		}
 		else if(exp_Data[exp_ItemTypeExplosive[itemtype]][exp_trigger] == MOTION)
 		{
@@ -228,7 +228,7 @@ hook OnPlayerUseItem(playerid, Item:itemid)
 
 			StartHoldAction(playerid, 1000);
 			ApplyAnimation(playerid, "BOMBER", "BOM_Plant_Loop", 4.0, 1, 0, 0, 0, 0, 1);
-			ShowActionText(playerid, ls(playerid, "ARMINGBOMB", true));
+			ShowActionText(playerid, ls(playerid, "ARMINGBOMB"));
 		}
 	}
 	else if(GetItemType(itemid) == exp_RadioTriggerItemType)
@@ -245,19 +245,19 @@ hook OnPlayerUseItem(playerid, Item:itemid)
 
 		if(!IsValidItem(bombitem))
 		{
-			ShowActionText(playerid, ls(playerid, "RADIONOSYNC", true));
+			ShowActionText(playerid, ls(playerid, "RADIONOSYNC"));
 			return Y_HOOKS_CONTINUE_RETURN_0;
 		}
 
 		if(exp_ItemTypeExplosive[bombitemtype] == INVALID_EXPLOSIVE_TYPE)
 		{
-			ShowActionText(playerid, ls(playerid, "RADIONOSYNC", true));
+			ShowActionText(playerid, ls(playerid, "RADIONOSYNC"));
 			return Y_HOOKS_CONTINUE_RETURN_0;
 		}
 
 		if(exp_Data[exp_ItemTypeExplosive[bombitemtype]][exp_trigger] != RADIO)
 		{
-			ShowActionText(playerid, ls(playerid, "RADIONOSYNC", true));
+			ShowActionText(playerid, ls(playerid, "RADIONOSYNC"));
 			return Y_HOOKS_CONTINUE_RETURN_0;
 		}
 
@@ -265,7 +265,7 @@ hook OnPlayerUseItem(playerid, Item:itemid)
 		GetItemExtraData(bombitem, value);
 		if(value != 1)
 		{
-			ShowActionText(playerid, ls(playerid, "RADIONOSYNC", true));
+			ShowActionText(playerid, ls(playerid, "RADIONOSYNC"));
 			return Y_HOOKS_CONTINUE_RETURN_0;
 		}
 
@@ -273,7 +273,7 @@ hook OnPlayerUseItem(playerid, Item:itemid)
 		SetItemToExplode(bombitem);
 		SetItemExtraData(itemid, _:INVALID_ITEM_ID);
 
-		ShowActionText(playerid, ls(playerid, "RADIOTRIGGD", true));
+		ShowActionText(playerid, ls(playerid, "RADIOTRIGGD"));
 	}
 
 	return Y_HOOKS_CONTINUE_RETURN_0;
@@ -325,7 +325,7 @@ hook OnHoldActionFinish(playerid)
 				exp_ArmTick[playerid] = GetTickCount();
 				defer SetItemToExplodeDelay(_:exp_ArmingItem[playerid], 5000);
 				ClearAnimations(playerid);
-				ShowActionText(playerid, ls(playerid, "ARMEDBOMB5S", true), 3000);
+				ShowActionText(playerid, ls(playerid, "ARMEDBOMB5S"), 3000);
 
 				exp_ArmingItem[playerid] = INVALID_ITEM_ID;
 			}
@@ -344,7 +344,7 @@ hook OnHoldActionFinish(playerid)
 
 				SetItemExtraData(exp_ArmingItem[playerid], 1);
 				ClearAnimations(playerid);
-				ShowActionText(playerid, ls(playerid, "ARMEDBOMB", true), 3000);
+				ShowActionText(playerid, ls(playerid, "ARMEDBOMB"), 3000);
 
 				exp_ArmingItem[playerid] = INVALID_ITEM_ID;
 			}

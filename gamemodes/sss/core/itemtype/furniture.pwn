@@ -105,7 +105,7 @@ hook OnPlayerUseItemWithItem(playerid, Item:itemid, Item:withitemid)
 
 				if(required > 0)
 				{
-					ShowActionText(playerid, sprintf(ls(playerid, "CNTEXTRASLO", true), required), 3000, 150);
+					ShowActionText(playerid, sprintf(ls(playerid, "CNTEXTRASLO"), required), 3000, 150);
 				}
 				else if(required == 0)
 				{

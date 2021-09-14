@@ -11,7 +11,7 @@ hook OnPlayerUseItemWithItem(playerid, Item:itemid, Item:withitemid)
 			
 		if(GetLiquidItemLiquidType(itemid) != liquid_Petrol)
 		{
-			ShowActionText(playerid, ls(playerid, "FUELNOTPETR", true), 3000);
+			ShowActionText(playerid, ls(playerid, "FUELNOTPETR"), 3000);
 			return Y_HOOKS_BREAK_RETURN_1;
 		}
 
@@ -20,7 +20,7 @@ hook OnPlayerUseItemWithItem(playerid, Item:itemid, Item:withitemid)
 
 		if(canfuel <= 0.0)
 		{
-			ShowActionText(playerid, ls(playerid, "PETROLEMPTY", true), 3000);
+			ShowActionText(playerid, ls(playerid, "PETROLEMPTY"), 3000);
 			return Y_HOOKS_BREAK_RETURN_1;
 		}
 
@@ -38,7 +38,7 @@ hook OnPlayerUseItemWithItem(playerid, Item:itemid, Item:withitemid)
 		CreateItem(ItemType:18, x, y, z, .rz = rz);
 
 		ApplyAnimation(playerid, "BOMBER", "BOM_PLANT_IN", 4.0, 0, 0, 0, 0, 0);
-		ShowActionText(playerid, ls(playerid, "MOLOPOURBOT", true), 3000);
+		ShowActionText(playerid, ls(playerid, "MOLOPOURBOT"), 3000);
 		
 		transfer = (canfuel - 0.5 < 0.0) ? canfuel : 0.5;
 		SetLiquidItemLiquidAmount(itemid, canfuel - transfer);

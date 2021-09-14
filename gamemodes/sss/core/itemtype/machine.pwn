@@ -149,7 +149,7 @@ _mach_PlayerUseMachine(playerid, Item:itemid)
 
 		ShowActionText(playerid,
 			sprintf(
-				ls(playerid, "MACHPROCESS", true),
+				ls(playerid, "MACHPROCESS"),
 				MsToString(
 					cookduration -
 					GetTickCountDifference(GetTickCount(), starttick),
@@ -271,7 +271,7 @@ timer _mach_HoldInteract[250](playerid)
 					), 6000);
 
 				else
-					ShowActionText(playerid, sprintf(ls(playerid, "MACHCOOKTIM", true), MsToString(ret, "%m minutos %s segundos")), 6000);
+					ShowActionText(playerid, sprintf(ls(playerid, "MACHCOOKTIM"), MsToString(ret, "%m minutos %s segundos")), 6000);
 
 				mach_CurrentMachine[playerid] = INVALID_ITEM_ID;
 			}
@@ -315,7 +315,7 @@ hook OnHoldActionUpdate(playerid, progress)
 
 			SetLiquidItemLiquidAmount(itemid, fuel - transfer);
 			SetItemArrayDataAtCell(mach_CurrentMachine[playerid], _:(machinefuel + transfer), E_MACHINE_FUEL);
-			ShowActionText(playerid, ls(playerid, "REFUELLING", true));
+			ShowActionText(playerid, ls(playerid, "REFUELLING"));
 		}
 	}
 

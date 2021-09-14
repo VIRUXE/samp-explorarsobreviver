@@ -161,7 +161,7 @@ hook OnPlayerUseItem(playerid, Item:itemid)
 							GetItemTypeName(result, uniqueid);
 							StartHoldAction(playerid, GetPlayerSkillTimeModifier(playerid, cons_Data[cons_CraftsetConstructSet[craftset]][cons_buildtime], uniqueid));
 							ApplyAnimation(playerid, "BOMBER", "BOM_Plant_Loop", 4.0, 1, 0, 0, 0, 0, 1);
-							ShowActionText(playerid, ls(playerid, "CONSTRUCTIN", true));
+							ShowActionText(playerid, ls(playerid, "CONSTRUCTIN"));
 
 							cons_Constructing[playerid] = craftset;
 
@@ -229,7 +229,7 @@ StartRemovingConstructedItem(playerid, Item:itemid, CraftSet:craftset)
 		GetItemTypeName(result, uniqueid);
 		StartHoldAction(playerid, GetPlayerSkillTimeModifier(playerid, cons_Data[cons_CraftsetConstructSet[craftset]][cons_removalTime], uniqueid));
 		ApplyAnimation(playerid, "BOMBER", "BOM_Plant_Loop", 4.0, 1, 0, 0, 0, 0, 1);
-		ShowActionText(playerid, ls(playerid, "DECONSTRUCT", true));
+		ShowActionText(playerid, ls(playerid, "DECONSTRUCT"));
 		cons_Deconstructing[playerid] = craftset;
 		cons_DeconstructingItem[playerid] = itemid;
 	}

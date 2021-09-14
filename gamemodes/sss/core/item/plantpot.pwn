@@ -41,7 +41,7 @@ hook OnPlayerUseItemWithItem(playerid, Item:itemid, Item:withitemid)
 
 				SetItemArrayDataAtCell(itemid, amount - 1, E_SEED_BAG_AMOUNT);
 				SetItemArrayData(withitemid, potdata, e_plant_pot_data);
-				ShowActionText(playerid, ls(playerid, "POTADDSEEDS", true), 5000);
+				ShowActionText(playerid, ls(playerid, "POTADDSEEDS"), 5000);
 				new Button:buttonid;
 				GetItemButtonID(itemid, buttonid);
 				SetButtonText(buttonid, "Pressione F para apanhar~n~Pressione "KEYTEXT_INTERACT" com uma Garrafa com Água, para adicionar agua na planta");
@@ -55,9 +55,9 @@ hook OnPlayerUseItemWithItem(playerid, Item:itemid, Item:withitemid)
 				type = GetLiquidItemLiquidType(itemid);
 
 			if(amount <= 0.0)
-				ShowActionText(playerid, ls(playerid, "POTBOTEMPTY", true), 5000);
+				ShowActionText(playerid, ls(playerid, "POTBOTEMPTY"), 5000);
 			else if(type != liquid_Water)
-				ShowActionText(playerid, ls(playerid, "POTBOTNOWAT", true), 5000);
+				ShowActionText(playerid, ls(playerid, "POTBOTNOWAT"), 5000);
 			else
 			{
 				new Float:transfer = (amount < 0.1) ? amount : 0.1, water;
@@ -66,7 +66,7 @@ hook OnPlayerUseItemWithItem(playerid, Item:itemid, Item:withitemid)
 				GetItemArrayDataAtCell(withitemid, water, E_PLANT_POT_WATER);
 				SetItemArrayDataAtCell(withitemid, water + floatround(transfer * 10), E_PLANT_POT_WATER, true);
 				SetLiquidItemLiquidAmount(itemid, amount - transfer);
-				ShowActionText(playerid, ls(playerid, "POTADDWATER", true), 5000);
+				ShowActionText(playerid, ls(playerid, "POTADDWATER"), 5000);
 				new Button:buttonid;
 				GetItemButtonID(itemid, buttonid);
 				SetButtonText(buttonid, "Pressione F para apanhar~n~Pressione "KEYTEXT_INTERACT" com uma Faca para obter a planta");
@@ -77,7 +77,7 @@ hook OnPlayerUseItemWithItem(playerid, Item:itemid, Item:withitemid)
 		{
 			if(!potdata[E_PLANT_POT_ACTIVE])
 			{
-				ShowActionText(playerid, ls(playerid, "POTNOACPLNT", true), 3000);
+				ShowActionText(playerid, ls(playerid, "POTNOACPLNT"), 3000);
 				return Y_HOOKS_BREAK_RETURN_1;
 			}
 
@@ -85,13 +85,13 @@ hook OnPlayerUseItemWithItem(playerid, Item:itemid, Item:withitemid)
 
 			if(!IsValidSeedType(seedtype))
 			{
-				ShowActionText(playerid, ls(playerid, "POTINVASEED", true), 3000);
+				ShowActionText(playerid, ls(playerid, "POTINVASEED"), 3000);
 				return Y_HOOKS_BREAK_RETURN_1;
 			}
 
 			if(_:(potdata[E_PLANT_POT_GROWTH] < GetSeedTypeGrowthTime(seedtype)))
 			{
-				ShowActionText(playerid, ls(playerid, "POTNOTGROWN", true), 3000);
+				ShowActionText(playerid, ls(playerid, "POTNOTGROWN"), 3000);
 				return Y_HOOKS_BREAK_RETURN_1;
 			}
 
@@ -118,7 +118,7 @@ hook OnPlayerUseItemWithItem(playerid, Item:itemid, Item:withitemid)
 
 			SetItemArrayData(withitemid, potdata, e_plant_pot_data);
 
-			ShowActionText(playerid, ls(playerid, "POTHARVESTE", true), 3000);
+			ShowActionText(playerid, ls(playerid, "POTHARVESTE"), 3000);
 		}
 
 		return Y_HOOKS_BREAK_RETURN_1;

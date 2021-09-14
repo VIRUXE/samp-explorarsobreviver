@@ -33,7 +33,7 @@ hook OnItemAddToContainer(Container:containerid, Item:itemid, playerid)
 	if(!_machine_isItemBottledSeawater(itemid))
 	{
 		ShowActionText(playerid, sprintf(
-			ls(playerid, "MACHITEMTYP", true),
+			ls(playerid, "MACHITEMTYP"),
 			"Water Bottle (Sea Water)"
 		));
 		return Y_HOOKS_BREAK_RETURN_1;
