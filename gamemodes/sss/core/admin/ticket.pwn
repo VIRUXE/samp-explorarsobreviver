@@ -172,7 +172,7 @@ CMD:ticket(playerid, params[])
 					return 4;
 
 				if(IsPlayerBeingAttended(playerid))
-					return ChatMsg(playerid, RED, " » Esse Jogador ja esta a ser Atendido.");
+					return ChatMsg(playerid, RED, " » Esse jogador já está em atendimento.");
 
 				inline Response(pid, dialogid, response, listitem, string:inputtext[])
 				{
@@ -188,8 +188,8 @@ CMD:ticket(playerid, params[])
 						SetPlayerChatMode(playerid, CHAT_MODE_TICKET);
 						SetPlayerChatMode(ticketOwnerId, CHAT_MODE_TICKET);
 
-						ChatMsg(playerid, GREEN, " » Esta agora a atender o jogador %P.", ticketOwnerId);
-						ChatMsg(ticketOwnerId, GREEN, " » Esta agora a ser atendido pelo Admin %P.", playerid);
+						ChatMsg(playerid, GREEN, " » Está atendendo o jogador %P.", ticketOwnerId);
+						ChatMsg(ticketOwnerId, GREEN, " » Está agora a ser atendido pelo Admin %P.", playerid);
 
 						log(true, "[TICKET] %p(%d) is attending %p(%d)", playerid, playerid, ticketOwnerId, ticketOwnerId);
 					}
@@ -216,7 +216,7 @@ CMD:ticket(playerid, params[])
 					{
 						ToggleAdminDuty(playerid, false);
 						SetPlayerChatMode(playerid, 3); // ADMIN CHAT
-						ChatMsg(playerid, GREEN, " » Voce Fechou o Ticket de %P", ticketOwnerId);
+						ChatMsg(playerid, GREEN, " » Voce fechou o Ticket de %P", ticketOwnerId);
 
 						TogglePlayerMute(ticketOwnerId, true);
 						TogglePlayerControllable(ticketOwnerId, false);
@@ -235,26 +235,26 @@ CMD:ticket(playerid, params[])
 							ToggleGodMode(ticketOwnerId, false);
 							TogglePlayerControllable(ticketOwnerId, true);
 						}
-						Dialog_ShowCallback(ticketOwnerId, using inline Response, DIALOG_STYLE_INPUT, "Ticket - Avaliar Atendimento", "O seu Ticket foi Fechado.\n\nAvalie por favor, de 1 a 3 (3 - Bom, 2 - Normal, 1 - Mau), a qualidade do atendimento.\n\nIsso e muito importante para podermos avaliar a nossa equipe e verificar se todos os jogadores sao tratados justamente.", "Avaliar", "Agora nao");
+						Dialog_ShowCallback(ticketOwnerId, using inline Response, DIALOG_STYLE_INPUT, "Ticket - Avaliar Atendimento", "O seu Ticket foi fechado.\n\nAvalie por favor, de 1 a 3 (3 - Bom, 2 - Normal, 1 - Mau), a qualidade do atendimento.\n\nIsso é muito importante para avaliarmos a nossa equipe e verificar se todos os jogadores são tratados justamente.", "Avaliar", "Depois");
 
 						_DeleteTicket(ticketOwnerId);
 
-						log(false, "[TICKET] %p(%d) Fechou o Ticket de %p(%d)", playerid, playerid, ticketOwnerId, ticketOwnerId);
+						log(false, "[TICKET] %p(%d) Fechou o ticket de %p(%d)", playerid, playerid, ticketOwnerId, ticketOwnerId);
 					}
 					else
-						return ChatMsg(playerid, YELLOW, " » Nao esta a atender ninguem para poder fechar.");
+						return ChatMsg(playerid, YELLOW, " » Você não está atendendo ninguém no momento.");
 				}
 				else
-					ChatMsg(playerid, YELLOW, "Utilizacao: /ticket (id/fechar)");
+					ChatMsg(playerid, YELLOW, " » Use: /ticket (id) (fechar)");
 			}
 		}
 		else
-			return ChatMsg(playerid, YELLOW, "Utilizacao: /ticket (sem parametros)");
+			return ChatMsg(playerid, YELLOW, " »: /ticket (sem parâmetros)");
 	}
 	else
 	{
 		if(ticket_Data[playerid][TICKET_DATE] != 0)
-			return ChatMsg(playerid, YELLOW, " » Ja tem um Ticket em aberto. Tem que esperar que um admin atenda.");
+			return ChatMsg(playerid, YELLOW, " » Você já tem um ticket aberto. Aguarde até que um Admin atenda.");
 
 		inline Response(pid, dialogid, response, listitem, string:inputtext[])
 		{
@@ -265,7 +265,7 @@ CMD:ticket(playerid, params[])
 
 				strcat(ticketText, inputtext);
 				_CreateTicket(playerid, ticketText);
-				return ChatMsg(playerid, GREEN, " » Ticket enviado com Sucesso. Aguarde que seja atendido.");
+				return ChatMsg(playerid, GREEN, " » Ticket enviado com sucesso. Aguarde até que um Admin atenda.");
 			}
 		}
 		Dialog_ShowCallback(playerid, using inline Response, DIALOG_STYLE_INPUT, "Ticket - Enviar um Ticket", "sdsfgsgrgsgegsegse\n\nsdsdfsgrgrgs", "Enviar", "Cancelar");
@@ -287,7 +287,7 @@ ACMD:ticketboard[1](playerid, params[]) // Mostrar/Esconder board
 	else
 		TextDrawHideForPlayer(playerid, ticket_Board);
 
-	ChatMsg(playerid, YELLOW, "Quadro de Tickets: %s", ticket_BoardActive[playerid] ? "Ativado" : "Desativado");
+	ChatMsg(playerid, YELLOW, "Lista de Tickets: %s", ticket_BoardActive[playerid] ? "Ativado" : "Desativado");
 
 	return 1;
 }
