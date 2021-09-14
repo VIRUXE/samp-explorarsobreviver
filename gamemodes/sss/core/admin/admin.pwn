@@ -96,7 +96,7 @@ hook OnPlayerDisconnected(playerid)
 	admin_PlayerKicked[playerid] = 0;
 }
 
-public OnPlayerClickMap(playerid, Float:fX, Float:fY, Float:fZ)
+hook OnPlayerClickMap(playerid, Float:fX, Float:fY, Float:fZ)
 {
 	if(GetPlayerAdminLevel(playerid) >= STAFF_LEVEL_MODERATOR)
 	{
@@ -112,22 +112,62 @@ public OnPlayerClickMap(playerid, Float:fX, Float:fY, Float:fZ)
 
 hook OnPlayerClickPlayer(playerid, clickedplayerid, source)
 {
-	if(GetPlayerAdminLevel(playerid) >= STAFF_LEVEL_MODERATOR && playerid != clickedplayerid)
-	{	
-		if(GetPlayerState(clickedplayerid) == PLAYER_STATE_SPECTATING && IsAdminOnDuty(clickedplayerid))
-			return 0;
+	if(GetPlayerAdminLevel(playerid) && playerid != clickedplayerid)
+	{
+		gBigString[playerid][0] = EOS;
 
-		ToggleAdminDuty(playerid, true);
+		strcat(gBigString[playerid], "Get\n");
+		strcat(gBigString[playerid], "Goto\n");
+		strcat(gBigString[playerid], "Freeze\n");
+		strcat(gBigString[playerid], "Unfreeze\n");
+		strcat(gBigString[playerid], "Kick\n");
+		strcat(gBigString[playerid], "Ban\n");
+		strcat(gBigString[playerid], "Aliases\n");
 
-		TeleportPlayerToPlayer(playerid, clickedplayerid);
+		inline Response(pid, dialogid, response, listitem, string:inputtext[])
+		{
+			#pragma unused pid, dialogid, inputtext
 
-		if(GetPlayerAdminLevel(clickedplayerid))
-			SetPlayerChatMode(playerid, 3);
-		else
-			SetPlayerChatMode(playerid, 0);
-	
-		ChatMsg(playerid, YELLOW, " » Você teleportou para %P", clickedplayerid);
-		ChatMsgLang(clickedplayerid, YELLOW, "TELEPORTEDT", playerid);
+			if(response)
+			{
+				switch(listitem)
+				{
+					case 0: TeleportPlayerToPlayer(clickedplayerid, playerid);
+					case 1: TeleportPlayerToPlayer(playerid, clickedplayerid);
+					case 2: FreezePlayer(clickedplayerid);
+					case 3: UnfreezePlayer(clickedplayerid);
+
+					case 4: {
+						inline Response2(pid2, dialogid2, response2, listitem2, string:inputtext2[])
+						{
+							#pragma unused pid2, dialogid2, listitem2
+						
+							if(response2)
+								KickPlayer(clickedplayerid, inputtext2);
+						}
+						Dialog_ShowCallback(playerid, using inline Response2, DIALOG_STYLE_INPUT , sprintf("%P", clickedplayerid),
+							"Type a kick reason", "Kick", "Exit");
+						
+					}
+					
+					case 5: {
+						inline Response2(pid2, dialogid2, response2, listitem2, string:inputtext2[])
+						{
+							#pragma unused pid2, dialogid2, listitem2
+						
+							if(response2)
+								BanPlayer(clickedplayerid, inputtext2, playerid, HOUR(720));
+						}
+						Dialog_ShowCallback(playerid, using inline Response2, DIALOG_STYLE_INPUT , sprintf("%P", clickedplayerid),
+							"Type a ban reason", "Kick", "Exit");
+						
+					}
+					//case 6: 
+				}
+			}
+		}
+		Dialog_ShowCallback(playerid, using inline Response, DIALOG_STYLE_LIST, sprintf("%P", clickedplayerid),
+			gBigString[playerid], "Select", "Exit");
 	}
 
     return 0;
