@@ -98,7 +98,8 @@ stock DefineVehicleType(modelid, const name[], group, category, size, Float:maxf
 	// 	veh_TypeTotal, modelid, name, group, category, size, maxfuel, fuelcons, lootindex, trunksize, spawnchance, flags);
 
 	veh_TypeData[veh_TypeTotal][veh_modelId] = modelid;
-	strcat(veh_TypeData[veh_TypeTotal][veh_modelId], name, MAX_VEHICLE_TYPE_NAME);
+	//strcat(veh_TypeData[veh_TypeTotal][veh_modelId], name, MAX_VEHICLE_TYPE_NAME); // ???????????
+	strcat(veh_TypeData[veh_TypeTotal][veh_name], name, MAX_VEHICLE_TYPE_NAME);
 	veh_TypeData[veh_TypeTotal][veh_spawnGroup] = group;
 	veh_TypeData[veh_TypeTotal][veh_category] = category;
 	veh_TypeData[veh_TypeTotal][veh_size] = size;
