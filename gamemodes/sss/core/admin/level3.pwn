@@ -738,22 +738,64 @@ AdminAddItem(playerid, ItemType:type)
 
 ACMD:addvehicle[3](playerid, params[])
 {
-	new	type = isnumeric(params) ? strval(params) : GetVehicleTypeFromName(params, true, true);
+	new name[32];
 
-	if(!IsValidVehicleType(type))
-		return ChatMsg(playerid, YELLOW, " » Tipo de Veículo Inválido.");
+	if(sscanf(params, "s[32]", name))
+		return ChatMsg(playerid, YELLOW, " » Utilize: /addvehicle [nome/id do veiculo]");
 
-	if(GetPlayerAdminLevel(playerid) < STAFF_LEVEL_LEAD)
-	{
-		inline Response(pid, dialogid, response, listitem, string:inputtext[])
+	new vname[MAX_VEHICLE_TYPE_NAME];
+
+	if(IsNumeric(name) && IsValidVehicleType(strval(name))) {
+		AdminAddVehicle(playerid, GetVehicleTypeModel(strval(name)));
+		return 1;
+	} else {
+		new
+			list[MAX_VEHICLE_TYPE] = {INVALID_VEHICLE_TYPE, ...},
+			count = -1;
+
+		gBigString[playerid][0] = EOS;
+
+		for(new i; i < MAX_VEHICLE_TYPE; i++)
 		{
-			#pragma unused pid, dialogid, response, listitem
+			if(!IsValidVehicleType(i))
+				break;
 
-			log(true, "[ADDVEHICLE] %p added vehicle %d reason: %s", pid, type, inputtext);
+			GetVehicleTypeName(i, vname);
+
+			if(strfind(vname, name, true) != -1)
+			{
+				list[++count] = i;
+				strcat(gBigString[playerid], ret_valstr(i)); // type
+				strcat(gBigString[playerid], ".\t"); // space
+				strcat(gBigString[playerid], vname); // type name
+				strcat(gBigString[playerid], "\n");
+			}
 		}
-		Dialog_ShowCallback(playerid, using inline Response, DIALOG_STYLE_INPUT, "Justificação", "Introduz a Motivo para ter adicionado esse veículo:", "OK", "");
+		if(count > 1)
+		{
+			inline Response(pid, dialogid, response, listitem, string:inputtext[])
+			{
+				#pragma unused pid, dialogid, inputtext
+
+				if(response)
+					AdminAddVehicle(playerid, list[listitem]);
+			}
+			Dialog_ShowCallback(playerid, using inline Response, DIALOG_STYLE_LIST, "Adicionar veiculo", gBigString[playerid], "Selecionar", "Sair");
+			return 1;
+		}
+		else if(list[0] != INVALID_VEHICLE_TYPE)
+		{
+			AdminAddVehicle(playerid, list[0]);
+			return 1;
+		}
 	}
 
+	ChatMsg(playerid, YELLOW, " » Tipo de Veículo Inválido.");
+
+	return 1;	
+}
+
+AdminAddVehicle(playerid, type) {
 	new
 		vehicleId,
 		Float:playerAngle,
@@ -779,7 +821,16 @@ ACMD:addvehicle[3](playerid, params[])
 	ToggleVehicleWheels(vehicleId, true);
 	PutPlayerInVehicle(playerid, vehicleId, 0);
 
-	return 1;
+	if(GetPlayerAdminLevel(playerid) < STAFF_LEVEL_LEAD)
+	{
+		inline Response(pid, dialogid, response, listitem, string:inputtext[])
+		{
+			#pragma unused pid, dialogid, response, listitem
+
+			log(true, "[ADDVEHICLE] %p added vehicle %d reason: %s", pid, type, inputtext);
+		}
+		Dialog_ShowCallback(playerid, using inline Response, DIALOG_STYLE_INPUT, "Justificação", "Introduz a Motivo para ter adicionado esse veículo:", "OK", "");
+	}
 }
 
 
