@@ -10,8 +10,8 @@ hook OnPlayerConnect(playerid)
 {
 	KeyActions[playerid] = CreatePlayerTextDraw(playerid, 5.000000, 211.000000, "~y~H~W~ Abrir bolsos~n~~y~N ~W~Dropar item");
 	PlayerTextDrawFont(playerid, KeyActions[playerid], 1);
-	PlayerTextDrawLetterSize(playerid, KeyActions[playerid], 0.304165, 1.250000);
-	PlayerTextDrawTextSize(playerid, KeyActions[playerid], 215.000000, 464.500000);
+	PlayerTextDrawLetterSize(playerid, KeyActions[playerid], 0.3, 1.2);
+	PlayerTextDrawTextSize(playerid, KeyActions[playerid], 215.000000, 0.0);
 	PlayerTextDrawSetOutline(playerid, KeyActions[playerid], 1);
 	PlayerTextDrawSetShadow(playerid, KeyActions[playerid], 1);
 	PlayerTextDrawAlignment(playerid, KeyActions[playerid], 1);

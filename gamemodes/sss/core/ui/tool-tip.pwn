@@ -9,8 +9,8 @@ Timer:		ToolTipTimer[MAX_PLAYERS];
 hook OnPlayerConnect(playerid)
 {
 	ToolTipText[playerid] = CreatePlayerTextDraw(playerid,		   500.000000, 122.000000, "text");
-	PlayerTextDrawLetterSize	 (playerid, ToolTipText[playerid], 0.4, 1.0);
-	PlayerTextDrawTextSize		 (playerid, ToolTipText[playerid], 635.000000, -158.000000);
+	PlayerTextDrawLetterSize	 (playerid, ToolTipText[playerid], 0.3, 1.2);
+	PlayerTextDrawTextSize		 (playerid, ToolTipText[playerid], 640.000000, 0.000000);
 	PlayerTextDrawSetOutline	 (playerid, ToolTipText[playerid], 1);
 	PlayerTextDrawSetShadow		 (playerid, ToolTipText[playerid], 1);
 	PlayerTextDrawAlignment		 (playerid, ToolTipText[playerid], 1);

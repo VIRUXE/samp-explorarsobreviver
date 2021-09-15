@@ -28,17 +28,17 @@ hook OnPlayerConnect(playerid){
 		Thank you :)
 */
 	item_TD[playerid] = CreatePlayerTextDraw(playerid, 318.000000, 435.000000, "Scavenge and Survive ~b~(Copyright (C) 2016 \"Southclaws\")");
-	PlayerTextDrawFont(playerid, item_TD[playerid], 1);
-	PlayerTextDrawLetterSize(playerid, item_TD[playerid], 0.254165, 1.250000);
-	PlayerTextDrawTextSize(playerid, item_TD[playerid], 280.000000, 254.000000);
-	PlayerTextDrawSetOutline(playerid, item_TD[playerid], 1);
-	PlayerTextDrawSetShadow(playerid, item_TD[playerid], 1);
-	PlayerTextDrawAlignment(playerid, item_TD[playerid], 2);
-	PlayerTextDrawBackgroundColor(playerid, item_TD[playerid], 255);
-	PlayerTextDrawColor(playerid, item_TD[playerid], ORANGE);
-	PlayerTextDrawShow(playerid, item_TD[playerid]);
+	PlayerTextDrawFont				(playerid, item_TD[playerid], 1);
+	PlayerTextDrawLetterSize		(playerid, item_TD[playerid], 0.3, 1.2);
+	PlayerTextDrawTextSize			(playerid, item_TD[playerid], 280.000000, 320.000000);
+	PlayerTextDrawSetOutline		(playerid, item_TD[playerid], 1);
+	PlayerTextDrawSetShadow			(playerid, item_TD[playerid], 1);
+	PlayerTextDrawAlignment			(playerid, item_TD[playerid], 2);
+	PlayerTextDrawBackgroundColor	(playerid, item_TD[playerid], 255);
+	PlayerTextDrawColor				(playerid, item_TD[playerid], ORANGE);
+	PlayerTextDrawShow				(playerid, item_TD[playerid]);
 	defer HideCredit(playerid);
-	PlayerTextDrawColor(playerid, item_TD[playerid], 0xFFFF00FF);
+	PlayerTextDrawColor				(playerid, item_TD[playerid], 0xFFFF00FF);
 }
 
 timer HideCredit[5000](playerid){
