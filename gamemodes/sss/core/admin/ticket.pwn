@@ -134,14 +134,19 @@ _UpdateTicketList()
 
 	foreach(new i : Player)
 	{
-		if(GetPlayerAdminLevel(i) && IsTicketListVisible(i))
-			TextDrawShowForPlayer(i, ticket_Board);
+		if(GetPlayerAdminLevel(i) && IsTicketListActive(i))
+		{
+			if(ticket_Count)
+				TextDrawShowForPlayer(i, ticket_Board);
+			else
+				TextDrawHideForPlayer(i, ticket_Board);
+		}
 	}
 
 	log(false, "ticket board update");
 }
 
-stock bool:IsTicketListVisible(playerid)
+stock bool:IsTicketListActive(playerid)
 	return ticket_ListVisible[playerid];
 
 stock bool:AreThereTicketsOpen()
@@ -166,13 +171,8 @@ stock IsAdminAttendingAPlayer(adminId)
 	return -1;
 }
 
-stock bool:IsPlayerBeingAttended(playerid)
-{
-	if(ticket_Data[playerid][TICKET_ADMIN] != -1)
-		return true;
-
-	return false;
-}
+stock IsPlayerBeingAttended(playerid)
+	return ticket_Data[playerid][TICKET_ADMIN];
 
 stock bool:DoesPlayerHaveATicket(playerid)
 {
@@ -196,7 +196,9 @@ CMD:ticket(playerid, params[])
 	{
 		if(isequal(params, "fechar", true))
 		{
-			new ticketOwnerId = -1;
+			new 
+				ticketOwnerId = -1,
+				attendingAdminId = -1;
 
 			if(GetPlayerAdminLevel(playerid)) // Fechar o Ticket que estiver a atender
 			{
@@ -212,10 +214,9 @@ CMD:ticket(playerid, params[])
 
 				if(ticketOwnerId != -1)
 				{
-					ToggleAdminDuty(playerid, false);
-					SetPlayerChatMode(playerid, 3); // ADMIN CHAT
-					
-					ChatMsg(playerid, GREEN, " » Voce fechou o Ticket de %P", ticketOwnerId);
+					attendingAdminId = playerid;
+
+					ChatMsg(playerid, GREEN, " » Você fechou o Ticket de %P", ticketOwnerId);
 
 					log(false, "[TICKET] %p(%d) Fechou o Ticket de %p(%d)", playerid, playerid, ticketOwnerId, ticketOwnerId);
 				}
@@ -227,32 +228,58 @@ CMD:ticket(playerid, params[])
 				if(DoesPlayerHaveATicket(playerid))
 				{
 					ticketOwnerId = playerid;
+
+					attendingAdminId = IsPlayerBeingAttended(ticketOwnerId);
+
+					if(attendingAdminId != -1)
+						ChatMsg(attendingAdminId, GREEN, " » O Jogador fechou o Ticket.", ticketOwnerId);
+
+					ChatMsg(playerid, GREEN, " » Você fechou o seu Ticket.", ticketOwnerId);
+
 					log(false, "[TICKET] %p(%d) Fechou o seu proprio Ticket", ticketOwnerId, ticketOwnerId);
 				}
 				else
 					return ChatMsg(playerid, YELLOW, " » Você não abriu nenhum Ticket.");	
 			}
 			
-			if(IsPlayerBeingAttended(ticketOwnerId)) // Avaliar apenas se estava a ser atendido
+			if(attendingAdminId != -1) 
 			{
+				ToggleAdminDuty(attendingAdminId, false);
+				SetPlayerChatMode(attendingAdminId, 3); // ADMIN CHAT
+
+				// Avaliar apenas se estava a ser atendido
 				TogglePlayerMute(ticketOwnerId, true);
 				TogglePlayerControllable(ticketOwnerId, false);
-				inline Response(pid, dialogid, response, listitem, string:inputtext[])
+
+				new dialogText[240+MAX_PLAYER_NAME];
+
+				format(dialogText, sizeof(dialogText), "O seu Ticket foi Fechado.\n\nAntes de poder voltar a jogar é necessário você avaliar a qualidade do atendimento do Admin %p.\n\nIsso é muito importante para avaliarmos a nossa equipe e verificar se todos os jogadores são tratados justamente.", attendingAdminId);
+
+				inline ResponseA(pid, dialogid, response, listitem, string:inputtext[])
 				{
-					#pragma unused pid, dialogid, listitem
+					#pragma unused pid, dialogid, listitem, inputtext
 
 					if(response)
 					{
-						// TODO: Guardar a avaliacao na base de dados
-						log(false, "[TICKET] %p(%d) avaliou o atendimento de %p(%d) como %d", ticketOwnerId, ticketOwnerId, playerid, playerid, strval(inputtext));
-					}
+						inline Response(pid, dialogid, response, listitem, string:inputtext[])
+						{
+							#pragma unused pid, dialogid, inputtext
 
-					TogglePlayerMute(ticketOwnerId, false);
-					TogglePlayerControllable(ticketOwnerId, true);
-					SetPlayerChatMode(ticketOwnerId, CHAT_LOCAL);
-					ToggleGodMode(ticketOwnerId, false);
+							if(response)
+							{
+								// TODO: Guardar a avaliacao na base de dados
+								log(false, "[TICKET] %p(%d) avaliou o atendimento de %p(%d) como %d", ticketOwnerId, ticketOwnerId, attendingAdminId, attendingAdminId, listitem);
+							}
+
+							TogglePlayerMute(ticketOwnerId, false);
+							TogglePlayerControllable(ticketOwnerId, true);
+							SetPlayerChatMode(ticketOwnerId, CHAT_LOCAL);
+							ToggleGodMode(ticketOwnerId, false);
+						}
+						Dialog_ShowCallback(ticketOwnerId, using inline Response, DIALOG_STYLE_LIST, "Ticket - Avaliar Atendimento", "Bom\nNormal\nMau", "Avaliar", "");
+					}
 				}
-				Dialog_ShowCallback(ticketOwnerId, using inline Response, DIALOG_STYLE_INPUT, "Ticket - Avaliar Atendimento", "O seu Ticket foi fechado.\n\nAvalie por favor, de 1 a 3 (3 - Bom, 2 - Normal, 1 - Mau), a qualidade do atendimento.\n\nIsso é muito importante para avaliarmos a nossa equipe e verificar se todos os jogadores são tratados justamente.", "Avaliar", "Depois");
+				Dialog_ShowCallback(ticketOwnerId, using inline ResponseA, DIALOG_STYLE_MSGBOX, "Ticket - Avaliar Atendimento", dialogText, "Seguinte", "");
 			}
 
 			_CloseTicket(ticketOwnerId);
@@ -326,7 +353,7 @@ ACMD:tickets[1](playerid, params[]) // Mostrar/Esconder board
 	#pragma unused params
 	ticket_ListVisible[playerid] = !ticket_ListVisible[playerid];
 
-	if(IsTicketListVisible(playerid))
+	if(IsTicketListActive(playerid))
 	{
 		if(AreThereTicketsOpen())
 			TextDrawShowForPlayer(playerid, ticket_Board);
@@ -334,7 +361,7 @@ ACMD:tickets[1](playerid, params[]) // Mostrar/Esconder board
 	else
 		TextDrawHideForPlayer(playerid, ticket_Board);
 
-	ChatMsg(playerid, YELLOW, " » Lista de Tickets: %s", IsTicketListVisible(playerid) ? "Ativad" : "Desativa");
+	ChatMsg(playerid, YELLOW, " » Lista de Tickets: %s", IsTicketListActive(playerid) ? "Ativada" : "Desativada");
 
 	return 1;
 }
