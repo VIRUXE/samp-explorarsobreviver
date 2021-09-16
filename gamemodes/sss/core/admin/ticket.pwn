@@ -299,7 +299,7 @@ CMD:ticket(playerid, params[])
 			if(ticketOwnerId == -1)
 				return ChatMsg(playerid, GREEN, " » Nao existem Tickets por atender.");
 
-			if(IsPlayerBeingAttended(ticketOwnerId))
+			if(IsPlayerBeingAttended(ticketOwnerId) != -1)
 				return ChatMsg(playerid, RED, " » Esse jogador já está em atendimento.");
 
 			inline Response(pid, dialogid, response, listitem, string:inputtext[])
