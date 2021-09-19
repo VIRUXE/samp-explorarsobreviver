@@ -455,7 +455,7 @@ stock Login(playerid)
 
 	CheckAdminLevel(playerid);
 
-	if(GetPlayerAdminLevel(playerid))
+	if(IsPlayerStaff(playerid))
 	{
 		new
 			reports = GetUnreadReports(),

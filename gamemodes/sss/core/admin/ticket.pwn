@@ -232,7 +232,7 @@ CMD:ticket(playerid, params[])
 				ticketOwnerId = -1,
 				attendingAdminId = -1;
 
-			if(GetPlayerAdminLevel(playerid)) // Fechar o Ticket que estiver a atender
+			if(IsPlayerStaff(playerid)) // Fechar o Ticket que estiver a atender
 			{
 				ticketOwnerId = IsAdminAttendingAPlayer(playerid);
 
@@ -319,7 +319,7 @@ CMD:ticket(playerid, params[])
 	}
 	else // Sem parametros
 	{
-		if(GetPlayerAdminLevel(playerid)) // Admin - Abrir o Ticket mais antigo para atender (Nota: Nao um admin nao pode criar tickets)
+		if(IsPlayerStaff(playerid)) // Admin - Abrir o Ticket mais antigo para atender (Nota: Nao um admin nao pode criar tickets)
 		{
 			if(IsAdminAttendingAPlayer(playerid) != -1)
 				return ChatMsg(playerid, RED, " » Ja esta em atendimento de um ticket. Nao pode entrar noutro.");
