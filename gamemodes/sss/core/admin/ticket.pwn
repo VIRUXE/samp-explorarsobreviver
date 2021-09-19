@@ -322,12 +322,12 @@ CMD:ticket(playerid, params[])
 		if(IsPlayerStaff(playerid)) // Admin - Abrir o Ticket mais antigo para atender (Nota: Nao um admin nao pode criar tickets)
 		{
 			if(IsAdminAttendingAPlayer(playerid) != -1)
-				return ChatMsg(playerid, RED, " » Ja esta em atendimento de um ticket. Nao pode entrar noutro.");
+				return ChatMsg(playerid, RED, " » Já está em atendimento de um ticket. Não pode entrar noutro.");
 
 			new ticketOwnerId = _GetOldestTicketOwnerId();
 
 			if(ticketOwnerId == -1)
-				return ChatMsg(playerid, GREEN, " » Nao existem Tickets por atender.");
+				return ChatMsg(playerid, GREEN, " » Não existem Tickets por atender.");
 			else
 			{
 				while(IsPlayerBeingAttended(ticketOwnerId) != -1)
