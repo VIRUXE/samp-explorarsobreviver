@@ -241,7 +241,7 @@ CMD:ticket(playerid, params[])
 					attendingAdminId = playerid;
 
 					ChatMsg(playerid, GREEN, " » Você fechou o Ticket de %P", ticketOwnerId);
-					ChatMsg(ticketOwnerId, GREEN, " » %P fechou o seu Ticket", playerid);
+					ChatMsg(ticketOwnerId, GREEN, " » %P"C_GREEN" fechou o seu Ticket", playerid);
 
 					log(false, "[TICKET] %p(%d) Fechou o Ticket de %p(%d)", playerid, playerid, ticketOwnerId, ticketOwnerId);
 				}
