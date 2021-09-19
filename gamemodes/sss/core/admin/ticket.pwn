@@ -293,7 +293,7 @@ CMD:ticket(playerid, params[])
 							if(response2)
 							{
 								// TODO: Guardar a avaliacao na base de dados
-								if(listitem != -1)
+								if(listitem2 != -1)
 									log(false, "[TICKET] %p(%d) avaliou o atendimento de %p(%d) como %d", ticketOwnerId, ticketOwnerId, attendingAdminId, attendingAdminId, listitem2);
 								else
 									log(false, "[TICKET] %p(%d) escolheu nao avaliar %p(%d)", ticketOwnerId, ticketOwnerId, attendingAdminId, attendingAdminId);
