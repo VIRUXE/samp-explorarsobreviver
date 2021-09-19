@@ -16,7 +16,7 @@ bool:	ticket_NotificationVisible[MAX_PLAYERS] = {true, ...},
 hook OnGameModeInit()
 {
 	ticket_Notification = 
-	TextDrawCreate(640.000000, 1.000000, "Ticket: 0");
+	TextDrawCreate(640.000000, 1.000000, "Tickets: 0");
 	TextDrawFont			(ticket_Notification, 1);
 	TextDrawLetterSize		(ticket_Notification, 0.300000, 1.200000);
 	TextDrawTextSize		(ticket_Notification, 600.000000, 17.000000);
@@ -160,6 +160,10 @@ _UpdateTicketNotification()
 		}
 	} */
 
+	new str[11];
+	format(str, sizeof(str), "Tickets: %d", ticket_Count);
+	TextDrawSetString(ticket_Notification, str);
+
 	foreach(new i : Player)
 	{
 		if(GetPlayerAdminLevel(i) && IsTicketListActive(i))
@@ -237,7 +241,7 @@ CMD:ticket(playerid, params[])
 					attendingAdminId = playerid;
 
 					ChatMsg(playerid, GREEN, " » Você fechou o Ticket de %P", ticketOwnerId);
-					ChatMsg(playerid, GREEN, " » %P fechou o seu Ticket", playerid);
+					ChatMsg(ticketOwnerId, GREEN, " » %P fechou o seu Ticket", playerid);
 
 					log(false, "[TICKET] %p(%d) Fechou o Ticket de %p(%d)", playerid, playerid, ticketOwnerId, ticketOwnerId);
 				}
