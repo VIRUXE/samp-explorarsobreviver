@@ -379,7 +379,10 @@ ChatMsgAdminsFlat(level, colour, const message[])
 
 stock ToggleAdminDuty(playerid, bool:toggle, goback = true)
 {
-	while(GetTickCountDifference(GetTickCount(), admin_DutyTick[playerid]) < 1500)
+	if(!IsPlayerConnected(playerid))
+		return 0;
+
+	while(GetTickCountDifference(GetTickCount(), admin_DutyTick[playerid]) < SEC(1.5))
 		admin_DutyTick[playerid] = GetTickCount();
 
 	new Float:x, Float:y, Float:z;
@@ -470,7 +473,8 @@ stock ToggleAdminDuty(playerid, bool:toggle, goback = true)
 	Interface
 
 ==============================================================================*/
-
+stock bool:IsPlayerStaff(playerid)
+	return GetPlayerAdminLevel(playerid) ? true : false;
 
 stock SetPlayerAdminLevel(playerid, level)
 {
