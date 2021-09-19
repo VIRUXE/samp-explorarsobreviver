@@ -286,15 +286,15 @@ CMD:ticket(playerid, params[])
 
 					if(response)
 					{
-						inline Response(pid, dialogid, response, listitem, string:inputtext[])
+						inline Response(pid2, dialogid2, response2, listitem2, string:inputtext2[])
 						{
-							#pragma unused pid, dialogid, inputtext
+							#pragma unused pid2, dialogid2, inputtext2
 
-							if(response)
+							if(response2)
 							{
 								// TODO: Guardar a avaliacao na base de dados
 								if(listitem != -1)
-									log(false, "[TICKET] %p(%d) avaliou o atendimento de %p(%d) como %d", ticketOwnerId, ticketOwnerId, attendingAdminId, attendingAdminId, listitem);
+									log(false, "[TICKET] %p(%d) avaliou o atendimento de %p(%d) como %d", ticketOwnerId, ticketOwnerId, attendingAdminId, attendingAdminId, listitem2);
 								else
 									log(false, "[TICKET] %p(%d) escolheu nao avaliar %p(%d)", ticketOwnerId, ticketOwnerId, attendingAdminId, attendingAdminId);
 							}
