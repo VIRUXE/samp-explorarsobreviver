@@ -46,7 +46,9 @@ _HandleCustomMelee(playerid, ItemType:itemtype)
 	if(GetPlayerAnimationIndex(playerid) == 1381)
 		return 0;
 
-	if(IsPlayerInWater(playerid))
+	new Float:depth, Float:playerDepth;
+
+	if(CA_IsPlayerInWater(playerid, depth, playerDepth))
 		return 0;
 
 	if(GetTickCountDifference(GetTickCount(), anm_AttackTick[playerid]) < 800)

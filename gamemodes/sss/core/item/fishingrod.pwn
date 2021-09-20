@@ -109,7 +109,9 @@ _CatchFish(playerid, Float:distance)
 	x += (distance * floatsin(-a, degrees));
 	y += (distance * floatcos(-a, degrees));
 
-	if(IsPosInWater(x, y, z) && -0.01 < z < 0.01)
+	new Float:depth, Float:posDepth;
+
+	if(IsPosInWater(x, y, z, depth, posDepth) && -0.01 < z < 0.01)
 	{
 		fish_Timer[playerid] = defer _TryCatch(playerid, GetPlayerSkillTimeModifier(playerid, MIN_FISHING_TIME + random(MAX_FISHING_TIME - MIN_FISHING_TIME), "Fishing"));
 		ShowActionText(playerid, ls(playerid, "FISHFISHING"));

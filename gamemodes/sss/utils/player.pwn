@@ -222,7 +222,7 @@ stock LowerPlayerToGround(playerid)
 	}
 }
 
-stock IsPlayerInWater(playerid)
+/* stock IsPlayerInWater(playerid)
 {
 	new
 		Float:x,
@@ -232,7 +232,7 @@ stock IsPlayerInWater(playerid)
 	GetPlayerPos(playerid, x, y, z);
 
 	return IsPosInWater(x, y, z);
-}
+} */
 
 stock IsPlayerIdle(playerid)
 {
@@ -255,9 +255,8 @@ stock IsPlayerInArea(playerid, Float:MinX, Float:MinY, Float:MaxX, Float:MaxY)
 	GetPlayerPos(playerid,x,y,pz);
 
 	if(x >= MinX && x <= MaxX && y >= MinY && y <= MaxY)
-	{
 		return 1;
-	}
+
 	return 0;
 }
 

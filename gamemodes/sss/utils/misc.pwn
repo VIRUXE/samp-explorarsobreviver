@@ -1,6 +1,6 @@
 
 // These are all the square water zones in SA-MP in this format: MinX, MinY, MaxX, MaxY, Height
-new Float:water_squares[][] = {
+/* new Float:water_squares[][] = {
 	{-1584.0, -1826.0, -1360.0, -1642.0, 0.00000},
 	{-3000.0, 354.0, -2832.0, 2942.0, 0.00000},
 	{-2832.0, 1296.0, -2704.0, 2192.0, 0.00000},
@@ -316,11 +316,57 @@ new Float:water_triangles[][] = {
 	{-1724.0, 170.0, -1612.0, 170.0, -1724.0, 58.0, 0.00000},
 	{-1550.0, 168.0, -1362.0, 168.0, -1550.0, -20.0, 0.00000},
 	{-1722.0, -62.0, -1574.0, -62.0, -1574.0, 86.0, 0.00000}
-};
+}; */
 
-stock IsPosInWater(Float:x, Float:y, Float:z)
+stock IsPosNearWater(Float:x, Float:y, Float:z, Float:dist = 3.0, Float:height = 3.0) // ColAndreas
 {
-	// todo: weather based z threshold
+	new Float:tmp;
+	
+	for(new i; i < 6; i++)
+		if(CA_RayCastLine(x + (dist * floatsin(i * 60.0, degrees)), y + (dist * floatcos(i * 60.0, degrees)), z + height, x + (dist * floatsin(i * 60.0, degrees)), y + (dist * floatcos(i * 60.0, degrees)), z - height, tmp, tmp, tmp) == WATER_OBJECT)
+			return 1;
+
+	return 0;
+}
+
+stock IsPosInWater(Float:x, Float:y, Float:z, &Float:depth, &Float:posDepth) // ColAndreas
+{
+	new Float:retx[10], Float:rety[10], Float:retz[10], Float: retdist[10], modelids[10];
+
+	new collisions = CA_RayCastMultiLine(x, y, z+1000.0, x, y, z-1000.0, retx, rety, retz, retdist, modelids, 10);
+
+	if(collisions > 0)
+	{
+		for(new i = 0, j = 0; i < collisions; i++)
+		{
+			if(modelids[i] == WATER_OBJECT)
+			{
+				depth = FLOAT_INFINITY;
+
+				for(j = 0; j < collisions; j++)
+				{
+					if(retz[j] < depth)
+					depth = retz[j];
+				}
+
+				depth = retz[i] - depth;
+				if(depth < 0.001 && depth > -0.001)
+					depth = 100.0;
+				posDepth = retz[i] - z;
+
+				if(posDepth < -2.0)
+					return 0;
+
+				return 1;
+			}
+		}
+	}
+
+	return 0;
+}
+
+/* stock IsPosInWater(Float:x, Float:y, Float:z)
+{
 	if(z < 1.7 && !IsPointInMapBounds(x, y, z))
 		return 1;
 
@@ -348,9 +394,7 @@ stock IsPosInWater(Float:x, Float:y, Float:z)
 					continue;
 			}
 			else if(water_triangles[i][1] > y || water_triangles[i][5] < y)
-			{
 				continue;
-			}
 
 			// We need to apply some entry level black magic (http://totologic.blogspot.nl/2014/01/accurate-point-in-triangle-test.html)
 			new Float:denominator = ( (water_triangles[i][3]-water_triangles[i][5]) * (water_triangles[i][0]-water_triangles[i][4]) ) + \
@@ -366,21 +410,14 @@ stock IsPosInWater(Float:x, Float:y, Float:z)
 		}
 	}
 	return 0;
-}
-
+}*/
 
 stock IsPointInMapBounds(Float:x, Float:y, Float:z)
 {
 	if(-3000.0 <= x <= 3000.0)
-	{
 		if(-3000.0 <= y <= 3000.0)
-		{
 			if(-100.0 <= z <= 1000.0)
-			{
 				return 1;
-			}
-		}
-	}
 
 	return 0;
 }
@@ -398,11 +435,13 @@ stock IsNumeric(const string[])
 	for(new i,j=strlen(string);i<j;i++)if (string[i] > '9' || string[i] < '0') return 0;
 	return 1;
 }
+
 stock IsCharNumeric(c)
 {
 	if(c>='0'&&c<='9')return 1;
 	return 0;
 }
+
 stock IsCharAlphabetic(c)
 {
 	if((c>='a'&&c<='z')||(c>='A'&&c<='Z'))return 1;
@@ -421,6 +460,7 @@ stock strtolower(string[])
 
 	return retStr;
 }
+
 stock UnderscoreToSpace(name[])
 {
 	new pos = strfind(name, "_", true);

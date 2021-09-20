@@ -205,7 +205,9 @@ stock DestroyWorldVehicle(vehicleid, bool:perma = false)
 		SetVehicleExternalLock(vehicleid, E_LOCK_STATE_EXTERNAL);
 		veh_Data[vehicleid][veh_key] = 0;
 
-		if(!IsPosInWater(x, y, z - 1.0))
+		new Float:depth, Float:posDepth;
+
+		if(!IsPosInWater(x, y, z - 1.0, depth, posDepth))
 		{
 			CreateDynamicObject(18690, x, y, z - 2.0, 0.0, 0.0, 0.0);
 			SetVehicleTrunkLock(vehicleid, true);
@@ -779,7 +781,9 @@ UpdateVehPos(playerid, vehicleid){
 
 IsVehicleValidOutOfBounds(vehicleid)
 {
-	if(IsPosInWater(veh_Data[vehicleid][veh_spawnX], veh_Data[vehicleid][veh_spawnY], veh_Data[vehicleid][veh_spawnZ] - 5.0))
+	new Float:depth, Float:posDepth;
+
+	if(IsPosInWater(veh_Data[vehicleid][veh_spawnX], veh_Data[vehicleid][veh_spawnY], veh_Data[vehicleid][veh_spawnZ] - 5.0, depth, posDepth))
 	{
 		switch(GetVehicleTypeCategory(GetVehicleType(vehicleid)))
 		{
