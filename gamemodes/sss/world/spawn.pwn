@@ -1,9 +1,6 @@
 
-#define MAX_SPAWNS (14)
-
-
 static
-	Float:spawn_List[MAX_SPAWNS][4] =
+	Float:spawn_List[][4] =
 	{
 		{-2923.4396,	-70.4305,		0.7973,		269.0305},
 		{-2914.9213,	-902.9458,		0.5190,		339.3433},
@@ -19,13 +16,12 @@ static
 		{-764.4365,		654.4160,		1.7907,		1.7156},
 		{-434.6048,		867.6434,		1.4236,		318.3918},
 		{-638.7510,		1286.1458,		1.4520,		110.0257}
-
 	},
 	spawn_Last[MAX_PLAYERS];
 
 
 
-GenerateSpawnPoint(playerid, &Float:x, &Float:y, &Float:z, &Float:r)
+stock GenerateSpawnPoint(playerid, &Float:x, &Float:y, &Float:z, &Float:r)
 {
 	new index = random(sizeof(spawn_List));
 
@@ -38,4 +34,58 @@ GenerateSpawnPoint(playerid, &Float:x, &Float:y, &Float:z, &Float:r)
 	r = spawn_List[index][3];
 
 	spawn_Last[playerid] = index;
+}
+
+stock SpawnPlayerAtRandomPoint(playerid, &Float:x, &Float:y, &Float:z)
+{
+	new
+		Float:randomX = frandom(3000.0, -3000.0),
+		Float:randomY = frandom(3000.0, -3000.0),
+		Float:depth, Float:posDepth;
+
+	x = randomX;
+	y = randomY;
+
+	CA_FindZ_For2DCoord(randomX, randomY, z);
+
+	printf("%0.4f %0.4f %0.4f", x,y,z);
+
+	while(IsPosInWater(x,y,z, depth, posDepth))
+	{
+		printf("IsPosInWater - %0.4f %0.4f %0.4f", x,y,z);	
+		SpawnPlayerAtRandomPoint(playerid, x,y,z);
+	}
+
+	while(IsPosNearWater(x,y,z))
+	{
+		printf("IsPosNearWater - %0.4f %0.4f %0.4f", x,y,z);	
+		SpawnPlayerAtRandomPoint(playerid, x,y,z);
+	}
+
+	z+=1.0;
+}
+
+CMD:testspawn(playerid)
+{
+	new Float:x, Float:y, Float:z;
+
+	SpawnPlayerAtRandomPoint(playerid, x,y,z);
+
+	while(CA_IsPlayerBlocked(playerid))
+	{
+		printf("CA_IsPlayerBlocked - %0.4f %0.4f %0.4f", x,y,z);	
+		SpawnPlayerAtRandomPoint(playerid, x,y,z);
+	}
+
+	SetPlayerPos(playerid, x,y,z);		
+
+	/* while(!CA_IsPlayerOnSurface(playerid, 0.1))
+	{
+		printf("CA_IsPlayerOnSurface - %0.4f %0.4f %0.4f", x,y,z-0.1);	
+		SetPlayerPos(playerid, x,y,z-0.1);
+	} */
+
+	ChatMsg(playerid, YELLOW, "Random Spawn: X:%0.4f, Y:%0.4f, Z:%0.4f - CA_IsPlayerOnSurface %b", x,y,z, CA_IsPlayerOnSurface(playerid));
+
+	return 1;
 }
