@@ -1,3 +1,4 @@
+#include <YSI\y_timers>
 
 static
 	Float:spawn_List[][4] =
@@ -36,7 +37,7 @@ stock GenerateSpawnPoint(playerid, &Float:x, &Float:y, &Float:z, &Float:r)
 	spawn_Last[playerid] = index;
 }
 
-stock SpawnPlayerAtRandomPoint(playerid, &Float:x, &Float:y, &Float:z)
+_GenerateRandomSpawnPoint(&Float:x, &Float:y, &Float:z)
 {
 	new
 		Float:randomX = frandom(3000.0, -3000.0),
@@ -48,44 +49,55 @@ stock SpawnPlayerAtRandomPoint(playerid, &Float:x, &Float:y, &Float:z)
 
 	CA_FindZ_For2DCoord(randomX, randomY, z);
 
-	printf("%0.4f %0.4f %0.4f", x,y,z);
+	if(z >= 0.0 && z <= 1.0)
+	{
+		printf("\tInvalid Z - %0.4f %0.4f %0.4f", x,y,z);
+		_GenerateRandomSpawnPoint(x,y,z);
+	}
+	else
+		z +=1.0;
+
+	printf("GenerateRandomSpawnPoint(start) - %0.4f %0.4f %0.4f", x,y,z);
 
 	while(IsPosInWater(x,y,z, depth, posDepth))
 	{
-		printf("IsPosInWater - %0.4f %0.4f %0.4f", x,y,z);	
-		SpawnPlayerAtRandomPoint(playerid, x,y,z);
+		printf("\tIsPosInWater - %0.4f %0.4f %0.4f", x,y,z);	
+		_GenerateRandomSpawnPoint(x,y,z);
 	}
 
 	while(IsPosNearWater(x,y,z))
 	{
-		printf("IsPosNearWater - %0.4f %0.4f %0.4f", x,y,z);	
-		SpawnPlayerAtRandomPoint(playerid, x,y,z);
+		printf("\tIsPosNearWater - %0.4f %0.4f %0.4f", x,y,z);	
+		_GenerateRandomSpawnPoint(x,y,z);
 	}
 
-	z+=1.0;
+	printf("GenerateRandomSpawnPoint(end) - %0.4f %0.4f %0.4f", x,y,z);
+}
+
+stock SpawnPlayerAtRandomPoint(playerid, &Float:x, &Float:y, &Float:z)
+{
+	_GenerateRandomSpawnPoint(x,y,z);
+
+	SetPlayerPos(playerid, x,y,z);
+
+	if(CA_IsPlayerBlocked(playerid, 3.0, 1.0))
+	{
+		printf("CA_IsPlayerBlocked - %0.4f %0.4f %0.4f", x,y,z);
+
+		_GenerateRandomSpawnPoint(x,y,z);
+		SetPlayerPos(playerid, x,y,z);
+	}
+
+	log(false, "[SPAWN] %p spawned at %0.1f %0.1f %0.1f (%s)", playerid, x,y,z, GetPlayerZoneName(playerid));
 }
 
 CMD:testspawn(playerid)
 {
 	new Float:x, Float:y, Float:z;
 
-	SpawnPlayerAtRandomPoint(playerid, x,y,z);
+	SpawnPlayerAtRandomPoint(playerid, x, y, z);
 
-	while(CA_IsPlayerBlocked(playerid))
-	{
-		printf("CA_IsPlayerBlocked - %0.4f %0.4f %0.4f", x,y,z);	
-		SpawnPlayerAtRandomPoint(playerid, x,y,z);
-	}
-
-	SetPlayerPos(playerid, x,y,z);		
-
-	/* while(!CA_IsPlayerOnSurface(playerid, 0.1))
-	{
-		printf("CA_IsPlayerOnSurface - %0.4f %0.4f %0.4f", x,y,z-0.1);	
-		SetPlayerPos(playerid, x,y,z-0.1);
-	} */
-
-	ChatMsg(playerid, YELLOW, "Random Spawn: X:%0.4f, Y:%0.4f, Z:%0.4f - CA_IsPlayerOnSurface %b", x,y,z, CA_IsPlayerOnSurface(playerid));
+	ChatMsg(playerid, YELLOW, "Spawn Coords: X:%0.4f, Y:%0.4f, Z:%0.4f", x, y, z);
 
 	return 1;
 }
