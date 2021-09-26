@@ -1,4 +1,4 @@
-stock GetPlayerZoneName(playerid)
+stock GetPlayerZoneName(playerid, bool:sound = false)
 {
     new
 		MapZone:zone = GetPlayerMapZone(playerid),
@@ -10,7 +10,8 @@ stock GetPlayerZoneName(playerid)
 		GetMapZoneName(zone, name);
 		GetMapZoneSoundID(zone, soundid);
 
-		PlayerPlaySound(playerid, soundid, 0.0, 0.0, 0.0);
+		if(sound)
+			PlayerPlaySound(playerid, soundid, 0.0, 0.0, 0.0);
 	}
 	else
 		name = "Oceano";

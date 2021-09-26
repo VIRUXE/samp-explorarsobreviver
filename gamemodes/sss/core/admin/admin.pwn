@@ -497,7 +497,7 @@ stock ToggleAdminDuty(playerid, bool:toggle, goback = true)
 	}
 
 	CallLocalFunction("OnAdminToggleDuty", "dbb", playerid, toggle, goback);
-	log(true, "[DUTY] Admin %p %s. (%.3f, %.3f, %.3f - %s)", playerid, toggle ? "entrou em serviço" : goback ? "saiu de serviço no local onde entrou" : "saiu de serviço no local actual", x,y,z, GetPlayerZoneName(playerid));
+	log(true, "[DUTY] Admin %p %s. (%.3f, %.3f, %.3f - %s)", playerid, toggle ? "entrou em serviço" : goback ? "saiu de serviço no local onde entrou" : "saiu de serviço no local actual", x,y,z, GetPlayerZoneName(playerid, true));
 	
 	return 1;
 }

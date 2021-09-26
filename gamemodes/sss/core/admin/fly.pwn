@@ -114,7 +114,7 @@ stock ToggleAdminFly(playerid, bool:toggle)
 		else
 			LowerPlayerToGround(playerid);
 		        
-		log(true, "[FLY] %p (%d) %s. (%0.3f, %0.3f, %0.3f - %s)", playerid, playerid, isFlying[playerid] ? "started flying" : "stopped flying", x,y,z, GetPlayerZoneName(playerid));
+		log(true, "[FLY] %p (%d) %s. (%0.3f, %0.3f, %0.3f - %s)", playerid, playerid, isFlying[playerid] ? "started flying" : "stopped flying", x,y,z, GetPlayerZoneName(playerid, true));
 
 		CallLocalFunction("OnAdminToggleFly", "db", playerid, isFlying[playerid]);
 	}
