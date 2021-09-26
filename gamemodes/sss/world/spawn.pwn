@@ -76,11 +76,17 @@ _GenerateRandomSpawnPoint(&Float:x, &Float:y, &Float:z)
 
 stock SpawnPlayerAtRandomPoint(playerid, &Float:x, &Float:y, &Float:z)
 {
+	new bool:parachute;
+
 	_GenerateRandomSpawnPoint(x,y,z);
 
-	SetPlayerPos(playerid, x,y,z);
+	if(random(100) > 50)
+		parachute = true;
 
-	if(CA_IsPlayerBlocked(playerid, 3.0, 1.0))
+	if(parachute)
+		z = 100.0;
+
+	if(!parachute && CA_IsPlayerBlocked(playerid, 3.0, 1.0))
 	{
 		printf("CA_IsPlayerBlocked - %0.4f %0.4f %0.4f", x,y,z);
 
@@ -88,7 +94,9 @@ stock SpawnPlayerAtRandomPoint(playerid, &Float:x, &Float:y, &Float:z)
 		SetPlayerPos(playerid, x,y,z);
 	}
 
-	log(false, "[SPAWN] %p spawned at %0.1f %0.1f %0.1f (%s)", playerid, x,y,z, GetPlayerZoneName(playerid));
+	SetPlayerPos(playerid, x,y,z);
+
+	log(false, "[SPAWN] %p spawned at %0.1f %0.1f %0.1f - %s (In the Air: %b)", playerid, x,y,z, GetPlayerZoneName(playerid, true), parachute);
 }
 
 CMD:testspawn(playerid)
