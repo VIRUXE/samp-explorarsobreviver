@@ -42,18 +42,21 @@ hook OnPlayerSpawnNewChar(playerid){
 	return 1;
 }
 
-BedCheck(playerid, Item:itemid, bool:spawn = false){
+BedCheck(playerid, Item:itemid, bool:spawn = false)
+{
 	if(!IsPlayerSpawned(playerid))
 	    return 0;
 
 	if(Bed_Item[playerid] != INVALID_ITEM_ID)
 		return 0;
 
-	if(!spawn){
+	if(!spawn)
+	{
 		new hour, minute;
 		GetServerTime(hour, minute);
 		
-		if(hour < 20 && hour > 8 && (GetPlayerVIP(playerid) - gettime() < 1)) {
+		if(hour < 20 && hour > 8 && IsPlayerVIP(playerid))
+		{
 			ShowActionText(playerid, ls(playerid, "SLEEPHOUR"), 6000);
 			return 0;
 		}
