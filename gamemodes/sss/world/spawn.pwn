@@ -49,43 +49,29 @@ _GenerateRandomSpawnPoint(&Float:x, &Float:y, &Float:z)
 
 	CA_FindZ_For2DCoord(randomX, randomY, z);
 
-	if(z >= 0.0 && z <= 1.0)
-	{
-		printf("\tInvalid Z - %0.4f %0.4f %0.4f", x,y,z);
-		_GenerateRandomSpawnPoint(x,y,z);
-	}
-	else
-		z +=1.0;
-
-	printf("GenerateRandomSpawnPoint(start) - %0.4f %0.4f %0.4f", x,y,z);
-
 	while(IsPosInWater(x,y,z, depth, posDepth))
-	{
-		printf("\tIsPosInWater - %0.4f %0.4f %0.4f", x,y,z);	
 		_GenerateRandomSpawnPoint(x,y,z);
-	}
 
 	while(IsPosNearWater(x,y,z))
-	{
-		printf("\tIsPosNearWater - %0.4f %0.4f %0.4f", x,y,z);	
 		_GenerateRandomSpawnPoint(x,y,z);
-	}
 
-	printf("GenerateRandomSpawnPoint(end) - %0.4f %0.4f %0.4f", x,y,z);
+	z +=1.0;
 }
 
 stock SpawnPlayerAtRandomPoint(playerid, &Float:x, &Float:y, &Float:z)
 {
-	new bool:parachute;
+	new parachute = random(100) < 40 || IsPlayerVIP(playerid) ? true : false;
 
 	_GenerateRandomSpawnPoint(x,y,z);
 
-	if(random(100) > 50)
-		parachute = true;
-
 	if(parachute)
-		z = 100.0;
+	{
+		z = IsPlayerVIP(playerid) ? frandom(1000.0, 500.0) : 500.0;
+		GivePlayerWeapon(playerid, WEAPON_PARACHUTE, 1);
+	}
 
+	SetPlayerPos(playerid, x,y,z);
+		
 	if(!parachute && CA_IsPlayerBlocked(playerid, 3.0, 1.0))
 	{
 		printf("CA_IsPlayerBlocked - %0.4f %0.4f %0.4f", x,y,z);
@@ -94,9 +80,7 @@ stock SpawnPlayerAtRandomPoint(playerid, &Float:x, &Float:y, &Float:z)
 		SetPlayerPos(playerid, x,y,z);
 	}
 
-	SetPlayerPos(playerid, x,y,z);
-
-	log(false, "[SPAWN] %p spawned at %0.1f %0.1f %0.1f - %s (In the Air: %b)", playerid, x,y,z, GetPlayerZoneName(playerid, true), parachute);
+	log(false, "[SPAWN] %p spawned at %0.1f %0.1f %0.1f - %s", playerid, x,y,z, GetPlayerZoneName(playerid, true));
 }
 
 CMD:testspawn(playerid)

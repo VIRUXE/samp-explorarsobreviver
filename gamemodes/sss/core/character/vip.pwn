@@ -1,5 +1,7 @@
 #include <YSI_Coding\y_hooks>
 
+#define IsPlayerVIP(%0)	GetPlayerVIP(%0) - gettime() < 1
+
 static
         vip_Level[MAX_PLAYERS],
         vip_InventoryOption[MAX_PLAYERS],
@@ -29,10 +31,9 @@ hook OnPlayerOpenContainer(playerid, Container:containerid)
 
 hook OnPlayerOpenInventory(playerid)
 {
-    if((GetPlayerVIP(playerid) - gettime()) > 1)
-    {
+    if(IsPlayerVIP(playerid))
 	    vip_InventoryOption[playerid] = AddInventoryListItem(playerid, "Menu VIP >");
-    }
+
 	return Y_HOOKS_CONTINUE_RETURN_0;
 }
 
@@ -363,10 +364,9 @@ stock SetVip(const name[MAX_PLAYER_NAME], level = 1, days = 30, hours = 0, minut
 
 hook OnHoldActionUpdate(playerid, progress)
 {
-	if((GetPlayerVIP(playerid) - gettime()) > 1)
-    {
+	if(IsPlayerVIP(playerid))
         SetPlayerHoldActionProgress(playerid, progress + (vip_Level[playerid] * 25) );
-    }
+
 	return Y_HOOKS_CONTINUE_RETURN_0;
 }
 
@@ -378,7 +378,7 @@ hook OnHoldActionUpdate(playerid, progress)
 
 hook OnPlayerSpawnNewChar(playerid)
 {
-    if((GetPlayerVIP(playerid) - gettime()) > 1)
+    if(IsPlayerVIP(playerid))
     {
         // Nivel 1 nascer com uma Mochila;
         GivePlayerBag(playerid, CreateItem(item_Satchel));
@@ -435,8 +435,6 @@ SetVipSpawn(playerid)
 
 hook OnPlayerSpawnChar(playerid)
 {
-    if((GetPlayerVIP(playerid) - gettime()) > 1)
-    {
+    if(IsPlayerVIP(playerid))
         SetPlayerColor(playerid, COLOR_PLAYER_VIP);
-    }
 }

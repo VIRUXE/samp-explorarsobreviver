@@ -245,6 +245,7 @@ stock UpdatePlayerWeaponItem(playerid)
 stock RemovePlayerWeapon(playerid)
 {
 	dbg("weapon-core", 1, "[RemovePlayerWeapon]");
+	
 	if(!IsPlayerConnected(playerid))
 		return 0;
 
@@ -271,7 +272,9 @@ _FastUpdateHandler(playerid)
 
 	if(!IsValidItemType(itemtype))
 	{
-		if(GetPlayerWeapon(playerid) > 0)
+		new weapon = GetPlayerWeapon(playerid);
+
+		if(weapon > 0  && weapon != WEAPON_PARACHUTE)
 			RemovePlayerWeapon(playerid);
 
 		return;
