@@ -1,9 +1,9 @@
 
 #include <YSI_Coding\y_hooks>
 
-
 static
 			BrightnessLevel[MAX_PLAYERS],
+			BrightnessStep[MAX_PLAYERS],
 PlayerText:	BrightnessUI[MAX_PLAYERS] = {PlayerText:INVALID_TEXT_DRAW, ...};
 
 
@@ -39,7 +39,7 @@ ptask BrightnessUpdate[100](playerid)
 		PlayerTextDrawBoxColor(playerid, BrightnessUI[playerid], BrightnessLevel[playerid]);
 		PlayerTextDrawShow(playerid, BrightnessUI[playerid]);
 
-		BrightnessLevel[playerid] -= 4;
+		BrightnessLevel[playerid] -= 2;
 
 		if(BrightnessLevel[playerid] < 0)
 			BrightnessLevel[playerid] = 0;
@@ -62,13 +62,9 @@ ptask BrightnessUpdate[100](playerid)
 	}
 
 	if(IsPlayerUnderDrugEffect(playerid, drug_Painkill))
-	{
 		PlayerTextDrawHide(playerid, BrightnessUI[playerid]);
-	}
 	else if(IsPlayerUnderDrugEffect(playerid, drug_Adrenaline))
-	{
 		PlayerTextDrawHide(playerid, BrightnessUI[playerid]);
-	}
 	else
 	{
 		PlayerTextDrawBoxColor(playerid, BrightnessUI[playerid], floatround((40.0 - hp) * 4.4));
@@ -79,7 +75,9 @@ ptask BrightnessUpdate[100](playerid)
 			if(GetTickCountDifference(GetTickCount(), GetPlayerKnockOutTick(playerid)) > 5000 * hp)
 			{
 				new Float:bleedrate;
+
 				GetPlayerBleedRate(playerid, bleedrate);
+
 				if(bleedrate > 0.0)
 				{
 					if(frandom(40.0) < (50.0 - hp))

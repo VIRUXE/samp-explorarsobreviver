@@ -55,31 +55,14 @@ CMD:chatinfo(playerid, params[])
 
 CMD:dicas(playerid, params[])
 {
-	if(IsPlayerToolTipsOn(playerid)) ChatMsgLang(playerid, YELLOW, "TOOLTIPSOFF"); else ChatMsgLang(playerid, YELLOW, "TOOLTIPSON");
+	ChatMsgLang(playerid, YELLOW, IsPlayerToolTipsOn(playerid) ? "TOOLTIPSOFF" : "TOOLTIPSON");
+
 	SetPlayerToolTips(playerid, !IsPlayerToolTipsOn(playerid));
 	return 1;
 }
 
-CMD:tools(playerid, params[])
+CMD:tooltips(playerid, params[])
 	return cmd_dicas(playerid, params);
-
-/*CMD:die(playerid, params[])
-{
-	if(GetTickCountDifference(GetTickCount(), GetPlayerSpawnTick(playerid)) < 60000)
-		return 2;
-
-	SetPlayerWeapon(playerid, 4, 1);
-	ApplyAnimation(playerid, "FOOD", "EAT_Burger", 1.0, 0, 0, 0, 0, 0);
-	defer Suicide(playerid);
-
-	return 1;
-}
-timer Suicide[3000](playerid)
-{
-	RemovePlayerWeapon(playerid);
-	SetPlayerHP(playerid, -100.0);
-}
-*/
 
 CMD:som(playerid, params[])
 {
@@ -100,16 +83,10 @@ CMD:mudarsenha(playerid,params[])
 		buffer[MAX_PASSWORD_LEN];
 
 	if(!IsPlayerLoggedIn(playerid))
-	{
-		ChatMsgLang(playerid, YELLOW, "LOGGEDINREQ");
-		return 1;
-	}
+		return ChatMsgLang(playerid, YELLOW, "LOGGEDINREQ");
 
 	if(sscanf(params, "s[32]s[32]", oldpass, newpass))
-	{
-		ChatMsgLang(playerid, YELLOW, "CHANGEPASSW");
-		return 1;
-	}
+		return ChatMsgLang(playerid, YELLOW, "CHANGEPASSW");
 	else
 	{
 		new storedhash[MAX_PASSWORD_LEN];
@@ -138,12 +115,8 @@ CMD:mudarsenha(playerid,params[])
 	}
 	return 1;
 }
-
-CMD:changepass(playerid, params[])
-	return cmd_mudarsenha(playerid, params);
-
-CMD:changepassword(playerid, params[])
-	return cmd_mudarsenha(playerid, params);
+CMD:changepass(playerid, params[]) return cmd_mudarsenha(playerid, params);
+CMD:changepassword(playerid, params[]) return cmd_mudarsenha(playerid, params);
 
 CMD:pos(playerid, params[])
 {

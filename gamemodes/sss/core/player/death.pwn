@@ -65,8 +65,6 @@ _OnDeath(playerid, killerid, deathreason)
 	if(IsPlayerInAnyVehicle(playerid))
 	{
 		RemovePlayerFromVehicle(playerid);
-		//TogglePlayerSpectating(playerid, true);
-		//TogglePlayerSpectating(playerid, false);
 		death_PosZ[playerid] += 0.5;
 	}
 	
@@ -424,4 +422,10 @@ stock GetLastKilledById(playerid)
 		return 0;
 
 	return death_LastKilledById[playerid];
+}
+
+timer Suicide[3000](playerid)
+{
+	RemovePlayerWeapon(playerid);
+	SetPlayerHP(playerid, -100.0);
 }

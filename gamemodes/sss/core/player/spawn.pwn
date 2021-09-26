@@ -257,12 +257,10 @@ PlayerSpawnNewCharacter(playerid, gender)
 
 	SetAccountTotalSpawns(name, GetPlayerTotalSpawns(playerid));
 
-	new Item:backpackitem, Item:tmpitem, Float:x, Float:y, Float:z, Float:r;
+	new Item:backpackitem, Item:tmpitem, Float:x, Float:y, Float:z;
 
-	GenerateSpawnPoint(playerid, x, y, z, r);
+	SpawnPlayerAtRandomPoint(playerid, x,y,z);
 	Streamer_UpdateEx(playerid, x, y, z, 0, 0);
-	SetPlayerPos(playerid, x, y, z);
-	SetPlayerFacingAngle(playerid, r);
 	SetPlayerVirtualWorld(playerid, 0);
 	SetPlayerInterior(playerid, 0);
 
@@ -363,9 +361,7 @@ PlayerSpawnNewCharacter(playerid, gender)
 				AddItemToInventory(playerid, tmpitem);
 			}
 			else
-			{
 				log(true, "item too big for new player respawn. itemtype: %d", _:spawn_NewItems[i][e_itmobj_type]);
-			}
 		}
 	}
 
@@ -377,8 +373,7 @@ PlayerSpawnNewCharacter(playerid, gender)
 		Logger_P(playerid),
 		Logger_F("x", x),
 		Logger_F("y", y),
-		Logger_F("z", z),
-		Logger_F("r", r));
+		Logger_F("z", z));
 
 	return 1;
 }

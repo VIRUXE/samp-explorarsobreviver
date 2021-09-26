@@ -60,7 +60,7 @@ _GenerateRandomSpawnPoint(&Float:x, &Float:y, &Float:z)
 
 stock SpawnPlayerAtRandomPoint(playerid, &Float:x, &Float:y, &Float:z)
 {
-	new parachute = random(100) < 40 || IsPlayerVIP(playerid) ? true : false;
+	new parachute = IsPlayerVIP(playerid) || random(100) < 40 ? true : false;
 
 	_GenerateRandomSpawnPoint(x,y,z);
 
