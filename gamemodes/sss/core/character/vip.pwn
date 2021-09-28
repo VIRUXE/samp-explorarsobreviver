@@ -1,19 +1,15 @@
 #include <YSI_Coding\y_hooks>
 
-#define IsPlayerVIP(%0)	GetPlayerVIP(%0) - gettime() < 1
+// #define IsPlayerVIP(%0)	GetPlayerVIP(%0) - gettime() < 1
 
 static
 		vip_Level[MAX_PLAYERS],
 		vip_InventoryOption[MAX_PLAYERS],
 bool:   vip_ViewingMenu[MAX_PLAYERS];
 
-hook OnPlayerConnect(playerid)
-{
-	vip_Level[playerid] = 0;
-}
-
 hook OnPlayerDisconnect(playerid, reason)
 {
+	vip_Level[playerid] = 0;
 	vip_ViewingMenu[playerid] = false;
 }
 
@@ -48,13 +44,7 @@ hook OnPlayerSelectExtraItem(playerid, item)
 
 ShowVipMenu(playerid)
 {
-	gBigString[playerid][0] = EOS;
-
-	strcat(gBigString[playerid], "Tempo de Vip restante\n");
-	strcat(gBigString[playerid], "Anuncio\n");
-	strcat(gBigString[playerid], "Trocar Roupa\n");
-	strcat(gBigString[playerid], "Mudar estilo de Luta\n");
-	strcat(gBigString[playerid], "Cometer suicidio\n");
+	gBigString[playerid] = "Tempo de Vip Restante\nAnuncio\nTrocar Roupa\nMudar Estilo de Luta\nCometer Suicidio\n";
 
 	if(vip_Level[playerid] >= 2)
 	{
@@ -100,10 +90,8 @@ ShowVipMenu(playerid)
 
 						if(response2)
 						{
-							ChatMsgAll(COLOR_PLAYER_VIP, "[Anuncio-VIP] %P(%d): "C_WHITE"%s",
+							ChatMsgAll(COLOR_PLAYER_VIP, "[Anúncio-VIP] %P(%d): "C_WHITE"%s",
 								playerid, playerid, TagScan(inputtext2));
-
-							ShowActionText(playerid, "Anuncio enviado para todos", 3000);
 
 							vip_ViewingMenu[playerid] = false;
 						}
@@ -133,7 +121,7 @@ ShowVipMenu(playerid)
 					}
 
 					ShowPlayerDialog(playerid, 66, DIALOG_STYLE_PREVIEW_MODEL,
-						"~Y~Roupas VIP", list, "Selecionar", "Voltar");
+						"~Y~Roupas VIP", list, "Ok", "Voltar");
 				}
 				case 3:
 				{
@@ -152,7 +140,7 @@ ShowVipMenu(playerid)
 							}
 
 							// Informar tecla de uso
-							ShowActionText(playerid, "Estilo de luta mudado~n~~y~~k~~PED_LOCK_TARGET~ ~w~+ ~y~~k~~VEHICLE_ENTER_EXIT~", 7000);
+							ShowActionText(playerid, "Estilo de Luta mudado~n~~y~~k~~PED_LOCK_TARGET~ ~w~+ ~y~~k~~VEHICLE_ENTER_EXIT~", 7000);
 
 							vip_ViewingMenu[playerid] = false;
 						}
@@ -163,7 +151,6 @@ ShowVipMenu(playerid)
 						sprintf("Menu VIP "C_GREEN"(Nivel %d)", vip_Level[playerid]),
 						"Kung Fu\nKnee Head\nEl bow\nGrab Kick",
 						"Selecionar", "Voltar");
-
 				}
 				case 4: // Cometer Suicidio
 				{
@@ -173,7 +160,7 @@ ShowVipMenu(playerid)
 
 					if(!IsPlayerCombatLogging(playerid, lastattacker, Item:lastweapon))
 					{
-/* 						DestroyPlayerItems(playerid);
+						/*DestroyPlayerItems(playerid);
 						SetPlayerBrightness(playerid,   255);
 						SetPlayerScore(playerid,        0);
 						SetPlayerWantedLevel(playerid,  0);
@@ -211,7 +198,7 @@ hook OnDialogModelResponse(playerid, dialogid, response, listitem)
 		{
 			SetPlayerClothes(playerid, listitem);
 			SetPlayerGender(playerid, GetClothesGender(listitem));
-			ShowActionText(playerid, "Roupa trocada", 3000);
+			ShowActionText(playerid, "Roupa Trocada", 3000);
 		}
 		else
 			ShowVipMenu(playerid);
@@ -333,6 +320,7 @@ hook OnPlayerSpawnNewChar(playerid)
 		GivePlayerBag(playerid, CreateItem(item_Satchel));
 		AddItemToPlayer(playerid, CreateItem(item_AntiSepBandage));
 		AddItemToPlayer(playerid, CreateItem(item_Wrench));
+		AddItemToPlayer(playerid, CreateItem(item_Map));
 
 		new Container:containerid = GetBagItemContainerID(GetPlayerBagItem(playerid));
 
@@ -359,3 +347,6 @@ hook OnPlayerSpawnChar(playerid)
 	if(IsPlayerVIP(playerid))
 		SetPlayerColor(playerid, COLOR_PLAYER_VIP);
 }
+
+stock IsPlayerVIP(playerid)
+	return vip_Level[playerid];
