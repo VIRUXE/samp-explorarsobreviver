@@ -27,12 +27,15 @@ ACMD:sethp[3](playerid, params[])
 
 	if(sscanf(params, "df", targetid, value))
 		ChatMsg(playerid, YELLOW, " » Utilização: /sethp [jogador] [valor]");
-	else if(!value)
-		ChatMsg(playerid, YELLOW, "Jogador %P: %fHP", targetid, GetPlayerHP(targetid));	
+	/* else if(isnull(params[1]))
+		ChatMsg(playerid, YELLOW, "Jogador %P: %fHP", targetid, GetPlayerHP(targetid));	 */
 	else
 	{
+		if(targetid == -1)
+			targetid = playerid;
+
 		SetPlayerHP(targetid, value);
-		ChatMsg(targetid, YELLOW, "HP do Jogador %P definida para %f", targetid, value);
+		ChatMsg(targetid, YELLOW, "HP do Jogador %P"C_YELLOW" definida para %f", targetid, value);
 	}
 
 	return 1;
