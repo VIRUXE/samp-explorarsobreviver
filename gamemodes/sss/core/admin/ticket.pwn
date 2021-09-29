@@ -47,9 +47,9 @@ hook OnPlayerDisconnect(playerid, reason)
 
 		if(attendingPlayerId != -1)
 		{
-			ticket_Data[playerid][TICKET_ADMIN] = -1;
+			ticket_Data[attendingPlayerId][TICKET_ADMIN] = -1;
 
-			ChatMsg(playerid, YELLOW, " » O Admin %P saiu. Espere que seja atendido por outro Admin.", playerid);
+			ChatMsg(attendingPlayerId, YELLOW, " » O Admin %P"C_YELLOW" saiu. Espere que seja atendido por outro Admin.", playerid);
 			
 			_UpdateTicketNotification();
 		}
@@ -64,7 +64,7 @@ hook OnPlayerDisconnect(playerid, reason)
 			{
 				ToggleAdminDuty(adminId, false);
 
-				ChatMsg(playerid, GREEN, " » O Jogador %P saiu. Ticket fechado automaticamente.", playerid);
+				ChatMsg(adminId, GREEN, " » O Jogador %P"C_YELLOW" saiu. Ticket fechado automaticamente.", playerid);
 			}
 
 			_CloseTicket(playerid);
