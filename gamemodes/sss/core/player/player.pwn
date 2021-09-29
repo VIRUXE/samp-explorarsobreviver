@@ -31,7 +31,8 @@ Float:	ply_Velocity,
 		ply_ShowHUD,
 		ply_stance,
 		ply_JoinTick,
-		ply_SpawnTick
+		ply_SpawnTick,
+bool:	ply_GodMode
 }
 
 static
@@ -92,6 +93,9 @@ public OnPlayerConnect(playerid)
 	if(!isnull(gMessageOfTheDay))
 		ChatMsg(playerid, BLUE, ""C_YELLOW" » Mensagem do Dia: "C_BLUE"%s", gMessageOfTheDay);
 
+	if(gServerRestarting)
+		ChatMsg(playerid, YELLOW, " » Servidor ainda a reinciar. Aguarde um pouco..."C_BLUE"%s", gMessageOfTheDay);
+
 	ply_Data[playerid][ply_ShowHUD] = true;
 
 	return 1;
@@ -104,8 +108,8 @@ public OnPlayerDisconnect(playerid, reason)
 
 	Logout(playerid);
 
-	ChatMsgAll(GREY, " » %P "C_GREY"%s.", playerid, reason ? "decidiu sair" : "perdeu a conexao");
-	Logger_Log("player disconnected", Logger_P(playerid), Logger_S("reason", reason ? "quit" : "lost connection"));
+	ChatMsgAll(GREY, " » %P "C_GREY"%s.", playerid, reason ? "decidiu sair" : IsPlayerMobile(playerid) ? "decidiu sair" : "perdeu a conexao");
+	Logger_Log("player disconnected", Logger_P(playerid), Logger_S("reason", reason ? "quit" : IsPlayerMobile(playerid) ? "quit" : "lost connection"));
 
 	SetTimerEx("OnPlayerDisconnected", 100, false, "dd", playerid, reason);
 
@@ -307,6 +311,7 @@ public OnPlayerUpdate(playerid)
 {
 	new Float:velocityX, Float:velocityY, Float:velocityZ;
 
+	// Vehicle Speed
 	if(IsPlayerInAnyVehicle(playerid))
 	{
 		new	uiStr[8];
@@ -322,10 +327,11 @@ public OnPlayerUpdate(playerid)
 		ply_Data[playerid][ply_Velocity] = floatsqroot( (velocityX*velocityX)+(velocityY*velocityY)+(velocityZ*velocityZ) ) * 150.0;
 	}
 
+	// Player Health
 	if(ply_Data[playerid][ply_Alive])
 	{
-		SetPlayerHealth(playerid, IsAdminOnDuty(playerid) ? 99999.9 : ply_Data[playerid][ply_HitPoints]);
-		SetPlayerArmour(playerid, ply_Data[playerid][ply_ArmourPoints]);
+		SetPlayerHealth(playerid, IsPlayerGod(playerid) ? (Float:0x7F800000) : ply_Data[playerid][ply_HitPoints]);
+		SetPlayerArmour(playerid, IsPlayerGod(playerid) ? (Float:0x7F800000) : ply_Data[playerid][ply_ArmourPoints]);
 	}
 	else
 		SetPlayerHealth(playerid, 99.9);
@@ -720,3 +726,12 @@ stock bool:IsPlayerAtConnectionPos(playerid)
 
 	return false;
 }
+
+stock ToggleGodMode(playerid, bool:god)
+{
+	if(god != ply_Data[playerid][ply_GodMode])
+		ply_Data[playerid][ply_GodMode] = god;
+}
+
+stock bool:IsPlayerGod(playerid)
+	return ply_Data[playerid][ply_GodMode];

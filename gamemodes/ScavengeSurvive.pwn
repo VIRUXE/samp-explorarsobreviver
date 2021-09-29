@@ -163,6 +163,7 @@ public OnGameModeInit()
 #define WHITE						0xFFFFFFFF
 #define CHAT_LOCAL					0xADABD1FF
 #define CHAT_RADIO					0x00FF0000
+#define CHAT_TICKET					0x80f29f00
 
 #define COLOR_PLAYER_NORMAL			0xB8B8B800
 #define COLOR_PLAYER_MOBILE			0x85858500

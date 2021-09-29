@@ -58,7 +58,7 @@ DBStatement:	stmt_AdminGetLevel;
 
 static
 				admin_Level[MAX_PLAYERS],
-				admin_OnDuty[MAX_PLAYERS],
+bool:			admin_OnDuty[MAX_PLAYERS],
 				admin_DutyTick[MAX_PLAYERS],
 				admin_PlayerKicked[MAX_PLAYERS];
 
@@ -84,7 +84,7 @@ hook OnScriptInit()
 hook OnPlayerConnect(playerid)
 {
 	admin_Level[playerid] = 0;
-	admin_OnDuty[playerid] = 0;
+	admin_OnDuty[playerid] = false;
 	admin_PlayerKicked[playerid] = 0;
 	return 1;
 }
@@ -92,7 +92,7 @@ hook OnPlayerConnect(playerid)
 hook OnPlayerDisconnected(playerid)
 {
 	admin_Level[playerid] = 0;
-	admin_OnDuty[playerid] = 0;
+	admin_OnDuty[playerid] = false;
 	admin_PlayerKicked[playerid] = 0;
 }
 
@@ -419,7 +419,10 @@ ChatMsgAdminsFlat(level, colour, const message[])
 
 stock ToggleAdminDuty(playerid, bool:toggle, goback = true)
 {
-	while(GetTickCountDifference(GetTickCount(), admin_DutyTick[playerid]) < 1500)
+	if(!IsPlayerConnected(playerid))
+		return 0;
+
+	while(GetTickCountDifference(GetTickCount(), admin_DutyTick[playerid]) < SEC(1.5))
 		admin_DutyTick[playerid] = GetTickCount();
 
 	new Float:x, Float:y, Float:z;
@@ -464,15 +467,15 @@ stock ToggleAdminDuty(playerid, bool:toggle, goback = true)
 		foreach(new i : Player)
 		{
 			if(GetPlayerAdminLevel(i))
-			{	
 				PR_SendRPC(bs, i, 72);
-			}
 		}
 		
 		BS_Delete(bs);
 
 		ToggleMapForPlayer(playerid, true);
-		
+
+		ToggleNameTagsForPlayer(playerid, true);
+
 		admin_OnDuty[playerid] = true;
 	}
 	else if(!toggle && admin_OnDuty[playerid])
@@ -496,6 +499,8 @@ stock ToggleAdminDuty(playerid, bool:toggle, goback = true)
 		SetPlayerColor(playerid, !IsPlayerMobile(playerid) ? COLOR_PLAYER_NORMAL : COLOR_PLAYER_MOBILE); // 
 	}
 
+	ToggleGodMode(playerid, admin_OnDuty[playerid]);
+
 	CallLocalFunction("OnAdminToggleDuty", "dbb", playerid, toggle, goback);
 	log(true, "[DUTY] Admin %p %s. (%.3f, %.3f, %.3f - %s)", playerid, toggle ? "entrou em serviço" : goback ? "saiu de serviço no local onde entrou" : "saiu de serviço no local actual", x,y,z, GetPlayerZoneName(playerid, true));
 	
@@ -508,7 +513,8 @@ stock ToggleAdminDuty(playerid, bool:toggle, goback = true)
 	Interface
 
 ==============================================================================*/
-
+stock bool:IsPlayerStaff(playerid)
+	return GetPlayerAdminLevel(playerid) ? true : false;
 
 stock SetPlayerAdminLevel(playerid, level)
 {
