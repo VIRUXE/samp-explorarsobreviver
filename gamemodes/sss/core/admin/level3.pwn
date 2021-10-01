@@ -50,7 +50,7 @@ ACMD:spec[2](playerid, params[])
 {
 	new targetid = !isnull(params) ? strval(params) : -1;
 
-	if(targetid > -1) // ID provided
+	if(targetid != -1) // ID provided
 	{
 		if(Iter_Count(Player) == 1)
 			return ChatMsg(playerid, RED, "Apenas está você online, vai dar spec em quem?...");
