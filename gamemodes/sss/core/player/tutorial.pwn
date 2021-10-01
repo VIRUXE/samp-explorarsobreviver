@@ -13,7 +13,7 @@ Timer:		PlayerTutorialUpd		[MAX_PLAYERS];
 
 hook OnPlayerConnect(playerid)
 {
-	TutorialDraw[playerid] = CreatePlayerTextDraw(playerid, 3.0, 339.0, "Play tutorial >");
+	TutorialDraw[playerid] = CreatePlayerTextDraw(playerid, 3.0, 339.0, "Tutorial");
 	PlayerTextDrawFont(playerid, TutorialDraw[playerid], 1);
 	PlayerTextDrawLetterSize(playerid, TutorialDraw[playerid], 0.395, 1.58);
 	PlayerTextDrawTextSize(playerid, TutorialDraw[playerid], 190.000000, 17.000000);
@@ -24,7 +24,6 @@ hook OnPlayerConnect(playerid)
 	PlayerTextDrawBoxColor(playerid, TutorialDraw[playerid], 255);
 	PlayerTextDrawUseBox(playerid, TutorialDraw[playerid], 1);
 	PlayerTextDrawSetProportional(playerid, TutorialDraw[playerid], 1);
-	
 
 	PlayerTutorialProgress[playerid] = 0;
 }
@@ -40,16 +39,6 @@ hook OnPlayerSpawnChar(playerid)
 hook OnPlayerSpawnNewChar(playerid)
 {
 	PlayerTextDrawHide(playerid, TutorialDraw[playerid]);
-}
-
-hook OnPlayerCreateChar(playerid)
-{
-	if(IsPlayerLoggedIn(playerid))
-	{
-		PlayerTextDrawSetSelectable(playerid, TutorialDraw[playerid], true);
-		PlayerTextDrawSetString(playerid, TutorialDraw[playerid], ls(playerid, "TUTORPROMPT"));
-		PlayerTextDrawShow(playerid, TutorialDraw[playerid]);
-	}
 }
 
 timer UpdateTutorialProgress[1000](playerid)
@@ -165,6 +154,7 @@ stock EnterTutorial(playerid)
 	PlayerInTutorial[playerid] = true;
 
 	SetPlayerPos(playerid, 928.8049,2072.3174,10.8203);
+	SetPlayerWorldBounds(playerid, 977.0765,925.0546,2086.1921,2054.0679);
 	SetPlayerFacingAngle(playerid, 269.3244);
 	SetPlayerVirtualWorld(playerid, playerid + 1);
 
@@ -277,7 +267,9 @@ stock ExitTutorial(playerid)
 
 	DestroyPlayerItems(playerid);
 	
+	SetPlayerWorldBounds(playerid, 20000.0000, -20000.0000, 20000.0000, -20000.0000);
 	SetPlayerPos(playerid, DEFAULT_POS_X, DEFAULT_POS_Y, DEFAULT_POS_Z);
+	
 	SetPlayerSpawnedState(playerid, false);
 	SetPlayerAliveState(playerid, false);
 	SetPlayerVirtualWorld(playerid, 0);
