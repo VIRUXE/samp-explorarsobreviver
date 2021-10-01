@@ -54,7 +54,7 @@ GetColourByType(type[])
 CMD:novidades(playerid)
 {
 	// Query the database for the latest changelogs
-	if(!mysql_tquery(gDatabase, "SELECT DATEDIFF(NOW(), date) AS datediff, DATE_FORMAT(date, '%d/%m') AS date, type, title, description FROM changelog c ORDER BY c.date DESC LIMIT 35;", "OnChangelogLoaded", "d", playerid))
+	if(!mysql_tquery(gDatabase, "SELECT DATEDIFF(NOW(), date) AS datediff, DATE_FORMAT(date, '%d/%m') AS date, type, title, description FROM changelog c ORDER BY c.date DESC LIMIT 30;", "OnChangelogLoaded", "d", playerid))
 		err(false, true, "Couldn't download changelog.");
 
 	return 1;
