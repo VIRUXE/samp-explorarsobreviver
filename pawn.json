@@ -62,16 +62,32 @@
 			"legacy"
 		]
 	},
-	"runtime": {
-		"port": 7777,
-		"announce": true,
-		"maxplayers": 64,
-		"hostname": "Explorar e Sobreviver (Desenvolvimento)",
-		"weburl": "discord.explorarsobreviver.com",
-		"language": "Portugues",
-		"extra": {
-			"long_call_time": "0",
-			"discord_bot_token": "null"
+	"runtime": [
+		{
+			"name": "dev",
+			"port": 7777,
+			"announce": true,
+			"maxplayers": 64,
+			"hostname": "Explorar e Sobreviver (Desenvolvimento)",
+			"weburl": "discord.explorarsobreviver.com",
+			"language": "Portugues",
+			"extra": {
+				"long_call_time": "0",
+				"discord_bot_token": "null"
+			}
+		},
+		{
+			"name": "prod",
+			"port": 7777,
+			"announce": true,
+			"maxplayers": 64,
+			"hostname": "Explorar e Sobreviver v1.0-beta",
+			"weburl": "discord.explorarsobreviver.com",
+			"language": "Portugues",
+			"extra": {
+				"long_call_time": "0",
+				"discord_bot_token": "ODQ3MTcwMjcwMDk4NzUxNDkw.YK6KzA.3Z2wcazEuXGDl94ptQPmJI6nmjw"
+			}
 		}
-	}
+	]
 }
