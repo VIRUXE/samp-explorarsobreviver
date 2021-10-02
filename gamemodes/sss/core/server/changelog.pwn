@@ -34,7 +34,7 @@ public OnChangelogLoaded(playerid)
 
 	Dialog_Show(playerid, DIALOG_STYLE_MSGBOX, "Registro de Alterações", changelogBuffer, "OK");
 
-	log(true, "[CHANGELOG] Change log shown to player %p", playerid);
+	log(true, "[CHANGELOG] %p viewed the change log.", playerid);
 }
 
 GetColourByType(type[])
