@@ -339,7 +339,7 @@ stock DisplayRegisterPrompt(playerid)
 
 			// Account created so we can now ask the player to whitelist if necessary
 			if(IsWhitelistActive() && !IsWhitelistAuto())
-				AskPlayerToWhitelist(playerid);
+				PromptPlayerToWhitelist(playerid);
 		}
 		else
 		{

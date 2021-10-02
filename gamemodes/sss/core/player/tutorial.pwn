@@ -97,13 +97,8 @@ timer UpdateTutorialProgress[1000](playerid)
 	PlayerTutorialProgress[playerid] = progress;
 
 	PlayerTextDrawShow(playerid, TutorialDraw[playerid]);
-	return 0;
-}
 
-hook OnPlayerClickPlayerTD(playerid, PlayerText:playertextid)
-{
-	if(playertextid == TutorialDraw[playerid])
-		EnterTutorial(playerid);
+	return 0;
 }
 
 hook OnVehicleSave(vehicleid)
@@ -451,7 +446,7 @@ CMD:sair(playerid, params[])
 		if(!IsPlayerRegistered(playerid))
 			DisplayRegisterPrompt(playerid);
 		else if(!IsPlayerAdmin(playerid) || GetPlayerAdminLevel(playerid) > 4)
-			AskPlayerToWhitelist(playerid);
+			PromptPlayerToWhitelist(playerid);
 
 		ExitTutorial(playerid);
 	}

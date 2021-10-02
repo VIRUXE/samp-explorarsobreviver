@@ -133,7 +133,7 @@ stock IsPlayerWhitelisted(playerid)
 	return wl_Whitelisted[playerid];
 }
 
-stock AskPlayerToWhitelist(playerid)
+stock PromptPlayerToWhitelist(playerid)
 {
 	new whitelistMsg[999];
 
@@ -158,7 +158,7 @@ stock AskPlayerToWhitelist(playerid)
 				wl_Whitelisted[playerid] = true;
 
 			if(!wl_Whitelisted[playerid])
-				AskPlayerToWhitelist(playerid);
+				PromptPlayerToWhitelist(playerid);
 		}
 		else
 			KickPlayer(playerid, "Decidiu sair");
@@ -236,7 +236,7 @@ timer _UpdateWhitelistCountdown[1000](playerid)
 
 	if(wl_Countdown[playerid] == 0)
 	{
-		AskPlayerToWhitelist(playerid);
+		PromptPlayerToWhitelist(playerid);
 		KickPlayer(playerid, "Whitelist");
 		stop wl_CountdownTimer[playerid];
 		return;
@@ -258,7 +258,7 @@ timer _UpdateWhitelistCountdown[1000](playerid)
 	anti-hack tools at disposal.
 */
 
-timer _WhitelistConnect[SEC(5)](playerid)
+timer _WhitelistConnect[5000](playerid)
 {
 	if(!IsPlayerConnected(playerid))
 	{
@@ -275,7 +275,7 @@ timer _WhitelistConnect[SEC(5)](playerid)
 		}
 		else if(!wl_Auto && wl_Active)
 		{
-			AskPlayerToWhitelist(playerid);
+			PromptPlayerToWhitelist(playerid);
 			log(true, "[_WhitelistConnect] Player %d was asked to whitelist.", playerid);
 		}
 	}
