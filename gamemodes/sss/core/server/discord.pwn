@@ -116,7 +116,7 @@ public DCC_OnMessageCreate(DCC_Message:message)
 		if(!strcmp(discordMessage, ".rr", true))
 		{
 			SendDiscordMessage(dc_GlobalChatChannel, "**Servidor vai agora reiniciar...**");
-			strdel(discordMessage, 0, 8);
+			strdel(discordMessage, 0, 3); // remove .rr
 			SetRestart(strval(discordMessage));
 			return 1;
 		}
