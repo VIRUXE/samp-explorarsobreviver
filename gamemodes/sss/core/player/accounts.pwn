@@ -472,7 +472,7 @@ stock Login(playerid)
 
 	foreach(new i : Player)
 		if(i != playerid)
-			ChatMsg(i, WHITE, " » %s%P(%d)"C_WHITE" entrou no servidor.", IsPlayerStaff() ? "Admin" : "", playerid, playerid);
+			ChatMsg(i, WHITE, " » %s%P(%d)"C_WHITE" entrou no servidor.", IsPlayerStaff(playerid) ? "Admin" : "", playerid, playerid);
 
 	acc_LoggedIn[playerid] = true;
 	acc_LoginAttempts[playerid] = 0;
