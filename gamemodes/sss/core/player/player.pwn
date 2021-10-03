@@ -60,6 +60,8 @@ public OnPlayerConnect(playerid)
 	
 	SetPlayerVirtualWorld(playerid, playerid + 1);
 
+	ResetVariables(playerid); // wtf why?
+
 	ply_Data[playerid][ply_JoinTick] = GetTickCount();
 
 	new
