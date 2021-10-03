@@ -93,18 +93,18 @@ stock TeleportPlayerToPlayer(playerid, targetid)
 	return 1;
 }
 
-stock IsNicknameValid(const name[])
+stock IsNicknameValid(const nickname[])
 {
 	new
 		i,
-		len = strlen(name);
+		len = strlen(nickname);
 
-	if(len < 3)
+	if(len < 3 || len > MAX_PLAYER_NAME)
 		return 0;
 
 	while(i < len)
 	{
-		switch(name[i])
+		switch(nickname[i])
 		{
 			case 'a'..'z', 'A'..'Z', '0'..'9', '(', ')', '[', ']', '.', '_', '$', '=', '@':
 				i++;
