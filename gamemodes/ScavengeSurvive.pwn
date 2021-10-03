@@ -268,7 +268,7 @@ bool:	gVehicleSurfing,
 Float:	gNameTagDistance,
 		gCombatLogWindow,
 		gLoginFreezeTime,
-		gMaxTaboutTime;
+		gMaxTabOutTime;
 
 // INTERNAL
 new

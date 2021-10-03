@@ -21,7 +21,7 @@ LoadSettings()
 	GetSettingFloat("player/nametag-distance", 15.0, gNameTagDistance);
 	GetSettingInt("player/combat-log-window", 30, gCombatLogWindow);
 	GetSettingInt("player/login-freeze-time", 8, gLoginFreezeTime);
-	GetSettingInt("player/max-tab-out-time", 60, gMaxTaboutTime);
+	GetSettingInt("player/max-tab-out-time", 60, gMaxTabOutTime);
 
 	// I'd appreciate if you left my credit and the proper gamemode name intact!
 	// Failure to do this will result in being blacklisted from the server list.

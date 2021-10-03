@@ -61,7 +61,7 @@ ptask AfkCheckUpdate[100](playerid)
 
 			log(true, "[FOCUS] %p unfocused game", playerid);
 
-			if(gMaxTaboutTime == 0)
+			if(gMaxTabOutTime == 0)
 			{
 				KickPlayer(playerid, "Unfocused from the game, could starve and cause bugs");
 				return;
@@ -102,14 +102,9 @@ hook OnPlayerMeleePlayer(playerid, targetid, Float:bleedrate, Float:knockmult)
 stock AFK_CheckKick(playerid)
 {
 	if(IsPlayerConnected(playerid) && !IsAdminOnDuty(playerid) && tab_IsTabbed[playerid])
-	{
-		if(GetTickCountDifference(GetTickCount(), tab_TabOutTick[playerid]) > SEC(gMaxTaboutTime))
-		{
-			KickPlayer(playerid, sprintf("Ausente por mais de %d segundos", gMaxTaboutTime));
-		}
-	}
+		if(GetTickCountDifference(GetTickCount(), tab_TabOutTick[playerid]) > SEC(gMaxTabOutTime))
+			KickPlayer(playerid, sprintf("Ausente por mais de %d segundos", gMaxTabOutTime));
 }
 
 stock IsPlayerUnfocused(playerid)
 	return tab_IsTabbed[playerid];
-
