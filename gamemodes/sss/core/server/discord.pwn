@@ -40,23 +40,19 @@ hook OnPlayerSendChat(playerid, text[], Float:frequency)
 		} */
 	}
 	if(strfind(text, "@everyone") == -1)
-		SendDiscordMessage(channel, "**%p** (%d): %s", playerid, playerid, text);
+		SendDiscordMessage(channel, "**%p**(%d): %s", playerid, playerid, text);
 }
 
 hook OnPlayerRegister(playerid)
-{
-    SendDiscordMessage(dc_GlobalChatChannel, "**%p (%d) %sregistrou conta.**", playerid, playerid, IsPlayerMobile(playerid) ? "(Mobile) " : "");
-}
+    SendDiscordMessage(dc_GlobalChatChannel, "**%p(%d) %sregistrou conta.**", playerid, playerid, IsPlayerMobile(playerid) ? "(Mobile) " : "");
 
 hook OnPlayerLogin(playerid)
-{
-	SendDiscordMessage(dc_GlobalChatChannel, "**%p (%d) %sentrou no servidor.**", playerid, playerid, IsPlayerMobile(playerid) ? "(Mobile) " : "");
-}
+	SendDiscordMessage(dc_GlobalChatChannel, "**%p(%d) %sentrou no servidor.**", playerid, playerid, IsPlayerMobile(playerid) ? "(Mobile) " : "");
 
 hook OnPlayerDisconnect(playerid, reason)
 {
 	if(IsPlayerLoggedIn(playerid) && !gServerRestarting)
-		SendDiscordMessage(dc_GlobalChatChannel, "**%p (%d) %s.**", playerid, playerid, reason ? "decidiu sair" : "perdeu a conexao");
+		SendDiscordMessage(dc_GlobalChatChannel, "**%p(%d) %s.**", playerid, playerid, reason ? "decidiu sair" : "perdeu a conexao");
 }
 
 public DCC_OnGuildMemberAdd(DCC_Guild:guild, DCC_User:user)
@@ -84,8 +80,8 @@ public OnMemberJoined(const nickname[DCC_NICKNAME_SIZE], bool:isNew)
 
 	if(isNew)
 		SendDiscordMessage(channel, "Bem-vindo! Você ainda não vinculou essa Conta de Discord com uma Conta de Jogo. Como tal, primeiro entre no servidor e registre sua conta. `sv.explorarsobreviver.com:7777`");
-	// else
-		// SendDiscordMessage(channel, "Você já tem essa conta vinculada. Foi atribuido o cargo de Sobrevivente automáticamente.", userId);
+	else
+		SendDiscordMessage(channel, "Você já tem essa conta de Discord vinculada. Foi atribuido o cargo de Sobrevivente automáticamente.", userId);
 }
 
 public DCC_OnMessageCreate(DCC_Message:message)
@@ -117,7 +113,7 @@ public DCC_OnMessageCreate(DCC_Message:message)
 		ChatMsgAdmins(1, 0xff4d00FF, "[Discord] "C_GREY"%s"C_WHITE": %s", discordUserName, TagScan(discordMessage));
 	else if(channel == dc_StaffChatChannel) // Apenas para executar comandos
 	{
-		if(!strcmp(discordMessage, ".restart", true))
+		if(!strcmp(discordMessage, ".rr", true))
 		{
 			SendDiscordMessage(dc_GlobalChatChannel, "**Servidor vai agora reiniciar...**");
 			strdel(discordMessage, 0, 8);
