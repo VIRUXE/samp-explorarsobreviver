@@ -52,7 +52,7 @@ _GenerateRandomSpawnPoint(&Float:x, &Float:y, &Float:z)
 	while(IsPosInWater(x,y,z, depth, posDepth))
 		_GenerateRandomSpawnPoint(x,y,z);
 
-	while(IsPosNearWater(x,y,z))
+	while(IsPosNearWater(x,y,z, 20.0, 5.0))
 		_GenerateRandomSpawnPoint(x,y,z);
 
 	z +=1.0;
@@ -80,7 +80,7 @@ stock SpawnPlayerAtRandomPoint(playerid, &Float:x, &Float:y, &Float:z)
 		SetPlayerPos(playerid, x,y,z);
 	}
 
-	log(false, "[SPAWN] %p spawned at %0.1f %0.1f %0.1f - %s", playerid, x,y,z, GetPlayerZoneName(playerid, true));
+	log(false, "[SPAWN] %p(%d) spawned at %0.1f %0.1f %0.1f - %s", playerid, playerid, x,y,z, GetPlayerZoneName(playerid, true));
 }
 
 CMD:testspawn(playerid)
