@@ -81,7 +81,7 @@ public OnMemberJoined(const nickname[DCC_NICKNAME_SIZE], bool:isNew)
 	if(isNew)
 		SendDiscordMessage(channel, "Bem-vindo! Você ainda não vinculou essa Conta de Discord com uma Conta de Jogo. Como tal, primeiro entre no servidor e registre sua conta. `sv.explorarsobreviver.com:7777`");
 	else
-		SendDiscordMessage(channel, "Você já tem essa conta de Discord vinculada. Foi atribuido o cargo de Sobrevivente automáticamente.", userId);
+		SendDiscordMessage(channel, "Você já tem essa conta de Discord vinculada. Foi atribuido o cargo de Sobrevivente automáticamente.");
 }
 
 public DCC_OnMessageCreate(DCC_Message:message)
