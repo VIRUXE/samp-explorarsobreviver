@@ -30,22 +30,17 @@ ptask AfkCheckUpdate[100](playerid)
 		Float:x,
 		Float:y,
 		Float:z,
-		playerstate;
-
-	playerstate = GetPlayerState(playerid);
+		playerstate = GetPlayerState(playerid);
 
 	if(playerstate <= 1)
-		GetPlayerVelocity(playerid, z, y, z);
-
+		GetPlayerVelocity(playerid, x, y, z);
 	else if(playerstate <= 3)
 		GetVehicleVelocity(GetPlayerVehicleID(playerid), x, y, z);
 
 	if(GetTickCountDifference(GetTickCount(), GetPlayerVehicleExitTick(playerid)) < 2000)
 		comparison = 3000;
-
 	else if(IsPlayerBeingHijacked(playerid))
 		comparison = 3800;
-
 	else if((x == 0.0 && y == 0.0 && z == 0.0))
 		comparison = 2500;
 
@@ -53,17 +48,20 @@ ptask AfkCheckUpdate[100](playerid)
 
 	// ShowActionText(playerid, sprintf("%d :: %s%d - %d", playerstate, (tab_Check[playerid] > comparison) ? ("~r~") : ("~w~"), tab_Check[playerid], comparison), 0);
 
+	GetPlayerPos(playerid, x,y,z);
+
 	if(tab_Check[playerid] > comparison)
 	{
 		if(!tab_IsTabbed[playerid])
 		{
 			CallLocalFunction("OnPlayerFocusChange", "dd", playerid, 0);
 
-			log(true, "[FOCUS] %p unfocused game", playerid);
+			log(true, "[FOCUS] %p(%d) unfocused game (%.3f, %.3f, %.3f - %s)", playerid, playerid, x,y,z, GetPlayerZoneName(playerid, false));
 
-			if(gMaxTabOutTime == 0)
+			if(!gMaxTabOutTime)
 			{
-				KickPlayer(playerid, "Unfocused from the game, could starve and cause bugs");
+				ChatMsg(playerid, RED, "Nao pode ficar tanto tempo ausente do jogo.");
+				OnPlayerDisconnect(playerid, 1);
 				return;
 			}
 
@@ -79,7 +77,7 @@ ptask AfkCheckUpdate[100](playerid)
 		{
 			CallLocalFunction("OnPlayerFocusChange", "dd", playerid, 1);
 
-			log(true, "[FOCUS] %p focused back to game", playerid);
+			log(true, "[FOCUS] %p(%d) focused back to game (%.3f, %.3f, %.3f - %s)", playerid, playerid, x,y,z, GetPlayerZoneName(playerid, false));
 
 			tab_IsTabbed[playerid] = false;
 		}
@@ -102,7 +100,7 @@ hook OnPlayerMeleePlayer(playerid, targetid, Float:bleedrate, Float:knockmult)
 stock AFK_CheckKick(playerid)
 {
 	if(IsPlayerConnected(playerid) && !IsAdminOnDuty(playerid) && tab_IsTabbed[playerid])
-		if(GetTickCountDifference(GetTickCount(), tab_TabOutTick[playerid]) > SEC(gMaxTabOutTime))
+		if(GetTickCountDifference(GetTickCount(), tab_TabOutTick[playerid]) > gMaxTabOutTime * 1000)
 			KickPlayer(playerid, sprintf("Ausente por mais de %d segundos", gMaxTabOutTime));
 }
 
