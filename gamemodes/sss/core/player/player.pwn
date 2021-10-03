@@ -47,7 +47,6 @@ forward OnDeath(playerid, killerid, reason);
 
 forward Float:GetPlayerTotalVelocity(playerid);
 
-
 public OnPlayerConnect(playerid)
 {
 	if(IsPlayerNPC(playerid))
@@ -60,8 +59,6 @@ public OnPlayerConnect(playerid)
 	TogglePlayerClock(playerid, false);
 	
 	SetPlayerVirtualWorld(playerid, playerid + 1);
-
-	ResetVariables(playerid);
 
 	ply_Data[playerid][ply_JoinTick] = GetTickCount();
 
@@ -86,15 +83,11 @@ public OnPlayerConnect(playerid)
 	SetSpawnInfo(playerid, 0, 0, DEFAULT_POS_X, DEFAULT_POS_Y, DEFAULT_POS_Z, 0.0, 0, 0, 0, 0, 0, 0);
 	SpawnPlayer(playerid);
 
-	foreach(new i : Player)
-		if(i != playerid)
-			ChatMsg(i, WHITE, " » %P (%d)"C_WHITE" entrou no servidor.", playerid, playerid);
-
 	if(!isnull(gMessageOfTheDay))
 		ChatMsg(playerid, BLUE, ""C_YELLOW" » Mensagem do Dia: "C_BLUE"%s", gMessageOfTheDay);
 
 	if(gServerRestarting)
-		ChatMsg(playerid, YELLOW, " » Servidor ainda a reinciar. Aguarde um pouco..."C_BLUE"%s", gMessageOfTheDay);
+		ChatMsg(playerid, YELLOW, " » Servidor ainda a reiniciar. Aguarde um pouco..."C_BLUE"%s", gMessageOfTheDay);
 
 	ply_Data[playerid][ply_ShowHUD] = true;
 
@@ -106,10 +99,12 @@ public OnPlayerDisconnect(playerid, reason)
 	if(gServerRestarting)
 		return 0;
 
-	Logout(playerid);
+	if(IsPlayerLoggedIn(playerid))
+		ChatMsgAll(GREY, " » %P(%d) "C_GREY"saiu do servidor.", playerid, playerid);
 
-	ChatMsgAll(GREY, " » %P "C_GREY"%s.", playerid, reason ? "decidiu sair" : IsPlayerMobile(playerid) ? "decidiu sair" : "perdeu a conexao");
-	Logger_Log("player disconnected", Logger_P(playerid), Logger_S("reason", reason ? "quit" : IsPlayerMobile(playerid) ? "quit" : "lost connection"));
+	log(true, "[PART] %p(%d) left the server. (Reason: %s, Logged In: %d)", playerid, playerid, reason ? "quit" : "lost connection", IsPlayerLoggedIn(playerid));
+
+	Logout(playerid);
 
 	SetTimerEx("OnPlayerDisconnected", 100, false, "dd", playerid, reason);
 
@@ -185,9 +180,7 @@ timer LoadAccountDelay[timer](playerid, timer)
 }
 
 hook OnPlayerDisconnected(playerid)
-{
 	ResetVariables(playerid);
-}
 
 ResetVariables(playerid)
 {
