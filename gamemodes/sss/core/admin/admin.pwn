@@ -116,13 +116,14 @@ hook OnPlayerClickPlayer(playerid, clickedplayerid, source)
 	{
 		gBigString[playerid][0] = EOS;
 
-		strcat(gBigString[playerid], "Get\n");
 		strcat(gBigString[playerid], "Goto\n");
+		strcat(gBigString[playerid], "Get\n");
 		strcat(gBigString[playerid], "Freeze\n");
 		strcat(gBigString[playerid], "Unfreeze\n");
 		strcat(gBigString[playerid], "Kick\n");
 		strcat(gBigString[playerid], "Ban\n");
 		strcat(gBigString[playerid], "Aliases\n");
+		strcat(gBigString[playerid], "Spectate\n");
 
 		inline Response(pid, dialogid, response, listitem, string:inputtext[])
 		{
@@ -167,7 +168,7 @@ hook OnPlayerClickPlayer(playerid, clickedplayerid, source)
 			}
 		}
 		Dialog_ShowCallback(playerid, using inline Response, DIALOG_STYLE_LIST, sprintf("%P", clickedplayerid),
-			gBigString[playerid], "Select", "Exit");
+			gBigString[playerid], "Ok", "Sair");
 	}
 
     return 0;
