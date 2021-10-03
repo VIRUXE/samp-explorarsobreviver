@@ -103,7 +103,7 @@ hook DCC_OnMessageCreate(DCC_Message:message)
 				DCC_GetChannelGuild(channel, guild);
 				DCC_AddGuildMemberRole(guild, discordUser, DCC_FindRoleById("867774790189973514")); // Colocar jogador no cargo "Sobrevivente"
 
-				SendDiscordMessage(channel, "> Conta de Discord `%s (Nick: %s)` foi vinculada com a Conta de Jogo `%s`! Verifique suas mensagens privadas.", discordUsername, discordNickname, accountName);
+				SendDiscordMessage(channel, "> Conta de Discord `%s` foi vinculada com a Conta de Jogo `%s`! Verifique suas mensagens privadas.", discordUsername, accountName);
 				DCC_CreatePrivateChannel(discordUser, "OnWhitelistSuccess", "s", accountName); // Enviar Mensagem privada. Pois ao colocar no cargo, o canal whitelist desaparece, logo não dá para ver se enviar mensagem para o canal
 
 				log(true, "[WHITELIST] Discord Account %s (Username: %s ID: %s) was linked to game account %s", discordNickname, discordUsername, discordUserId, accountName);
@@ -156,7 +156,7 @@ stock PromptPlayerToWhitelist(playerid)
 				PromptPlayerToWhitelist(playerid);
 		}
 		else
-			KickPlayer(playerid, "Decidiu sair");
+			OnPlayerDisconnect(playerid, 1);
 	}
 	Dialog_ShowCallback(playerid, using inline Response, DIALOG_STYLE_MSGBOX, "Vincular Conta", whitelistMsg, "Jogar", "Sair");
 }
@@ -232,7 +232,7 @@ timer _UpdateWhitelistCountdown[1000](playerid)
 	if(wl_Countdown[playerid] == 0)
 	{
 		PromptPlayerToWhitelist(playerid);
-		KickPlayer(playerid, "Whitelist");
+		KickPlayer(playerid, "Tem que vincular sua conta.");
 		stop wl_CountdownTimer[playerid];
 		return;
 	}
@@ -257,7 +257,7 @@ timer _WhitelistConnect[5000](playerid)
 {
 	if(!IsPlayerConnected(playerid))
 	{
-		log(true, "[_WhitelistConnect] Player %d not connected any more.", playerid);
+		log(true, "[_WhitelistConnect] Player %p(%d) not connected any more.", playerid, playerid);
 		return;
 	}
 
@@ -266,16 +266,16 @@ timer _WhitelistConnect[5000](playerid)
 		if(DoesAccountHaveDiscord(playerid))
 		{
 			wl_Whitelisted[playerid] = true;
-			log(true, "[_WhitelistConnect] Player %d is whitelisted.", playerid);
+			log(true, "[_WhitelistConnect] Player %p(%d) is whitelisted.", playerid, playerid);
 		}
 		else if(!wl_Auto && wl_Active)
 		{
 			PromptPlayerToWhitelist(playerid);
-			log(true, "[_WhitelistConnect] Player %d was asked to whitelist.", playerid);
+			log(true, "[_WhitelistConnect] Player %p(%d) was asked to whitelist.", playerid, playerid);
 		}
 	}
 	else
-		log(true, "[_WhitelistConnect] Player %d is in the tutorial. Not doing anything.", playerid);
+		log(true, "[_WhitelistConnect] Player %p(%d) is in the tutorial. Not doing anything.", playerid, playerid);
 }
 
 hook OnPlayerLogin(playerid)
