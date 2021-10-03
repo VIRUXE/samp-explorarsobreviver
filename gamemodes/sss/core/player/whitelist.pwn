@@ -153,7 +153,12 @@ stock PromptPlayerToWhitelist(playerid)
 				wl_Whitelisted[playerid] = true;
 
 			if(!wl_Whitelisted[playerid])
+			{
+				ChatMsg(playerid, YELLOW, "Continua tudo igual. Ainda nao vinculou sua conta!");
 				PromptPlayerToWhitelist(playerid);
+			}
+			else
+				ChatMsg(playerid, GREEN, "Obrigado por vincular sua conta.");
 		}
 		else
 			OnPlayerDisconnect(playerid, 1);
