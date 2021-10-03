@@ -52,7 +52,7 @@ hook OnPlayerLogin(playerid)
 hook OnPlayerDisconnect(playerid, reason)
 {
 	if(IsPlayerLoggedIn(playerid) && !gServerRestarting)
-		SendDiscordMessage(dc_GlobalChatChannel, "**%p(%d) %s.**", playerid, playerid, reason ? "decidiu sair" : "perdeu a conexao");
+		SendDiscordMessage(dc_GlobalChatChannel, "**%p(%d) saiu.**", playerid, playerid);
 }
 
 public DCC_OnGuildMemberAdd(DCC_Guild:guild, DCC_User:user)
