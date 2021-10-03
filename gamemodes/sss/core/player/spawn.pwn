@@ -367,6 +367,18 @@ PlayerSpawnNewCharacter(playerid, gender)
 
 	SetPlayerBrightness(playerid, 255);
 
+	/* new spawnMsg = 
+	{
+		{
+
+		},
+		{
+			
+		}
+	} */
+
+	ShowActionText(playerid, z >= 500 ? "O seu aviao comecou a cair e voce nao teve outra hipotese senao saltar..." : "Acordou de um desmaio, sem qualquer lembranca...", SEC(3), 300);
+
 	CallLocalFunction("OnPlayerSpawnNewChar", "d", playerid);
 
 	Logger_Log("player spawned new character",
