@@ -30,7 +30,7 @@ hook OnVehicleCreated(vehicleid)
 
 	if(trunksize > 0)
 	{
-		trunk_ContainerID[vehicleid] = CreateContainer("porta-malas", trunksize);
+		trunk_ContainerID[vehicleid] = CreateContainer("Porta-Malas", trunksize);
 		trunk_ContainerVehicle[trunk_ContainerID[vehicleid]] = vehicleid;
 		trunk_Locked[vehicleid] = false;
 	}
