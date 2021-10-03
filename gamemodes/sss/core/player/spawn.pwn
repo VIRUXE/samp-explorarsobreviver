@@ -1,13 +1,11 @@
 
 #include <YSI_Coding\y_hooks>
 
-
 enum e_item_object
 {
 	ItemType:e_itmobj_type,
 	e_itmobj_exdata
 }
-
 
 static
 ItemType:	spawn_BagType,
@@ -88,11 +86,6 @@ hook OnPlayerConnect(playerid)
 {
 	spawn_State[playerid] = false;
 
-//	defer LoadClassUI(playerid);
-//}
-//
-//timer LoadClassUI[1](playerid)
-//{
 	ClassButtonMale[playerid]		=CreatePlayerTextDraw(playerid, 250.000000, 200.000000, "~n~Male~n~~n~");
 	PlayerTextDrawAlignment			(playerid, ClassButtonMale[playerid], 2);
 	PlayerTextDrawBackgroundColor	(playerid, ClassButtonMale[playerid], 255);
@@ -377,7 +370,7 @@ PlayerSpawnNewCharacter(playerid, gender)
 		}
 	} */
 
-	ShowActionText(playerid, z >= 500 ? "O seu aviao comecou a cair e voce nao teve outra hipotese senao saltar..." : "Acordou de um desmaio, sem qualquer lembranca...", SEC(3), 300);
+	ChatMsg(playerid, WHITE, z >= 500 ? "O seu aviao comecou a cair e voce nao teve outra hipotese senao saltar..." : "Acordou de um desmaio, sem qualquer lembranca...");
 
 	CallLocalFunction("OnPlayerSpawnNewChar", "d", playerid);
 
