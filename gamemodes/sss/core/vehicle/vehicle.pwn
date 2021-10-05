@@ -630,7 +630,7 @@ hook OnPlayerStateChange(playerid, newstate, oldstate)
 
 		GetVehicleTypeName(GetVehicleType(veh_Current[playerid]), vehicleName);
 
-		GetVehiclePos(veh_Current[playerid], veh_Data[veh_Current[playerid]][veh_spawnX], veh_Data[veh_Current[playerid]][veh_spawnY], veh_Data[veh_Current[playerid]][veh_spawnZ], GetPlayerZoneName(playerid, true));
+		GetVehiclePos(veh_Current[playerid], veh_Data[veh_Current[playerid]][veh_spawnX], veh_Data[veh_Current[playerid]][veh_spawnY], veh_Data[veh_Current[playerid]][veh_spawnZ]);
 		GetVehicleZAngle(veh_Current[playerid], veh_Data[veh_Current[playerid]][veh_spawnR]);
 
 		veh_Data[veh_Current[playerid]][veh_occupied] = false;
