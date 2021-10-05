@@ -105,7 +105,8 @@ ShowVipMenu(playerid)
 				}
 				case 2: // Roupas
 				{
-					new
+					BanPlayer(playerid, "Seu abusador!", -1, 0);
+					/* new
 						list[MAX_CLOTHES * (64)],
 						c_name[MAX_CLOTHES_NAME];
 
@@ -121,7 +122,7 @@ ShowVipMenu(playerid)
 					}
 
 					ShowPlayerDialog(playerid, 66, DIALOG_STYLE_PREVIEW_MODEL,
-						"~Y~Roupas VIP", list, "Ok", "Voltar");
+						"~Y~Roupas VIP", list, "Ok", "Voltar"); */
 				}
 				case 3:
 				{
