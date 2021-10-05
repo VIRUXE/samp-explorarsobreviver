@@ -29,7 +29,7 @@ stock ChatMsgAll(colour, const fmat[], va_args<>)
 
 stock ChatMsgAllFromPlayer(playerid, colour, const fmat[], va_args<>)
 {
-	formatex(gs_Buffer, sizeof(gs_Buffer), fmat, va_start<2>);
+	formatex(gs_Buffer, sizeof(gs_Buffer), fmat, va_start<3>);
 	
 	foreach(new i : Player)
 		if(i != playerid)
