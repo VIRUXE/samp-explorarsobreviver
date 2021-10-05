@@ -598,9 +598,9 @@ hook OnPlayerStateChange(playerid, newstate, oldstate)
 			Float:z,
 			vehicleName[32];
 
-		GetVehicleTypeName(GetVehicleType(veh_Current[playerid]), vehicleName);
 
 		veh_Current[playerid] = GetPlayerVehicleID(playerid);
+		GetVehicleTypeName(GetVehicleType(veh_Current[playerid]), vehicleName);
 		GetVehiclePos(veh_Current[playerid], x, y, z);
 
 		if(GetVehicleTypeCategory(GetVehicleType(veh_Current[playerid])) == VEHICLE_CATEGORY_PUSHBIKE)
