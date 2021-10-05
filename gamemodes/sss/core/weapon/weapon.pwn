@@ -673,24 +673,25 @@ hook OnPlayerDropItem(playerid, Item:itemid)
 	    //return Y_HOOKS_CONTINUE_RETURN_0;
 
 	itmw_DropItemID[playerid] = itemid;
-	stop itmw_DropTimer[playerid];
+	stop itmw_DropTimer[playerid]; // ????
 
 	inline Response(pid, dialogid, response, listitem, string:inputtext[])
 	{
 		#pragma unused pid, dialogid, listitem, inputtext
 
+		stop itmw_DropTimer[playerid]; // ????
+
 		if(response)
-		{
-			stop itmw_DropTimer[playerid];
 			itmw_DropTimer[playerid] = defer _UnloadWeapon(playerid, _:itemid);
-		} else {
-			stop itmw_DropTimer[playerid];
+		else
+		{
 			PlayerDropItem(playerid);
 			itmw_DropItemID[playerid] = INVALID_ITEM_ID;
 		}
 		return 1;
 	}
-	Dialog_ShowCallback(playerid, using inline Response, DIALOG_STYLE_MSGBOX, " ", "Escolha descarregar ou soltar arma..", "Descarregar", "Soltar");
+	Dialog_ShowCallback(playerid, using inline Response, DIALOG_STYLE_MSGBOX, " ", "Escolha descarregar ou soltar arma..", "Desc.", "Soltar");
+
 	return Y_HOOKS_BREAK_RETURN_1;
 }
 
