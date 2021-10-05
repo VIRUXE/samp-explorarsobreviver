@@ -595,14 +595,16 @@ hook OnPlayerStateChange(playerid, newstate, oldstate)
 		new
 			Float:x,
 			Float:y,
-			Float:z;
+			Float:z,
+			vehicleName[32];
+
+		GetVehicleTypeName(GetVehicleType(veh_Current[playerid]), vehicleName);
 
 		veh_Current[playerid] = GetPlayerVehicleID(playerid);
 		GetVehiclePos(veh_Current[playerid], x, y, z);
 
 		if(GetVehicleTypeCategory(GetVehicleType(veh_Current[playerid])) == VEHICLE_CATEGORY_PUSHBIKE)
 			SetVehicleEngine(veh_Current[playerid], 1);
-
 		else
 			VehicleEngineState(veh_Current[playerid], veh_Data[veh_Current[playerid]][veh_engine]);
 
@@ -613,7 +615,7 @@ hook OnPlayerStateChange(playerid, newstate, oldstate)
 
 		veh_EnterTick[playerid] = GetTickCount();
 
-		log(true, "[VEHICLE] %p entered %s (%d) as driver at %f, %f, %f", playerid, GetVehicleUUID(veh_Current[playerid]), veh_Current[playerid], x, y, z);
+		log(true, "[VEHICLE] %p(%d) entered %s(%d) as Driver (%.3f, %.3f, %.3f - %s)", playerid, playerid, vehicleName, veh_Current[playerid], x, y, z, GetPlayerZoneName(playerid, true));
 	}
 
 	if(oldstate == PLAYER_STATE_DRIVER)
@@ -624,7 +626,11 @@ hook OnPlayerStateChange(playerid, newstate, oldstate)
 			return 0;
 		}
 
-		GetVehiclePos(veh_Current[playerid], veh_Data[veh_Current[playerid]][veh_spawnX], veh_Data[veh_Current[playerid]][veh_spawnY], veh_Data[veh_Current[playerid]][veh_spawnZ]);
+		new vehicleName[32];
+
+		GetVehicleTypeName(GetVehicleType(veh_Current[playerid]), vehicleName);
+
+		GetVehiclePos(veh_Current[playerid], veh_Data[veh_Current[playerid]][veh_spawnX], veh_Data[veh_Current[playerid]][veh_spawnY], veh_Data[veh_Current[playerid]][veh_spawnZ], GetPlayerZoneName(playerid, true));
 		GetVehicleZAngle(veh_Current[playerid], veh_Data[veh_Current[playerid]][veh_spawnR]);
 
 		veh_Data[veh_Current[playerid]][veh_occupied] = false;
@@ -634,26 +640,26 @@ hook OnPlayerStateChange(playerid, newstate, oldstate)
 		SetCameraBehindPlayer(playerid);
 		HideVehicleUI(playerid);
 
-		log(true, "[VEHICLE] %p exited %s (%d) as driver at %f, %f, %f", playerid, GetVehicleUUID(veh_Current[playerid]), veh_Current[playerid], veh_Data[veh_Current[playerid]][veh_spawnX], veh_Data[veh_Current[playerid]][veh_spawnY], veh_Data[veh_Current[playerid]][veh_spawnZ]);
+		log(true, "[VEHICLE] %p(%d) exited %s(%d) as Driver (%.3f, %.3f, %.3f - %s)", playerid, playerid, vehicleName, veh_Current[playerid], veh_Data[veh_Current[playerid]][veh_spawnX], veh_Data[veh_Current[playerid]][veh_spawnY], veh_Data[veh_Current[playerid]][veh_spawnZ], GetPlayerZoneName(playerid, true));
 	}
 
 	if(newstate == PLAYER_STATE_PASSENGER)
 	{
 		new
 			vehicletype,
-			vehiclename[32],
+			vehicleName[32],
 			Float:x,
 			Float:y,
 			Float:z;
 
 		veh_Current[playerid] = GetPlayerVehicleID(playerid);
 		vehicletype = GetVehicleType(veh_Current[playerid]);
-		GetVehicleTypeName(vehicletype, vehiclename);
+		GetVehicleTypeName(vehicletype, vehicleName);
 		GetVehiclePos(veh_Current[playerid], x, y, z);
 
 		ShowVehicleUI(playerid, GetPlayerVehicleID(playerid));
 
-		log(true, "[VEHICLE] %p entered %s (%d) as passenger at %f, %f, %f", playerid, GetVehicleUUID(veh_Current[playerid]), veh_Current[playerid], x, y, z);
+		log(true, "[VEHICLE] %p(%d) entered %s(%d) as Passenger (%.3f, %.3f, %.3f - %s)", playerid, playerid, vehicleName, veh_Current[playerid], x, y, z, GetPlayerZoneName(playerid, true));
 	}
 
 	if(oldstate == PLAYER_STATE_PASSENGER)
@@ -666,18 +672,18 @@ hook OnPlayerStateChange(playerid, newstate, oldstate)
 
 		new
 			vehicletype,
-			vehiclename[32],
+			vehicleName[32],
 			Float:x,
 			Float:y,
 			Float:z;
 
 		vehicletype = GetVehicleType(veh_Current[playerid]);
-		GetVehicleTypeName(vehicletype, vehiclename);
+		GetVehicleTypeName(vehicletype, vehicleName);
 		GetVehiclePos(veh_Current[playerid], x, y, z);
 
 		SetVehicleExternalLock(GetPlayerLastVehicle(playerid), E_LOCK_STATE_OPEN);
 		HideVehicleUI(playerid);
-		log(true, "[VEHICLE] %p exited %s (%d) as passenger at %f, %f, %f", playerid, GetVehicleUUID(veh_Current[playerid]), veh_Current[playerid], x, y, z);
+		log(true, "[VEHICLE] %p(%d) exited %s(%d) as Passenger (%.3f, %.3f, %.3f - %s)", playerid, playerid, vehicleName, veh_Current[playerid], x, y, z, GetPlayerZoneName(playerid, true));
 	}
 
 	return 1;
@@ -685,11 +691,11 @@ hook OnPlayerStateChange(playerid, newstate, oldstate)
 
 ShowVehicleUI(playerid, vehicleid)
 {
-	new vehiclename[MAX_VEHICLE_TYPE_NAME];
+	new vehicleName[MAX_VEHICLE_TYPE_NAME];
 
-	GetVehicleTypeName(GetVehicleType(vehicleid), vehiclename);
+	GetVehicleTypeName(GetVehicleType(vehicleid), vehicleName);
 
-	PlayerTextDrawSetString(playerid, veh_NameUI[playerid], vehiclename);
+	PlayerTextDrawSetString(playerid, veh_NameUI[playerid], vehicleName);
 	PlayerTextDrawShow(playerid, veh_NameUI[playerid]);
 	PlayerTextDrawShow(playerid, veh_SpeedUI[playerid]);
 
