@@ -33,7 +33,7 @@ stock ChatMsgAllFromPlayer(playerid, colour, const fmat[], va_args<>)
 	
 	foreach(new i : Player)
 		if(i != playerid)
-			ChatMsgFlat(playerid, colour, gs_Buffer);
+			ChatMsgFlat(i, colour, gs_Buffer);
 
 	return 1;
 }
