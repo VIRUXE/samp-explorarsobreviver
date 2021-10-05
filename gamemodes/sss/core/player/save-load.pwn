@@ -51,14 +51,10 @@ forward OnPlayerLoad(playerid, filename[]);
 
 
 hook OnGameModeInit()
-{
 	DirectoryCheck(DIRECTORY_SCRIPTFILES DIRECTORY_PLAYER);
-}
 
 hook OnPlayerConnect(playerid)
-{
 	saveload_Loaded[playerid] = false;
-}
 
 SavePlayerChar(playerid)
 {
@@ -103,17 +99,11 @@ SavePlayerChar(playerid)
 	);
 
 	if(GetPlayerSpecialAction(playerid) == SPECIAL_ACTION_DUCK)
-	{
 		player_data[PLY_CELL_STANCE] = 1;
-	}
 	else if(animidx == 43)
-	{
 		player_data[PLY_CELL_STANCE] = 2;
-	}
 	else if(animidx == 1381)
-	{
 		player_data[PLY_CELL_STANCE] = 3;
-	}
 
 	GetPlayerBleedRate(playerid, Float:player_data[PLY_CELL_BLEEDING]);
 	player_data[PLY_CELL_CUFFED] = (GetPlayerSpecialAction(playerid) == SPECIAL_ACTION_CUFFED);
@@ -340,7 +330,7 @@ LoadPlayerChar(playerid)
 	SetPlayerCuffs(playerid, player_data[PLY_CELL_CUFFED]);
 	SetPlayerVIP(playerid, player_data[PLY_CELL_VIP]);
 	SetPlayerRadioFrequency(playerid, Float:player_data[PLY_CELL_FREQ]);
-	SetPlayerChatMode(playerid, player_data[PLY_CELL_CHATMODE]);
+	SetPlayerChatMode(playerid, CHAT_MODE_GLOBAL); // Not loading correctly.
 	SetPlayerToolTips(playerid, bool:player_data[PLY_CELL_TOOLTIPS]);
 	SetPlayerSpawnPos(playerid, Float:player_data[PLY_CELL_SPAWN_X], Float:player_data[PLY_CELL_SPAWN_Y], Float:player_data[PLY_CELL_SPAWN_Z]);
 	SetPlayerSpawnRot(playerid, Float:player_data[PLY_CELL_SPAWN_R]);
@@ -350,7 +340,6 @@ LoadPlayerChar(playerid)
 
 	if(player_data[PLY_CELL_MUTE_TIME] != 0)
 		TogglePlayerMute(playerid, true, player_data[PLY_CELL_MUTE_TIME]);
-
 	else
 		TogglePlayerMute(playerid, false);
 
