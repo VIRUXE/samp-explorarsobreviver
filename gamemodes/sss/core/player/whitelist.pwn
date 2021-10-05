@@ -90,7 +90,7 @@ hook DCC_OnMessageCreate(DCC_Message:message)
 				if(playerid != INVALID_PLAYER_ID)
 				{
 					wl_Whitelisted[playerid] = true;
-					ChatMsg(playerid, GREEN, "Está agora na Whitelist. Pode clicar em Jogar!");
+					ChatMsg(playerid, GREEN, "Sua conta foi agora vinculada. Pode clicar em Jogar!");
 
 					SetPlayerPos(playerid, DEFAULT_POS_X, DEFAULT_POS_Y, DEFAULT_POS_Z);
 					SetPlayerSpawnedState(playerid, false);
@@ -103,7 +103,7 @@ hook DCC_OnMessageCreate(DCC_Message:message)
 				DCC_GetChannelGuild(channel, guild);
 				DCC_AddGuildMemberRole(guild, discordUser, DCC_FindRoleById("867774790189973514")); // Colocar jogador no cargo "Sobrevivente"
 
-				SendDiscordMessage(channel, "> Conta de Discord `%s` foi vinculada com a Conta de Jogo `%s`! Verifique suas mensagens privadas.", discordUsername, accountName);
+				SendDiscordMessage(channel, "> Conta de Discord `%s` foi vinculada com a Conta de Jogo `%s`.", discordUsername, accountName);
 				DCC_CreatePrivateChannel(discordUser, "OnWhitelistSuccess", "s", accountName); // Enviar Mensagem privada. Pois ao colocar no cargo, o canal whitelist desaparece, logo não dá para ver se enviar mensagem para o canal
 
 				log(true, "[WHITELIST] Discord Account %s (Username: %s ID: %s) was linked to game account %s", discordNickname, discordUsername, discordUserId, accountName);
@@ -122,7 +122,7 @@ public OnWhitelistSuccess(const nameProvided[MAX_PLAYER_NAME])
 {
 	new DCC_Channel:channel = DCC_GetCreatedPrivateChannel();
 
-	SendDiscordMessage(channel, "> Sua Conta de Jogo `%s` foi vinculada com sua Conta de Discord e recebeu o cargo de Sobrevivente, para poder aceder aos restantes canais. Bom jogo!", nameProvided);
+	SendDiscordMessage(channel, "> Sua Conta de Jogo `%s` foi vinculada com sua Conta de Discord. Recebeu o cargo de Sobrevivente, para poder aceder aos restantes canais. Bom jogo!", nameProvided);
 }
 
 stock IsPlayerWhitelisted(playerid)
@@ -139,7 +139,7 @@ stock PromptPlayerToWhitelist(playerid)
 	format(whitelistMsg, sizeof(whitelistMsg), ""C_WHITE"Você precisa de vincular sua Conta de Discord antes de poder jogar com outros jogadores.\n\n\
 		"C_WHITE"\t1. Entre em "C_BLUE"http://%s"C_WHITE". "C_WHITE"(Nota: necessita de vincular seu celular no Discord)\n\
 		"C_WHITE"\t2. Digite %P"C_WHITE" em #vincular-conta\n\
-		"C_WHITE"\t3. Volte aqui, clique em \"Jogar\" e pronto, você ja pode se divertir! :) \n\n\
+		"C_WHITE"\t3. Volte aqui (nao necessita de fechar o jogo), clique em \"Jogar\" e pronto, você ja pode se divertir! :) \n\n\
 		"C_YELLOW"Aviso:"C_WHITE" Isso serve como proteção para o servidor. Pedimos sua compreensão.",
 		gWebsiteURL, playerid);
 		
@@ -314,24 +314,14 @@ timer _WhitelistDisconnect[100](playerid)
 /*
 	Interface
 */
-
-
 stock IsWhitelistAuto()
-{
 	return wl_Auto;
-}
 
 stock IsWhitelistActive()
-{
 	return wl_Active;
-}
 
 stock SetNonWhitelistTime(value)
-{
 	wl_NonWhitelistTime = value;
-}
 
 stock GetNonWhitelistTime()
-{
 	return wl_NonWhitelistTime;
-}
