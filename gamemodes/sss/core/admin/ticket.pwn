@@ -330,8 +330,12 @@ CMD:ticket(playerid, params[])
 				return ChatMsg(playerid, GREEN, " » Não existem Tickets por atender.");
 			else
 			{
+				log(true, "[CMD:TICKET] ticketOwnerId %d", ticketOwnerId);
+
 				while(IsPlayerBeingAttended(ticketOwnerId) != -1)
 				{
+					log(true, "[CMD:TICKET] IsPlayerBeingAttended - ticketOwnerId %d", ticketOwnerId);
+					
 					ticketOwnerId = _GetOldestTicketOwnerId();
 
 					if(ticketOwnerId == -1)
@@ -349,12 +353,16 @@ CMD:ticket(playerid, params[])
 
 				if(response)
 				{
+					log(true, "[CMD:TICKET] ticketOwnerId %d", ticketOwnerId);
+
 					while(IsPlayerBeingAttended(ticketOwnerId) != -1)
 					{
+						log(true, "[CMD:TICKET] IsPlayerBeingAttended - ticketOwnerId %d", ticketOwnerId);
+						
 						ticketOwnerId = _GetOldestTicketOwnerId();
 
 						if(ticketOwnerId == -1)
-							return ChatMsg(playerid, GREEN, " » Todos os Tickets já foram atendidos..");
+							return ChatMsg(playerid, GREEN, " » Não existem Tickets por atender.");
 					}
 
 					ticket_Data[ticketOwnerId][TICKET_ADMIN] = playerid;
