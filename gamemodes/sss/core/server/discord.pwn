@@ -40,7 +40,7 @@ hook OnPlayerSendChat(playerid, text[], Float:frequency)
 		} */
 	}
 	if(strfind(text, "@everyone") == -1)
-		SendDiscordMessage(channel, "**%p**(%d): %s", playerid, playerid, text);
+		SendDiscordMessage(channel, "**%p**(%d)%s: %s", playerid, playerid, IsPlayerMobile(playerid) ? "(m)" : "", text);
 }
 
 hook OnPlayerRegister(playerid)
@@ -113,13 +113,13 @@ public DCC_OnMessageCreate(DCC_Message:message)
 		ChatMsgAdmins(1, 0xff4d00FF, "[Discord] "C_GREY"%s"C_WHITE": %s", discordUserName, TagScan(discordMessage));
 	else if(channel == dc_StaffChatChannel) // Apenas para executar comandos
 	{
-		if(!strcmp(discordMessage, ".rr", true))
+		/* if(!strcmp(discordMessage, ".rr", true))
 		{
 			SendDiscordMessage(dc_GlobalChatChannel, "**Servidor vai agora reiniciar...**");
 			strdel(discordMessage, 0, 3); // remove .rr
 			SetRestart(strval(discordMessage));
 			return 1;
-		}
+		} */
 	}
 
 	return 1;
