@@ -27,6 +27,17 @@ stock ChatMsgAll(colour, const fmat[], va_args<>)
 	return 1;
 }
 
+stock ChatMsgAllFromPlayer(playerid, colour, const fmat[], va_args<>)
+{
+	formatex(gs_Buffer, sizeof(gs_Buffer), fmat, va_start<2>);
+	
+	foreach(new i : Player)
+		if(i != playerid)
+			ChatMsgFlat(playerid, colour, gs_Buffer);
+
+	return 1;
+}
+
 stock ChatMsgLang(playerid, colour, const key[], va_args<>)
 {
 	formatex(gs_Buffer, sizeof(gs_Buffer), GetLanguageString(GetPlayerLanguage(playerid), key), va_start<3>);

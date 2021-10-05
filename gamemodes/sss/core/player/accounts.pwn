@@ -470,9 +470,7 @@ stock Login(playerid)
 			ChatMsg(playerid, YELLOW, " » %d Bugs reportados. Digite "C_BLUE"/bugs", issues);
 	}
 
-	foreach(new i : Player)
-		if(i != playerid)
-			ChatMsg(i, WHITE, " » %s%P(%d)"C_WHITE" entrou no servidor.", IsPlayerStaff(playerid) ? "Admin" : "", playerid, playerid);
+	ChatMsgAllFromPlayer(playerid, WHITE, " » %s%P(%d)"C_WHITE" entrou no servidor.", IsPlayerStaff(playerid) ? "Admin " : "", playerid, playerid);
 
 	acc_LoggedIn[playerid] = true;
 	acc_LoginAttempts[playerid] = 0;
