@@ -342,10 +342,7 @@ stock DisplayRegisterPrompt(playerid)
 				PromptPlayerToWhitelist(playerid);
 		}
 		else
-		{
-			ChatMsgAll(GREY, " » %p saiu sem se registrar.", playerid);
-			Kick(playerid);
-		}
+			OnPlayerDisconnect(playerid, 1);
 
 		return 1;
 	}
@@ -378,10 +375,7 @@ stock DisplayLoginPrompt(playerid, badpass = 0)
 				if(acc_LoginAttempts[playerid] < 5)
 					DisplayLoginPrompt(playerid, 1);
 				else
-				{
-					ChatMsgAll(GREY, " » %p saiu sem fazer login.", playerid);
-					Kick(playerid);
-				}
+					OnPlayerDisconnect(playerid, 1);
 
 				return 1;
 			}
@@ -402,17 +396,11 @@ stock DisplayLoginPrompt(playerid, badpass = 0)
 				if(acc_LoginAttempts[playerid] < 5)
 					DisplayLoginPrompt(playerid, 1);
 				else
-				{
-					ChatMsgAll(GREY, " » %p saiu sem fazer login.", playerid);
-					Kick(playerid);
-				}
+					OnPlayerDisconnect(playerid, 1);
 			}
 		}
 		else
-		{
-			ChatMsgAll(GREY, " » %p saiu sem fazer login.", playerid);
-			Kick(playerid);
-		}
+			OnPlayerDisconnect(playerid, 1);
 
 		return 1;
 	}
