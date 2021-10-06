@@ -32,10 +32,13 @@ hook OnPlayerOpenInventory(playerid)
 
 hook OnPlayerSelectExtraItem(playerid, item)
 {
-	if(item == vip_InventoryOption[playerid])
+	if(GetInventoryListItemCount(playerid) && item == vip_InventoryOption[playerid]) // Apenas se tiver itens extra e se o item for o VIP
 	{
+		log(true, "[VIP] vip_InventoryOption - %d (%p)", vip_InventoryOption[playerid], playerid);
+
 		ShowVipMenu(playerid);
 		ClosePlayerInventory(playerid);
+
 		return Y_HOOKS_BREAK_RETURN_1;
 	}
 
@@ -105,8 +108,7 @@ ShowVipMenu(playerid)
 				}
 				case 2: // Roupas
 				{
-					BanPlayer(playerid, "Seu abusador!", -1, 0);
-					/* new
+					new
 						list[MAX_CLOTHES * (64)],
 						c_name[MAX_CLOTHES_NAME];
 
@@ -122,7 +124,7 @@ ShowVipMenu(playerid)
 					}
 
 					ShowPlayerDialog(playerid, 66, DIALOG_STYLE_PREVIEW_MODEL,
-						"~Y~Roupas VIP", list, "Ok", "Voltar"); */
+						"~Y~Roupas VIP", list, "Ok", "Voltar");
 				}
 				case 3:
 				{
