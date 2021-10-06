@@ -468,6 +468,8 @@ stock Login(playerid)
 
 	SpawnLoggedInPlayer(playerid);
 
+	SetPlayerColor(playerid, COLOR_PLAYER_NORMAL);
+
 	CallLocalFunction("OnPlayerLogin", "d", playerid);
 }
 

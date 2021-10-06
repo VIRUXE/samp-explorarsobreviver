@@ -52,12 +52,15 @@ public OnPlayerConnect(playerid)
 {
 	if(IsPlayerNPC(playerid))
 		return 1;
-
+		
 	ply_Data[playerid][ply_Mobile] = IsPlayerMobile(playerid); // SA-MP Mobile native
 
 	log(true, "[JOIN] %p(%d) %sconnected.", playerid, playerid, IsPlayerUsingMobile(playerid) ? "(Mobile) " : "");
 
-	SetPlayerColor(playerid, COLOR_PLAYER_NORMAL);
+	if(gServerInitialising)
+		ChatMsg(playerid, YELLOW, " » Servidor ainda a reiniciar. Aguarde um pouco..."C_BLUE"%s", gMessageOfTheDay);
+
+	SetPlayerColor(playerid, 0x00000000);
 
 	TogglePlayerClock(playerid, false);
 	
@@ -91,8 +94,6 @@ public OnPlayerConnect(playerid)
 	if(!isnull(gMessageOfTheDay))
 		ChatMsg(playerid, BLUE, ""C_YELLOW" » Mensagem do Dia: "C_BLUE"%s", gMessageOfTheDay);
 
-	if(gServerInitialising)
-		ChatMsg(playerid, YELLOW, " » Servidor ainda a reiniciar. Aguarde um pouco..."C_BLUE"%s", gMessageOfTheDay);
 
 	ply_Data[playerid][ply_ShowHUD] = true;
 
