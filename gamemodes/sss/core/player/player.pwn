@@ -91,7 +91,7 @@ public OnPlayerConnect(playerid)
 	if(!isnull(gMessageOfTheDay))
 		ChatMsg(playerid, BLUE, ""C_YELLOW" » Mensagem do Dia: "C_BLUE"%s", gMessageOfTheDay);
 
-	if(gServerRestarting)
+	if(gServerInitialising)
 		ChatMsg(playerid, YELLOW, " » Servidor ainda a reiniciar. Aguarde um pouco..."C_BLUE"%s", gMessageOfTheDay);
 
 	ply_Data[playerid][ply_ShowHUD] = true;
