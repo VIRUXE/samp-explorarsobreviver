@@ -58,7 +58,15 @@ public OnPlayerConnect(playerid)
 	log(true, "[JOIN] %p(%d) %sconnected.", playerid, playerid, IsPlayerUsingMobile(playerid) ? "(Mobile) " : "");
 
 	if(gServerInitialising)
-		ChatMsg(playerid, YELLOW, " » Servidor ainda a reiniciar. Aguarde um pouco..."C_BLUE"%s", gMessageOfTheDay);
+	{
+		ChatMsg(playerid, GREY, " »»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»");
+		ChatMsg(playerid, GREY, " »»»»»»»»»»»»»»»» Explorar e Sobreviver »»»»»»»»»»»»»»»»");
+		ChatMsg(playerid, GREY, " »»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»");
+		ChatMsg(playerid, GREY, " » Servidor a Iniciar. Aguarde um pouco...");
+		ChatMsg(playerid, GREY, " »»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»");
+		ChatMsg(playerid, GREY, " »»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»");
+		ChatMsg(playerid, GREY, " »»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»");
+	}
 
 	SetPlayerColor(playerid, 0x00000000);
 
