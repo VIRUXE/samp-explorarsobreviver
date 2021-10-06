@@ -173,7 +173,7 @@ stock DisplayPlayerInventory(playerid)
 
 	format(title, sizeof(title), "Bolsos (%d/%d)", size - slots, size);
 
-	ShowPlayerDialog(playerid, 33, DIALOG_STYLE_LIST, title, list, "Enter", "Sair");
+	ShowPlayerDialog(playerid, 33, DIALOG_STYLE_LIST, title, list, "Ok", "Sair");
 
 	inv_ViewingInventory[playerid] = true;
 
@@ -464,7 +464,7 @@ hook OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 
 			CallLocalFunction("OnPlayerViewInventoryOpt", "d", playerid);
 
-			ShowPlayerDialog(playerid, 32, DIALOG_STYLE_LIST, title, inv_OptionsList[playerid], "Enter", "Voltar");
+			ShowPlayerDialog(playerid, 32, DIALOG_STYLE_LIST, title, inv_OptionsList[playerid], "Ok", "Voltar");
 		}
 
 		return 0;
