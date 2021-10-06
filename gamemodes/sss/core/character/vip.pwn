@@ -32,7 +32,7 @@ hook OnPlayerOpenInventory(playerid)
 
 hook OnPlayerSelectExtraItem(playerid, item)
 {
-	if(GetInventoryListItemCount(playerid) && item == vip_InventoryOption[playerid]) // Apenas se tiver itens extra e se o item for o VIP
+	if(vip_InventoryOption[playerid] != 0 && item == vip_InventoryOption[playerid]) // Apenas se tiver itens extra e se o item for o VIP
 	{
 		log(true, "[VIP] vip_InventoryOption - %d (%p)", vip_InventoryOption[playerid], playerid);
 
