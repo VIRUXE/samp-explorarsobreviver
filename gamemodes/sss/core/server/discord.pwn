@@ -40,19 +40,19 @@ hook OnPlayerSendChat(playerid, text[], Float:frequency)
 		} */
 	}
 	if(strfind(text, "@everyone") == -1)
-		SendDiscordMessage(channel, "**%p**(%d)%s: %s", playerid, playerid, IsPlayerMobile(playerid) ? "(m)" : "", text);
+		SendDiscordMessage(channel, "**%p**(%d)%s: %s", playerid, playerid, IsPlayerUsingMobile(playerid) ? "(m)" : "", text);
 }
 
 hook OnPlayerRegister(playerid)
-    SendDiscordMessage(dc_GlobalChatChannel, "**%p(%d) %sregistrou conta.**", playerid, playerid, IsPlayerMobile(playerid) ? "(Mobile) " : "");
+    SendDiscordMessage(dc_GlobalChatChannel, "**%p(%d) %sregistrou conta.**", playerid, playerid, IsPlayerUsingMobile(playerid) ? "(Mobile) " : "");
 
 hook OnPlayerLogin(playerid)
-	SendDiscordMessage(dc_GlobalChatChannel, "**%s%p(%d) %sentrou no servidor.**", IsPlayerStaff(playerid) ? "Admin " : "", playerid, playerid, IsPlayerMobile(playerid) ? "(Mobile) " : "");
+	SendDiscordMessage(dc_GlobalChatChannel, "**%s%p(%d) %sentrou no servidor.**", IsPlayerStaff(playerid) ? "Admin " : "", playerid, playerid, IsPlayerUsingMobile(playerid) ? "(Mobile) " : "");
 
 hook OnPlayerDisconnect(playerid, reason)
 {
 	if(IsPlayerLoggedIn(playerid) && !gServerRestarting)
-		SendDiscordMessage(dc_GlobalChatChannel, "**%p(%d) saiu.**", playerid, playerid);
+		SendDiscordMessage(dc_GlobalChatChannel, "**%p(%d) %s.**", playerid, playerid, reason ? "saiu" : IsPlayerUsingMobile(playerid) ? "saiu" : "perdeu a conexao");
 }
 
 public DCC_OnGuildMemberAdd(DCC_Guild:guild, DCC_User:user)

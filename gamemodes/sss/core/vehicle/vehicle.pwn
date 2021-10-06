@@ -90,8 +90,8 @@ hook OnPlayerSpawn(playerid)
 		PlayerTextDrawDestroy(playerid, veh_SpeedUI[playerid]);
 	}
 
-	veh_NameUI[playerid]			=CreatePlayerTextDraw(playerid, IsPlayerMobile(playerid) ? 5.0 : 621.0, 415.0, "Infernus");
-	PlayerTextDrawAlignment			(playerid, veh_NameUI[playerid], IsPlayerMobile(playerid) ? 1 : 3);
+	veh_NameUI[playerid]			=CreatePlayerTextDraw(playerid, IsPlayerUsingMobile(playerid) ? 5.0 : 621.0, 415.0, "Infernus");
+	PlayerTextDrawAlignment			(playerid, veh_NameUI[playerid], IsPlayerUsingMobile(playerid) ? 1 : 3);
 	PlayerTextDrawBackgroundColor	(playerid, veh_NameUI[playerid], 255);
 	PlayerTextDrawFont				(playerid, veh_NameUI[playerid], 2);
 	PlayerTextDrawLetterSize		(playerid, veh_NameUI[playerid], 0.349999, 1.799998);
@@ -99,8 +99,8 @@ hook OnPlayerSpawn(playerid)
 	PlayerTextDrawSetOutline		(playerid, veh_NameUI[playerid], 1);
 	PlayerTextDrawSetProportional	(playerid, veh_NameUI[playerid], 1);
 
-	veh_SpeedUI[playerid]			=CreatePlayerTextDraw(playerid, IsPlayerMobile(playerid) ? 5.0 : 620.0, 401.0, "220km/h");
-	PlayerTextDrawAlignment			(playerid, veh_SpeedUI[playerid], IsPlayerMobile(playerid) ? 1 : 3);
+	veh_SpeedUI[playerid]			=CreatePlayerTextDraw(playerid, IsPlayerUsingMobile(playerid) ? 5.0 : 620.0, 401.0, "220km/h");
+	PlayerTextDrawAlignment			(playerid, veh_SpeedUI[playerid], IsPlayerUsingMobile(playerid) ? 1 : 3);
 	PlayerTextDrawBackgroundColor	(playerid, veh_SpeedUI[playerid], 255);
 	PlayerTextDrawFont				(playerid, veh_SpeedUI[playerid], 2);
 	PlayerTextDrawLetterSize		(playerid, veh_SpeedUI[playerid], 0.250000, 1.599998);
@@ -108,8 +108,8 @@ hook OnPlayerSpawn(playerid)
 	PlayerTextDrawSetOutline		(playerid, veh_SpeedUI[playerid], 1);
 	PlayerTextDrawSetProportional	(playerid, veh_SpeedUI[playerid], 1);
 
-	veh_FuelUI[playerid]			=CreatePlayerTextDraw(playerid, IsPlayerMobile(playerid) ? 5.0 : 620.0, 386.0, "0.0/0.0L");
-	PlayerTextDrawAlignment			(playerid, veh_FuelUI[playerid], IsPlayerMobile(playerid) ? 1 : 3);
+	veh_FuelUI[playerid]			=CreatePlayerTextDraw(playerid, IsPlayerUsingMobile(playerid) ? 5.0 : 620.0, 386.0, "0.0/0.0L");
+	PlayerTextDrawAlignment			(playerid, veh_FuelUI[playerid], IsPlayerUsingMobile(playerid) ? 1 : 3);
 	PlayerTextDrawBackgroundColor	(playerid, veh_FuelUI[playerid], 255);
 	PlayerTextDrawFont				(playerid, veh_FuelUI[playerid], 2);
 	PlayerTextDrawLetterSize		(playerid, veh_FuelUI[playerid], 0.250000, 1.599999);
@@ -117,8 +117,8 @@ hook OnPlayerSpawn(playerid)
 	PlayerTextDrawSetOutline		(playerid, veh_FuelUI[playerid], 1);
 	PlayerTextDrawSetProportional	(playerid, veh_FuelUI[playerid], 1);
 
-	veh_DamageUI[playerid]			=CreatePlayerTextDraw(playerid, IsPlayerMobile(playerid) ? 5.0 : 620.0, 371.0, "DANO");
-	PlayerTextDrawAlignment			(playerid, veh_DamageUI[playerid], IsPlayerMobile(playerid) ? 1 : 3);
+	veh_DamageUI[playerid]			=CreatePlayerTextDraw(playerid, IsPlayerUsingMobile(playerid) ? 5.0 : 620.0, 371.0, "DANO");
+	PlayerTextDrawAlignment			(playerid, veh_DamageUI[playerid], IsPlayerUsingMobile(playerid) ? 1 : 3);
 	PlayerTextDrawBackgroundColor	(playerid, veh_DamageUI[playerid], 255);
 	PlayerTextDrawFont				(playerid, veh_DamageUI[playerid], 2);
 	PlayerTextDrawLetterSize		(playerid, veh_DamageUI[playerid], 0.250000, 1.599999);
@@ -126,8 +126,8 @@ hook OnPlayerSpawn(playerid)
 	PlayerTextDrawSetOutline		(playerid, veh_DamageUI[playerid], 1);
 	PlayerTextDrawSetProportional	(playerid, veh_DamageUI[playerid], 1);
 
-	veh_EngineUI[playerid]			=CreatePlayerTextDraw(playerid, IsPlayerMobile(playerid) ? 5.0 : 620.0, 356.0, "MOTOR");
-	PlayerTextDrawAlignment			(playerid, veh_EngineUI[playerid], IsPlayerMobile(playerid) ? 1 : 3);
+	veh_EngineUI[playerid]			=CreatePlayerTextDraw(playerid, IsPlayerUsingMobile(playerid) ? 5.0 : 620.0, 356.0, "MOTOR");
+	PlayerTextDrawAlignment			(playerid, veh_EngineUI[playerid], IsPlayerUsingMobile(playerid) ? 1 : 3);
 	PlayerTextDrawBackgroundColor	(playerid, veh_EngineUI[playerid], 255);
 	PlayerTextDrawFont				(playerid, veh_EngineUI[playerid], 2);
 	PlayerTextDrawLetterSize		(playerid, veh_EngineUI[playerid], 0.250000, 1.599999);
@@ -135,8 +135,8 @@ hook OnPlayerSpawn(playerid)
 	PlayerTextDrawSetOutline		(playerid, veh_EngineUI[playerid], 1);
 	PlayerTextDrawSetProportional	(playerid, veh_EngineUI[playerid], 1);
 
-	veh_DoorsUI[playerid]			=CreatePlayerTextDraw(playerid, IsPlayerMobile(playerid) ? 5.0 : 620.0, 341.0, "PORTAS");
-	PlayerTextDrawAlignment			(playerid, veh_DoorsUI[playerid], IsPlayerMobile(playerid) ? 1 : 3);
+	veh_DoorsUI[playerid]			=CreatePlayerTextDraw(playerid, IsPlayerUsingMobile(playerid) ? 5.0 : 620.0, 341.0, "PORTAS");
+	PlayerTextDrawAlignment			(playerid, veh_DoorsUI[playerid], IsPlayerUsingMobile(playerid) ? 1 : 3);
 	PlayerTextDrawBackgroundColor	(playerid, veh_DoorsUI[playerid], 255);
 	PlayerTextDrawFont				(playerid, veh_DoorsUI[playerid], 2);
 	PlayerTextDrawLetterSize		(playerid, veh_DoorsUI[playerid], 0.250000, 1.599999);

@@ -211,7 +211,7 @@ hook OnPlayerStateChange(playerid, newstate, oldstate)
 			new
 				playerName[MAX_PLAYER_NAME],
 				Float:px, Float:py, Float:pz,
-				bool:isUsingMobile = IsPlayerMobile(playerid);
+				bool:isUsingMobile = IsPlayerUsingMobile(playerid);
 
 			GetPlayerName(playerid, playerName, MAX_PLAYER_NAME);
 

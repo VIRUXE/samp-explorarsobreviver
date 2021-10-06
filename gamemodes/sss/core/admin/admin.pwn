@@ -497,7 +497,7 @@ stock ToggleAdminDuty(playerid, bool:toggle, goback = true)
 
 		SetPlayerClothes(playerid, GetPlayerClothesID(playerid));
 
-		SetPlayerColor(playerid, !IsPlayerMobile(playerid) ? COLOR_PLAYER_NORMAL : COLOR_PLAYER_MOBILE); // 
+		SetPlayerColor(playerid, !IsPlayerUsingMobile(playerid) ? COLOR_PLAYER_NORMAL : COLOR_PLAYER_MOBILE); // 
 	}
 
 	ToggleGodMode(playerid, admin_OnDuty[playerid]);

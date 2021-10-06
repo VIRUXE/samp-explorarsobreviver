@@ -46,7 +46,7 @@ hook OnPlayerText(playerid, text[])
 			freq = 4.0;
 	}
 
-	if(IsPlayerMobile(playerid))
+	if(IsPlayerUsingMobile(playerid))
 		RemoveAccents(text);
 
 	PlayerSendChat(playerid, text, freq);

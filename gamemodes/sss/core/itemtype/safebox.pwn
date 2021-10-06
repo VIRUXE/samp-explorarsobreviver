@@ -157,7 +157,7 @@ hook OnPlayerUseItem(playerid, Item:itemid)
 
 		if(IsItemInWorld(itemid))
 		{
-			if(IsPlayerMobile(playerid) && box_TypeData[box_ItemTypeBoxType[itemtype]][box_animate])
+			if(IsPlayerUsingMobile(playerid) && box_TypeData[box_ItemTypeBoxType[itemtype]][box_animate])
 				PlayerPickUpItem(playerid, itemid);
 				
 			if(_DisplaySafeboxDialog(playerid, itemid, box_TypeData[box_ItemTypeBoxType[itemtype]][box_animate]))

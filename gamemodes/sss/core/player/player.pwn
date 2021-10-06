@@ -32,7 +32,8 @@ Float:	ply_Velocity,
 		ply_stance,
 		ply_JoinTick,
 		ply_SpawnTick,
-bool:	ply_GodMode
+bool:	ply_GodMode,
+bool:	ply_Mobile
 }
 
 static
@@ -52,7 +53,9 @@ public OnPlayerConnect(playerid)
 	if(IsPlayerNPC(playerid))
 		return 1;
 
-	Logger_Log("player connected", Logger_P(playerid));
+	ply_Data[playerid][ply_Mobile] = IsPlayerMobile(playerid); // SA-MP Mobile native
+
+	log(true, "[JOIN] %p(%d) %sconnected.", playerid, playerid, IsPlayerUsingMobile(playerid) ? "(Mobile) " : "");
 
 	SetPlayerColor(playerid, COLOR_PLAYER_NORMAL);
 
@@ -102,7 +105,7 @@ public OnPlayerDisconnect(playerid, reason)
 		return 0;
 
 	if(IsPlayerLoggedIn(playerid))
-		ChatMsgAll(GREY, " » %P(%d) "C_GREY"saiu do servidor.", playerid, playerid);
+		ChatMsgAll(GREY, " » %P(%d) "C_GREY"%s.", playerid, playerid, reason ? "saiu" : IsPlayerUsingMobile(playerid) ? "saiu" : "perdeu a conexao");
 
 	log(true, "[PART] %p(%d) left the server. (Reason: %s, Logged In: %d)", playerid, playerid, reason ? "quit" : "lost connection", IsPlayerLoggedIn(playerid));
 
@@ -286,7 +289,7 @@ public OnPlayerSpawn(playerid)
 	if(IsPlayerNPC(playerid))
 		return 1;
 
-	SetPlayerColor(playerid, !IsPlayerMobile(playerid) ? COLOR_PLAYER_NORMAL : COLOR_PLAYER_MOBILE);
+	SetPlayerColor(playerid, !IsPlayerUsingMobile(playerid) ? COLOR_PLAYER_NORMAL : COLOR_PLAYER_MOBILE);
 
 	ply_Data[playerid][ply_SpawnTick] = GetTickCount();
 
@@ -730,3 +733,6 @@ stock ToggleGodMode(playerid, bool:god)
 
 stock bool:IsPlayerGod(playerid)
 	return ply_Data[playerid][ply_GodMode];
+
+stock bool:IsPlayerUsingMobile(playerid)
+	return ply_Data[playerid][ply_Mobile];

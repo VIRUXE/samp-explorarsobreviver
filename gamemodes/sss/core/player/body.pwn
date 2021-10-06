@@ -451,7 +451,7 @@ IRPC:GIVEDAM(playerid, BitStream:bs){
 		PR_UINT32, dBodypart
 	);	
 
-	if(IsPlayerMobile(playerid))
+	if(IsPlayerUsingMobile(playerid))
 	{
 		new 
 			Float:x,
@@ -489,7 +489,7 @@ IRPC:GIVEDAM(playerid, BitStream:bs){
 
 CMD:mc(playerid, params[])
 {
-	if(IsPlayerMobile(playerid))
+	if(IsPlayerUsingMobile(playerid))
 	{
 		new actorid;
 

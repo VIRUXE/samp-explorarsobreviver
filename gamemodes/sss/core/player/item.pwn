@@ -65,7 +65,7 @@ hook OnPlayerGetItem(playerid, Item:itemid){
 	TextDrawShowForPlayer(playerid, item_Prev);
 
 	// Temporary fix Special Action on mobile
-	if(IsItemTypeCarry(itype) && IsPlayerMobile(playerid)) 
+	if(IsItemTypeCarry(itype) && IsPlayerUsingMobile(playerid)) 
 		RemovePlayerAttachedObject(playerid, ITEM_ATTACH_INDEX);
 }
 

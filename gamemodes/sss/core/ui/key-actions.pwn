@@ -46,7 +46,7 @@ stock AddToolTipText(playerid, const key[], const use[])
 {
 	new tmp[128];
 
-	if(IsPlayerMobile(playerid))
+	if(IsPlayerUsingMobile(playerid))
 	{
 		if(!strcmp(key, KEYTEXT_INTERACT)) 			strcat(tmp, "F");
 		else if(!strcmp(key, KEYTEXT_RELOAD)) 		strcat(tmp, "ALT");
