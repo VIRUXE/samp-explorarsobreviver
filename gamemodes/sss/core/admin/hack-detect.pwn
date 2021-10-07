@@ -590,6 +590,8 @@ ptask HealthHackCheck[1000](playerid)
 
 	GetPlayerHealth(playerid, playerHealth);
 
+	log(true, "[HealthHackCheck] %p - %f", playerid, playerHealth);
+
 	if(IsPlayerSpawned(playerid) && !IsPlayerGod(playerid) && playerHealth > 99.9)
 	{
 		new
@@ -600,28 +602,28 @@ ptask HealthHackCheck[1000](playerid)
 		GetPlayerName(playerid, playerName, MAX_PLAYER_NAME);
 
 		ReportPlayer(playerName, "Hack de Vida", -1, "HP", x, y, z, GetPlayerVirtualWorld(playerid), GetPlayerInterior(playerid), "");
-		KickPlayer(playerid, "Hack de Vida");
+		// KickPlayer(playerid, "Hack de Vida");
+		OnPlayerDisconnect(playerid, 1);
 	}
 
 	if(IsPlayerInAnyVehicle(playerid))
 	{
-		new
-			Float:vehicleHP,
-			vehicleId = GetPlayerVehicleID(playerid);
+		new	Float:vehicleHP = GetPlayerVehicleID(playerid);
 
 		GetVehicleHealth(vehicleId, vehicleHP);
 
 		if(vehicleHP > 990.0 && GetPlayerVehicleSeat(playerid) == 0) // Only check the driver - Checking passengers causes a false ban
 		{
 			new
-				Float:playerX, Float:playerY, Float:playerZ,
+				Float:x, Float:y, Float:x,
 				playerName[MAX_PLAYER_NAME];
 
-			GetPlayerPos(playerid, playerX, playerY, playerZ);
+			GetPlayerPos(playerid, x, y, x);
 			GetPlayerName(playerid, playerName, MAX_PLAYER_NAME);
 
-			ReportPlayer(playerName, "Hack de Vida no Veículo", -1, REPORT_TYPE_VHEALTH, playerX, playerY, playerZ, GetPlayerVirtualWorld(playerid), GetPlayerInterior(playerid), "");
-			KickPlayer(playerid, "Hack de Vida no Veículo");
+			ReportPlayer(playerName, "Hack de Vida no Veículo", -1, REPORT_TYPE_VHEALTH, x, y, x, GetPlayerVirtualWorld(playerid), GetPlayerInterior(playerid), "");
+			// KickPlayer(playerid, "Hack de Vida no Veículo");
+			OnPlayerDisconnect(playerid, 1);
 
 			SetVehicleHealth(vehicleId, 300.0); // Reset vehicle health so others don't get banned
 		}

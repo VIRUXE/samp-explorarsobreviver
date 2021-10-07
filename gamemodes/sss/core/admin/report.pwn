@@ -129,8 +129,8 @@ stock ReportPlayer(const name[], const reason[], reporterId, const type[], Float
 	if(IsPlayerConnected(reporterId))
 		GetPlayerName(reporterId, reporterName, MAX_PLAYER_NAME);
 
-	log(true, "[REPORT] %s reported %s. Reason: %s", isnull(reporterName) ? "Server" : reporterName, name, reason);
-	ChatMsgAdmins(1, YELLOW, " » %s reported %s. Reason: %s", isnull(reporterName) ? "Server" : reporterName, name, reason);
+	log(true, "[REPORT] %s reported %s. Reason: %s", isnull(reporterName) ? "Servidor" : reporterName, name, reason);
+	ChatMsgAdmins(1, YELLOW, " » %s reported %s. Reason: %s", isnull(reporterName) ? "Servidor" : reporterName, name, reason);
 	SendDiscordMessage(DCC_FindChannelById("874083183690391602"), "%s reportou %s. Razão: %s", isnull(reporterName) ? "Servidor" : reporterName, name, reason);
 
 	stmt_bind_value(stmt_ReportInsert, 0, DB::TYPE_STRING, name, MAX_PLAYER_NAME);
