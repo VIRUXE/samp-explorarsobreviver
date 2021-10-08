@@ -1,7 +1,6 @@
 
 #include <YSI_Coding\y_hooks>
 
-
 #define MAX_REPORT_REASON_LENGTH	(128)
 #define MAX_REPORT_TYPE_LENGTH		(10)
 #define MAX_REPORT_INFO_LENGTH		(128)
@@ -65,6 +64,7 @@ enum e_report_list_struct
 	report_read,
 	report_rowid
 }
+
 static
 DBStatement:	stmt_ReportInsert,
 DBStatement:	stmt_ReportDelete,
@@ -74,7 +74,9 @@ DBStatement:	stmt_ReportNameExists,
 DBStatement:	stmt_ReportList,
 DBStatement:	stmt_ReportInfo,
 DBStatement:	stmt_ReportSetRead,
-DBStatement:	stmt_ReportGetUnread;
+DBStatement:	stmt_ReportGetUnread,
+
+DCC_Channel:	report_channel;
 
 
 /*==============================================================================
@@ -112,6 +114,8 @@ hook OnGameModeInit()
 	stmt_ReportInfo			= db_prepare(gAccounts, "SELECT * FROM "ACCOUNTS_TABLE_REPORTS" WHERE rowid = ?");
 	stmt_ReportSetRead		= db_prepare(gAccounts, "UPDATE "ACCOUNTS_TABLE_REPORTS" SET "FIELD_REPORTS_READ" = ? WHERE rowid = ?");
 	stmt_ReportGetUnread	= db_prepare(gAccounts, "SELECT COUNT(*) FROM "ACCOUNTS_TABLE_REPORTS" WHERE "FIELD_REPORTS_READ" = 0");
+
+	report_channel = DCC_FindChannelById("874083183690391602");
 }
 
 
@@ -131,7 +135,7 @@ stock ReportPlayer(const name[], const reason[], reporterId, const type[], Float
 
 	log(true, "[REPORT] %s reported %s. Reason: %s", isnull(reporterName) ? "Servidor" : reporterName, name, reason);
 	ChatMsgAdmins(1, YELLOW, " » %s reported %s. Reason: %s", isnull(reporterName) ? "Servidor" : reporterName, name, reason);
-	SendDiscordMessage(DCC_FindChannelById("874083183690391602"), "%s reportou %s. Razão: %s", isnull(reporterName) ? "Servidor" : reporterName, name, reason);
+	SendDiscordMessage(report_channel, "%s reportou %s. Razão: %s", isnull(reporterName) ? "Servidor" : reporterName, name, reason);
 
 	stmt_bind_value(stmt_ReportInsert, 0, DB::TYPE_STRING, name, MAX_PLAYER_NAME);
 	stmt_bind_value(stmt_ReportInsert, 1, DB::TYPE_STRING, reason, MAX_REPORT_REASON_LENGTH);
