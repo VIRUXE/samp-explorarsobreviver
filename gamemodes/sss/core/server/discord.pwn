@@ -108,18 +108,18 @@ public DCC_OnMessageCreate(DCC_Message:message)
 	RemoveAccents(discordMessage);
 
 	if(channel == dc_GlobalChatChannel)
-		ChatMsgAll(0x5865F2FF, "[Discord] "C_GREY"%s"C_WHITE": %s", discordUserName, TagScan(discordMessage));
+		ChatMsgAll(WHITE, "[Discord] "C_GREY"%s"C_WHITE": %s", discordUserName, TagScan(discordMessage));
 	else if(channel == dc_AdminChatChannel)
 		ChatMsgAdmins(1, 0xff4d00FF, "[Discord] "C_GREY"%s"C_WHITE": %s", discordUserName, TagScan(discordMessage));
 	else if(channel == dc_StaffChatChannel) // Apenas para executar comandos
 	{
-		/* if(!strcmp(discordMessage, ".rr", true))
+		if(!strcmp(discordMessage, ".rr", true))
 		{
 			SendDiscordMessage(dc_GlobalChatChannel, "**Servidor vai agora reiniciar...**");
-			strdel(discordMessage, 0, 3); // remove .rr
+			strdel(discordMessage, 0, 2); // remove .rr
 			SetRestart(strval(discordMessage));
 			return 1;
-		} */
+		}
 	}
 
 	return 1;
