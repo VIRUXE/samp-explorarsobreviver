@@ -30,9 +30,6 @@ public OnPlayerCommandText(playerid, cmdtext[])
 	for (new i, j = strlen(cmd); i < j; i++)
 		cmd[i] = tolower(cmd[i]);
 
-	if(!IsPlayerWhitelisted(playerid) && !isequal(cmd[1], "sair") && IsWhitelistActive() && !IsWhitelistAuto())
-		return ChatMsg(playerid, RED, "Tem que vincular sua Conta de Discord primeiro antes de poder executar comandos.");
-
 	format(cmdfunction, 64, "cmd_%s", cmd[1]); // Format the standard command function name
 
 	if(funcidx(cmdfunction) == -1) // If it doesn't exist, all hope is not lost! It might be defined as an admin command which has the admin level after the command name
@@ -77,7 +74,7 @@ public OnPlayerCommandText(playerid, cmdtext[])
 	// If a command returns 7, don't log it.
 
 	if(0 < result < 7)
-		log(false, "[COMMAND] %p (%d): %s", playerid, playerid, cmdtext);
+		log(false, "[COMMAND] %p[%d](%d): %s", playerid, GetPlayerAdminLevel(playerid), playerid, cmdtext);
 
 	switch(result)
 	{
