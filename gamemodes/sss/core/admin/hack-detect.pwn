@@ -608,20 +608,22 @@ ptask HealthHackCheck[1000](playerid)
 
 	if(IsPlayerInAnyVehicle(playerid))
 	{
-		new	Float:vehicleHP = GetPlayerVehicleID(playerid);
+		new
+			Float:vehicleHP,
+			vehicleId = GetPlayerVehicleID(playerid);
 
 		GetVehicleHealth(vehicleId, vehicleHP);
 
 		if(vehicleHP > 990.0 && GetPlayerVehicleSeat(playerid) == 0) // Only check the driver - Checking passengers causes a false ban
 		{
 			new
-				Float:x, Float:y, Float:x,
+				Float:x, Float:y, Float:z,
 				playerName[MAX_PLAYER_NAME];
 
-			GetPlayerPos(playerid, x, y, x);
+			GetPlayerPos(playerid, x, y, z);
 			GetPlayerName(playerid, playerName, MAX_PLAYER_NAME);
 
-			ReportPlayer(playerName, "Hack de Vida no Veículo", -1, REPORT_TYPE_VHEALTH, x, y, x, GetPlayerVirtualWorld(playerid), GetPlayerInterior(playerid), "");
+			ReportPlayer(playerName, "Hack de Vida no Veículo", -1, REPORT_TYPE_VHEALTH, x, y, z, GetPlayerVirtualWorld(playerid), GetPlayerInterior(playerid), "");
 			// KickPlayer(playerid, "Hack de Vida no Veículo");
 			OnPlayerDisconnect(playerid, 1);
 
