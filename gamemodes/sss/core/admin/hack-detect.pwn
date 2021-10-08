@@ -590,7 +590,7 @@ ptask HealthHackCheck[1000](playerid)
 
 	GetPlayerHealth(playerid, playerHealth);
 
-	log(true, "[HealthHackCheck] %p - %f", playerid, playerHealth);
+	// log(true, "[HealthHackCheck] %p - %f", playerid, playerHealth);
 
 	if(IsPlayerSpawned(playerid) && !IsPlayerGod(playerid) && playerHealth > 99.9)
 	{
@@ -602,7 +602,6 @@ ptask HealthHackCheck[1000](playerid)
 		GetPlayerName(playerid, playerName, MAX_PLAYER_NAME);
 
 		ReportPlayer(playerName, "Hack de Vida", -1, "HP", x, y, z, GetPlayerVirtualWorld(playerid), GetPlayerInterior(playerid), "");
-		// KickPlayer(playerid, "Hack de Vida");
 		OnPlayerDisconnect(playerid, 1);
 	}
 
@@ -624,7 +623,6 @@ ptask HealthHackCheck[1000](playerid)
 			GetPlayerName(playerid, playerName, MAX_PLAYER_NAME);
 
 			ReportPlayer(playerName, "Hack de Vida no Veículo", -1, REPORT_TYPE_VHEALTH, x, y, z, GetPlayerVirtualWorld(playerid), GetPlayerInterior(playerid), "");
-			// KickPlayer(playerid, "Hack de Vida no Veículo");
 			OnPlayerDisconnect(playerid, 1);
 
 			SetVehicleHealth(vehicleId, 300.0); // Reset vehicle health so others don't get banned

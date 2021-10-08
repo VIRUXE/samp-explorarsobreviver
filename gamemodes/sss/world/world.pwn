@@ -124,12 +124,7 @@ timer _Finalise[500]()
 
 		GetItemTypeUniqueName(i, itemtypename);
 
-		Logger_Log("spawned items",
-			Logger_S("type", itemtypename),
-			Logger_I("loaded", ItemCounts[i]),
-			Logger_I("spawned", GetItemTypeCount(i) - ItemCounts[i]),
-			Logger_I("total", GetItemTypeCount(i))
-		);
+		log(true, "[WORLD] Item Type %s - Loaded: %d, Spawned: %d, Total: %d", itemtypename, ItemCounts[i], GetItemTypeCount(i) - ItemCounts[i], GetItemTypeCount(i));
 	}
 
 	gServerInitialising = false;

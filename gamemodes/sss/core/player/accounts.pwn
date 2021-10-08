@@ -304,7 +304,7 @@ stock DisplayRegisterPrompt(playerid)
 	new str[150];
 	format(str, 150, ls(playerid, "ACCREGIBODY"), playerid);
 
-	Logger_Log("player is registering", Logger_P(playerid));
+	log(true, "[ACCOUNT] %p(%d) is registering.", playerid, playerid);
 
 	inline Response(pid, dialogid, response, listitem, string:inputtext[])
 	{
@@ -335,7 +335,7 @@ stock DisplayRegisterPrompt(playerid)
 				Handled();
 				return 1;
 			}
-			Logger_Log("account created", Logger_P(playerid));
+			log(true, "[ACCOUNT] %p(%d) created an account.", playerid, playerid);
 
 			// Account created so we can now ask the player to whitelist if necessary
 			if(IsWhitelistActive() && !IsWhitelistAuto())
@@ -360,7 +360,7 @@ stock DisplayLoginPrompt(playerid, badpass = 0)
 	else
 		format(str, 150, ls(playerid, "ACCLOGIBODY"), playerid);
 
-	Logger_Log("player is logging in", Logger_P(playerid));
+	log(true, "[ACCOUNT] %p(%d) is logging in.", playerid, playerid);
 
 	inline Response(pid, dialogid, response, listitem, string:inputtext[])
 	{
@@ -375,7 +375,10 @@ stock DisplayLoginPrompt(playerid, badpass = 0)
 				if(acc_LoginAttempts[playerid] < 5)
 					DisplayLoginPrompt(playerid, 1);
 				else
+				{
+					log(true, "[ACCOUNT] %p(%d) reached max password tries.", playerid, playerid);
 					OnPlayerDisconnect(playerid, 1);
+				}
 
 				return 1;
 			}
@@ -396,15 +399,21 @@ stock DisplayLoginPrompt(playerid, badpass = 0)
 				if(acc_LoginAttempts[playerid] < 5)
 					DisplayLoginPrompt(playerid, 1);
 				else
+				{
+					log(true, "[ACCOUNT] %p(%d) reached max password tries.", playerid, playerid);
 					OnPlayerDisconnect(playerid, 1);
+				}
 			}
 		}
 		else
+		{
+			log(true, "[ACCOUNT] %p(%d) left before logging in.", playerid, playerid);
 			OnPlayerDisconnect(playerid, 1);
+		}
 
 		return 1;
 	}
-	Dialog_ShowCallback(playerid, using inline Response, DIALOG_STYLE_PASSWORD, ls(playerid, "ACCLOGITITL"), str, "Entrar", "Sair");
+	Dialog_ShowCallback(playerid, using inline Response, DIALOG_STYLE_PASSWORD, " ", str, "Entrar", "Sair");
 
 	return 1;
 }
@@ -422,11 +431,9 @@ stock Login(playerid)
 	new serial[MAX_GPCI_LEN];
 	gpci(playerid, serial, MAX_GPCI_LEN);
 
-	Logger_Log("player logged in",
-		Logger_P(playerid),
-		Logger_S("gpci", serial),
-		Logger_B("alive", IsPlayerAlive(playerid))
-	);
+	log(true, "[ACCOUNT] %p(%d) logged in. (GPCI: %s. Alive: %s)", playerid, playerid, serial, IsPlayerAlive(playerid) ? "Yes" : "No");
+
+	SetPlayerColor(playerid, !IsPlayerUsingMobile(playerid) ? COLOR_PLAYER_NORMAL : COLOR_PLAYER_MOBILE);
 
 	// TODO: move to a single query
 	stmt_bind_value(stmt_AccountSetIpv4, 0, DB::TYPE_INTEGER, GetPlayerIpAsInt(playerid));
@@ -468,7 +475,6 @@ stock Login(playerid)
 
 	SpawnLoggedInPlayer(playerid);
 
-	SetPlayerColor(playerid, COLOR_PLAYER_NORMAL);
 
 	CallLocalFunction("OnPlayerLogin", "d", playerid);
 }
@@ -484,10 +490,7 @@ stock Logout(playerid, docombatlogcheck = 1)
 {
 	if(!acc_LoggedIn[playerid])
 	{
-		Logger_Log("player logged out",
-			Logger_P(playerid),
-			Logger_B("logged_in", false)
-		);
+		log(true, "[ACOCUNT] %p(%d) logged out. (Logged in: No)", playerid, playerid);
 		return 0;
 	}
 	
@@ -500,15 +503,11 @@ stock Logout(playerid, docombatlogcheck = 1)
 	GetPlayerPos(playerid, x, y, z);
 	GetPlayerFacingAngle(playerid, r);
 
-	Logger_Log("player logged out",
-		Logger_P(playerid),
-		Logger_F("x", x),
-		Logger_F("y", y),
-		Logger_F("z", z),
-		Logger_F("r", r),
-		Logger_B("logged_in", acc_LoggedIn[playerid]),
-		Logger_B("alive", IsPlayerAlive(playerid)),
-		Logger_B("knocked_out", IsPlayerKnockedOut(playerid))
+	log(true, "[ACCOUNT] %p(%d) logged out. (Logged In: %s, Alive: %s, Knocked Out: %s) (%.3f, %.3f, %.3f - %s)", playerid, playerid, 
+		acc_LoggedIn[playerid] ? "Yes" : "No", 
+		IsPlayerAlive(playerid) ? "Yes" : "No", 
+		IsPlayerKnockedOut(playerid) ? "Yes" : "No", 
+		x,y,z, GetPlayerZoneName(playerid, false)
 	);
 
 	if(IsAdminOnDuty(playerid))
@@ -527,9 +526,7 @@ stock Logout(playerid, docombatlogcheck = 1)
 
 			if(IsPlayerCombatLogging(playerid, lastattacker, Item:lastweapon))
 			{
-				Logger_Log("player combat-logged",
-					Logger_P(playerid));
-
+				log(true, "[ACCOUNT] %p(%d) combat-logged. (%.3f, %.3f, %.3f - %s)", playerid, playerid, x,y,z, GetPlayerZoneName(playerid, false));
 				ChatMsgAll(YELLOW, " » %p Deslogou em Combate esse Viado!", playerid);
 
 				// TODO: make this correct, lastweapon is an item ID but
@@ -960,7 +957,7 @@ stock DoesAccountHaveDiscord(playerid)
 	else
 		err(false, true, ("[ACCOUNTS] Impossível executar stmt_AccountHaveDiscord"));
 
-	log(true, "[ACCOUNTS] DoesAccountHaveDiscord - Player %p: %d", playerid, does);
+	log(true, "[ACCOUNTS] DoesAccountHaveDiscord - %p: %s", playerid, does ? "Yes" : "No");
 
 	return does;
 }

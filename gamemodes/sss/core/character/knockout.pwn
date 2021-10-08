@@ -56,15 +56,14 @@ stock KnockOutPlayer(playerid, duration)
 	if(!IsPlayerSpawned(playerid))
 		return 0;
 
-	Logger_Log("player knocked out",
-		Logger_P(playerid),
-		Logger_S("duration", MsToString(duration, "%1m:%1s.%1d")));
+	new Float:x, Float:y, Float:z;
+	GetPlayerPos(playerid, x, y, z);
+
+	log(true, "[KNOCKOUT] %p(%d) knocked out. (Duration: %s) (%.3f, %.3f, %.3f - %s)", playerid, playerid, MsToString(duration, "%1m:%1s.%1d"), x,y,z, GetPlayerZoneName(playerid, false));
 
 	ShowPlayerProgressBar(playerid, KnockoutBar);
 
-	new Float:z;
-	GetPlayerPos(playerid, z, z, z);
-	if(z < -0.5)
+	if(z < -0.5) // ?
 	{
 		SetPlayerHP(playerid, -1);
 		return 1;
@@ -79,9 +78,7 @@ stock KnockOutPlayer(playerid, duration)
 	}
 
 	if(knockout_KnockedOut[playerid])
-	{
 		knockout_Duration[playerid] += duration;
-	}
 	else
 	{
 		knockout_Tick[playerid] = GetTickCount();
@@ -109,7 +106,7 @@ stock KnockOutPlayer(playerid, duration)
 
 stock WakeUpPlayer(playerid)
 {
-	Logger_Log("player awoke from knockout", Logger_P(playerid));
+	log(true, "[KNOCKOUT] %p(%d) awoke from knockout.", playerid, playerid);
 
 	stop knockout_Timer[playerid];
 

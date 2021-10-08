@@ -60,9 +60,11 @@ public OnPlayerConnect(playerid)
 	if(gServerInitialising)
 	{
 		ChatMsg(playerid, ORANGE, "");
-		ChatMsg(playerid, ORANGE, " »»»»»»»»»»»»»»»» "C_GREY"Explorar e Sobreviver"C_GREY" »»»»»»»»»»»»»»»»");
+		ChatMsg(playerid, ORANGE, " »»»»»»»»»»»»»»»» "C_GREY"Explorar e Sobreviver"C_ORANGE" »»»»»»»»»»»»»»»»");
 		ChatMsg(playerid, ORANGE, "");
-		ChatMsg(playerid, ORANGE, " » "C_GREY"Servidor a Iniciar"C_ORANGE". "C_YELLOW"Aguarde um pouco...");
+		ChatMsg(playerid, ORANGE, " » "C_GREY"Servidor a Iniciar. "C_YELLOW"Aguarde um pouco...");
+		ChatMsg(playerid, ORANGE, "");
+		ChatMsg(playerid, ORANGE, " »»»»»»»»»»»»»»»» "C_GREY"Explorar e Sobreviver"C_ORANGE" »»»»»»»»»»»»»»»»");
 		ChatMsg(playerid, ORANGE, "");
 	}
 
@@ -146,45 +148,33 @@ timer LoadAccountDelay[timer](playerid, timer)
 	{
 		new cause[128];
 		GetLastErrorCause(cause);
-		Logger_Err("failed to load account",
-			Logger_P(playerid),
-			Logger_S("cause", cause));
-		KickPlayer(playerid, "Problema ao carregar a sua conta...");
+		log(true, "[ACCOUNT] %p(%d) failed to load account. (Cause: %s)", playerid, playerid, cause);
+		KickPlayer(playerid, "Ocorreu um problema ao carregar sua conta. Fale no #suporte no Discord.");
 		Handled();
 		return;
 	}
 
 	if(e == Error:0) // Account does not exist, so load the player on the tutorial first
 	{
-		Logger_Log("account does not exist, prompting registration",
-			Logger_P(playerid),
-			Logger_I("result", _:e)
-		);
+		log(true, "[ACCOUNT] %p(%d) doesn't have an account. Putting in Tutorial.", playerid, playerid);
 		EnterTutorial(playerid);
 	}
 
 	if(e == Error:1) // Account does exist, prompt login
 	{
-		Logger_Log("account loaded, prompting login",
-			Logger_P(playerid),
-			Logger_I("result", _:e)
-		);
+		log(true, "[ACCOUNT] %p(%d) loaded account.", playerid, playerid);
 		DisplayLoginPrompt(playerid);
 	}
 
 	if(e == Error:2) // Account does exist, auto login
 	{
-		Logger_Log("LoadAccount: auto login",
-			Logger_P(playerid)
-		);
+		log(true, "[ACCOUNT] %p(%d) auto logged in.", playerid, playerid);
 		Login(playerid);
 	}
 
 	if(e == Error:4) // Account does exists, but is disabled
 	{
-		Logger_Log("LoadAccount: account inactive",
-			Logger_P(playerid)
-		);
+		log(true, "[ACCOUNT] %p(%d) is inactive.", playerid, playerid);
 		KickPlayer(playerid, "Conta inativa!");
 	}
 
@@ -295,8 +285,6 @@ public OnPlayerSpawn(playerid)
 {
 	if(IsPlayerNPC(playerid))
 		return 1;
-
-	SetPlayerColor(playerid, !IsPlayerUsingMobile(playerid) ? COLOR_PLAYER_NORMAL : COLOR_PLAYER_MOBILE);
 
 	ply_Data[playerid][ply_SpawnTick] = GetTickCount();
 

@@ -180,12 +180,7 @@ PlayerSpawnExistingCharacter(playerid)
 	else if(GetPlayerStance(playerid) == 3)
 		ApplyAnimation(playerid, "ROB_BANK", "SHP_HandsUp_Scr", 4.0, 0, 1, 1, 1, 0);
 
-	Logger_Log("player spawned existing character",
-		Logger_P(playerid),
-		Logger_F("x", x),
-		Logger_F("y", y),
-		Logger_F("z", z),
-		Logger_F("r", r));
+	log(true, "[SPAWN] %p(%d) spawned existing character. (%.3f, %.3f, %.3f - %s)", playerid, playerid, x,y,z, GetPlayerZoneName(playerid, true));
 
 	CallLocalFunction("OnPlayerSpawnChar", "d", playerid);
 	return 0;

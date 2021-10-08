@@ -1,8 +1,8 @@
 LANGCHANGE= » {C_YELLOW}Idioma alterado para Português do Brasil!
-ACCLOGIBODY={C_WHITE}Bem-vindo de volta %P{C_WHITE}, Introduza a sua senha abaixo!\n\n{C_YELLOW}Se divirta! :)
+ACCLOGIBODY={C_WHITE}Bem-vindo de volta!\n\nIntroduza sua senha abaixo!
 ACCLOGITITL=Entrar na Sua Conta
 ACCLOGWROPW=Senha incorreta! %d de 5 tentativas
-ACCREGIBODY={C_WHITE}Olá %P{C_WHITE}, você deve ser novo aqui!\nPor favor, crie sua conta, introduzindo uma {C_BLUE}senha{C_WHITE} abaixo:
+ACCREGIBODY={C_WHITE}Olá! Você deve ser novo aqui!\n\nPor favor, crie sua conta, introduzindo uma senha abaixo:
 ACCREGITITL=Registrar Conta
 AIMSHOUTHLP= » Utilize: /grito [texto] - Define um texto para enviar assim que você Pressionar o Botão Direito do Mouse juntamente com o Scroll do Mouse.
 AIMSHOUTSET= » Grito definido para '%s'
