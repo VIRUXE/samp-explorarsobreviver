@@ -59,13 +59,11 @@ public OnPlayerConnect(playerid)
 
 	if(gServerInitialising)
 	{
-		ChatMsg(playerid, GREY, " »»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»");
-		ChatMsg(playerid, GREY, " »»»»»»»»»»»»»»»» Explorar e Sobreviver »»»»»»»»»»»»»»»»");
-		ChatMsg(playerid, GREY, " »»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»");
-		ChatMsg(playerid, GREY, " » Servidor a Iniciar. Aguarde um pouco...");
-		ChatMsg(playerid, GREY, " »»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»");
-		ChatMsg(playerid, GREY, " »»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»");
-		ChatMsg(playerid, GREY, " »»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»");
+		ChatMsg(playerid, ORANGE, "");
+		ChatMsg(playerid, ORANGE, " »»»»»»»»»»»»»»»» "C_GREY"Explorar e Sobreviver"C_GREY" »»»»»»»»»»»»»»»»");
+		ChatMsg(playerid, ORANGE, "");
+		ChatMsg(playerid, ORANGE, " » "C_GREY"Servidor a Iniciar"C_ORANGE". "C_YELLOW"Aguarde um pouco...");
+		ChatMsg(playerid, ORANGE, "");
 	}
 
 	SetPlayerColor(playerid, 0x00000000);
