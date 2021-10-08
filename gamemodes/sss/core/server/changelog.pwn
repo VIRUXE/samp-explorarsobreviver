@@ -1,9 +1,16 @@
 #include <YSI_Coding\y_hooks>
 
+static bool:hasNewStuff;
+
 hook OnPlayerLogin(playerid)
 {
 	if(IsPlayerWhitelisted(playerid)) // meh
-		ChatMsg(playerid, GREEN, " » Veja todas as novidades em "C_WHITE"/novidades!");
+	{
+		if(hasNewStuff)
+			cmd_novidades(playerid);
+		else
+			ChatMsg(playerid, GREEN, " » Veja todas as novidades em "C_WHITE"/novidades!");
+	}
 }
 
 forward OnChangelogLoaded(playerid);
@@ -26,6 +33,9 @@ public OnChangelogLoaded(playerid)
 		cache_get_value(row, "type", type);
 		cache_get_value(row, "title", title);
 		cache_get_value(row, "description", description);
+
+		if(!hasNewStuff && datediff <= 7)
+			hasNewStuff = true;
 
 		format(rowBuffer, sizeof(rowBuffer), "%s%s"C_GREY"\t%s%s\t"C_WHITE"%s"C_GREY"%s"C_WHITE"%s\n", datediff <= 7 ? C_GOLD : C_GREY, date, GetColourByType(type), type, title, strlen(title) <= 6 ? "\t\t" : "\t", !isequal(description, "NULL", true) ? description : "Sem descrição.");
 		strcat(changelogBuffer, rowBuffer);
