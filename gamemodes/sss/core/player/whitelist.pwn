@@ -45,8 +45,10 @@ hook OnPlayerDisconnect(playerid)
 
 hook OnPlayerCommandText(playerid, cmdtext[])
 {
-	if(!IsPlayerWhitelisted(playerid) && !isequal(cmd[1], "sair") && IsWhitelistActive() && !IsWhitelistAuto())
+	if(!IsPlayerWhitelisted(playerid) && !isequal(cmdtext, "/sair") && IsWhitelistActive() && !IsWhitelistAuto())
 		return ChatMsg(playerid, RED, "Tem que vincular sua Conta de Discord primeiro antes de poder executar comandos.");
+	
+	return Y_HOOKS_CONTINUE_RETURN_0;
 }
 
 // Whitelist pelo Discord
