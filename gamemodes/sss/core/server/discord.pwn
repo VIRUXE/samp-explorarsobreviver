@@ -115,9 +115,15 @@ public DCC_OnMessageCreate(DCC_Message:message)
 	{
 		if(!strcmp(discordMessage, ".rr", true))
 		{
+			new restartTime;
+
 			SendDiscordMessage(dc_GlobalChatChannel, "**Servidor vai agora reiniciar...**");
 			strdel(discordMessage, 0, 2); // remove .rr
-			SetRestart(strval(discordMessage));
+			restartTime = strval(discordMessage);
+
+			log(true, "[RESTART] %s set the server to restart, in %d", discordUserName, restartTime);
+
+			SetRestart(restartTime);
 			return 1;
 		}
 	}
