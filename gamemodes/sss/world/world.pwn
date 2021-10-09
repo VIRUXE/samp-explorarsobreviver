@@ -128,6 +128,8 @@ timer _Finalise[500]()
 	}
 
 	gServerInitialising = false;
+
+	CallLocalFunction("OnServerStarted");
 }
 
 stock GetMapName()
