@@ -22,6 +22,13 @@ hook OnGameModeInit()
 	dc_StaffChatChannel 	= DCC_FindChannelById("846031149285638195");
 	dc_RoleSobrevivente		= DCC_FindRoleById("867774790189973514");
 	dc_RoleBanido			= DCC_FindRoleById("868524903672971294");
+
+	SendDiscordMessage(dc_GlobalChatChannel, "**Servidor a iniciar. Aguarde...");
+}
+
+hook OnServerStarted()
+{
+	SendDiscordMessage(dc_GlobalChatChannel, "**Servidor terminou de iniciar! Podem conectar. @here");
 }
 
 hook OnPlayerSendChat(playerid, text[], Float:frequency)
