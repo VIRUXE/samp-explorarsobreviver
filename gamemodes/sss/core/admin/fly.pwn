@@ -17,10 +17,10 @@ hook OnPlayerKeyStateChange(playerid, newkeys, oldkeys)
 	}
 }
 
-hook OnPlayerUpdate(playerid)
+ptask FlyUpdate[10](playerid)
 {
 	if(!isFlying[playerid])
-        return 1;
+        return;
 
     new
 		k, ud, lr,
@@ -45,7 +45,7 @@ hook OnPlayerUpdate(playerid)
 	if(k & KEY_CROUCH)
         heightMult =-HEIGHT_GAIN;
 
-	if(k & KEY_FIRE) // Botão ESQ - Mover em axis
+	if(k & KEY_FIRE) // LMB - Mover em axis
 	{
 		if(lr == KEY_LEFT)		
             velocityFactor = VELOCITY_NORM, angle += 90.0;
@@ -74,7 +74,7 @@ hook OnPlayerUpdate(playerid)
 	}
 	SetPlayerVelocity(playerid, velocityFactor*floatsin(-angle, degrees), velocityFactor*floatcos(-angle, degrees), heightMult);
 
-	return 1;
+	return;
 }
 
 hook OnPlayerDisconnect(playerid)
