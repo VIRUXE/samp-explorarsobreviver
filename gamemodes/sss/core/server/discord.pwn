@@ -23,12 +23,12 @@ hook OnGameModeInit()
 	dc_RoleSobrevivente		= DCC_FindRoleById("867774790189973514");
 	dc_RoleBanido			= DCC_FindRoleById("868524903672971294");
 
-	SendDiscordMessage(dc_GlobalChatChannel, "**Servidor a iniciar. Aguarde...");
+	SendDiscordMessage(dc_GlobalChatChannel, "**Servidor a iniciar. Aguarde...**");
 }
 
 hook OnServerStarted()
 {
-	SendDiscordMessage(dc_GlobalChatChannel, "**Servidor terminou de iniciar! Podem conectar. @here");
+	SendDiscordMessage(dc_GlobalChatChannel, "**Servidor terminou de iniciar! Podem conectar.** <@&867774790189973514>");
 }
 
 hook OnPlayerSendChat(playerid, text[], Float:frequency)
@@ -127,7 +127,7 @@ public DCC_OnMessageCreate(DCC_Message:message)
 			strdel(discordMessage, 0, 3); // remove .rr
 			restartSeconds = strval(discordMessage);
 
-			SendDiscordMessage(dc_GlobalChatChannel, "**Servidor vai reiniciar em %02d:%02d** @here", restartSeconds / 60, restartSeconds % 60);
+			SendDiscordMessage(dc_GlobalChatChannel, "**Servidor vai reiniciar em %02d:%02d** <@&867774790189973514>", restartSeconds / 60, restartSeconds % 60);
 			log(true, "[RESTART] %s set the server to restart.", discordUserName);
 
 			SetRestart(restartSeconds);
