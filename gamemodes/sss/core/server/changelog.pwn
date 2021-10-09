@@ -37,7 +37,9 @@ public OnChangelogLoaded(playerid)
 		if(!hasNewStuff && datediff <= 7)
 			hasNewStuff = true;
 
-		format(rowBuffer, sizeof(rowBuffer), "%s%s"C_GREY"\t%s%s\t"C_WHITE"%s"C_GREY"%s"C_WHITE"%s\n", datediff <= 7 ? C_GOLD : C_GREY, date, GetColourByType(type), type, title, strlen(title) < 7 ? "\t\t" : "\t", !isequal(description, "NULL", true) ? description : "Sem descrição.");
+		new charCount = strlen(date) + strlen(type) + strlen(title);
+
+		format(rowBuffer, sizeof(rowBuffer), "%s%s"C_GREY"\t%s%s\t"C_WHITE"%s"C_GREY"%s"C_WHITE"%s\n", datediff <= 7 ? C_GOLD : C_GREY, date, GetColourByType(type), type, title, charCount <= 20 ? "\t\t" : "\t", !isequal(description, "NULL", true) ? description : "Sem descrição.");
 		strcat(changelogBuffer, rowBuffer);
 	}
 	strcat(changelogBuffer, "\n"C_GREY"Legenda:\n"C_RED"bugfix"C_GREY": bug resolvido - "C_YELLOW"tweak"C_GREY": modificação - "C_GREEN"feat"C_GREY": novidade");
