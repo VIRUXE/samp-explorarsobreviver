@@ -57,17 +57,6 @@ public OnPlayerConnect(playerid)
 
 	log(true, "[JOIN] %p(%d) %sconnected.", playerid, playerid, IsPlayerUsingMobile(playerid) ? "(Mobile) " : "");
 
-	if(gServerInitialising)
-	{
-		ChatMsg(playerid, ORANGE, "");
-		ChatMsg(playerid, ORANGE, " »»»»»»»»»»»»»»»» "C_GREY"Explorar e Sobreviver"C_ORANGE" »»»»»»»»»»»»»»»»");
-		ChatMsg(playerid, ORANGE, "");
-		ChatMsg(playerid, ORANGE, " » "C_GREY"Servidor a Iniciar. "C_YELLOW"Aguarde um pouco...");
-		ChatMsg(playerid, ORANGE, "");
-		ChatMsg(playerid, ORANGE, " »»»»»»»»»»»»»»»» "C_GREY"Explorar e Sobreviver"C_ORANGE" »»»»»»»»»»»»»»»»");
-		ChatMsg(playerid, ORANGE, "");
-	}
-
 	SetPlayerColor(playerid, 0x00000000);
 
 	TogglePlayerClock(playerid, false);
@@ -99,9 +88,19 @@ public OnPlayerConnect(playerid)
 	SetSpawnInfo(playerid, 0, 0, DEFAULT_POS_X, DEFAULT_POS_Y, DEFAULT_POS_Z, 0.0, 0, 0, 0, 0, 0, 0);
 	SpawnPlayer(playerid);
 
+	if(gServerInitialising)
+	{
+		ChatMsg(playerid, ORANGE, "");
+		ChatMsg(playerid, ORANGE, " »»»»»»»»»»»»»»»» "C_GREY"Explorar e Sobreviver"C_ORANGE" »»»»»»»»»»»»»»»»");
+		ChatMsg(playerid, ORANGE, "");
+		ChatMsg(playerid, ORANGE, " » "C_GREY"Servidor a Iniciar. "C_YELLOW"Aguarde um pouco...");
+		ChatMsg(playerid, ORANGE, "");
+		ChatMsg(playerid, ORANGE, " »»»»»»»»»»»»»»»» "C_GREY"Explorar e Sobreviver"C_ORANGE" »»»»»»»»»»»»»»»»");
+		ChatMsg(playerid, ORANGE, "");
+	}
+
 	if(!isnull(gMessageOfTheDay))
 		ChatMsg(playerid, BLUE, ""C_YELLOW" » Mensagem do Dia: "C_BLUE"%s", gMessageOfTheDay);
-
 
 	ply_Data[playerid][ply_ShowHUD] = true;
 
