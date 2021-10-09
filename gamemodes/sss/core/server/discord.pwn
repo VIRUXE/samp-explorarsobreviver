@@ -113,12 +113,12 @@ public DCC_OnMessageCreate(DCC_Message:message)
 		ChatMsgAdmins(1, 0xff4d00FF, "[Discord] "C_GREY"%s"C_WHITE": %s", discordUserName, TagScan(discordMessage));
 	else if(channel == dc_StaffChatChannel) // Apenas para executar comandos
 	{
-		if(!strcmp(discordMessage, ".rr", true))
+		if(!strfind(discordMessage, ".rr", true))
 		{
 			new restartTime;
 
 			SendDiscordMessage(dc_GlobalChatChannel, "**Servidor vai agora reiniciar...**");
-			strdel(discordMessage, 0, 2); // remove .rr
+			strdel(discordMessage, 0, 3); // remove .rr
 			restartTime = strval(discordMessage);
 
 			log(true, "[RESTART] %s set the server to restart, in %d", discordUserName, restartTime);
