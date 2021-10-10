@@ -363,7 +363,7 @@ hook OnPlayerSpawnChar(playerid)
 	// Procurar se existe algum corpo do Jogador
 	foreach(new i : body_Count)
 	{
-		if(!strcmp(body_PlayerName[i], name)))
+		if(!strcmp(body_PlayerName[i], name))
 		{
 			if(GetDynamicActorVirtualWorld(i) == 3333) 
 			{
