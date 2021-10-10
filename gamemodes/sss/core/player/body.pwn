@@ -360,10 +360,12 @@ hook OnPlayerSpawnChar(playerid)
 	new name[MAX_PLAYER_NAME];
 	GetPlayerName(playerid, name, MAX_PLAYER_NAME);
 
-	foreach(new i : body_Count){
-		if(!strcmp(body_PlayerName[i], name) && !isnull(body_PlayerName[i]))
+	// Procurar se existe algum corpo do Jogador
+	foreach(new i : body_Count)
+	{
+		if(!strcmp(body_PlayerName[i], name)))
 		{
-			if(GetDynamicActorVirtualWorld(i) == 3333)
+			if(GetDynamicActorVirtualWorld(i) == 3333) 
 			{
 				DestroyPlayerItems(playerid);
 
@@ -374,8 +376,8 @@ hook OnPlayerSpawnChar(playerid)
 				SetPlayerSpawnedState(playerid, false);
 				SetPlayerAliveState(playerid, false);
 				SetPlayerVirtualWorld(playerid, 0);
-				PlayerCreateNewCharacter(playerid);
 				SetPlayerBrightness(playerid, 255);
+				PlayerCreateNewCharacter(playerid);
 			}
 
 			DestroyBody(i);
