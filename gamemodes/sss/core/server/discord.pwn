@@ -76,6 +76,8 @@ public DCC_OnGuildMemberAdd(DCC_Guild:guild, DCC_User:user)
 	DCC_GetGuildMemberNickname(guild, user, userNickname);
 	DCC_CreatePrivateChannel(user, "OnMemberJoined", "sb", userNickname, isUserLinked);
 
+	log(true, "[DISCORD] %s joined the Guild. (Account linked: %s)", userNickname, isnull(playerAccountName) ? "None" : playerAccountName);
+
 	if(isUserLinked) // Já está vinculada, por isso atribuir o cargo correto
 		DCC_AddGuildMemberRole(guild, user, !IsPlayerBanned(playerAccountName) ? dc_RoleSobrevivente : dc_RoleBanido); // Colocar jogador no cargo "Sobrevivente"
 }
@@ -146,7 +148,7 @@ stock SendDiscordMessage(DCC_Channel:channel, const fmat[], va_args<>)
 	return 1;
 }
 
-stock GetAccountNameByDiscordId(const discordId[DCC_ID_SIZE], accountName[MAX_PLAYER_NAME])
+stock GetAccountNameByDiscordId(const discordId[DCC_ID_SIZE], &accountName[MAX_PLAYER_NAME])
 {
 	new DBStatement:stmt = db_prepare(gAccounts, "SELECT name FROM Player WHERE discord_id=? COLLATE NOCASE");
 
@@ -159,6 +161,4 @@ stock GetAccountNameByDiscordId(const discordId[DCC_ID_SIZE], accountName[MAX_PL
 		err(false, true, "[DISCORD] Couldn't execute GetAccountNameByDiscordId");
 
 	log(true, "[DISCORD] GetAccountNameByDiscordId(%s) - Name: %s", discordId, accountName);
-
-	return accountName;
 }
