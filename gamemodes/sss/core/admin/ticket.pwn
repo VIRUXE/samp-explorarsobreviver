@@ -353,7 +353,7 @@ CMD:ticket(playerid, params[])
 
 				if(response)
 				{
-					log(true, "[CMD:TICKET] ticketOwnerId %d", ticketOwnerId);
+					log(true, "[CMD:TICKET] Reponse ticketOwnerId %d", ticketOwnerId);
 
 					while(IsPlayerBeingAttended(ticketOwnerId) != -1)
 					{
