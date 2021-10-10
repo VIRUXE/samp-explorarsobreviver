@@ -127,7 +127,7 @@ public DCC_OnMessageCreate(DCC_Message:message)
 			strdel(discordMessage, 0, 3); // remove .rr
 			restartSeconds = strval(discordMessage);
 
-			SendDiscordMessage(dc_GlobalChatChannel, "**Servidor vai reiniciar em %02d:%02d** <@&867774790189973514>", restartSeconds / 60, restartSeconds % 60);
+			SendDiscordMessage(dc_GlobalChatChannel, "**Servidor vai reiniciar em %02d:%02d**", restartSeconds / 60, restartSeconds % 60);
 			log(true, "[RESTART] %s set the server to restart.", discordUserName);
 
 			SetRestart(restartSeconds);
