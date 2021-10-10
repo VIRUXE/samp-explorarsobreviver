@@ -615,7 +615,7 @@ hook OnPlayerStateChange(playerid, newstate, oldstate)
 
 		veh_EnterTick[playerid] = GetTickCount();
 
-		log(true, "[VEHICLE] %p(%d) entered %s(%d) as Driver (%.3f, %.3f, %.3f - %s)", playerid, playerid, vehicleName, veh_Current[playerid], x, y, z, GetPlayerZoneName(playerid, true));
+		log(true, "[VEHICLE] %p(%d) entered %s(%d) as Driver (%.3f, %.3f, %.3f - %s)", playerid, playerid, vehicleName, veh_Current[playerid], x, y, z, GetPlayerZoneName(playerid, false));
 	}
 
 	if(oldstate == PLAYER_STATE_DRIVER)
@@ -640,7 +640,7 @@ hook OnPlayerStateChange(playerid, newstate, oldstate)
 		SetCameraBehindPlayer(playerid);
 		HideVehicleUI(playerid);
 
-		log(true, "[VEHICLE] %p(%d) exited %s(%d) as Driver (%.3f, %.3f, %.3f - %s)", playerid, playerid, vehicleName, veh_Current[playerid], veh_Data[veh_Current[playerid]][veh_spawnX], veh_Data[veh_Current[playerid]][veh_spawnY], veh_Data[veh_Current[playerid]][veh_spawnZ], GetPlayerZoneName(playerid, true));
+		log(true, "[VEHICLE] %p(%d) exited %s(%d) as Driver (%.3f, %.3f, %.3f - %s)", playerid, playerid, vehicleName, veh_Current[playerid], veh_Data[veh_Current[playerid]][veh_spawnX], veh_Data[veh_Current[playerid]][veh_spawnY], veh_Data[veh_Current[playerid]][veh_spawnZ], GetPlayerZoneName(playerid, false));
 	}
 
 	if(newstate == PLAYER_STATE_PASSENGER)
@@ -659,7 +659,7 @@ hook OnPlayerStateChange(playerid, newstate, oldstate)
 
 		ShowVehicleUI(playerid, GetPlayerVehicleID(playerid));
 
-		log(true, "[VEHICLE] %p(%d) entered %s(%d) as Passenger (%.3f, %.3f, %.3f - %s)", playerid, playerid, vehicleName, veh_Current[playerid], x, y, z, GetPlayerZoneName(playerid, true));
+		log(true, "[VEHICLE] %p(%d) entered %s(%d) as Passenger (%.3f, %.3f, %.3f - %s)", playerid, playerid, vehicleName, veh_Current[playerid], x, y, z, GetPlayerZoneName(playerid, false));
 	}
 
 	if(oldstate == PLAYER_STATE_PASSENGER)
@@ -683,7 +683,7 @@ hook OnPlayerStateChange(playerid, newstate, oldstate)
 
 		SetVehicleExternalLock(GetPlayerLastVehicle(playerid), E_LOCK_STATE_OPEN);
 		HideVehicleUI(playerid);
-		log(true, "[VEHICLE] %p(%d) exited %s(%d) as Passenger (%.3f, %.3f, %.3f - %s)", playerid, playerid, vehicleName, veh_Current[playerid], x, y, z, GetPlayerZoneName(playerid, true));
+		log(true, "[VEHICLE] %p(%d) exited %s(%d) as Passenger (%.3f, %.3f, %.3f - %s)", playerid, playerid, vehicleName, veh_Current[playerid], x, y, z, GetPlayerZoneName(playerid, false));
 	}
 
 	return 1;
