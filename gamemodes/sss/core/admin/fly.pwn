@@ -17,7 +17,7 @@ hook OnPlayerKeyStateChange(playerid, newkeys, oldkeys)
 	}
 }
 
-ptask FlyUpdate[10](playerid)
+/* ptask FlyUpdate[10](playerid)
 {
 	if(!isFlying[playerid])
         return;
@@ -75,7 +75,7 @@ ptask FlyUpdate[10](playerid)
 	SetPlayerVelocity(playerid, velocityFactor*floatsin(-angle, degrees), velocityFactor*floatcos(-angle, degrees), heightMult);
 
 	return;
-}
+} */
 
 hook OnPlayerDisconnect(playerid)
     isFlying[playerid] = false;
