@@ -48,9 +48,9 @@ ptask FlyUpdate[10](playerid)
 	if(k & KEY_FIRE) // LMB - Mover em axis
 	{
 		if(lr == KEY_LEFT)		
-            velocityFactor = VELOCITY_NORM, angle += 90.0;
+            velocityFactor = VELOCITY_NORM, angle += 180.0;
 		else if(lr == KEY_RIGHT)
-            velocityFactor = VELOCITY_NORM, angle -= 90.0;
+            velocityFactor = VELOCITY_NORM, angle -= 180.0;
 	}
 	else
 	{
