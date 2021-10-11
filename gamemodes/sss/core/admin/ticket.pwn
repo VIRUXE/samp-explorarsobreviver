@@ -294,12 +294,12 @@ CMD:ticket(playerid, params[])
 							{
 								// TODO: Guardar a avaliacao na base de dados
 								if(listitem2 != -1)
-									log(false, "[TICKET] %p(%d) avaliou o atendimento de %p(%d) como %d", ticketOwnerId, ticketOwnerId, attendingAdminId, attendingAdminId, listitem2);
+									log(true, "[TICKET] %p(%d) avaliou o atendimento de %p(%d) como %d", ticketOwnerId, ticketOwnerId, attendingAdminId, attendingAdminId, listitem2);
 								else
-									log(false, "[TICKET] %p(%d) escolheu nao avaliar %p(%d)", ticketOwnerId, ticketOwnerId, attendingAdminId, attendingAdminId);
+									log(true, "[TICKET] %p(%d) escolheu nao avaliar %p(%d)", ticketOwnerId, ticketOwnerId, attendingAdminId, attendingAdminId);
 							}
 							else
-								log(false, "[TICKET] %p(%d) escolheu nao avaliar %p(%d)", ticketOwnerId, ticketOwnerId, attendingAdminId, attendingAdminId);
+								log(true, "[TICKET] %p(%d) escolheu nao avaliar %p(%d)", ticketOwnerId, ticketOwnerId, attendingAdminId, attendingAdminId);
 
 							TogglePlayerMute(ticketOwnerId, false);
 							TogglePlayerControllable(ticketOwnerId, true);
